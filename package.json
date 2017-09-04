@@ -1,0 +1,19 @@
+{
+  "name": "back-grappa2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OhtuGrappa2/back-grappa2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OhtuGrappa2/back-grappa2/issues"
+  },
+  "homepage": "https://github.com/OhtuGrappa2/back-grappa2#readme"
+}
