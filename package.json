@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OhtuGrappa2/back-grappa2/issues"
   },
-  "homepage": "https://github.com/OhtuGrappa2/back-grappa2#readme"
+  "homepage": "https://github.com/OhtuGrappa2/back-grappa2#readme",
+  "dependencies": {
+    "express": "^4.15.4"
+  }
 }
