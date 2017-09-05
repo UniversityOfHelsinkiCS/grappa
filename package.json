@@ -1,6 +1,7 @@
 {
   "name": "front-grappa2",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "autoprefixer": "7.1.2",
