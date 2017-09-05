@@ -11,9 +11,9 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
-        <form action="/localhost:3100">
+        <form action="/localhost:3100/helloUser">
           Nimesi: <br />
-          <input type="text" name="nimi" /> <br />
+          <input type="text" name="username" /> <br />
           <input type="submit" value="Lähetä" />
         </form>
         </p>
