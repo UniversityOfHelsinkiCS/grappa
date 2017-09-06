@@ -1,15 +1,22 @@
-const express = require('express')
-const app = express()
+require('babel-core/register');
+require('babel-polyfill');
 
-app.get(['/', '/helloUser'], function (req, res) {
+const express = require('express');
+const app = express();
+const output = require('./src/output');
+
+app.get('/',  (req, res) => {
+  output.send(req.query.outputType, res, { text: "Hello World!"} );
+})
+
+app.get('/helloUser', (req, res) => {
   if(req.query.username){
-    res.setHeader('Content-Type', 'application/json');
-    res.json({ text: req.query.username });
+    output.send(req.query.outputType, res, { text: req.query.username });
   } else {
-    res.json({ text: "Hello World!" });
+    output.send(req.query.outputType, res, { text: "Hello World!" });
   }
 })
 
-app.listen(3100, function () {
-  console.log('Example app listening on port 3100!')
+app.listen(3100, () => {
+  console.log('Example app listening on port 3100!');
 })
