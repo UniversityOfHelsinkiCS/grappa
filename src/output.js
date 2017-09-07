@@ -1,4 +1,4 @@
-export const jsonOut = (res, outputContent) => {
+const jsonOut = (res, outputContent) => {
     try {
         JSON.stringify(outputContent);
     } catch (e) {

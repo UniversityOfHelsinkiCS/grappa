@@ -7,20 +7,31 @@ test('my passing test', t => {
 	t.pass();
 });
 
-test('output test: input no json', t => {
+test('json output test: input no json: expects correct http header and error json', t => {
 	const output = require('../src/output');
-	//const express = require('express');
-	//var mock = sinon.mock(express.ServerResponse); 
-	var myAPI = {setHeader: function (a,b) {},json: function  (a) {} };
-	//console.log(typeof(myAPI.setHeader()))
-	var mock = sinon.mock(myAPI); 
 
+	var resAPI = {setHeader: function (a,b) {},json: function  (a) {} };
+	var mock = sinon.mock(resAPI); 
+	
 	var expectation1 = mock.expects("setHeader").once().withArgs('Content-Type', 'application/json');
-	var expectation2 = mock.expects("json").once();
+	var expectation2 = mock.expects("json").once().calledWith({ error: "output not valid json" });
 
-	output.jsonOut(mock,"some text");
+	output.send("json", resAPI, "some text");
 
 	mock.verify();
-	//t.pass();
-	
+});
+
+test('json output test: input is json: expects correct http header and same json output', t => {
+	const output = require('../src/output');
+
+	var resAPI = {setHeader: function (a,b) {},json: function  (a) {} };
+	var mock = sinon.mock(resAPI); 
+	var expectedOutputContent = { text: "Hello World!" }
+
+	var expectation1 = mock.expects("setHeader").once().withArgs('Content-Type', 'application/json');
+	var expectation2 = mock.expects("json").once().calledWith(expectedOutputContent);
+
+	output.send("json", resAPI, expectedOutputContent);
+
+	mock.verify();
 });
