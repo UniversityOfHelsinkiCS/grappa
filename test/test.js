@@ -3,8 +3,6 @@ import test from 'ava';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import chai from 'chai';
-require('ignore-styles')
-import App from '../src/App.js';
 var expect = chai.expect;
 
 //meta tests for all the testing frameworks
