@@ -5,9 +5,9 @@ import chai from 'chai';
 require('ignore-styles')
 import App from '../src/App.js';
 var expect = chai.expect;
-
+const app = <App/>
 const wrapper = shallow(
-  <App/>
+  app
 );
 
 test('has correct title', () => {
@@ -26,6 +26,15 @@ test('has correct button', () => {
   expect(doesAppContainElement(<input type="submit" value="send" />)).to.equal(true);
 });
 
+/* test('finds inputfield', () => {
+//  var spy = sinon.spy(app, 'setState');
+
+  wrapper.find('input').text('Test');
+  wrapper.find('send').simulate('click');
+
+  expect(app.state.username === 'Test').to.equal(true);
+
+}); */
 
 function doesAppContainElement(element) {
   return wrapper.containsMatchingElement(element);
