@@ -35,15 +35,32 @@ test('sinon spy test', () => {
 });
 
 class Title extends React.Component {
+
+	constructor(props) {
+    super(props);
+    this.state = {
+			title: props.title,
+  };
+}
   render() {
-    return <p>Title Component</p>;
+    return <p>{this.state.title}</p>;
   }
 }
 
-//enzyme & jest test (DOESN'T WORK!!!)
-test('enzyme & jest test', () => {
+ test('Titles text is exactly the same', () => {
     const wrapper = shallow(
         <Title title="Events" />
     );
-    expect(wrapper.prop('title')).to.equal('Events');
+    expect(wrapper.text()).to.equal('Events');
 });
+
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+test('welcome renders h1 element correct', () => {
+	const wrapper = shallow(
+			<Welcome name="Pekka" />
+	);
+	expect(wrapper.containsMatchingElement(<h1>Hello, Pekka</h1>)).to.equal(true);
+})
