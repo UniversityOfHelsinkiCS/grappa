@@ -64,4 +64,4 @@ test('welcome renders h1 element correct', () => {
 			<Welcome name="Pekka" />
 	);
 	expect(wrapper.containsMatchingElement(<h1>Hello, Pekka</h1>)).to.equal(true);
-})
+});
