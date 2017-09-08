@@ -1,37 +1,48 @@
 import test from 'ava';
 import sinon from 'sinon';
+import app from '../index'
 
+const request = require('supertest');
 
+test('get > hello world -greeting', async t => {
+	t.plan(2);
 
-test('my passing test', t => {
-	t.pass();
+	const res = await request(app)
+		.get('/')
+		.send();
+
+	t.is(res.status, 200);
+	t.is(
+		JSON.stringify(res.body), 
+		JSON.stringify({ text: "Hello World!" })
+	);
 });
 
-test('json output test: input no json: expects correct http header and error json', t => {
-	const output = require('../src/output');
-
-	var resAPI = {setHeader: function (a,b) {},json: function  (a) {} };
-	var mock = sinon.mock(resAPI); 
+test('get > /hellouser -greeting when name NOT provided', async t => {
+	t.plan(2);
 	
-	var expectation1 = mock.expects("setHeader").once().withArgs('Content-Type', 'application/json');
-	var expectation2 = mock.expects("json").once().calledWith({ error: "output not valid json" });
+	const res = await request(app)
+		.get('/helloUser')
+		.send();
 
-	output.send("json", resAPI, "some text");
-
-	mock.verify();
+	t.is(res.status, 200);
+	t.is(
+		JSON.stringify(res.body), 
+		JSON.stringify({ text: "Hello World!" })
+	);
 });
 
-test('json output test: input is json: expects correct http header and same json output', t => {
-	const output = require('../src/output');
+test('get > /hellouser -greeting when name provided', async t => {
+	t.plan(2);
+	const randomString = Math.random().toString(36).substring(8);
 
-	var resAPI = {setHeader: function (a,b) {},json: function  (a) {} };
-	var mock = sinon.mock(resAPI); 
-	var expectedOutputContent = { text: "Hello World!" }
+	const res = await request(app)
+		.get('/helloUser?username='+randomString)
+		.send();
 
-	var expectation1 = mock.expects("setHeader").once().withArgs('Content-Type', 'application/json');
-	var expectation2 = mock.expects("json").once().calledWith(expectedOutputContent);
-
-	output.send("json", resAPI, expectedOutputContent);
-
-	mock.verify();
+	t.is(res.status, 200);
+	t.is(
+		JSON.stringify(res.body), 
+		JSON.stringify({ text: randomString })
+	);
 });

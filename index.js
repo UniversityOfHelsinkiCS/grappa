@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const output = require('./src/output');
 
+module.exports = app;
+
 app.get('/',  (req, res) => {
   output.send(req.query.outputType, res, { text: "Hello World!"} );
 })

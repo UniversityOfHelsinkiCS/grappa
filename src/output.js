@@ -27,7 +27,7 @@ export const send = (outputType, res, outputContent) => {
             textOut(res,outputContent);
             break;
         case "html": 
-            textOut(res,outputContent);
+            htmlOut(res,outputContent);
             break;
         default: 
             jsonOut(res,outputContent);
