@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import logo from './grappa.jpg';
 import './App.css';
 import axios from 'axios';
@@ -39,7 +40,8 @@ class App extends Component {
           <input type="submit" value="send" />
         </form>
         </p>
-
+        <br />
+        <Link to="/contract"> Go to contract page </Link>
       </div>
     );
   }
