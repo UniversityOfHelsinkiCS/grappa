@@ -13,6 +13,10 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = "Grappa: Main page";
+  }
+
   handlePost(e) {
     e.preventDefault()
     let value = this.refs.input.value;

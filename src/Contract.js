@@ -3,6 +3,9 @@ import logo from './grappa.jpg';
 import { Link } from 'react-router-dom';
 
 class Contract extends Component {
+    componentDidMount() {
+        document.title = "Grappa: Contract page";
+    }
 
     render() {
       return (
