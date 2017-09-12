@@ -33,12 +33,6 @@ test('has link to contract page', () => {
   expect(doesAppContainElement(<Link to="/contract"> Go to contract page </Link>)).to.equal(true);
 });
 
-test('when link to contract page is called, something happens', () => {
-  const changeToContract = sinon.spy('/contract')
-  wrapper.find('Link').simulate('click');
-  expect(changeToContract.calledOnce).to.equal(true);
-});
-
 function doesAppContainElement(element) {
   return wrapper.containsMatchingElement(element);
 };
