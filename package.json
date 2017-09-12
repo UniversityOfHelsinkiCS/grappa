@@ -49,6 +49,7 @@
     "ava": "^0.22.0",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
+    "coveralls": "^2.13.1",
     "enzyme": "^2.9.1",
     "ignore-styles": "^5.0.1",
     "nyc": "^11.2.1",
@@ -61,7 +62,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
-    "report": "nyc report --reporter=html"
+    "report": "nyc report --reporter=html",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "ava": {
     "files": [
