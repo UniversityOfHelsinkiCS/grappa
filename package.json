@@ -83,8 +83,12 @@
     "babel": "inherit"
   },
   "babel": {
-    "presets": ["es2015"],
-    "plugins": ["transform-runtime"],
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
     "ignore": "test.js",
     "env": {
       "development": {
