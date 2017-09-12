@@ -7,7 +7,7 @@ class Contract extends Component {
         super(props);
         this.handleContractChange = this.handleContractChange.bind(this);
         this.state = {
-           compitionEta: "",
+           completionEta: "",
            supervision: "",
            misc: ""
         }
@@ -18,6 +18,7 @@ class Contract extends Component {
     }
 
     handleContractChange(event) {
+      console.log("handler called "+event.target.name + " " + event.target.value);
       this.setState({ 
         [event.target.name]: event.target.value
       });  
@@ -35,11 +36,11 @@ class Contract extends Component {
           Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.
 
           <form onSubmit={this.handlePost}>
-          <textarea ref="input" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="compitionEta" onChange={this.handleContractChange} /> <br />
+          <textarea ref="input" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="completionEta" value={this.state.completionEta} onChange={this.handleContractChange} /> <br />
           <br />
-          <textarea ref="input" placeholder="ohjauksen määrän ja laadun yksityiskohdat" type="text" name="supervision" onChange={this.handleContractChange}/> <br />
+          <textarea ref="input" placeholder="ohjauksen määrän ja laadun yksityiskohdat" type="text" name="supervision" value={this.state.supervision} onChange={this.handleContractChange}/> <br />
           <br />
-          <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" onChange={this.handleContractChange} /> <br />
+          <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
           <br />
           <input type="submit" value="send" />
         </form>
