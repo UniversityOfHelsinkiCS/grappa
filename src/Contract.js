@@ -19,9 +19,14 @@ class Contract extends Component {
 
     handleContractChange(event) {
       console.log("handler called "+event.target.name + " " + event.target.value);
-      this.setState({ 
+      this.setState({
         [event.target.name]: event.target.value
-      });  
+      });
+    }
+
+    sendForm(event) {
+      console.log(event);
+      console.log("Nappia painettiin.");
     }
 
     render() {
@@ -42,7 +47,7 @@ class Contract extends Component {
           <br />
           <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
           <br />
-          <input type="submit" value="send" />
+          <input type="submit" value="send" onClick={(event) => this.sendForm(event)}/>
         </form>
 
 
@@ -53,5 +58,5 @@ class Contract extends Component {
       );
     }
   }
-  
+
   export default Contract;
