@@ -36,7 +36,7 @@ test('should have 3 textarea elements', t => {
 });
 
 test('should have a submit element', t => {
-    t.is(wrapper.find('input[type="submit"]').length,1);
+    t.is(wrapper.find('button[type="submit"]').length,1);
 });
 
 test('should have specified (3) empty state elements', t => {
@@ -74,7 +74,7 @@ test('when send button is clicked, sendForm method is called', t => {
     const spy = sinon.spy(instance, "sendForm");
     instance.forceUpdate();
 
-    wrapper.find('input[type="submit"]').simulate('click');
+    wrapper.find('button[type="submit"]').simulate('click');
     t.is(spy.calledOnce, true);
 });
 
