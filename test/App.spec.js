@@ -1,11 +1,11 @@
 import React from 'react';
 import test from 'ava';
-import { Link } from 'react-router-dom';
+import { Link, Router } from 'react-router-dom';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
+//import sinon from 'sinon';
 require('ignore-styles')
 import App from '../src/App.js';
-import Router from "react-router-dom";
+
 const app = <App/>
 const wrapper = shallow(
   app
