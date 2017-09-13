@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import logo from './grappa.jpg';
 import './App.css';
 import axios from 'axios';
+import Form from 'semantic-ui-react';
 
 class App extends Component {
   constructor(props) {
@@ -23,30 +24,38 @@ class App extends Component {
     console.log("value", value)
     axios.get('/helloUser?username=' + value)
       .then(resp => {
-      this.setState({
-        username: resp.data.text
-      })
-    }).catch((error) => console.error(error));
+        this.setState({
+          username: resp.data.text
+        })
+      }).catch((error) => console.error(error));
   }
 
   render() {
     return (
       <div className="App">
-        <div className="App-header">
+
+        <div className="ui inverted segment">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Enter your name below</h2>
         </div>
-        <h2>{this.state.username}</h2>
-        <p className="App-intro">
-        <form onSubmit={this.handlePost}>
-          <input ref="input" placeholder="enter your name here" type="text" name="username"/> <br />
-          <br />
-          <input type="submit" value="send" />
-        </form>
-        </p>
+
+        <div className="ui segment">
+          <h2>{this.state.username}</h2>
+          
+          <form onSubmit={this.handlePost}>
+            <div className="ui action input">
+              <input ref="input" placeholder="enter your name here" type="text" name="username" />
+              <button className="ui button" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+
         <br />
         <Link to="/contract"> Go to contract page </Link>
+
       </div>
+
+
     );
   }
 }
