@@ -6,9 +6,7 @@ require('ignore-styles')
 import App from '../src/App.js';
 
 const app = <App/>
-const wrapper = shallow(
-  app
-);
+const wrapper = shallow(app);
 
 test('has correct title', t => {
 	t.truthy(doesAppContainElement(<h2>Enter your name below</h2>));
