@@ -30,7 +30,7 @@ test('should have specified (3) empty state elements', t => {
 
 test('change completionEta by target.name', t => {
     const randomString = getRandomString();
-    const input = wrapper.find('textarea').at(0);
+    const input = wrapper.find('textarea[name="completionEta"]');
 
     input.simulate('change', {target: {name: 'completionEta',value: randomString}});
 
@@ -39,7 +39,7 @@ test('change completionEta by target.name', t => {
 
 test('when supervision is filled, state changes', test => {
     const randomString = getRandomString();
-    const input = wrapper.find('textarea').at(1);
+    const input = wrapper.find('textarea[name="supervision"]');
 
     input.simulate('change', {target: {name: 'supervision', value : randomString}});
 
@@ -48,26 +48,17 @@ test('when supervision is filled, state changes', test => {
 
 test('when misc is filled, state changes', test => {
     const randomString = getRandomString();
-    const input = wrapper.find('textarea').at(2);
+    const input = wrapper.find('textarea[name="misc"]');
 
     input.simulate('change', {target: {name: 'misc', value : randomString}});
     
     test.is(wrapper.state().misc, randomString);
 });
 
-test('when send button is clicked, sendForm method is called', t => {
-    const instance = wrapper.instance();
-    const spy = sinon.spy(instance, "sendForm");
-    instance.forceUpdate();
 
-    wrapper.find('input[type="submit"]').simulate('click');
-    t.is(spy.calledOnce, true);
-});
-
-
-test.skip('change in completionEta textarea changes input field', t => {
+test.skip('change in completionEta textarea changes input field value', t => {
     const randomString = getRandomString();
-    const input = wrapper.find('textarea').at(0);
+    const input = wrapper.find('textarea[name="completionEta"]');
     console.log('random String: ' + randomString);
     input.simulate('change', {target: {name: 'completionEta',value: randomString}});
     console.log('input value ' + input.get(0).props.value);
@@ -81,3 +72,12 @@ test.skip('change in completionEta textarea changes input field', t => {
  function getRandomString() {
    return Math.random().toString(36).substring(8);
  }
+
+test('when send button is clicked, sendForm method is called', t => {
+    const instance = wrapper.instance();
+    const spy = sinon.spy(instance, "sendForm");
+    instance.forceUpdate();
+
+    wrapper.find('input[type="submit"]').simulate('click');
+    t.is(spy.calledOnce, true);
+});
