@@ -2,7 +2,6 @@ import React from 'react';
 import test from 'ava';
 import { Link, Router } from 'react-router-dom';
 import { shallow } from 'enzyme';
-//import sinon from 'sinon';
 require('ignore-styles')
 import App from '../src/App.js';
 
