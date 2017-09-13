@@ -10,6 +10,23 @@ import Contract from '../src/Contract';
 const contractApp = <Contract/>
 const wrapper = shallow(contractApp);
 
+const stateValueChecker = (elementName) => {
+    const randomString = getRandomString();
+    const input = wrapper.find('textarea[name="'+elementName+'"]');
+
+    input.simulate('change', {target: {name: elementName,value: randomString}});
+    
+    return (wrapper.state()[elementName] === randomString);
+}
+
+const textareaValueChecker = (elementName) => {
+    const randomString = getRandomString();
+    
+    wrapper.find('textarea[name="'+elementName+'"]').simulate('change', {target: {name: elementName,value: randomString}});
+    
+    return (wrapper.find('textarea[name="'+elementName+'"]').props().value === randomString);
+}
+
 test('has a correct tittle 2', t => {
     t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
 });
@@ -28,39 +45,28 @@ test('should have specified (3) empty state elements', t => {
     t.is(wrapper.state().misc,"");
 });
 
-test('change completionEta by target.name', t => {
-    const randomString = getRandomString();
-    const input = wrapper.find('textarea[name="completionEta"]');
-
-    input.simulate('change', {target: {name: 'completionEta',value: randomString}});
-
-    t.is(wrapper.state().completionEta,randomString);
+test('change completionEta is filled, state changes', t => {
+    t.truthy(stateValueChecker('completionEta'));
 });
 
-test('when supervision is filled, state changes', test => {
-    const randomString = getRandomString();
-    const input = wrapper.find('textarea[name="supervision"]');
-
-    input.simulate('change', {target: {name: 'supervision', value : randomString}});
-
-    test.is(wrapper.state().supervision, randomString);
+test('when supervision is filled, state changes', t => {
+    t.truthy(stateValueChecker('supervision'));
 });
 
-test('when misc is filled, state changes', test => {
-    const randomString = getRandomString();
-    const input = wrapper.find('textarea[name="misc"]');
-
-    input.simulate('change', {target: {name: 'misc', value : randomString}});
-    
-    test.is(wrapper.state().misc, randomString);
+test('when misc is filled, state changes', t => {
+    t.truthy(stateValueChecker('misc'));
 });
 
 test('change in completionEta textarea changes input field value', t => {
-    const randomString = getRandomString();
-    
-    wrapper.find('textarea[name="completionEta"]').simulate('change', {target: {name: 'completionEta',value: randomString}});
-    
-    t.is(wrapper.find('textarea[name="completionEta"]').props().value, randomString);
+    t.truthy(textareaValueChecker('completionEta'));
+});
+
+test('change in supervision textarea changes input field value', t => {
+    t.truthy(textareaValueChecker('supervision'));
+});
+
+test('change in misc textarea changes input field value', t => {
+    t.truthy(textareaValueChecker('misc'));
 });
 
 test('when send button is clicked, sendForm method is called', t => {
