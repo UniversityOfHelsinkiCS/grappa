@@ -21,7 +21,7 @@ test('has correct input field', t => {
 });
 
 test('has correct button', t => {
-  t.truthy(doesAppContainElement(<input type="submit" value="send" />));
+  t.truthy(doesAppContainElement(<button className="ui button" type="submit">Send</button>));
 });
 
 test('has link to contract page', t => {
