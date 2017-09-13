@@ -6,6 +6,7 @@ class Contract extends Component {
     constructor(props) {
         super(props);
         this.handleContractChange = this.handleContractChange.bind(this);
+        this.sendForm = this.sendForm.bind(this);
         this.state = {
            completionEta: "",
            supervision: "",
@@ -47,7 +48,7 @@ class Contract extends Component {
           <br />
           <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
           <br />
-          <input type="submit" value="send" onClick={(event) => this.sendForm(event)}/>
+          <input type="submit" value="send" onClick={this.sendForm}/>
         </form>
 
 
