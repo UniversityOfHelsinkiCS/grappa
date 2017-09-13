@@ -55,23 +55,13 @@ test('when misc is filled, state changes', test => {
     test.is(wrapper.state().misc, randomString);
 });
 
-
-test.skip('change in completionEta textarea changes input field value', t => {
+test('change in completionEta textarea changes input field value', t => {
     const randomString = getRandomString();
-    const input = wrapper.find('textarea[name="completionEta"]');
-    console.log('random String: ' + randomString);
-    input.simulate('change', {target: {name: 'completionEta',value: randomString}});
-    console.log('input value ' + input.get(0).props.value);
-    console.log('random String: ' + randomString);
-    //console.log(input.get(0));
-    t.is(input.props.value, randomString);
-    //expect(input.value).to.equal(randomString);
-    //expect(wrapper.state().completionEta).to.equal(randomString);
+    
+    wrapper.find('textarea[name="completionEta"]').simulate('change', {target: {name: 'completionEta',value: randomString}});
+    
+    t.is(wrapper.find('textarea[name="completionEta"]').props().value, randomString);
 });
-
- function getRandomString() {
-   return Math.random().toString(36).substring(8);
- }
 
 test('when send button is clicked, sendForm method is called', t => {
     const instance = wrapper.instance();
@@ -81,3 +71,7 @@ test('when send button is clicked, sendForm method is called', t => {
     wrapper.find('input[type="submit"]').simulate('click');
     t.is(spy.calledOnce, true);
 });
+
+function getRandomString() {
+    return Math.random().toString(36).substring(8);
+}
