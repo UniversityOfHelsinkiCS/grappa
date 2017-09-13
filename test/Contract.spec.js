@@ -28,21 +28,48 @@ test('should have specified (3) empty state elements', t => {
     t.is(wrapper.state().misc,"");
 });
 
-test('change textarea by target.name', t => {
-    const randomString = Math.random().toString(36).substring(8);
+test('change completionEta by target.name', t => {
+    const randomString = getRandomString();
     const input = wrapper.find('textarea').at(0);
     input.simulate('change', {target: {name: 'completionEta',value: randomString}});
     t.is(wrapper.state().completionEta,randomString);
 });
 
+test('when supervision is filled, state changes', test => {
+    const randomString = getRandomString();
+    const input = wrapper.find('textarea').at(1);
+    input.simulate('change', {target: {name: 'supervision', value : randomString}});
+    test.is(wrapper.state().supervision, randomString);
+});
 
-test.skip('change in completionEta textarea changes completionEta state', t => {
-    const randomString = Math.random().toString(36).substring(8);
+test('when misc is filled, state changes', test => {
+  const randomString = getRandomString();
+  const input = wrapper.find('textarea').at(2);
+  input.simulate('change', {target: {name: 'misc', value : randomString}});
+  test.is(wrapper.state().misc, randomString);
+});
+
+test.skip('when send button is clicked, sendForm method is called', t => {
+  var spy = sinon.stub(app, "sendForm");
+  const button = wrapper.find('button').at(0);
+  button.simulate('click');
+  t.is(spy.calledOnce, true);
+});
+
+
+test.skip('change in completionEta textarea changes input field', t => {
+    const randomString = getRandomString();
     const input = wrapper.find('textarea').at(0);
+    console.log('random String: ' + randomString);
     input.simulate('change', {target: {name: 'completionEta',value: randomString}});
-    //console.log(input);
-    console.log(input.get(0));
-    t.is(input.get(0).value,randomString);
+    console.log('input value ' + input.get(0).props.value);
+    console.log('random String: ' + randomString);
+    //console.log(input.get(0));
+    t.is(input.props.value, randomString);
     //expect(input.value).to.equal(randomString);
     //expect(wrapper.state().completionEta).to.equal(randomString);
 });
+
+ function getRandomString() {
+   return Math.random().toString(36).substring(8);
+ }
