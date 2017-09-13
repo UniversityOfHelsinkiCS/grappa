@@ -71,33 +71,6 @@ class Contract extends Component {
             <Link to="/"> Go back to HomePage :P </Link>
         </div>
     </div>
-
-
-
-/*
-      <div className="Contract">
-        <div className="Contract-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Thesis Contract</h2>
-        </div>
-        <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
-        <p className="Contract-intro">
-          Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.
-          </p>
-        <textarea ref="input" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="completionEta" value={this.state.completionEta} onChange={this.handleContractChange} /> <br />
-        <br />
-        <textarea ref="input" placeholder="ohjauksen määrän ja laadun yksityiskohdat" type="text" name="supervision" value={this.state.supervision} onChange={this.handleContractChange} /> <br />
-        <br />
-        <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
-        <br />
-        <input type="submit" value="send" onClick={this.sendForm} />
-
-
-
-
-        <br />
-        <Link to="/"> Go back to HomePage :P </Link>
-      </div>*/
     );
   }
 }
