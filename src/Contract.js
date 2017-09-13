@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './grappa.jpg';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class Contract extends Component {
   constructor(props) {
@@ -24,7 +25,16 @@ class Contract extends Component {
   }
 
   sendForm = (event) => {
-    console.log(event);
+    
+    axios.post('/api/contract',{
+      completionEta: this.state.completionEta,
+      supervision: this.state.supervision,
+      misc: this.state.misc
+    })
+      .then((resp) => {
+      console.log(resp)
+    })
+    .catch((error) => {console.error(error)});
     console.log("Nappia painettiin.");
   }
 
@@ -39,15 +49,14 @@ class Contract extends Component {
         <p className="Contract-intro">
           Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.
           </p>
-        <form onSubmit={this.handlePost}>
-          <textarea ref="input" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="completionEta" value={this.state.completionEta} onChange={this.handleContractChange} /> <br />
-          <br />
-          <textarea ref="input" placeholder="ohjauksen määrän ja laadun yksityiskohdat" type="text" name="supervision" value={this.state.supervision} onChange={this.handleContractChange} /> <br />
-          <br />
-          <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
-          <br />
-          <input type="submit" value="send" onClick={this.sendForm} />
-        </form>
+        <textarea ref="input" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="completionEta" value={this.state.completionEta} onChange={this.handleContractChange} /> <br />
+        <br />
+        <textarea ref="input" placeholder="ohjauksen määrän ja laadun yksityiskohdat" type="text" name="supervision" value={this.state.supervision} onChange={this.handleContractChange} /> <br />
+        <br />
+        <textarea ref="input" placeholder="muut sovittavat asiat" type="text" name="misc" value={this.state.misc} onChange={this.handleContractChange} /> <br />
+        <br />
+        <input type="submit" value="send" onClick={this.sendForm} />
+
 
 
 
