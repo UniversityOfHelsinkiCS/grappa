@@ -1,36 +1,33 @@
 import React from 'react';
 import test from 'ava';
-import { Link } from 'react-router-dom';
+import { Link, Router } from 'react-router-dom';
 import { shallow } from 'enzyme';
-import chai from 'chai';
-import sinon from 'sinon';
 require('ignore-styles')
 import App from '../src/App.js';
-import Router from "react-router-dom";
-var expect = chai.expect;
+
 const app = <App/>
 const wrapper = shallow(
   app
 );
 
-test('has correct title', () => {
-	expect(doesAppContainElement(<h2>Enter your name below</h2>)).to.equal(true);
+test('has correct title', t => {
+	t.truthy(doesAppContainElement(<h2>Enter your name below</h2>));
 });
 
-test('text is ennen kutsua at beginning', () => {
-	expect(doesAppContainElement(<h2>ennen kutsua</h2>)).to.equal(true);
+test('text is ennen kutsua at beginning', t => {
+	t.truthy(doesAppContainElement(<h2>ennen kutsua</h2>));
 });
 
-test('has correct input field', () => {
-  expect(doesAppContainElement(<input ref="input" placeholder="enter your name here" type="text" name="username"/>)).to.equal(true);
+test('has correct input field', t => {
+  t.truthy(doesAppContainElement(<input ref="input" placeholder="enter your name here" type="text" name="username"/>));
 });
 
-test('has correct button', () => {
-  expect(doesAppContainElement(<input type="submit" value="send" />)).to.equal(true);
+test('has correct button', t => {
+  t.truthy(doesAppContainElement(<input type="submit" value="send" />));
 });
 
-test('has link to contract page', () => {
-  expect(doesAppContainElement(<Link to="/contract"> Go to contract page </Link>)).to.equal(true);
+test('has link to contract page', t => {
+  t.truthy(doesAppContainElement(<Link to="/contract"> Go to contract page </Link>));
 });
 
 function doesAppContainElement(element) {
