@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import logo from './grappa.jpg';
 import './App.css';
 import axios from 'axios';
-import Form from 'semantic-ui-react';
 
 class App extends Component {
   constructor(props) {
