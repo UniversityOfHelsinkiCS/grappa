@@ -43,6 +43,17 @@ class Contract extends Component {
 
             <div className="ui form">
                 <form onSubmit={this.handlePost}>
+                        <h1>Opinnäytetyön tekujä</h1>
+                               <div className="two fields">
+                                 <div className="field">
+                                     <label>Nimi</label>
+                                     <input type="text" ref="input" placeHolder="nimi" />
+                                 </div>
+                                 <div className="field">
+
+                                 </div>
+                               </div>
+
                     <div className="field">
                         <label>Gradun valmistumisen ajankohta</label>
                         <textarea ref="input" rows="2" placeholder="arvioitu gradun valmistumisen aikataulu" type="text" name="completionEta" value={this.state.completionEta} onChange={this.handleContractChange} />
