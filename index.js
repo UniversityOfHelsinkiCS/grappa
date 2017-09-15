@@ -26,16 +26,16 @@ app.get('/helloUser', (req, res) => {
 })
 
 // Contract
-app.get('/api/contract', (req, res) => {
+app.get('/contract', (req, res) => {
   contractController.getContract(req, res);
 });
 
-app.post('/api/contract', (req, res) => {
+app.post('/contract', (req, res) => {
   contractController.saveContract(req, res);
 });
 
 // Thesis
-app.get('/api/theses', (req, res) => {
+app.get('/theses', (req, res) => {
   // list all theses
   thesisController.getTheses(req, res);
 });
