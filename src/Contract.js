@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './grappa.jpg';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class Contract extends Component {
   constructor() {
@@ -52,8 +53,15 @@ class Contract extends Component {
   }
 
   sendForm = (event) => {
-    //event.preventDefault();
-    //console.log(event);
+    axios.post('/api/contract',{
+      completionEta: this.state.completionEta,
+      supervision: this.state.supervision,
+      misc: this.state.misc
+    })
+      .then((resp) => {
+      console.log(resp)
+    })
+    .catch((error) => {console.error(error)});
     console.log("Nappia painettiin.");
   }
 
@@ -265,6 +273,7 @@ class Contract extends Component {
           <Link to="/"> Go back to HomePage :P </Link>
         </div>
       </div>
+
     );
   }
 }
