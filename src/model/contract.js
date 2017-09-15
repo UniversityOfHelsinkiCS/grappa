@@ -1,7 +1,26 @@
 export class ThesisContract {
-    construct(completionEta, supervision, misc){
-        this.completionEta = completionEta;
-        this.supervision = supervision;
-        this.misc = misc;
+    construct(){
+        studentName,
+        studentNumber,
+        studentAddress,
+        studentPhone,
+        studentEmail,
+        studentMajor,
+ 
+        thesisTitle,
+        thesisStartDate,
+        thesisCompletionEta,
+        thesisPerformancePlace,
+ 
+        thesisSupervisorMain,
+        thesisSupervisorSecond,
+        thesisSupervisorOther,
+ 
+        thesisWorkStudentTime,
+        thesisWorkSupervisorTime,
+        thesisWorkIntermediateGoal,
+        thesisWorkMeetingAgreement,
+        thesisWorkOther,
+        studentGradeGoal
     }
 }

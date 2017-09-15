@@ -8,6 +8,5 @@ export function getContract(req, res) {
 
 export function saveContract(req, res) {
     console.log(req.body);
-    contractDao.saveContract(req.body);
-    output.send(req.query.outputType, res.status(200), "saveContract function called.");
+    output.send(req.query.outputType, res.status(200), contractDao.saveContract(req));
 }
