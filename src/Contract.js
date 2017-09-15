@@ -52,7 +52,7 @@ class Contract extends Component {
   }
 
   sendForm = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     //console.log(event);
     console.log("Nappia painettiin.");
   }
