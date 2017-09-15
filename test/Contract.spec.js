@@ -99,7 +99,7 @@ for(let i=0;i < (formItems.input.length);i++){
     });
 }
 
-test.failing('when send button is clicked, sendForm method is called', t => {
+test('when send button is clicked, sendForm method is called', t => {
     const instance = wrapper.instance();
     const spy = sinon.spy(instance, "sendForm");
     instance.forceUpdate();

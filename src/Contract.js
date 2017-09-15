@@ -238,6 +238,7 @@ class Contract extends Component {
     <div className="ui form">
       <form onSubmit={this.handlePost}>
         {sectionList}
+        <br />
         <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>
       </form>
     </div>);
