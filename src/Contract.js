@@ -47,21 +47,21 @@ class Contract extends Component {
 
     let oldState = this.state.form;
     let newState = this.state.form;
-    newState[event.target.name] =event.target.value;
-  
-    this.setState({oldState: newState})
+    newState[event.target.name] = event.target.value;
+
+    this.setState({ oldState: newState })
   }
 
   sendForm = (event) => {
-    axios.post('/api/contract',{
+    axios.post('/api/contract', {
       completionEta: this.state.completionEta,
       supervision: this.state.supervision,
       misc: this.state.misc
     })
       .then((resp) => {
-      console.log(resp)
-    })
-    .catch((error) => {console.error(error)});
+        console.log(resp)
+      })
+      .catch((error) => { console.error(error) });
     console.log("Nappia painettiin.");
   }
 
@@ -70,35 +70,25 @@ class Contract extends Component {
   }
 
   createField = (fieldData) => {
-    if (fieldData.inputType === "input" && fieldData.labelType.includes("right")) {
-      return (
-        <div className={this.defineFieldClasses(fieldData.labelType,fieldData.inputType,fieldData.required)}>
-          <input name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />
-          <div className="ui label" >{fieldData.label}</div>
-        </div>
-      );
-    } else if (fieldData.inputType === "input" && !fieldData.labelType.includes("right")) {
-      return (
-        <div className={this.defineFieldClasses(fieldData.labelType,fieldData.inputType,fieldData.required)}>
-          <div className="ui label" >{fieldData.label}</div>
-          <input name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />
-        </div>
-      );
+    let forReturn = [];
+    if (fieldData.inputType === "input") {
+
+      forReturn = [<div className="ui label" >{fieldData.label}</div>,
+                   <input name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
+
+      if (fieldData.labelType.includes("right")) {
+        forReturn.reverse();
+      }
     } else if (fieldData.inputType === "textarea") {
-      return (
-        <div className={this.defineFieldClasses(fieldData.labelType,fieldData.inputType,fieldData.required)}>
-          <label>{fieldData.label}</label>
-          <textarea name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>
-        </div>
-      );
-    } else {
-      return (
-        <div className={this.defineFieldClasses(fieldData.fieldType,"input",false)}>
-          <input name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />
-          <div className="ui label" >{fieldData.label}</div>
-        </div>
-      );
+      forReturn = [<label>{fieldData.label}</label>,
+                   <textarea name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
     }
+
+    return (
+      <div className={this.defineFieldClasses(fieldData.labelType, fieldData.inputType, fieldData.required)}>
+        {forReturn}
+      </div>
+    );
   }
 
   createFormSectionLine = (sectionLineData) => {
@@ -243,13 +233,13 @@ class Contract extends Component {
       });
 
     return (
-    <div className="ui form">
-      <form onSubmit={this.handlePost}>
-        {sectionList}
-        <br />
-        <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>
-      </form>
-    </div>);
+      <div className="ui form">
+        <form onSubmit={this.handlePost}>
+          {sectionList}
+          <br />
+          <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>
+        </form>
+      </div>);
   }
 
   render() {
@@ -265,10 +255,10 @@ class Contract extends Component {
           <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
           <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
           <br />
-          
-            {this.createForm()}
 
-          
+          {this.createForm()}
+
+
           <br />
           <Link to="/"> Go back to HomePage :P </Link>
         </div>
