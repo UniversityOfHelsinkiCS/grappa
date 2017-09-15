@@ -4,6 +4,19 @@ import logo from './grappa.jpg';
 import './App.css';
 import axios from 'axios';
 
+var getAxios = () => {
+  if (process.env.API_URL) {
+    console.log("not undefined");
+    return axios.create({
+      baseURL: process.env.API_URL
+    });
+  } else {
+    return axios;
+  }
+}
+
+const service = getAxios();
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +33,8 @@ class App extends Component {
   handlePost(e) {
     e.preventDefault()
     let value = this.refs.input.value;
-    console.log("value", value)
-    axios.get('/helloUser?username=' + value)
+    console.log("API_URL", process.env.API_URL);
+    service.get('/helloUser?username=' + value)
       .then(resp => {
         this.setState({
           username: resp.data.text
