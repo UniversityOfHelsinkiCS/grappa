@@ -53,6 +53,7 @@ class Contract extends Component {
   }
 
   sendForm = (event) => {
+    event.preventDefault();
     axios.post('/api/contract', this.state.form /*{
       completionEta: this.state.completionEta,
       supervision: this.state.supervision,
