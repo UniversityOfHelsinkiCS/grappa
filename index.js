@@ -1,6 +1,8 @@
 require('babel-core/register');
 require('babel-polyfill');
 
+const thesisController = require('./src/controllers/ThesisController');
+
 const express = require('express');
 const app = express();
 const output = require('./src/output');
@@ -18,6 +20,9 @@ app.get('/helloUser', (req, res) => {
     output.send(req.query.outputType, res, { text: "Hello World!" });
   }
 })
+
+app.use(thesisController);
+
 
 app.listen(3100, () => {
   console.log('Example app listening on port 3100!');
