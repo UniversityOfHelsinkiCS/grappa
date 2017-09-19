@@ -1,8 +1,10 @@
+const mockContract = require('../mockdata/mockContract');
+
 export const getContract = () => {
-    return "Hola";
+    return mockContract.singleMockContract;
 }
 
 export const saveContract = (data) => {
     console.log(data);
-    console.log('data saved');
+    return {text: 'Contract saved to backend'};
 }
