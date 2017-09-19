@@ -8,10 +8,16 @@ import { send } from '../output.js';
 
 
 export function getContract(req, res) {
-    output.send(req.query.outputType, res.status(200), contractDao.getContract());
+    send(req.query.outputType, res.status(200), contractDao.getContract());
 }
 
 export function saveContract(req, res) {
     console.log(req.body);
-    output.send(req.query.outputType, res.status(200), contractDao.saveContract(req));
+    send(req.query.outputType, res.status(200), contractDao.saveContract(req));
 }
+
+//theses list implemented this way, not sure if better or not
+
+//app.get('/contract', (req, res) => {
+  //  send(req.query.outputType, res.status(200), contractDao.getContract());
+//})

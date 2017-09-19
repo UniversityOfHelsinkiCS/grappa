@@ -1,13 +1,11 @@
 require('babel-core/register');
 require('babel-polyfill');
 
-const thesisController = require('./src/controllers/ThesisController');
-
 const express = require('express');
 const app = express();
 const output = require('./src/output');
-const contractController = require('./src/controller/contractController');
-const thesisController = require('./src/controller/thesisController');
+const contractController = require('./src/controllers/ContractController');
+const thesisController = require('./src/controllers/ThesisController');
 
 module.exports = app;
 
