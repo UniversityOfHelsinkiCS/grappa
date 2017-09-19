@@ -9,7 +9,8 @@ import Contract from '../src/Contract';
 
 const contractApp = <Contract/>
 const wrapper = shallow(contractApp);
-let xhr, requests;
+let sandbox;
+let server;
 
 const formItems = {
     input: [
@@ -57,6 +58,17 @@ const textareaValueChecker = (elementType,elementName) => {
 function getRandomString() {
     return Math.random().toString(36).substring(8);
 }
+
+
+test.before( () => {
+    sandbox = sinon.sandbox.create();
+    server = sandbox.useFakeServer();
+});
+
+test.after( () => {
+    server.restore();
+    sandbox.restore();
+});
 
 test('has a correct tittle 2', t => {
     t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
@@ -113,22 +125,22 @@ test('when send button is clicked, sendForm method is called', t => {
     t.is(spy.calledOnce, true);
 });
 
-test.before( () => {
-    xhr = sinon.useFakeXMLHttpRequest();
-    requests = [];
-    xhr.onCreate = function (req) { requests.push(req); };
-});
 
 test.skip('when send button is clicked, data is sent to the server to correct url via POST', t => {
 
+    console.log(wrapper);
+    console.log("########################################################");
+    console.log(wrapper.instance());
+    console.log("########################################################");
+    console.log(typeof(wrapper.instance().sendForm));
+    wrapper.instance().sendForm.then(() => {console.log("request made")}).then("done", "done");
+
+  setTimeout(() => server.respond([200, { 'Content-Type': 'application/json' }, '[]']), 0);
+/*
     wrapper.instance().sendForm(undefined, sinon.spy());
     console.log(requests);
     t.is(requests.length, 1);
-    t.is(requests[0].url, "/api/contract");
+    t.is(requests[0].url, "/contract");
     t.is(requests[0].method, "POST");
-    console.log(requests[0].requestBody);
-});
-
-test.after( () => {
-    xhr.restore();
+    console.log(requests[0].requestBody);*/
 });
