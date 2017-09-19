@@ -7,6 +7,7 @@ class Contract extends Component {
   constructor() {
     super();
     this.state = {
+      serverResponseReceived: "",
       completionEta: "",
       supervision: "",
       misc: "",
@@ -53,72 +54,83 @@ class Contract extends Component {
   }
 
   sendForm = (event) => {
-    if(event !== undefined)
+    this.setState({ serverResponseReceived: "" });
+
+    if (event !== undefined)
       event.preventDefault();
-    axios.post('/contract', this.state.form /*{
-      completionEta: this.state.completionEta,
-      supervision: this.state.supervision,
-      misc: this.state.misc
-      
-    }*/)
+
+    axios.post('/contract', this.state.form)
       .then((resp) => {
-        console.log(resp)
+        //console.log(resp)
+        if (resp.status === 200)
+          this.setState({ serverResponseReceived: "success" });
       })
-      .catch((error) => { console.error(error) });
-    console.log("Nappia painettiin.");
+      .catch((error) => { 
+        //console.error(error) 
+        this.setState({ serverResponseReceived: "error" });
+      });
+    console.log("Nappia painettiin. ");
+
   }
 
   defineFieldClasses = (labelType, fieldType, required) => {
     return ("field ui small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
   }
 
-  createField = (fieldData) => {
+  createField = (fieldData, fieldKey) => {
     let forReturn = [];
     if (fieldData.inputType === "input") {
 
-      forReturn = [<div className="ui label" >{fieldData.label}</div>,
-                   <input name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
+      forReturn = [<div key={fieldKey+"label"} className="ui label" >{fieldData.label}</div>,
+      <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
 
       if (fieldData.labelType.includes("right")) {
         forReturn.reverse();
       }
     } else if (fieldData.inputType === "textarea") {
-      forReturn = [<label>{fieldData.label}</label>,
-                   <textarea name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
+      forReturn = [<label key={fieldKey+"label"}>{fieldData.label}</label>,
+      <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
     }
 
     return (
-      <div className={this.defineFieldClasses(fieldData.labelType, fieldData.inputType, fieldData.required)}>
+      <div key={fieldKey+"fieldDiv"} className={this.defineFieldClasses(fieldData.labelType, fieldData.inputType, fieldData.required)}>
         {forReturn}
       </div>
     );
   }
 
-  createFormSectionLine = (sectionLineData) => {
+  createFormSectionLine = (sectionLineData, sectionLineKey) => {
     if (sectionLineData.fields.length === 1) {
-      return (this.createField(sectionLineData.fields[0]));
+      return (this.createField(sectionLineData.fields[0], sectionLineKey+"field0"));
     } else if (sectionLineData.fields.length === 2) {
       return (
-        <div className="two fields">
-          {this.createField(sectionLineData.fields[0])}
-          {this.createField(sectionLineData.fields[1])}
+        <div key={sectionLineKey} className="two fields">
+          {this.createField(sectionLineData.fields[0], sectionLineKey+"field0")}
+          {this.createField(sectionLineData.fields[1], sectionLineKey+"field1")}
         </div>
       );
     }
   }
 
-  createFormSection = (sectionData) => {
+  createFormSection = (sectionData, sectionKey) => {
     let sectionLineList = sectionData.sectionLines.map(
-      (sectionLineData) => {
-        return this.createFormSectionLine(sectionLineData);
+      (sectionLineData, sectionLineKey) => {
+        return this.createFormSectionLine(sectionLineData, "section"+sectionKey+"sectionLine"+sectionLineKey);
       })
 
     return (
-      <div><br />
+      <div key={"section"+sectionKey}><br />
         <h3 className="ui dividing header">{sectionData.header}</h3>
         {sectionLineList}
       </div>
     );
+  }
+
+  getResponseMessage = (type) => {
+    return (<div className={'ui message ' + this.state.serverResponseReceived}>
+      <i className="close icon"></i>
+      <div className="header">{type==="success" && "Tiedot tallennettiin onnistuneesti"} {type==="error" && "Ilmestyi ongelmia"}</div>
+    </div>);
   }
 
   createForm = () => {
@@ -231,18 +243,26 @@ class Contract extends Component {
     }
 
     let sectionList = formFieldProperties.sections.map(
-      (sectionData) => {
-        return this.createFormSection(sectionData);
+      (sectionData, sectionKey) => {
+        return this.createFormSection(sectionData, "form"+sectionKey);
       });
 
+
+
+
     return (
-      <div className="ui form">
+      <div className={"ui form " + this.state.serverResponseReceived}>
         <form onSubmit={this.handlePost}>
           {sectionList}
           <br />
           <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>
+          <br />
+          {this.state.serverResponseReceived === "success" && this.getResponseMessage("success")}
+          {this.state.serverResponseReceived === "error" && this.getResponseMessage("error")}
         </form>
-      </div>);
+
+      </div>
+    );
   }
 
   render() {
