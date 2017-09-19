@@ -69,8 +69,7 @@ class Contract extends Component {
         //console.error(error) 
         this.setState({ serverResponseReceived: "error" });
       });
-    console.log("Nappia painettiin. ");
-
+    //console.log("Nappia painettiin. ");
   }
 
   defineFieldClasses = (labelType, fieldType, required) => {

@@ -9,6 +9,7 @@ import Contract from '../src/Contract';
 
 const contractApp = <Contract/>
 const wrapper = shallow(contractApp);
+let xhr, requests;
 
 const formItems = {
     input: [
@@ -51,6 +52,10 @@ const textareaValueChecker = (elementType,elementName) => {
     wrapper.find(elementType+'[name="'+elementName+'"]').simulate('change', {target: {name: elementName,value: randomString}});
     
     return (wrapper.find(elementType+'[name="'+elementName+'"]').props().value === randomString);
+}
+
+function getRandomString() {
+    return Math.random().toString(36).substring(8);
 }
 
 test('has a correct tittle 2', t => {
@@ -108,6 +113,22 @@ test('when send button is clicked, sendForm method is called', t => {
     t.is(spy.calledOnce, true);
 });
 
-function getRandomString() {
-    return Math.random().toString(36).substring(8);
-}
+test.before( () => {
+    xhr = sinon.useFakeXMLHttpRequest();
+    requests = [];
+    xhr.onCreate = function (req) { requests.push(req); };
+});
+
+test.skip('when send button is clicked, data is sent to the server to correct url via POST', t => {
+
+    wrapper.instance().sendForm(undefined, sinon.spy());
+    console.log(requests);
+    t.is(requests.length, 1);
+    t.is(requests[0].url, "/api/contract");
+    t.is(requests[0].method, "POST");
+    console.log(requests[0].requestBody);
+});
+
+test.after( () => {
+    xhr.restore();
+});
