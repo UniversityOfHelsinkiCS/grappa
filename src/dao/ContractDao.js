@@ -1,4 +1,4 @@
-const mockContract = require('../mockdata/mockContract');
+const mockContract = require('../mockdata/MockContract');
 
 export const getContract = () => {
     return mockContract.singleMockContract;
