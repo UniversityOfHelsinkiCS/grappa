@@ -4,8 +4,8 @@ require('babel-polyfill');
 const express = require('express');
 const app = express();
 const output = require('./src/output');
-const contractController = require('./src/controller/contractController');
-const thesisController = require('./src/controller/thesisController');
+const contractController = require('./src/controllers/ContractController');
+const thesisController = require('./src/controllers/ThesisController');
 
 module.exports = app;
 
@@ -25,6 +25,8 @@ app.get('/helloUser', (req, res) => {
   }
 })
 
+app.use(thesisController);
+
 // Contract
 app.get('/contract', (req, res) => {
   contractController.getContract(req, res);
@@ -39,3 +41,4 @@ app.get('/theses', (req, res) => {
   // list all theses
   thesisController.getTheses(req, res);
 });
+
