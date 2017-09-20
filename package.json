@@ -60,7 +60,11 @@
   },
   "scripts": {
     "start": "API_URL=http://localhost:3100 node scripts/start.js",
+<<<<<<< HEAD
     "build": "API_URL=http://svm-57.cs.helsinki.fi/api/ node scripts/build.js",
+=======
+    "build": "API_URL=/api/ node scripts/build.js",
+>>>>>>> master
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
     "report": "nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
