@@ -13,7 +13,7 @@ class Contract extends Component {
   }
 
   componentDidMount() {
-    document.title = "Grappa: Contract page";
+    document.title = "Contract page";
   }
 
   handleContractChange = (event) => {
