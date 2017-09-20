@@ -15,21 +15,22 @@ module.exports = (app) => {
           output.send(req.query.outputType, res, { text: "Hello World!" });
         }
     })
-      
-    app.use(thesisController);
-      
+    
       // Contract
     app.get('/contract', (req, res) => {
         contractController.getContract(req, res);
     });
-      
+    
     app.post('/contract', (req, res) => {
         contractController.saveContract(req, res);
     });
-      
+    
       // Thesis
     app.get('/theses', (req, res) => {
-        // list all theses
-        thesisController.getTheses(req, res);
+        thesisController.getAllTheses(req, res);
+    });
+
+    app.get('/theses/:id', (req, res)=> {
+        thesisController.getThesisById(req, res);
     });
 };

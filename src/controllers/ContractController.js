@@ -1,5 +1,4 @@
 require('babel-polyfill');
-
 const contractDao = require('../dao/ContractDao');
 const express = require('express');
 const app = express();
