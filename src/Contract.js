@@ -61,12 +61,12 @@ class Contract extends Component {
 
     axios.post('/contract', this.state.form)
       .then((resp) => {
-        //console.log(resp)
+        console.log(resp)
         if (resp.status === 200)
           this.setState({ serverResponseReceived: "success" });
       })
       .catch((error) => { 
-        //console.error(error) 
+        console.error(error) 
         this.setState({ serverResponseReceived: "error" });
       });
     //console.log("Nappia painettiin. ");
