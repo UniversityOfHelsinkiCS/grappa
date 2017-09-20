@@ -20,6 +20,10 @@ module.exports = (app) => {
     app.get('/contract', (req, res) => {
         contractController.getContract(req, res);
     });
+
+    app.get('/contract/:id', (req, res) => {
+        contractController.getContractById(req, res);
+    });
     
     app.post('/contract', (req, res) => {
         contractController.saveContract(req, res);
@@ -30,7 +34,7 @@ module.exports = (app) => {
         thesisController.getAllTheses(req, res);
     });
 
-    app.get('/theses/:id', (req, res)=> {
+    app.get('/theses/:id', (req, res) => {
         thesisController.getThesisById(req, res);
     });
 };
