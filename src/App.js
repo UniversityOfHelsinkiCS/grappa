@@ -17,19 +17,6 @@ var getAxios = () => {
 
 const service = getAxios();
 
-var getAxios = () => {
-  if (process.env.API_URL) {
-    console.log("not undefined");
-    return axios.create({
-      baseURL: process.env.API_URL
-    });
-  } else {
-    return axios;
-  }
-}
-
-const service = getAxios();
-
 class App extends Component {
   constructor(props) {
     super(props);
