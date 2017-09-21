@@ -8,7 +8,6 @@ export const getAllTheses = () => {
 
 export const getThesisById = (id) => { 
     for(let i = 0; i < thesesList.length; i++) {
-        console.log(thesesList[i]);
         if (thesesList[i].id.toString() === id) {
             return thesesList[i];
         }
