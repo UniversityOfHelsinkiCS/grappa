@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../media/grappa.jpg';
+import { createStore } from 'redux'
 
 const service =  require("../util/apiConnection.js");
 
+//left at: https://github.com/happypoulp/redux-tutorial/blob/master/04_get-state.js
+const reducer = function (...args) {
+  console.log('Reducer was called with args', args)
+}
+const appStore = createStore(reducer);
 
 class App extends Component {
   constructor(props) {
