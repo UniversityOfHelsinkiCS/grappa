@@ -14,3 +14,7 @@ const getAxios = () => {
 export const get = (url) => {
     return getAxios().get(url);
 }
+
+export const post = (url, data) => {
+    return getAxios().post(url, data);
+}
