@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 //import ava from 'ava';
 import sinon from 'sinon';
 require('ignore-styles')
-import Contract from '../src/Contract';
+import Contract from '../src/components/Contract';
 import axios from 'axios';
 
 const contractApp = <Contract />
