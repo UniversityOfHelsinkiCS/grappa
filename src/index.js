@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './index.css';
-import App from './App';
-import Contract from './Contract';
-import ThesisList from './ThesisList';
-import registerServiceWorker from './registerServiceWorker';
 
-//ReactDOM.render(<App />, document.getElementById('root'));
+//components
+import App from './components/App';
+import Contract from './components/Contract';
+import ThesisList from './components/ThesisList';
+
+//util
+import registerServiceWorker from './util/registerServiceWorker';
+
+//media
+import './media/index.css';
+import './media/App.css';
 
 ReactDOM.render(
     <Router>

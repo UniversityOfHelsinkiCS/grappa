@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from './grappa.jpg';
+import logo from '../media/grappa.jpg';
 import { Link } from 'react-router-dom';
-const service =  require("./ApiConnection.js");
+const service =  require("../util/apiConnection.js");
 
 class ThesisList extends Component {
     constructor(props) {
