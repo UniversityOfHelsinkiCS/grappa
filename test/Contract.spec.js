@@ -142,5 +142,26 @@ test("when send button is clicked: axios.post() is called with correct arguments
 
     t.is(axiousStub.calledOnce, true);
     t.is(axiousStub.calledWith('/contract', wrapper.state().form), true);
-    //t.truthy(wrapper.state().serverResponseReceived == "success");
+});
+
+test.skip("when send button is clicked: successful server response leads to change in UI", t => {
+    let axiousStub = sinon.stub(axios, 'post').withArgs('/contract', wrapper.state().form)
+        .returns(
+            Promise.resolve({
+                status: 200,
+                response: { text: "Contract saved to backend" }
+        }));
+
+    const instance = wrapper.instance();
+    const spy = sinon.spy(instance, "getResponseMessage");
+    instance.forceUpdate();
+
+    wrapper.find('textarea[name="thesisTitle"]')
+        .simulate('change', { target: { name: "thesisTitle", value: getRandomString() } });
+
+    wrapper.find('button[type="submit"]').simulate('click');
+
+    console.log(wrapper.state());
+    t.is(spy.calledOnce, true);
+    t.truthy(wrapper.state().serverResponseReceived == "success");
 });
