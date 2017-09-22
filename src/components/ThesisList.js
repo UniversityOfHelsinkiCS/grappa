@@ -7,21 +7,32 @@ class ThesisList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            //there has to be a empty thesisListElements on first render before componentDidMount
-            thesisListElements: <tr key={0} class="item"><td>{""}</td><td>{""}</td><td>{""}</td></tr>
+            theses: [],
+            filteredTheses: [],
+            searchTerm: ""
         }
     }
 
   componentDidMount() {
       document.title = "Thesis List Page";
       service.get("/theses").then((resp) => {
-          console.log("THESES: ", resp.data);
+          var theses = resp.data.map((thesis) => thesis);
           this.setState(
-              {thesisListElements: resp.data.map((thesis) =>
-                  <tr key={thesis.id} class="item"><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
-              )}
+              { theses: theses ,
+               filteredTheses: theses }
           );
       }).catch((error) => console.error(error));
+  }
+
+  handleFilteringTheses = (e) => {
+      var value = e.target.value.toLowerCase();
+      var filtered = (value === "") ? this.state.theses : this.state.theses.filter((thesis) =>
+          (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) || thesis.title.toLowerCase().includes(value) || thesis.grade.toString() === value)
+      );
+      this.setState(
+          { filteredTheses: filtered,
+            searchTerm: value }
+      );
   }
 
   render() {
@@ -32,6 +43,14 @@ class ThesisList extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h2>Thesis List</h2>
         </div>
+
+        <div className="ui fluid category search">
+            <div className="ui icon input">
+                <input className="prompt" value={this.state.searchTerm} type="text" placeholder="Filter theses" onChange={this.handleFilteringTheses}/>
+                <i className="search icon"></i>
+            </div>
+        </div>
+
         <table className="ui celled table">
             <thead>
                 <tr>
@@ -40,8 +59,11 @@ class ThesisList extends Component {
                     <th>Grade</th>
                 </tr>
             </thead>
-            <tbody>{this.state.thesisListElements}</tbody>
+            <tbody>{this.state.filteredTheses.map((thesis) =>
+                <tr><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
+            )}</tbody>
         </table>
+
         <div className="ui segment">
             <p><Link to="/"> Go back to HomePage</Link></p>
         </div>
