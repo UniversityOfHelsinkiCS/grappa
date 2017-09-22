@@ -2,20 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from './grappa.jpg';
 import './App.css';
-import axios from 'axios';
 
-var getAxios = () => {
-  if (process.env.API_URL) {
-    console.log("not undefined");
-    return axios.create({
-      baseURL: process.env.API_URL
-    });
-  } else {
-    return axios;
-  }
-}
+const service =  require("./ApiConnection.js");
 
-const service = getAxios();
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +22,6 @@ class App extends Component {
   handlePost(e) {
     e.preventDefault()
     let value = this.refs.input.value;
-    console.log("API_URL", process.env.API_URL);
     service.get('/helloUser?username=' + value)
       .then(resp => {
         this.setState({
@@ -63,8 +51,8 @@ class App extends Component {
         </div>
 
         <br />
-        <Link to="/contract"> Go to contract page </Link>
-
+        <p><Link to="/contract"> Go to contract page </Link></p>
+        <p><Link to="/theses"> Go to thesis list page </Link></p>
       </div>
 
 
