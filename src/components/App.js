@@ -6,6 +6,7 @@ import { createStore } from 'redux'
 const service =  require("../util/apiConnection.js");
 
 //left at: https://github.com/happypoulp/redux-tutorial/blob/master/04_get-state.js
+//check this for good redux:ing: https://github.com/Hashnode/mern-starter
 const reducer = function (...args) {
   console.log('Reducer was called with args', args)
 }
