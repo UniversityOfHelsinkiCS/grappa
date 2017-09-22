@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './grappa.jpg';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+const service =  require("./ApiConnection.js");
 
 class Contract extends Component {
   constructor() {
@@ -59,17 +60,17 @@ class Contract extends Component {
     if (event !== undefined)
       event.preventDefault();
 
-    axios.post('/contract', this.state.form)
-      .then((resp) => {
+    service.post('/contract', this.state.form)
+      .then(resp => {
         console.log(resp)
-        if (resp.status === 200)
+        if (resp.status === 200) {
+          console.log("yay!")
           this.setState({ serverResponseReceived: "success" });
-      })
-      .catch((error) => { 
-        console.error(error) 
+        }
+      }).catch((error) => {
+        console.error(error)
         this.setState({ serverResponseReceived: "error" });
       });
-    //console.log("Nappia painettiin. ");
   }
 
   defineFieldClasses = (labelType, fieldType, required) => {
@@ -80,19 +81,19 @@ class Contract extends Component {
     let forReturn = [];
     if (fieldData.inputType === "input") {
 
-      forReturn = [<div key={fieldKey+"label"} className="ui label" >{fieldData.label}</div>,
+      forReturn = [<div key={fieldKey + "label"} className="ui label" >{fieldData.label}</div>,
       <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
 
       if (fieldData.labelType.includes("right")) {
         forReturn.reverse();
       }
     } else if (fieldData.inputType === "textarea") {
-      forReturn = [<label key={fieldKey+"label"}>{fieldData.label}</label>,
+      forReturn = [<label key={fieldKey + "label"}>{fieldData.label}</label>,
       <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
     }
 
     return (
-      <div key={fieldKey+"fieldDiv"} className={this.defineFieldClasses(fieldData.labelType, fieldData.inputType, fieldData.required)}>
+      <div key={fieldKey + "fieldDiv"} className={this.defineFieldClasses(fieldData.labelType, fieldData.inputType, fieldData.required)}>
         {forReturn}
       </div>
     );
@@ -100,12 +101,12 @@ class Contract extends Component {
 
   createFormSectionLine = (sectionLineData, sectionLineKey) => {
     if (sectionLineData.fields.length === 1) {
-      return (this.createField(sectionLineData.fields[0], sectionLineKey+"field0"));
+      return (this.createField(sectionLineData.fields[0], sectionLineKey + "field0"));
     } else if (sectionLineData.fields.length === 2) {
       return (
         <div key={sectionLineKey} className="two fields">
-          {this.createField(sectionLineData.fields[0], sectionLineKey+"field0")}
-          {this.createField(sectionLineData.fields[1], sectionLineKey+"field1")}
+          {this.createField(sectionLineData.fields[0], sectionLineKey + "field0")}
+          {this.createField(sectionLineData.fields[1], sectionLineKey + "field1")}
         </div>
       );
     }
@@ -114,11 +115,11 @@ class Contract extends Component {
   createFormSection = (sectionData, sectionKey) => {
     let sectionLineList = sectionData.sectionLines.map(
       (sectionLineData, sectionLineKey) => {
-        return this.createFormSectionLine(sectionLineData, "section"+sectionKey+"sectionLine"+sectionLineKey);
+        return this.createFormSectionLine(sectionLineData, "section" + sectionKey + "sectionLine" + sectionLineKey);
       })
 
     return (
-      <div key={"section"+sectionKey}><br />
+      <div key={"section" + sectionKey}><br />
         <h3 className="ui dividing header">{sectionData.header}</h3>
         {sectionLineList}
       </div>
@@ -128,7 +129,7 @@ class Contract extends Component {
   getResponseMessage = (type) => {
     return (<div className={'ui message ' + this.state.serverResponseReceived}>
       <i className="close icon"></i>
-      <div className="header">{type==="success" && "Tiedot tallennettiin onnistuneesti"} {type==="error" && "Ilmestyi ongelmia"}</div>
+      <div className="header">{type === "success" && "Tiedot tallennettiin onnistuneesti"} {type === "error" && "Ilmestyi ongelmia"}</div>
     </div>);
   }
 
@@ -243,7 +244,7 @@ class Contract extends Component {
 
     let sectionList = formFieldProperties.sections.map(
       (sectionData, sectionKey) => {
-        return this.createFormSection(sectionData, "form"+sectionKey);
+        return this.createFormSection(sectionData, "form" + sectionKey);
       });
 
 
