@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import logo from './grappa.jpg';
-import './App.css';
+import logo from '../media/grappa.jpg';
 
-const service =  require("./ApiConnection.js");
+const service =  require("../util/apiConnection.js");
 
 
 class App extends Component {
