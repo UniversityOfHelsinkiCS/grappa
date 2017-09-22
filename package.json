@@ -56,7 +56,9 @@
     "react-dom": "^15.6.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-test-renderer": "^15.6.1"
+    "react-test-renderer": "^15.6.1",
+    "redux": "^3.7.2",
+    "redux-ava": "^2.2.0"
   },
   "scripts": {
     "start": "API_URL=http://localhost:3100 node scripts/start.js",
@@ -101,6 +103,8 @@
   },
   "eslintConfig": {
     "extends": "react-app",
-    "parserOptions": { "ecmaVersion": 6 }
+    "parserOptions": {
+      "ecmaVersion": 6
+    }
   }
 }
