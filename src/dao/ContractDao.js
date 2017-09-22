@@ -1,7 +1,18 @@
-const mockContract = require('../mockdata/MockContract');
+const mockContracts = require('../mockdata/MockContracts');
 
 export const getContract = () => {
-    return mockContract.singleMockContract;
+    //return the first contract in list
+    return mockContracts[0];
+}
+
+export const getContractById = (id) => {
+    let contract;
+    for(let i = 0; i < mockContracts.length; i++) {
+        if (mockContracts[i].id.toString() === id) {
+            return mockContracts[i];
+        }
+    }
+    return null;
 }
 
 export const saveContract = (data) => {
