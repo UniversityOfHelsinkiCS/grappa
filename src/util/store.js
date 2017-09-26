@@ -1,8 +1,28 @@
-import { createStore, applyMiddleware, compose } from "redux";
-
+import { createStore, combineReducers } from "redux";
+//kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
 //malli myöhempää käyttöä varten grappa1.0:sta: https://github.com/UniversityOfHelsinkiCS/grappa-frontend/blob/master/src/store.js
-const combinedReducers = combineReducers({/*tänne sitten tuodaan reducerit*/});
+//tutorial: https://github.com/happypoulp/redux-tutorial
 
-const store = createPersistentStore(combinedReducers);
+var userReducer = function (state = {}, action) {
+    switch (action.type) {
+        // etc.
+        default:
+            return state;
+    }
+}
+var itemsReducer = function (state = [], action) {
+    switch (action.type) {
+        // etc.
+        default:
+            return state;
+    }
+}
+
+const combinedReducers = combineReducers({
+    user: userReducer,
+    items: itemsReducer
+});
+
+const store = createStore(combinedReducers);
 
 export default store;
