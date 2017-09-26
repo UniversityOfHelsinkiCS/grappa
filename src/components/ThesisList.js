@@ -26,6 +26,7 @@ class ThesisList extends Component {
 
   handleFilteringTheses = (e) => {
       var value = e.target.value.toLowerCase();
+      //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
       var filtered = (value === "") ? this.state.theses : this.state.theses.filter((thesis) =>
           (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) || thesis.title.toLowerCase().includes(value) || thesis.grade.toString() === value)
       );
@@ -38,19 +39,16 @@ class ThesisList extends Component {
   render() {
     return (
     <div className="App">
-
         <div className="ui inverted segment">
             <img src={logo} className="App-logo" alt="logo" />
             <h2>Thesis List</h2>
         </div>
-
         <div className="ui fluid category search">
             <div className="ui icon input">
                 <input className="prompt" value={this.state.searchTerm} type="text" placeholder="Filter theses" onChange={this.handleFilteringTheses}/>
                 <i className="search icon"></i>
             </div>
         </div>
-
         <table className="ui celled table">
             <thead>
                 <tr>
@@ -60,10 +58,9 @@ class ThesisList extends Component {
                 </tr>
             </thead>
             <tbody>{this.state.filteredTheses.map((thesis) =>
-                <tr><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
+                <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
             )}</tbody>
         </table>
-
         <div className="ui segment">
             <p><Link to="/"> Go back to HomePage</Link></p>
         </div>
