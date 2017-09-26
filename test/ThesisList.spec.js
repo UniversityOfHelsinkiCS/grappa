@@ -17,10 +17,6 @@ test('should have a table element', t => {
     t.is(wrapper.find('table').length, 1);
 });
 
-test('should have two tr elements in table', t => {
-    t.is(wrapper.find('tr').length, 2);
-});
-
-test('should have specified (1) empty tr state element', t => {
-    t.is(wrapper.state().thesisListElements.type, 'tr');
+test('should have 1 tr elements in table', t => {
+    t.is(wrapper.find('tr').length, 1);
 });
