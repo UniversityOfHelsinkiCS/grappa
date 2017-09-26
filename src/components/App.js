@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../media/grappa.jpg';
 
-const service =  require("../util/apiConnection.js");
-
+const service = require("../util/apiConnection.js");
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +38,7 @@ class App extends Component {
 
         <div className="ui segment">
           <h2>{this.state.username}</h2>
-          
+
           <form onSubmit={this.handlePost}>
             <div className="ui action input">
               <input ref="input" placeholder="enter your name here" type="text" name="username" />
