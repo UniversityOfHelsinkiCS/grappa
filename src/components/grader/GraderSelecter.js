@@ -22,7 +22,7 @@ export default class GraderSelecter extends Component {
   }
 
   removeGrader = (grader) => () => {
-    const removed = this.state.selected.filter(grdr => grdr != grader);
+    const removed = this.state.selected.filter(grdr => grdr !== grader);
     this.setState({ selected: removed });
   }
 
@@ -53,13 +53,9 @@ export default class GraderSelecter extends Component {
   handleKeyPress = (target) => {
     // charCode 13 is ENTER
     if (target.charCode === 13) {
-      const grader = this.props.graders.find((item, index) => {
-        if (!this.state.filtered[index] && !this.isActivated(item)) {
-          return item;
-        }
-      });
+      const grader = this.state.filtered.find(grader => !this.isActivated(grader) );
       if (grader !== undefined) {
-        this.addGrader(grader);
+        this.addGrader(grader)();
       }
     }
   }
