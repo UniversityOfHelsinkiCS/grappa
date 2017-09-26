@@ -9,6 +9,7 @@ import ThesisList from './components/ThesisList';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
+import store from "./util/store";
 
 //media
 import './media/index.css';
