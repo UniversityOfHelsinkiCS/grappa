@@ -7,7 +7,6 @@ const service = require("../util/apiConnection.js");
 class App extends Component {
   constructor(props) {
     super(props);
-    this.handlePost = this.handlePost.bind(this);
     this.state = {
       username: "ennen kutsua"
     }
@@ -17,7 +16,7 @@ class App extends Component {
     document.title = "Grappa: Main page";
   }
 
-  handlePost(e) {
+  handlePost = (e) => {
     e.preventDefault()
     let value = this.refs.input.value;
     service.get('/helloUser?username=' + value)
