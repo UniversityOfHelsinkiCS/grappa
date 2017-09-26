@@ -79,7 +79,7 @@ export default class GraderSelecter extends Component {
     return this.state.selected.map((grader, index) => {
       return (
         <a key={index} className="ui label transition visible" onFocus={this.focusMenu}>
-          { `${grader.title}` }&nbsp;{ `${grader.name}` }
+          { grader.title + " " + grader.name }
           <i className="delete icon"
             onClick={this.removeGrader(grader)}
           ></i>
