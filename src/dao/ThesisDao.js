@@ -2,28 +2,24 @@ import thesesList from "../mockdata/Theses.js";
 
 const knex = require('../../connection');
 
+// don't know if export function is better than export const? Both are working.
+
 export function getAllTheses() {
-    var returnValue = knex.select().from('thesis')
-    .then(function (theses) {
-        returnValue = theses;
-        console.log(returnValue);
-        return theses;
+    return knex.select().from('thesis')
+        .then(theses => {
+            return theses;
     });
-    return returnValue;
-    // return Promise.all(promises);
 }
 
 export const getThesisById = (id) => {
-    for (let i = 0; i < thesesList.length; i++) {
-        if (thesesList[i].id.toString() === id) {
-            console.log(thesesList[i]);
-            return thesesList[i];
-        }
-    }
-    return null;
+    return knex.select().from('thesis').where('thesisId', id)
+        .then(thesis => {
+            return thesis;
+        });
 }
 
 export const getThesisByStudyfield = (studyfield) => {
+    // what is this? there is no studyfield table in db yet. This method uses mockdata.
     let thesesByStudyfield = [];
     for (let i = 0; i < thesesList.length; i++) {
         if (thesesList[i].studyFieldId === studyfield) {

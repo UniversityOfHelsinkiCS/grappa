@@ -17,10 +17,6 @@ module.exports = (app) => {
     })
     
       // Contract
-    app.get('/contract', (req, res) => {
-        contractController.getContract(req, res);
-    });
-
     app.get('/contract/:id', (req, res) => {
         contractController.getContractById(req, res);
     });

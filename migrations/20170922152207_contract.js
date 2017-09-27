@@ -2,10 +2,11 @@ exports.up = function (knex, Promise) {
     return Promise.all([
 
         knex.schema.createTable('contract', function (table) {
-            table.increments('id').primary();
+            table.increments('contractId').primary();
             table.string('studentName');
             table.string('studentNumber');
             table.string('studentAddress');
+            table.string('studentPhone');
             table.string('studentEmail');
             table.string('studentMajor');
             table.string('thesisTitle');

@@ -5,13 +5,11 @@ const app = express();
 
 import { send } from '../output.js';
 
-export function getContract(req, res) {
-    // turha metodi, mutta frontti käyttää tätä vielä (poista kun frontti ei käytä tätä)
-    send(req.query.outputType, res.status(200), contractDao.getContract());
-}
-
 export function getContractById(req, res) {
-    send(req.query.outputType, res.status(200), contractDao.getContractById(req.params.id));
+    contractDao.getContractById(req.params.id)
+        .then(contract => {
+            send(req.query.outputType, res.status(200), contract);
+        })
 }
 
 export function saveContract(req, res) {

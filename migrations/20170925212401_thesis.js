@@ -2,7 +2,7 @@
 exports.up = function (knex, Promise) {
     return Promise.all([
         knex.schema.createTable('thesis', function (table) {
-            table.increments('id').primary();
+            table.increments('thesisId').primary();
             table.string('authorFirstname');
             table.string('authorLastname');
             table.string('authorEmail');
@@ -12,7 +12,7 @@ exports.up = function (knex, Promise) {
             table.string('graderEval');
             table.integer('studyFieldId');
             table.integer('userId');
-            // table.timestamps();
+            table.timestamps();
         })
     ]);
 };

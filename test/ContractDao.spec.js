@@ -3,7 +3,7 @@ import test from 'ava';
 const contractDao = require('../src/dao/ContractDao');
 const mockContracts = require('../src/mockdata/MockContracts');
 
-test('ContractDao returns a contract by id correctly', t => {
+test.skip('ContractDao returns a contract by id correctly', t => {
     let id = '1';
     let contract = contractDao.getContractById(id);
     let mockContract;

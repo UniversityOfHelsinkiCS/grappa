@@ -6,7 +6,7 @@ exports.seed = function (knex, Promise) {
       // Inserts seed entries
       return knex('thesis').insert([
         {
-          id: 1,
+          thesisId: 1,
           authorFirstname: 'Anni',
           authorLastname: 'Puurunen',
           authorEmail: 'anni.puurunen@gmail.com',
@@ -18,7 +18,7 @@ exports.seed = function (knex, Promise) {
           userId: 1
         },
         {
-          id: 2,
+          thesisId: 2,
           authorFirstname: 'Etunimi',
           authorLastname: 'Sukunimi',
           authorEmail: 'etu.suku@gmail.com',
@@ -30,7 +30,7 @@ exports.seed = function (knex, Promise) {
           userId: 2
         },
         {
-          id: 3,
+          thesisId: 3,
           authorFirstname: 'Firstname',
           authorLastname: 'Lastname',
           authorEmail: 'first.last@gmail.com',

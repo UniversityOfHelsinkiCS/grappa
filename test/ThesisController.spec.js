@@ -11,7 +11,7 @@ const req = {
 const resAPI = { status: a => { return a } };
 const sendStub = sinon.stub(output, "send");
 
-test('getThesisById calls output.send() and dao.contractById()', t => {
+test.skip('getThesisById calls output.send() and dao.contractById()', t => {
     const stubDao = sinon.stub(dao, "getThesisById");
     stubDao.withArgs(req.params.id).returns("ok");
 
@@ -23,7 +23,7 @@ test('getThesisById calls output.send() and dao.contractById()', t => {
     resMock.verify();
 });
 
-test('getAllTheses calls output.send() and dao.getAllTheses()', t => {
+test.skip('getAllTheses calls output.send() and dao.getAllTheses()', t => {
     const stubDao = sinon.stub(dao, "getAllTheses");
     stubDao.withArgs(req.params.id).returns("ok");
 
