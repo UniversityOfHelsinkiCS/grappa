@@ -8,7 +8,9 @@ const knex = require('../../connection');
 import { send } from '../output.js';
 
 export function getAllTheses(req, res) {
-    send(req.query.outputType, res.status(200), thesisDao.getAllTheses());
+    thesisDao.getAllTheses().then(theses => {
+        send(req.query.outputType, res.status(200), theses);
+    });
 }
 
 export function getThesisById(req, res) {

@@ -3,11 +3,11 @@ import thesesList from "../mockdata/Theses.js";
 const knex = require('../../connection');
 
 export function getAllTheses() {
-    var returnValue = [];
-    knex.select().from('thesis')
+    var returnValue = knex.select().from('thesis')
     .then(function (theses) {
         returnValue = theses;
         console.log(returnValue);
+        return theses;
     });
     return returnValue;
     // return Promise.all(promises);
