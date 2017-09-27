@@ -34,6 +34,6 @@ module.exports = [
         graderEval: 'Tarkastajien esittely',
         studyFieldId: 2,
         userId: 5
-    },
+    }
 ]
 
