@@ -8,7 +8,12 @@ export const getContractById = (id) => {
         });
 }
 
-export const saveContract = (data) => {
+export const saveNewContract = (data) => {
     // needs to be connected to database
-    return {text: 'Contract saved to backend'};
+    return {text: 'New contract saved to backend'};
+}
+
+export const updateContract = (data) => {
+    // needs to be connected to database
+    return {text: 'Contract updated to backend'};
 }

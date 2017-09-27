@@ -14,5 +14,9 @@ export function getContractById(req, res) {
 
 export function saveContract(req, res) {
     console.log(req.body);
-    send(req.query.outputType, res.status(200), contractDao.saveContract(req));
+    if(req.body.contractId !== "" && req.body.contractId !== undefined){
+        send(req.query.outputType, res.status(200), contractDao.updateContract(req));
+    } else {
+        send(req.query.outputType, res.status(200), contractDao.saveNewContract(req));
+    }
 }
