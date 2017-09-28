@@ -12,11 +12,13 @@ export function getContractById(req, res) {
         })
 }
 
-export function saveContract(req, res) {
+export async function saveContract(req, res) {
     if(req.body.contractId !== "" && req.body.contractId !== undefined){
-
-        send(req.query.outputType, res, contractDao.updateContract(req.body));
+        const daoResponse = await contractDao.updateContract(req.body);
+        send(req.query.outputType, res, daoResponse);
     } else {
-        send(req.query.outputType, res, contractDao.saveNewContract(req.body));
+        const daoResponse = await contractDao.saveNewContract(req.body);
+        console.log(daoResponse);
+        send(req.query.outputType, res, daoResponse);
     }
 }

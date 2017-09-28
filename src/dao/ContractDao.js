@@ -8,32 +8,23 @@ export const getContractById = (id) => {
         });
 }
 
-export const saveNewContract  = async (data) => {
-    console.log("saving new entry: ");
-    console.log(data);
-
-
-    
-    
-    //let forReturn = 
-    await knex('contract')
+export const saveNewContract  = (data) => {
+    return knex('contract')
         .returning('contractId')
         .insert(data)
         .then((contractId) => {
-            return {text: 'New contract saved to backend', contractId: contractId};
+            return {text: 'New contract saved to backend', contractId: contractId[0]};
             
           });
-        //.then((contractId)=>{
-        //    console.log("then called with id: " + contractId);
-        //    return {text: 'New contract saved to backend', contractId: contractId}});
-        //return forReturn;
 }
 
 export const updateContract = (data) => {
-    console.log("updating existing entry: " + data);
     return knex('contract')
         .returning('contractId')
         .where('contractId', '=', data.contractId)
         .update(data)
-        .return({text: 'Contract updated to backend'});
+        .then((contractId) => {
+            return {text: 'New contract saved to backend', contractId: contractId[0]};
+            
+          });
 }
