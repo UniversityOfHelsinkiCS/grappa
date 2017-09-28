@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-const service =  require("../util/apiConnection.js");
-
+const service = require("../util/apiConnection.js");
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.handlePost = this.handlePost.bind(this);
     this.state = {
       username: "ennen kutsua"
     }
@@ -17,7 +15,7 @@ class App extends Component {
     document.title = "Grappa: Main page";
   }
 
-  handlePost(e) {
+  handlePost = (e) => {
     e.preventDefault()
     let value = this.refs.input.value;
     service.get('/helloUser?username=' + value)
@@ -38,7 +36,7 @@ class App extends Component {
 
         <div className="ui segment">
           <h2>{this.state.username}</h2>
-          
+
           <form onSubmit={this.handlePost}>
             <div className="ui action input">
               <input ref="input" placeholder="enter your name here" type="text" name="username" />
