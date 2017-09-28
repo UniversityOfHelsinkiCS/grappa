@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from '../media/grappa.jpg';
 import { Link } from 'react-router-dom';
 const service =  require("../util/apiConnection.js");
 
@@ -29,7 +28,6 @@ class ThesisList extends Component {
     <div className="App">
 
         <div className="ui inverted segment">
-            <img src={logo} className="App-logo" alt="logo" />
             <h2>Thesis List</h2>
         </div>
         <table className="ui celled table">

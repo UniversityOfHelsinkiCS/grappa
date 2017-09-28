@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../media/grappa.jpg';
 
 const service =  require("../util/apiConnection.js");
 
@@ -34,7 +33,6 @@ class App extends Component {
       <div className="App">
 
         <div className="ui inverted segment">
-          <img src={logo} className="App-logo" alt="logo" />
           <h2>Enter your name below</h2>
         </div>
 
