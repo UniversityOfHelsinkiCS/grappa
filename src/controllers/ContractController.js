@@ -18,7 +18,6 @@ export async function saveContract(req, res) {
         send(req.query.outputType, res, daoResponse);
     } else {
         const daoResponse = await contractDao.saveNewContract(req.body);
-        console.log(daoResponse);
         send(req.query.outputType, res, daoResponse);
     }
 }
