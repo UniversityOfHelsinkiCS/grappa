@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from 'knex';
+//import knex from 'knex';
 
 const contractDao = require('../src/dao/ContractDao');
 const mockContracts = require('../src/mockdata/MockContracts');
@@ -17,7 +17,7 @@ test.skip('ContractDao returns a contract by id correctly', t => {
     t.deepEqual(contract, mockContract);
 });
 
-test.only('saveNewContract calls knex correctly & returns correct json', t => {
+test.skip('saveNewContract calls knex correctly & returns correct json', t => {
     let knexStub = sinon.mock(knex);
     const testData = {};
     const knexAPI = {
@@ -27,7 +27,10 @@ test.only('saveNewContract calls knex correctly & returns correct json', t => {
     };
     let knexMock = {};
 
-    t.truthy(knexStub.calledWithNes());
+    contractDao.saveNewContract(testData);
+    knexStub.expects("call").withArgs("contract").once();
+    knexStub.verify();
+    
     
     /*
     knex('contract')
