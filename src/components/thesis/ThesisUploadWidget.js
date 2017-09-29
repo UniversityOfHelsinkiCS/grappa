@@ -33,7 +33,7 @@ export default class ThesisUploadWidget extends Component {
 
     render() {
         return (
-            <div className="field">
+            <div className="field" style={{borderStyle: 'dashed'}}>
                 <label>{this.getLabel()}</label>
                     <Dropzone className="field upload-box" onDrop={this.onDrop} multiple={false}>
                         <p className="upload-p">Click to navigate to the file or drop them from your file system.</p>
