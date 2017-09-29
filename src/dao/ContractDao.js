@@ -12,10 +12,8 @@ export const saveNewContract  = (data) => {
     return knex('contract')
         .returning('contractId')
         .insert(data)
-        .then((contractId) => {
-            return {text: 'New contract saved to backend', contractId: contractId[0]};
-            
-          });
+        .then(contractId => contractId[0])
+        .catch(err => err);
 }
 
 export const updateContract = (data) => {
@@ -23,8 +21,6 @@ export const updateContract = (data) => {
         .returning('contractId')
         .where('contractId', '=', data.contractId)
         .update(data)
-        .then((contractId) => {
-            return {text: 'New contract saved to backend', contractId: contractId[0]};
-            
-          });
+        .then(contractId => contractId[0])
+        .catch(err => err);
 }

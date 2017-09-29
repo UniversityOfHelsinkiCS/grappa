@@ -13,11 +13,22 @@ export function getContractById(req, res) {
 }
 
 export async function saveContract(req, res) {
-    if(req.body.contractId !== "" && req.body.contractId !== undefined){
-        const daoResponse = await contractDao.updateContract(req.body);
-        send(req.query.outputType, res, daoResponse);
+    const contractData = req.body;
+    if(contractData.contractId !== "" && contractData.contractId !== undefined){
+        try{
+            const daoResponse = await contractDao.updateContract(contractData);
+            send(req.query.outputType, res.status(200), {text: "update successed", contractId: daoResponse});
+        } catch (err) {
+            send(req.query.outputType, res.status(500), {text: "error occurred", error: err});
+        }
     } else {
-        const daoResponse = await contractDao.saveNewContract(req.body);
-        send(req.query.outputType, res, daoResponse);
+        try{
+            const daoResponse = await contractDao.saveNewContract(contractData);
+            send(req.query.outputType, res.status(200), {text: "save successed", contractId: daoResponse});
+        } catch (err) {
+            send(req.query.outputType, res.status(500), {text: "error occurred", error: err});
+        }
+
+
     }
 }
