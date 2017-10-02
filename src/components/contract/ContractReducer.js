@@ -1,4 +1,4 @@
-import {CONTRACT_SAVE_SUCCESS, CONTRACT_SAVE_FAILURE} from "./ContractActions"
+import {CONTRACT_SAVE_SUCCESS, CONTRACT_SAVE_FAILURE} from "./ContractActions";
 
 const initialState = { data: [] };
 
