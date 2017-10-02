@@ -45,16 +45,23 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
     render() {
         return (
-            <select
-                className="ui fluid search dropdown"
-                onChange={this.chooseMeeting}
-                value={this.props.chosenMeetingId}>
-                {this.state.filteredMeetings.map((meeting, index) =>
-                    <option key={index} value={meeting.id} >
-                        {meeting.content}
-                    </option>
-                )}
-            </select>
+            <div>
+                <h3 className="ui dividing header">Choose the Councilmeeting date</h3>
+                <p>
+                    Deadline tells when Grappa stops accepting new theses for that date. If the deadline has passed
+                    you have to either contact admin or submit thesis to another Councilmeeting.
+                </p>
+                <select
+                    className="ui fluid search dropdown"
+                    onChange={this.chooseMeeting}
+                    value={this.props.chosenMeetingId}>
+                    {this.state.filteredMeetings.map((meeting, index) =>
+                        <option key={index} value={meeting.id} >
+                            {meeting.content}
+                        </option>
+                    )}
+                </select>
+            </div>
         );
     }
 }

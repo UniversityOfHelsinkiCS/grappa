@@ -90,6 +90,7 @@ export default class GraderSelecter extends Component {
     autoComplete="off"
     tabIndex="0"
     style={{ width: "100%" }}
+    disabled={this.props.allowEdit ? "" : "true"}
     value={this.state.searchValue}
     onChange={this.search}
     onKeyPress={this.handleKeyPress}
