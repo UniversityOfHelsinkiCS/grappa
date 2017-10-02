@@ -72,9 +72,7 @@ class Contract extends Component {
             }).catch((error) => {
                 console.error(error)
                 this.setState({ serverResponseReceived: "error" });
-                const failure = saveFailure();
-                console.log("failure: " + failure);
-                requestWasReturned(failure);
+                requestWasReturned(saveFailure());
             });
     }
 
