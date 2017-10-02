@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 //components
 import App from './components/App';
-import Contract from './components/Contract';
+import Contract from './components/contract/Contract';
 import ThesisList from './components/ThesisList';
 
 //util
