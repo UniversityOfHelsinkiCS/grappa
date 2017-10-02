@@ -7,7 +7,6 @@ export default class GraderSelecter extends Component {
     this.state = {
       searchValue: "",
       menuActive: false,
-      selected: [],
       filtered: [],
     };
   }
@@ -22,14 +21,11 @@ export default class GraderSelecter extends Component {
   }
 
   removeGrader = (grader) => () => {
-    const removed = this.state.selected.filter(grdr => grdr !== grader);
-    this.setState({ selected: removed });
+    this.props.removeGrader(grader);
   }
 
   addGrader = (grader) => () => {
-    this.setState({
-        selected: [...this.state.selected, grader]
-    })
+    this.props.addGrader(grader);
   }
 
   toggleMenu = () => {
@@ -72,11 +68,11 @@ export default class GraderSelecter extends Component {
   }
 
   isActivated(grader) {
-    return this.state.selected.includes(grader);
+    return this.props.alreadySelected.includes(grader);
   }
 
   renderSelected() {
-    return this.state.selected.map((grader, index) => {
+    return this.props.alreadySelected.map((grader, index) => {
       return (
         <a key={index} className="ui label transition visible" onFocus={this.focusMenu}>
           { grader.title + " " + grader.name }
