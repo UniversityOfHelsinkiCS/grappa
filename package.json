@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava",
+    "test": "NODE_ENV=test nyc ava",
     "start": "nodemon index.js",
     "start:prod": "node index.js",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",

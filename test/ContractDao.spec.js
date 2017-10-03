@@ -6,6 +6,8 @@ const knex = require('../connection');
 const contractDao = require('../src/dao/ContractDao');
 const mockContracts = require('../src/mockdata/MockContracts');
 
+//process.env.NODE_ENV = 'test';
+
 test.beforeEach(async t => {
     console.log(knex);
     let temp = await knex.raw('SELECT name FROM sqlite_master WHERE type="table"');
@@ -94,7 +96,7 @@ test.afterEach(async t => {
 	await knex.schema.dropTable('contract');
 });
 
-test.skip('ContractDao returns a contract by id correctly', t => {
+test('ContractDao returns a contract by id correctly', t => {
     let id = '1';
     let contract = contractDao.getContractById(id);
     let mockContract;
@@ -106,7 +108,7 @@ test.skip('ContractDao returns a contract by id correctly', t => {
     t.deepEqual(contract, mockContract);
 });
 
-test.only('saveNewContract call returns contractId = 3', async t => {
+test('saveNewContract call returns contractId = 3', async t => {
     const testData = {
         studentName: 'Firstname2 Lastname2',
         studentNumber: "01234568",
