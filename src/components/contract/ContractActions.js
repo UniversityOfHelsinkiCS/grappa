@@ -4,7 +4,7 @@ export const CONTRACT_SAVE_FAILURE = 'CONTRACT_SAVE_FAILURE'
 
 export const saveSuccess = function() {
     return {
-      type: CONTRACT_SAVE_FAILURE,
+      type: CONTRACT_SAVE_SUCCESS,
       text: 'Sopimus talletettu onnistuneesti'
     };
 }
