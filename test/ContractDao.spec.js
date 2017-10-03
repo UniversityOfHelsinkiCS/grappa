@@ -9,10 +9,10 @@ const mockContracts = require('../src/mockdata/MockContracts');
 //process.env.NODE_ENV = 'test';
 
 test.beforeEach(async t => {
-    console.log(knex);
-    let temp = await knex.raw('SELECT name FROM sqlite_master WHERE type="table"');
-    console.log(temp);
-    await knex.schema.createTable('contract', function (table) {
+    //console.log(knex);
+    let temp = knex.raw('SELECT name FROM sqlite_master WHERE type="table"');
+    //console.log(temp);
+    knex.schema.createTable('contract', function (table) {
         table.increments('contractId').primary();
         table.string('studentName');
         table.string('studentNumber');
@@ -36,7 +36,7 @@ test.beforeEach(async t => {
         table.timestamps();
     })
     
-    await knex('contract').insert([
+    knex('contract').insert([
         {
           contractId: 1,
           studentName: 'Anni Puurunen',
@@ -93,10 +93,11 @@ test.beforeEach(async t => {
       
 });
 test.afterEach(async t => {
-	await knex.schema.dropTable('contract');
+    knex.schema.dropTable('contract');
+    //console.log(knex.select().from('contract').where('contractId', 1));
 });
 
-test('ContractDao returns a contract by id correctly', t => {
+test.serial('ContractDao returns a contract by id correctly', t => {
     let id = '1';
     let contract = contractDao.getContractById(id);
     let mockContract;
@@ -108,7 +109,7 @@ test('ContractDao returns a contract by id correctly', t => {
     t.deepEqual(contract, mockContract);
 });
 
-test('saveNewContract call returns contractId = 3', async t => {
+test.serial('saveNewContract call returns contractId = 3', async t => {
     const testData = {
         studentName: 'Firstname2 Lastname2',
         studentNumber: "01234568",
@@ -137,7 +138,7 @@ test('saveNewContract call returns contractId = 3', async t => {
 
     
     var temp = await contractDao.saveNewContract(testData);
-    console.log(temp);
+    //console.log(temp);
     t.truthy(temp==3)
     /*
     await knex('contract')

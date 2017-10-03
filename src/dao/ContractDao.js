@@ -8,7 +8,7 @@ export const getContractById = (id) => {
         });
 }
 
-export const saveNewContract  = (data) => {
+export const saveNewContract = (data) => {
     return knex('contract')
         .returning('contractId')
         .insert(data)

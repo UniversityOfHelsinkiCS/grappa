@@ -6,10 +6,9 @@ const app = express();
 import { send } from '../output.js';
 
 export function getContractById(req, res) {
-    contractDao.getContractById(req.params.id)
-        .then(contract => {
-            send(req.query.outputType, res.status(200), contract);
-        })
+    const contract = contractDao.getContractById(req.params.id);
+    send(req.query.outputType, res.status(200), contract);
+        
 }
 
 export async function saveContract(req, res) {
