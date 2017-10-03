@@ -11,10 +11,15 @@ const getAxios = () => {
     }
 }
 
-export const get = (url) => {
-    return getAxios().get(url);
+const get = (url) => {
+    return getAxios().get(url).then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
-export const post = (url, data) => {
-    return getAxios().post(url, data);
+const post = (url, data) => {
+    return getAxios().post(url, data).then(res => {res.status === 200 ? res : Promise.reject()});
+}
+
+//todo: switch case for rest; richer argument possibilities
+export default function callApi(url, method='get', content){
+    return (method=='get' ? get(url) : post(url, content));
 }

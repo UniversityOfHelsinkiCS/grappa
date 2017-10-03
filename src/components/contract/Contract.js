@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {saveFailure, saveSuccess} from "./ContractActions";
+import { saveFailure, saveSuccess } from "./ContractActions";
 import ContractResponse from "./ContractResponse";
 
-const service = require("../../util/apiConnection.js");
+import service from "../../util/apiConnection.js";
+
+//redux
+import { connect } from "react-redux";
+import { saveContract } from "./ContractActions";
+
 
 class Contract extends Component {
     constructor() {
@@ -61,19 +66,8 @@ class Contract extends Component {
         if (event !== undefined)
             event.preventDefault();
 
-        service.post('/contract', this.state.form)
-            .then(resp => {
-                console.log(resp)
-                if (resp.status === 200) {
-                    console.log("yay!")
-                    this.setState({ serverResponseReceived: "success" });
-                    ContractResponse.requestWasReturned(getContractSaveSuccess());
-                }
-            }).catch((error) => {
-                console.error(error)
-                this.setState({ serverResponseReceived: "error" });
-                ContractResponse.requestWasReturned(getContractSaveFailure());
-            });
+        this.props.saveContract(this.state.form);
+
     }
 
     defineFieldClasses = (labelType, fieldType, required) => {
@@ -293,4 +287,10 @@ class Contract extends Component {
     }
 }
 
-export default Contract;
+const mapDispatchToProps = (dispatch) => ({
+    saveContract(data) {
+        dispatch(saveContract(data));
+    },
+});
+
+export default connect(null, mapDispatchToProps)(Contract);

@@ -8,12 +8,12 @@ class ContractResponse extends Component {
     constructor() {
         super();
         this.state = {
-            currentState: "";
+            currentState: ""
         };
     };
 
     changeState(event) {
-        this.setState(currentState: event.text);
+        this.setState({currentState: event.text});
     }
 
     getCurrentState() {
@@ -23,8 +23,8 @@ class ContractResponse extends Component {
 
 const requestWasReturned = (event) => {
     const data = contractSave([] , event);
-    changeState(data);
-    console.log(getCurrentState());
+    this.changeState(data);
+    console.log(this.getCurrentState());
   };
 
 
