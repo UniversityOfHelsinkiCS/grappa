@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {saveFailure, saveSuccess} from "./ContractActions";
-import requestWasReturned from "./RequestInfo";
+import ContractResponse from "./ContractResponse";
 
 const service = require("../../util/apiConnection.js");
 
@@ -67,12 +67,12 @@ class Contract extends Component {
                 if (resp.status === 200) {
                     console.log("yay!")
                     this.setState({ serverResponseReceived: "success" });
-                    requestWasReturned(saveSuccess());
+                    ContractResponse.requestWasReturned(getContractSaveSuccess());
                 }
             }).catch((error) => {
                 console.error(error)
                 this.setState({ serverResponseReceived: "error" });
-                requestWasReturned(saveFailure());
+                ContractResponse.requestWasReturned(getContractSaveFailure());
             });
     }
 
