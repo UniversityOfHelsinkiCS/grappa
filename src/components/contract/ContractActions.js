@@ -1,4 +1,4 @@
-import callApi from '../../util/apiConnection';
+import { callApi } from '../../util/apiConnection';
 
 export const CONTRACT_SAVE_ATTEMPT = 'CONTRACT_SAVE_ATTEMPT'
 export const CONTRACT_SAVE_SUCCESS = 'CONTRACT_SAVE_SUCCESS'
