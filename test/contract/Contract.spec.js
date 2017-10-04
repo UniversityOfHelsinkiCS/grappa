@@ -4,9 +4,8 @@ import { Router, Link } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
-import { Contract } from '../src/components/contract/Contract';
+import { Contract } from '../../src/components/contract/Contract';
 import axios from 'axios';
-//import store from '../src/util/store';
 
 const contractApp = <Contract />
 const wrapper = shallow(contractApp);
