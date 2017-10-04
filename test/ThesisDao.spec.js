@@ -6,6 +6,7 @@ const mockTheses = require('../src/mockdata/Theses');
 
 test('getAllTheses returns list of right length ', t => {
     let listOfTheses = thesisDao.getAllTheses();
+    //console.log("lista on", listOfTheses);
     t.deepEqual(listOfTheses.length, mockTheses.length);
 });
 
