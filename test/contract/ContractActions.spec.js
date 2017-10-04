@@ -20,12 +20,6 @@ const contractTestData = { some: 'data' };
 const callApiStub = sinon.stub(API, 'callApi').withArgs('/contract', 'post', contractTestData)
     .returns(Promise.resolve(contractTestData));
 
-const initialState = [];
-const stateWithSuccessSave = [{ id: 'CONTRACT_SAVE_SUCCESS', text: 'Sopimus talletettu onnistuneesti', completed: true }];
-const stateWithFailedSave = [{ id: 'CONTRACT_SAVE_FAILURE', text: 'Sopimuksen talletus epäonnistui', completed: true}];
-const stateWithAttemptedSave = [{ id: 'CONTRACT_SAVE_ATTEMPT', text: 'Sopimuksen talletus käynnistetty', completed: false }];
-
-
 test('saveSuccess returns correct type', actionTest(
     saveSuccess,
     contractTestData,
@@ -44,7 +38,8 @@ test('saveAttempt returns correct type', actionTest(
     { type: CONTRACT_SAVE_ATTEMPT, text: 'Sopimuksen talletus käynnistetty' },
 ));
 
-test.skip('saveContract returns correct type', actionTest(
+test.skip('saveContract returns correct type', t => (
+    saveContract(contractTestData).then(res => console.log(res))
     //kunnon kamaa tänne
 ));
 /*
