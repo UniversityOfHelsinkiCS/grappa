@@ -1,6 +1,6 @@
 module.exports = [
     { 
-        id: 1,
+        thesisId: 1,
         authorFirstname: 'Matti',
         authorLastname: 'Meikäläinen',
         authorEmail: 'matti.meikäläinen@gmail.com',
@@ -9,10 +9,12 @@ module.exports = [
         grade: 2,
         graderEval: 'Tarkastajien esittely',
         studyFieldId: 1,
-        userId: 1
+        userId: 1,
+        created_at: null,
+        updated_at: null,
     },
     {
-        id: 2,
+        thesisId: 2,
         authorFirstname: 'Uolevi',
         authorLastname: 'Uolevilainen',
         authorEmail: 'uolevi@gmail.com',
@@ -21,10 +23,13 @@ module.exports = [
         grade: 3,
         graderEval: 'Tarkastajien esittely',
         studyFieldId: 2,
-        userId: 2
+        userId: 2,
+
+        created_at: null,
+        updated_at: null,
     },
     {
-        id: 3,
+        thesisId: 3,
         authorFirstname: 'Ada',
         authorLastname: 'Lovelace',
         authorEmail: 'ada.lovelace@gmail.com',
@@ -33,7 +38,10 @@ module.exports = [
         grade: 4,
         graderEval: 'Tarkastajien esittely',
         studyFieldId: 2,
-        userId: 5
+        userId: 5,
+
+        created_at: null,
+        updated_at: null,
     }
 ]
 

@@ -13,17 +13,7 @@ const req = {
 const resAPI = { status: a => { return a } };
 const sendStub = sinon.stub(output, "send");
 
-test('knextesti', async t => {
-
-    const kysely = await knex.select().from('thesis')
-        .then(theses => {
-        theses;});
-    console.log("kysely on", kysely);
-    
-    t.truthy(true);
-});
-
-/*test.skip('getThesisById calls output.send() and dao.contractById()', t => {
+test('getThesisById calls output.send() and dao.thesisById()', t => {
     const stubDao = sinon.stub(dao, "getThesisById");
     stubDao.withArgs(req.params.id).returns("ok");
 
@@ -35,7 +25,7 @@ test('knextesti', async t => {
     resMock.verify();
 });
 
-test.skip('getAllTheses calls output.send() and dao.getAllTheses()', t => {
+test('getAllTheses calls output.send() and dao.getAllTheses()', t => {
     const stubDao = sinon.stub(dao, "getAllTheses");
     stubDao.withArgs(req.params.id).returns("ok");
 
@@ -46,4 +36,4 @@ test.skip('getAllTheses calls output.send() and dao.getAllTheses()', t => {
     t.truthy(sendStub.calledWith(req.query.outputType, 200, "ok"));
     resMock.verify();
 });
-*/
+
