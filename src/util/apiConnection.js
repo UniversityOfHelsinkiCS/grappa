@@ -20,6 +20,6 @@ const post = (url, data) => {
 }
 
 //todo: switch case for rest; richer argument possibilities
-export default function callApi(url, method='get', content){
+export function callApi(url, method='get', content){
     return (method=='get' ? get(url) : post(url, content));
 }
