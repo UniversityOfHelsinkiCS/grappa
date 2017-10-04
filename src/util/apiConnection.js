@@ -11,7 +11,7 @@ const getAxios = () => {
     }
 }
 
-const get = (url) => {
+export const get = (url) => {
     return getAxios().get(url).then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
