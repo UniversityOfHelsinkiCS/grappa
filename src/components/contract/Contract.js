@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import { saveFailure, saveSuccess } from "./ContractActions";
 import ContractResponse from "./ContractResponse";
 
-import service from "../../util/apiConnection.js";
-
 //redux
 import { connect } from "react-redux";
 import { saveContract } from "./ContractActions";
 
 
-class Contract extends Component {
+export class Contract extends Component {
     constructor() {
         super();
         this.state = {

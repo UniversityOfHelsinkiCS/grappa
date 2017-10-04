@@ -2,11 +2,11 @@ import React from 'react';
 import test from 'ava';
 import { Router, Link } from 'react-router-dom';
 import { shallow } from 'enzyme';
-//import ava from 'ava';
 import sinon from 'sinon';
 require('ignore-styles')
-import Contract from '../src/components/contract/Contract';
+import { Contract } from '../src/components/contract/Contract';
 import axios from 'axios';
+//import store from '../src/util/store';
 
 const contractApp = <Contract />
 const wrapper = shallow(contractApp);
@@ -56,7 +56,7 @@ const textareaValueChecker = (elementType, elementName) => {
     return (wrapper.find(elementType + '[name="' + elementName + '"]').props().value === randomString);
 }
 
-function getRandomString() {
+const getRandomString = () => {
     return Math.random().toString(36).substring(8);
 }
 
@@ -72,7 +72,7 @@ test.after( () => {
     //sandbox.restore();
 });
 */
-test('has a correct tittle 2', t => {
+test.only('has a correct tittle 2', t => {
     t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
 });
 
