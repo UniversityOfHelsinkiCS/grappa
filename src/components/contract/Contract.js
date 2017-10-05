@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ContractResponse from "./ContractResponse";
 
 //redux
-import { connect } from "react-redux";
+import { connect, subscribe } from "react-redux";
 import { saveContract } from "./ContractActions";
 
 
@@ -43,8 +43,22 @@ export class Contract extends Component {
         }
     }
 
+    handleChange() {
+        let currentValue = this.props.store.getState();
+
+        console.log(currentValue);
+    }
+
     componentDidMount() {
         document.title = "Contract page";
+        console.log(this.props.contract);
+        //this.props.store.subscribe(this.handleChange);
+    }
+
+    componentDidUpdate() {
+        //document.title = "Contract page";
+        console.log(this.props.contract);
+        //this.props.store.subscribe(this.handleChange);
     }
 
     handleContractChange = (event) => {
@@ -290,4 +304,4 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default connect(null, mapDispatchToProps)(Contract);
+export default connect(state => state.contract, mapDispatchToProps)(Contract);
