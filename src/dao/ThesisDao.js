@@ -8,7 +8,7 @@ export function getAllTheses() {
     return knex.select().from('thesis')
         .then(theses => {
             return theses;
-    });
+        });
 }
 
 export const getThesisById = (id) => {
