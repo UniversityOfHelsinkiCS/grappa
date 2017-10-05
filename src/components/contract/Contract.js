@@ -43,33 +43,45 @@ export class Contract extends Component {
         }
     }
 
-    handleChange() {
-        let currentValue = this.props.store.getState();
-
-        console.log(currentValue);
-    }
-
     componentDidMount() {
         document.title = "Contract page";
-        console.log(this.props.contract);
-        //this.props.store.subscribe(this.handleChange);
     }
 
     componentDidUpdate() {
-        //document.title = "Contract page";
-        console.log(this.props.contract);
-        //this.props.store.subscribe(this.handleChange);
+        console.log(this.props.contract[this.props.contract.length - 1]);
+    }
+    getLastContractAction() {
+        return this.props.contract[this.props.contract.length - 1];
     }
 
-    handleContractChange = (event) => {
-        //console.log("handler called " + event.target.name + " " + event.target.value);
+    getButton() {
+        const lastAction = this.getLastContractAction();
+        const workableButton = <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>;
+        const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={this.sendForm}>Save</button>;
 
-        let oldState = this.state.form;
-        let newState = this.state.form;
-        newState[event.target.name] = event.target.value;
-
-        this.setState({ oldState: newState })
+        if (lastAction === undefined) { return workableButton }
+        else {
+            if (lastAction.id == 'CONTRACT_SAVE_ATTEMPT') { return disabledLoadingButton }
+            else { return workableButton }
+        }
     }
+
+    getResponseMessage = (type) => {
+
+        const lastAction = this.getLastContractAction();
+        const successMessage = <div className='ui message success'><i className="close icon"></i><div className="header">Tiedot tallennettiin onnistuneesti</div></div>;
+        const failedMessage = <div className='ui message error'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
+
+        if (lastAction === undefined) { return '' }
+        else {console.log(lastAction.id)
+            if (lastAction.id == 'CONTRACT_SAVE_SUCCESS') {console.log(successMessage); return successMessage }
+            else if (lastAction.id == 'CONTRACT_SAVE_FAILURE') {console.log(failedMessage); return failedMessage }
+            else { return '' }
+        }
+    }
+
+
+
 
     sendForm = (event) => {
         this.setState({ serverResponseReceived: "" });
@@ -132,13 +144,6 @@ export class Contract extends Component {
                 {sectionLineList}
             </div>
         );
-    }
-
-    getResponseMessage = (type) => {
-        return (<div className={'ui message ' + this.state.serverResponseReceived}>
-            <i className="close icon"></i>
-            <div className="header">{type === "success" && "Tiedot tallennettiin onnistuneesti"} {type === "error" && "Ilmestyi ongelmia"}</div>
-        </div>);
     }
 
     createForm = () => {
@@ -263,10 +268,9 @@ export class Contract extends Component {
                 <form onSubmit={this.handlePost}>
                     {sectionList}
                     <br />
-                    <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>
+                    {this.getButton()}
                     <br />
-                    {this.state.serverResponseReceived === "success" && this.getResponseMessage("success")}
-                    {this.state.serverResponseReceived === "error" && this.getResponseMessage("error")}
+                    {this.getResponseMessage()}
                 </form>
 
             </div>
@@ -304,4 +308,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default connect(state => state.contract, mapDispatchToProps)(Contract);
+const mapStateToProps = (state) => {
+    return { contract: state.contract };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contract);
