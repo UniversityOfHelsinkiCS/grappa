@@ -11,17 +11,19 @@ export const saveAttempt = function () {
     };
 }
 
-export const saveSuccess = function () {
+export const saveSuccess = function (data) {
     return {
         type: CONTRACT_SAVE_SUCCESS,
-        text: 'Sopimus talletettu onnistuneesti'
+        text: 'Sopimus talletettu onnistuneesti',
+        data
     };
 }
 
-export const saveFailure = function () {
+export const saveFailure = function (error) {
     return {
         type: CONTRACT_SAVE_FAILURE,
-        text: 'Sopimuksen talletus epäonnistui'
+        text: 'Sopimuksen talletus epäonnistui',
+        error
     };
 }
 
@@ -29,7 +31,7 @@ export const saveContract = (contract) => {
     return (dispatch) => {
         dispatch(saveAttempt());
         callApi('/contract', 'post', contract)
-            .then(res =>  dispatch(saveSuccess()))
-            .catch(err => dispatch(saveFailure()));
+            .then(res =>  dispatch(saveSuccess(res)))
+            .catch(err => dispatch(saveFailure(err.response)));
     }
 }
