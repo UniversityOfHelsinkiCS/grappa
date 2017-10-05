@@ -5,16 +5,28 @@ const app = express();
 
 import { send } from '../output.js';
 
-export function getContract(req, res) {
-    // turha metodi, mutta frontti käyttää tätä vielä (poista kun frontti ei käytä tätä)
-    send(req.query.outputType, res.status(200), contractDao.getContract());
+export async function getContractById(req, res) {
+    const contract = await contractDao.getContractById(req.params.id);
+    send(req.query.outputType, res.status(200), contract);
 }
 
-export function getContractById(req, res) {
-    send(req.query.outputType, res.status(200), contractDao.getContractById(req.params.id));
-}
+export async function saveContract(req, res) {
+    const contractData = req.body;
+    if(contractData.contractId !== "" && contractData.contractId !== undefined){
+        try{
+            const daoResponse = await contractDao.updateContract(contractData);
+            send(req.query.outputType, res.status(200), {text: "update successed", contractId: daoResponse});
+        } catch (err) {
+            send(req.query.outputType, res.status(500), {text: "error occurred", error: err});
+        }
+    } else {
+        try{
+            const daoResponse = await contractDao.saveNewContract(contractData);
+            send(req.query.outputType, res.status(200), {text: "save successed", contractId: daoResponse});
+        } catch (err) {
+            send(req.query.outputType, res.status(500), {text: "error occurred", error: err});
+        }
 
-export function saveContract(req, res) {
-    console.log(req.body);
-    send(req.query.outputType, res.status(200), contractDao.saveContract(req));
+
+    }
 }

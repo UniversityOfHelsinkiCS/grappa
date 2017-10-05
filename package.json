@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava",
+    "test": "NODE_ENV=test nyc ava",
     "start": "nodemon index.js",
     "start:prod": "node index.js",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
@@ -24,7 +24,13 @@
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "express": "^4.15.4"
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "knex": "^0.13.0",
+    "nodemon": "~1.12.0",
+    "pg": "^7.3.0",
+    "sinon": "^3.2.1",
+    "sqlite3": "^3.1.12"
   },
   "devDependencies": {
     "ava": "^0.22.0",
@@ -46,7 +52,7 @@
       "**/*.{js,jsx}",
       "!dist/**/*"
     ],
-    "concurrency": 5,
+    "concurrency": 0,
     "failFast": true,
     "failWithoutAssertions": false,
     "tap": true,

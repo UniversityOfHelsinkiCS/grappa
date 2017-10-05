@@ -1,14 +1,17 @@
+const bodyParser = require('body-parser');
 const output = require('./src/output');
 const contractController = require('./src/controllers/ContractController');
 const thesisController = require('./src/controllers/ThesisController');
 
 
 module.exports = (app) => {
+    const jsonParser = bodyParser.json()
+    const urlencodedParser = bodyParser.urlencoded({ extended: false })
     app.get('/',  (req, res) => {
         output.send(req.query.outputType, res, { text: "Hello World!"} );
     })
 
-    app.get('/helloUser', (req, res) => {
+    app.get('/helloUser', urlencodedParser, (req, res) => {
         if(req.query.username){
           output.send(req.query.outputType, res, { text: req.query.username });
         } else {
@@ -17,15 +20,11 @@ module.exports = (app) => {
     })
     
       // Contract
-    app.get('/contract', (req, res) => {
-        contractController.getContract(req, res);
-    });
-
     app.get('/contract/:id', (req, res) => {
         contractController.getContractById(req, res);
     });
     
-    app.post('/contract', (req, res) => {
+    app.post('/contract', jsonParser, (req, res) => {
         contractController.saveContract(req, res);
     });
     

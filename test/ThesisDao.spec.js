@@ -1,22 +1,45 @@
 import test from 'ava';
 import sinon from 'sinon';
+import knex from '../connection';
 
 const thesisDao = require('../src/dao/ThesisDao');
 const mockTheses = require('../src/mockdata/Theses');
 
-test('getAllTheses returns list of right length ', t => {
-    let listOfTheses = thesisDao.getAllTheses();
+test.before(async t => {    
+    await knex.schema.createTable('thesis', function (table) {
+        table.increments('thesisId').primary();
+        table.string('authorFirstname');
+        table.string('authorLastname');
+        table.string('authorEmail');
+        table.string('title');
+        table.string('urkund');
+        table.integer('grade');
+        table.string('graderEval');
+        table.integer('studyFieldId');
+        table.integer('userId');
+        table.timestamps();
+    })
+
+});
+
+test.beforeEach(async t => {
+    await knex('thesis').del();
+    await knex('thesis').insert(mockTheses);
+});
+
+test.serial('getAllTheses returns list of right length ', async t => {
+    let listOfTheses = await thesisDao.getAllTheses();
     t.deepEqual(listOfTheses.length, mockTheses.length);
 });
 
-test('getThesisById returns right thesis', t => {
+test.serial('getThesisById returns right thesis', async t => {
     let id = '1';
-    let thesis = thesisDao.getThesisById(id);
+    let thesis = await thesisDao.getThesisById(id);
     let mockthesis;
     for(let i = 0; i < mockTheses.length; i++) {
-        if (mockTheses[i].id.toString() === id) {
+        if (mockTheses[i].thesisId.toString() === id) {
             mockthesis = mockTheses[i];
         }
     }
-    t.deepEqual(thesis, mockthesis);
+    t.deepEqual(thesis[0], mockthesis);
 });

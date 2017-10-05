@@ -1,21 +1,26 @@
 const mockContracts = require('../mockdata/MockContracts');
-
-export const getContract = () => {
-    //return the first contract in list
-    return mockContracts[0];
-}
+const knex = require('../../connection');
 
 export const getContractById = (id) => {
-    let contract;
-    for(let i = 0; i < mockContracts.length; i++) {
-        if (mockContracts[i].id.toString() === id) {
-            return mockContracts[i];
-        }
-    }
-    return null;
+    return knex.select().from('contract').where('contractId', id)
+        .then(contract => {
+            return contract;
+        });
 }
 
-export const saveContract = (data) => {
-    console.log(data);
-    return {text: 'Contract saved to backend'};
+export const saveNewContract = (data) => {
+    return knex('contract')
+        .returning('contractId')
+        .insert(data)
+        .then(contractId => contractId[0])
+        .catch(err => err);
+}
+
+export const updateContract = (data) => {
+    return knex('contract')
+        .returning('contractId')
+        .where('contractId', '=', data.contractId)
+        .update(data)
+        .then(contractId => contractId[0])
+        .catch(err => err);
 }

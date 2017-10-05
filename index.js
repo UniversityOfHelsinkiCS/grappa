@@ -4,6 +4,7 @@ require('babel-polyfill');
 const express = require('express');
 const app = express();
 const routes = require('./routes.js');
+const connection = require('./connection');
 
 module.exports = app;
 
@@ -12,4 +13,3 @@ app.listen(3100, () => {
 })
 
 routes(app);
-

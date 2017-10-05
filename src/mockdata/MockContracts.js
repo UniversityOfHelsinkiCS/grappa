@@ -1,6 +1,6 @@
 module.exports = [
     {
-        id: 1,
+        contractId: 1,
         studentName: 'Maija Vilkkumaa',
         studentNumber: "01234567",
         studentAddress: "Helsinginkatu 1",
@@ -23,10 +23,13 @@ module.exports = [
         thesisWorkMeetingAgreement: "Meeting agreement",
         thesisWorkOther: "Other",
     
-        studentGradeGoal: "5"
+        studentGradeGoal: "5",
+
+        created_at: null,
+        updated_at: null,
     },
     {
-        id: 2,
+        contractId: 2,
         studentName: 'Anna Puu',
         studentNumber: "01234568",
         studentAddress: "Mäkelänkatu 1",
@@ -49,6 +52,9 @@ module.exports = [
         thesisWorkMeetingAgreement: "Meeting agreement",
         thesisWorkOther: "Other",
     
-        studentGradeGoal: "3"
+        studentGradeGoal: "3",
+
+        created_at: null,
+        updated_at: null,
     }
 ];

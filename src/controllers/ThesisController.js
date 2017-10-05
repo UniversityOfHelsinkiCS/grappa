@@ -5,10 +5,23 @@ const app = express();
 
 import { send } from '../output.js';
 
-export function getAllTheses (req, res) {
-    send(req.query.outputType, res.status(200), thesisDao.getAllTheses());
+export async function getAllTheses(req, res) {
+    const theses = await thesisDao.getAllTheses();
+    send(req.query.outputType, res.status(200), theses);
+    /*thesisDao.getAllTheses()
+        .then(theses => {
+            send(req.query.outputType, res.status(200), theses);
+        });
+    */
 }
 
-export function getThesisById (req, res) {
-    send(req.query.outputType, res.status(200), thesisDao.getThesisById(req.params.id));
+export async function getThesisById(req, res) {
+    const thesis = await thesisDao.getThesisById(req.params.id);
+    send(req.query.outputType, res.status(200), thesis);
+    //thesisDao.getThesisById(req.params.id)
+    //    .then(thesis => {
+    //        send(req.query.outputType, res.status(200), thesis);
+    //    });
+    
+    
 }
