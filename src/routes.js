@@ -7,6 +7,7 @@ module.exports = (app) => {
 
     app.use('/', index);
     app.use('/contract', contracts);
+    app.use('/contracts', contracts);
     app.use('/theses', theses);
 
 };
