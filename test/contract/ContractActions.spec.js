@@ -40,10 +40,11 @@ test('saveAttempt returns correct type', actionTest(
     { type: CONTRACT_SAVE_ATTEMPT, text: 'Sopimuksen talletus käynnistetty' },
 ));
 
-test.skip('saveContract returns correct type', t => (
-    saveContract(contractTestData).then(res => console.log(res))
+test.only('saveContract returns correct type', t => {
+    saveContract(contractTestData).then(res => console.log("wtf " + res));
+    t.truthy(callApiStub.calledOnce);
     //kunnon kamaa tänne
-));
+});
 /*
 CONTRACT_SAVE_ATTEMPT
 CONTRACT_SAVE_SUCCESS
