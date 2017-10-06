@@ -1,10 +1,10 @@
-Here will be documentation of the whole project. 
+# Here will be the documentation for the project.
 
 Some of the most important dependencies:
 
-We use **Semantic UI**, **Redux** and **React** at the front end.
+* Front end: **React**, **Redux** and **Semantic UI** 
 
-We use **knex** at the back end as a query builder for SQL. 
+* Back end: **Node.js**, **knex**, **express** 
 
-We use **Ava** and **sinon** for testing.
+* Testing: **Ava** and **sinon**
 
