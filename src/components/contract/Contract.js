@@ -50,8 +50,31 @@ export class Contract extends Component {
         console.log(this.props.contract[this.props.contract.length - 1]);
     }
     getLastContractAction() {
-        return this.props.contract[this.props.contract.length - 1];
+        const forReturn = this.props.contract[this.props.contract.length - 1];
+
+        return (forReturn === undefined ? {} : forReturn);
     }
+
+    getResponseMessage = () => {
+
+        const lastAction = this.getLastContractAction();
+        const successMessage = <div className='ui success message'><i className="close icon"></i><div className="header">Tiedot tallennettiin onnistuneesti</div></div>;
+        const failedMessage = <div className='ui error message'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
+        if (lastAction === undefined) { return '' }
+        else {
+            console.log(lastAction.id)
+            if (lastAction.id === 'CONTRACT_SAVE_SUCCESS') {
+                  return successMessage;
+                }
+            else if (lastAction.id === 'CONTRACT_SAVE_FAILURE') {
+               return failedMessage;
+             }
+            else {
+              return '';
+            }
+        }
+    }
+
 
     getButton() {
         const lastAction = this.getLastContractAction();
@@ -65,23 +88,6 @@ export class Contract extends Component {
         }
     }
 
-    getResponseMessage = (type) => {
-
-        const lastAction = this.getLastContractAction();
-        const successMessage = <div className='ui message success'><i className="close icon"></i><div className="header">Tiedot tallennettiin onnistuneesti</div></div>;
-        const failedMessage = <div className='ui message error'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
-
-        if (lastAction === undefined) { return '' }
-        else {console.log(lastAction.id)
-            if (lastAction.id == 'CONTRACT_SAVE_SUCCESS') {console.log(successMessage); return successMessage }
-            else if (lastAction.id == 'CONTRACT_SAVE_FAILURE') {console.log(failedMessage); return failedMessage }
-            else { return '' }
-        }
-    }
-
-
-
-
     sendForm = (event) => {
         this.setState({ serverResponseReceived: "" });
 
@@ -89,7 +95,6 @@ export class Contract extends Component {
             event.preventDefault();
 
         this.props.saveContract(this.state.form);
-
     }
 
     defineFieldClasses = (labelType, fieldType, required) => {
@@ -261,9 +266,9 @@ export class Contract extends Component {
 
 
 
-
+        const lastAction = this.getLastContractAction();
         return (
-            <div className={"ui form " + this.state.serverResponseReceived}>
+            <div className={"ui form " + lastAction.formClass}>
                 <form onSubmit={this.handlePost}>
                     {sectionList}
                     <br />
@@ -271,8 +276,8 @@ export class Contract extends Component {
                     <br />
                     {this.getResponseMessage()}
                 </form>
-
             </div>
+
         );
     }
 
@@ -291,7 +296,6 @@ export class Contract extends Component {
 
                     {this.createForm()}
 
-
                     <br />
                     <Link to="/"> Go back to HomePage :P </Link>
                 </div>
@@ -299,6 +303,18 @@ export class Contract extends Component {
 
         );
     }
+
+    getSuccessMessage() {
+        return (
+             <div className='ui success message'>
+                  <i className="close icon"></i>
+                  <div className="header">
+                      Tiedot tallennettiin onnistuneesti
+                  </div>
+             </div>
+      );
+    }
+
 }
 
 const mapDispatchToProps = (dispatch) => ({
