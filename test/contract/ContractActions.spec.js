@@ -5,14 +5,14 @@ import { actionTest } from 'redux-ava';
 
 // internal modules
 import * as API from '../../src/util/apiConnection';
-import { 
-    saveAttempt, 
-    saveSuccess, 
-    saveFailure, 
-    saveContract, 
+import {
+    saveAttempt,
+    saveSuccess,
+    saveFailure,
+    saveContract,
     CONTRACT_SAVE_ATTEMPT,
     CONTRACT_SAVE_SUCCESS,
-    CONTRACT_SAVE_FAILURE 
+    CONTRACT_SAVE_FAILURE
 } from '../../src/components/contract/ContractActions';
 
 const contractTestData = { some: 'data' };
@@ -22,14 +22,16 @@ const callApiStub = sinon.stub(API, 'callApi').withArgs('/contract', 'post', con
 
 test('saveSuccess returns correct type', actionTest(
     saveSuccess,
+    {data: "some data"},
     contractTestData,
-    { type: CONTRACT_SAVE_SUCCESS, text: 'Sopimus talletettu onnistuneesti' },
+    { type: CONTRACT_SAVE_SUCCESS, text: 'Sopimus talletettu onnistuneesti' , data: {data: "some data"}},
 ));
 
 test('saveFailure returns correct type', actionTest(
     saveFailure,
+    {error: "some error"},
     contractTestData,
-    { type: CONTRACT_SAVE_FAILURE, text: 'Sopimuksen talletus epäonnistui' },
+    { type: CONTRACT_SAVE_FAILURE, text: 'Sopimuksen talletus epäonnistui', error: {error: "some error"} },
 ));
 
 test('saveAttempt returns correct type', actionTest(

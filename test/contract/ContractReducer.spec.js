@@ -9,9 +9,9 @@ import { saveAttempt, saveSuccess, saveFailure } from '../../src/components/cont
 const testData = { some: 'data' };
 
 const initialState = [];
-const stateWithSuccessSave = [{ id: 'CONTRACT_SAVE_SUCCESS', text: 'Sopimus talletettu onnistuneesti', completed: true }];
-const stateWithFailedSave = [{ id: 'CONTRACT_SAVE_FAILURE', text: 'Sopimuksen talletus epäonnistui', completed: true}];
-const stateWithAttemptedSave = [{ id: 'CONTRACT_SAVE_ATTEMPT', text: 'Sopimuksen talletus käynnistetty', completed: false }];
+const stateWithSuccessSave = [{ id: 'CONTRACT_SAVE_SUCCESS', text: 'Sopimus talletettu onnistuneesti', formClass: "success", completed: true }];
+const stateWithFailedSave = [{ id: 'CONTRACT_SAVE_FAILURE', text: 'Sopimuksen talletus epäonnistui', formClass: "error", completed: true}];
+const stateWithAttemptedSave = [{ id: 'CONTRACT_SAVE_ATTEMPT', text: 'Sopimuksen talletus käynnistetty', formClass: "", completed: false }];
 
 
 test('saveSuccess changes state correctly', reducerTest(
