@@ -1,14 +1,13 @@
 import React from 'react';
 import test from 'ava';
 import { Router, Link } from 'react-router-dom';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
-import { Contract } from '../../src/components/contract/Contract';
+import {Contract} from '../../src/components/contract/Contract';
 import axios from 'axios';
 
-const contractApp = <Contract />
-const wrapper = shallow(contractApp);
+const wrapper = shallow(<Contract contract={[]} />);
 let sandbox;
 let server;
 
