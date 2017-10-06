@@ -71,7 +71,6 @@ test.after( () => {
 });
 */
 test.only('has a correct tittle 2', t => {
-    console.log("WTF");
     t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
 });
 
