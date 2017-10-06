@@ -9,6 +9,7 @@ const contractSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
+                formClass: "success",
                 completed: true
             }];
         case CONTRACT_SAVE_FAILURE:
@@ -16,6 +17,7 @@ const contractSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
+                formClass: "error",
                 completed: true
             }];
         case CONTRACT_SAVE_ATTEMPT:
@@ -23,6 +25,7 @@ const contractSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
+                formClass: "",
                 completed: false
             }];
         default:
