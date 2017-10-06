@@ -53,6 +53,11 @@ test('saveContract calls saveSuccess on succesful callApi promise resolution', a
     t.deepEqual(resArray, compareArray);
 });
 
+/**
+ * Tämä testi on .cb, eli callback modessa. 
+ * Testissä on määritelty monta vertailua tehdään (3kpl).
+ * Testi loppuu vain kuin testi saavuttaa t.end() komennon.
+ */
 test.cb('saveContract calls saveSuccess on errorful callApi promise rejection', t => {
     t.plan(3);
     let compareArray = [saveAttempt(), saveFailure(contractTestDataError.response)];
