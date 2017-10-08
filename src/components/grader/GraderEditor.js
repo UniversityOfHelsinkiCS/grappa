@@ -20,6 +20,7 @@ export default class GraderEditor extends Component {
 
     selectGrader = (event) => {
         const updateGrader = this.props.graders.find(grader => grader.id.toString() === event.target.value);
+        if (!updateGrader) return;
         this.setState({ updateGrader });
     }
 
@@ -85,6 +86,7 @@ export default class GraderEditor extends Component {
                 <div className="field">
                     <label>Who</label>
                     <select className="ui fluid search dropdown" onChange={this.selectGrader}>
+                        <option value="">Select grader</option>
                         {this.props.graders.map((grader, index) =>
 
                             <option key={index} className="item" value={grader.id}>
@@ -132,7 +134,8 @@ export default class GraderEditor extends Component {
         return (
             <div className="ui form">
                 {this.renderCreate()}
-                {this.renderUpdate()}
+                {this.renderUpdate()
+                }
             </div>
         );
     }

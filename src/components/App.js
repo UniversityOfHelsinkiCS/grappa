@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import GraderEditor from './grader/GraderEditor';
 
 const service = require("../util/apiConnection.js");
 
@@ -44,6 +45,13 @@ class App extends Component {
                         </div>
                     </form>
                 </div>
+
+                <GraderEditor graders={[{title: "Dr.",
+                                        name: "Nimi",
+                                        id: 1},
+                                        {title: "Prof.",
+                                        name: "Nimi2",
+                                        id: 2}]}/>
 
                 <br />
                 <p><Link to="/contract"> Go to contract page </Link></p>
