@@ -10,6 +10,9 @@ const combinedReducers = combineReducers({
     contract: ContractReducer
 });
 
+console.log(ContractReducer);
+console.log(combinedReducers);
+
 const store = createStore(
     combinedReducers,
     compose(applyMiddleware(thunk),
