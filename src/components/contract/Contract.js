@@ -15,7 +15,7 @@ export class Contract extends Component {
             supervision: "",
             misc: "",
             form: {
-                studentName: "",
+                studentName: "saffsa",
                 studentNumber: "",
                 studentAddress: "",
                 studentPhone: "",
@@ -75,6 +75,14 @@ export class Contract extends Component {
         }
     }
 
+    handleFormChange = (event) => {
+    //console.log("handler called " + event.target.name + " " + event.target.value);
+    const oldForm = this.state.form;
+    let newForm = oldForm;
+    newForm[event.target.name] = event.target.value;
+    this.setState({ form: newForm })
+}
+
 
     getButton() {
         const lastAction = this.getLastContractAction();
@@ -106,14 +114,14 @@ export class Contract extends Component {
         if (fieldData.inputType === "input") {
 
             forReturn = [<div key={fieldKey + "label"} className="ui label" >{fieldData.label}</div>,
-            <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
+            <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleFormChange} />];
 
             if (fieldData.labelType.includes("right")) {
                 forReturn.reverse();
             }
         } else if (fieldData.inputType === "textarea") {
             forReturn = [<label key={fieldKey + "label"}>{fieldData.label}</label>,
-            <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
+            <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleFormChange}></textarea>];
         }
 
         return (
@@ -135,6 +143,7 @@ export class Contract extends Component {
             );
         }
     }
+
 
     createFormSection = (sectionData, sectionKey) => {
         let sectionLineList = sectionData.sectionLines.map(
