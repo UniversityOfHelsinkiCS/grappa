@@ -39,8 +39,7 @@ const formItems = {
 
 const stateValueChecker = (elementType, elementName) => {
     const randomString = getRandomString();
-    const input = wrapper.find(elementType + '[name="' + elementName + '"]');
-
+    const input = findElement(elementType,elementName);
     input.simulate('change', { target: { name: elementName, value: randomString } });
 
     return (wrapper.state().form[elementName] === randomString);
@@ -48,11 +47,20 @@ const stateValueChecker = (elementType, elementName) => {
 
 const textareaValueChecker = (elementType, elementName) => {
     const randomString = getRandomString();
-
-    wrapper.find(elementType + '[name="' + elementName + '"]').simulate('change', { target: { name: elementName, value: randomString } });
-
+    const textArea = findElement(elementType, elementName);
+    textArea.simulate('change', { target: {name: elementName, value: randomString } });
     return (wrapper.find(elementType + '[name="' + elementName + '"]').props().value === randomString);
 }
+
+const getJson = (object) => {
+    return JSON.stringify(object);
+}
+
+const findElement = (elementType, elementName) => {
+    return wrapper.find(elementType + '[name="' + elementName + '"]');
+}
+
+
 
 const getRandomString = () => {
     return Math.random().toString(36).substring(8);
@@ -70,7 +78,7 @@ test.after( () => {
     //sandbox.restore();
 });
 */
-test.only('has a correct tittle 2', t => {
+test('has a correct tittle 2', t => {
     t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
 });
 
@@ -116,7 +124,10 @@ for (let i = 0; i < (formItems.input.length); i++) {
     });
 }
 
-test('when send button is clicked, sendForm method is called', t => {
+
+
+
+test.skip('when send button is clicked, sendForm method is called', t => {
     const instance = wrapper.instance();
     const spy = sinon.spy(instance, "sendForm");
     instance.forceUpdate();
