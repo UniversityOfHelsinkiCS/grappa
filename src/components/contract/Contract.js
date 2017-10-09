@@ -15,7 +15,7 @@ export class Contract extends Component {
             supervision: "",
             misc: "",
             form: {
-                studentName: "saffsa",
+                studentName: "",
                 studentNumber: "",
                 studentAddress: "",
                 studentPhone: "",
