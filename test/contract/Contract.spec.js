@@ -5,7 +5,6 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
 import {Contract} from '../../src/components/contract/Contract';
-import axios from 'axios';
 
 const wrapper = shallow(<Contract contract={[]} />);
 let sandbox;
@@ -127,30 +126,30 @@ for (let i = 0; i < (formItems.input.length); i++) {
 
 
 
-test.skip('when send button is clicked, sendForm method is called', t => {
+test('when send button is clicked, sendForm method is called', t => {
     const instance = wrapper.instance();
-    const spy = sinon.spy(instance, "sendForm");
+    const spy = sinon.stub(instance, "sendForm");
     instance.forceUpdate();
 
     wrapper.find('button[type="submit"]').simulate('click');
     t.is(spy.calledOnce, true);
+    spy.restore();
 });
 
-test.skip("when send button is clicked: axios.post() is called with correct arguments", t => {
-    let axiousStub = sinon.stub(axios, 'post').withArgs('/contract', wrapper.state().form)
-        .returns(
-            Promise.resolve({
-                status: 200,
-                response: { text: "Contract saved to backend" }
-        }));
+test("when sendForm method is called,saveContract() is called with correct arguments", t => {
+    const instance = wrapper.instance();
+    let saveStub = sinon.stub();
+    wrapper.setProps({ saveContract: saveStub });
+    instance.forceUpdate();
+    wrapper.update();
 
     wrapper.find('textarea[name="thesisTitle"]')
         .simulate('change', { target: { name: "thesisTitle", value: getRandomString() } });
 
-    wrapper.find('button[type="submit"]').simulate('click');
+    wrapper.instance().sendForm();
 
-    t.is(axiousStub.calledOnce, true);
-    t.is(axiousStub.calledWith('/contract', wrapper.state().form), true);
+    t.is(saveStub.callCount, 1);
+    t.is(saveStub.calledWith(wrapper.state().form), true);
 });
 
 test.skip("when send button is clicked: successful server response leads to change in UI", t => {
