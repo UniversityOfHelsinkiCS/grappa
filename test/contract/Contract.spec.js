@@ -123,9 +123,6 @@ for (let i = 0; i < (formItems.input.length); i++) {
     });
 }
 
-
-
-
 test('when send button is clicked, sendForm method is called', t => {
     const instance = wrapper.instance();
     const spy = sinon.stub(instance, "sendForm");
@@ -152,7 +149,7 @@ test("when sendForm method is called,saveContract() is called with correct argum
     t.is(saveStub.calledWith(wrapper.state().form), true);
 });
 
-test.skip("when send button is clicked: successful server response leads to change in UI", t => {
+test.skip("TBD: change in redux state leads to change in UI", t => {
     let axiousStub = sinon.stub(axios, 'post').withArgs('/contract', wrapper.state().form)
         .returns(
             Promise.resolve({
