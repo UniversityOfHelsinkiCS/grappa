@@ -47,7 +47,7 @@ export class Contract extends Component {
     }
 
     componentDidUpdate() {
-        console.log(this.props.contract[this.props.contract.length - 1]);
+        //console.log(this.props.contract[this.props.contract.length - 1]);
     }
     getLastContractAction() {
         const forReturn = this.props.contract[this.props.contract.length - 1];
@@ -62,7 +62,7 @@ export class Contract extends Component {
         const failedMessage = <div className='ui error message'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
         if (lastAction === undefined) { return '' }
         else {
-            console.log(lastAction.id)
+            //console.log(lastAction.id)
             if (lastAction.id === 'CONTRACT_SAVE_SUCCESS') {
                   return successMessage;
                 }
