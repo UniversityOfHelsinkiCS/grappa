@@ -47,7 +47,7 @@ export class Contract extends Component {
     }
 
     componentDidUpdate() {
-        console.log(this.props.contract[this.props.contract.length - 1]);
+        //console.log(this.props.contract[this.props.contract.length - 1]);
     }
     getLastContractAction() {
         const forReturn = this.props.contract[this.props.contract.length - 1];
@@ -62,7 +62,7 @@ export class Contract extends Component {
         const failedMessage = <div className='ui error message'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
         if (lastAction === undefined) { return '' }
         else {
-            console.log(lastAction.id)
+            //console.log(lastAction.id)
             if (lastAction.id === 'CONTRACT_SAVE_SUCCESS') {
                   return successMessage;
                 }
@@ -74,6 +74,14 @@ export class Contract extends Component {
             }
         }
     }
+
+    handleFormChange = (event) => {
+    //console.log("handler called " + event.target.name + " " + event.target.value);
+    const oldForm = this.state.form;
+    let newForm = oldForm;
+    newForm[event.target.name] = event.target.value;
+    this.setState({ form: newForm })
+}
 
 
     getButton() {
@@ -106,14 +114,14 @@ export class Contract extends Component {
         if (fieldData.inputType === "input") {
 
             forReturn = [<div key={fieldKey + "label"} className="ui label" >{fieldData.label}</div>,
-            <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange} />];
+            <input key={fieldKey} name={fieldData.name} type="text" placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleFormChange} />];
 
             if (fieldData.labelType.includes("right")) {
                 forReturn.reverse();
             }
         } else if (fieldData.inputType === "textarea") {
             forReturn = [<label key={fieldKey + "label"}>{fieldData.label}</label>,
-            <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleContractChange}></textarea>];
+            <textarea key={fieldKey} name={fieldData.name} rows={fieldData.rows} placeholder={fieldData.placeholder} value={this.state.form[fieldData.name]} onChange={this.handleFormChange}></textarea>];
         }
 
         return (
@@ -135,6 +143,7 @@ export class Contract extends Component {
             );
         }
     }
+
 
     createFormSection = (sectionData, sectionKey) => {
         let sectionLineList = sectionData.sectionLines.map(
