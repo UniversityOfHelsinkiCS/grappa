@@ -68,7 +68,7 @@
     "webpack-dev-server": "2.7.1"
   },
   "scripts": {
-    "start": "API_URL=http://localhost:3100 NODE_ENV=development node scripts/start.js",
+    "start": "API_URL=http://localhost:3100 node scripts/start.js",
     "build": "API_URL=/api/ node scripts/build.js",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
     "report": "nyc report --reporter=html",
