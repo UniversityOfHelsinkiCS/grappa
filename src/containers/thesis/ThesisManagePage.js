@@ -212,6 +212,7 @@ export default class ThesisCreatePage extends Component {
         }
     }
 
+    //GraderEditor ei tule olemaan tällä sivulla vaan GraderManagement-sivulla
     renderGraderControl() {
         return (
             <div>
