@@ -19,13 +19,19 @@ class GraderManagementPage extends Component {
     render() {
         return (
             <div className="App">
+                <div className="ui inverted segment">
+                    <h2>Grader Management</h2>
+                </div>
+
+                <div className="ui segment">
                 <p>
                     Thesis has to have a minimun of two graders and if
                     one of them isn't at least a professor and the other a doctor an evaluation of
                     the graders will be done by the thesis' studyfield's professor.
                 </p>
-
+                
                 <GraderEditor graders={[{
+                    //mockdata so that updateGrader doesn't crash
                     title: "Dr.",
                     name: "Nimi",
                     id: 1
@@ -36,8 +42,10 @@ class GraderManagementPage extends Component {
                     id: 2
                 }]} />
 
+                </div>
+
                 <div className="ui segment">
-                    <p><Link to="/"> Go back to HomePage</Link></p>
+                    <p><Link to="/"> Go back to Homepage</Link></p>
                 </div>
             </div>
         );

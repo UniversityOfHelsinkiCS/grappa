@@ -297,7 +297,7 @@ export class Contract extends Component {
                     {this.createForm()}
 
                     <br />
-                    <Link to="/"> Go back to HomePage :P </Link>
+                    <Link to="/"> Go back to Homepage</Link>
                 </div>
             </div>
 
