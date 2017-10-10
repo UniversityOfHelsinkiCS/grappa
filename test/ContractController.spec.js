@@ -4,11 +4,6 @@ import router from '../src/routes/contracts.js';
 
 const reqres = require('reqres');
 
-//const req = {
-//    query: { outputType: "json" },
-//    params: { id: 124 }
-//};
-
 let req;
 let res;
 let contractController;
@@ -83,18 +78,67 @@ test.cb('getContractById does not return incorrect information', t => {
     dao.getContractById.restore();
 });
 
+test('saveContract calls dao.saveNewContract() once', t => {
+    const stub = sinon.stub(dao, "saveNewContract");
+    contractController.dao = dao;
+    contractController.saveContract(req, res);
+    t.is(stub.calledOnce, true, "saveNewContract is called once");
+    dao.saveNewContract.restore();
+});
 
-test.todo('saveContract');
+test.cb('saveContract returns 200 for new agreement', t => {
+    const stub = sinon.stub(dao, "saveNewContract");
+    contractController.dao = dao;
+    contractController.saveContract(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "saveContract returns status 200 for new agreement");
+            t.end();
+        });
+    dao.saveNewContract.restore();
+});
 
-//test.serial('saveContract calls output.send() and dao.saveContract()', t => {
-//    const stubDaoSave = sinon.stub(dao, "saveContract");
-//    stubDaoSave.withArgs(req).returns("ok");
+test.cb('saveContract returns 500 for error with new agreement', t => {
+    const stub = sinon.stub(dao, "saveNewContract");
+    stub.throws();
+    contractController.dao = dao;
+    contractController.saveContract(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(500), true, "saveContract returns status 500 for error with new agreement");
+            t.end();
+        });
+    dao.saveNewContract.restore();
+});
 
-//    const resMock = sinon.mock(resAPI);
-//    const expectation1 = resMock.expects("status").once().withArgs(200).returns(200);
-//    contractController.getContractById(req, resAPI)
-//        .then(() => {
-//            t.truthy(sendStub.calledWith(req.query.outputType, 200, "ok"));
-//            resMock.verify();
-//        });
-//});
+test('saveContract calls dao.updateContract() once', t => {
+    const stub = sinon.stub(dao, "updateContract");
+    contractController.dao = dao;
+    req.body.contractId = 34;
+    contractController.saveContract(req, res);
+    t.is(stub.calledOnce, true, "updateContract is called once");
+    dao.updateContract.restore();
+});
+
+test.cb('saveContract returns 200 for update', t => {
+    const stub = sinon.stub(dao, "updateContract");
+    contractController.dao = dao;
+    req.body.contractId = 34;
+    contractController.saveContract(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "saveContract returns status 200 for update");
+            t.end();
+        });
+    dao.updateContract.restore();
+});
+
+test.cb('saveContract returns 500 for error with update', t => {
+    const stub = sinon.stub(dao, "updateContract");
+    stub.throws();
+    contractController.dao = dao;
+    req.body.contractId = 34;
+    contractController.saveContract(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(500), true, "saveContract returns status 500 for error with update");
+            t.end();
+        });
+    dao.updateContract.restore();
+});
