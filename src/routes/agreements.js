@@ -2,7 +2,6 @@ const router = require('express').Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
-const output = require('../output');
 const agreementController = require('../controllers/AgreementController');
 
 // router.get('/', (req, res) => {
