@@ -1,109 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
-//redux
-import { connect, subscribe } from "react-redux";
-import { saveAgreement } from "./AgreementActions";
+export default class FormCreator extends Component {
 
-import EventMessage from '../EventMessage';
-
-
-export class Agreement extends Component {
-    constructor() {
-        super();
-        this.state = {
-            serverResponseReceived: "",
-            completionEta: "",
-            supervision: "",
-            misc: "",
-            form: {
-                studentName: "",
-                studentNumber: "",
-                studentAddress: "",
-                studentPhone: "",
-                studentEmail: "",
-                studentMajor: "",
-
-                thesisTitle: "",
-                thesisStartDate: "",
-                thesisCompletionEta: "",
-                thesisPerformancePlace: "",
-
-                thesisSupervisorMain: "",
-                thesisSupervisorSecond: "",
-                thesisSupervisorOther: "",
-
-                thesisWorkStudentTime: "",
-                thesisWorkSupervisorTime: "",
-                thesisWorkIntermediateGoal: "",
-                thesisWorkMeetingAgreement: "",
-                thesisWorkOther: "",
-
-                studentGradeGoal: "",
-            }
-        }
-    }
-
-    componentDidMount() {
-        document.title = "Agreement page";
-    }
-
-    componentDidUpdate() {
-        //console.log(this.props.agreement[this.props.agreement.length - 1]);
-    }
-    getLastAgreementAction() {
-        const forReturn = this.props.agreement[this.props.agreement.length - 1];
-
-        return (forReturn === undefined ? {} : forReturn);
-    }
-
-    getResponseMessage = () => {
-
-        const lastAction = this.getLastAgreementAction();
-
-        if (lastAction === undefined) { return '' }
-        else {
-            if (lastAction.id === 'AGREEMENT_SAVE_SUCCESS') {
-                return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
-            }
-            else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
-                return <EventMessage type='error' message='Ilmestyi ongelmia' />;;
-            }
-            else {
-                return '';
-            }
-        }
-    }
-
-    handleFormChange = (event) => {
-        //console.log("handler called " + event.target.name + " " + event.target.value);
-        const oldForm = this.state.form;
-        let newForm = oldForm;
-        newForm[event.target.name] = event.target.value;
-        this.setState({ form: newForm })
-    }
-
-
-    getButton() {
-        const lastAction = this.getLastAgreementAction();
-        const workableButton = <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>;
-        const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={this.sendForm}>Save</button>;
-
-        if (lastAction === undefined) { return workableButton }
-        else {
-            if (lastAction.id == 'AGREEMENT_SAVE_ATTEMPT') { return disabledLoadingButton }
-            else { return workableButton }
-        }
-    }
-
-    sendForm = (event) => {
-        this.setState({ serverResponseReceived: "" });
-
-        if (event !== undefined)
-            event.preventDefault();
-
-        this.props.saveAgreement(this.state.form);
-    }
 
     defineFieldClasses = (labelType, fieldType, required) => {
         return ("field ui small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
@@ -276,64 +174,20 @@ export class Agreement extends Component {
 
 
         const lastAction = this.getLastAgreementAction();
-        return (
-            <div className={"ui form " + lastAction.formClass}>
-                <form onSubmit={this.handlePost}>
-                    {sectionList}
-                    <br />
-                    {this.getButton()}
-                    <br />
-
-                </form>
-            </div>
-
-        );
+      
     }
+
+
 
     render() {
-        return (
-            <div className="App">
+        return <div className={"ui form " + lastAction.formClass}>
+        <form onSubmit={this.handlePost}>
+            {sectionList}
+            <br />
+            {this.getButton()}
+            <br />
 
-                <div className="ui inverted segment">
-                    <h2>Thesis Agreement</h2>
-                </div>
-
-                <div className="ui segment">
-                    <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
-                    <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
-                    <br />
-
-                    {this.createForm()}
-                    {this.getResponseMessage()}
-                    <br />
-                    <Link to="/"> Go back to HomePage :P </Link>
-                </div>
-            </div>
-
-        );
+        </form>
+    </div>;
     }
-
-    getSuccessMessage() {
-        return (
-            <div className='ui success message'>
-                <i className="close icon"></i>
-                <div className="header">
-                    Tiedot tallennettiin onnistuneesti
-                  </div>
-            </div>
-        );
-    }
-
 }
-
-const mapDispatchToProps = (dispatch) => ({
-    saveAgreement(data) {
-        dispatch(saveAgreement(data));
-    },
-});
-
-const mapStateToProps = (state) => {
-    return { agreement: state.agreement };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Agreement);
