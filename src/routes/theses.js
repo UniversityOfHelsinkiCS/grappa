@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
-const output = require('../output');
 const thesisController = require('../controllers/ThesisController');
 const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
