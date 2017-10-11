@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 //redux
 import { connect, subscribe } from "react-redux";
-import { saveContract } from "./ContractActions";
+import { saveAgreement } from "./AgreementActions";
 
 
-export class Contract extends Component {
+export class Agreement extends Component {
     constructor() {
         super();
         this.state = {
@@ -43,30 +43,30 @@ export class Contract extends Component {
     }
 
     componentDidMount() {
-        document.title = "Contract page";
+        document.title = "Agreement page";
     }
 
     componentDidUpdate() {
-        //console.log(this.props.contract[this.props.contract.length - 1]);
+        //console.log(this.props.agreement[this.props.agreement.length - 1]);
     }
-    getLastContractAction() {
-        const forReturn = this.props.contract[this.props.contract.length - 1];
+    getLastAgreementAction() {
+        const forReturn = this.props.agreement[this.props.agreement.length - 1];
 
         return (forReturn === undefined ? {} : forReturn);
     }
 
     getResponseMessage = () => {
 
-        const lastAction = this.getLastContractAction();
+        const lastAction = this.getLastAgreementAction();
         const successMessage = <div className='ui success message'><i className="close icon"></i><div className="header">Tiedot tallennettiin onnistuneesti</div></div>;
         const failedMessage = <div className='ui error message'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
         if (lastAction === undefined) { return '' }
         else {
             //console.log(lastAction.id)
-            if (lastAction.id === 'CONTRACT_SAVE_SUCCESS') {
+            if (lastAction.id === 'AGREEMENT_SAVE_SUCCESS') {
                   return successMessage;
                 }
-            else if (lastAction.id === 'CONTRACT_SAVE_FAILURE') {
+            else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
                return failedMessage;
              }
             else {
@@ -85,13 +85,13 @@ export class Contract extends Component {
 
 
     getButton() {
-        const lastAction = this.getLastContractAction();
+        const lastAction = this.getLastAgreementAction();
         const workableButton = <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>;
         const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={this.sendForm}>Save</button>;
 
         if (lastAction === undefined) { return workableButton }
         else {
-            if (lastAction.id == 'CONTRACT_SAVE_ATTEMPT') { return disabledLoadingButton }
+            if (lastAction.id == 'AGREEMENT_SAVE_ATTEMPT') { return disabledLoadingButton }
             else { return workableButton }
         }
     }
@@ -102,7 +102,7 @@ export class Contract extends Component {
         if (event !== undefined)
             event.preventDefault();
 
-        this.props.saveContract(this.state.form);
+        this.props.saveAgreement(this.state.form);
     }
 
     defineFieldClasses = (labelType, fieldType, required) => {
@@ -275,7 +275,7 @@ export class Contract extends Component {
 
 
 
-        const lastAction = this.getLastContractAction();
+        const lastAction = this.getLastAgreementAction();
         return (
             <div className={"ui form " + lastAction.formClass}>
                 <form onSubmit={this.handlePost}>
@@ -295,7 +295,7 @@ export class Contract extends Component {
             <div className="App">
 
                 <div className="ui inverted segment">
-                    <h2>Thesis Contract</h2>
+                    <h2>Thesis Agreement</h2>
                 </div>
 
                 <div className="ui segment">
@@ -327,13 +327,13 @@ export class Contract extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    saveContract(data) {
-        dispatch(saveContract(data));
+    saveAgreement(data) {
+        dispatch(saveAgreement(data));
     },
 });
 
 const mapStateToProps = (state) => {
-    return { contract: state.contract };
+    return { agreement: state.agreement };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contract);
+export default connect(mapStateToProps, mapDispatchToProps)(Agreement);

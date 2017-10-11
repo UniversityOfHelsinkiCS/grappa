@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 
 //components
 import App from './components/App';
-import Contract from './components/contract/Contract';
+import Agreement from './components/agreement/Agreement';
 import ThesisList from './components/ThesisList';
 
 //util
@@ -21,7 +21,7 @@ ReactDOM.render(
         <Router>
             <Switch>
                 <Route exact path="/" component={App}/>
-                <Route exact path="/contract" component={Contract}/>
+                <Route exact path="/agreement" component={Agreement}/>
                 <Route exact path="/theses" component={ThesisList}/>
             </Switch>
         </Router>

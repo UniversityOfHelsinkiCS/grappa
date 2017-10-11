@@ -1,19 +1,19 @@
 import { callApi } from '../../util/apiConnection';
 
-export const CONTRACT_SAVE_ATTEMPT = 'CONTRACT_SAVE_ATTEMPT'
-export const CONTRACT_SAVE_SUCCESS = 'CONTRACT_SAVE_SUCCESS'
-export const CONTRACT_SAVE_FAILURE = 'CONTRACT_SAVE_FAILURE'
+export const AGREEMENT_SAVE_ATTEMPT = 'AGREEMENT_SAVE_ATTEMPT'
+export const AGREEMENT_SAVE_SUCCESS = 'AGREEMENT_SAVE_SUCCESS'
+export const AGREEMENT_SAVE_FAILURE = 'AGREEMENT_SAVE_FAILURE'
 
 export const saveAttempt = function () {
     return {
-        type: CONTRACT_SAVE_ATTEMPT,
+        type: AGREEMENT_SAVE_ATTEMPT,
         text: 'Sopimuksen talletus käynnistetty'
     };
 }
 
 export const saveSuccess = function (data) {
     return {
-        type: CONTRACT_SAVE_SUCCESS,
+        type: AGREEMENT_SAVE_SUCCESS,
         text: 'Sopimus talletettu onnistuneesti',
         data
     };
@@ -21,16 +21,16 @@ export const saveSuccess = function (data) {
 
 export const saveFailure = function (error) {
     return {
-        type: CONTRACT_SAVE_FAILURE,
+        type: AGREEMENT_SAVE_FAILURE,
         text: 'Sopimuksen talletus epäonnistui',
         error
     };
 }
 
-export const saveContract = (contract) => {
+export const saveAgreement = (agreement) => {
     return (dispatch) => {
         dispatch(saveAttempt());
-        callApi('/contract', 'post', contract)
+        callApi('/agreement', 'post', agreement)
             .then(res =>  dispatch(saveSuccess(res)))
             .catch(err => dispatch(saveFailure(err.response)));
     }
