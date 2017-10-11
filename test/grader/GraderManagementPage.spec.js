@@ -4,7 +4,7 @@ import test from 'ava';
 import { shallow } from 'enzyme';
 //import sinon from 'sinon';
 import { GraderManagementPage } from '../../src/containers/grader/GraderManagementPage.js';
-import GraderEditor from "../../src/components/grader/GraderEditor.js"
+//import GraderEditor from "../../src/components/grader/GraderEditor.js";
 require('ignore-styles');
 
 
@@ -16,5 +16,5 @@ test('has a correct title', t => {
 });
 
 test('contains grader editor component', t => {
-    t.truthy(wrapper.find(<GraderEditor/>));
+    t.truthy(wrapper.find('<GraderEditor/>'));
 });
