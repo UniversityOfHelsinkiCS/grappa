@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { connect, subscribe } from "react-redux";
 import { saveAgreement } from "./AgreementActions";
 
+import EventMessage from '../EventMessage';
+
 
 export class Agreement extends Component {
     constructor() {
@@ -58,16 +60,15 @@ export class Agreement extends Component {
     getResponseMessage = () => {
 
         const lastAction = this.getLastAgreementAction();
-        const successMessage = <div className='ui success message'><i className="close icon"></i><div className="header">Tiedot tallennettiin onnistuneesti</div></div>;
-        const failedMessage = <div className='ui error message'><i className="close icon"></i><div className="header">Ilmestyi ongelmia</div></div>;
+        
         if (lastAction === undefined) { return '' }
         else {
             //console.log(lastAction.id)
             if (lastAction.id === 'AGREEMENT_SAVE_SUCCESS') {
-                  return successMessage;
+                  return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
                 }
             else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
-               return failedMessage;
+               return <EventMessage type='error' message='Ilmestyi ongelmia' />;;
              }
             else {
               return '';
