@@ -10,12 +10,27 @@ const combinedReducers = combineReducers({
     contract: ContractReducer
 });
 
+<<<<<<< HEAD
 console.log(ContractReducer);
 console.log(combinedReducers);
 
+=======
+let store;
+if (process.env.NODE_ENV === 'development') {
+    store = createStore(
+        combinedReducers,
+        compose(applyMiddleware(thunk),
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+} else {
+    store = createStore(
+        combinedReducers,
+        applyMiddleware(thunk));
+}
+/*
+>>>>>>> 0888092267396203fab9686b9d713138695c4fa0
 const store = createStore(
     combinedReducers,
     compose(applyMiddleware(thunk),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
-
+*/
 export default store;
