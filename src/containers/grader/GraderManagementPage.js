@@ -19,6 +19,21 @@ class GraderManagementPage extends Component {
         document.title = "Grappa: Grader Management";
     }
 
+    getLastGraderAction() {
+        const forReturn = this.props.graders[this.props.graders.length - 1];
+
+        return (forReturn === undefined ? {} : forReturn);
+    }
+
+    handleSaveGrader = (grader) => {
+        //console.log(grader);
+        this.props.saveAddedGrader(grader);
+    }
+
+    handleUpdateGrader = (grader) => {
+        this.props.saveUpdatedGrader(grader);
+    }
+
     render() {
         return (
             <div className="App">
@@ -33,7 +48,7 @@ class GraderManagementPage extends Component {
                         the graders will be done by the thesis' studyfield's professor.
                     </p>
 
-                    <GraderEditor graders={[{
+                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
                         //mockdata so that updateGrader doesn't crash
                         title: "Dr.",
                         name: "Nimi",

@@ -24,18 +24,18 @@ export default class GraderEditor extends Component {
         this.setState({ updateGrader });
     }
 
-    saveGrader = () => {
+    saveNewGrader = () => {
         const grader = this.state.newGrader;
         console.log("saving");
         console.log(grader);
-        //this.props.saveGrader(grader);
+        this.props.saveGrader(grader);
     }
 
     updateGrader = () => {
         const grader = this.state.updateGrader;
         console.log("updating");
         console.log(grader);
-        //this.props.updateGrader(grader);
+        this.props.updateGrader(grader);
     }
 
     deleteGrader = () => {
@@ -72,7 +72,7 @@ export default class GraderEditor extends Component {
                 <div className="ui field">
                     <label>&nbsp;</label>
 
-                    <button className="ui green button" onClick={this.saveGrader}>
+                    <button className="ui green button" onClick={this.saveNewGrader}>
                         Create Grader
           </button>
                 </div>
