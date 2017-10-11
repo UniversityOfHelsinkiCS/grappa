@@ -73,7 +73,7 @@ export default class GraderEditor extends Component {
                     <label>&nbsp;</label>
 
                     <button className="ui green button" onClick={this.saveNewGrader}>
-                        Create Grader
+                        Create Supervisor
           </button>
                 </div>
             </div>
@@ -117,13 +117,13 @@ export default class GraderEditor extends Component {
                 <div className="field">
                     <label>&nbsp;</label>
                     <button className="ui blue button" onClick={this.updateGrader}>
-                        Update Grader
+                        Update Supervisor
           </button>
                 </div>
                 <div className="field">
                     <label>&nbsp;</label>
                     <button className="ui red button" onClick={this.deleteGrader}>
-                        Delete Grader
+                        Delete Supervisor
           </button>
                 </div>
             </div>

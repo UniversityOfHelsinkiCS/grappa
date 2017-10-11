@@ -6,7 +6,7 @@ import GraderEditor from "../../components/grader/GraderEditor.js"
 import { connect, subscribe } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
-class GraderManagementPage extends Component {
+export class GraderManagementPage extends Component {
     /*constructor(props) {
         super(props);
         this.state = {
@@ -16,17 +16,11 @@ class GraderManagementPage extends Component {
     */
 
     componentDidMount() {
-        document.title = "Grappa: Grader Management";
-    }
-
-    getLastGraderAction() {
-        const forReturn = this.props.graders[this.props.graders.length - 1];
-
-        return (forReturn === undefined ? {} : forReturn);
+        document.title = "Grappa: Grader and Supervisor Management";
     }
 
     handleSaveGrader = (grader) => {
-        //console.log(grader);
+        console.log("testi");
         this.props.saveAddedGrader(grader);
     }
 
@@ -38,14 +32,12 @@ class GraderManagementPage extends Component {
         return (
             <div className="App">
                 <div className="ui inverted segment">
-                    <h2>Grader Management</h2>
+                    <h2>Thesis Supervisor Management</h2>
                 </div>
 
                 <div className="ui segment">
                     <p>
-                        Thesis has to have a minimum of two graders and if
-                        one of them isn't at least a professor and the other a doctor an evaluation of
-                        the graders will be done by the thesis' studyfield's professor.
+                        Add supervisors and edit the list of supervisors here. This page will be displayed to studyfields' professors and admins only.
                     </p>
 
                     <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
@@ -87,4 +79,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GraderManagementPage);
-//export default GraderManagementPage;
