@@ -1,46 +1,97 @@
 import test from 'ava';
 import sinon from 'sinon';
-//import knex from 'knex';
-const knex = require('../connection');
 
-const controller = require('../src/controllers/ThesisController');
-const dao = require('../src/dao/ThesisDao');
-const output = require('../src/output');
-const req = {
-    query: { outputType: "json" },
-    params: { id: 124 }
-};
-const resAPI = { status: a => { return a } };
-const sendStub = sinon.stub(output, "send");
+import router from '../src/routes/theses.js';
 
-test.afterEach(async t => {
-    sendStub.reset();
+const reqres = require('reqres');
+
+let req;
+let res;
+let thesisController;
+let dao;
+
+test.beforeEach(async t => {
+    req = reqres.req();
+    res = reqres.res();
+    dao = require('../src/dao/ThesisDao');
+    thesisController = require('../src/controllers/ThesisController');
 });
 
-test.serial('getThesisById calls output.send() and dao.thesisById()', t => {
-    const stubDao = sinon.stub(dao, "getThesisById");
-    stubDao.withArgs(req.params.id).returns("ok");
-
-    const resMock = sinon.mock(resAPI);
-    const expectation1 = resMock.expects("status").once().withArgs(200).returns(200);
-
-    controller.getThesisById(req, resAPI)
-    .then(() => {
-        t.truthy(sendStub.calledWith(req.query.outputType, 200, "ok"));
-        resMock.verify();
-    });
+test('getThesisById calls dao.thesisById() once', t => {
+    const stub = sinon.stub(dao, "getThesisById");
+    thesisController.dao = dao;
+    thesisController.getThesisById(req, res);
+    t.is(stub.calledOnce, true, "thesisById is called once");
+    dao.getThesisById.restore();
 });
 
-test.serial('getAllTheses calls output.send() and dao.getAllTheses()', t => {
-    const stubDao = sinon.stub(dao, "getAllTheses");
-    stubDao.withArgs(req.params.id).returns("ok");
+test('getThesisById calls dao.thesisById() with correct id', t => {
+    const stub = sinon.stub(dao, "getThesisById");
+    req.params.id = 123;
+    stub.returns("ok");
+    thesisController.dao = dao;
+    thesisController.getThesisById(req, res);
+    t.is(stub.calledWith(req.params.id), true, "thesisById is called with correct id");
+    dao.getThesisById.restore();
+});
 
-    const resMock = sinon.mock(resAPI);
-    const expectation1 = resMock.expects("status").once().withArgs(200).returns(200);
-    controller.getAllTheses(req, resAPI)
+test.cb('getThesisById returns correct information', t => {
+    const stub = sinon.stub(dao, "getThesisById");
+    req.params.id = 123;
+    stub.returns({ test: "xoxo" });
+    stub.withArgs(req.params.id).returns({ test: "ok" });
+    thesisController.dao = dao;
+    thesisController.getThesisById(req, res)
         .then(() => {
-            t.truthy(sendStub.calledWith(req.query.outputType, 200, "ok"));
-            resMock.verify();
+            t.is(res.json.calledWith({ test: "ok" }), true, "thesisById returns correct information");
+            t.end();
         });
-    
+    dao.getThesisById.restore();
+});
+
+test.cb('getThesisById returns status 200', t => {
+    const stub = sinon.stub(dao, "getThesisById");
+    req.params.id = 123;
+    stub.returns({ test: "xoxo" });
+    stub.withArgs(req.params.id).returns({ test: "ok" });
+    thesisController.dao = dao;
+    thesisController.getThesisById(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "thesisById returns status 200");
+            t.end();
+        });
+    dao.getThesisById.restore();
+});
+
+test('getAllTheses calls dao.getAllTheses() once', t => {
+    const stub = sinon.stub(dao, "getAllTheses");
+    thesisController.dao = dao;
+    thesisController.getAllTheses(req, res);
+    t.is(stub.calledOnce, true, "getAllTheses is called once");
+    dao.getAllTheses.restore();
+});
+
+test.cb('getAllTheses returns correct information', t => {
+    const stub = sinon.stub(dao, "getAllTheses");
+    stub.returns({ test: "xoxo" });
+    thesisController.dao = dao;
+    thesisController.getAllTheses(req, res)
+        .then(() => {
+            t.is(res.json.calledWith({ test: "xoxo" }), true, "getAllTheses returns correct information");
+            t.end();
+        });
+    dao.getAllTheses.restore();
+});
+
+test.cb('getAllTheses returns status 200', t => {
+    const stub = sinon.stub(dao, "getAllTheses");
+    stub.returns({ test: "xoxo" });
+    stub.withArgs(req.params.id).returns({ test: "ok" });
+    thesisController.dao = dao;
+    thesisController.getAllTheses(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "getAllTheses returns status 200");
+            t.end();
+        });
+    dao.getAllTheses.restore();
 });
