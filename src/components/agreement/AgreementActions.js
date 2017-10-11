@@ -30,7 +30,7 @@ export const saveFailure = function (error) {
 export const saveAgreement = (agreement) => {
     return (dispatch) => {
         dispatch(saveAttempt());
-        callApi('/agreement', 'post', agreement)
+        callApi('/agreements', 'post', agreement)
             .then(res =>  dispatch(saveSuccess(res)))
             .catch(err => dispatch(saveFailure(err.response)));
     }
