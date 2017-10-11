@@ -1,3 +1,4 @@
+const agreements = require('./routes/agreements.js');
 const contracts = require('./routes/contracts.js');
 const theses = require('./routes/theses.js');
 const index = require('./routes/index.js');
@@ -8,6 +9,7 @@ module.exports = (app) => {
     app.use('/', index);
     app.use('/contract', contracts);
     app.use('/contracts', contracts);
+    app.use('/agreements', agreements);
     app.use('/theses', theses);
 
 };
