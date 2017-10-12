@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-const service = require("../util/apiConnection.js");
+const service = require("../../util/apiConnection.js");
 
 class ThesisList extends Component {
     constructor(props) {

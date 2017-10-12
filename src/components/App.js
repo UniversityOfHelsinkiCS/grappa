@@ -46,11 +46,10 @@ class App extends Component {
                 </div>
 
                 <br />
-                <p><Link to="/contract"> Go to contract page </Link></p>
+                <p><Link to="/contractform"> Go view your contract </Link></p>
+                <p><Link to="/contract"> Go to contract form page </Link></p>
                 <p><Link to="/theses"> Go to thesis list page </Link></p>
             </div>
-
-
         );
     }
 }

@@ -25,7 +25,7 @@ test('has correct button', t => {
 });
 
 test('has link to contract page', t => {
-  t.truthy(doesAppContainElement(<Link to="/contract"> Go to contract page </Link>));
+  t.truthy(doesAppContainElement(<Link to="/contract"> Go to contract form page </Link>));
 });
 
 function doesAppContainElement(element) {

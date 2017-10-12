@@ -12,11 +12,15 @@ const getAxios = () => {
 }
 
 export const get = (url) => {
-    return getAxios().get(url).then(res => {res.status === 200 ? res : Promise.reject()});
+    return getAxios().get(url);//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
 const post = (url, data) => {
-    return getAxios().post(url, data).then(res => {res.status === 200 ? res : Promise.reject()});
+    return getAxios().post(url, data);//.then(res => {res.status === 200 ? res : Promise.reject()});
+}
+
+export const put = (url, data) => {
+    return getAxios().put(url, data);//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
 //todo: switch case for rest; richer argument possibilities
