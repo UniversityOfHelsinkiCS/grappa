@@ -14,7 +14,7 @@ class ThesisList extends Component {
 
     componentDidMount() {
         document.title = "Thesis List Page";
-        service.get("/theses").then((resp) => {
+        service.oldGet("/theses").then((resp) => {
             var theses = resp.data.map((thesis) => thesis);
             this.setState(
                 {

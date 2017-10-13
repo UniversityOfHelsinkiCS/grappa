@@ -18,7 +18,7 @@ class App extends Component {
     handlePost = (e) => {
         e.preventDefault()
         let value = this.refs.input.value;
-        service.get('/helloUser?username=' + value)
+        service.oldGet('/helloUser?username=' + value)
             .then(resp => {
                 this.setState({
                     username: resp.data.text

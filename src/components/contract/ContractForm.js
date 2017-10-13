@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ContractEditModal from './ContractEditModal';
 import ContractView from './ContractView';
+//import { getAgreement } from "./ContractActions";
 const service = require("../../util/apiConnection");
+
+//TODO: commit, pull => merge, refactor to agreement, commit, tests
 
 class ContractForm extends Component {
     constructor(props) {
@@ -17,7 +20,8 @@ class ContractForm extends Component {
     componentDidMount() {
         document.title = "Contract Page";
         //TODO: fetch the correct agreement based on user
-        service.get("/agreements/1").then((resp) => {
+        //var resp = getAgreement(1);
+        service.oldGet("/agreements/1").then((resp) => {
             var original = Object.assign({}, resp.data[0]);
             this.setState(
                 {
@@ -47,7 +51,7 @@ class ContractForm extends Component {
 
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
-        service.put('/agreements/' + this.state.originalData.agreementId, this.state.formData)
+        service.oldPut('/agreements/' + this.state.originalData.agreementId, this.state.formData)
             .then(resp => {
                 console.log(resp)
             }).catch((error) => {
