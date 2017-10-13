@@ -20,9 +20,9 @@ const agreementTestData = { some: 'data' };
 const agreementTestDataError = { response: { some: 'error' } };
 
 const callApiStub = sinon.stub(API, 'callApi')
-    .withArgs('/agreement', 'post', agreementTestData)
+    .withArgs('/agreements', 'post', agreementTestData)
     .returns(Promise.resolve(agreementTestData))
-    .withArgs('/agreement', 'post', agreementTestDataError).returns(Promise.reject(agreementTestDataError));
+    .withArgs('/agreements', 'post', agreementTestDataError).returns(Promise.reject(agreementTestDataError));
 
 test('saveSuccess returns correct type', actionTest(
     saveSuccess,
