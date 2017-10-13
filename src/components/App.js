@@ -49,8 +49,7 @@ class App extends Component {
                 </div>
 
                 <br />
-                <p><Link to="/agreement"> Go to agreement page </Link></p>
-                <p><Link to="/theses"> Go to thesis list page </Link></p>
+                
             </div>
 
 

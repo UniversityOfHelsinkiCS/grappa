@@ -67,7 +67,7 @@ class ThesisList extends Component {
                     )}</tbody>
                 </table>
                 <div className="ui segment">
-                    <p><Link to="/"> Go back to HomePage</Link></p>
+                    
                 </div>
             </div>
         );

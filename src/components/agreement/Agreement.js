@@ -307,7 +307,7 @@ export class Agreement extends Component {
                     {this.createForm()}
                     {this.getResponseMessage()}
                     <br />
-                    <Link to="/"> Go back to HomePage :P </Link>
+                    
                 </div>
             </div>
 
