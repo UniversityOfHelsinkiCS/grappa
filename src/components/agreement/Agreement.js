@@ -298,7 +298,7 @@ export class Agreement extends Component {
                 <div className="ui inverted segment">
                     <h2>Thesis Agreement</h2>
                 </div>
-                <NavBar active="Agreement" />
+                <NavBar active={"Agreement"} />
                 <div className="ui segment">
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                     <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>

@@ -47,7 +47,7 @@ class ThesisList extends Component {
                 <div className="ui inverted segment">
                     <h2>Thesis List</h2>
                 </div>
-                <NavBar active="Theses" />
+                <NavBar active={"Theses"} />
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" value={this.state.searchTerm} type="text" placeholder="Filter theses" onChange={this.handleFilteringTheses} />
