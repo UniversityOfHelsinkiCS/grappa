@@ -4,9 +4,9 @@ import { Router, Link } from 'react-router-dom';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
-import {Contract} from '../../src/components/contract/Contract';
+import {Agreement} from '../../src/components/agreement/Agreement';
 
-const wrapper = shallow(<Contract contract={[]} />);
+const wrapper = shallow(<Agreement agreement={[]} />);
 let sandbox;
 let server;
 
@@ -78,7 +78,7 @@ test.after( () => {
 });
 */
 test('has a correct tittle 2', t => {
-    t.truthy(wrapper.contains(<h2>Thesis Contract</h2>));
+    t.truthy(wrapper.contains(<h2>Thesis Agreement</h2>));
 });
 
 test('should have ' + formItems.textarea.length + ' textarea elements', t => {
@@ -133,10 +133,10 @@ test('when send button is clicked, sendForm method is called', t => {
     spy.restore();
 });
 
-test("when sendForm method is called,saveContract() is called with correct arguments", t => {
+test("when sendForm method is called,saveAgreement() is called with correct arguments", t => {
     const instance = wrapper.instance();
     let saveStub = sinon.stub();
-    wrapper.setProps({ saveContract: saveStub });
+    wrapper.setProps({ saveAgreement: saveStub });
     instance.forceUpdate();
     wrapper.update();
 
@@ -150,11 +150,11 @@ test("when sendForm method is called,saveContract() is called with correct argum
 });
 
 test.skip("TBD: change in redux state leads to change in UI", t => {
-    let axiousStub = sinon.stub(axios, 'post').withArgs('/contract', wrapper.state().form)
+    let axiousStub = sinon.stub(axios, 'post').withArgs('/agreement', wrapper.state().form)
         .returns(
             Promise.resolve({
                 status: 200,
-                response: { text: "Contract saved to backend" }
+                response: { text: "Agreement saved to backend" }
         }));
 
     const instance = wrapper.instance();
