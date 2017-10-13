@@ -11,12 +11,14 @@ const getAxios = () => {
     }
 }
 
-export const get = (url) => {
-    return getAxios().get(url).then(res => {res.status === 200 ? res : Promise.reject()});
+// DO NOT EXPORT
+const get = (url) => {
+    return getAxios().get(url)//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
+// DO NOT EXPORT
 const post = (url, data) => {
-    return getAxios().post(url, data).then(res => {res.status === 200 ? res : Promise.reject()});
+    return getAxios().post(url, data)//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
 //todo: switch case for rest; richer argument possibilities
