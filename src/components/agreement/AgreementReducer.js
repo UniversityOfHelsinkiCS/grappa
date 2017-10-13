@@ -1,10 +1,10 @@
-import { CONTRACT_SAVE_SUCCESS, CONTRACT_SAVE_FAILURE, CONTRACT_SAVE_ATTEMPT } from "./ContractActions";
+import { AGREEMENT_SAVE_SUCCESS, AGREEMENT_SAVE_FAILURE, AGREEMENT_SAVE_ATTEMPT } from "./AgreementActions";
 
-//const initialState = { data: [getContractNotSent().text] };
+//const initialState = { data: [getAgreementNotSent().text] };
 
-const contractSave = (state = [], action) => {
+const agreementSave = (state = [], action) => {
     switch (action.type) {
-        case CONTRACT_SAVE_SUCCESS:
+        case AGREEMENT_SAVE_SUCCESS:
             return [...state,
             {
                 id: action.type,
@@ -12,7 +12,7 @@ const contractSave = (state = [], action) => {
                 formClass: "success",
                 completed: true
             }];
-        case CONTRACT_SAVE_FAILURE:
+        case AGREEMENT_SAVE_FAILURE:
             return [...state,
             {
                 id: action.type,
@@ -20,7 +20,7 @@ const contractSave = (state = [], action) => {
                 formClass: "error",
                 completed: true
             }];
-        case CONTRACT_SAVE_ATTEMPT:
+        case AGREEMENT_SAVE_ATTEMPT:
             return [...state,
             {
                 id: action.type,
@@ -33,4 +33,4 @@ const contractSave = (state = [], action) => {
     }
 };
 
-export default contractSave;
+export default agreementSave;

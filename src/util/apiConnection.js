@@ -11,24 +11,22 @@ const getAxios = () => {
     }
 }
 
+// DO NOT EXPORT
 const get = (url) => {
-    return getAxios().get(url).then(res => {res.status === 200 ? res : Promise.reject()});
+    return getAxios().get(url)//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
-export const oldGet = (url) => {
-    return getAxios().get(url);
-}
-
+// DO NOT EXPORT
 const post = (url, data) => {
-    return getAxios().post(url, data).then(res => {res.status === 200 ? res : Promise.reject()});
+    return getAxios().post(url, data)//.then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
 const put = (url, data) => {
     return getAxios().put(url, data).then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
-export const oldPut = (url) => {
-    return getAxios().get(url);
+export const oldPut = (url, content) => {
+    return getAxios().put(url, content);
 }
 
 //delete is an operator => can't use it as const name

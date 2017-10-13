@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
-const service = require("../util/apiConnection.js");
+//import { Link } from 'react-router-dom';
+import NavBar from './NavBar';
+import { callApi } from "../util/apiConnection.js";
 
 class App extends Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class App extends Component {
     handlePost = (e) => {
         e.preventDefault()
         let value = this.refs.input.value;
-        service.oldGet('/helloUser?username=' + value)
+        callApi('/helloUser?username=' + value)
             .then(resp => {
                 this.setState({
                     username: resp.data.text
@@ -29,14 +29,12 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-
                 <div className="ui inverted segment">
                     <h2>Enter your name below</h2>
                 </div>
-
+                <NavBar active={"Homepage"} />
                 <div className="ui segment">
                     <h2>{this.state.username}</h2>
-
                     <form onSubmit={this.handlePost}>
                         <div className="ui action input">
                             <input ref="input" placeholder="enter your name here" type="text" name="username" />
@@ -44,11 +42,7 @@ class App extends Component {
                         </div>
                     </form>
                 </div>
-
                 <br />
-                <p><Link to="/contractform"> Go view your contract </Link></p>
-                <p><Link to="/contract"> Go to contract form page </Link></p>
-                <p><Link to="/theses"> Go to thesis list page </Link></p>
             </div>
         );
     }
