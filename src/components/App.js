@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import NavBar from './NavBar';
 
-const service = require("../util/apiConnection.js");
+import { callApi } from "../util/apiConnection.js";
 
 class App extends Component {
     constructor(props) {
@@ -20,7 +20,7 @@ class App extends Component {
     handlePost = (e) => {
         e.preventDefault()
         let value = this.refs.input.value;
-        service.get('/helloUser?username=' + value)
+        callApi('/helloUser?username=' + value)
             .then(resp => {
                 this.setState({
                     username: resp.data.text
