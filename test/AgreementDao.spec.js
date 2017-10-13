@@ -2,7 +2,6 @@ import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
 const knex = require('../connection');
-//const mockDb = require('mock-knex');
 
 const agreementDao = require('../src/dao/AgreementDao');
 const mockAgreements = require('../src/mockdata/MockAgreements');
@@ -40,17 +39,14 @@ test.beforeEach(async t => {
     //let temp = knex.raw('SELECT * FROM agreement');
     await knex('agreement').del();
     await knex('agreement').insert(mockAgreements);
-  //  mockDb.mock(db);
 });
 
 test.beforeEach(async t => {
-    //mockDb.unmock(db);
 });    
 
 
 test.serial('getAllAgreements returns list of right length ', async t => {
     let listOfAgreements = await agreementDao.getAllAgreements();
-    console.log(listOfAgreements);
     t.deepEqual(listOfAgreements.length, mockAgreements.length);
 });
 
