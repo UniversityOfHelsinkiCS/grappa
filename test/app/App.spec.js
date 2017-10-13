@@ -24,10 +24,6 @@ test('has correct button', t => {
   t.truthy(doesAppContainElement(<button className="ui button" type="submit">Send</button>));
 });
 
-test('has link to agreement page', t => {
-  t.truthy(doesAppContainElement(<Link to="/agreement"> Go to agreement page </Link>));
-});
-
 function doesAppContainElement(element) {
   return wrapper.containsMatchingElement(element);
 };
