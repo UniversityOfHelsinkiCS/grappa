@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import NavBar from './NavBar';
+
 const service = require("../util/apiConnection.js");
 
 class App extends Component {
@@ -33,7 +35,8 @@ class App extends Component {
                 <div className="ui inverted segment">
                     <h2>Enter your name below</h2>
                 </div>
-
+                <NavBar active="Homepage" />
+                
                 <div className="ui segment">
                     <h2>{this.state.username}</h2>
 
