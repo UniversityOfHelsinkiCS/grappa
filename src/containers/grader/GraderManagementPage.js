@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //import service from "../../util/apiConnection.js";
 import GraderEditor from "../../components/grader/GraderEditor.js"
-
+import NavBar from '../../components/NavBar';
 import { connect } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
@@ -33,6 +33,7 @@ export class GraderManagementPage extends Component {
                 <div className="ui inverted segment">
                     <h2>Thesis Supervisor Management</h2>
                 </div>
+                <NavBar active={"Supervisor management"} />
 
                 <div className="ui segment">
                     <p>
