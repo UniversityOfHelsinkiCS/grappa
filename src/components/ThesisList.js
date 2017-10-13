@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
-const service = require("../util/apiConnection.js");
+import { callApi } from "../util/apiConnection.js";
 
 class ThesisList extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class ThesisList extends Component {
 
     componentDidMount() {
         document.title = "Thesis List Page";
-        service.get("/theses").then((resp) => {
+        callApi("/theses").then((resp) => {
             console.log(resp);
             var theses = resp.data.map((thesis) => thesis);
             this.setState(
