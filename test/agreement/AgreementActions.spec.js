@@ -53,6 +53,8 @@ test('saveAgreement calls saveSuccess on succesful callApi promise resolution', 
     t.deepEqual(resArray, compareArray);
 });
 
+
+
 /**
  * Tämä testi on .cb, eli callback modessa. 
  * Testissä on määritelty monta vertailua tehdään (3kpl).
