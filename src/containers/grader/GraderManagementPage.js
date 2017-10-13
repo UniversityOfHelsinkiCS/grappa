@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 //import service from "../../util/apiConnection.js";
 import GraderEditor from "../../components/grader/GraderEditor.js"
 
-import { connect, subscribe } from "react-redux";
+import { connect } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
 export class GraderManagementPage extends Component {
@@ -20,7 +20,6 @@ export class GraderManagementPage extends Component {
     }
 
     handleSaveGrader = (grader) => {
-        console.log("testi");
         this.props.saveAddedGrader(grader);
     }
 
@@ -41,7 +40,7 @@ export class GraderManagementPage extends Component {
                     </p>
 
                     <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
-                        //mockdata so that updateGrader doesn't crash
+                        //mockdata so that updateGrader doesn't crash before back end really gives data
                         title: "Dr.",
                         name: "Nimi",
                         id: 1

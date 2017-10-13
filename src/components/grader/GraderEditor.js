@@ -38,6 +38,7 @@ export default class GraderEditor extends Component {
         this.props.updateGrader(grader);
     }
 
+    //not functioning yet in Grappa 2, to be added later
     deleteGrader = () => {
         const grader = this.state.updateGrader;
         console.log("deleting");
@@ -46,6 +47,7 @@ export default class GraderEditor extends Component {
     }
 
     renderCreate() {
+        console.log(this.state);
         return (
             <div className="three fields">
                 <div className="ui field">
@@ -82,7 +84,7 @@ export default class GraderEditor extends Component {
 
     renderUpdate() {
         return (
-            <div className="five fields">
+            <div className="four fields">
                 <div className="field">
                     <label>Who</label>
                     <select className="ui fluid search dropdown" onChange={this.selectGrader}>
@@ -120,12 +122,7 @@ export default class GraderEditor extends Component {
                         Update Supervisor
           </button>
                 </div>
-                <div className="field">
-                    <label>&nbsp;</label>
-                    <button className="ui red button" onClick={this.deleteGrader}>
-                        Delete Supervisor
-          </button>
-                </div>
+                
             </div>
         );
     }
