@@ -8,10 +8,14 @@ const agreementController = require('../controllers/AgreementController');
 //     agreementController.getAgreements(req, res);
 // });
     
+router.get('/', (req, res) => {
+    agreementController.getAllAgreements();
+});
+
 router.get('/:id', (req, res) => {
     agreementController.getAgreementById(req, res);
 });
-    
+
 router.post('/', jsonParser, (req, res) => {
         agreementController.saveAgreement(req, res);
 });

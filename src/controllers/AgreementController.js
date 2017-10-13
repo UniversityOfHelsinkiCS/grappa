@@ -8,6 +8,11 @@ export async function getAgreementById(req, res) {
     res.status(200).json(agreement);
 }
 
+export async function getAllAgreements(req, res) {
+    const agreements = await agreementDao.getAllAgreements();
+    res.status(200).json(agreements);
+}
+
 export async function saveAgreement(req, res) {
     const agreementData = req.body;
     if(agreementData.agreementId !== "" && agreementData.agreementId !== undefined){

@@ -19,7 +19,27 @@ test.beforeEach(async t => {
 test.afterEach(async t => {
 });
 
-test('getAgreementById calls dao.agreementById() once', t => {
+test('getAllAgreements calls dao.getAllAgreements() once', t => {
+    const stub = sinon.stub(dao, "getAllAgreements");
+    agreementController.dao = dao;
+    agreementController.getAllAgreements(req, res);
+    t.is(stub.calledOnce, true, "getAllAgreements is called once");
+    dao.getAllAgreements.restore();
+});
+
+test.cb('getAllAgreements returns status 200', t => {
+    const stub = sinon.stub(dao, "getAllAgreements");
+    stub.returns({ test: "xoxo" });
+    agreementController.dao = dao;
+    agreementController.getAllAgreements(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "getAllAgreements returns status 200");
+            t.end();
+        });
+    dao.getAllAgreements.restore();
+});
+
+test('getAgreementById calls dao.getAgreementById() once', t => {
     const stub = sinon.stub(dao, "getAgreementById");
     agreementController.dao = dao;
     agreementController.getAgreementById(req, res);
