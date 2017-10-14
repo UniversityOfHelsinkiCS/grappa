@@ -11,9 +11,9 @@ export default class NavBar extends Component {
         ]
         const linkElements = elements.map(elem => {
             if(this.props.active === elem.text)
-                return <Link to={elem.path} className="item active">{elem.text}</Link>;
+                return <Link key={elem.text} to={elem.path} className="item active">{elem.text}</Link>;
             else
-                return <Link to={elem.path} className="item">{elem.text}</Link>
+                return <Link key={elem.text} to={elem.path} className="item">{elem.text}</Link>
          });
 
         return (
