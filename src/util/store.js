@@ -11,7 +11,6 @@ const combinedReducers = combineReducers({
 });
 
 let store;
-console.log(process);
 if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_NO_DEVTOOLS !== '1') {
     store = createStore(
         combinedReducers,
