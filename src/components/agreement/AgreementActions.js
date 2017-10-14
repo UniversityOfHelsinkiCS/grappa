@@ -35,3 +35,12 @@ export const saveAgreement = (agreement) => {
             .catch(err => dispatch(saveFailure(err.response)));
     }
 }
+
+/*export const getAgreement = (agreementId) => {
+    return (dispatch) => {
+        dispatch(getAttempt());
+        callApi('/agreement/' + agreementId, 'get')
+            .then(res => dispatch(getSuccess(res)))
+            .catch(err => dispatch(getFailure(err.response)));
+    //}
+}*/
