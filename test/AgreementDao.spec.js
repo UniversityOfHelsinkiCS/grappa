@@ -9,7 +9,6 @@ const mockAgreements = require('../src/mockdata/MockAgreements');
 test.before(async t => {
     //knex.schema.dropTableIfExists('agreement');
     //let temp = knex.raw('SELECT * FROM agreement');
-
     await knex.schema.createTable('agreement', function (table) {
         table.increments('agreementId').primary();
         table.string('studentName');
@@ -33,18 +32,23 @@ test.before(async t => {
         table.string('studentGradeGoal');
         table.timestamps();
     })
-
 });
 
 test.beforeEach(async t => {
-    //console.log(knex);
-    //let temp = await knex.raw('SELECT name FROM sqlite_master WHERE type="table"');
+    //knex.schema.dropTableIfExists('agreement');
+    //let temp = knex.raw('SELECT * FROM agreement');
     await knex('agreement').del();
     await knex('agreement').insert(mockAgreements);
-    //let temp = await knex.raw('SELECT * FROM agreement');
-    //console.log(temp);
 });
 
+test.beforeEach(async t => {
+});    
+
+
+test.serial('getAllAgreements returns list of right length ', async t => {
+    let listOfAgreements = await agreementDao.getAllAgreements();
+    t.deepEqual(listOfAgreements.length, mockAgreements.length);
+});
 
 test.serial('AgreementDao returns a agreement by id correctly', async t => {
 

@@ -8,6 +8,13 @@ export const getAgreementById = (id) => {
         });
 }
 
+export const getAllAgreements = () => {
+    return knex.select().from('agreement')
+        .then(agreements => {
+            return agreements;
+        });
+}
+
 export const saveNewAgreement = (data) => {
     return knex('agreement')
         .returning('agreementId')
