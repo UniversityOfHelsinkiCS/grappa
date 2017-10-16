@@ -5,9 +5,10 @@ import { Provider } from 'react-redux';
 
 //components
 import App from './components/App';
+import AgreementForm from './components/agreement/AgreementForm';
 import Agreement from './components/agreement/Agreement';
-import ThesisList from './components/ThesisList';
 import GraderManagement from './containers/grader/GraderManagementPage';
+import ThesisList from './components/thesis/ThesisList';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
@@ -22,6 +23,7 @@ ReactDOM.render(
         <Router>
             <Switch>
                 <Route exact path="/" component={App}/>
+                <Route exact path="/agreementform" component={AgreementForm}/>
                 <Route exact path="/agreement" component={Agreement}/>
                 <Route exact path="/theses" component={ThesisList}/>
                 <Route exact path="/graderManagement" component={GraderManagement}/>
