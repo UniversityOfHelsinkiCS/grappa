@@ -50,10 +50,8 @@ export default class FormCreator extends Component {
             })
 
         return (
-            <div key={"section" + sectionKey}><br />
-                <h3 className="ui dividing header">{sectionData.header}</h3>
-                {sectionLineList}
-            </div>
+            <Section sectionKey={sectionKey} header={sectionData.header}
+                     elements={sectionLineList} />
         );
     }
 
