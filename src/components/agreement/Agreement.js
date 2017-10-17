@@ -7,7 +7,7 @@ import { saveAgreement } from "./AgreementActions";
 
 import EventMessage from '../EventMessage';
 import NavBar from '../NavBar';
-import Section from '../form/Section'
+import FormCreator from '../form/FormCreator'
 
 
 export class Agreement extends Component {
@@ -287,7 +287,7 @@ export class Agreement extends Component {
                     <br />
                     {this.getButton()}
                     <br />
-
+                    
                 </form>
             </div>
 
@@ -310,7 +310,7 @@ export class Agreement extends Component {
                     {this.createForm()}
                     {this.getResponseMessage()}
                     <br />
-                    
+                    <FormCreator />
                 </div>
             </div>
 
