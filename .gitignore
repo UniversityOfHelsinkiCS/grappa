@@ -60,3 +60,6 @@ typings/
 # nyc
 coverage
 .nyc_output
+
+# Sqlite db
+*.sqlite

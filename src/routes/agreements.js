@@ -4,12 +4,12 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const agreementController = require('../controllers/AgreementController');
 
-// router.get('/', (req, res) => {
-//     agreementController.getAgreements(req, res);
-// });
-    
 router.get('/', (req, res) => {
-    agreementController.getAllAgreements();
+    agreementController.getAllAgreements(req, res);
+});
+
+router.get('/:id/previous', (req, res) => {
+    agreementController.getPreviousAgreementById(req, res);
 });
 
 router.get('/:id', (req, res) => {
@@ -17,7 +17,11 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', jsonParser, (req, res) => {
-        agreementController.saveAgreement(req, res);
+    agreementController.saveAgreement(req, res);
 });
-    
+
+router.put('/:id', jsonParser, (req, res) => {
+    agreementController.saveAgreement(req, res);
+});
+
 module.exports = router;

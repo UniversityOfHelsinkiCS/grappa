@@ -3,7 +3,7 @@ import sinon from 'sinon';
 //import knex from 'knex';
 const knex = require('../connection');
 
-const contractDao = require('../src/dao/ContractDao');
+const contractService = require('../src/services/ContractService');
 const mockContracts = require('../src/mockdata/MockContracts');
 
 test.before(async t => {
@@ -49,7 +49,7 @@ test.beforeEach(async t => {
 test.serial('ContractDao returns a contract by id correctly', async t => {
 
     let id = '1';
-    let contract = await contractDao.getContractById(id);
+    let contract = await contractService.getContractById(id);
     let mockContract;
     for(let i = 0; i < mockContracts.length; i++) {
         if (mockContracts[i].contractId.toString() === id) {
@@ -88,7 +88,7 @@ test.serial('saveNewContract call returns contractId = 3', async t => {
       };
 
     
-    var temp = await contractDao.saveNewContract(testData);
+    var temp = await contractService.saveNewContract(testData);
     //console.log(temp);
     t.truthy(temp==3);
     /*
