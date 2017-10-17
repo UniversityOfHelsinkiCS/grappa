@@ -3,14 +3,15 @@ import sinon from 'sinon';
 //import knex from 'knex';
 const knex = require('../connection');
 
-const agreementDao = require('../src/dao/AgreementDao');
-const mockAgreements = require('../src/mockdata/MockAgreements');
+const contractService = require('../src/services/ContractService');
+const mockContracts = require('../src/mockdata/MockContracts');
 
 test.before(async t => {
-    //knex.schema.dropTableIfExists('agreement');
-    //let temp = knex.raw('SELECT * FROM agreement');
-    await knex.schema.createTable('agreement', function (table) {
-        table.increments('agreementId').primary();
+    //knex.schema.dropTableIfExists('contract');
+    //let temp = knex.raw('SELECT * FROM contract');
+
+    await knex.schema.createTable('contract', function (table) {
+        table.increments('contractId').primary();
         table.string('studentName');
         table.string('studentNumber');
         table.string('studentAddress');
@@ -32,39 +33,34 @@ test.before(async t => {
         table.string('studentGradeGoal');
         table.timestamps();
     })
+
 });
 
 test.beforeEach(async t => {
-    //knex.schema.dropTableIfExists('agreement');
-    //let temp = knex.raw('SELECT * FROM agreement');
-    await knex('agreement').del();
-    await knex('agreement').insert(mockAgreements);
+    //console.log(knex);
+    //let temp = await knex.raw('SELECT name FROM sqlite_master WHERE type="table"');
+    await knex('contract').del();
+    await knex('contract').insert(mockContracts);
+    //let temp = await knex.raw('SELECT * FROM contract');
+    //console.log(temp);
 });
 
-test.beforeEach(async t => {
-});    
 
-
-test.serial('getAllAgreements returns list of right length ', async t => {
-    let listOfAgreements = await agreementDao.getAllAgreements();
-    t.deepEqual(listOfAgreements.length, mockAgreements.length);
-});
-
-test.serial('AgreementDao returns a agreement by id correctly', async t => {
+test.serial('ContractDao returns a contract by id correctly', async t => {
 
     let id = '1';
-    let agreement = await agreementDao.getAgreementById(id);
-    let mockAgreement;
-    for(let i = 0; i < mockAgreements.length; i++) {
-        if (mockAgreements[i].agreementId.toString() === id) {
-            mockAgreement = mockAgreements[i];
+    let contract = await contractService.getContractById(id);
+    let mockContract;
+    for(let i = 0; i < mockContracts.length; i++) {
+        if (mockContracts[i].contractId.toString() === id) {
+            mockContract = mockContracts[i];
         }
     }
-    t.is(agreement.length, 1);
-    t.deepEqual(agreement[0], mockAgreement);
+    t.is(contract.length, 1);
+    t.deepEqual(contract[0], mockContract);
 });
 
-test.serial('saveNewAgreement call returns agreementId = 3', async t => {
+test.serial('saveNewContract call returns contractId = 3', async t => {
     const testData = {
         studentName: 'Firstname2 Lastname2',
         studentNumber: "01234568",
@@ -92,16 +88,16 @@ test.serial('saveNewAgreement call returns agreementId = 3', async t => {
       };
 
     
-    var temp = await agreementDao.saveNewAgreement(testData);
+    var temp = await contractService.saveNewContract(testData);
     //console.log(temp);
     t.truthy(temp==3);
     /*
-    await knex('agreement')
-    .returning('agreementId')
+    await knex('contract')
+    .returning('contractId')
     .insert(testData)
-    .then((agreementId) => {
-        console.log( {text: 'New agreement saved to backend', agreementId: agreementId[0]});
-        t.truthy(agreementId[0]==3)
+    .then((contractId) => {
+        console.log( {text: 'New contract saved to backend', contractId: contractId[0]});
+        t.truthy(contractId[0]==3)
       });
       */
 

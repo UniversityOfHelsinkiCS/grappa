@@ -8,21 +8,21 @@ const reqres = require('reqres');
 let req;
 let res;
 let thesisController;
-let dao;
+let service;
 
 test.beforeEach(async t => {
     req = reqres.req();
     res = reqres.res();
-    dao = require('../src/dao/ThesisDao');
+    service = require('../src/services/ThesisService');
     thesisController = require('../src/controllers/ThesisController');
 });
 
 test.cb('getThesisById', t => {
-    const stub = sinon.stub(dao, "getThesisById");
+    const stub = sinon.stub(service, "getThesisById");
     req.params.id = 123;
     stub.returns({ test: "xoxo" });
     stub.withArgs(req.params.id).returns({ test: "ok" });
-    thesisController.dao = dao;
+    thesisController.service = service;
     thesisController.getThesisById(req, res)
         .then(() => {
             t.is(stub.calledOnce, true, "thesisById is called once");
@@ -31,13 +31,13 @@ test.cb('getThesisById', t => {
             t.is(res.json.calledWith({ test: "ok" }), true, "thesisById returns correct information");
             t.end();
         });
-    dao.getThesisById.restore();
+    service.getThesisById.restore();
 });
 
 test.cb('getAllTheses returns correct information', t => {
-    const stub = sinon.stub(dao, "getAllTheses");
+    const stub = sinon.stub(service, "getAllTheses");
     stub.returns({ test: "xoxo" });
-    thesisController.dao = dao;
+    thesisController.service = service;
     thesisController.getAllTheses(req, res)
         .then(() => {
             t.is(stub.calledOnce, true, "getAllTheses is called once");
@@ -45,5 +45,5 @@ test.cb('getAllTheses returns correct information', t => {
             t.is(res.json.calledWith({ test: "xoxo" }), true, "getAllTheses returns correct information");
             t.end();
         });
-    dao.getAllTheses.restore();
+    service.getAllTheses.restore();
 });

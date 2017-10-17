@@ -7,138 +7,138 @@ const reqres = require('reqres');
 let req;
 let res;
 let contractController;
-let dao;
+let service;
 
 test.beforeEach(async t => {
     req = reqres.req();
     res = reqres.res();
-    dao = require('../src/dao/ContractDao');
+    service = require('../src/services/ContractService');
     contractController = require('../src/controllers/ContractController');
 });
 
 test.afterEach(async t => {
 });
 
-test('getContractById calls dao.contractById() once', t => {
-    const stub = sinon.stub(dao, "getContractById");
-    contractController.dao = dao;
+test('getContractById calls service.contractById() once', t => {
+    const stub = sinon.stub(service, "getContractById");
+    contractController.service = service;
     contractController.getContractById(req, res);
     t.is(stub.calledOnce, true, "contractById is called once");
-    dao.getContractById.restore();
+    service.getContractById.restore();
 });
 
-test('getContractById calls dao.contractById() with correct id', t => {
-    const stub = sinon.stub(dao, "getContractById");
+test('getContractById calls service.contractById() with correct id', t => {
+    const stub = sinon.stub(service, "getContractById");
     req.params.id = 123;
     stub.returns("ok");
-    contractController.dao = dao;
+    contractController.service = service;
     contractController.getContractById(req, res);
     t.is(stub.calledWith(req.params.id), true, "contractById is called with correct id");
-    dao.getContractById.restore();
+    service.getContractById.restore();
 });
 
 test.cb('getContractById returns correct information', t => {
-    const stub = sinon.stub(dao, "getContractById");
+    const stub = sinon.stub(service, "getContractById");
     req.params.id = 123;
     stub.returns({ test: "xoxo" });
     stub.withArgs(req.params.id).returns({ test: "ok" });
-    contractController.dao = dao;
+    contractController.service = service;
     contractController.getContractById(req, res)
         .then(() => {
             t.is(res.json.calledWith({ test: "ok" }), true, "contractById returns correct information");
             t.end();
         });
-    dao.getContractById.restore();
+    service.getContractById.restore();
 });
 
 test.cb('getContractById returns status 200', t => {
-    const stub = sinon.stub(dao, "getContractById");
+    const stub = sinon.stub(service, "getContractById");
     req.params.id = 123;
     stub.returns({ test: "xoxo" });
     stub.withArgs(req.params.id).returns({ test: "ok" });
-    contractController.dao = dao;
+    contractController.service = service;
     contractController.getContractById(req, res)
         .then(() => {
             t.is(res.status.calledWith(200), true, "contractById returns status 200");
             t.end();
         });
-    dao.getContractById.restore();
+    service.getContractById.restore();
 });
 
 test.cb('getContractById does not return incorrect information', t => {
-    const stub = sinon.stub(dao, "getContractById");
+    const stub = sinon.stub(service, "getContractById");
     req.params.id = 123;
     stub.returns({ test: "nok" });
-    contractController.dao = dao;
+    contractController.service = service;
     contractController.getContractById(req, res)
         .then(() => {
             t.not(res.json.calledWith({ test: "xoxo" }), true, "contractById does not return incorrect information");
             t.end();
         });
-    dao.getContractById.restore();
+    service.getContractById.restore();
 });
 
-test('saveContract calls dao.saveNewContract() once', t => {
-    const stub = sinon.stub(dao, "saveNewContract");
-    contractController.dao = dao;
+test('saveContract calls service.saveNewContract() once', t => {
+    const stub = sinon.stub(service, "saveNewContract");
+    contractController.service = service;
     contractController.saveContract(req, res);
     t.is(stub.calledOnce, true, "saveNewContract is called once");
-    dao.saveNewContract.restore();
+    service.saveNewContract.restore();
 });
 
 test.cb('saveContract returns 200 for new agreement', t => {
-    const stub = sinon.stub(dao, "saveNewContract");
-    contractController.dao = dao;
+    const stub = sinon.stub(service, "saveNewContract");
+    contractController.service = service;
     contractController.saveContract(req, res)
         .then(() => {
             t.is(res.status.calledWith(200), true, "saveContract returns status 200 for new agreement");
             t.end();
         });
-    dao.saveNewContract.restore();
+    service.saveNewContract.restore();
 });
 
 test.cb('saveContract returns 500 for error with new agreement', t => {
-    const stub = sinon.stub(dao, "saveNewContract");
+    const stub = sinon.stub(service, "saveNewContract");
     stub.throws();
-    contractController.dao = dao;
+    contractController.service = service;
     contractController.saveContract(req, res)
         .then(() => {
             t.is(res.status.calledWith(500), true, "saveContract returns status 500 for error with new agreement");
             t.end();
         });
-    dao.saveNewContract.restore();
+    service.saveNewContract.restore();
 });
 
-test('saveContract calls dao.updateContract() once', t => {
-    const stub = sinon.stub(dao, "updateContract");
-    contractController.dao = dao;
+test('saveContract calls service.updateContract() once', t => {
+    const stub = sinon.stub(service, "updateContract");
+    contractController.service = service;
     req.body.contractId = 34;
     contractController.saveContract(req, res);
     t.is(stub.calledOnce, true, "updateContract is called once");
-    dao.updateContract.restore();
+    service.updateContract.restore();
 });
 
 test.cb('saveContract returns 200 for update', t => {
-    const stub = sinon.stub(dao, "updateContract");
-    contractController.dao = dao;
+    const stub = sinon.stub(service, "updateContract");
+    contractController.service = service;
     req.body.contractId = 34;
     contractController.saveContract(req, res)
         .then(() => {
             t.is(res.status.calledWith(200), true, "saveContract returns status 200 for update");
             t.end();
         });
-    dao.updateContract.restore();
+    service.updateContract.restore();
 });
 
 test.cb('saveContract returns 500 for error with update', t => {
-    const stub = sinon.stub(dao, "updateContract");
+    const stub = sinon.stub(service, "updateContract");
     stub.throws();
-    contractController.dao = dao;
+    contractController.service = service;
     req.body.contractId = 34;
     contractController.saveContract(req, res)
         .then(() => {
             t.is(res.status.calledWith(500), true, "saveContract returns status 500 for error with update");
             t.end();
         });
-    dao.updateContract.restore();
+    service.updateContract.restore();
 });
