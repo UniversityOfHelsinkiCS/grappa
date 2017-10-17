@@ -4,9 +4,9 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const agreementController = require('../controllers/AgreementController');
 
-// router.get('/', (req, res) => {
-//     agreementController.getAgreements(req, res);
-// });
+router.get('/', (req, res) => {
+    agreementController.getAllAgreements();
+});
 
 router.get('/:id', (req, res) => {
     agreementController.getAgreementById(req, res);
