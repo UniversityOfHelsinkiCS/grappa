@@ -6,11 +6,11 @@ import { callApi } from "../util/apiConnection.js";
 import { connect } from "react-redux";
 import { changeUserRole } from "./user/UserActions.js";
 
-class App extends Component {
+export class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            role: {id: undefined},
+            role: { id: props.role },
         }
     }
 
@@ -31,14 +31,13 @@ class App extends Component {
     */
 
     handleRoleChange = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         let newRole = document.getElementById('roles').value;
-        
         this.setState({
-            role: newRole,
-        })
-        newRole = this.state.role;
-        this.props.changeUserRole(newRole);
+            role: { id: newRole },
+        });
+        //newRole = this.state.role;
+        this.props.changeUserRole({id: newRole});
     }
 
     render() {
@@ -60,6 +59,7 @@ class App extends Component {
                         </select>
                         <button className="ui button" type="submit">Choose</button>
                     </form>
+                    <p>Your role is: {this.state.role.id} </p>
                 </div>
             </div>
         );
@@ -75,7 +75,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-    return { role: state.role };
+    console.log(state);
+    if (!state.user[0])
+        return {role: undefined};
+    return { role: state.user[0].role.id };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

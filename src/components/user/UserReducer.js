@@ -9,6 +9,7 @@ const changeUserRole = (state = [], action) => {
             return [...state,
             {
                 id: action.type,
+                role: action.data,
                 text: action.text,
                 formClass: "success",
                 completed: true
@@ -21,14 +22,16 @@ const changeUserRole = (state = [], action) => {
                 formClass: "error",
                 completed: true
             }];
-        case CHANGE_ROLE_ATTEMPT:
+        /*case CHANGE_ROLE_ATTEMPT:
             return [...state,
             {
                 id: action.type,
+                role: action.data,
                 text: action.text,
                 formClass: "",
                 completed: false
             }];
+        */
         default:
             return state;
     }

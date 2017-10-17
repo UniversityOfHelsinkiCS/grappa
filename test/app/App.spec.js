@@ -2,8 +2,9 @@ import React from 'react';
 import test from 'ava';
 import { Link, Router } from 'react-router-dom';
 import { shallow } from 'enzyme';
+import { App } from '../../src/components/App.js';
 require('ignore-styles')
-import App from '../../src/components/App.js';
+
 
 const app = <App />
 const wrapper = shallow(app);

@@ -5,10 +5,12 @@ export const CHANGE_ROLE_SUCCESS = 'CHANGE_ROLE_SUCCESS';
 export const CHANGE_ROLE_FAILURE = 'CHANGE_ROLE_FAILURE';
 
 
-export const changeAttempt = function () {
+export const changeAttempt = function (data) {
+    console.log(data);
     return {
         type: CHANGE_ROLE_ATTEMPT,
-        text: 'Changing user role...'
+        text: 'Changing user role...',
+        data
     };
 }
 
@@ -16,7 +18,7 @@ export const changeSuccess = function (data) {
     return {
         type: CHANGE_ROLE_SUCCESS,
         text: 'User role changed',
-        data
+        data,
     };
 }
 
@@ -29,10 +31,10 @@ export const changeFailure = function (error) {
 }
 
 
-export const changeUserRole = (user) => {
+export const changeUserRole = (role) => {
     return (dispatch) => {
-        //dispatch(changeAttempt());
-        dispatch(changeSuccess());
+        //dispatch(changeAttempt(role));
+        dispatch(changeSuccess(role));
         //callApi('/user', 'post', user)
         //    .then(res =>  dispatch(changeSuccess(res)))
         //    .catch(err => dispatch(changeFailure(err.response)));
