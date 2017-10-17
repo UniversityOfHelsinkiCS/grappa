@@ -4,8 +4,8 @@ exports.seed = function (knex, Promise) {
       .then(function () {
         return knex('previousagreements').insert([
           {
-            agreementId: 1,
-            previousAgreementId: 2
+            agreementId: 3,
+            previousAgreementId: 1
           }
         ]);
       });

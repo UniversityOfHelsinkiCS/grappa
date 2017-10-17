@@ -49,6 +49,23 @@ test.cb('getAgreementById', t => {
     service.getAgreementById.restore();
 });
 
+test.cb('getPreviousAgreementById', t => {
+    const stub = sinon.stub(service, "getPreviousAgreementById");
+    req.params.id = 123;
+    stub.returns({ test: "xoxo" });
+    stub.withArgs(req.params.id).returns({ test: "ok" });
+    agreementController.service = service;
+    agreementController.getPreviousAgreementById(req, res)
+        .then(() => {
+            t.is(stub.calledOnce, true, "previousAgreementById is called once");
+            t.is(stub.calledWith(req.params.id), true, "previousAgreementById is called with correct id");
+            t.is(res.status.calledWith(200), true, "previousAgreementById returns status 200");
+            t.is(res.json.calledWith({ test: "ok" }), true, "previousAgreementById returns correct information");
+            t.end();
+        });
+    service.getPreviousAgreementById.restore();
+});
+
 test.cb('getAgreementById does not return incorrect information', t => {
     const stub = sinon.stub(service, "getAgreementById");
     req.params.id = 123;

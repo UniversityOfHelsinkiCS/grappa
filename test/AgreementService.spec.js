@@ -5,6 +5,7 @@ const knex = require('../connection');
 
 const agreementService = require('../src/services/AgreementService');
 const mockAgreements = require('../src/mockdata/MockAgreements');
+const mockPrevAgreements = require('../src/mockdata/MockPrevAgreements');
 
 test.before(async t => {
     //knex.schema.dropTableIfExists('agreement');
@@ -31,7 +32,14 @@ test.before(async t => {
         table.string('thesisWorkOther');
         table.string('studentGradeGoal');
         table.timestamps();
-    })
+    });
+    await knex.schema.createTable('previousagreements', function (table) {
+        table.integer('agreementId');
+        table.foreign('agreementId').references('agreement.agreementId')
+        table.integer('previousAgreementId');
+        table.foreign('previousAgreementId').references('agreement.agreementId')
+        table.primary(['agreementId', 'previousAgreementId']);
+    });
 });
 
 test.beforeEach(async t => {
@@ -39,10 +47,12 @@ test.beforeEach(async t => {
     //let temp = knex.raw('SELECT * FROM agreement');
     await knex('agreement').del();
     await knex('agreement').insert(mockAgreements);
+    await knex('previousagreements').del();
+    await knex('previousagreements').insert(mockPrevAgreements);
 });
 
 test.beforeEach(async t => {
-});    
+});
 
 
 test.serial('getAllAgreements returns list of right length ', async t => {
@@ -50,12 +60,12 @@ test.serial('getAllAgreements returns list of right length ', async t => {
     t.deepEqual(listOfAgreements.length, mockAgreements.length);
 });
 
-test.serial('AgreementDao returns a agreement by id correctly', async t => {
+test.serial('AgreementService returns a agreement by id correctly', async t => {
 
     let id = '1';
     let agreement = await agreementService.getAgreementById(id);
     let mockAgreement;
-    for(let i = 0; i < mockAgreements.length; i++) {
+    for (let i = 0; i < mockAgreements.length; i++) {
         if (mockAgreements[i].agreementId.toString() === id) {
             mockAgreement = mockAgreements[i];
         }
@@ -64,7 +74,7 @@ test.serial('AgreementDao returns a agreement by id correctly', async t => {
     t.deepEqual(agreement[0], mockAgreement);
 });
 
-test.serial('saveNewAgreement call returns agreementId = 3', async t => {
+test.serial('saveNewAgreement call returns agreementId = 4', async t => {
     const testData = {
         studentName: 'Firstname2 Lastname2',
         studentNumber: "01234568",
@@ -89,12 +99,12 @@ test.serial('saveNewAgreement call returns agreementId = 3', async t => {
         thesisWorkOther: "Other",
 
         studentGradeGoal: "3"
-      };
+    };
 
-    
+
     var temp = await agreementService.saveNewAgreement(testData);
     //console.log(temp);
-    t.truthy(temp==3);
+    t.truthy(temp == 4);
     /*
     await knex('agreement')
     .returning('agreementId')

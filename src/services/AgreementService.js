@@ -9,7 +9,7 @@ export const getAgreementById = (id) => {
 }
 
 export const getPreviousAgreementById = (id) => {
-    return knex.select().from('previousagreements').join('agreement', 'previousagreements.agreementId', '=', 'agreement.agreementId').where('previousagreements.agreementId', id)
+    return knex.select().from('previousagreements').join('agreement', 'previousagreements.previousAgreementId', '=', 'agreement.agreementId').where('previousagreements.agreementId', id)
         .then(agreement => {
             return agreement;
         });
