@@ -25,11 +25,21 @@ export default class Section extends Component {
         this.setState({sectionKey: newSectionKey});
     }
 
+    renderListElements() {
+        return (
+            <ul>
+              {this.props.elements.map(function(listValue){
+                return <li>{listValue}</li>;
+              })}
+            </ul>
+          )
+    }
+
     render() {
         return (
-            <div key={"section" + sectionKey}><br />
-                <h3 className="ui dividing header">{this.state.header}</h3>
-                {elements}
+            <div key={"section" + this.state.sectionKey}><br />
+                <h3 className="ui dividing header">{this.props.header}</h3>
+                {this.props.elements}
             </div>
         )
     }
