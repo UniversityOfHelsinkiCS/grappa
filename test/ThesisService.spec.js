@@ -2,7 +2,7 @@ import test from 'ava';
 import sinon from 'sinon';
 import knex from '../connection';
 
-const thesisDao = require('../src/dao/ThesisDao');
+const thesisService = require('../src/services/ThesisService');
 const mockTheses = require('../src/mockdata/Theses');
 
 test.before(async t => {    
@@ -28,13 +28,13 @@ test.beforeEach(async t => {
 });
 
 test.serial('getAllTheses returns list of right length ', async t => {
-    let listOfTheses = await thesisDao.getAllTheses();
+    let listOfTheses = await thesisService.getAllTheses();
     t.deepEqual(listOfTheses.length, mockTheses.length);
 });
 
 test.serial('getThesisById returns right thesis', async t => {
     let id = '1';
-    let thesis = await thesisDao.getThesisById(id);
+    let thesis = await thesisService.getThesisById(id);
     let mockthesis;
     for(let i = 0; i < mockTheses.length; i++) {
         if (mockTheses[i].thesisId.toString() === id) {
