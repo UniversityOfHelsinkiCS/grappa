@@ -17,6 +17,14 @@ export default class Section extends Component {
         this.state.elements.push(field);
     }
 
+    setHeader(newHeader) {
+        this.setState({header: newHeader});
+    }
+    
+    setSectionKey(newSectionKey) {
+        this.setState({sectionKey: newSectionKey});
+    }
+
     render() {
         return (
             <div key={"section" + sectionKey}><br />
