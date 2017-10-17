@@ -8,6 +8,11 @@ export async function getAgreementById(req, res) {
     res.status(200).json(agreement);
 }
 
+export async function getPreviousAgreementById(req, res) {
+    const agreement = await agreementService.getPreviousAgreementById(req.params.id);
+    res.status(200).json(agreement);
+}
+
 export async function getAllAgreements(req, res) {
     const agreements = await agreementService.getAllAgreements();
     res.status(200).json(agreements);

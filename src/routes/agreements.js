@@ -8,6 +8,10 @@ router.get('/', (req, res) => {
     agreementController.getAllAgreements(req, res);
 });
 
+router.get('/:id/previous', (req, res) => {
+    agreementController.getPreviousAgreementById(req, res);
+});
+
 router.get('/:id', (req, res) => {
     agreementController.getAgreementById(req, res);
 });
