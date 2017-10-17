@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import NavBar from './NavBar';
 import { callApi } from "../util/apiConnection.js";
 
+import { connect } from "react-redux";
+import { changeRole } from "./user/UserActions.js";
+
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "ennen kutsua",
-            role: "-",
+            role: {id: undefined},
         }
     }
 
@@ -30,13 +32,15 @@ class App extends Component {
 
     handleRoleChange = (e) => {
         e.preventDefault()
-        let value = document.getElementById('roles').value;
+        let newRole = document.getElementById('roles').value;
+        
         this.setState({
-            role: value,
+            role: newRole,
         })
-
+        newRole = this.state.role;
+        this.props.changeRole(newRole);
     }
-    
+
     render() {
         return (
             <div className="App">
@@ -62,4 +66,16 @@ class App extends Component {
     }
 }
 
-export default App;
+//export default App;
+
+const mapDispatchToProps = (dispatch) => ({
+    saveAddedGrader: function (data) {
+        dispatch(changeRole(data));
+    },
+});
+
+const mapStateToProps = (state) => {
+    return { role: state.role };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
