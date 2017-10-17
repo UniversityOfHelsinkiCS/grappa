@@ -7,13 +7,6 @@ import { connect } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
 export class GraderManagementPage extends Component {
-    /*constructor(props) {
-        super(props);
-        this.state = {
-            //something
-        }
-    }
-    */
 
     componentDidMount() {
         document.title = "Grappa: Grader and Supervisor Management";
@@ -39,7 +32,8 @@ export class GraderManagementPage extends Component {
                     <p>
                         Add supervisors and edit the list of supervisors here. This page will be displayed to studyfields' professors and admins only.
                     </p>
-
+                    <p> Does not work yet and should be refactored since the customer wanted this to be implemented differently. Redux works anyway.
+                    </p>
                     <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
                         //mockdata so that updateGrader doesn't crash before back end really gives data
                         title: "Dr.",
@@ -52,10 +46,6 @@ export class GraderManagementPage extends Component {
                         id: 2
                     }]} />
 
-                </div>
-
-                <div className="ui segment">
-                    <p><Link to="/"> Go back to homepage</Link></p>
                 </div>
             </div>
         );

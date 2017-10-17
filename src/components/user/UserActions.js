@@ -1,8 +1,8 @@
 import { callApi } from '../../util/apiConnection';
 
-export const CHANGE_ROLE_ATTEMPT = 'ADD_GRADER_SAVE_ATTEMPT';
-export const CHANGE_ROLE_SUCCESS = 'ADD_GRADER_SAVE_SUCCESS';
-export const CHANGE_ROLE_FAILURE = 'ADD_GRADER_SAVE_FAILURE';
+export const CHANGE_ROLE_ATTEMPT = 'CHANGE_ROLE_ATTEMPT';
+export const CHANGE_ROLE_SUCCESS = 'CHANGE_ROLE_SUCCESS';
+export const CHANGE_ROLE_FAILURE = 'CHANGE_ROLE_FAILURE';
 
 
 export const changeAttempt = function () {

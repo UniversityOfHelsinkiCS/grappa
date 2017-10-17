@@ -4,7 +4,7 @@ import NavBar from './NavBar';
 import { callApi } from "../util/apiConnection.js";
 
 import { connect } from "react-redux";
-import { changeRole } from "./user/UserActions.js";
+import { changeUserRole } from "./user/UserActions.js";
 
 class App extends Component {
     constructor(props) {
@@ -38,7 +38,7 @@ class App extends Component {
             role: newRole,
         })
         newRole = this.state.role;
-        this.props.changeRole(newRole);
+        this.props.changeUserRole(newRole);
     }
 
     render() {
@@ -69,8 +69,8 @@ class App extends Component {
 //export default App;
 
 const mapDispatchToProps = (dispatch) => ({
-    saveAddedGrader: function (data) {
-        dispatch(changeRole(data));
+    changeUserRole: function (data) {
+        dispatch(changeUserRole(data));
     },
 });
 
