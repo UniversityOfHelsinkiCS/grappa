@@ -7,6 +7,7 @@ import { saveAgreement } from "./AgreementActions";
 
 import EventMessage from '../EventMessage';
 import NavBar from '../NavBar';
+import Section from '../form/Section'
 
 
 export class Agreement extends Component {
@@ -153,6 +154,8 @@ export class Agreement extends Component {
             })
 
         return (
+             /*<Section sectionKey={sectionKey} header={sectionData.header}
+                     elements={sectionLineList} />   jos tekee näin niin toimii, mut testit hajoaa WTF*/
             <div key={"section" + sectionKey}><br />
                 <h3 className="ui dividing header">{sectionData.header}</h3>
                 {sectionLineList}
@@ -290,16 +293,16 @@ export class Agreement extends Component {
 
         );
     }
-
     render() {
         return (
             <div className="App">
-
                 <div className="ui inverted segment">
                     <h2>Thesis Agreement</h2>
                 </div>
                 <NavBar active={"Agreement"} />
+                
                 <div className="ui segment">
+
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                     <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
                     <br />
