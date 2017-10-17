@@ -7,7 +7,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "ennen kutsua"
+            username: "ennen kutsua",
+            role: "-",
         }
     }
 
@@ -15,7 +16,7 @@ class App extends Component {
         document.title = "Grappa: Main page";
     }
 
-    handlePost = (e) => {
+    /*handlePost = (e) => {
         e.preventDefault()
         let value = this.refs.input.value;
         callApi('/helloUser?username=' + value)
@@ -25,24 +26,37 @@ class App extends Component {
                 })
             }).catch((error) => console.error(error));
     }
+    */
 
+    handleRoleChange = (e) => {
+        e.preventDefault()
+        let value = document.getElementById('roles').value;
+        this.setState({
+            role: value,
+        })
+
+    }
+    
     render() {
         return (
             <div className="App">
                 <div className="ui inverted segment">
-                    <h2>Enter your name below</h2>
+                    <h2>Choose a role for browsing Grappa 2</h2>
                 </div>
                 <NavBar active={"Homepage"} />
                 <div className="ui segment">
-                    <h2>{this.state.username}</h2>
-                    <form onSubmit={this.handlePost}>
-                        <div className="ui action input">
-                            <input ref="input" placeholder="enter your name here" type="text" name="username" />
-                            <button className="ui button" type="submit">Send</button>
-                        </div>
+                    <form onSubmit={this.handleRoleChange}>
+                        <select id="roles" class="ui dropdown">
+                            <option value="">Choose a role</option>
+                            <option value="opiskelija">Opiskelija</option>
+                            <option value="vastuuohjaaja">Vastuuohjaaja</option>
+                            <option value="muu ohjaaja">Muu ohjaaja</option>
+                            <option value="vastuuprofessori">Vastuuprofessori</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <button className="ui button" type="submit">Choose</button>
                     </form>
                 </div>
-                <br />
             </div>
         );
     }
