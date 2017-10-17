@@ -49,13 +49,40 @@ exports.seed = function (knex, Promise) {
           thesisSupervisorOther: "Supervisior 3",
 
           thesisWorkStudentTime: "Student time",
-          thesisWorkSupervisorTime: "Supervisior time",
+          thesisWorkSupervisorTime: "Supervisor time",
           thesisWorkIntermediateGoal: "Intermediate goal",
           thesisWorkMeetingAgreement: "Meeting agreement",
           thesisWorkOther: "Other",
 
           studentGradeGoal: "3"
-        }
+        },
+        {
+            agreementId: 3,
+            studentName: 'Anni Puurunen',
+            studentNumber: "01234567",
+            studentAddress: "Helsinginkatu 1",
+            studentPhone: "05012345678",
+            studentEmail: "anni.puurunen@hotmail.com",
+            studentMajor: "Käpistely",
+  
+            thesisTitle: "Annin hieno gradu muokatulla otsikolla",
+            thesisStartDate: "01.01.2010",
+            thesisCompletionEta: "01.01.2011",
+            thesisPerformancePlace: "Helsinki",
+  
+            thesisSupervisorMain: "Supervisor 1",
+            thesisSupervisorSecond: "Supervisor 2",
+            thesisSupervisorOther: "Supervisor 3",
+  
+            thesisWorkStudentTime: "Student time",
+            thesisWorkSupervisorTime: "Supervisor time",
+            thesisWorkIntermediateGoal: "Intermediate goal",
+            thesisWorkMeetingAgreement: "Meeting agreement",
+            thesisWorkOther: "Other",
+  
+            studentGradeGoal: "5"
+          },
+  
       ]);
     });
 };
