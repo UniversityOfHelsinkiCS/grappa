@@ -2,7 +2,7 @@ import test from 'ava';
 import { shallow } from 'enzyme';
 
 import React, { Component } from 'react';
-import Section from '../../src/components/form/Section';
+import Section from '../../src/components/form/FormSection';
 require('ignore-styles')
 
 
