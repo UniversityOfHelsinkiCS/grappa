@@ -301,13 +301,14 @@ export class Agreement extends Component {
                 </div>
                 <NavBar active={"Agreement"} />
                 
-                <div className="ui segment">
+                <div className="ui left aligned container">
 
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                     <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
                     <br />
 
-                    {this.createForm()}
+                    {//this.createForm()
+                    }
                     {this.getResponseMessage()}
                     <br />
                     <FormCreator />
