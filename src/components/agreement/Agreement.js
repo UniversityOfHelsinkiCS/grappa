@@ -106,7 +106,7 @@ export class Agreement extends Component {
 
         this.props.saveAgreement(this.state.form);
     }
-
+/*
     defineFieldClasses = (labelType, fieldType, required) => {
         return ("field ui small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
     }
@@ -155,14 +155,14 @@ export class Agreement extends Component {
 
         return (
              /*<Section sectionKey={sectionKey} header={sectionData.header}
-                     elements={sectionLineList} />   jos tekee näin niin toimii, mut testit hajoaa WTF*/
+                     elements={sectionLineList} />   jos tekee näin niin toimii, mut testit hajoaa WTF * /
             <div key={"section" + sectionKey}><br />
                 <h3 className="ui dividing header">{sectionData.header}</h3>
                 {sectionLineList}
             </div>
         );
     }
-
+*/
     createForm = () => {
         const formFieldProperties = {
             sections:
@@ -293,6 +293,56 @@ export class Agreement extends Component {
 
         );
     }
+
+    formFieldInfo =  {
+        sections:
+        [{
+            header: "Opinnäytetyön tekijä",
+            fields: [
+                { inputType: "input", name: "studentName", label: "Nimi", labelType: "nine wide", required: true, placeholder: "Etu- ja Sukunimi" },
+                { inputType: "input", name: "studentNumber", label: "Opiskelijanumero", labelType: "nine wide", required: true, placeholder: "XXXXXXX" },
+                { inputType: "input", name: "studentAddress", label: "Lähiosoite", labelType: "nine wide", required: true, placeholder: "Peräpolku 2 C 45, Nuppulinna" },
+                { inputType: "input", name: "studentPhone", label: "Puhelinnumero", labelType: "nine wide", required: true, placeholder: "000 000 00 00" },
+                { inputType: "input", name: "studentEmail", label: "Sähköpostiosoite", labelType: "nine wide", required: true, placeholder: "nimi@domain.com" },
+                { inputType: "input", name: "studentMajor", label: "Pääaine", labelType: "nine wide", required: true, placeholder: "(jos muu kuin TKTL)" },
+            ]
+        },
+        {
+            header: "Opinnäytetyö",
+            fields: [
+                { inputType: "textarea", rows: 2, name: "thesisTitle", label: "Opinnäytetyön otsikko (työnimi) tekokielellä", labelType: "fluid", required: true, placeholder: "Opinnäytetyön otsikko (työnimi) tekokielellä" },
+                { inputType: "input", name: "thesisStartDate", label: "Aloitusajankohta", labelType: "", required: true, placeholder: "" },
+                { inputType: "input", name: "thesisCompletionEta", label: "Arvioitu valmistumisajankohta", labelType: "", required: true, placeholder: "" },
+                { inputType: "textarea", rows: 2, name: "thesisPerformancePlace", label: "Suorituspaikka", labelType: "fluid ", required: true, placeholder: "(projekti, työnantaja, tms.) ja yhteystiedot" },
+            ]
+        },
+        {
+            header: "Ohjausvastuut",
+            fields: [
+                { inputType: "input", name: "thesisSupervisorMain", label: "Vastuuohjaaja", labelType: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+                { inputType: "input", name: "thesisSupervisorSecond", label: "2. ohjaaja", labelType: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+                { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", labelType: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+            ]
+        },
+        {
+            header: "Työskentelyn tavoitteet ja ajankäyttö",
+            fields: [
+                { inputType: "textarea", rows: 1, name: "thesisWorkStudentTime", label: "Opiskelijan arvioima opinnäytetyöhön käytettävä työaika", labelType: "fluid", required: true, placeholder: "(esim. tuntia / vko)" },
+                { inputType: "textarea", rows: 2, name: "thesisWorkSupervisorTime", label: "Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)", labelType: "fluid", required: true, placeholder: "" },
+                { inputType: "textarea", rows: 2, name: "thesisWorkIntermediateGoal", label: "Välitavoitteet (deadlinet työn eri vaiheille)", labelType: "fluid", required: true, placeholder: "" },
+                { inputType: "textarea", rows: 2, name: "thesisWorkMeetingAgreement", label: "Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta", labelType: "fluid", required: true, placeholder: "" },
+                { inputType: "textarea", rows: 2, name: "thesisWorkOther", label: "Muuta", labelType: "fluid", required: false, placeholder: "(esim. opiskelijan odotukset ohjaajalle / ohjaajan odotukset opiskelijalle" },
+            ]
+        },
+        {
+            header: "Tavoitearvosana",
+            fields: [
+                { inputType: "textarea", rows: 1, name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", labelType: "", required: true, placeholder: "Etu- ja Sukunimi" },
+            ]
+        }]
+    }
+
+
     render() {
         return (
             <div className="App">
@@ -312,7 +362,12 @@ export class Agreement extends Component {
                     {this.getResponseMessage()}
                     <br />
 
-                    <FormCreator fieldOnChangeFunc={this.handleFormChange} />
+                    <FormCreator 
+                        formFieldInfo={this.formFieldInfo}
+                        onSubmitFunc={(e)=>{if (e !== undefined){e.preventDefault();}}} 
+                        buttonOnClickFunc={this.sendForm} 
+                        accessToStore={this.props.agreement}
+                        fieldOnChangeFunc={this.handleFormChange} />
 
                 </div>
             </div>
