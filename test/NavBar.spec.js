@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 
 import NavBar from '../src/components/NavBar.js';
 
-const expecteLinkAmmount = 5;
+const expectedLinkAmount = 6;
 
-test('Basic NavBar has 5 inactive elements', t => {
+test('Basic NavBar has 6 inactive elements', t => {
     const wrapper = shallow(<NavBar/>);
-    t.is(wrapper.find('Link').length, expecteLinkAmmount);
+    t.is(wrapper.find('Link').length, expectedLinkAmount);
     t.is(wrapper.find('Link[className="item active"]').length, 0);
 });
 
@@ -24,6 +24,6 @@ test('NavBar marks correct element active when prop "Homepage" is given', t => {
 test('NavBar doesn\'t mark non-existing element prop is given', t => {
     const page = "Random Non Existing";
     const wrapper = shallow(<NavBar active={page} />);
-    t.is(wrapper.find('Link').length, expecteLinkAmmount);
+    t.is(wrapper.find('Link').length, expectedLinkAmount);
     t.is(wrapper.find('Link[className="item active"]').length, 0);
 });
