@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 import FormField from './FormField';
 
 export default class Section extends Component {
-    constructor() {
-        super();
-        this.state = {
-            sectionKey: "",
-            header: "",
-            elements: [],
-        }
-    }
     
     render() {
 
