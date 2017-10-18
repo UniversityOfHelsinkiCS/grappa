@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 
 //redux
 import { connect, subscribe } from "react-redux";
@@ -311,7 +311,9 @@ export class Agreement extends Component {
                     }
                     {this.getResponseMessage()}
                     <br />
+
                     <FormCreator fieldOnChangeFunc={this.handleFormChange} />
+
                 </div>
             </div>
 
