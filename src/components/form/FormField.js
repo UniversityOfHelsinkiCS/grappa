@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 export default class Field extends Component {
     defineFieldClasses = (labelType, fieldType, required) => {
-        return ("field ui small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
+        return ("field small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
     }
     render() {
 

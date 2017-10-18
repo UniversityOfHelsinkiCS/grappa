@@ -77,7 +77,7 @@ export default class FormCreator extends Component {
 
 
             return (
-                   <form>
+                   <form className={"ui form "}>
                         {sectionList}
                         <br />
                         {this.getButton()}
@@ -92,13 +92,11 @@ export default class FormCreator extends Component {
 
 
     render() {
-        return <div className={"ui form "}>
+        return <div>
         
             {this.createForm()}
             <br />
-            {this.getButton()}
-            <br />
-
+            
     </div>;
     }
 }
