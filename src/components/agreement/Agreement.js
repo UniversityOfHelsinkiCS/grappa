@@ -85,7 +85,7 @@ export class Agreement extends Component {
         this.setState({ form: newForm })
     }
 
-
+/*
     getButton() {
         const lastAction = this.getLastAgreementAction();
         const workableButton = <button className="ui primary button" type="submit" onClick={this.sendForm}>Save</button>;
@@ -106,7 +106,7 @@ export class Agreement extends Component {
 
         this.props.saveAgreement(this.state.form);
     }
-/*
+
     defineFieldClasses = (labelType, fieldType, required) => {
         return ("field ui small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
     }
@@ -162,7 +162,7 @@ export class Agreement extends Component {
             </div>
         );
     }
-*/
+
     createForm = () => {
         const formFieldProperties = {
             sections:
@@ -293,7 +293,7 @@ export class Agreement extends Component {
 
         );
     }
-
+*/
     formFieldInfo =  {
         sections:
         [{
