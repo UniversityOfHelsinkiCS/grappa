@@ -16,7 +16,7 @@ export default class Section extends Component {
         let fieldList = this.props.elements.map(
             (fieldData, fieldKey) => {
 
-                return <FormField fieldKey={fieldKey} fieldData={fieldData} />;
+                return <FormField fieldKey={fieldKey} fieldData={fieldData} fieldOnChangeFunc={this.props.fieldOnChangeFunc} />;
 
             });
 

@@ -70,7 +70,7 @@ export default class FormCreator extends Component {
         let sectionList = formFieldProperties.sections.map(
             (sectionData, sectionKey) => {
 
-                return <FormSection sectionKey={sectionKey} header={sectionData.header} elements={sectionData.fields} />;
+                return <FormSection sectionKey={sectionKey} header={sectionData.header} elements={sectionData.fields} fieldOnChangeFunc={this.props.fieldOnChangeFunc} />;
 
             });
 

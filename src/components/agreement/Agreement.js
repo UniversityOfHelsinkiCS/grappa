@@ -311,7 +311,7 @@ export class Agreement extends Component {
                     }
                     {this.getResponseMessage()}
                     <br />
-                    <FormCreator />
+                    <FormCreator fieldOnChangeFunc={this.handleFormChange} />
                 </div>
             </div>
 
