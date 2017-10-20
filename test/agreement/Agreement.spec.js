@@ -5,7 +5,7 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
 import {Agreement} from '../../src/components/agreement/Agreement';
-import FormCreator from '../../src/components/form/FormCreater';
+import FormCreator from '../../src/components/form/FormCreator';
 
 const wrapper = shallow(<Agreement agreement={[]} />);
 
@@ -24,7 +24,7 @@ test.skip('calls FormCreator properly', t => {
 
     const wrapper2 = shallow(<Agreement agreement={agreementStoreStub} />);
     const spy = sinon.stub(Agreement.prototype, 'sendForm')
-    const spy = sinon.stub(Agreement.prototype, 'handleFormChange')
+    const spy2 = sinon.stub(Agreement.prototype, 'handleFormChange')
 
 
     
