@@ -1,27 +1,48 @@
 import React, { Component } from 'react';
 
-
 export default class Field extends Component {
-    defineFieldClasses = (labelType, fieldType, required) => {
-        return ("field small " + labelType + " " + fieldType + " " + (required === true ? 'required' : ''));
+    defineFieldClasses = (extraClassNames, fieldType, required) => {
+        return ("field small " + extraClassNames + " " + fieldType + " " + (required === true ? 'required' : ''));
     }
+
     render() {
 
         let forReturn = [];
-        if (this.props.fieldData.inputType === "input") {
 
-            forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
-            <input key={this.props.fieldKey} name={this.props.fieldData.name} type="text" placeholder={this.props.fieldData.placeholder} onChange={this.props.fieldOnChangeFunc} />];
-
-        
-
-        } else if (this.props.fieldData.inputType === "textarea") {
-            forReturn = [<label key={this.props.fieldKey + "label"}>{this.props.fieldData.label}</label>,
-            <textarea key={this.props.fieldKey} name={this.props.fieldData.name} rows={this.props.fieldData.rows} placeholder={this.props.fieldData.placeholder} onChange={this.props.fieldOnChangeFunc} ></textarea>];
+        switch(this.props.fieldData.inputType) {
+            case "input":
+                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+                            <input 
+                                key={this.props.fieldKey} 
+                                name={this.props.fieldData.name} 
+                                type="text" placeholder={this.props.fieldData.placeholder} 
+                                onChange={this.props.fieldOnChangeFunc} />
+                            ];
+                break;
+            case "textarea":
+                forReturn = [<label key={this.props.fieldKey + "label"}>{this.props.fieldData.label}</label>,
+                             <textarea 
+                                key={this.props.fieldKey} 
+                                name={this.props.fieldData.name} 
+                                rows={this.props.fieldData.rows} 
+                                placeholder={this.props.fieldData.placeholder} 
+                                onChange={this.props.fieldOnChangeFunc} ></textarea>
+                            ];
+                break;
+            case "bareText":
+                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+                            <p 
+                                key={this.props.fieldKey} 
+                                id={this.props.fieldData.name} 
+                                type="text" placeholder={this.props.fieldData.placeholder} />
+                            ];
+                break;
+            default:
+                console.error("FormField error ("+this.props.fieldData.name+"): inputType not defined!");
         }
 
         return (
-            <div key={this.props.fieldKey + "fieldDiv"} className={this.defineFieldClasses(this.props.fieldData.labelType, this.props.fieldData.inputType, this.props.fieldData.required)}>
+            <div key={this.props.fieldKey + "fieldDiv"} className={this.defineFieldClasses(this.props.fieldData.extraClassNames, this.props.fieldData.inputType, this.props.fieldData.required)}>
                 {forReturn}
             </div>
         );
