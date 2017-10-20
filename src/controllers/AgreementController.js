@@ -20,19 +20,30 @@ export async function getAllAgreements(req, res) {
 
 export async function saveAgreement(req, res) {
     const agreementData = req.body;
-    if(agreementData.agreementId !== "" && agreementData.agreementId !== undefined){
-        try{
+    if (agreementData.agreementId !== "" && agreementData.agreementId !== undefined) {
+        try {
             const daoResponse = await agreementService.updateAgreement(agreementData);
-            res.status(200).json({text: "agreement update successful", agreementId: daoResponse});
+            res.status(200).json({ text: "agreement update successful", agreementId: daoResponse });
         } catch (err) {
-            res.status(500).json({text: "error occurred", error: err});
+            res.status(500).json({ text: "error occurred", error: err });
         }
     } else {
-        try{
+        try {
             const daoResponse = await agreementService.saveNewAgreement(agreementData);
-            res.status(200).json({text: "agreement save successful", agreementId: daoResponse});
+            res.status(200).json({ text: "agreement save successful", agreementId: daoResponse });
         } catch (err) {
-            res.status(500).json({text: "error occurred", error: err});
+            res.status(500).json({ text: "error occurred", error: err });
         }
     }
 }
+
+export async function savePrevious(req, res) {
+    const data = req.body;
+    try {
+        const daoResponse = await agreementService.savePrevious(data);
+        res.status(200).json({ text: "agreement linked to previous agreement successfully", agreementId: daoResponse });
+    } catch (err) {
+        res.status(500).json({ text: "error occurred", error: err });
+    }
+}
+
