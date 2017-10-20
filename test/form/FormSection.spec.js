@@ -1,8 +1,10 @@
 import test from 'ava';
 import { shallow } from 'enzyme';
+import sinon from 'sinon';
 
 import React, { Component } from 'react';
 import Section from '../../src/components/form/FormSection';
+import FormField from '../../src/components/form/FormField';
 require('ignore-styles')
 
 
@@ -24,11 +26,11 @@ test('header is correct', t => {
     t.truthy(wrapper.contains(expectedHeader));
 });
 
-test('when element is added, it renders', t => {
-    const element = <p>Tiistai</p>;
-    const array = [];
-    array.push(element);
-    const withElementOnly = <Section elements = {array} />;
-    const wrapper = shallow(withElementOnly);
-    t.truthy(wrapper.contains(element));
+test.only('when element is added, it creates FormField object', t => {
+    const field = <FormField fieldKey="key" fieldData="data" />
+    const stub = sinon.stub(field);
+    const object = {fieldKey: "key" , fieldData: "data"};
+    const array = [object];
+    const formSection = <Section elements= {array} />
+    t.truthy(stub.called);
 })
