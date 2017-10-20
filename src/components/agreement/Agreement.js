@@ -68,7 +68,7 @@ export class Agreement extends Component {
                 return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
             }
             else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
-                return <EventMessage type='error' message='Ilmestyi ongelmia' />;;
+                return <EventMessage type='error' message='Ilmestyi ongelmia' />;
             }
             else {
                 return '';
