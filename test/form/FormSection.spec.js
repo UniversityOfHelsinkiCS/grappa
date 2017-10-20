@@ -26,7 +26,7 @@ test('header is correct', t => {
     t.truthy(wrapper.contains(expectedHeader));
 });
 
-test.only('when element is added, it creates FormField object', t => {
+test('when element is added, it creates FormField object', t => {
 
     const fieldData = {
         inputType: "input",
