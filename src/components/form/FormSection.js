@@ -14,7 +14,7 @@ export default class Section extends Component {
 
         return (
             <div key={"section" + this.props.sectionKey}><br />
-                <h3 className="ui dividing header">{this.props.header}</h3>
+                <h1 className="ui dividing header">{this.props.header}</h1>
                 {fieldList}
             </div>
         )
