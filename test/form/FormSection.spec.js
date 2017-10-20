@@ -27,10 +27,28 @@ test('header is correct', t => {
 });
 
 test.only('when element is added, it creates FormField object', t => {
-    const field = <FormField fieldKey="key" fieldData="data" />
-    const stub = sinon.stub(field);
-    const object = {fieldKey: "key" , fieldData: "data"};
-    const array = [object];
-    const formSection = <Section elements= {array} />
-    t.truthy(stub.called);
+
+    const fieldData = {
+        inputType: "input",
+        name: "someTestName",
+        label: "Testing label",
+        placeholder: "test placeholder"
+    };
+    const fieldOnChangeSpy = () => {};
+  
+    const element = {fieldData: {fieldData}, 
+                     fieldOnChangeFunc: {fieldOnChangeSpy}};
+    const array = [element];
+    const expected =<FormField fieldKey= {0}
+                    fieldData={fieldData}
+                    fieldOnChangeFunc= {fieldOnChangeSpy}
+                    />;
+    const section = <Section sectionKey="Ww" header="en" elements = {array} />
+    const wrapper = shallow(section);
+    console.log("wrapper")
+    console.log(wrapper.debug());
+    console.log("########################");
+    console.log("expected");
+    console.log(expected);
+    t.truthy(wrapper.contains(expected));
 })
