@@ -8,76 +8,7 @@ import {Agreement} from '../../src/components/agreement/Agreement';
 import FormCreator from '../../src/components/form/FormCreater';
 
 const wrapper = shallow(<Agreement agreement={[]} />);
-let sandbox;
-let server;
 
-const formItems = {
-    input: [
-        "studentName",
-        "studentNumber",
-        "studentAddress",
-        "studentPhone",
-        "studentEmail",
-        "studentMajor",
-        "thesisStartDate",
-        "thesisCompletionEta",
-        "thesisSupervisorMain",
-        "thesisSupervisorSecond",
-        "thesisSupervisorOther",
-    ],
-    textarea: [
-        "thesisTitle",
-        "thesisPerformancePlace",
-        "thesisWorkStudentTime",
-        "thesisWorkSupervisorTime",
-        "thesisWorkIntermediateGoal",
-        "thesisWorkMeetingAgreement",
-        "thesisWorkOther",
-        "studentGradeGoal"
-    ]
-}
-
-const stateValueChecker = (elementType, elementName) => {
-    const randomString = getRandomString();
-    const input = findElement(elementType,elementName);
-    input.simulate('change', { target: { name: elementName, value: randomString } });
-
-    return (wrapper.state().form[elementName] === randomString);
-}
-
-const textareaValueChecker = (elementType, elementName) => {
-    const randomString = getRandomString();
-    const textArea = findElement(elementType, elementName);
-    textArea.simulate('change', { target: {name: elementName, value: randomString } });
-    return (wrapper.find(elementType + '[name="' + elementName + '"]').props().value === randomString);
-}
-
-const getJson = (object) => {
-    return JSON.stringify(object);
-}
-
-const findElement = (elementType, elementName) => {
-    return wrapper.find(elementType + '[name="' + elementName + '"]');
-}
-
-
-
-const getRandomString = () => {
-    return Math.random().toString(36).substring(8);
-}
-
-/*
-test.before( () => {
-    //sandbox = sinon.sandbox.create();
-    server = sinon.fakeServer.create();//sandbox.useFakeServer();
-    server.respondImmediately = true;
-});
-
-test.after( () => {
-    server.restore();
-    //sandbox.restore();
-});
-*/
 test('has a correct tittle 2', t => {
     t.truthy(wrapper.contains(<h2>Thesis Agreement</h2>));
 });
