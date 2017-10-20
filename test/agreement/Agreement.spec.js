@@ -5,6 +5,7 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 require('ignore-styles')
 import {Agreement} from '../../src/components/agreement/Agreement';
+import FormCreator from '../../src/components/form/FormCreater';
 
 const wrapper = shallow(<Agreement agreement={[]} />);
 let sandbox;
@@ -78,6 +79,27 @@ test.after( () => {
 });
 */
 test('has a correct tittle 2', t => {
+    t.truthy(wrapper.contains(<h2>Thesis Agreement</h2>));
+});
+
+//UNFINISHED
+test.skip('calls FormCreator properly', t => {
+    const agreementStoreStub = ['some elemtn','elemnt n2', '3rd element'];
+
+    const FakeForm = React.createClass({
+        render: () => <div>Fake Form</div>,
+      })
+    Agreement.__Rewire__('FormCreator', FakeForm)
+
+    const wrapper2 = shallow(<Agreement agreement={agreementStoreStub} />);
+    const spy = sinon.stub(Agreement.prototype, 'sendForm')
+    const spy = sinon.stub(Agreement.prototype, 'handleFormChange')
+
+
+    
+    t.is(wrapper.find(FakeBook).length,1)
+
+
     t.truthy(wrapper.contains(<h2>Thesis Agreement</h2>));
 });
 
