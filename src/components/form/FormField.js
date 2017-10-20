@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export default class Field extends Component {
     defineFieldClasses = (extraClassNames, fieldType, required) => {
-        return ("field small " + extraClassNames + " " + fieldType + " " + (required === true ? 'required' : ''));
+        return ("field small " + (extraClassNames === undefined ? '' : extraClassNames) + " " + fieldType + " " + (required === true ? 'required' : ''));
     }
 
     render() {
