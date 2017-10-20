@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import FormField from './FormField';
 
-export default class Section extends Component {
-    
+export default class Section extends Component {    
     render() {
-
         let fieldList = this.props.elements.map(
             (fieldData, fieldKey) => {
-
-                return <FormField fieldKey={fieldKey} fieldData={fieldData} fieldOnChangeFunc={this.props.fieldOnChangeFunc} />;
-
+                return <FormField 
+                            fieldKey={fieldKey} 
+                            fieldData={fieldData} 
+                            fieldOnChangeFunc={this.props.fieldOnChangeFunc} 
+                        />;
             });
-
 
         return (
             <div key={"section" + this.props.sectionKey}><br />
@@ -21,5 +20,3 @@ export default class Section extends Component {
         )
     }
 }
-
-//<FormSection sectionKey={"form" + sectionKey} header={sectionData.header} elements={sectionData.fields} />;
