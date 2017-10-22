@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Tutkielman arvosteluasteikko",
+        "text": "Tutkielman osaamistavoitteet kuvataan koulutusohjelman opetussuunnitelmassa, jotka tiedekuntaneuvosto hyväksyy. Ylemmän korkeakoulututkinnon tutkielman arvostelussa käytetään asteikkoa 0-5, jossa 5 = erinomainen, 4 = kiitettävä 3 = hyvä, 2= tyydyttävä, 1 = välttävä ja 0 = hylätty."
+    },
+    {
+        "erilainenLista": [
+            {
+                "title": "5 (erinomainen)",
+                "text": "Tutkielma on poikkeuksellisen hyvä ja osoittaa tekijän tieteellistä kypsyyttä, kriittistä ajattelua ja syvällistä perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa koherentin ja yhtenäisen kokonaisuuden. Tutkielma täyttää opinnäytetyölle asetetut vaatimukset erinomaisesti kaikilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "4 (kiitettävä)",
+                "text": "Tutkielma on erittäin hyvä ja osoittaa tekijän kypsyyttä, kriittisyyttä ja perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa selkeän ja yhtenäisen kokonaisuuden. Tutkielma vastaa opinnäytetyölle asetettuja vaatimuksia kiitettävästi lähes kaikilla arvioinnin osa-alueilla."
+            }
+        ]
+    },
+    {   
+        "title": "Tutkielman arvioinnin osa-alueet",
+        "text": "Arvioitavien osa-alueiden otsikot ovat e-thesis –järjestelmän arviointilomakkeella, arviointi asteikolla 0-5. Koulutusohjelma-/tiedekuntakohtaisesti annetaan tarkemmat sovellusohjeet osa-alueiden arviointiin, arviointikriteerit. Tutkielman arvioinnissa kiinnitetään huomiota seuraaviin pääasioihin:"
+    },
+    {
+        "title": "1. Tutkimusaihe ja tutkimuksen tarkoitus",
+        "list": 
+        [
+            "tutkielman aiheen ja sen merkittävyyden perustelu",
+            "oivallus aiheen valinnassa ja rajauksessa"
+        ]
+    }
+]
