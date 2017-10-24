@@ -1,26 +1,26 @@
 exports.seed = function (knex, Promise) {
     // Deletes ALL existing entries
-    return knex('agreementPerson').del()
+    return knex('personRoleField').del()
         .then(function () {
             // Inserts seed entries
-            return knex('agreementPerson').insert([
+            return knex('personRoleField').insert([
                 {
                     personRoleId: 1,
+                    personId: 1,
                     roleId: 1,
-                    approved: true,
-                    statement: 'This supervisor is approved'
+                    studyfieldId: 1,
                 },
                 {
                     personRoleId: 2,
+                    personId: 2,
                     roleId: 1,
-                    approved: false,
-                    statement: 'This supervisor has not been approved'
+                    studyfieldId: 2
                 },
                 {
                     personRoleId: 3,
+                    personId: 3,
                     roleId: 1,
-                    approved: true,
-                    statement: ''
+                    studyfieldId: 1
                 }
             ]);
         });
