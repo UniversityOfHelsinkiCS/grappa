@@ -41,17 +41,9 @@ test('when element is added, it creates FormField object', t => {
     const element = {fieldData: {fieldData}, fieldKey: 0,
                      fieldOnChangeFunc: {fieldOnChangeSpy}};
     const array = [element];
-    const expected =<FormField fieldKey={0}
-                    fieldData={fieldData}
-                    fieldOnChangeFunc= {fieldOnChangeSpy}
-                    />;    
+    
     const section = <Section sectionKey="Ww" header="en" elements = {array}
                              fieldOnChangeFunc= {fieldOnChangeSpy} />
     const wrapper = shallow(section);
-   /* console.log("wrapper")
-    console.log(wrapper.debug());
-    console.log("########################");
-    console.log("expected");
-    console.log(expected); */
     t.is(wrapper.find(FormField).length , 1);
 })
