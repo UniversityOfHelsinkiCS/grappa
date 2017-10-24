@@ -8,6 +8,7 @@ export default class NavBar extends Component {
             {path: '/agreementform', text: 'AgreementForm'},
             {path: '/agreement', text: 'Agreement'},
             {path: '/theses', text: 'Theses'},
+            {path: '/graderManagement', text: 'Supervisor management'},
         ]
         const linkElements = elements.map(elem => {
             if(this.props.active === elem.text)
