@@ -43,7 +43,7 @@ export default class Field extends Component {
                 break;
             case "dropdown":
             forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
-                            <select class="ui dropdown">
+                            <select class="ui dropdown" onChange={this.props.fieldOnChangeFunc} >
                                 {this.props.fieldData.responses.map(
                                     (response) => {
                                         return <option value={response.value} selected={response.selected} >{response.text}</option>;
