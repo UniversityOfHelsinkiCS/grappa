@@ -4,7 +4,7 @@ import sinon from 'sinon';
 
 import React, { Component } from 'react';
 import Section from '../../src/components/form/FormSection';
-import Field from '../../src/components/form/FormField';
+import FormField from '../../src/components/form/FormField';
 
 
 require('ignore-styles')
@@ -44,7 +44,7 @@ test('when element is added, it creates FormField object', t => {
     const element = {fieldData: {fieldData}, fieldKey: 0,
                      fieldOnChangeFunc: {fieldOnChangeSpy}};
     const array = [element];
-    const expected =<Field fieldKey={0}
+    const expected =<FormField fieldKey={0}
                     fieldData={fieldData}
                     fieldOnChangeFunc= {fieldOnChangeSpy}
                     />;    
@@ -56,5 +56,6 @@ test('when element is added, it creates FormField object', t => {
     console.log("########################");
     console.log("expected");
     console.log(expected); */
-    t.truthy(wrapper.find('input'));
+    const input = wrapper.find(FormField);
+    t.is(wrapper.find(FormField).length , 1);
 })
