@@ -9,7 +9,9 @@ export const getAgreementById = (id) => {
 }
 
 export const getPreviousAgreementById = (id) => {
-    return knex.select().from('previousagreements').join('agreement', 'previousagreements.previousAgreementId', '=', 'agreement.agreementId').where('previousagreements.agreementId', id)
+    return knex.select().from('previousagreements')
+        .join('agreement', 'previousagreements.previousAgreementId', '=', 'agreement.agreementId')
+        .where('previousagreements.agreementId', id)
         .then(agreement => {
             return agreement;
         });
@@ -35,6 +37,14 @@ export const updateAgreement = (data) => {
         .returning('agreementId')
         .where('agreementId', '=', data.agreementId)
         .update(data)
+        .then(agreementId => agreementId[0])
+        .catch(err => err);
+}
+
+export const savePrevious = (data) => {
+    return knex('previousagreements')
+        .returning('agreementId')
+        .insert(data)
         .then(agreementId => agreementId[0])
         .catch(err => err);
 }

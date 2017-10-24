@@ -24,4 +24,9 @@ router.put('/:id', jsonParser, (req, res) => {
     agreementController.saveAgreement(req, res);
 });
 
+router.post('/previous', jsonParser, (req, res) => {
+    agreementController.savePrevious(req, res);
+});
+
+
 module.exports = router;

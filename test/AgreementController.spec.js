@@ -128,3 +128,16 @@ test.cb('saveAgreement returns 500 for error with update', t => {
         });
     service.updateAgreement.restore();
 });
+
+test.cb('savePrevious', t => {
+    const stub = sinon.stub(service, "savePrevious");
+    agreementController.service = service;
+    agreementController.savePrevious(req, res)
+        .then(() => {
+            t.is(stub.calledOnce, true, "savePrevious is called once");
+            t.is(res.status.calledWith(200), true, "savePrevious returns status 200 for success");
+            t.end();
+        });
+    service.savePrevious.restore();
+});
+
