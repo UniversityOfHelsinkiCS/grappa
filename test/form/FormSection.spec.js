@@ -1,10 +1,12 @@
 import test from 'ava';
-import { shallow } from 'enzyme';
+import { shallow} from 'enzyme';
 import sinon from 'sinon';
 
 import React, { Component } from 'react';
 import Section from '../../src/components/form/FormSection';
-import FormField from '../../src/components/form/FormField';
+import Field from '../../src/components/form/FormField';
+
+
 require('ignore-styles')
 
 
@@ -23,6 +25,9 @@ test('header is correct', t => {
     const withHeaderOnly =  <Section header={headerText} elements={[]} />;
     const wrapper = shallow(withHeaderOnly);
     const expectedHeader = <h1 className="ui dividing header">{headerText}</h1>;
+    console.log("PAPSPSAPSPSPAAPSSPA")
+    console.log(wrapper.debug());
+    console.log("EIEIEIEIEIEIEIEIEI");
     t.truthy(wrapper.contains(expectedHeader));
 });
 
@@ -36,19 +41,20 @@ test('when element is added, it creates FormField object', t => {
     };
     const fieldOnChangeSpy = () => {};
   
-    const element = {fieldData: {fieldData}, 
+    const element = {fieldData: {fieldData}, fieldKey: 0,
                      fieldOnChangeFunc: {fieldOnChangeSpy}};
     const array = [element];
-    const expected =<FormField fieldKey= {0}
+    const expected =<Field fieldKey={0}
                     fieldData={fieldData}
                     fieldOnChangeFunc= {fieldOnChangeSpy}
-                    />;
-    const section = <Section sectionKey="Ww" header="en" elements = {array} />
+                    />;    
+    const section = <Section sectionKey="Ww" header="en" elements = {array}
+                             fieldOnChangeFunc= {fieldOnChangeSpy} />
     const wrapper = shallow(section);
-    console.log("wrapper")
+   /* console.log("wrapper")
     console.log(wrapper.debug());
     console.log("########################");
     console.log("expected");
-    console.log(expected);
-    t.truthy(wrapper.contains(expected));
+    console.log(expected); */
+    t.truthy(wrapper.find('input'));
 })
