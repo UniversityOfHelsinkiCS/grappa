@@ -25,9 +25,6 @@ test('header is correct', t => {
     const withHeaderOnly =  <Section header={headerText} elements={[]} />;
     const wrapper = shallow(withHeaderOnly);
     const expectedHeader = <h1 className="ui dividing header">{headerText}</h1>;
-    console.log("PAPSPSAPSPSPAAPSSPA")
-    console.log(wrapper.debug());
-    console.log("EIEIEIEIEIEIEIEIEI");
     t.truthy(wrapper.contains(expectedHeader));
 });
 
