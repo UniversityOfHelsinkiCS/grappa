@@ -1,15 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from "react-redux";
+import { getPermissions } from "../util/rolePermissions";
 
-export default class NavBar extends Component {
+class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            links: [
+                {path: '/', text: 'Homepage'},
+                {path: '/agreementform', text: 'AgreementForm'},
+                {path: '/agreement', text: 'Agreement'},
+                {path: '/theses', text: 'Theses'},
+                {path: '/graderManagement', text: 'Supervisor management'},
+            ]
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.role) {
+            this.setState(
+                {
+                    links: getPermissions(props.role, 'nav-bar', 'show')
+                }
+            );
+        }
+    }
+
     render() {
-        const elements = [
-            {path: '/', text: 'Homepage'},
-            {path: '/agreementform', text: 'AgreementForm'},
-            {path: '/agreement', text: 'Agreement'},
-            {path: '/theses', text: 'Theses'},
-            {path: '/graderManagement', text: 'Supervisor management'},
-        ]
+        const elements = this.state.links
         const linkElements = elements.map(elem => {
             if(this.props.active === elem.text)
                 return <Link key={elem.text} to={elem.path} className="item active">{elem.text}</Link>;
@@ -27,3 +46,11 @@ export default class NavBar extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    if (!state.user[0])
+        return { role: undefined };
+    return { role: state.user[state.user.length - 1].role.id };
+}
+
+export default connect(mapStateToProps)(NavBar);

@@ -31,7 +31,6 @@ class AgreementEditModal extends Component {
               }
           );
         }
-
     }
 
     onFieldChange = (fieldName, value) => {
@@ -113,8 +112,8 @@ class AgreementEditModal extends Component {
 
 const mapStateToProps = (state) => {
     if (!state.user[0])
-        return {role: undefined};
-    return { role: state.user[0].role.id };
+        return { role: undefined };
+    return { role: state.user[state.user.length - 1].role.id };
 }
 
 export default connect(mapStateToProps)(AgreementEditModal);
