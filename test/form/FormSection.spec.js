@@ -56,6 +56,5 @@ test('when element is added, it creates FormField object', t => {
     console.log("########################");
     console.log("expected");
     console.log(expected); */
-    const input = wrapper.find(FormField);
     t.is(wrapper.find(FormField).length , 1);
 })
