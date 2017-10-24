@@ -130,7 +130,7 @@ export class Agreement extends Component {
             ]
         },
         {
-            header: "Tavoitearvosana - dropdown testi",
+            header: "Tavoitearvosana",
             fields: [
                 { inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true, 
                     responses: [
