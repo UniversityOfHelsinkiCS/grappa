@@ -11,9 +11,12 @@ export default class ThesisUploadWidget extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        console.log("newProps: " + JSON.stringify(newProps));
         if (newProps.currentFile) {
+            console.log("IFFF");
             this.setState({ fileName: newProps.currentFile.name})
         }
+        console.log("Tiedoston nimi " + this.state.fileName);
     }
 
     getLabel = () => {
@@ -28,6 +31,9 @@ export default class ThesisUploadWidget extends Component {
     }
 
     onDrop = (files) => {
+        console.log("FILU " + JSON.stringify(files[0]));
+        console.log("filun nimi " + files[0].name);
+        this.componentWillReceiveProps({currentFile: files[0]});
         this.props.sendChange(this.props.type, files[0]);
     }
 
