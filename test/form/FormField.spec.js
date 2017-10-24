@@ -124,7 +124,7 @@ test.only('correct dropdown field returned', t => {
 
     const expected = <div key={fieldKey + "fieldDiv"} className={'field small dropdown'}>
                         <label key={fieldKey + "label"} >{fieldData.label}</label>
-                        <select class="ui dropdown">
+                        <select class="ui dropdown" onChange={fieldOnChangeSpy} >
                             <option value={fieldData.responses[0].value} selected={fieldData.responses[0].selected} >{fieldData.responses[0].text}</option>
                             <option value={fieldData.responses[1].value} selected={fieldData.responses[1].selected} >{fieldData.responses[1].text}</option>
                         </select>
