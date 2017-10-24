@@ -41,6 +41,16 @@ export default class Field extends Component {
                                 type="text" placeholder={this.props.fieldData.placeholder} />
                             ];
                 break;
+            case "dropdown":
+            forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+                            <select class="ui dropdown">
+                                {this.props.fieldData.responses.map(
+                                    (response) => {
+                                        return <option value={response.value} selected={response.selected} >{response.text}</option>;
+                                    })}
+                            </select>
+                        ];
+            break;
             default:
                 console.error("FormField error ("+this.props.fieldData.name+"): inputType not defined!");
         }
