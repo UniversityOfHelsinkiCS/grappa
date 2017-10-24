@@ -76,5 +76,5 @@ test.serial('saveNewSupervisor returns new personId', async t => {
         lastname: 'Person'
     };
     let returnValue = await supervisorService.saveNewSupervisor(mockSupervisorData);
-    t.truthy(true);
+    t.truthy(returnValue, mockPersons.length + 1);
 });
