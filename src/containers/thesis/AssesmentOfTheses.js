@@ -27,20 +27,31 @@ class AssesmentOfTheses extends Component {
 
     renderAssesmentText() {
         //let assesment = JSON.stringify(AssesmentInFinnish, 1, '\n\n');
-        let printable = "";
-        let lista = [];
-        for (var i = 0; i<AssesmentInFinnish.length; i++) {
-            printable += "<h2>" + AssesmentInFinnish[i].title + "</h2>\n\n";
-            lista[i] = AssesmentInFinnish[i].title;
+        let printable = [];
+        let titles = [];
+        let texts = [];
+        for (var i = 0; i < AssesmentInFinnish.length; i++) {
+            //printable += "<h2>" + AssesmentInFinnish[i].title + "</h2>\n\n";
+            titles[i] = AssesmentInFinnish[i].title;
+            texts[i] = AssesmentInFinnish[i].text;
+            printable[i] = [titles[i], texts[i]];
             //console.log(AssesmentInFinnish[i]);
         }
-        return "tähän perään assesment: " + lista;
+        let lista2 = titles.map((titles) =>
+            texts
+        );
+        return printable;
     }
 
-   // <tbody>{this.state.filteredTheses.map((thesis) =>
-     //   <tr key={thesis.id}><td>{thesis.authorLastname}</td><td>{thesis.title}</td></tr>
-       // )}</tbody>
+    // <tbody>{this.state.filteredTheses.map((thesis) =>
+    //   <tr key={thesis.id}><td>{thesis.authorLastname}</td><td>{thesis.title}</td></tr>
+    // )}</tbody>
 
+
+    //{ this.renderAssesmentText().map((all)=>
+    //<h2>{all[0]}</h2>
+
+    //)}
     render() {
         return (
             <div className="App">
@@ -49,12 +60,14 @@ class AssesmentOfTheses extends Component {
                 </div>
                 <NavBar active={"Assesment of theses"} />
                 <div className="ui segment">
-                    <p> tähän pitäisi palauttaa alle tekstiä <br/>
-                        <h2>{ this.renderAssesmentText() }</h2>
-                        
-                    </p>
-                </div>
+                    {AssesmentInFinnish.map(all => (
+                        <div>
+                            <h2>{all.title}</h2>
+                            <p>{all.text}</p>
+                        </div>
+                    ))}
             </div>
+            </div >
         );
     }
 }
