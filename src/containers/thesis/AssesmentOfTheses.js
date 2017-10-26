@@ -27,11 +27,19 @@ class AssesmentOfTheses extends Component {
 
     renderAssesmentText() {
         //let assesment = JSON.stringify(AssesmentInFinnish, 1, '\n\n');
+        let printable = "";
+        let lista = [];
         for (var i = 0; i<AssesmentInFinnish.length; i++) {
-            console.log(AssesmentInFinnish[i]);
+            printable += "<h2>" + AssesmentInFinnish[i].title + "</h2>\n\n";
+            lista[i] = AssesmentInFinnish[i].title;
+            //console.log(AssesmentInFinnish[i]);
         }
-        return "tähän perään assesment: " + AssesmentInFinnish[2].title;
+        return "tähän perään assesment: " + lista;
     }
+
+   // <tbody>{this.state.filteredTheses.map((thesis) =>
+     //   <tr key={thesis.id}><td>{thesis.authorLastname}</td><td>{thesis.title}</td></tr>
+       // )}</tbody>
 
     render() {
         return (
@@ -42,7 +50,8 @@ class AssesmentOfTheses extends Component {
                 <NavBar active={"Assesment of theses"} />
                 <div className="ui segment">
                     <p> tähän pitäisi palauttaa alle tekstiä <br/>
-                        { this.renderAssesmentText() }
+                        <h2>{ this.renderAssesmentText() }</h2>
+                        
                     </p>
                 </div>
             </div>
