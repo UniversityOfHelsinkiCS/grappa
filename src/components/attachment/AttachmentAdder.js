@@ -10,11 +10,6 @@ export default class AttachmentAdder extends Component {
         }
     }
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.currentFile) {
-        }
-    }
-
     onDrop = (files) => {
         const droppedFile = files[0];
         this.addAttachment(droppedFile);
@@ -22,10 +17,19 @@ export default class AttachmentAdder extends Component {
         console.log("attachment size " + this.state.attachments.length);
     }
 
-    addAttachment = (file) => {
-        const newList = this.state.attachments;
-        newList.push(file);
-        this.setState({ attachments: newList });
+    addAttachment = (attachment) => {
+        const newAttachmentsList = this.state.attachments;
+        newAttachmentsList.push(attachment);
+        this.setState({ attachments: newAttachmentsList });
+    }
+
+    removeAttachment = (attachment) => {
+        const newAttachmentsList = this.state.attachments;
+        const index =  newAttachmentsList.indexOf(attachment);
+        console.log("ennen poistoa: " + newAttachmentsList);
+        newAttachmentsList.splice(index, 1);
+        console.log("poiston jälkeen: + newAttachmentsList");
+        this.setState({attachments: newAttachmentsList});
     }
 
     getFileList = () => {
@@ -35,7 +39,9 @@ export default class AttachmentAdder extends Component {
                 {this.state.attachments.map(attachment =>
 
                     <div>
-                        <button className="negative ui icon button ">
+                        <button 
+                            className="negative ui icon button "
+                            onClick= { () =>this.removeAttachment(attachment)}>
                             <i className="remove icon"></i>
                         </button>
                         &nbsp;
