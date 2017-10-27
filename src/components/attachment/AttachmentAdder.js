@@ -14,7 +14,6 @@ export default class AttachmentAdder extends Component {
         const droppedFile = files[0];
         this.addAttachment(droppedFile);
         this.props.sendChange(droppedFile);
-        console.log("attachment size " + this.state.attachments.length);
     }
 
     addAttachment = (attachment) => {
@@ -53,10 +52,10 @@ export default class AttachmentAdder extends Component {
     }
 
     getHeader = () => {
-        if (this.props.attachmentCount === undefined) {
+        if (this.props.limit === undefined) {
             return <h1>Upload attachments as much as you want</h1>
         }
-        return <h1>Upload maximum {this.props.attachmentCount} attachments</h1>
+        return <h1>Upload maximum {this.props.limit} attachments</h1>
     }
 
 
@@ -74,18 +73,41 @@ export default class AttachmentAdder extends Component {
         </h2>);
     }
 
+    renderDropzone = () => {
+        if (this.canAttachmentBeUploaded()) {
+            return (<div className="field" style={{ borderStyle: 'dashed' }}>
+                    <Dropzone 
+                        className="field upload-box"
+                        onDrop={this.onDrop}
+                        multiple={false}
+                    >
+                    <p className="upload-p">
+                    Click to navigate to the file or drop them from your file system.
+                    </p>
+                    </Dropzone>
+        </div>);
+        }
+        return <br/>;
+
+    }
+
+    thereIsNoLimit = () => {
+        return !this.props.limit;
+    }
+
+    thereIsRoomForAttachment = () => {
+        return this.state.attachments.length < this.props.limit;
+    }
+
+    canAttachmentBeUploaded = ()  => {
+        return this.thereIsNoLimit() || this.thereIsRoomForAttachment();
+    }
+
     render() {
         return (
             <div>
                 {this.getHeader()}
-                <div className="field" style={{ borderStyle: 'dashed' }}>
-                    <label>Add attachments</label>
-                    <Dropzone className="field upload-box"
-                        onDrop={this.onDrop}
-                        multiple={false}>
-                        <p className="upload-p">Click to navigate to the file or drop them from your file system.</p>
-                    </Dropzone>
-                </div>
+                {this.renderDropzone()}
                 {this.getFileList()}
             </div>
 
