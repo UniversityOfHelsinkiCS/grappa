@@ -21,7 +21,7 @@ test('if no maximum size, header tells it', t => {
     t.truthy(wrapper.contains(header));
 })
 
-test('header informs no fiels uploaded when started', t=> {
+test('header informs no files uploaded when started', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
     const noElementsHeader = <h2>No attachments uploaded</h2>;
     t.truthy(wrapper.contains(noElementsHeader));
@@ -58,8 +58,7 @@ test("when delete button is clicked, it is removed from the view", t => {
     const files = getFileList();
     wrapper.setState({attachments: files});
     wrapper.find('button').simulate('click');
-
-    t.truthy(wrapper.find('button').length, 0);
+    t.is(wrapper.find('button').length, 0);
 })
 
 const getFileList = () => {
