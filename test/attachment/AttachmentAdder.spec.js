@@ -10,6 +10,8 @@ require('ignore-styles')
 
 const defaultAttachmentAdder = <AttachmentAdder sendChange = {(file) => {}} />
 
+const limitOfOne = <AttachmentAdder sendChange = {(file) => {}}  limit = {1}/>
+
 test('has Dropzone element', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
     t.is(wrapper.find(Dropzone).length, 1);
@@ -66,3 +68,16 @@ const getFileList = () => {
     const fileArray = [file];
     return fileArray;
 }
+
+test("when limit is given, it is told", t => {
+    const wrapper = shallow(limitOfOne);
+    const header = <h1>Upload maximum 1 attachments</h1>;
+    t.truthy(wrapper.contains(header));
+})
+
+test("when limit is set to 1 and attachment added, dropzone is not there", t => {
+    const wrapper = shallow(limitOfOne);
+    const files = getFileList();
+    wrapper.setState({attachments: files});
+    t.is(wrapper.find(Dropzone).length, 0);
+})
