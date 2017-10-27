@@ -43,6 +43,14 @@ class AssesmentOfTheses extends Component {
         return printable;
     }
 
+    renderList() {
+        let print = "";
+        for (var i = 0; i < AssesmentInFinnish.length; i++) {
+            print[i] = AssesmentInFinnish[i].list;
+        
+        }
+    }
+
     // <tbody>{this.state.filteredTheses.map((thesis) =>
     //   <tr key={thesis.id}><td>{thesis.authorLastname}</td><td>{thesis.title}</td></tr>
     // )}</tbody>
@@ -64,9 +72,10 @@ class AssesmentOfTheses extends Component {
                         <div>
                             <h2>{all.title}</h2>
                             <p>{all.text}</p>
+                            
                         </div>
                     ))}
-            </div>
+                </div>
             </div >
         );
     }

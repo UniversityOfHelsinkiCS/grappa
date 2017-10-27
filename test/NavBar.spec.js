@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 
 import NavBar from '../src/components/NavBar.js';
 
-const expectedLinkAmount = 6;
+const expectedLinkAmount = 7;
 
-test('Basic NavBar has 6 inactive elements', t => {
+test('Basic NavBar has 7 inactive elements', t => {
     const wrapper = shallow(<NavBar/>);
     t.is(wrapper.find('Link').length, expectedLinkAmount);
     t.is(wrapper.find('Link[className="item active"]').length, 0);

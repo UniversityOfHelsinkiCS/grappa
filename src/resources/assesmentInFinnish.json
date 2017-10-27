@@ -4,8 +4,8 @@
         "text": "Tutkielman osaamistavoitteet kuvataan koulutusohjelman opetussuunnitelmassa, jotka tiedekuntaneuvosto hyväksyy. Ylemmän korkeakoulututkinnon tutkielman arvostelussa käytetään asteikkoa 0-5, jossa 5 = erinomainen, 4 = kiitettävä 3 = hyvä, 2= tyydyttävä, 1 = välttävä ja 0 = hylätty."
     },
     {
-        "title": "otsikko",
-        "erilainenLista": [
+        "title": "test title",
+        "list": [
             {
                 "title": "5 (erinomainen)",
                 "text": "Tutkielma on poikkeuksellisen hyvä ja osoittaa tekijän tieteellistä kypsyyttä, kriittistä ajattelua ja syvällistä perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa koherentin ja yhtenäisen kokonaisuuden. Tutkielma täyttää opinnäytetyölle asetetut vaatimukset erinomaisesti kaikilla arvioinnin osa-alueilla."
@@ -13,7 +13,25 @@
             {
                 "title": "4 (kiitettävä)",
                 "text": "Tutkielma on erittäin hyvä ja osoittaa tekijän kypsyyttä, kriittisyyttä ja perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa selkeän ja yhtenäisen kokonaisuuden. Tutkielma vastaa opinnäytetyölle asetettuja vaatimuksia kiitettävästi lähes kaikilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "3 (hyvä)",
+                "text": "Tutkielma on hyvä ja se sisältää oleelliset asiat loogisessa järjestyksessä muodostaen yhtenäisen kokonaisuuden. Tutkielma vastaa hyvin opinnäytetyölle asetettuja vaatimuksia useimmilla arvioinnin osa-alueilla."
+
+            },
+            {
+                "title": "2 (tyydyttävä)",
+                "text": "Tutkielma muodostaa ymmärrettävän ja riittävän loogisen kokonaisuuden. Tutkielmassa on puutteita, mutta se vastaa opinnäytetyölle asetettuja vaatimuksia useilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "1 (välttävä)",
+                "text": "Tutkielma sisältää oleellisia asioita jokseenkin loogisessa järjestyksessä ja ylittää hyväksyttävissä olevan rajan. Tutkielmassa on paljon puutteita, mutta se vastaa välttävästi opinnäytetyölle asetettuja vaatimuksia useilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "0 (hylätty",
+                "text": "Tutkielma on hajanainen ja epälooginen, eikä muodosta kokonaisuutta. Tutkielman arvioinnin osa-alueiden vaatimukset eivät täyty hyväksyttävällä tavalla."
             }
+
         ]
     },
     {   
@@ -24,7 +42,7 @@
         "title": "1. Tutkimusaihe ja tutkimuksen tarkoitus",
         "list": 
         [
-            "tutkielman aiheen ja sen merkittävyyden perustelu",
+            "tutkielman aiheen ja sen merkittävyyden perustelu \n",
             "oivallus aiheen valinnassa ja rajauksessa"
         ]
     }
