@@ -144,7 +144,16 @@ export class Agreement extends Component {
         {
             header: "Tavoitearvosana",
             fields: [
-                { inputType: "textarea", rows: 1, name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "", required: true, placeholder: "Etu- ja Sukunimi" },
+                { inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true, 
+                    responses: [
+                        {value: 0, text: 'Choose...'},
+                        {value: 5, text: '5 (Excellent)'},
+                        {value: 4, text: '4 (Very Good)'},
+                        {value: 3, text: '3 (Good)'},
+                        {value: 2, text: '2 (Satisfactory)'},
+                        {value: 1, text: '1 (Passable)'},
+                    ]
+                },
             ]
         }]
     }

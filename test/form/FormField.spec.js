@@ -102,6 +102,36 @@ test('correct bareText field returned', t => {
     t.truthy(wrapper.contains(expected));
 })
 
+test.only('correct dropdown field returned', t => {
+    const fieldKey = 'someTestingKey4';
+    const fieldData = {
+        inputType: "dropdown",
+        name: "someTestName4",
+        label: "Testing label 4",
+        placeholder: "test placeholder 4",
+        responses: [
+            {value: 0, text: 'Choose some'},
+            {value: 5, text: 'some chosen one', selected:true},
+        ]
+    };
+    const fieldOnChangeSpy = () => {};
+    const formField = <FormField
+        fieldKey={fieldKey}
+        fieldData={fieldData}
+        fieldOnChangeFunc={fieldOnChangeSpy}
+    />;
+    const wrapper = shallow(formField);
+
+    const expected = <div key={fieldKey + "fieldDiv"} className={'field small dropdown'}>
+                        <label key={fieldKey + "label"} >{fieldData.label}</label>
+                        <select class="ui dropdown" onChange={fieldOnChangeSpy}  name={fieldData.name} >
+                            <option value={fieldData.responses[0].value} selected={fieldData.responses[0].selected} >{fieldData.responses[0].text}</option>
+                            <option value={fieldData.responses[1].value} selected={fieldData.responses[1].selected} >{fieldData.responses[1].text}</option>
+                        </select>
+                    </div>;
+    t.truthy(wrapper.contains(expected));
+})
+
 test('extraClasses are added correctly', t => {
     const fieldKey = 'someTestingKey4';
     const fieldData = {
