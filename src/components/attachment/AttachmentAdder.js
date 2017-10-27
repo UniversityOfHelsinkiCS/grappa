@@ -6,7 +6,7 @@ export default class AttachmentAdder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            attachments: [{ name: "asd" }],
+            attachments: [],
         }
     }
 
@@ -26,9 +26,7 @@ export default class AttachmentAdder extends Component {
     removeAttachment = (attachment) => {
         const newAttachmentsList = this.state.attachments;
         const index =  newAttachmentsList.indexOf(attachment);
-        console.log("ennen poistoa: " + newAttachmentsList);
         newAttachmentsList.splice(index, 1);
-        console.log("poiston jälkeen: + newAttachmentsList");
         this.setState({attachments: newAttachmentsList});
     }
 
@@ -54,18 +52,32 @@ export default class AttachmentAdder extends Component {
 
     }
 
+    getHeader = () => {
+        if (this.props.attachmentCount === undefined) {
+            return <h1>Upload attachments as much as you want</h1>
+        }
+        return <h1>Upload maximum {this.props.attachmentCount} attachments</h1>
+    }
+
+
+
     getFileNumberLabel = () => {
-        if (this.state.attachments.length === 0) {
+        const attachmentsUploaded = this.state.attachments.length;
+        if (attachmentsUploaded === 0) {
             return <h2>No attachments uploaded</h2>;
         }
+        else if (attachmentsUploaded === 1) {
+            return <h2>One attachment uploaded:</h2>
+        }
         return (<h2>
-            {this.state.attachments.length + " attachments uploaded:"}
+            {attachmentsUploaded + " attachments uploaded:"}
         </h2>);
     }
 
     render() {
         return (
             <div>
+                {this.getHeader()}
                 <div className="field" style={{ borderStyle: 'dashed' }}>
                     <label>Add attachments</label>
                     <Dropzone className="field upload-box"
