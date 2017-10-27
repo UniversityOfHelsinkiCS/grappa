@@ -15,6 +15,12 @@ test('has Dropzone element', t=> {
     t.is(wrapper.find(Dropzone).length, 1);
 });
 
+test('if no maximum size, header tells it', t => {
+    const wrapper = shallow(defaultAttachmentAdder);
+    const header = <h1>Upload attachments as much as you want</h1>;
+    t.truthy(wrapper.contains(header));
+})
+
 test('header informs no fiels uploaded when started', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
     const noElementsHeader = <h2>No attachments uploaded</h2>;
@@ -47,6 +53,14 @@ test('when button is clicked, it tells u no attachments uploaded', t => {
     t.truthy(wrapper.contains(noElementsHeader));
 })
 
+test("when delete button is clicked, it is removed from the view", t => {
+    const wrapper = shallow(defaultAttachmentAdder);
+    const files = getFileList();
+    wrapper.setState({attachments: files});
+    wrapper.find('button').simulate('click');
+
+    t.truthy(wrapper.find('button').length, 0);
+})
 
 const getFileList = () => {
     const file = {name: "MattiLuukkainenFullStack.sql"};
