@@ -5,14 +5,14 @@ import Dropzone from "react-dropzone";
 export default class ThesisUploadWidget extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            attachments: [],
+        }
     }
 
     componentWillReceiveProps(newProps) {
-        console.log("newProps: " + JSON.stringify(newProps));
         if (newProps.currentFile) {
-            console.log("IFFF");
         }
-        console.log("Tiedoston nimi " + this.state.fileName);
     }
 
     getLabel = () => {
@@ -22,29 +22,43 @@ export default class ThesisUploadWidget extends Component {
             case "abstractFile":
                 return "Upload Thesis with abstract on 2nd page (max. 40 MB)";
             case "attachment":
-                return "Upload attachments to agreement"
+                return "Upload attachments"
             default:
                 return "Error ThesisUploadWidget getLabel";
         }
     }
 
     onDrop = (files) => {
-        console.log("FILU " + JSON.stringify(files[0]));
-        console.log("filun nimi " + files[0].name);
+        this.state.attachments.push(files[0]);
         this.props.sendChange(this.props.type, files[0]);
     }
 
     getFileList = () => {
-    
-    return <p>asdsad</p>;
+        const attachmentElements = [];
+        for (let i = 0; i < this.state.attachments.length; i++) {
+            console.log("filu: " + this.state.attachments[i].name);
+            const element = <p>{this.state.attachments[i].name}</p>  
+            attachmentElements.push(element); 
+        }
+        return (<div class ="fileList">
+                    {this.getFileNumberLabel()}
+                    {attachmentElements}
+                </div>);
+
+    }
+
+    getFileNumberLabel = () => {
+        if (this.state.attachments.length === 0) {
+            return "No attachments uploaded";
+        }
+        return this.state.attachments.length + " attachments uploaded:";
     }
 
     render() {
         return (
             <div>
-
-            <div className="field" style={{borderStyle: 'dashed'}}>
-                <label>{this.getLabel()}</label>
+                <div className="field" style={{borderStyle: 'dashed'}}>
+                    <label>{this.getLabel()}</label>
                     <Dropzone className="field upload-box" onDrop={this.onDrop} multiple={false}>
                         <p className="upload-p">Click to navigate to the file or drop them from your file system.</p>
                     </Dropzone>
