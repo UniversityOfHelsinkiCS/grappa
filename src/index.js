@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
 //components
 import App from './components/App';
-import Contract from './components/Contract';
-import ThesisList from './components/ThesisList';
+import AgreementForm from './components/agreement/AgreementForm';
+import Agreement from './components/agreement/Agreement';
+import GraderManagement from './containers/grader/GraderManagementPage';
+import ThesisList from './components/thesis/ThesisList';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
@@ -16,13 +19,17 @@ import './media/index.css';
 import './media/App.css';
 
 ReactDOM.render(
-    <Router>
-        <Switch>
-            <Route exact path="/" component={App}/>
-            <Route exact path="/contract" component={Contract}/>
-            <Route exact path="/theses" component={ThesisList}/>
-        </Switch>
-    </Router>,
+    <Provider store={store}>
+        <Router>
+            <Switch>
+                <Route exact path="/" component={App}/>
+                <Route exact path="/agreementform" component={AgreementForm}/>
+                <Route exact path="/agreement" component={Agreement}/>
+                <Route exact path="/theses" component={ThesisList}/>
+                <Route exact path="/graderManagement" component={GraderManagement}/>
+            </Switch>
+        </Router>
+    </Provider>,
     document.getElementById('root')
   );
 
