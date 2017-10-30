@@ -18,7 +18,7 @@ export default class NavBar extends Component {
          });
 
         return (
-            <div className="ui secondary pointing menu">
+            <div className="ui stackable secondary pointing menu">
                 {linkElements}
                 <div className="right menu">
                     <Link to="/" className="item"> Logout </Link>
