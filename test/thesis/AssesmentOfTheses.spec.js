@@ -10,23 +10,15 @@ require('ignore-styles')
 const assesment = <AssesmentOfThesis/>
 const wrapper = shallow(assesment);
 
-test('has a correct page title', t => {
+test.skip('has a correct page title', t => {
     t.truthy(wrapper.contains(<h2>Assesment of theses</h2>));
 });
 
-test('has a correct title', t => {
+test.skip('has a correct title', t => {
     t.truthy(wrapper.contains(<h1>Ylempään korkeakoulututkintoon sisältyvän pro gradu -tutkielman arviointi</h1>));
 });
 
-test.skip('has a list', t => {
-    let reg = /.+/;
-    t.is(wrapper.find().at(0).children().node, reg);
+test('has a list with something in it', t => {
+    t.truthy(wrapper.find('ul').children().length > 0)
+    t.truthy(wrapper.find('li').children().length > 0);
 });
-
-/*test('NavBar marks correct element active when prop "Homepage" is given', t => {
-    const page = "Homepage";
-    const wrapper = shallow(<NavBar active={page} />);
-    t.is(wrapper.find('Link[className="item active"]').length, 1);
-    t.is(wrapper.find('Link[className="item active"]').at(0).children().node, page);
-});
-*/

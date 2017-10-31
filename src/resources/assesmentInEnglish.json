@@ -1,9 +1,182 @@
 [
     {
-        "title": "title"
-        
+        "title": "1. Grading scale",
+        "text": "The learning outcomes set for Master’s theses are described in the curriculum of the relevant degree programme, which is approved by the faculty council. Master’s theses are graded on the following scale: 5 = Excellent, 4 = Very Good, 3 = Good, 2 = Satisfactory, 1 = Passable, 0 = Fail."    
     },
     {
-        "text": "text"
+        "list": [
+            {
+                "title": "5 (Excellent)",
+                "text": "The thesis is of an exceptionally high quality and demonstrates the author’s academic maturity, critical thinking skills and thorough familiarity with the topic.  The thesis covers all essential issues in a logical order and constitutes a coherent and consistent whole.  The thesis meets excellently the requirements set for Master’s theses in all the areas assessed."
+            },
+            {
+                "title": "4 (Very Good)",
+                "text": "The thesis is of a very high quality and demonstrates the author’s maturity, critical thinking and familiarity with the topic. The thesis covers all essential issues in a logical order and constitutes a clear and consistent whole.  The thesis meets very well the requirements set for Master’s theses in almost all the areas assessed."
+            },
+            {
+                "title": "3 (Good)",
+                "text": "The thesis is of a high quality, covers all essential issues in a logical order and constitutes a consistent whole.  The thesis meets well the requirements set for Master’s theses in most of the areas assessed."
+            },
+            {
+                "title": "2 (Satisfactory)",
+                "text": "The thesis constitutes an understandable and sufficiently logical whole. The thesis has some deficiencies, but meets the requirements set for Master’s theses in several areas assessed."
+            },
+            {
+                "title": "1 (Passable)",
+                "text": "The thesis covers some essential issues in a somewhat logical order and is passable. The thesis has many deficiencies, but meets passably the requirements set for Master’s theses in several areas assessed."
+            },
+            {
+                "title": " 0 (Fail)",
+                "text": "The thesis is fragmented and illogical and does not constitute a whole. The requirements set for the various areas assessed are not acceptably met."
+            }
+        ]
+    },
+    {
+        "title": "2. Areas of assessment",
+        "text": "The headings of the areas assessed can be found on the assessment form in the e-thesis system. The assessment is based on a scale of 0–5. Each degree programme or faculty can issue detailed application instructions for assessing various areas and can specify assessment criteria. The following main issues are considered in thesis assessment:"    
+    },
+    {
+        "title": "1. Research topic and purpose",
+        "list": [
+            {
+                "text": "Justifying the research topic and its significance"
+            },
+            {
+                "text": "Showing insight in the selection and definition of the topic"
+            },
+            {
+                "text": "Defining a clear research question and objective, research problem or theme"
+            },
+            {
+                "text": "Considering research ethics"
+            }
+        ]
+    },
+    {
+        "title": "2. Knowledge of the research field and related theories as well as use of literature",
+        "list": [
+            {
+                "text": "Being familiar with relevant research and literature"
+            },
+            {
+                "text": "Defining a research perspective and concepts relevant to the problem discussed"
+            },
+            {
+                "text": "Using a wide range of source literature"
+            },
+            {
+                "text": "Using source criticism and original scientific sources"
+            },
+            {
+                "text": "Analytically examining perspectives presented in the source literature and creating syntheses "
+            }
+        ]
+    },
+    {
+        "title": "3. Material, acquisition of material and analyses",
+        "list": [
+            {
+                "text": "Selecting an appropriate method to address the research question"
+            },
+            {
+                "text": "Describing the method comprehensively (strategy, information retrieval and analysis)"
+            },
+            {
+                "text": "Ensuring that the material is sufficient and applicable for the research question and analysis method"
+            },
+            {
+                "text": "Describing the material"
+            },
+            {
+                "text": "Using the method critically and in an evaluative way"
+            },
+            {
+                "text": "Considering research ethics"
+            }
+        ]
+    },
+    {
+        "title": "4. Research results and reporting",
+        "list": [
+            {
+                "text": "Addressing the research question in the results "
+            },
+            {
+                "text": "Reporting the results clearly and logically"
+            },
+            {
+                "text": "Illustrating the relationship between the images, diagrams and tables and the text"
+            }
+        ]
+    },
+    {
+        "title": "5. Examination of results (discussion) and conclusions",
+        "list": [
+            {
+                "text": "Specifying the relationship between the research results and previous research"
+            },
+            {
+                "text": "Presenting new research problems"
+            },
+            {
+                "text": "Considering opportunities for applications"
+            },
+            {
+                "text": "Assessing the reliability of the thesis according to the research approach"
+            },
+            {
+                "text": "Considering issues of research ethics"
+            },
+            {
+                "text": "Examining the research process and results critically and thoroughly"
+            },
+            {
+            	"text": "Drawing thorough, reliable and insightful conclusions"
+            },
+            {
+            	"text": "Basing the conclusions on the results"
+            }
+        ]
+    },
+    {
+        "title": "6. Structure, clarity and general polish of the thesis",
+        "list": [
+            {
+                "text": "Using a clear structure appropriate for the research approach"
+            },
+            {
+                "text": "Mastering the craft of academic prose (varies according to the research approach)"
+            },
+            {
+                "text": "Distinguishing between the author’s own interpretations and the information presented in sources as well as incorporating these two elements clearly and seamlessly"
+            },
+            {
+                "text": "Using grammatically correct language"
+            },
+            {
+                "text": "Documenting sources appropriately and consistently"
+            },
+            {
+                "text": "Writing a clear and accurate bibliography"
+            },
+            {
+            	"text": "Using an appropriate layout"
+            }
+        ]
+    },
+    {
+        "title": "7. Work during the thesis process",
+        "list": [
+            {
+                "text": "Being open-minded and independent"
+            },
+            {
+            	"text": "Adopting methods and solving problems creatively"
+            },
+            {
+                "text": "Completing the thesis in the planned timetable"
+            }
+        ]
     }
+
 ]
