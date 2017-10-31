@@ -50,6 +50,17 @@ test.before(async t => {
         table.integer('studyfieldId').unsigned();
         table.foreign('studyfieldId').references('studyfield.studyfieldId');
     });
+
+    await knex.schema.createTable('agreementPerson', function (table) {
+        table.integer('agreementId').unsigned();
+        table.foreign('agreementId').references('agreement.agreementId');
+        table.integer('personRoleId').unsigned(); //grader
+        table.foreign('personRoleId').references('personRole.personRoleId');
+        table.integer('roleId').unsigned();
+        table.foreign('roleId').references('role.roleId');
+        table.boolean('approved');
+        table.string('statement');
+    });
 });
 
 test.beforeEach(async t => {
@@ -62,6 +73,8 @@ test.beforeEach(async t => {
     await knex('role').insert(mockRoles);
     await knex('personRoleField').del();
     await knex('personRoleField').insert(mockPersonRoles);
+    await knex('agreementPerson').del();
+    await knex('agreementPerson').insert(mockAgreementPersons);
 });
 
 test.serial('getAllSupervisors returns list of right length ', async t => {
@@ -69,12 +82,19 @@ test.serial('getAllSupervisors returns list of right length ', async t => {
     t.deepEqual(listOfSupervisors.length, 3);
 });
 
-test.serial('saveNewSupervisor returns new personId', async t => {
-    const mockSupervisorData = {
-        agreementId: 1,
-        firstname: 'Test',
-        lastname: 'Person'
+test.serial('saveAgreementPerson returns agreementId', async t => {
+    const mockAgreementPerson = {
+        agreementId: 2,
+        personRoleId: 2,
+        roleId: 1,
+        approved: false,
+        statement: ''
     };
-    let returnValue = await supervisorService.saveNewSupervisor(mockSupervisorData);
-    t.truthy(returnValue, mockPersons.length + 1);
+    let returnValue = await supervisorService.saveAgreementPerson(mockAgreementPerson);
+    t.truthy(returnValue, mockAgreementPerson.agreementId);
+});
+
+test.serial('getSupervisorRoleId returns correct ID', async t => {
+    let returnValue = await supervisorService.getSupervisorRoleId();
+    t.deepEqual(returnValue, supervisorRoleId);
 });
