@@ -13,7 +13,7 @@ router.get('/:id', (req, res) => {
     thesisController.getThesisById(req, res);
 });
 
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/', jsonParser, (req, res) => {
     thesisController.saveThesis(req, res);
 });
 
