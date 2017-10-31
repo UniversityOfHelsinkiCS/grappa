@@ -12,5 +12,9 @@ router.get('/', (req, res) => {
 router.post('/', jsonParser, (req, res) => {
     supervisorController.saveSupervisor(req, res);
 });
+
+router.put('/review', jsonParser, (req, res) => {
+    supervisorController.reviewSupervisor(req, res);
+});
     
 module.exports = router;

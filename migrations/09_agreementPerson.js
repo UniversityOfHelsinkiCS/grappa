@@ -7,6 +7,9 @@ exports.up = function (knex, Promise) {
             table.foreign('personRoleId').references('personRole.personRoleId');
             table.integer('roleId').unsigned();
             table.foreign('roleId').references('role.roleId');
+            table.integer('approverId').unsigned();
+            table.foreign('approverId').references('personRole.personRoleId');
+            table.date('approvalDate');
             table.boolean('approved');
             table.string('statement');
         })
