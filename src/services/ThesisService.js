@@ -1,13 +1,15 @@
-import thesesList from "../mockdata/Theses.js";
+import thesesList from "../mockdata/MockTheses.js";
 
 const knex = require('../../connection');
 
 // don't know if export function is better than export const? Both are working.
 
 export function getAllTheses() {
-    return knex.select().from('thesis')
-        .then(theses => {
-            return theses;
+    return knex.select('thesis.thesisId', 'thesis.title', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
+        .join('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
+        .join('person', 'agreement.authorId', '=', 'person.personId')
+        .then(thesis => {
+            return thesis;
         });
 }
 
