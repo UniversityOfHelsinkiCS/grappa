@@ -55,10 +55,13 @@ test.before(async t => {
         table.integer('agreementId').unsigned();
         table.foreign('agreementId').references('agreement.agreementId');
         table.integer('personRoleId').unsigned(); //grader
-        table.foreign('personRoleId').references('personRole.personRoleId');
+        table.foreign('personRoleId').references('personRoleField.personRoleId');
         table.integer('roleId').unsigned();
         table.foreign('roleId').references('role.roleId');
+        table.integer('approverId').unsigned();
+        table.foreign('approverId').references('personRoleField.personRoleId');
         table.boolean('approved');
+        table.date('approvalDate');
         table.string('statement');
     });
 });
@@ -97,4 +100,16 @@ test.serial('saveAgreementPerson returns agreementId', async t => {
 test.serial('getSupervisorRoleId returns correct ID', async t => {
     let returnValue = await supervisorService.getSupervisorRoleId();
     t.deepEqual(returnValue, supervisorRoleId);
+});
+
+test.serial('updateAgreementPerson returns correct ID', async t => {
+    const mockAgreementPerson = {
+        agreementId: 2,
+        personRoleId: 2,
+        approved: true,
+        approverId: 1,
+        statement: 'I approve this supervisor'
+    };
+    let returnValue = await supervisorService.updateAgreementPerson(mockAgreementPerson);
+    t.deepEqual(returnValue, undefined);
 });

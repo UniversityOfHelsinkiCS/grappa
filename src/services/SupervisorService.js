@@ -22,7 +22,12 @@ export async function saveAgreementPerson(agreementPersonData) {
         .catch(err => err);
 }
 
-export function approveSupervisor(data) {
-    // TO DO
-    return data;
+export async function updateAgreementPerson(agreementPersonData) {
+    return await knex('agreementPerson')
+        .returning('personRoleId')
+        .where('personRoleId', '=', agreementPersonData.personRoleId)
+        .andWhere('agreementId', '=', agreementPersonData.agreementId)       
+        .update(agreementPersonData)
+        .then(personRoleId => personRoleId[0])
+        .catch(err => err);
 }
