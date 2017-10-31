@@ -18,7 +18,7 @@ export const getThesisById = (id) => {
         });
 }
 
-export const saveThesis = (theses) => {
+export const saveThesis = (data) => {
     return knex('theses')
     .returning('thesisId')
     .insert(data)
