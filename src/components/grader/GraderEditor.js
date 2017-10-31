@@ -20,23 +20,25 @@ export default class GraderEditor extends Component {
 
     selectGrader = (event) => {
         const updateGrader = this.props.graders.find(grader => grader.id.toString() === event.target.value);
+        if (!updateGrader) return;
         this.setState({ updateGrader });
     }
 
-    saveGrader = () => {
+    saveNewGrader = () => {
         const grader = this.state.newGrader;
         console.log("saving");
         console.log(grader);
-        //this.props.saveGrader(grader);
+        this.props.saveGrader(grader);
     }
 
     updateGrader = () => {
         const grader = this.state.updateGrader;
         console.log("updating");
         console.log(grader);
-        //this.props.updateGrader(grader);
+        this.props.updateGrader(grader);
     }
 
+    //not functioning yet in Grappa 2, to be added later
     deleteGrader = () => {
         const grader = this.state.updateGrader;
         console.log("deleting");
@@ -45,6 +47,7 @@ export default class GraderEditor extends Component {
     }
 
     renderCreate() {
+        console.log(this.state);
         return (
             <div className="three fields">
                 <div className="ui field">
@@ -71,8 +74,8 @@ export default class GraderEditor extends Component {
                 <div className="ui field">
                     <label>&nbsp;</label>
 
-                    <button className="ui green button" onClick={this.saveGrader}>
-                        Create Grader
+                    <button className="ui green button" onClick={this.saveNewGrader}>
+                        Create Supervisor
           </button>
                 </div>
             </div>
@@ -81,10 +84,11 @@ export default class GraderEditor extends Component {
 
     renderUpdate() {
         return (
-            <div className="five fields">
+            <div className="four fields">
                 <div className="field">
                     <label>Who</label>
                     <select className="ui fluid search dropdown" onChange={this.selectGrader}>
+                        <option value="">Select grader</option>
                         {this.props.graders.map((grader, index) =>
 
                             <option key={index} className="item" value={grader.id}>
@@ -115,15 +119,10 @@ export default class GraderEditor extends Component {
                 <div className="field">
                     <label>&nbsp;</label>
                     <button className="ui blue button" onClick={this.updateGrader}>
-                        Update Grader
+                        Update Supervisor
           </button>
                 </div>
-                <div className="field">
-                    <label>&nbsp;</label>
-                    <button className="ui red button" onClick={this.deleteGrader}>
-                        Delete Grader
-          </button>
-                </div>
+                
             </div>
         );
     }
@@ -132,7 +131,8 @@ export default class GraderEditor extends Component {
         return (
             <div className="ui form">
                 {this.renderCreate()}
-                {this.renderUpdate()}
+                {this.renderUpdate()
+                }
             </div>
         );
     }
