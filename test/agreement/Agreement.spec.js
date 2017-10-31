@@ -9,10 +9,6 @@ import FormCreator from '../../src/components/form/FormCreator';
 
 const wrapper = shallow(<Agreement agreement={[]} />);
 
-test('has a correct tittle 2', t => {
-    t.truthy(wrapper.contains(<h2>Thesis Agreement</h2>));
-});
-
 //UNFINISHED
 test.skip('calls FormCreator properly', t => {
     const agreementStoreStub = ['some elemtn','elemnt n2', '3rd element'];

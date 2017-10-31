@@ -11,10 +11,6 @@ require('ignore-styles');
 const page = <GraderManagementPage/>
 const wrapper = shallow(page);
 
-test('has a correct title', t => {
-    t.truthy(wrapper.contains(<h2>Thesis Supervisor Management</h2>));
-});
-
 test('contains grader editor component', t => {
     t.truthy(wrapper.find('<GraderEditor/>'));
 });
