@@ -25,41 +25,33 @@ class AssesmentOfTheses extends Component {
      }
      */
 
-    renderAssesmentText() {
-        //let assesment = JSON.stringify(AssesmentInFinnish, 1, '\n\n');
-        let printable = [];
-        let titles = [];
-        let texts = [];
-        for (var i = 0; i < AssesmentInFinnish.length; i++) {
-            //printable += "<h2>" + AssesmentInFinnish[i].title + "</h2>\n\n";
-            titles[i] = AssesmentInFinnish[i].title;
-            texts[i] = AssesmentInFinnish[i].text;
-            printable[i] = [titles[i], texts[i]];
-            //console.log(AssesmentInFinnish[i]);
-        }
-        let lista2 = titles.map((titles) =>
-            texts
-        );
-        return printable;
+
+    renderAssesment() {
+        return AssesmentInFinnish.map(all => (
+            <div>
+                <h2>{all.title}</h2>
+                <p>{all.text}</p>
+                <ul class= "ui list"> {all.list !== undefined &&
+                    all.list.map(lista => (
+                        <li><b>{lista.title}</b> {lista.text}</li>
+                    ))
+                }
+                </ul>
+            </div>
+        ))
     }
 
-    renderList() {
-        let print = "";
-        for (var i = 0; i < AssesmentInFinnish.length; i++) {
-            print[i] = AssesmentInFinnish[i].list;
-        
-        }
+    renderTitles() {
+        return <div>
+            <b>
+            HELSINGIN YLIOPISTO<br/>
+            2.8.2017<br/>
+            Opintoasiainneuvosto<br/>
+            <h1>Ylempään korkeakoulututkintoon sisältyvän pro gradu -tutkielman arviointi</h1>
+            </b>
+            </div>
     }
 
-    // <tbody>{this.state.filteredTheses.map((thesis) =>
-    //   <tr key={thesis.id}><td>{thesis.authorLastname}</td><td>{thesis.title}</td></tr>
-    // )}</tbody>
-
-
-    //{ this.renderAssesmentText().map((all)=>
-    //<h2>{all[0]}</h2>
-
-    //)}
     render() {
         return (
             <div className="App">
@@ -67,14 +59,9 @@ class AssesmentOfTheses extends Component {
                     <h2>Assesment of theses</h2>
                 </div>
                 <NavBar active={"Assesment of theses"} />
-                <div className="ui segment">
-                    {AssesmentInFinnish.map(all => (
-                        <div>
-                            <h2>{all.title}</h2>
-                            <p>{all.text}</p>
-                            
-                        </div>
-                    ))}
+                <div className="ui left aligned segment">
+                    {this.renderTitles()},
+                    {this.renderAssesment()}
                 </div>
             </div >
         );
