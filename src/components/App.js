@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
-import NavBar from './NavBar';
 import { callApi } from "../util/apiConnection.js";
 
 import { connect } from "react-redux";
@@ -43,13 +41,9 @@ export class App extends Component {
     render() {
         return (
             <div className="App">
-                <div className="ui inverted segment">
-                    <h2>Choose a role for browsing Grappa 2</h2>
-                </div>
-                <NavBar active={"Homepage"} />
                 <div className="ui segment">
                     <form onSubmit={this.handleRoleChange}>
-                        <select id="roles" class="ui dropdown">
+                        <select id="roles" className="ui dropdown">
                             <option value="">Choose a role</option>
                             <option value="opiskelija">Opiskelija</option>
                             <option value="vastuuohjaaja">Vastuuohjaaja</option>

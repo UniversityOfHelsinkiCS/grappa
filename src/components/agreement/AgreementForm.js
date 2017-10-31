@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AgreementEditModal from './AgreementEditModal';
 import AgreementView from './AgreementView';
-import NavBar from '../NavBar';
-//import { getAgreement } from "./AgreementActions";
 import { callApi } from "../../util/apiConnection";
 const service = require("../../util/apiConnection");
 
@@ -66,10 +64,6 @@ class AgreementPage extends Component {
         var changes = (JSON.stringify(this.state.formData) === JSON.stringify(this.state.originalData));
         return (
             <div className="App">
-                <div className="ui inverted segment">
-                    <h2>Agreement</h2>
-                </div>
-                <NavBar active={"AgreementForm"} />
                 <AgreementEditModal showModal={ this.state.editMode } closeModal={ this.toggleEditModal } formData={ this.state.formData } originalData={ this.state.originalData } updateFormData={ this.updateFormData } />
                 <AgreementView agreementData={ this.state.formData } />
                 <div className="ui segment">
