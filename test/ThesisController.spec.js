@@ -47,3 +47,19 @@ test.cb('getAllTheses returns correct information', t => {
         });
     service.getAllTheses.restore();
 });
+
+test.cb.only('saveAgreement', t => {
+    const body ={
+        title: 'Annin Grady',
+        urkund: 'http://',
+        grade: 4,
+        graderEval: 'Tarkastajien esittely',
+        userId: 1
+    };
+    req.body = body;
+    thesisController.saveThesis(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "saveAgreement returns status 200 for new agreement");
+            t.end();
+        });
+});
