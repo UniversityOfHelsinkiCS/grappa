@@ -12,7 +12,7 @@ exports.up = function (knex, Promise) {
             table.integer('studyFieldId').unsigned();
             table.foreign('studyFieldId').references('studyfield.studyfieldId');
             table.boolean('fake');
-            table.integer('gradeGoal');
+            table.integer('studentGradeGoal');
             table.string('studentWorkTime');
             table.string('supervisorWorkTime');
             table.string('intermediateGoal');
