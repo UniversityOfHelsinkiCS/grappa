@@ -18,6 +18,14 @@ export const getThesisById = (id) => {
         });
 }
 
+export const saveTheses = (theses) => {
+    return knex('theses')
+    .returning('thesisId')
+    .insert(data)
+    .then(thesisId => thesisId[0])
+    .catch(err => err);
+}
+
 export const getThesisByStudyfield = (studyfield) => {
     // what is this? there is no studyfield table in db yet. This method uses mockdata.
     let thesesByStudyfield = [];
