@@ -5,7 +5,6 @@ import { connect, subscribe } from "react-redux";
 import { saveAgreement } from "./AgreementActions";
 
 import EventMessage from '../EventMessage';
-import NavBar from '../NavBar';
 import FormCreator from '../form/FormCreator'
 
 
@@ -31,7 +30,6 @@ export class Agreement extends Component {
                 thesisPerformancePlace: "",
 
                 thesisSupervisorMain: "",
-                thesisSupervisorSecond: "",
                 thesisSupervisorOther: "",
 
                 thesisWorkStudentTime: "",
@@ -47,6 +45,8 @@ export class Agreement extends Component {
 
     componentDidMount() {
         document.title = "Agreement page";
+        //this.prefillFormInfo();
+        //dispatch action to get info for agreement
     }
 
     getLastAgreementAction() {
@@ -86,7 +86,19 @@ export class Agreement extends Component {
         if (event !== undefined)
             event.preventDefault();
 
-        this.props.saveAgreement(this.state.form);
+        //THIS IS HOW IT SHOULD WORK
+        //this.props.saveAgreement(this.state.form);
+
+        //GUM-FIX
+        const gumFixReturn = {
+            authorId: 1,
+            thesisId: 2,
+            responsibleSupervisorId: this.state.form.thesisSupervisorMain,
+            studyFieldId: 1,
+            fake: true,
+            studentGradeGoal: this.state.form.studentGradeGoal
+        }
+        this.props.saveAgreement(gumFixReturn);
     }
 
     formFieldInfo =  {
@@ -115,7 +127,6 @@ export class Agreement extends Component {
             header: "Ohjausvastuut",
             fields: [
                 { inputType: "input", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
-                { inputType: "input", name: "thesisSupervisorSecond", label: "2. ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
                 { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
             ]
         },
@@ -132,7 +143,16 @@ export class Agreement extends Component {
         {
             header: "Tavoitearvosana",
             fields: [
-                { inputType: "textarea", rows: 1, name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "", required: true, placeholder: "Etu- ja Sukunimi" },
+                { inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true, 
+                    responses: [
+                        {value: 0, text: 'Choose...'},
+                        {value: 5, text: '5 (Excellent)'},
+                        {value: 4, text: '4 (Very Good)'},
+                        {value: 3, text: '3 (Good)'},
+                        {value: 2, text: '2 (Satisfactory)'},
+                        {value: 1, text: '1 (Passable)'},
+                    ]
+                },
             ]
         }]
     }
@@ -141,11 +161,6 @@ export class Agreement extends Component {
     render() {
         return (
             <div className="App">
-                <div className="ui inverted segment">
-                    <h2>Thesis Agreement</h2>
-                </div>
-                <NavBar active={"Agreement"} />
-                
                 <div className="ui left aligned container">
 
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
