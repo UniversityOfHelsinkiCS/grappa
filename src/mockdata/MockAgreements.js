@@ -1,6 +1,39 @@
 module.exports = [
     {
         agreementId: 1,
+        authorId: 1,
+        thesisId: 1,
+        responsibleSupervisor: 1,
+        studyFieldId: 1,
+        fake: 0,
+        created_at: null,
+        updated_at: null
+    },
+    {
+        agreementId: 2,
+        authorId: 1,
+        thesisId: 1,
+        responsibleSupervisor: 1,
+        studyFieldId: 1,
+        fake: 0,
+        created_at: null,
+        updated_at: null
+    },
+    {
+        agreementId: 3,
+        authorId: 1,
+        thesisId: 1,
+        responsibleSupervisor: 1,
+        studyFieldId: 1,
+        fake: 0,
+        created_at: null,
+        updated_at: null
+    }
+];
+
+/*module.exports = [
+    {
+        agreementId: 1,
         studentName: 'Maija Vilkkumaa',
         studentNumber: "01234567",
         studentAddress: "Helsinginkatu 1",
@@ -86,4 +119,4 @@ module.exports = [
         created_at: null,
         updated_at: null,
     }
-];
+];*/
