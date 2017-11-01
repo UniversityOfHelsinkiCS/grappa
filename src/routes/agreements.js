@@ -20,8 +20,8 @@ router.post('/', jsonParser, (req, res) => {
     agreementController.saveAgreement(req, res);
 });
 
-router.put('/', jsonParser, (req, res) => {
-    agreementController.saveAgreement(req, res);
+router.put('/:id', jsonParser, (req, res) => {
+    agreementController.updateAgreement(req, res);
 });
 
 router.post('/previous', jsonParser, (req, res) => {

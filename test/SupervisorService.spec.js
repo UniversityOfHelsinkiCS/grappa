@@ -27,7 +27,10 @@ test.before(async t => {
         table.string('lastname');
         table.string('title')
         table.boolean('isRetired');
-        table.timestamps();
+        table.string('studentNumber');
+        table.string('address');
+        table.string('phone');
+        table.string('major');
     });
     await knex.schema.createTable('studyfield', function (table) {
         table.increments('studyfieldId').primary();

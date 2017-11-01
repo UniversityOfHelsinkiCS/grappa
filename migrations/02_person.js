@@ -8,6 +8,10 @@ exports.up = function(knex, Promise) {
             table.string('lastname');
             table.string('title')
             table.boolean('isRetired');
+            table.string('studentNumber');
+            table.string('address');
+            table.string('phone');
+            table.string('major');
             table.timestamps();
         })
     ]);
