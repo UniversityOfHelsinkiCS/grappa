@@ -84,3 +84,19 @@ test('when agreement is send to route, and body is correct, status is 200', asyn
     t.is(res.status, 200);
 });
 
+
+test('when agreement is send to route, and body is not correct, status is ', async t => {
+    const body ={
+        urkund: 'http://',
+        grade: 4,
+        graderEval: 'Tarkastajien esittely',
+        userId: 1,
+        bullShit: 300,
+    };
+    req.body = body;
+
+    const res = await request(app)
+    .post('/theses', req)
+    .send();
+    t.is(res.status, 500);
+});
