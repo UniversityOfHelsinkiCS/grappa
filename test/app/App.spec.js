@@ -5,13 +5,8 @@ import { shallow } from 'enzyme';
 import { App } from '../../src/components/App.js';
 require('ignore-styles')
 
-
 const app = <App />
 const wrapper = shallow(app);
-
-test('has correct title', t => {
-    t.truthy(doesAppContainElement(<h2>Choose a role for browsing Grappa 2</h2>));
-});
 
 test('has correct role fields', t => {
     t.truthy(doesAppContainElement(<option value="other_supervisor">Muu ohjaaja</option>));

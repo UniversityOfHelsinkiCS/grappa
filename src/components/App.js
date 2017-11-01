@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import NavBar from './NavBar';
-
 import { connect } from "react-redux";
 import { changeUserRole } from "./user/UserActions.js";
 
@@ -29,13 +27,9 @@ export class App extends Component {
     render() {
         return (
             <div className="App">
-                <div className="ui inverted segment">
-                    <h2>Choose a role for browsing Grappa 2</h2>
-                </div>
-                <NavBar active={"Homepage"} />
                 <div className="ui segment">
                     <form onSubmit={this.handleRoleChange}>
-                        <select id="roles" class="ui dropdown">
+                        <select id="roles" className="ui dropdown">
                             <option value="">Choose a role</option>
                             <option value="student">Opiskelija</option>
                             <option value="supervisor">Vastuuohjaaja</option>
