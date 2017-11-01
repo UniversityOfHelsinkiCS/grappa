@@ -11,6 +11,8 @@ import Agreement from './components/agreement/Agreement';
 import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
 import ThesisManage from './containers/thesis/ThesisManagePage';
+import CouncilmeetingManage from './containers/councilmeeting/CouncilmeetingManagePage';
+import CouncilmeetingView from './containers/councilmeeting/CouncilmeetingViewPage';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
@@ -33,6 +35,8 @@ ReactDOM.render(
                         <Route exact path="/theses" component={ThesisList} />
                         <Route exact path="/graderManagement" component={GraderManagement} />
                         <Route exact path="/thesis" component={ThesisManage} />
+                        <Route exact path="/councilmeeting" component={CouncilmeetingView} />
+                        <Route exact path="/councilmeetings" component={CouncilmeetingManage} />
                     </Switch>
                 </div>
             </div>
