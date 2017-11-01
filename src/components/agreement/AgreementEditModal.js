@@ -3,7 +3,7 @@ import AgreementEditModalField from './AgreementEditModalField';
 import { connect } from "react-redux";
 import { getPermissions } from "../../util/rolePermissions";
 
-class AgreementEditModal extends Component {
+export class AgreementEditModal extends Component {
     constructor(props) {
         super(props);
         this.state = {

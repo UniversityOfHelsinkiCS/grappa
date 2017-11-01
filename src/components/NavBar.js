@@ -3,7 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { getPermissions } from "../util/rolePermissions";
 
-class NavBar extends Component {
+export class NavBar extends Component {
     state = {
         links: [
             { path: '/', text: 'Homepage' },
@@ -41,7 +41,7 @@ class NavBar extends Component {
                     <h2>Grappa</h2>
                 </div>
                 <div className="ui stackable secondary pointing menu">
-                    { this.state.links.map((elem, index) => <NavLink key={index} to={elem.path} exact className="item" activeStyle='is-active'>{elem.text}</NavLink>) }
+                    { this.state.links.map((elem, index) => <NavLink key={index} to={elem.path} exact className="item">{elem.text}</NavLink>) }
                     <div className="right menu">
                         <Link to="/" className="item">Logout</Link>
                     </div>
