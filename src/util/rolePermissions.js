@@ -10,7 +10,8 @@ const nav = {
     agreement: {path: '/agreement', text: 'Agreement'},
     theses: {path: '/theses', text: 'Theses'},
     graderManagement: {path: '/graderManagement', text: 'Supervisor management'},
-    thesis: {path: '/thesis', text: 'New thesis'}
+    thesis: {path: '/thesis', text: 'New thesis'},
+    assesment: { path: '/assesment', text: 'Assesment of theses'}
 }
 
 const permissions = {
@@ -18,7 +19,7 @@ const permissions = {
     'supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         },
         'agreement': {
@@ -29,7 +30,7 @@ const permissions = {
     'other_supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         }
     },
@@ -37,7 +38,7 @@ const permissions = {
     'student': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['thesis']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['thesis'], nav['assesment']
             ]
         },
         'agreement': {
@@ -49,7 +50,7 @@ const permissions = {
     'resp_professor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
             ]
         }
     },
@@ -57,7 +58,7 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment']
             ]
         }
     }

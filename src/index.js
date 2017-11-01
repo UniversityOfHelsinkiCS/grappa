@@ -10,6 +10,7 @@ import AgreementForm from './components/agreement/AgreementForm';
 import Agreement from './components/agreement/Agreement';
 import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
+import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
 import ThesisManage from './containers/thesis/ThesisManagePage';
 
 //util
@@ -32,6 +33,7 @@ ReactDOM.render(
                     <Route exact path="/theses" component={ThesisList} />
                     <Route exact path="/gradermanagement" component={GraderManagement} />
                     <Route exact path="/thesis" component={ThesisManage} />
+                    <Route exact path="/assesment" component={AssesmentOfTheses}/>
                 </Switch>
             </div>
         </Router>

@@ -1,0 +1,182 @@
+[
+    {
+        "title": "1. Bedömningsskalan",
+        "text": "Kunskapsmålen för avhandlingen beskrivs i utbildningsprogrammets undervisningsplan som  godkänns av fakultetsrådet. Vid bedömningen av avhandlingen som hör till högre högskoleexamen används skalan 0–5, där 5 = utmärkt, 4 = berömlig, 3 = god, 2 = nöjaktig, 1 = försvarlig och 0 = underkänd."    
+    },
+    {
+        "list": [
+            {
+                "title": "5 (utmärkt)",
+                "text": "Avhandlingen är exceptionellt välskriven och visar vetenskaplig mognad, kritiskt tänkande och djupgående kunskaper i ämnet. Avhandlingen innehåller det väsentliga i en logisk ordning och bildar en koherent och sammanhängande helhet. Avhandlingen uppfyller på ett utmärkt sätt de krav som ställs på ett examensarbete inom alla de delområden som bedömningen gäller."
+            },
+            {
+                "title": "4 (berömlig)",
+                "text": "Avhandlingen är mycket välskriven och visar mognad, kritiskt förhållningssätt och kunskaper i ämnet. Avhandlingen innehåller det väsentliga i en logisk ordning och bildar tydlig och sammanhållen helhet. Avhandlingen uppfyller på ett berömligt sätt de krav som ställs på ett examensarbete inom nästan alla de delområden som bedömningen gäller."
+            },
+            {
+                "title": "3 (god)",
+                "text": "Avhandlingen är välskriven och innehåller det väsentliga i en logisk ordning och bildar en sammanhängande helhet. Avhandlingen uppfyller väl de krav som ställs på ett examensarbete inom de flesta delområden som bedömningen gäller."
+            },
+            {
+                "title": "2 (nöjaktig)",
+                "text": "Avhandlingen bildar en begriplig och tillräckligt logisk helhet. Avhandlingen har brister, men uppfyller de krav som ställs på ett examensarbete på flera av de delområden som bedömningen gäller."
+            },
+            {
+                "title": "1 (försvarlig)",
+                "text": "Avhandlingen innehåller en del av det som är väsentligt för ämnet i en tämligen logisk ordning och överstiger gränsen för godkänt. Avhandlingen har flera brister, men den uppfyller på ett försvarligt sätt de krav som ställs på ett examensarbete på flera av de delområden som bedömningen gäller."
+            },
+            {
+                "title": "0 (underkänd)",
+                "text": "Avhandlingen är osammanhängande och ologisk och bildar inte en helhet. De krav som ställs på de delområden som bedömningen av avhandlingen gäller uppfylls inte på ett sätt som kan godkännas."
+            }
+        ]
+    },
+    {
+        "title": "2. Delområden som bedömningen gäller",
+        "text": "De delområden som ska bedömas finns på bedömningsblanketten i e-thesis med bedömningsskalan 0–5. Utbildningsprogrammen/fakulteterna utfärdar närmare anvisningar om bedömningen av delområden och bedömningskriterier. Vid bedömningen av avhandlingen fäster man uppmärksamhet vid följande huvudpunkter:"    
+    },
+    {
+        "title": "1. Forskningsämne och syfte",
+        "list": [
+            {
+                "text": "motiveringen av ämnet för avhandlingen och ämnets relevans"
+            },
+            {
+                "text": "idén och avgränsningen av ämnet"
+            },
+            {
+                "text": "tydlig utformning av forskningsuppgiften och målet, forskningsproblem eller forskningstema"
+            },
+            {
+                "text": "beaktandet av forskningsetiska aspekter"
+            }
+        ]
+    },
+    {
+        "title": "2. Kunskaper om och teoretisk förtrogenhet med forskningsområdet och användning av litteratur",
+        "list": [
+            {
+                "text": "förtrogenheten med forskning och litteratur som anknyter till ämnet"
+            },
+            {
+                "text": "perspektivets och begreppens relevans för forskningsproblemet"
+            },
+            {
+                "text": "mångsidig användning av källorna"
+            },
+            {
+                "text": "källkritik och användningen av vetenskapliga originalkällor"
+            },
+            {
+                "text": "analys och syntes av infallsvinklarna i de skriftliga källorna "
+            }
+        ]
+    },
+    {
+        "title": "3. Material, datainsamling och analyser",
+        "list": [
+            {
+                "text": "metoden är lämplig för forskningsuppgiften"
+            },
+            {
+                "text": "beskrivningen av metoden är uttömmande (strategi, datainsamling och analys)"
+            },
+            {
+                "text": "tillräckligt och lämpligt material för forskningsuppgiften och analysmetoden"
+            },
+            {
+                "text": "beskrivningen av materialet"
+            },
+            {
+                "text": "kritiskt utvärderande metodanvändning"
+            },
+            {
+                "text": "beaktandet av forskningsetiska aspekter"
+            }
+        ]
+    },
+    {
+        "title": "4. Forskningsresultat och redovisning av resultaten",
+        "list": [
+            {
+                "text": "resultaten innehåller svar på forskningsuppgiften "
+            },
+            {
+                "text": "logisk och tydlig redovisning av resultaten"
+            },
+            {
+                "text": "åskådlighet: bilder, figurer, tabeller i förhållande till texten"
+            }
+        ]
+    },
+    {
+        "title": "5. Granskning av resultaten (reflektion) och slutsatser",
+        "list": [
+            {
+                "text": "forskningsresultatens samband med tidigare forskning"
+            },
+            {
+                "text": "formulering av nya forskningsfrågor"
+            },
+            {
+                "text": "möjliga sätt att tillämpa forskningen tas upp i reflektionen"
+            },
+            {
+                "text": "reliabilitetsanalysen är anpassad till forskningsgreppet"
+            },
+            {
+                "text": "forskningsetiska aspekter tas upp i reflektionen"
+            },
+            {
+                "text": "kritisk och grundlig granskning av forskningsprocessen och resultaten"
+            },
+            {
+                "text": "grundliga, tillförlitliga och insiktsfulla slutledningar"
+            },
+            {
+                "text": "slutledningarnas förankring i resultaten"
+            }
+        ]
+    },
+    {
+    	"title": "6. Avhandlingens disposition, tydlighet och utförande",
+    	"list": [
+    	    {
+                "text": "tydlig disposition som passar forskningsgreppet"
+            },
+            {
+                "text": "behärskningen av vetenskaplig sakprosa (varierar beroende på forskningsgreppet)"
+            },
+            {
+                "text": "författarens egna tolkningar och fakta som presenteras i källorna både särskiljs och ställs i relation till varandra på ett tydligt och smidigt sätt"
+            },
+            {
+                "text": "språkriktighet"
+            },
+            {
+                "text": "korrekt och konsekvent källangivelse"
+            },
+            {
+                "text": "tydlig och felfri källförteckning"
+            },
+            {
+                "text": "oklanderlig layout"
+            }
+    	]
+    },
+    {
+    	"title": "7. Arbetssätt under arbetet med avhandlingen",
+    	"list": [
+    	    {
+                "text": "fördomsfritt och självständigt"
+            },
+            {
+                "text": "tillgodogörande av metoder och kreativ problemlösning"
+            },
+            {
+                "text": "slutförande av processen enligt den planerade tidtabellen"
+            }
+    	]
+    }
+
+]

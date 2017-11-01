@@ -11,7 +11,8 @@ class NavBar extends Component {
             { path: '/agreement', text: 'Agreement' },
             { path: '/theses', text: 'Theses' },
             { path: '/gradermanagement', text: 'Supervisor management' },
-            { path: '/thesis', text: 'New thesis' }
+            { path: '/thesis', text: 'New thesis' },
+            { path: '/assesment', text: 'Assesment of theses'}
         ]
     }
 
