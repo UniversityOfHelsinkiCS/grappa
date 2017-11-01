@@ -25,3 +25,9 @@ export async function updatePerson(personData) {
     .then(personId => personId[0])
     .catch(err => err);
 }
+
+export const getPersonById = (id) => {
+    return knex.select().from('person').where('personId', id)
+        .then(person => person)
+        .catch(err => err);
+}
