@@ -34,3 +34,8 @@ export async function updatePerson(req, res) {
         res.status(500).json({text: "person does not exist"});
     }
 }
+
+export async function getPersonById(req, res) {
+    const person = await personService.getPersonById(req.params.id);
+    res.status(200).json(person);
+}

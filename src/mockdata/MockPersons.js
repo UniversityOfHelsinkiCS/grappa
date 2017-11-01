@@ -6,7 +6,7 @@ module.exports = [
         title: 'Dr.',
         firstname: 'Supervisor',
         lastname: 'Lastname',
-        isRetired: false,
+        isRetired: 0,
     },
     {
         personId: 2,
@@ -15,7 +15,7 @@ module.exports = [
         title: 'Prof.',
         firstname: 'Olavi',
         lastname: 'Uusivirta',
-        isRetired: false,
+        isRetired: 0,
     },
     {
         personId: 3,
@@ -24,7 +24,7 @@ module.exports = [
         title: 'Other',
         firstname: 'Anna',
         lastname: 'Puu',
-        isRetired: false,
+        isRetired: 0,
     },
     {
         personId: 4,
@@ -33,6 +33,6 @@ module.exports = [
         title: 'Ms',
         firstname: 'Retired',
         lastname: 'Person',
-        isRetired: true,
+        isRetired: 1,
     }
 ];

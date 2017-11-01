@@ -1,4 +1,3 @@
-const mockAgreements = require('../mockdata/MockAgreements');
 const knex = require('../../connection');
 
 export const getAgreementById = (id) => {
