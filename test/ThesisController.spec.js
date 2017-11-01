@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import router from '../src/routes/theses.js';
 
 const reqres = require('reqres');
+const request = require('supertest');
 
 let req;
 let res;
@@ -49,4 +50,19 @@ test.cb('getAllTheses returns correct information', t => {
     service.getAllTheses.restore();
 });
 
-
+test.cb('saveAgreement works from controller', t => {
+    const body ={
+        title: 'Annin Grady',
+        urkund: 'http://',
+        grade: 4,
+        graderEval: 'Tarkastajien esittely',
+        userId: 1
+    };
+    req.body = body;
+    thesisController.saveThesis(req, res)
+        .then(() => {
+            console.log("STATUS " + JSON.stringify(res));
+            t.is(res.status.calledWith(200), true, "saveThesis returns status 200 for new thesis");
+            t.end();
+        });
+});
