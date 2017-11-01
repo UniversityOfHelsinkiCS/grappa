@@ -10,6 +10,7 @@ import AgreementForm from './components/agreement/AgreementForm';
 import Agreement from './components/agreement/Agreement';
 import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
+import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
 import ThesisManage from './containers/thesis/ThesisManagePage';
 import CouncilmeetingManage from './containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from './containers/councilmeeting/CouncilmeetingViewPage';
@@ -37,6 +38,7 @@ ReactDOM.render(
                         <Route exact path="/thesis" component={ThesisManage} />
                         <Route exact path="/councilmeeting" component={CouncilmeetingView} />
                         <Route exact path="/councilmeetings" component={CouncilmeetingManage} />
+                        <Route exact path="/assesment" component={AssesmentOfTheses}/>
                     </Switch>
                 </div>
             </div>

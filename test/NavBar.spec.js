@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import NavBar from '../src/components/NavBar.js';
 
-const expectedLinkAmount = 6;
+const expectedLinkAmount = 7;
 
 test('Basic NavBar has elements', t => {
     const wrapper = shallow(<NavBar/>);
