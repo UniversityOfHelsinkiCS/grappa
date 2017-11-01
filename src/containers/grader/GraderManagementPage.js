@@ -21,7 +21,7 @@ export class GraderManagementPage extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
 
                 <div className="ui segment">
                     <p>

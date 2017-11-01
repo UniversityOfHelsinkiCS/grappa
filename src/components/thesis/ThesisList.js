@@ -40,7 +40,7 @@ class ThesisList extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" value={this.state.searchTerm} type="text" placeholder="Filter theses" onChange={this.handleFilteringTheses} />

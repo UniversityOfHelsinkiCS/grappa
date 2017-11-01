@@ -23,16 +23,18 @@ import './media/App.css';
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <div>
+            <div className="App">
                 <NavBar />
-                <Switch>
-                    <Route exact path="/" component={App} />
-                    <Route exact path="/agreementform" component={AgreementForm} />
-                    <Route exact path="/agreement" component={Agreement} />
-                    <Route exact path="/theses" component={ThesisList} />
-                    <Route exact path="/graderManagement" component={GraderManagement} />
-                    <Route exact path="/thesis" component={ThesisManage} />
-                </Switch>
+                <div className="ui left aligned container">
+                    <Switch>
+                        <Route exact path="/" component={App} />
+                        <Route exact path="/agreementform" component={AgreementForm} />
+                        <Route exact path="/agreement" component={Agreement} />
+                        <Route exact path="/theses" component={ThesisList} />
+                        <Route exact path="/graderManagement" component={GraderManagement} />
+                        <Route exact path="/thesis" component={ThesisManage} />
+                    </Switch>
+                </div>
             </div>
         </Router>
     </Provider>,

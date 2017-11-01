@@ -160,9 +160,7 @@ export class Agreement extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="ui left aligned container">
-
+            <div>
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                     <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
@@ -174,7 +172,6 @@ export class Agreement extends Component {
                         fieldOnChangeFunc={this.handleFormChange} />
                         {this.getResponseMessage()}
                     <br />
-                </div>
             </div>
 
         );
