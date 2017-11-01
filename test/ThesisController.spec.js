@@ -17,8 +17,6 @@ test.beforeEach(async t => {
     thesisController = require('../src/controllers/ThesisController');
 });
 
-test.afterEach(async t => {
-});
 
 test.cb('getThesisById', t => {
     const stub = sinon.stub(service, "getThesisById");
@@ -51,19 +49,4 @@ test.cb('getAllTheses returns correct information', t => {
     service.getAllTheses.restore();
 });
 
-test.cb('saveAgreement', t => {
-    const body ={
-        title: 'Annin Grady',
-        urkund: 'http://',
-        grade: 4,
-        graderEval: 'Tarkastajien esittely',
-        userId: 1
-    };
-    req.body = body;
-    thesisController.saveThesis(req, res)
-        .then(() => {
-            console.log("STATUS " + JSON.stringify(res));
-            t.is(res.status.calledWith(200), true, "saveThesis returns status 200 for new thesis");
-            t.end();
-        });
-});
+
