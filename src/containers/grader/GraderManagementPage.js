@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //import service from "../../util/apiConnection.js";
+import { callApi } from "../../util/apiConnection.js";
 import GraderEditor from "../../components/grader/GraderEditor.js"
 import { connect } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
 export class GraderManagementPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            supervisors: ['default1', 'default2']
+        }
+    }
 
     componentDidMount() {
-        document.title = "Grappa: Grader and Supervisor Management";
+        document.title = "Grader and Supervisor Management";
+        callApi("/supervisors").then((resp) => {
+            var supervis = resp.data.map((supervis) => supervis);
+            this.setState(
+                {
+                    supervisors: supervis
+                }
+            );
+        }).catch((error) => console.error(error));
     }
 
     handleSaveGrader = (grader) => {
@@ -29,6 +44,11 @@ export class GraderManagementPage extends Component {
                     </p>
                     <p> Does not work yet and should be refactored since the customer wanted this to be implemented differently. Redux works anyway.
                     </p>
+                    <ul class="ui list"> { this.state.supervisors.map(supervis => (
+                            <li>supervisor: {supervis}</li>
+                        ))
+                    }
+                    </ul>
                     <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
                         //mockdata so that updateGrader doesn't crash before back end really gives data
                         title: "Dr.",
