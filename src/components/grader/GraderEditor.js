@@ -47,7 +47,6 @@ export default class GraderEditor extends Component {
     }
 
     renderCreate() {
-        console.log(this.state);
         return (
             <div className="three fields">
                 <div className="ui field">

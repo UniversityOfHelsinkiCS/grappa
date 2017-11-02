@@ -85,7 +85,7 @@ export const getGradersFailure = function (error) {
 
 export const getGraders = (grader) => {
     return (dispatch) => {
-        dispatch(saveAddedAttempt());
+        dispatch(getGradersAttempt());
         callApi('/supervisors', 'get', grader)
             .then(res =>  dispatch(getGradersSuccess(res)))
             .catch(err => dispatch(getGradersFailure(err.response)));

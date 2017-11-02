@@ -10,14 +10,15 @@ export class GraderManagementPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            supervisors: ['default1', 'default2']
+            supervisors: []
         }
     }
 
     componentDidMount() {
         document.title = "Grader and Supervisor Management";
         callApi("/supervisors").then((resp) => {
-            var supervis = resp.data.map((supervis) => supervis);
+            let supervis = resp.data.map((superviso) => superviso);
+            console.log("backista:", resp.data);
             this.setState(
                 {
                     supervisors: supervis
@@ -44,8 +45,8 @@ export class GraderManagementPage extends Component {
                     </p>
                     <p> Does not work yet and should be refactored since the customer wanted this to be implemented differently. Redux works anyway.
                     </p>
-                    <ul class="ui list"> { this.state.supervisors.map(supervis => (
-                            <li>supervisor: {supervis}</li>
+                    <ul class="ui list"> { this.state.supervisors.map(supervisor => (
+                            <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
                         ))
                     }
                     </ul>
