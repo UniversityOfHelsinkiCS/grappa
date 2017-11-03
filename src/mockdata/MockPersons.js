@@ -6,7 +6,11 @@ module.exports = [
         title: 'Dr.',
         firstname: 'Supervisor',
         lastname: 'Lastname',
-        isRetired: 0,
+        isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Leppäsuonkatu'),
+        phone: '050 1234567',
+        major: 'Käpistely'
     },
     {
         personId: 2,
@@ -15,7 +19,11 @@ module.exports = [
         title: 'Prof.',
         firstname: 'Olavi',
         lastname: 'Uusivirta',
-        isRetired: 0,
+        isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Leppäsuonkatu'),
+        phone: '050 1234567',
+        major: 'Matte'
     },
     {
         personId: 3,
@@ -24,7 +32,11 @@ module.exports = [
         title: 'Other',
         firstname: 'Anna',
         lastname: 'Puu',
-        isRetired: 0,
+        isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Väinö Auerin katu'),
+        phone: '050 1234567',
+        major: 'Kemma'
     },
     {
         personId: 4,
@@ -33,6 +45,10 @@ module.exports = [
         title: 'Ms',
         firstname: 'Retired',
         lastname: 'Person',
-        isRetired: 1,
+        isRetired: true,
+        studentNumber: ('012345678'),
+        address: ('Mannerheimintie'),
+        phone: '050 1234567',
+        major: 'geologiaa'
     }
 ];

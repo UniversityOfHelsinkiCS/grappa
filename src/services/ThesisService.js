@@ -20,13 +20,19 @@ export const getThesisById = (id) => {
         });
 }
 
-export const getThesisByStudyfield = (studyfield) => {
-    // what is this? there is no studyfield table in db yet. This method uses mockdata.
-    let thesesByStudyfield = [];
-    for (let i = 0; i < thesesList.length; i++) {
-        if (thesesList[i].studyFieldId === studyfield) {
-            thesesByStudyfield.push(thesesList[i]);
-        }
-    }
-    return thesesByStudyfield;
+export const saveThesis = (data) => {
+    return knex('thesis')
+    .returning('thesisId')
+    .insert(data)
+    .then(thesisId => thesisId[0])
+    .catch(err => err);
+}
+
+export async function updateThesis(thesisData) {
+    return await knex('thesis')
+    .returning('thesisId')
+    .where('thesisId', '=', thesisData.thesisId)
+    .update(thesisData)
+    .then(thesisId => thesisId[0])
+    .catch(err => err);
 }
