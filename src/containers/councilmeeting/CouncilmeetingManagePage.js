@@ -39,7 +39,7 @@ export class CouncilmeetingManagePage extends Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.initDates(this.props);
   }
 
@@ -77,15 +77,11 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   saveMeeting = () => {
-    console.log("Saving")
-    console.log(this.state.newCouncilmeeting);
-    //this.props.saveCouncilmeeting(this.state.newCouncilmeeting);
+    this.props.saveCouncilmeeting(this.state.newCouncilmeeting);
   }
 
   updateMeeting = () => {
-    console.log("Updating")
-    console.log(this.state.updateCouncilmeeting);
-    //this.props.updateCouncilmeeting(meeting);
+    this.props.updateCouncilmeeting(this.state.updateCouncilmeeting);
   }
 
   selectMeeting = (meeting) => () => {
@@ -93,9 +89,7 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   deleteMeeting = (meeting) => () => {
-    console.log("Deleting")
-    console.log(meeting);
-    //this.props.deleteCouncilmeeting(this.state.shownDates[index]);    
+    this.props.deleteCouncilmeeting(meeting);    
   }
 
   renderCreate(newCouncilmeeting) {
