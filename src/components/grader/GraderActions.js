@@ -15,14 +15,14 @@ export const GET_GRADERS_FAILURE = 'GET_GRADERS_FAILURE';
 export const saveAddedAttempt = function () {
     return {
         type: ADD_GRADER_SAVE_ATTEMPT,
-        text: 'Arvioijan/ohjaajan lisäys käynnistetty'
+        text: 'Trying to save a grader/supervisor'
     };
 }
 
 export const saveAddedSuccess = function (data) {
     return {
         type: ADD_GRADER_SAVE_SUCCESS,
-        text: 'Arvioija/ohjaaja lisätty onnistuneesti',
+        text: 'Grader/supervisor added',
         data
     };
 }
@@ -30,7 +30,7 @@ export const saveAddedSuccess = function (data) {
 export const saveAddedFailure = function (error) {
     return {
         type: ADD_GRADER_SAVE_FAILURE,
-        text: 'Arvioijan/ohjaajan lisäys epäonnistui',
+        text: 'Couldn\'t save a grader/supervisor',
         error
     };
 }
@@ -38,14 +38,14 @@ export const saveAddedFailure = function (error) {
 export const saveUpdatedAttempt = function () {
     return {
         type: UPDATE_GRADER_SAVE_ATTEMPT,
-        text: 'Arvioijan/ohjaajan päivitys käynnistetty'
+        text: 'Trying to update a grader/supervisor'
     };
 }
 
 export const saveUpdatedSuccess = function (data) {
     return {
         type: UPDATE_GRADER_SAVE_SUCCESS,
-        text: 'Arvioijan/ohjaajan päivitys onnistui',
+        text: 'Grader/supervisor updated',
         data
     };
 }
@@ -53,7 +53,7 @@ export const saveUpdatedSuccess = function (data) {
 export const saveUpdatedFailure = function (error) {
     return {
         type: UPDATE_GRADER_SAVE_FAILURE,
-        text: 'Arvioijan/ohjaajan päivitys epäonnistui',
+        text: 'Couldn\'t update a grader/supervisor',
         error
     };
 }
@@ -62,14 +62,14 @@ export const saveUpdatedFailure = function (error) {
 export const getGradersAttempt = function () {
     return {
         type: GET_GRADERS_ATTEMPT,
-        text: 'Ohjaajien haku tietokannasta käynnistetty'
+        text: 'Trying to get graders/supervisors'
     };
 }
 
 export const getGradersSuccess = function (data) {
     return {
         type: GET_GRADERS_SUCCESS,
-        text: 'Ohjaajien haku tietokannasta onnistui',
+        text: 'Managed to get graders/supervisors',
         data
     };
 }
@@ -77,11 +77,10 @@ export const getGradersSuccess = function (data) {
 export const getGradersFailure = function (error) {
     return {
         type: GET_GRADERS_FAILURE,
-        text: 'Ohjaajien haku tietokannasta epäonnistui',
+        text: 'Couldn\'t get graders/supervisors',
         error
     };
 }
-
 
 export const getGraders = (grader) => {
     return (dispatch) => {

@@ -68,7 +68,7 @@ const graderSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
-                formClass: "",
+                formClass: "error",
                 completed: true
             }];
         case GET_GRADERS_SUCCESS:
@@ -76,7 +76,7 @@ const graderSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
-                formClass: "",
+                formClass: "success",
                 completed: true
             }];
         default:

@@ -54,6 +54,7 @@ export class GraderManagementPage extends Component {
                     </ul>
 
                     <h2>Edit supervisor list</h2>
+                    <p>Updating not working on backend yet, sorry</p>
                     <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
                         this.state.supervisors.map(supervisor => (supervisor))
                     } />
