@@ -56,7 +56,7 @@ class ThesisList extends Component {
                         </tr>
                     </thead>
                     <tbody>{this.state.filteredTheses.map((thesis) =>
-                        <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
+                        <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.thesisTitle}</td><td>{thesis.grade}</td></tr>
                     )}</tbody>
                 </table>
                 <div className="ui segment">
