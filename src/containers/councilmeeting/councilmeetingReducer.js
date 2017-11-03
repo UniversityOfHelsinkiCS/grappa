@@ -5,9 +5,9 @@ const agreementSave = (state = [], action) => {
         case "COUNCILMEETING_SAVE_ONE_SUCCESS":
             return  [...state, action.response];
         case "COUNCILMEETING_UPDATE_ONE_SUCCESS":
-            return [...state.filter(meeting => meeting.id !== action.response.id), action.response];
+            return [...state.filter(meeting => meeting.id == action.response.id), action.response];
         case "COUNCILMEETING_DELETE_ONE_SUCCESS":
-            return state.filter(meeting => meeting.id !== action.response.id);
+            return state.filter(meeting => meeting.id !== action.response);
         default:
             return state;
     }
