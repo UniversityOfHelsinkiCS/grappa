@@ -28,7 +28,7 @@ class ThesisList extends Component {
         var value = e.target.value.toLowerCase();
         //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
         var filtered = (value === "") ? this.state.theses : this.state.theses.filter((thesis) =>
-            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) ||  thesis.title.toLowerCase().includes(value) || thesis.grade.toString() === value)
+            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) ||  thesis.thesisTitle.toLowerCase().includes(value) || thesis.grade.toString() === value)
         );
         this.setState(
             {
