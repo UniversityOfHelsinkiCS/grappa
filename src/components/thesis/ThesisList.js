@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
-import NavBar from '../NavBar';
 import { callApi } from "../../util/apiConnection.js";
 
 class ThesisList extends Component {
@@ -30,7 +28,7 @@ class ThesisList extends Component {
         var value = e.target.value.toLowerCase();
         //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
         var filtered = (value === "") ? this.state.theses : this.state.theses.filter((thesis) =>
-            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) ||  thesis.title.toLowerCase().includes(value) || thesis.grade.toString() === value)
+            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) ||  thesis.thesisTitle.toLowerCase().includes(value) || thesis.grade.toString() === value)
         );
         this.setState(
             {
@@ -43,10 +41,6 @@ class ThesisList extends Component {
     render() {
         return (
             <div className="App">
-                <div className="ui inverted segment">
-                    <h2>Thesis List</h2>
-                </div>
-                <NavBar active={"Theses"} />
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" value={this.state.searchTerm} type="text" placeholder="Filter theses" onChange={this.handleFilteringTheses} />
@@ -62,7 +56,7 @@ class ThesisList extends Component {
                         </tr>
                     </thead>
                     <tbody>{this.state.filteredTheses.map((thesis) =>
-                        <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.title}</td><td>{thesis.grade}</td></tr>
+                        <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.thesisTitle}</td><td>{thesis.grade}</td></tr>
                     )}</tbody>
                 </table>
                 <div className="ui segment">

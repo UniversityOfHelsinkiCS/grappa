@@ -9,10 +9,6 @@ import ThesisList from '../../src/components/thesis/ThesisList';
 const thesisApp = <ThesisList/>
 const wrapper = shallow(thesisApp);
 
-test('has a correct title', t => {
-    t.truthy(wrapper.contains(<h2>Thesis List</h2>));
-});
-
 test('should have a table element', t => {
     t.is(wrapper.find('table').length, 1);
 });
