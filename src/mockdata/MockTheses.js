@@ -1,7 +1,7 @@
 module.exports = [
     { 
         thesisId: 1,
-        title: 'Annin Grady',
+        thesisTitle: 'Annin Grady',
         performancePlace: 'Hima',
         urkund: 'http://',
         grade: 4,
@@ -10,7 +10,7 @@ module.exports = [
     },
     {
         thesisId: 2,
-        title: 'Hieno Gradu',
+        thesisTitle: 'Hieno Gradu',
         performancePlace: 'Hima',
         urkund: 'http://',
         grade: 1,
@@ -19,7 +19,7 @@ module.exports = [
     },
     {
         thesisId: 3,
-        title: 'Amazing Thesis',
+        thesisTitle: 'Amazing Thesis',
         performancePlace: 'Hima',
         urkund: 'http://',
         grade: 4,
