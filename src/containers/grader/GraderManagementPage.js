@@ -38,29 +38,18 @@ export class GraderManagementPage extends Component {
     render() {
         return (
             <div className="App">
-
                 <div className="ui segment">
                     <p>
                         Add supervisors and edit the list of supervisors here. This page will be displayed to studyfields' professors and admins only.
                     </p>
-                    <p> Does not work yet and should be refactored since the customer wanted this to be implemented differently. Redux works anyway.
-                    </p>
-                    <ul class="ui list"> { this.state.supervisors.map(supervisor => (
-                            <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
-                        ))
+                    <ul class="ui list"> {this.state.supervisors.map(supervisor => (
+                        <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
+                    ))
                     }
                     </ul>
-                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
-                        //mockdata so that updateGrader doesn't crash before back end really gives data
-                        title: "Dr.",
-                        name: "Nimi",
-                        id: 1
-                    },
-                    {
-                        title: "Prof.",
-                        name: "Nimi2",
-                        id: 2
-                    }]} />
+                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
+                        this.state.supervisors.map(supervisor => (supervisor))
+                    } />
 
                 </div>
             </div>
