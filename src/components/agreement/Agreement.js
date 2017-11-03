@@ -85,20 +85,8 @@ export class Agreement extends Component {
 
         if (event !== undefined)
             event.preventDefault();
+        this.props.saveAgreement(this.state.form);
 
-        //THIS IS HOW IT SHOULD WORK
-        //this.props.saveAgreement(this.state.form);
-
-        //GUM-FIX
-        const gumFixReturn = {
-            authorId: 1,
-            thesisId: 2,
-            responsibleSupervisorId: this.state.form.thesisSupervisorMain,
-            studyFieldId: 1,
-            fake: true,
-            studentGradeGoal: this.state.form.studentGradeGoal
-        }
-        this.props.saveAgreement(gumFixReturn);
     }
 
     formFieldInfo =  {
