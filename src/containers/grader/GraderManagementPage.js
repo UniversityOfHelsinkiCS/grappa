@@ -44,7 +44,7 @@ export class GraderManagementPage extends Component {
                     </p>
 
                     <h2>Thesis projects</h2>
-                    {<ThesisList />}
+                    <ThesisList fields={4} />
 
                     <h2>List of all supervisors</h2>
                     <ul class="ui list"> {this.state.supervisors.map(supervisor => (

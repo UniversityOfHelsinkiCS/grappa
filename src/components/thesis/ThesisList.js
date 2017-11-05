@@ -28,7 +28,7 @@ class ThesisList extends Component {
         var value = e.target.value.toLowerCase();
         //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
         var filtered = (value === "") ? this.state.theses : this.state.theses.filter((thesis) =>
-            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) ||  thesis.thesisTitle.toLowerCase().includes(value) || thesis.grade.toString() === value)
+            (thesis.authorLastname.toLowerCase().includes(value) || thesis.authorFirstname.toLowerCase().includes(value) || thesis.thesisTitle.toLowerCase().includes(value) || thesis.grade.toString() === value)
         );
         this.setState(
             {
@@ -36,6 +36,33 @@ class ThesisList extends Component {
                 searchTerm: value
             }
         );
+    }
+
+    renderTable() {
+        return (
+            <table className="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Title</th>
+                        <th>Grade</th>
+                        {this.props.fields === 4 && //is 4 on supervisor management page
+                            <th>Action needed, if any</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>{this.state.filteredTheses.map((thesis) =>
+                    <tr key={thesis.thesisId}>
+                        <td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td>
+                        <td>{thesis.thesisTitle}</td>
+                        <td>{thesis.grade}</td>
+                        {this.props.fields === 4 &&
+                            <td>Process needs approval? Needs grader approval?</td>
+                        }
+                    </tr>
+                )}</tbody>
+            </table>
+        )
     }
 
     render() {
@@ -47,18 +74,7 @@ class ThesisList extends Component {
                         <i className="search icon"></i>
                     </div>
                 </div>
-                <table className="ui celled table">
-                    <thead>
-                        <tr>
-                            <th>Author</th>
-                            <th>Title</th>
-                            <th>Grade</th>
-                        </tr>
-                    </thead>
-                    <tbody>{this.state.filteredTheses.map((thesis) =>
-                        <tr key={thesis.id}><td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td><td>{thesis.thesisTitle}</td><td>{thesis.grade}</td></tr>
-                    )}</tbody>
-                </table>
+                {this.renderTable()}
                 <div className="ui segment">
                 </div>
             </div>
