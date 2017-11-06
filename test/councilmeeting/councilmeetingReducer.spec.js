@@ -2,7 +2,7 @@ import test from 'ava';
 import sinon from 'sinon';
 import { reducerTest } from 'redux-ava';
 
-import agreementSave from '../../src/containers/councilmeeting/councilmeetingReducer';
+import reducer from '../../src/containers/councilmeeting/councilmeetingReducer';
 
 const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"}
 const councilmeetingEdited = { id: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: "date"}
@@ -15,7 +15,7 @@ const stateWithCouncilmeetings = councilmeetings;
 const stateWithEditedCouncilmeeting = [ councilmeeting2 ];
 
 test('get all success changes state correctly', reducerTest(
-    agreementSave,
+    reducer,
     [],
     {
         type: "COUNCILMEETING_GET_ALL_SUCCESS", 
@@ -25,7 +25,7 @@ test('get all success changes state correctly', reducerTest(
 ));
 
 test('save success changes state correctly', reducerTest(
-    agreementSave,
+    reducer,
     [],
     {
         type: "COUNCILMEETING_SAVE_ONE_SUCCESS", 
@@ -36,7 +36,7 @@ test('save success changes state correctly', reducerTest(
 
 
 test('update success changes state correctly', reducerTest(
-    agreementSave,
+    reducer,
     [ councilmeeting ],
     {
         type: "COUNCILMEETING_UPDATE_ONE_SUCCESS", 
@@ -46,7 +46,7 @@ test('update success changes state correctly', reducerTest(
 ));
 
 test('delete success changes state correctly', reducerTest(
-    agreementSave,
+    reducer,
     stateWithACouncilmeeting,
     {
         type: "COUNCILMEETING_DELETE_ONE_SUCCESS", 

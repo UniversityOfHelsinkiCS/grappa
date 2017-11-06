@@ -14,6 +14,7 @@ import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
 import ThesisManage from './containers/thesis/ThesisManagePage';
 import CouncilmeetingManage from './containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from './containers/councilmeeting/CouncilmeetingViewPage';
+import EmailDraftPage from './containers/email/EmailDraftPage';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
@@ -38,6 +39,7 @@ ReactDOM.render(
                         <Route exact path="/thesis" component={ThesisManage} />
                         <Route exact path="/councilmeeting" component={CouncilmeetingView} />
                         <Route exact path="/councilmeetings" component={CouncilmeetingManage} />
+                        <Route exact path="/emaildrafts" component={EmailDraftPage} />
                         <Route exact path="/assesment" component={AssesmentOfTheses}/>
                     </Switch>
                 </div>

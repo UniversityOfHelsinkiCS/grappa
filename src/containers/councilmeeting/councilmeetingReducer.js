@@ -1,4 +1,4 @@
-const agreementSave = (state = [], action) => {
+const reducer = (state = [], action) => {
     switch (action.type) {
         case "COUNCILMEETING_GET_ALL_SUCCESS":
             return action.response;
@@ -13,4 +13,4 @@ const agreementSave = (state = [], action) => {
     }
 };
 
-export default agreementSave;
+export default reducer;

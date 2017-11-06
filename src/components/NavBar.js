@@ -11,7 +11,8 @@ export default class NavBar extends Component {
             { path: '/graderManagement', text: 'Supervisor management' },
             /*{ path: '/thesis', text: 'New thesis' },
             { path: '/councilmeeting', text: 'Next councilmeeting' },
-            { path: '/councilmeetings', text: 'Councilmeetings' },*/          
+            { path: '/councilmeetings', text: 'Councilmeetings' },
+            { path: '/emaildrafts', text: 'Email drafts' },*/
             { path: '/assesment', text: 'Assesment of theses' },
         ];
 
