@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 //import service from "../../util/apiConnection.js";
+import { callApi } from "../../util/apiConnection.js";
 import GraderEditor from "../../components/grader/GraderEditor.js"
+import ThesisList from "../../components/thesis/ThesisList.js"
 import { connect } from "react-redux";
 import { saveAddedGrader, saveUpdatedGrader, getGraders } from "../../components/grader/GraderActions.js";
 
 export class GraderManagementPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            supervisors: []
+        }
+    }
 
     componentDidMount() {
-        document.title = "Grappa: Grader and Supervisor Management";
+        document.title = "Grader and Supervisor Management";
+        callApi("/supervisors").then((resp) => {
+            let supervis = resp.data.map((superviso) => superviso);
+            this.setState(
+                {
+                    supervisors: supervis
+                }
+            );
+        }).catch((error) => console.error(error));
     }
 
     handleSaveGrader = (grader) => {
@@ -22,25 +38,26 @@ export class GraderManagementPage extends Component {
     render() {
         return (
             <div className="App">
-
-                <div className="ui segment">
+                <div className="ui left aligned segment">
                     <p>
-                        Add supervisors and edit the list of supervisors here. This page will be displayed to studyfields' professors and admins only.
+                        Add and edit supervisor list here or review thesis projects (to be added soon!). This page will be displayed to studyfields' professors and admins only.
                     </p>
-                    <p> Does not work yet and should be refactored since the customer wanted this to be implemented differently. Redux works anyway.
-                    </p>
-                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={[{
-                        //mockdata so that updateGrader doesn't crash before back end really gives data
-                        title: "Dr.",
-                        name: "Nimi",
-                        id: 1
-                    },
-                    {
-                        title: "Prof.",
-                        name: "Nimi2",
-                        id: 2
-                    }]} />
 
+                    <h2>Thesis projects</h2>
+                    {<ThesisList />}
+
+                    <h2>List of all supervisors</h2>
+                    <ul class="ui list"> {this.state.supervisors.map(supervisor => (
+                        <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
+                    ))
+                    }
+                    </ul>
+
+                    <h2>Edit supervisor list</h2>
+                    <p>Updating not working on backend yet, sorry</p>
+                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
+                        this.state.supervisors.map(supervisor => (supervisor))
+                    } />
                 </div>
             </div>
         );
