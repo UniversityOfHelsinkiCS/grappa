@@ -72,6 +72,7 @@
     "start": "API_URL=http://localhost:3100 node scripts/start.js",
     "build": "API_URL=/api/ node scripts/build.js",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
+    "wintest": "ava",
     "report": "nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./**/*.js || true"

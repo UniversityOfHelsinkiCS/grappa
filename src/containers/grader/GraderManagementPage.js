@@ -37,28 +37,26 @@ export class GraderManagementPage extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="ui left aligned segment">
-                    <p>
-                        Add and edit supervisor list here or review thesis projects (to be added soon!). This page will be displayed to studyfields' professors and admins only.
+            <div className="ui segment">
+                <p>
+                    Add and edit supervisor list here or review thesis projects (to be added soon!). This page will be displayed to studyfields' professors and admins only.
                     </p>
 
-                    <h2>Thesis projects</h2>
-                    {<ThesisList />}
+                <h2>Thesis projects</h2>
+                {<ThesisList />}
 
-                    <h2>List of all supervisors</h2>
-                    <ul class="ui list"> {this.state.supervisors.map(supervisor => (
-                        <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
-                    ))
-                    }
-                    </ul>
+                <h2>List of all supervisors</h2>
+                <ul class="ui list"> {this.state.supervisors.map(supervisor => (
+                    <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
+                ))
+                }
+                </ul>
 
-                    <h2>Edit supervisor list</h2>
-                    <p>Updating not working on backend yet, sorry</p>
-                    <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
-                        this.state.supervisors.map(supervisor => (supervisor))
-                    } />
-                </div>
+                <h2>Edit supervisor list</h2>
+                <p>Updating not working on backend yet, sorry</p>
+                <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
+                    this.state.supervisors.map(supervisor => (supervisor))
+                } />
             </div>
         );
     }
