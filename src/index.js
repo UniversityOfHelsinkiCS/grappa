@@ -12,6 +12,9 @@ import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
 import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
 import ThesisManage from './containers/thesis/ThesisManagePage';
+import CouncilmeetingManage from './containers/councilmeeting/CouncilmeetingManagePage';
+import CouncilmeetingView from './containers/councilmeeting/CouncilmeetingViewPage';
+import EmailDraftPage from './containers/email/EmailDraftPage';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
@@ -24,17 +27,22 @@ import './media/App.css';
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <div>
+            <div className="App">
                 <NavBar />
-                <Switch>
-                    <Route exact path="/" component={App} />
-                    <Route exact path="/agreementform" component={AgreementForm} />
-                    <Route exact path="/agreement" component={Agreement} />
-                    <Route exact path="/theses" component={ThesisList} />
-                    <Route exact path="/gradermanagement" component={GraderManagement} />
-                    <Route exact path="/thesis" component={ThesisManage} />
-                    <Route exact path="/assesment" component={AssesmentOfTheses}/>
-                </Switch>
+                <div className="ui left aligned container">
+                    <Switch>
+                        <Route exact path="/" component={App} />
+                        <Route exact path="/agreementform" component={AgreementForm} />
+                        <Route exact path="/agreement" component={Agreement} />
+                        <Route exact path="/theses" component={ThesisList} />
+                        <Route exact path="/gradermanagement" component={GraderManagement} />
+                        <Route exact path="/thesis" component={ThesisManage} />
+                        <Route exact path="/councilmeeting" component={CouncilmeetingView} />
+                        <Route exact path="/councilmeetings" component={CouncilmeetingManage} />
+                        <Route exact path="/emaildrafts" component={EmailDraftPage} />
+                        <Route exact path="/assesment" component={AssesmentOfTheses}/>
+                    </Switch>
+                </div>
             </div>
         </Router>
     </Provider>,

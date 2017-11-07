@@ -11,8 +11,11 @@ export class NavBar extends Component {
             { path: '/agreement', text: 'Agreement' },
             { path: '/theses', text: 'Theses' },
             { path: '/gradermanagement', text: 'Supervisor management' },
-            { path: '/thesis', text: 'New thesis' },
-            { path: '/assesment', text: 'Assesment of theses'}
+            { path: '/assesment', text: 'Assesment of theses'},
+            /*{ path: '/thesis', text: 'New thesis' },
+            { path: '/councilmeeting', text: 'Next councilmeeting' },
+            { path: '/councilmeetings', text: 'Councilmeetings' },
+            { path: '/emaildrafts', text: 'Email drafts' }*/
         ]
     }
 

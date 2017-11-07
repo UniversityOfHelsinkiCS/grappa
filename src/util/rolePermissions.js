@@ -11,7 +11,10 @@ const nav = {
     theses: {path: '/theses', text: 'Theses'},
     graderManagement: {path: '/graderManagement', text: 'Supervisor management'},
     thesis: {path: '/thesis', text: 'New thesis'},
-    assesment: { path: '/assesment', text: 'Assesment of theses'}
+    assesment: { path: '/assesment', text: 'Assesment of theses'},
+    councilMeeting: { path: '/councilmeeting', text: 'Next councilmeeting' },
+    councilMeetings: { path: '/councilmeetings', text: 'Councilmeetings' },
+    emailDrafts: { path: '/emaildrafts', text: 'Email drafts' }
 }
 
 const permissions = {
@@ -58,7 +61,7 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment']
+                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment'], nav['councilMeeting'], nav['councilMeetings'], nav['emailDrafts']
             ]
         }
     }

@@ -248,7 +248,7 @@ export default class ThesisCreatePage extends Component {
                 </div>
                 <button className="ui primary button" onClick={this.toggleModal}>
                     Submit
-        </button>
+                </button>
             </div>
         )
     }

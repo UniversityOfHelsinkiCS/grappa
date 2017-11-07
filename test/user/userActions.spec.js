@@ -17,10 +17,6 @@ import {
 const userTestData = { some: 'data' };
 const userTestDataError = { response: { some: 'error' } };
 
-test ('test test', t => {
-    t.truthy(true);
-});
-
 test('changeSuccess returns correct type', actionTest(
     changeSuccess,
     { data: "some data" },

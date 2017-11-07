@@ -4,7 +4,15 @@ import moment from "moment";
 import { Link } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default class CouncilmeetingManagePage extends Component {
+import { connect } from "react-redux";
+import {
+ getCouncilmeetings,
+ saveCouncilmeeting,
+ updateCouncilmeeting,
+ deleteCouncilmeeting
+} from "./councilmeetingActions";
+
+export class CouncilmeetingManagePage extends Component {
   constructor() {
     super();
     this.state = {
@@ -20,7 +28,7 @@ export default class CouncilmeetingManagePage extends Component {
   initDates(props) {
     let councilmeetings = props.Councilmeetings;
     if (!councilmeetings) {
-        return;
+      return;
     }
     const formattedDates = councilmeetings;
     const filteredDates = this.filterOldDates(councilmeetings);
@@ -31,7 +39,7 @@ export default class CouncilmeetingManagePage extends Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.initDates(this.props);
   }
 
@@ -69,25 +77,19 @@ export default class CouncilmeetingManagePage extends Component {
   }
 
   saveMeeting = () => {
-      console.log("Saving")
-      console.log(this.state.newCouncilmeeting);
-    //this.props.saveCouncilmeeting(this.state.newCouncilmeeting);
-  } 
-
-  updateMeeting = () => {
-      console.log("Updating")
-      console.log(this.state.updateCouncilmeeting);
-    //this.props.updateCouncilmeeting(meeting);
+    this.props.saveCouncilmeeting(this.state.newCouncilmeeting);
   }
 
-  selectMeeting = (meeting) => () => {  
+  updateMeeting = () => {
+    this.props.updateCouncilmeeting(this.state.updateCouncilmeeting);
+  }
+
+  selectMeeting = (meeting) => () => {
     this.setState({ updateCouncilmeeting: meeting })
   }
 
   deleteMeeting = (meeting) => () => {
-      console.log("Deleting")
-      console.log(meeting);
-    //this.props.deleteCouncilmeeting(this.state.shownDates[index]);    
+    this.props.deleteCouncilmeeting(meeting);    
   }
 
   renderCreate(newCouncilmeeting) {
@@ -197,7 +199,7 @@ export default class CouncilmeetingManagePage extends Component {
           </tr>
         </thead>
         <tbody>
-        { shownDates.map((councilmeeting, index) =>
+          {shownDates.map((councilmeeting, index) =>
             <tr key={index} onClick={this.selectMeeting(councilmeeting)}>
               <td>
                 <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.date).format("DD/MM/YYYY")}</Link>
@@ -224,64 +226,62 @@ export default class CouncilmeetingManagePage extends Component {
       </table>
     )
   }
-/*
-  renderPrintPersonView() {
-    const { shownDates } = this.state;
-    return (
-      <div className="ui form">
-        <div className="field">
-          <h2 className="ui dividing header">Upcoming councilmeetings</h2>
-          <p>
-            Instructor deadline is the last date when new theses can be accepted to the meeting.
-            Otherwise they are automatically moved to the next meeting.
-            Student deadline is the last date when students can upload their abstract to Grappa.
-          </p>
-          <div className="ui checkbox">
-            <input
-              type="checkbox"
-              checked={this.state.showOld ? "true" : ""}
-              onChange={this.handleCheckboxChange.bind(this, "toggleShowOld")}
-            />
-            <label>Show also past dates</label>
-          </div>
-          <table className="ui celled table">
-            <thead>
-              <tr>
-                <th onClick={this.handleClick.bind(this, "sort", "date")}>Date</th>
-                <th onClick={this.handleClick.bind(this, "sort", "instructorDeadline")}>Instructor deadline</th>
-                <th onClick={this.handleClick.bind(this, "sort", "studentDeadline")}>Student deadline</th>
-              </tr>
-            </thead>
-            <tbody>
-              { shownDates.map((item, index) =>
-                <tr key={index} >
-                  <td>
-                    <Link to={`/councilmeeting/${item.id}`}>{item.date.format("DD/MM/YYYY")}</Link>
-                  </td>
-                  <td>
-                    <Link to={`/councilmeeting/${item.id}`}>{item.instructorDeadline.format("DD/MM/YYYY")}</Link>
-                  </td>
-                  <td>
-                    <Link to={`/councilmeeting/${item.id}`}>{item.studentDeadline.format("DD/MM/YYYY")}</Link>
-                  </td>
+  /*
+    renderPrintPersonView() {
+      const { shownDates } = this.state;
+      return (
+        <div className="ui form">
+          <div className="field">
+            <h2 className="ui dividing header">Upcoming councilmeetings</h2>
+            <p>
+              Instructor deadline is the last date when new theses can be accepted to the meeting.
+              Otherwise they are automatically moved to the next meeting.
+              Student deadline is the last date when students can upload their abstract to Grappa.
+            </p>
+            <div className="ui checkbox">
+              <input
+                type="checkbox"
+                checked={this.state.showOld ? "true" : ""}
+                onChange={this.handleCheckboxChange.bind(this, "toggleShowOld")}
+              />
+              <label>Show also past dates</label>
+            </div>
+            <table className="ui celled table">
+              <thead>
+                <tr>
+                  <th onClick={this.handleClick.bind(this, "sort", "date")}>Date</th>
+                  <th onClick={this.handleClick.bind(this, "sort", "instructorDeadline")}>Instructor deadline</th>
+                  <th onClick={this.handleClick.bind(this, "sort", "studentDeadline")}>Student deadline</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                { shownDates.map((item, index) =>
+                  <tr key={index} >
+                    <td>
+                      <Link to={`/councilmeeting/${item.id}`}>{item.date.format("DD/MM/YYYY")}</Link>
+                    </td>
+                    <td>
+                      <Link to={`/councilmeeting/${item.id}`}>{item.instructorDeadline.format("DD/MM/YYYY")}</Link>
+                    </td>
+                    <td>
+                      <Link to={`/councilmeeting/${item.id}`}>{item.studentDeadline.format("DD/MM/YYYY")}</Link>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    );
-  }
-*/
+      );
+    }
+  */
   renderAdminView() {
     return (
       <div className="ui form">
         <div className="ui two fields">
           <div className="field">
-            { this.renderCreate(this.state.newCouncilmeeting) 
-            }
-            { this.renderEdit(this.state.updateCouncilmeeting) 
-            }
+            {this.renderCreate(this.state.newCouncilmeeting)}
+            {this.renderEdit(this.state.updateCouncilmeeting)}
           </div>
           <div className="field">
             <h2 className="ui dividing header">Upcoming councilmeetings</h2>
@@ -297,8 +297,7 @@ export default class CouncilmeetingManagePage extends Component {
               />
               <label>Show also past dates</label>
             </div>
-            {this.renderList(this.state.shownDates) 
-            }
+            {this.renderList(this.state.shownDates)}
           </div>
         </div>
       </div>
@@ -310,23 +309,10 @@ export default class CouncilmeetingManagePage extends Component {
     return this.renderAdminView();
   }
 }
-/*
-import { connect } from "react-redux";
-import {
- getCouncilmeetings,
- saveCouncilmeeting,
- updateCouncilmeeting,
- deleteCouncilmeeting
-} from "./councilmeeting.actions";
 
 const mapStateToProps = (state) => {
-  const auth_r = state.get("auth");
-  const cm_r = state.get("councilmeeting");
-  const thesis_r = state.get("thesis");
   return {
-    User: auth_r.get("user").toJS(),
-    Councilmeetings: cm_r.get("councilmeetings").toJS(),
-    Theses: thesis_r.get("theses").toJS(),
+    Councilmeetings: state.councilmeetings,
   };
 };
 
@@ -345,5 +331,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingListCreate);
-*/
+export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingManagePage);

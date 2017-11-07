@@ -26,7 +26,7 @@ export class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <div className="ui segment">
                     <form onSubmit={this.handleRoleChange}>
                         <select id="roles" className="ui dropdown">
