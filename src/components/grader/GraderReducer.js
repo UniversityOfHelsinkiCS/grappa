@@ -2,7 +2,7 @@ import {
     ADD_GRADER_SAVE_SUCCESS, ADD_GRADER_SAVE_FAILURE, ADD_GRADER_SAVE_ATTEMPT, 
     UPDATE_GRADER_SAVE_SUCCESS, UPDATE_GRADER_SAVE_FAILURE, UPDATE_GRADER_SAVE_ATTEMPT, 
     GET_GRADERS_ATTEMPT, GET_GRADERS_SUCCESS, GET_GRADERS_FAILURE, 
-} from "./ContractActions";
+} from "./GraderActions";
 
 
 const graderSave = (state = [], action) => {
@@ -68,7 +68,7 @@ const graderSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
-                formClass: "",
+                formClass: "error",
                 completed: true
             }];
         case GET_GRADERS_SUCCESS:
@@ -76,7 +76,7 @@ const graderSave = (state = [], action) => {
             {
                 id: action.type,
                 text: action.text,
-                formClass: "",
+                formClass: "success",
                 completed: true
             }];
         default:
