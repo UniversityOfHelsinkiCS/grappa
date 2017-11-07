@@ -7,6 +7,10 @@ module.exports = [
         firstname: 'Supervisor',
         lastname: 'Lastname',
         isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Leppäsuonkatu'),
+        phone: '050 1234567',
+        major: 'Käpistely'
     },
     {
         personId: 2,
@@ -16,6 +20,10 @@ module.exports = [
         firstname: 'Olavi',
         lastname: 'Uusivirta',
         isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Leppäsuonkatu'),
+        phone: '050 1234567',
+        major: 'Matte'
     },
     {
         personId: 3,
@@ -25,6 +33,10 @@ module.exports = [
         firstname: 'Anna',
         lastname: 'Puu',
         isRetired: false,
+        studentNumber: ('012345678'),
+        address: ('Väinö Auerin katu'),
+        phone: '050 1234567',
+        major: 'Kemma'
     },
     {
         personId: 4,
@@ -34,5 +46,9 @@ module.exports = [
         firstname: 'Retired',
         lastname: 'Person',
         isRetired: true,
+        studentNumber: ('012345678'),
+        address: ('Mannerheimintie'),
+        phone: '050 1234567',
+        major: 'geologiaa'
     }
 ];

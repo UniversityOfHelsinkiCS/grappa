@@ -2,8 +2,10 @@ import test from 'ava';
 import sinon from 'sinon';
 
 import router from '../src/routes/theses.js';
+import app from '../index';
 
 const reqres = require('reqres');
+const request = require('supertest');
 
 let req;
 let res;
@@ -16,6 +18,7 @@ test.beforeEach(async t => {
     service = require('../src/services/ThesisService');
     thesisController = require('../src/controllers/ThesisController');
 });
+
 
 test.cb('getThesisById', t => {
     const stub = sinon.stub(service, "getThesisById");
@@ -46,4 +49,37 @@ test.cb('getAllTheses returns correct information', t => {
             t.end();
         });
     service.getAllTheses.restore();
+});
+
+test.cb('saveAgreement works from controller', t => {
+    const body ={
+        thesisTitle: 'Annin Grady',
+        urkund: 'http://',
+        grade: 4,
+        graderEval: 'Tarkastajien esittely',
+        userId: 1
+    };
+    req.body = body;
+    thesisController.saveThesis(req, res)
+        .then(() => {
+            t.is(res.status.calledWith(200), true, "saveThesis returns status 200 for new thesis");
+            t.end();
+        });
+});
+
+test('when agreement is send to route, and body is correct, status is 200', async t => {
+    const body ={
+        title: 'Annin Grady',
+        urkund: 'http://',
+        grade: 4,
+        graderEval: 'Tarkastajien esittely',
+        userId: 1
+    };
+    req.body = body;
+
+    const res = await request(app)
+    .post('/theses', req)
+    .send();
+
+    t.is(res.status, 200);
 });

@@ -1,89 +1,44 @@
 module.exports = [
     {
         agreementId: 1,
-        studentName: 'Maija Vilkkumaa',
-        studentNumber: "01234567",
-        studentAddress: "Helsinginkatu 1",
-        studentPhone: "05012345678",
-        studentEmail: "maija.vilkkumaa@hotmail.com",
-        studentMajor: "Fysiikka",
-
-        thesisTitle: "Maijan grady fysiikasta",
-        thesisStartDate: "01.01.2010",
-        thesisCompletionEta: "01.01.2011",
-        thesisPerformancePlace: "Helsinki",
-
-        thesisSupervisorMain: "Supervisior 1",
-        thesisSupervisorSecond: "Supervisior 2",
-        thesisSupervisorOther: "Supervisior 3",
-
-        thesisWorkStudentTime: "Student time",
-        thesisWorkSupervisorTime: "Supervisior time",
-        thesisWorkIntermediateGoal: "Intermediate goal",
-        thesisWorkMeetingAgreement: "Meeting agreement",
-        thesisWorkOther: "Other",
-
-        studentGradeGoal: "5",
-
-        created_at: null,
-        updated_at: null,
+        authorId: 1,
+        thesisId: 1,
+        responsibleSupervisorId: 1,
+        studyfieldId: 1,
+        fake: false,
+        studentGradeGoal: 5,
+        studentWorkTime: "1h viikossa",
+        supervisorWorkTime: "tsiigaillaan",
+        intermediateGoal: "oispa valmistunut",
+        meetingAgreement: "just just",
+        other: "eihän tässä muuta"
     },
     {
         agreementId: 2,
-        studentName: 'Anna Puu',
-        studentNumber: "01234568",
-        studentAddress: "Mäkelänkatu 1",
-        studentPhone: "05012345679",
-        studentEmail: "anna.puu@hotmail.com",
-        studentMajor: "Kemia",
-
-        thesisTitle: "Annan gradu kemiasta",
-        thesisStartDate: "01.01.2005",
-        thesisCompletionEta: "01.01.2006",
-        thesisPerformancePlace: "Helsinki",
-
-        thesisSupervisorMain: "Supervisior 1",
-        thesisSupervisorSecond: "Supervisior 2",
-        thesisSupervisorOther: "Supervisior 3",
-
-        thesisWorkStudentTime: "Student time",
-        thesisWorkSupervisorTime: "Supervisior time",
-        thesisWorkIntermediateGoal: "Intermediate goal",
-        thesisWorkMeetingAgreement: "Meeting agreement",
-        thesisWorkOther: "Other",
-
-        studentGradeGoal: "3",
-
-        created_at: null,
-        updated_at: null,
+        authorId: 2,
+        thesisId: 2,
+        responsibleSupervisorId: 2,
+        studyfieldId: 2,
+        fake: false,
+        studentGradeGoal: 5,
+        studentWorkTime: "200h viikossa",
+        supervisorWorkTime: "jee",
+        intermediateGoal: "valmistun",
+        meetingAgreement: "joka päivä",
+        other: "ddd"
     },
     {
         agreementId: 3,
-        studentName: 'Maija Vilkkumaa',
-        studentNumber: "01234567",
-        studentAddress: "Helsinginkatu 1",
-        studentPhone: "05012345678",
-        studentEmail: "maija.vilkkumaa@hotmail.com",
-        studentMajor: "Fysiikka",
-
-        thesisTitle: "Maijan päivitetty grady fysiikasta",
-        thesisStartDate: "01.01.2010",
-        thesisCompletionEta: "01.01.2011",
-        thesisPerformancePlace: "Helsinki",
-
-        thesisSupervisorMain: "Supervisior 1",
-        thesisSupervisorSecond: "Supervisior 2",
-        thesisSupervisorOther: "Supervisior 3",
-
-        thesisWorkStudentTime: "Student time",
-        thesisWorkSupervisorTime: "Supervisior time",
-        thesisWorkIntermediateGoal: "Intermediate goal",
-        thesisWorkMeetingAgreement: "Meeting agreement",
-        thesisWorkOther: "Other",
-
-        studentGradeGoal: "5",
-
-        created_at: null,
-        updated_at: null,
+        authorId: 1,
+        thesisId: 1,
+        responsibleSupervisorId: 1,
+        studyfieldId: 1,
+        fake: true,
+        studentGradeGoal: 5,
+        studentWorkTime: "5h viikossa",
+        supervisorWorkTime: "jees",
+        intermediateGoal: "valmistunen",
+        meetingAgreement: "joka toinen päivä",
+        other: "eee"
     }
 ];

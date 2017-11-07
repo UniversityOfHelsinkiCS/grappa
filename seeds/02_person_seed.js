@@ -12,6 +12,10 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Supervisor',
                   lastname: 'Lastname',
                   isRetired: false,
+                  studentNumber: ('012345678'),
+                  address: ('Leppäsuonkatu'),
+                  phone: '050 1234567',
+                  major: 'Käpistely'
               },
               {
                   personId: 2,
@@ -21,6 +25,10 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Olavi',
                   lastname: 'Uusivirta',
                   isRetired: false,
+                  studentNumber: ('012345678'),
+                  address: ('Leppäsuonkatu'),
+                  phone: '050 1234567',
+                  major: 'Matte'
               },
               {
                   personId: 3,
@@ -30,6 +38,10 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Anna',
                   lastname: 'Puu',
                   isRetired: false,
+                  studentNumber: ('012345678'),
+                  address: ('Väinö Auerin katu'),
+                  phone: '050 1234567',
+                  major: 'Kemma'
               },
               {
                   personId: 4,
@@ -39,6 +51,10 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Retired',
                   lastname: 'Person',
                   isRetired: true,
+                  studentNumber: ('012345678'),
+                  address: ('Mannerheimintie'),
+                  phone: '050 1234567',
+                  major: 'geologiaa'
               }
           ]);
       });

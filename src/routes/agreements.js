@@ -21,7 +21,7 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 router.put('/:id', jsonParser, (req, res) => {
-    agreementController.saveAgreement(req, res);
+    agreementController.updateAgreement(req, res);
 });
 
 router.post('/previous', jsonParser, (req, res) => {

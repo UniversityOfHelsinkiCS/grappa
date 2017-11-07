@@ -8,4 +8,9 @@ router.put('/', jsonParser, (req, res) => {
     personController.updatePerson(req, res);
 });
 
+router.get('/:id', (req, res) => {
+    personController.getPersonById(req, res);
+});
+
+
 module.exports = router;

@@ -59,7 +59,49 @@ test.cb('saveSupervisor returns error 500 with existing personId', t => {
     req.body.personId = 2;
     supervisorController.saveSupervisor(req, res)
         .then(() => {
-            t.is(res.status.calledWith(500), true, 'wrokokrs');
+            t.is(res.status.calledWith(500), true, 'saveSupervisor returns error 500');
             t.end();
         });
+});
+
+test.cb('reviewSupervisor returns 200 for success', t => {
+    const stub = sinon.stub(supervisorService, "updateAgreementPerson");
+    stub.returns({ test: "xoxo" });
+    supervisorController.supervisorService = supervisorService;
+    req.body.agreementId = 1;
+    req.body.personRoleId = 1;
+    supervisorController.reviewSupervisor(req, res)
+    .then(() => {
+        t.is(stub.calledOnce, true, "updateAgreementPerson is called once");
+        t.is(res.status.calledWith(200), true, "updateAgreementPerson returns 200");
+        t.end();
+    });
+    supervisorService.updateAgreementPerson.restore();
+});
+
+test.cb('reviewSupervisor return 500 for error', t => {
+    const stub = sinon.stub(supervisorService, "updateAgreementPerson");
+    req.body.agreementId = 1;
+    req.body.personRoleId = 1;
+    stub.throws();
+    supervisorController.supervisorService = supervisorService;
+    supervisorController.reviewSupervisor(req, res)
+    .then(() => {
+        t.is(res.status.calledWith(500), true, "updateAgreementPerson returns status 500");
+        t.end();
+    });
+    supervisorService.updateAgreementPerson.restore();
+});
+
+test.cb('reviewSupervisor returns error when data is missing IDs', t => {
+    const stub = sinon.stub(supervisorService, "updateAgreementPerson");
+    stub.throws();
+    supervisorController.supervisorService = supervisorService;
+    req.body.agreementId = null;
+    supervisorController.reviewSupervisor(req, res)
+    .then(() => {
+        t.is(res.status.calledWith(500), true, "updateAgreementPerson returns status 500");
+        t.end();
+    });
+    supervisorService.updateAgreementPerson.restore();
 });

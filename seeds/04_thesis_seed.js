@@ -6,7 +6,8 @@ exports.seed = function (knex, Promise) {
             return knex('thesis').insert([
                 {
                     thesisId: 1,
-                    title: 'Annin Grady',
+                    thesisTitle: 'Annin Grady',
+                    performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 4,
                     graderEval: 'Tarkastajien esittely',
@@ -14,7 +15,8 @@ exports.seed = function (knex, Promise) {
                 },
                 {
                     thesisId: 2,
-                    title: 'Hieno Gradu',
+                    thesisTitle: 'Hieno Gradu',
+                    performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 1,
                     graderEval: 'Tarkastajien esittely',
@@ -22,7 +24,8 @@ exports.seed = function (knex, Promise) {
                 },
                 {
                     thesisId: 3,
-                    title: 'Amazing Thesis',
+                    thesisTitle: 'Amazing Thesis',
+                    performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 4,
                     graderEval: 'Tarkastajien esittely',

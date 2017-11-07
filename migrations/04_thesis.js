@@ -2,12 +2,14 @@ exports.up = function (knex, Promise) {
     return Promise.all([
         knex.schema.createTable('thesis', function (table) {
             table.increments('thesisId').primary();
-            table.string('title');
+            table.string('thesisTitle');
+            table.date('startDate');
+            table.date('completionEta');
+            table.string('performancePlace');
             table.string('urkund');
             table.integer('grade');
             table.string('graderEval');
             table.integer('userId');
-            table.timestamps();
         })
     ]);
 };

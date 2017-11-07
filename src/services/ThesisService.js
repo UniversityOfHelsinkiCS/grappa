@@ -1,13 +1,15 @@
-import thesesList from "../mockdata/Theses.js";
+import thesesList from "../mockdata/MockTheses.js";
 
 const knex = require('../../connection');
 
 // don't know if export function is better than export const? Both are working.
 
 export function getAllTheses() {
-    return knex.select().from('thesis')
-        .then(theses => {
-            return theses;
+    return knex.select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
+        .join('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
+        .join('person', 'agreement.authorId', '=', 'person.personId')
+        .then(thesis => {
+            return thesis;
         });
 }
 
@@ -18,13 +20,19 @@ export const getThesisById = (id) => {
         });
 }
 
-export const getThesisByStudyfield = (studyfield) => {
-    // what is this? there is no studyfield table in db yet. This method uses mockdata.
-    let thesesByStudyfield = [];
-    for (let i = 0; i < thesesList.length; i++) {
-        if (thesesList[i].studyFieldId === studyfield) {
-            thesesByStudyfield.push(thesesList[i]);
-        }
-    }
-    return thesesByStudyfield;
+export const saveThesis = (data) => {
+    return knex('thesis')
+    .returning('thesisId')
+    .insert(data)
+    .then(thesisId => thesisId[0])
+    .catch(err => err);
+}
+
+export async function updateThesis(thesisData) {
+    return await knex('thesis')
+    .returning('thesisId')
+    .where('thesisId', '=', thesisData.thesisId)
+    .update(thesisData)
+    .then(thesisId => thesisId[0])
+    .catch(err => err);
 }
