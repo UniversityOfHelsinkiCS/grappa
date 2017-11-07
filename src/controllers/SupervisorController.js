@@ -9,6 +9,11 @@ export async function getAllSupervisors(req, res) {
     res.status(200).json(supervisors);
 }
 
+export async function getAgreementPersons(req, res) {
+    const agreementPersons = await supervisorService.getAgreementPersonsNeedingApproval();
+    res.status(200).json(agreementPersons);
+}
+
 export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
     if (supervisorData.personId == null || supervisorData.personId == '') {

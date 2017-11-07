@@ -19,11 +19,11 @@ export async function savePersonRole(personRoleData) {
 
 export async function updatePerson(personData) {
     return await knex('person')
-    .returning('personId')
-    .where('personId', '=', personData.personId)
-    .update(personData)
-    .then(personId => personId[0])
-    .catch(err => err);
+        .returning('personId')
+        .where('personId', '=', personData.personId)
+        .update(personData)
+        .then(personId => personId[0])
+        .catch(err => err);
 }
 
 export const getPersonById = (id) => {
