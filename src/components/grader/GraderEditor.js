@@ -7,19 +7,25 @@ export default class GraderEditor extends Component {
             newGrader: {
                 firstname: "",
                 lastname: "",
-                title: ""
+                title: "",
+                studyfieldId: ""
             },
-            updateGrader: { 
-                id: undefined, 
-                firstname: "", 
-                lastname: "", 
-                title: "" 
+            updateGrader: {
+                id: undefined,
+                firstname: "",
+                lastname: "",
+                title: "",
+                studyfieldId: ""
             }
         };
     }
 
     getTitles = () => {
         return ["Prof.", "Assistant Prof.", "Adjunct Prof.", "Dr.", "Other"];
+    }
+
+    getStudyfields = () => {
+        return [1, 2, 3, "n"];
     }
 
     handleChange = (field, formname) => (event) => {
@@ -52,14 +58,16 @@ export default class GraderEditor extends Component {
     }
 
     renderNameField(name) {
+        let nameLowCase = name.toLowerCase();
+        nameLowCase = nameLowCase.replace(/\s/g, '');
         return (
             <div className="ui field">
                 <label>{name}</label>
                 <input
                     type="text"
-                    value={this.state.newGrader.name}
+                    value={this.state.newGrader.nameLowCase}
                     placeholder={name}
-                    onChange={this.handleChange(name, "newGrader")}
+                    onChange={this.handleChange(nameLowCase, "newGrader")}
                 />
             </div>)
     }
@@ -80,12 +88,29 @@ export default class GraderEditor extends Component {
         )
     }
 
+    renderStudyfieldList() {
+        return (
+            <div className="ui field">
+                <label>Studyfield</label>
+                <select
+                    className="ui fluid search dropdown"
+                    value={this.state.newGrader.studyfieldId}
+                    onChange={this.handleChange("studyfieldId", "newGrader")}
+                >
+                    <option value="">Select studyfield</option>
+                    {this.getStudyfields().map((studyfield, index) => <option key={index} value={studyfield}>{studyfield}</option>)}
+                </select>
+            </div>
+        )
+    }
+
     renderCreate() {
         return (
-            <div className="four fields">
+            <div className="five fields">
                 {this.renderTitleList()}
-                {this.renderNameField("firstname")}
-                {this.renderNameField("lastname")}
+                {this.renderNameField("First name")}
+                {this.renderNameField("Last name")}
+                {this.renderStudyfieldList()}
                 <div className="ui field">
                     <label>&nbsp;</label>
 
@@ -112,13 +137,14 @@ export default class GraderEditor extends Component {
                     </select>
                 </div>
                 {this.renderTitleList()}
-                {this.renderNameField("firstname")}
-                {this.renderNameField("lastname")}
+                {this.renderNameField("First name")}
+                {this.renderNameField("Last name")}
+                {this.renderStudyfieldList()}
                 <div className="field">
                     <label>&nbsp;</label>
                     <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
                         Update Supervisor
-          </button>
+                    </button>
                 </div>
             </div>
         );
