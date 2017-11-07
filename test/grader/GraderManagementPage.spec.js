@@ -14,3 +14,7 @@ const wrapper = shallow(page);
 test('contains grader editor component', t => {
     t.truthy(wrapper.find('<GraderEditor/>'));
 });
+
+test('contains thesisList component', t => {
+    t.truthy(wrapper.find('<ThesisList/>'));
+});

@@ -4,8 +4,17 @@ export default class GraderEditor extends Component {
     constructor() {
         super();
         this.state = {
-            newGrader: { name: "", title: "" },
-            updateGrader: { id: undefined, name: "", title: "" }
+            newGrader: {
+                firstname: "",
+                lastname: "",
+                title: ""
+            },
+            updateGrader: { 
+                id: undefined, 
+                firstname: "", 
+                lastname: "", 
+                title: "" 
+            }
         };
     }
 
@@ -19,64 +28,70 @@ export default class GraderEditor extends Component {
     }
 
     selectGrader = (event) => {
-        const updateGrader = this.props.graders.find(grader => grader.id.toString() === event.target.value);
+        const updateGrader = this.props.graders.find(grader => grader.personId.toString() === event.target.value);
         if (!updateGrader) return;
         this.setState({ updateGrader });
     }
 
     saveNewGrader = () => {
         const grader = this.state.newGrader;
-        console.log("saving");
-        console.log(grader);
         this.props.saveGrader(grader);
     }
 
     updateGrader = () => {
         const grader = this.state.updateGrader;
-        console.log("updating");
-        console.log(grader);
         this.props.updateGrader(grader);
     }
 
     //not functioning yet in Grappa 2, to be added later
     deleteGrader = () => {
-        const grader = this.state.updateGrader;
-        console.log("deleting");
-        console.log(grader);
+        //const grader = this.state.updateGrader;
+        //console.log("deleting");
+        //console.log(grader);
         //this.props.deleteGrader(grader);
     }
 
-    renderCreate() {
-        console.log(this.state);
+    renderNameField(name) {
         return (
-            <div className="three fields">
-                <div className="ui field">
-                    <label>Title</label>
-                    <select
-                        className="ui fluid search dropdown"
-                        value={this.state.newGrader.title}
-                        onChange={this.handleChange("title", "newGrader")}
-                    >
+            <div className="ui field">
+                <label>{name}</label>
+                <input
+                    type="text"
+                    value={this.state.newGrader.name}
+                    placeholder={name}
+                    onChange={this.handleChange(name, "newGrader")}
+                />
+            </div>)
+    }
 
-                        <option value="">Select title</option>
-                        {this.getTitles().map((title, index) => <option key={index} value={title}>{title}</option>)}
-                    </select>
-                </div>
-                <div className="ui field">
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        value={this.state.newGrader.name}
-                        placeholder="Name"
-                        onChange={this.handleChange("name", "newGrader")}
-                    />
-                </div>
+    renderTitleList() {
+        return (
+            <div className="ui field">
+                <label>Title</label>
+                <select
+                    className="ui fluid search dropdown"
+                    value={this.state.newGrader.title}
+                    onChange={this.handleChange("title", "newGrader")}
+                >
+                    <option value="">Select title</option>
+                    {this.getTitles().map((title, index) => <option key={index} value={title}>{title}</option>)}
+                </select>
+            </div>
+        )
+    }
+
+    renderCreate() {
+        return (
+            <div className="four fields">
+                {this.renderTitleList()}
+                {this.renderNameField("firstname")}
+                {this.renderNameField("lastname")}
                 <div className="ui field">
                     <label>&nbsp;</label>
 
-                    <button className="ui green button" onClick={this.saveNewGrader}>
+                    <button id="add" className="ui green button" onClick={this.saveNewGrader}>
                         Create Supervisor
-          </button>
+                    </button>
                 </div>
             </div>
         );
@@ -84,45 +99,27 @@ export default class GraderEditor extends Component {
 
     renderUpdate() {
         return (
-            <div className="four fields">
+            <div className="five fields">
                 <div className="field">
                     <label>Who</label>
                     <select className="ui fluid search dropdown" onChange={this.selectGrader}>
                         <option value="">Select grader</option>
                         {this.props.graders.map((grader, index) =>
-
-                            <option key={index} className="item" value={grader.id}>
-                                {grader.title}&nbsp;&nbsp;{grader.name}
+                            <option key={index} className="item" value={grader.personId}>
+                                {grader.title}&nbsp;&nbsp;{grader.firstname}&nbsp;&nbsp;{grader.lastname}&nbsp;&nbsp;Studyfield:&nbsp;{grader.studyfieldId}
                             </option>
                         )}
                     </select>
                 </div>
-                <div className="field">
-                    <label>Title</label>
-                    <select
-                        className="ui fluid search dropdown"
-                        value={this.state.updateGrader.title}
-                        onChange={this.handleChange("title", "updateGrader")}
-                    >
-                        {this.getTitles().map((title, index) => <option key={index} value={title}>{title}</option>)}
-                    </select>
-                </div>
-                <div className="field">
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        value={this.state.updateGrader.name}
-                        placeholder="Name"
-                        onChange={this.handleChange("name", "updateGrader")}
-                    />
-                </div>
+                {this.renderTitleList()}
+                {this.renderNameField("firstname")}
+                {this.renderNameField("lastname")}
                 <div className="field">
                     <label>&nbsp;</label>
-                    <button className="ui blue button" onClick={this.updateGrader}>
+                    <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
                         Update Supervisor
           </button>
                 </div>
-                
             </div>
         );
     }
