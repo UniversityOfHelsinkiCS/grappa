@@ -16,15 +16,12 @@ export async function getThesisById(req, res) {
 export async function saveThesis(req, res) {
     const thesisData = req.body;
     console.log("ENNEN");
-    thesisService.saveThesis(thesisData, function(response, error) {
-        console.log("ÖRPSÖRPSÖRPS");
-            if (err != null) {
-                    console.log("SAIN KIINNI ERRORIN!");
-                    res.status(500).json({ text: "error occurred", error: err });
-                }
-            else {
-                    console.log("NORMIPÄIVÄ");
-                    res.status(200).json({ text: "agreement update successful", agreementId: response });
-                }
-            });
+    thesisService.saveThesis(thesisData).then((response) =>  {
+        console.log("response " + JSON.stringify(response));
+    }
+    ).catch(err => {
+        console.log("tetewtwetwe");
+        console.log(err);   
+    });
+
 }
