@@ -1,7 +1,11 @@
 const knex = require('../../connection');
 
 export const getAgreementById = (id) => {
-    return knex.select().from('agreement').where('agreementId', id)
+    return knex.select('thesis.title as thesisTitle', 'studyfield.name as studentMajor', 'agreement.studentGradeGoal', 'person.email as studentEmail', 'person.firstname as studentFirstName', 'person.lastname as studentLastName').from('agreement')
+        .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+        .join('person', 'agreement.authorId', '=', 'person.personId')
+        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .where('agreementId', id)
         .then(agreement => {
             return agreement;
         });
