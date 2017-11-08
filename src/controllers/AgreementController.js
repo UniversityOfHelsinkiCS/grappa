@@ -22,11 +22,13 @@ export async function getAllAgreements(req, res) {
 }
 
 export async function saveAgreement(req, res) {
+    console.log("saveAgreement");
     const data = req.body;
     if (data.agreementId === "" || data.agreementId == null) {
         try {
-            if (data.personId === undefined)
-                data.personId = 1;
+            //REMOVE THIS WHEN AGREEMENT SAVE WORKS
+            data.personId = 1;
+            data.thesisSupervisorMain = 1;
             /*const personData = {
                 personId: data.personId,
                 firstname: data.studentFirstName,
@@ -54,8 +56,8 @@ export async function saveAgreement(req, res) {
                 intermediateGoal: data.thesisWorkIntermediateGoal,
                 meetingAgreement: data.thesisWorkMeetingAgreement,
                 other: data.thesisWorkOther
-            };*/
-            const agreementId = await agreementService.saveNewAgreement(agreementData);
+            };
+            const agreementId = await agreementService.saveNewAgreement(agreementData);*/
             emailService.agreementCreated(data);
             res.status(200).json({ text: "agreement save successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {

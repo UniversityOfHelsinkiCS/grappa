@@ -17,15 +17,9 @@ export const agreementCreated = (data) => {
 
 export const agreementUpdated = (data) => {
     console.log("agreementUpdated", data);
-    //let email = templates.getEmailTemplate('updateAgreement');
-    //console.log("email", email);
-    /*
-    let email = template.getEmailTemplate('updateAgreement');
-    console.log("email", email);
+    let body = templates.getEmailTemplate('updateAgreement');
     //selvitä kuka lähetti
-    let
-    //sendEmailByPersonId();
-    */
+    //kova koodattu tässä vaiheessa
 }
 
 const getEmailAddressByPersonRoleFieldId = (id) => {
