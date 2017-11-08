@@ -22,7 +22,8 @@ export async function saveThesis(req, res) {
     }
     ).catch(err => {
         console.log("error " + err);
-        res.status(500).json("Error occured when saving theses " + err);
+        res.status(500).json("Error occured when saving theses ");
+        console.log("STATUS 500 JÄLKEEN!");
     });
-
+    //res.status(500).json("Error occured when saving theses ");
 }
