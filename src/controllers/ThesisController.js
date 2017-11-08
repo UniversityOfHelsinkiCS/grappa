@@ -18,10 +18,11 @@ export async function saveThesis(req, res) {
     console.log("ENNEN");
     thesisService.saveThesis(thesisData).then((response) =>  {
         console.log("response " + JSON.stringify(response));
+        res.status(200).json("Thesis saved succesfully " + response);
     }
     ).catch(err => {
-        console.log("tetewtwetwe");
-        console.log(err);   
+        console.log("error " + err);
+        res.status(500).json("Error occured when saving theses " + err);
     });
 
 }
