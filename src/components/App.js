@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { callApi } from "../util/apiConnection.js";
-
 import { connect } from "react-redux";
 import { changeUserRole } from "./user/UserActions.js";
 
@@ -16,18 +14,6 @@ export class App extends Component {
         document.title = "Grappa: Main page";
     }
 
-    /*handlePost = (e) => {
-        e.preventDefault()
-        let value = this.refs.input.value;
-        callApi('/helloUser?username=' + value)
-            .then(resp => {
-                this.setState({
-                    username: resp.data.text
-                })
-            }).catch((error) => console.error(error));
-    }
-    */
-
     handleRoleChange = (e) => {
         e.preventDefault();
         let newRole = document.getElementById('roles').value;
@@ -40,15 +26,15 @@ export class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <div className="ui segment">
                     <form onSubmit={this.handleRoleChange}>
                         <select id="roles" className="ui dropdown">
                             <option value="">Choose a role</option>
-                            <option value="opiskelija">Opiskelija</option>
-                            <option value="vastuuohjaaja">Vastuuohjaaja</option>
-                            <option value="muu ohjaaja">Muu ohjaaja</option>
-                            <option value="vastuuprofessori">Vastuuprofessori</option>
+                            <option value="student">Opiskelija</option>
+                            <option value="supervisor">Vastuuohjaaja</option>
+                            <option value="other_supervisor">Muu ohjaaja</option>
+                            <option value="resp_professor">Vastuuprofessori</option>
                             <option value="admin">Admin</option>
                         </select>
                         <button className="ui button" type="submit">Choose</button>

@@ -64,7 +64,7 @@ export class Agreement extends Component {
                 return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
             }
             else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
-                return <EventMessage type='error' message='Ilmestyi ongelmia' />;;
+                return <EventMessage type='error' message='Ilmestyi ongelmia' />;
             }
             else {
                 return '';
@@ -148,9 +148,7 @@ export class Agreement extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="ui left aligned container">
-
+            <div>
                     <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                     <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
@@ -162,7 +160,6 @@ export class Agreement extends Component {
                         fieldOnChangeFunc={this.handleFormChange} />
                         {this.getResponseMessage()}
                     <br />
-                </div>
             </div>
 
         );

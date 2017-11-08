@@ -49,7 +49,7 @@ class AgreementPage extends Component {
 
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements/' + this.state.originalData.agreementId, this.state.formData)
+        service.oldPut('/agreements', this.state.formData)
             .then(resp => {
                 console.log(resp)
             }).catch((error) => {
@@ -63,7 +63,7 @@ class AgreementPage extends Component {
         //check if form data has changed
         var changes = (JSON.stringify(this.state.formData) === JSON.stringify(this.state.originalData));
         return (
-            <div className="App">
+            <div>
                 <AgreementEditModal showModal={ this.state.editMode } closeModal={ this.toggleEditModal } formData={ this.state.formData } originalData={ this.state.originalData } updateFormData={ this.updateFormData } />
                 <AgreementView agreementData={ this.state.formData } />
                 <div className="ui segment">

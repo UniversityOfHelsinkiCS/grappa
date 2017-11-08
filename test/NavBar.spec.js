@@ -2,9 +2,9 @@ import test from 'ava';
 import { shallow } from 'enzyme';
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
-import NavBar from '../src/components/NavBar.js';
+import { NavBar } from '../src/components/NavBar.js';
 
 const expectedLinkAmount = 7;
 
