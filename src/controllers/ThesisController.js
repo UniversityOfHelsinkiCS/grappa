@@ -15,15 +15,12 @@ export async function getThesisById(req, res) {
 
 export async function saveThesis(req, res) {
     const thesisData = req.body;
-    console.log("ENNEN");
     thesisService.saveThesis(thesisData).then((response) =>  {
-        console.log("response " + JSON.stringify(response));
         res.status(200).json("Thesis saved succesfully " + response);
     }
     ).catch(err => {
-        console.log("error " + err);
         res.status(500).json("Error occured when saving theses ");
-        console.log("STATUS 500 JÄLKEEN!");
     });
-    //res.status(500).json("Error occured when saving theses ");
 }
+
+
