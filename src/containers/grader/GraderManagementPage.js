@@ -50,11 +50,11 @@ export class GraderManagementPage extends Component {
                     </ul>
      */
 
-    toggleEditModal = () => {
-        var newValue = !this.state.showReview;
+    toggleEditModal = (e, key) => {
+        let newValue = !this.state.showReview;
         this.setState(
             {
-                showReview: newValue
+                showReview: newValue,
             }
         );
     }
@@ -68,10 +68,10 @@ export class GraderManagementPage extends Component {
                     </p>
 
                     <h2>List of thesis supervisors needing approval</h2>
-                    <ul class="ui list"> {this.state.agreementPersons.map(person => (
+                    <ul className="ui list"> {this.state.agreementPersons.map(person => (
                         <li>{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
                             &nbsp;&nbsp;
-                            <button key={person.personId} className="ui button" onClick={ this.toggleEditModal }>
+                            <button key={person.personId} className="ui button" onClick={ (e) => this.toggleEditModal(e, this.key) } >
                                 Review Supervisor
                             </button>
                         </li>

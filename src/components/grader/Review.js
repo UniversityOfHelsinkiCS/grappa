@@ -35,7 +35,7 @@ export default class Review extends Component {
                 <div>
                     <div className="field ui">
                         <label>Write your review here</label><br/>
-                        <textarea rows="5" type="text" value={ "" } />
+                        <textarea rows="5" type="text" />
                     </div>
                     
                 </div>
