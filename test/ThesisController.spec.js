@@ -62,12 +62,7 @@ test.cb.only('saveAgreement returns 500 if there no database ', t => {
     req.body = body;
     thesisController.saveThesis(req, res)
         .then(() => {
-
             console.log("RES THEN" + JSON.stringify(res));
-            t.is(res.status.calledWith(500), true, "saveThesis returns status 500 if no database");
-            t.end();
-        }).catch(() => {
-            console.log("res CATCH " + JSON.stringify(res));
             t.is(res.status.calledWith(500), true, "saveThesis returns status 500 if no database");
             t.end();
         });
