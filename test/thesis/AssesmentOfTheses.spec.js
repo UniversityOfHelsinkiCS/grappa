@@ -5,8 +5,6 @@ import { shallow } from 'enzyme';
 import 'enzyme';
 import sinon from 'sinon';
 import AssesmentOfThesis from '../../src/containers/thesis/AssesmentOfTheses';
-require('ignore-styles')
-
 
 const assesment = <AssesmentOfThesis />
 const wrapper = shallow(assesment);

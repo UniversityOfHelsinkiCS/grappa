@@ -6,20 +6,6 @@ import React, { Component } from 'react';
 import Section from '../../src/components/form/FormSection';
 import FormField from '../../src/components/form/FormField';
 
-
-require('ignore-styles')
-
-
-test('sectionkey is correct', t => {
-    const withOnlySectionKey = <Section sectionKey={"testKey"} elements={[]} />;
-    const wrapper = shallow(withOnlySectionKey);
-    const expected =  <div key={"section" + "testKey"}><br />
-                            <h1 className="ui dividing header"></h1>
-                     </div>
-    
-    t.truthy(wrapper.contains(expected));
-});
-
 test('header is correct', t => {
     const headerText = "testHeader";
     const withHeaderOnly =  <Section header={headerText} elements={[]} />;

@@ -4,7 +4,6 @@ import sinon from 'sinon';
 
 import React, { Component } from 'react';
 import FormField from '../../src/components/form/FormField';
-require('ignore-styles')
 
 const fieldTestData = {
     inputType: "textarea",
