@@ -2,12 +2,14 @@ require('babel-polyfill');
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
+const agreementPersonService = require('../services/AgreementPersonService');
 const express = require('express');
 const app = express();
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
-    res.status(200).json(agreement);
+    const agreementPersons = await agreementPersonService.getAgreementPersonsByAgreementId(req.params.id);
+    res.status(200).json({agreement:  agreement, persons: agreementPersons});
 }
 
 export async function getPreviousAgreementById(req, res) {
