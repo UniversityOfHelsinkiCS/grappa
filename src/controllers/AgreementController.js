@@ -2,13 +2,12 @@ require('babel-polyfill');
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
-const agreementPersonService = require('../services/AgreementPersonService');
 const express = require('express');
 const app = express();
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
-    const agreementPersons = await agreementPersonService.getAgreementPersonsByAgreementId(req.params.id);
+    const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
     res.status(200).json({agreement:  agreement, persons: agreementPersons});
 }
 
@@ -69,12 +68,14 @@ export async function updateAgreement(req, res) {
     const agreementId = req.params.id;
     if (agreementId != null && agreementId !== '') {
         try {
+            //console.log("updateAgreement", data);
             const personData = {
                 personId: data.personId,
                 firstname: data.studentFirstName,
                 lastname: data.studentLastName,
                 studentNumber: data.studentNumber,
                 email: data.studentEmail,
+                address: data.studentAddress,
                 major: data.studentMajor
             };
             const cleanPersonData = removeUselessKeys(personData);
@@ -132,4 +133,3 @@ export async function savePrevious(req, res) {
         res.status(500).json({ text: "error occurred", error: err });
     }
 }
-
