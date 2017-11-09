@@ -3,7 +3,6 @@ import test from 'ava';
 import { Router, Link } from 'react-router-dom';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
-require('ignore-styles')
 import {Agreement} from '../../src/components/agreement/Agreement';
 import FormCreator from '../../src/components/form/FormCreator';
 

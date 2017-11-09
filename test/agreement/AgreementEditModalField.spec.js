@@ -3,7 +3,6 @@ import test from 'ava';
 import { Router, Link } from 'react-router-dom';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
-require('ignore-styles')
 import AgreementEditModalField from '../../src/components/agreement/AgreementEditModalField';
 
 const mockField = shallow(<AgreementEditModalField fieldName={ "fname" } content={ "fcontent" } originalContent={ "foriginal" } textField={ false } onChange={() => {}}/>);

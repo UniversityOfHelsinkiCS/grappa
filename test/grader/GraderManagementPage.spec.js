@@ -2,7 +2,6 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import { GraderManagementPage } from '../../src/containers/grader/GraderManagementPage.js';
-require('ignore-styles');
 
 const wrapper = shallow(<GraderManagementPage/>);
 

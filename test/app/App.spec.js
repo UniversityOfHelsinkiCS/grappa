@@ -3,7 +3,6 @@ import test from 'ava';
 import { Link, Router } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import { App } from '../../src/components/App.js';
-require('ignore-styles')
 
 const app = <App />
 const wrapper = shallow(app);

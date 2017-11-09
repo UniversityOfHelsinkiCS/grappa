@@ -6,8 +6,6 @@ import Dropzone from "react-dropzone";
 
 import AttachmentAdder from "../../src/components/attachment/AttachmentAdder";
 
-require('ignore-styles')
-
 const defaultAttachmentAdder = <AttachmentAdder sendChange = {(file) => {}} />
 
 const limitOfOne = <AttachmentAdder sendChange = {(file) => {}}  limit = {1}/>

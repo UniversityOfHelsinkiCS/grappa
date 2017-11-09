@@ -6,8 +6,6 @@ import React, { Component } from 'react';
 import Section from '../../src/components/form/FormSection';
 import FormField from '../../src/components/form/FormField';
 
-require('ignore-styles')
-
 test('header is correct', t => {
     const headerText = "testHeader";
     const withHeaderOnly =  <Section header={headerText} elements={[]} />;
