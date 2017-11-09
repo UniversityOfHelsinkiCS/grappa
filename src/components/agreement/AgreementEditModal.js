@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import AgreementEditModalField from './AgreementEditModalField';
+import { connect } from "react-redux";
+import { getPermissions } from "../../util/rolePermissions";
 
-class AgreementEditModal extends Component {
+export class AgreementEditModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
             editedFormData: {},
-            editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal',
-            'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle'],
+            editableFields: [],
             ignoredFields: ['agreementId', 'created_at', 'updated_at'],
             textFields: ['thesisWorkStudentTime', 'thesisWorkSupervisorTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
         }
@@ -15,11 +16,21 @@ class AgreementEditModal extends Component {
 
     componentWillReceiveProps(props) {
         var original = Object.assign({}, props.formData); //can't use pointer here
-        this.setState(
-            {
-                editedFormData: original
-            }
-        );
+        if (props.role) {
+            this.setState(
+                {
+                    editedFormData: original,
+                    editableFields: getPermissions(props.role, 'agreement', 'edit')
+                }
+            );
+        } else {
+          this.setState(
+              {
+                  editedFormData: original,
+                  editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle']
+              }
+          );
+        }
     }
 
     onFieldChange = (fieldName, value) => {
@@ -48,10 +59,8 @@ class AgreementEditModal extends Component {
     parseAgreementData = (data) => {
         var parsedList = [];
         for (var p in data) {
-            //TODO: editable fields by person
-            // && (this.state.editableFields.indexOf(p) > -1)
             var originalData = this.props.originalData;
-            if(data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1)) {
+            if(data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
                 parsedList.push({
                     fieldName: p,
                     content: data[p],
@@ -101,4 +110,10 @@ class AgreementEditModal extends Component {
     }
 };
 
-export default AgreementEditModal;
+const mapStateToProps = (state) => {
+    if (!state.user[0])
+        return { role: undefined };
+    return { role: state.user[state.user.length - 1].role.id };
+}
+
+export default connect(mapStateToProps)(AgreementEditModal);

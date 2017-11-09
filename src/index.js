@@ -35,7 +35,7 @@ ReactDOM.render(
                         <Route exact path="/agreementform" component={AgreementForm} />
                         <Route exact path="/agreement" component={Agreement} />
                         <Route exact path="/theses" component={ThesisList} />
-                        <Route exact path="/graderManagement" component={GraderManagement} />
+                        <Route exact path="/gradermanagement" component={GraderManagement} />
                         <Route exact path="/thesis" component={ThesisManage} />
                         <Route exact path="/councilmeeting" component={CouncilmeetingView} />
                         <Route exact path="/councilmeetings" component={CouncilmeetingManage} />

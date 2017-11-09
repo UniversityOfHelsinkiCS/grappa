@@ -97,7 +97,7 @@ export default class GraderSelecter extends Component {
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
-        />
+        ></input>
     }
 
     renderDropdown() {

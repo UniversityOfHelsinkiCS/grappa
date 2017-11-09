@@ -49,7 +49,7 @@ class AgreementPage extends Component {
 
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements/' + this.state.originalData.agreementId, this.state.formData)
+        service.oldPut('/agreements', this.state.formData)
             .then(resp => {
                 console.log(resp)
             }).catch((error) => {

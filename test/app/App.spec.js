@@ -8,11 +8,11 @@ const app = <App />
 const wrapper = shallow(app);
 
 test('has correct role fields', t => {
-    t.truthy(doesAppContainElement(<option value="muu ohjaaja">Muu ohjaaja</option>));
-    t.truthy(doesAppContainElement(<option value="vastuuprofessori">Vastuuprofessori</option>));
+    t.truthy(doesAppContainElement(<option value="other_supervisor">Muu ohjaaja</option>));
+    t.truthy(doesAppContainElement(<option value="resp_professor">Vastuuprofessori</option>));
     t.truthy(doesAppContainElement(<option value="admin">Admin</option>));
-    t.truthy(doesAppContainElement(<option value="vastuuohjaaja">Vastuuohjaaja</option>));
-    t.truthy(doesAppContainElement(<option value="opiskelija">Opiskelija</option>));
+    t.truthy(doesAppContainElement(<option value="supervisor">Vastuuohjaaja</option>));
+    t.truthy(doesAppContainElement(<option value="student">Opiskelija</option>));
 });
 
 test('has correct button', t => {
