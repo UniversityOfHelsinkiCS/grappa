@@ -9,7 +9,7 @@ Grappa 2.0 (GRAdut Pikaisesti PAkettiin 2.0) will be a tool for both students an
 
 This front-end is made with React + Redux + Webpack. You can read the documentation in which the general structure is explained:
 
-[Documentation] https://drive.google.com/drive/folders/0B5AboURQNTdya2xJcC0zVmVDM1E
+[Documentation] (https://drive.google.com/drive/folders/0B5AboURQNTdya2xJcC0zVmVDM1E)
 
 How to install (to be added)
 
