@@ -20,14 +20,28 @@ class AgreementPage extends Component {
         //TODO: fetch the correct agreement based on user
         //var resp = getAgreement(1);
         callApi("/agreements/1").then((resp) => {
-            var original = Object.assign({}, resp.data[0]);
+            var data = this.parseResponceData(resp.data);
             this.setState(
                 {
-                    formData: resp.data[0],
-                    originalData: original
+                    formData: data,
+                    originalData: Object.assign({}, data)
                 }
             );
         }).catch((error) => console.error(error));
+    }
+
+    parseResponceData = (data) => {
+        var parsedData = data.agreement;
+        for (let i = 0; i < data.persons.length; i++) {
+            if (data.persons[i].personRoleId === 1) {
+                parsedData.thesisSupervisorMain = data.persons[i].name
+            } else if (data.persons[i].personRoleId === 2) {
+                parsedData.thesisSupervisorSecond = data.persons[i].name
+            } else if (data.persons[i].personRoleId === 3) {
+                parsedData.thesisSupervisorOther = data.persons[i].name
+            }
+        }
+        return parsedData;
     }
 
     toggleEditModal = () => {
@@ -49,14 +63,14 @@ class AgreementPage extends Component {
 
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements', this.state.formData)
+        service.oldPut('/agreements/1', this.state.formData)
             .then(resp => {
                 console.log(resp)
             }).catch((error) => {
                 console.error(error)
             });
         //Make this better
-        window.location.reload();
+        //window.location.reload();
     }
 
     render() {

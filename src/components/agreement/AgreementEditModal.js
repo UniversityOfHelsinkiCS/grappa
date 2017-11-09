@@ -24,12 +24,12 @@ export class AgreementEditModal extends Component {
                 }
             );
         } else {
-          this.setState(
-              {
-                  editedFormData: original,
-                  editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle']
-              }
-          );
+            this.setState(
+                {
+                    editedFormData: original,
+                    editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle']
+                }
+            );
         }
     }
 
