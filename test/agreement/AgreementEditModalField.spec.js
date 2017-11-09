@@ -39,61 +39,29 @@ test('agreement edit modal textarea has a reset button', t => {
 });
 
 test('when agreement edit modal field input value changes handleChange is called', t => {
-    const instance = mockField.instance();
-    const spy = sinon.stub(instance, "handleChange");
-    instance.forceUpdate();
-
-    mockField.find('input').simulate('change', {target: {value: 'a'}});
-    t.is(spy.calledOnce, true);
-    spy.restore();
+    const changeStub = sinon.stub();
+    const wrapper = shallow(<AgreementEditModalField fieldName={ "tname" } content={ "tcontent" } originalContent={ "toriginal" } textField={ false } onChange={changeStub}/>);
+    wrapper.find('input').simulate('change', {target: {value: 'a'}});
+    t.truthy(changeStub.calledOnce);
 });
 
 test('when agreement edit modal textarea value changes handleChange is called', t => {
-    const instance = mockTextarea.instance();
-    const spy = sinon.stub(instance, "handleChange");
-    instance.forceUpdate();
-
-    mockTextarea.find('textarea').simulate('change', {target: {value: 'a'}});
-    t.is(spy.calledOnce, true);
-    spy.restore();
+    const changeStub = sinon.stub();
+    const wrapper = shallow(<AgreementEditModalField fieldName={ "tname" } content={ "tcontent" } originalContent={ "toriginal" } textField={ true } onChange={changeStub}/>);
+    wrapper.find('textarea').simulate('change', {target: {value: 'a'}});
+    t.truthy(changeStub.calledOnce);
 });
 
-test('when agreement edit modal field input value changes component state changes', t => {
-    mockField.find('input').simulate('change', {target: {value: 'a'}});
-    t.truthy(mockField.unrendered.props.content, 'fcontenta');
+test('when agreement edit modal field reset button is clicked onChange is called', t => {
+    const changeStub = sinon.stub();
+    const wrapper = shallow(<AgreementEditModalField fieldName={ "tname" } content={ "tcontent" } originalContent={ "toriginal" } textField={ false } onChange={changeStub}/>);
+    wrapper.find('button').simulate('click');
+    t.truthy(changeStub.calledOnce);
 });
 
-test('when agreement edit modal textarea value changes component state changes', t => {
-    mockTextarea.find('textarea').simulate('change', {target: {value: 'a'}});
-    t.truthy(mockField.unrendered.props.content, 'fcontenta');
-});
-
-test('when agreement edit modal field reset button is clicked resetContent is called', t => {
-    const instance = mockField.instance();
-    const spy = sinon.stub(instance, "resetContent");
-    instance.forceUpdate();
-
-    mockField.find('button').simulate('click');
-    t.is(spy.calledOnce, true);
-    spy.restore();
-});
-
-test('when agreement edit modal textarea reset button is clicked resetContent is called', t => {
-    const instance = mockField.instance();
-    const spy = sinon.stub(instance, "resetContent");
-    instance.forceUpdate();
-
-    mockField.find('button').simulate('click');
-    t.is(spy.calledOnce, true);
-    spy.restore();
-});
-
-test('when agreement edit modal field reset button is clicked component state changes', t => {
-    mockField.find('button').simulate('click');
-    t.truthy(mockField.unrendered.props.content, 'foriginal');
-});
-
-test('when agreement edit modal textarea reset button is clicked component state changes', t => {
-    mockTextarea.find('textarea').simulate('click');
-    t.truthy(mockField.unrendered.props.content, 'foriginal');
+test('when agreement edit modal textarea reset button is clicked onChange is called', t => {
+    const changeStub = sinon.stub();
+    const wrapper = shallow(<AgreementEditModalField fieldName={ "tname" } content={ "tcontent" } originalContent={ "toriginal" } textField={ true } onChange={changeStub}/>);
+    wrapper.find('button').simulate('click');
+    t.truthy(changeStub.calledOnce);
 });
