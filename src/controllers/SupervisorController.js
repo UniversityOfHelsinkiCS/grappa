@@ -10,13 +10,13 @@ export async function getAllSupervisors(req, res) {
 }
 
 export async function getAgreementPersons(req, res) {
-    const agreementPersons = await supervisorService.getAgreementPersonsNeedingApproval();
+    const agreementPersons = await supervisorService.getAllAgreementPersons(); //in future will call getAlLAgreementPersonsNeedingAction
     res.status(200).json(agreementPersons);
 }
 
 export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
-    if (supervisorData.personId == null || supervisorData.personId == '') {
+    if (supervisorData.personId == null || supervisorData.personId == '') { //save new
         try {
             const supervisorRoleId = await supervisorService.getSupervisorRoleId();
             const personData = {
@@ -42,19 +42,48 @@ export async function saveSupervisor(req, res) {
                 statement: ''
             };
             const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
-            res.status(200).json({text: "supervisor save successful", personId: personId});
+            res.status(200).json({ text: "supervisor save successful", personId: personId });
         } catch (err) {
-            res.status(500).json({text: "error occurred", error: err});
+            res.status(500).json({ text: "error occurred", error: err });
         }
-    } else {
-        res.status(500).json({text: "supervisor already exists"});
+    } else { //update
+        try {
+            const supervisorRoleId = await supervisorService.getSupervisorRoleId();
+            const personData = {
+                personId: supervisorData.personId,
+                firstname: supervisorData.firstname,
+                lastname: supervisorData.lastname,
+                title: supervisorData.title,
+                email: supervisorData.email,
+                shibbolethId: supervisorData.shibbolethId,
+                isRetired: supervisorData.isRetired
+            };
+            const personRoleData = {
+                personId: supervisorData.personId,
+                studyfieldId: supervisorData.studyfieldId,
+                roleId: supervisorRoleId
+            };
+            const personRoleId = await personService.savePersonRole(personRoleData);
+            const agreementPersonData = {
+                agreementId: supervisorData.agreementId,
+                personRoleId: personRoleId,
+                roleId: supervisorRoleId,
+                approved: false,
+                statement: ''
+            };
+            
+            const agreementId = await supervisorService.updateAgreementPerson(agreementPersonData);
+            res.status(200).json({ text: "supervisor save successful", personId: personId });
+        } catch (err) {
+            res.status(500).json({ text: "error occurred", error: err });
+        }
     }
 }
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
     if ((data.personRoleId != null || data.personRoleId === '') && (data.agreementId != null || data.agreementId === '')) {
-        try { 
+        try {
             let agreementPersonData = {
                 personRoleId: data.personRoleId,
                 agreementId: data.agreementId,
@@ -64,12 +93,12 @@ export async function reviewSupervisor(req, res) {
                 approvalDate: new Date().toJSON()
             };
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
-            res.status(200).json({text: "supervisor reviewed successfully", personRoleId: response});
+            res.status(200).json({ text: "supervisor reviewed successfully", personRoleId: response });
         } catch (err) {
-            res.status(500).json({text: "error occured", error: err});
+            res.status(500).json({ text: "error occured", error: err });
         }
     } else {
-        res.status(500).json({text: "agreementId and personRoleId are required"});
+        res.status(500).json({ text: "agreementId and personRoleId are required" });
     }
-    
+
 }
