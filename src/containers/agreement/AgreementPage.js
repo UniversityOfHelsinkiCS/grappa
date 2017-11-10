@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
+import Agreement from '../../components/agreement/Agreement';
+
+//redux
+import { connect } from "react-redux";
+import { saveAgreement } from "./agreementActions";
+
 import { callApi } from "../../util/apiConnection";
 const service = require("../../util/apiConnection");
 
-class AgreementPage extends Component {
+export class AgreementPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            newAgreement: false,
             formData: {},
             originalData: {},
             editMode: false
@@ -32,19 +39,11 @@ class AgreementPage extends Component {
 
     toggleEditModal = () => {
         var editable = !this.state.editMode;
-        this.setState(
-            {
-                editMode: editable
-            }
-        );
+        this.setState({ editMode: editable });
     }
 
     updateFormData = (data) => {
-        this.setState(
-            {
-                formData: data
-            }
-        );
+        this.setState({ formData: data });
     }
 
     sendForm = (e) => {
@@ -59,23 +58,55 @@ class AgreementPage extends Component {
         window.location.reload();
     }
 
+    startNewAgreement = () => {
+        this.setState({ newAgreement: !this.state.newAgreement })
+    }
+
+    handleSaveAgreement = (agreement) => {
+        this.props.saveAgreement(agreement);
+    }
+
     render() {
         //check if form data has changed
         var changes = (JSON.stringify(this.state.formData) === JSON.stringify(this.state.originalData));
-        return (
-            <div>
-                <AgreementEditModal showModal={ this.state.editMode } closeModal={ this.toggleEditModal } formData={ this.state.formData } originalData={ this.state.originalData } updateFormData={ this.updateFormData } />
-                <AgreementView agreementData={ this.state.formData } />
-                <div className="ui segment">
-                    <button className="ui primary button" onClick={ this.toggleEditModal }>Edit agreement</button>
-                    <button className="ui primary button" type="submit" disabled={ changes } onClick={ this.sendForm }>Save Agreement</button>
+        if (this.state.newAgreement) {
+            return (
+                <div>
                     <br />
-                    <br />
-                    <p><Link to="/">Go back to HomePage</Link></p>
+                    <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
+                    <Agreement agreement={this.props.agreement} saveAgreement={this.handleSaveAgreement} />
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div>
+                    <br />
+                    <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.formData} originalData={this.state.originalData} updateFormData={this.updateFormData} />
+                    <AgreementView agreementData={this.state.formData} />
+                    <div className="ui segment">
+                        <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
+                        <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
+                        <br />
+                        <br />
+                        <p><Link to="/">Go back to HomePage</Link></p>
+                    </div>
+                </div>
+            );
+        }
     }
 }
 
-export default AgreementPage;
+const mapDispatchToProps = (dispatch) => ({
+    saveAgreement(data) {
+        dispatch(saveAgreement(data));
+    },
+});
+
+const mapStateToProps = (state) => {
+    return {
+        agreement: state.agreement
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AgreementPage);

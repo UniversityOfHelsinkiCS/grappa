@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 
-//redux
-import { connect, subscribe } from "react-redux";
-import { saveAgreement } from "./agreementActions";
+import EventMessage from '../EventMessage';
+import FormCreator from '../form/FormCreator'
 
-import EventMessage from '../../components/EventMessage';
-import FormCreator from '../../components/form/FormCreator'
-
-export class Agreement extends Component {
+export default class Agreement extends Component {
     constructor() {
         super();
         this.state = {
@@ -40,12 +36,6 @@ export class Agreement extends Component {
                 studentGradeGoal: "",
             }
         }
-    }
-
-    componentDidMount() {
-        document.title = "Agreement";
-        //this.prefillFormInfo();
-        //dispatch action to get info for agreement
     }
 
     getLastAgreementAction() {
@@ -85,7 +75,6 @@ export class Agreement extends Component {
         if (event !== undefined)
             event.preventDefault();
         this.props.saveAgreement(this.state.form);
-
     }
 
     formFieldInfo =  {
@@ -164,15 +153,3 @@ export class Agreement extends Component {
         );
     }
 }
-
-const mapDispatchToProps = (dispatch) => ({
-    saveAgreement(data) {
-        dispatch(saveAgreement(data));
-    },
-});
-
-const mapStateToProps = (state) => {
-    return { agreement: state.agreement };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Agreement);

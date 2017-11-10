@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import NavBar from './components/NavBar';
 import AgreementPage from './containers/agreement/AgreementPage';
-import Agreement from './containers/agreement/Agreement';
 import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
 import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
@@ -32,8 +31,7 @@ ReactDOM.render(
                 <div className="ui left aligned container">
                     <Switch>
                         <Route exact path="/" component={App} />
-                        <Route exact path="/agreementform" component={AgreementPage} />
-                        <Route exact path="/agreement" component={Agreement} />
+                        <Route exact path="/agreement" component={AgreementPage} />
                         <Route exact path="/theses" component={ThesisList} />
                         <Route exact path="/gradermanagement" component={GraderManagement} />
                         <Route exact path="/thesis" component={ThesisManage} />
