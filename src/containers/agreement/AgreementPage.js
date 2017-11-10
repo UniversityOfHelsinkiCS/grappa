@@ -8,6 +8,7 @@ import Agreement from '../../components/agreement/Agreement';
 import { connect } from "react-redux";
 import { saveAgreement } from "./agreementActions";
 
+//TODO: REMOVE THIS
 import { callApi } from "../../util/apiConnection";
 const service = require("../../util/apiConnection");
 
@@ -24,8 +25,7 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-        //TODO: fetch the correct agreement based on user
-        //var resp = getAgreement(1);
+        //TODO: REMOVE THIS
         callApi("/agreements/1").then((resp) => {
             var original = Object.assign({}, resp.data[0]);
             this.setState(
@@ -46,6 +46,7 @@ export class AgreementPage extends Component {
         this.setState({ formData: data });
     }
 
+    //TODO: REMOVE THIS
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
         service.oldPut('/agreements', this.state.formData)
