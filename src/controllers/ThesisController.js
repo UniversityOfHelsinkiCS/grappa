@@ -19,7 +19,7 @@ export async function saveThesis(req, res) {
         res.status(200).json("Thesis saved succesfully " + response);
     }
     ).catch(err => {
-        res.status(500).json("Error occured when saving theses ");
+        res.status(500).json(err);
     });
 }
 
