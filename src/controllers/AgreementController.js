@@ -59,12 +59,12 @@ const getAgreementData = function(data, thesisId) {
         other: data.thesisWorkOther
     };
 }
-export function saveAgreement(req, res) {
+export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         const personData = getPersonData(data);
-        const personUpdatedSuccessfully = updatePerson(personData);
-        console.log("PERSON SAVE " + JSON.stringify(personUpdatedSuccessfully));
+        const personUpdatedSuccessfully = await updatePerson(personData);
+        console.log("PERSON UPDATE " + JSON.stringify(personUpdatedSuccessfully));
         const thesisData = getThesisData(data);
         const thesisSaveInformation = saveThesis(data);
         console.log("thesisSaveInformation " + JSON.stringify(thesisSaveInformation));
@@ -74,6 +74,9 @@ export function saveAgreement(req, res) {
             res.status(200).json({text: "Agreement saved successfully"});
             }
         else {
+            console.log("personUpdatedSuccesfully " + personUpdatedSuccessfully);
+            console.log("thesisSave " + thesisSaveInformation.success);
+            console.log("agreementSave " + JSON.stringify(agreementSavedSuccesfully));
             res.status(500).json({text: "Error occured"});
         }
         
@@ -83,7 +86,7 @@ export function saveAgreement(req, res) {
 }
 
 const updatePerson = async function(personData) {
-     personService.updatePerson(personData).then((response) => {
+    await personService.updatePerson(personData).then((response) => {
         console.log("Personin päivitys onnistui");
         return true;
     }).catch(err => {
@@ -93,7 +96,7 @@ const updatePerson = async function(personData) {
 }
 
 const saveThesis = async function(thesisData) {
-    thesisService.saveThesis(thesisData).then((response) =>  {
+    await thesisService.saveThesis(thesisData).then((response) =>  {
         return {success: true, id: response};
     }
     ).catch(err => {
@@ -102,7 +105,7 @@ const saveThesis = async function(thesisData) {
 }
 
 const saveAgreementToService = async function(agreementData) {
-    agreementService.saveNewAgreement(agreementData).then((response) => {
+    await agreementService.saveNewAgreement(agreementData).then((response) => {
         return true;
     }).catch(err => {
         return false;
