@@ -2,7 +2,6 @@ import React from 'react';
 import test from 'ava';
 import EventMessage from "../src/components/EventMessage";
 import {shallow, mount} from 'enzyme';
-require('ignore-styles');
 
 
 test('with success message element is correct', t => {

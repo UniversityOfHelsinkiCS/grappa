@@ -4,8 +4,6 @@ import test from 'ava';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import GraderEditor from '../../src/components/grader/GraderEditor.js';
-require('ignore-styles');
-
 
 const editor = <GraderEditor graders={[]}/>
 const wrapper = shallow(editor);

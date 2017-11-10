@@ -18,13 +18,13 @@ class AgreementElement extends Component {
     }
 
     resetContent = (e) => {
-        e.preventDefault();
         var originalContent = this.props.originalContent;
         this.setState(
             {
                 content: originalContent
             }
         );
+        console.log("resetContent");
         this.props.onChange(this.props.fieldName, originalContent);
     }
 

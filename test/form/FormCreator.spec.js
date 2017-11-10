@@ -6,8 +6,6 @@ import React, { Component } from 'react';
 import FormCreator from '../../src/components/form/FormCreator';
 import FormSection from '../../src/components/form/FormSection';
 
-
-require('ignore-styles')
 /*
 <FormCreator 
     formFieldInfo={this.formFieldInfo}
