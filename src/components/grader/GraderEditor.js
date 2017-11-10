@@ -25,7 +25,7 @@ export default class GraderEditor extends Component {
     }
 
     getStudyfields = () => {
-        return [1, 2, 3, "n"];
+        return [1, 2, 3, "n"]; //TODO get these from back and get their names, too
     }
 
     handleChange = (field, formname) => (event) => {
@@ -125,7 +125,7 @@ export default class GraderEditor extends Component {
 
                         <button id="add" className="ui green button" onClick={this.saveNewGrader}>
                             Create Supervisor
-                    </button>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -156,7 +156,7 @@ export default class GraderEditor extends Component {
                         <label>&nbsp;</label>
                         <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
                             Update Supervisor
-                    </button>
+                        </button>
                     </div>
                 </div>
             </div>

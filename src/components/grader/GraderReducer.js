@@ -1,10 +1,29 @@
-import { 
-    ADD_GRADER_SAVE_SUCCESS, ADD_GRADER_SAVE_FAILURE, ADD_GRADER_SAVE_ATTEMPT, 
-    UPDATE_GRADER_SAVE_SUCCESS, UPDATE_GRADER_SAVE_FAILURE, UPDATE_GRADER_SAVE_ATTEMPT, 
-    GET_GRADERS_ATTEMPT, GET_GRADERS_SUCCESS, GET_GRADERS_FAILURE, 
-} from "./GraderActions";
+const reducer = (state = [], action) => {
+    switch (action.type) {
+        case "GRADER_SAVE_ONE_SUCCESS":
+            console.log("SAVE_GRADER", action);
+            return [...state, action.response.data];
+        case "GRADER_GET_ALL_SUCCESS":
+            console.log("GET_GRADERS", action)
+            return action.response.data;
+        case "GRADER_DELETE_ONE_SUCCESS":
+            return state.filter(grader => grader.personId !== action.response.data.personId);
+        //case "COUNCILMEETING_UPDATE_ONE_SUCCESS":
+          //  return [...state.filter(meeting => meeting.id == action.response.id), action.response];
+        //case "COUNCILMEETING_DELETE_ONE_SUCCESS":
+        //    return state.filter(meeting => meeting.id !== action.response);
+        default:
+            return state;
+    }
+};
+
+export default reducer;
 
 
+
+
+
+/*
 const graderSave = (state = [], action) => {
     switch (action.type) {
         case ADD_GRADER_SAVE_SUCCESS:
@@ -83,5 +102,6 @@ const graderSave = (state = [], action) => {
             return state;
     }
 };
+*/
 
-export default graderSave;
+//export default graderSave;

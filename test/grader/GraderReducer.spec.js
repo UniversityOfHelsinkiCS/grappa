@@ -2,6 +2,7 @@ import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
 import graderSave from '../../src/components/grader/GraderReducer';
+import reducer from '../../src/components/grader/GraderReducer';
 import { saveAddedSuccess,
     saveAddedFailure,
     saveAddedAttempt,

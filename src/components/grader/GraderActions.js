@@ -1,24 +1,55 @@
 import { callApi } from '../../util/apiConnection';
 
-export const ADD_GRADER_SAVE_ATTEMPT = 'ADD_GRADER_SAVE_ATTEMPT';
-export const ADD_GRADER_SAVE_SUCCESS = 'ADD_GRADER_SAVE_SUCCESS';
-export const ADD_GRADER_SAVE_FAILURE = 'ADD_GRADER_SAVE_FAILURE';
+const action = (suffix, response) => {
+    return {
+        type: "GRADER_" + suffix,
+        response,
+    }
+}
 
-export const UPDATE_GRADER_SAVE_ATTEMPT = 'UPDATE_GRADER_SAVE_ATTEMPT';
-export const UPDATE_GRADER_SAVE_SUCCESS = 'UPDATE_GRADER_SAVE_SUCCESS';
-export const UPDATE_GRADER_SAVE_FAILURE = 'UPDATE_GRADER_SAVE_FAILURE';
+export const saveAddedGrader = (grader) => {
+    const route = '/supervisors/save';
+    const prefix = "SAVE_ONE_";
+    const method = "post";
+    return callController(route, prefix, method, grader);
+}
 
-export const GET_GRADERS_ATTEMPT = 'GET_GRADERS_ATTEMPT';
-export const GET_GRADERS_SUCCESS = 'GET_GRADERS_SUCCESS';
-export const GET_GRADERS_FAILURE = 'GET_GRADERS_FAILURE';
+export const getSupervisors = () => {
+    const route = '/supervisors'
+    const prefix = "GET_ALL_";
+    const method = "get";
+    return callController(route, prefix, method);
+}
 
-export const saveAddedAttempt = function () {
+export const deleteSupervisor = () => {
+    const route = '/supervisors'
+    const prefix = "DELETE_ONE_";
+    const method = "delete";
+    return callController(route, prefix, method);
+}
+
+const callController = (route, prefix, method, data) => (dispatch) => {
+    dispatch(action(prefix + "ATTEMPT"));
+    callApi(route, method, data) //TODO fix so that can use different paths
+        .then(res => dispatch(action(prefix + "SUCCESS", res)))
+        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+}
+
+
+
+
+
+
+
+/*export const saveAddedAttempt = function () {
     return {
         type: ADD_GRADER_SAVE_ATTEMPT,
         text: 'Trying to save a grader/supervisor'
     };
 }
+*/
 
+/*
 export const saveAddedSuccess = function (data) {
     return {
         type: ADD_GRADER_SAVE_SUCCESS,
@@ -91,7 +122,8 @@ export const getGraders = (grader) => {
     }
 }
 
-export const saveAddedGrader = (grader) => {
+//old one
+/*export const saveAddedGrader = (grader) => {
     return (dispatch) => {
         dispatch(saveAddedAttempt());
         callApi('/supervisors/save', 'post', grader)
@@ -99,7 +131,9 @@ export const saveAddedGrader = (grader) => {
             .catch(err => dispatch(saveAddedFailure(err.response)));
     }
 }
+*/
 
+/*
 export const saveUpdatedGrader = (grader) => {
     return (dispatch) => {
         dispatch(saveUpdatedAttempt());
@@ -108,4 +142,6 @@ export const saveUpdatedGrader = (grader) => {
             .catch(err => dispatch(saveUpdatedFailure(err.response)));
     }
 }
+
+*/
 
