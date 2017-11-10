@@ -3,8 +3,8 @@ import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
 // internal modules
-import agreementSave from '../../src/components/agreement/AgreementReducer';
-import { saveAttempt, saveSuccess, saveFailure } from '../../src/components/agreement/AgreementActions';
+import agreementSave from '../../src/containers/agreement/agreementReducer';
+import { saveAttempt, saveSuccess, saveFailure } from '../../src/containers/agreement/agreementActions';
 
 const testData = { some: 'data' };
 
