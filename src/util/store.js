@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk';
-import agreementReducer from "../components/agreement/AgreementReducer";
+import agreementReducer from "../containers/agreement/agreementReducer";
 import userReducer from "../components/user/UserReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer"
 

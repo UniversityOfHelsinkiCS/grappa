@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import AgreementEditModal from './AgreementEditModal';
-import AgreementView from './AgreementView';
+import AgreementEditModal from '../../components/agreement/AgreementEditModal';
+import AgreementView from '../../components/agreement/AgreementView';
 import { callApi } from "../../util/apiConnection";
 const service = require("../../util/apiConnection");
 

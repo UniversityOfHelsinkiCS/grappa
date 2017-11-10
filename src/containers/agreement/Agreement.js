@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 
 //redux
 import { connect, subscribe } from "react-redux";
-import { saveAgreement } from "./AgreementActions";
+import { saveAgreement } from "./agreementActions";
 
-import EventMessage from '../EventMessage';
-import FormCreator from '../form/FormCreator'
-
+import EventMessage from '../../components/EventMessage';
+import FormCreator from '../../components/form/FormCreator'
 
 export class Agreement extends Component {
     constructor() {
@@ -44,7 +43,7 @@ export class Agreement extends Component {
     }
 
     componentDidMount() {
-        document.title = "Agreement page";
+        document.title = "Agreement";
         //this.prefillFormInfo();
         //dispatch action to get info for agreement
     }
