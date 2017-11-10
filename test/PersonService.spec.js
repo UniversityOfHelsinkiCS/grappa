@@ -76,7 +76,7 @@ test.serial('updatePerson', async t => {
         isRetired: false,
     }
     let returnValue = await personService.updatePerson(updatedPersonData);
-    t.deepEqual(returnValue, undefined);
+    t.deepEqual(returnValue, 1);
 });
 
 // test.serial('getPersonById returns right person', async t => {

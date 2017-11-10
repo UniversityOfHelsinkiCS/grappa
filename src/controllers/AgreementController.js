@@ -8,7 +8,7 @@ const app = express();
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    res.status(200).json({agreement:  agreement, persons: agreementPersons});
+    res.status(200).json({ agreement: agreement, persons: agreementPersons });
 }
 
 export async function getPreviousAgreementById(req, res) {
@@ -68,7 +68,6 @@ export async function updateAgreement(req, res) {
     const agreementId = req.params.id;
     if (agreementId != null && agreementId !== '') {
         try {
-            //console.log("updateAgreement", data);
             const personData = {
                 personId: data.personId,
                 firstname: data.studentFirstName,

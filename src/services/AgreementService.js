@@ -53,7 +53,6 @@ export const savePrevious = (data) => {
 
 //change data formatting from DB to front
 const parseAgreementData = (data) => {
-    console.log("data", data);
     let parsed = {
         //person
         personId: data.personId,
@@ -81,6 +80,5 @@ const parseAgreementData = (data) => {
         thesisWorkMeetingAgreement: data.meetingAgreement,
         thesisWorkOther: data.other
     }
-    console.log("parsed", parsed);
     return parsed;
 }
