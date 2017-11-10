@@ -94,7 +94,7 @@ export const getGraders = (grader) => {
 export const saveAddedGrader = (grader) => {
     return (dispatch) => {
         dispatch(saveAddedAttempt());
-        callApi('/supervisors', 'post', grader)
+        callApi('/supervisors/save', 'post', grader)
             .then(res =>  dispatch(saveAddedSuccess(res)))
             .catch(err => dispatch(saveAddedFailure(err.response)));
     }
@@ -103,7 +103,7 @@ export const saveAddedGrader = (grader) => {
 export const saveUpdatedGrader = (grader) => {
     return (dispatch) => {
         dispatch(saveUpdatedAttempt());
-        callApi('/supervisors', 'post', grader)
+        callApi('/supervisors/update', 'post', grader)
             .then(res =>  dispatch(saveUpdatedSuccess(res)))
             .catch(err => dispatch(saveUpdatedFailure(err.response)));
     }

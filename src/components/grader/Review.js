@@ -5,15 +5,16 @@ export default class Review extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModal: props.showModal
+            showModal: props.showModal,
+            person: props.person
         }
     }
 
     componentWillReceiveProps(props) {
-        var original = Object.assign({}, props.formData); //can't use pointer here
+        let person = Object.assign({}, props.person);
         this.setState(
             {
-                editedFormData: original
+                person: person
             }
         );
     }
@@ -22,7 +23,7 @@ export default class Review extends Component {
         this.props.closeModal();
     }
 
-    handleDisapproval() {
+    handleDisapproval = () => {
         this.props.closeModal();
     }
 
@@ -30,7 +31,9 @@ export default class Review extends Component {
         return (
             <div className="scrolling content">
                 <div className="description">
-                    Write a review, if this grader needs it. Other info to be shown here?
+                    <p><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
+                        grader for thesis: THESISNAMEHERE</p>
+                    <p>Write a review, if this grader needs it. Other info to be shown here?</p>
                 </div>
                 <div>
                     <div className="field ui">
@@ -44,6 +47,7 @@ export default class Review extends Component {
     }
 
     render() {
+        console.log(this.props, this.state);
         if (!this.props.showModal) {
             return (<div />);
         }
@@ -61,7 +65,7 @@ export default class Review extends Component {
                         Accept grader
                     </button>
                     <button className="ui negative button" onClick={ this.handleDisapproval }>
-                        Say no
+                        Do not accept
                     </button>
                 </div>
             </div>

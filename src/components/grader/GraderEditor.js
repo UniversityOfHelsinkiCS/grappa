@@ -47,6 +47,13 @@ export default class GraderEditor extends Component {
     updateGrader = () => {
         const grader = this.state.updateGrader;
         this.props.updateGrader(grader);
+        this.setState(
+            {
+                updateGrader: {
+                    id: grader.id
+                }
+            }
+        )
     }
 
     //not functioning yet in Grappa 2, to be added later
@@ -106,17 +113,20 @@ export default class GraderEditor extends Component {
 
     renderCreate() {
         return (
-            <div className="five fields">
-                {this.renderTitleList()}
-                {this.renderNameField("First name")}
-                {this.renderNameField("Last name")}
-                {this.renderStudyfieldList()}
-                <div className="ui field">
-                    <label>&nbsp;</label>
+            <div>
+                <p>Add new grader</p>
+                <div className="five fields">
+                    {this.renderTitleList()}
+                    {this.renderNameField("First name")}
+                    {this.renderNameField("Last name")}
+                    {this.renderStudyfieldList()}
+                    <div className="ui field">
+                        <label>&nbsp;</label>
 
-                    <button id="add" className="ui green button" onClick={this.saveNewGrader}>
-                        Create Supervisor
+                        <button id="add" className="ui green button" onClick={this.saveNewGrader}>
+                            Create Supervisor
                     </button>
+                    </div>
                 </div>
             </div>
         );
@@ -124,27 +134,30 @@ export default class GraderEditor extends Component {
 
     renderUpdate() {
         return (
-            <div className="five fields">
-                <div className="field">
-                    <label>Who</label>
-                    <select className="ui fluid search dropdown" onChange={this.selectGrader}>
-                        <option value="">Select grader</option>
-                        {this.props.graders.map((grader, index) =>
-                            <option key={index} className="item" value={grader.personId}>
-                                {grader.title}&nbsp;&nbsp;{grader.firstname}&nbsp;&nbsp;{grader.lastname}&nbsp;&nbsp;Studyfield:&nbsp;{grader.studyfieldId}
-                            </option>
-                        )}
-                    </select>
-                </div>
-                {this.renderTitleList()}
-                {this.renderNameField("First name")}
-                {this.renderNameField("Last name")}
-                {this.renderStudyfieldList()}
-                <div className="field">
-                    <label>&nbsp;</label>
-                    <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
-                        Update Supervisor
+            <div>
+                <p>Updating not working on backend yet, sorry</p>
+                <div className="five fields">
+                    <div className="field">
+                        <label>Who</label>
+                        <select className="ui fluid search dropdown" onChange={this.selectGrader}>
+                            <option value="">Select grader</option>
+                            {this.props.graders.map((grader, index) =>
+                                <option key={index} className="item" value={grader.personId}>
+                                    {grader.title}&nbsp;&nbsp;{grader.firstname}&nbsp;&nbsp;{grader.lastname}&nbsp;&nbsp;Studyfield:&nbsp;{grader.studyfieldId}
+                                </option>
+                            )}
+                        </select>
+                    </div>
+                    {this.renderTitleList()}
+                    {this.renderNameField("First name")}
+                    {this.renderNameField("Last name")}
+                    {this.renderStudyfieldList()}
+                    <div className="field">
+                        <label>&nbsp;</label>
+                        <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
+                            Update Supervisor
                     </button>
+                    </div>
                 </div>
             </div>
         );

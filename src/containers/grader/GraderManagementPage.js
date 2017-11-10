@@ -50,11 +50,12 @@ export class GraderManagementPage extends Component {
                     </ul>
      */
 
-    toggleEditModal = (e, key) => {
+    toggleEditModal = (e, person) => {
         let newValue = !this.state.showReview;
         this.setState(
             {
                 showReview: newValue,
+                personToBeReviewed: person
             }
         );
     }
@@ -63,25 +64,21 @@ export class GraderManagementPage extends Component {
         return (
             <div className="ui segment">
                 <p>
-                    Add and edit supervisor list here or review thesis projects (to be added soon!). This page will be displayed to studyfields' professors and admins only.
+                    Add and edit supervisor list here or review thesis projects. This page will be displayed to studyfields' professors and admins only.
                 </p>
-
-                <h2>List of thesis supervisors needing approval</h2>
-                <ul className="ui list"> {this.state.agreementPersons.map(person => (
-                    <li>{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
+                <h2>List of thesis supervisors (atm showing all, in future those needing approval)</h2>
+                <div>{this.state.agreementPersons.map(person => (
+                    <div>{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
                         &nbsp;&nbsp;
-                            <button key={person.personId} className="ui button" onClick={(e) => this.toggleEditModal(e, this.key)} >
+                            <button key={person.personId} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >
                             Review Supervisor
                             </button>
-                    </li>
+                    </div>
                 ))
                 }
-                </ul>
-
-                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} />
-
+                </div>
+                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} />
                 <h2>Edit supervisor list</h2>
-                <p>Updating not working on backend yet, sorry</p>
                 <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={
                     this.state.supervisors.map(supervisor => (supervisor))
                 } />
