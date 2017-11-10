@@ -6,7 +6,9 @@ export default class Review extends Component {
         super(props);
         this.state = {
             showModal: props.showModal,
-            person: props.person
+            person: props.person,
+            review: null,
+            isApproved: null
         }
     }
 
@@ -14,17 +16,36 @@ export default class Review extends Component {
         let person = Object.assign({}, props.person);
         this.setState(
             {
-                person: person
+                person: person,
+                isApproved: person.approved,
+                review: person.statement
             }
         );
     }
 
     handleSave = () => {
+        this.setState(
+            {
+                isApproved: true
+            }
+        )
         this.props.closeModal();
     }
 
     handleDisapproval = () => {
+        this.setState(
+            {
+                isApproved: false
+            }
+        )
         this.props.closeModal();
+    }
+
+    handleReviewChange = (event) => {
+        const old = this.state.review;
+        let newReview = old;
+        newReview = event.target.value;
+        this.setState({ review: newReview });
     }
 
     renderTexts() {
@@ -32,22 +53,22 @@ export default class Review extends Component {
             <div className="scrolling content">
                 <div className="description">
                     <p><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
-                        grader for thesis: THESISNAMEHERE</p>
+                        grader for thesis: THESISNAMEWILLBEHERE</p>
                     <p>Write a review, if this grader needs it. Other info to be shown here?</p>
                 </div>
                 <div>
                     <div className="field ui">
-                        <label>Write your review here</label><br/>
-                        <textarea rows="5" type="text" />
+                        <label>Write your review here</label><br />
+                        <textarea rows="5" type="text" value={this.state.review} onChange={this.handleReviewChange} />
                     </div>
-                    
+
                 </div>
             </div>
         )
     }
 
     render() {
-        console.log(this.props, this.state);
+        //console.log(this.props, this.state);
         if (!this.props.showModal) {
             return (<div />);
         }
@@ -57,16 +78,16 @@ export default class Review extends Component {
                 <div className="ui active modal" style={{ top: 45, border: '2px solid black', borderRadius: '7px' }}>
                     <i className="close icon" onClick={this.props.closeModal}></i>
                     <div className="header">Review grader</div>
-                    
                     {this.renderTexts()}
-
                     <br />
-                    <button className="ui positive button" onClick={ this.handleSave }>
-                        Accept grader
-                    </button>
-                    <button className="ui negative button" onClick={ this.handleDisapproval }>
-                        Do not accept
-                    </button>
+                    <div className="two fields">
+                        <button className="ui positive button" onClick={this.handleSave}>
+                            Accept grader
+                        </button>
+                        <button className="ui negative button" onClick={this.handleDisapproval}>
+                            Do not accept
+                        </button>
+                    </div>
                 </div>
             </div>
         );
