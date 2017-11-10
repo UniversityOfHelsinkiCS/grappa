@@ -51,24 +51,7 @@ test.cb('getAllTheses returns correct information', t => {
     service.getAllTheses.restore();
 });
 
-test.cb.only('saveAgreement returns 500 if there no database ', t => {
-    const body ={
-        thesisTitle: 'Annin Grady',
-        urkund: 'http://',
-        grade: 4,
-        graderEval: 'Tarkastajien esittely',
-        userId: 1
-    };
-    req.body = body;
-    thesisController.saveThesis(req, res)
-        .then(() => {
-            console.log("RES THEN" + JSON.stringify(res));
-            t.is(res.status.calledWith(500), true, "saveThesis returns status 500 if no database");
-            t.end();
-        });
-});
-
-test('when agreement is send to route, and body is correct, status is 200', async t => {
+test('saveAgreement calls services method', async t => {
     const body ={
         title: 'Annin Grady',
         urkund: 'http://',
@@ -77,10 +60,9 @@ test('when agreement is send to route, and body is correct, status is 200', asyn
         userId: 1
     };
     req.body = body;
-
-    const res = await request(app)
-    .post('/theses', req)
-    .send();
-
-    t.is(res.status, 200);
+    const spy = sinon.spy(service, "saveThesis");
+    thesisController.saveThesis(req, res).then((response) => {
+        t.is(spy.calledOnce, true, "saveThesis calls services method saveThesis");
+    })
+   
 });
