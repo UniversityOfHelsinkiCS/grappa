@@ -20,46 +20,93 @@ export async function getAllAgreements(req, res) {
     res.status(200).json(agreements);
 }
 
-export async function saveAgreement(req, res) {
+const agreementHasNoId = function(data) {
+    return data.agreementId === "" || data.agreementId == null;
+} 
+const getPersonData = function(data) {
+    const personData = {
+        personId: data.personId,
+        firstname: data.studentFirstName,
+        lastname: data.studentLastName,
+        studentNumber: data.studentNumber,
+        email: data.studentEmail,
+        major: data.studentMajor
+    };
+    return personData;
+}
+
+const getThesisData = function(data) {
+    const thesisData = {
+        thesisTitle: data.thesisTitle,
+        startDate: data.thesisStartDate,
+        completionEta: data.thesisCompletionEta,
+        performancePlace:  data.thesisPerformancePlace
+    };
+    return thesisData;
+}
+
+const getAgreementData = function(data, thesisId) {
+    const agreementData = {
+        authorId: data.personId,
+        thesisId: thesisId,
+        responsibleSupervisorId: data.responsibleSupervisorId,
+        studyFieldId: data.studyFieldId,
+        studentGradeGoal: data.studentGradeGoal,
+        studentWorkTime: data.thesisWorkStudentTime,
+        supervisorWorkTime: data.thesisWorkSupervisorTime,
+        intermediateGoal: data.thesisWorkIntermediateGoal,
+        meetingAgreement: data.thesisWorkMeetingAgreement,
+        other: data.thesisWorkOther
+    };
+}
+export function saveAgreement(req, res) {
     const data = req.body;
-    if (data.agreementId === "" || data.agreementId == null) {
-        try {
-            const personData = {
-                personId: data.personId,
-                firstname: data.studentFirstName,
-                lastname: data.studentLastName,
-                studentNumber: data.studentNumber,
-                email: data.studentEmail,
-                major: data.studentMajor
-            };
-            await personService.updatePerson(personData);
-            const thesisData = {
-                thesisTitle: data.thesisTitle,
-                startDate: data.thesisStartDate,
-                completionEta: data.thesisCompletionEta,
-                performancePlace:  data.thesisPerformancePlace
-            };
-            const thesisId = await thesisService.saveThesis(thesisData);
-            const agreementData = {
-                authorId: data.personId,
-                thesisId: thesisId,
-                responsibleSupervisorId: data.responsibleSupervisorId,
-                studyFieldId: data.studyFieldId,
-                studentGradeGoal: data.studentGradeGoal,
-                studentWorkTime: data.thesisWorkStudentTime,
-                supervisorWorkTime: data.thesisWorkSupervisorTime,
-                intermediateGoal: data.thesisWorkIntermediateGoal,
-                meetingAgreement: data.thesisWorkMeetingAgreement,
-                other: data.thesisWorkOther
-            };
-            const agreementId = await agreementService.saveNewAgreement(agreementData);
-            res.status(200).json({ text: "agreement save successfull(/SQL error)", agreementId: agreementId });
-        } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
+    if (agreementHasNoId(data)) {
+        const personData = getPersonData(data);
+        const personUpdatedSuccessfully = updatePerson(personData);
+        console.log("PERSON SAVE " + JSON.stringify(personUpdatedSuccessfully));
+        const thesisData = getThesisData(data);
+        const thesisSaveInformation = saveThesis(data);
+        console.log("thesisSaveInformation " + JSON.stringify(thesisSaveInformation));
+        const agreementData = getAgreementData(data, thesisSaveInformation.id);
+        const agreementSavedSuccesfully = saveAgreementToService(agreementData);
+        if (personUpdatedSuccessfully && thesisSaveInformation.success && agreementSavedSuccesfully) {
+            res.status(200).json({text: "Agreement saved successfully"});
+            }
+        else {
+            res.status(500).json({text: "Error occured"});
         }
+        
     } else {
         res.status(500).json({ text: "agreement already exists" });
     }
+}
+
+const updatePerson = async function(personData) {
+     personService.updatePerson(personData).then((response) => {
+        console.log("Personin päivitys onnistui");
+        return true;
+    }).catch(err => {
+        console.log("Personin päivitys epäonnistui");
+        return false;
+    });
+}
+
+const saveThesis = async function(thesisData) {
+    thesisService.saveThesis(thesisData).then((response) =>  {
+        return {success: true, id: response};
+    }
+    ).catch(err => {
+        return {success: false, id: null};
+    });
+}
+
+const saveAgreementToService = async function(agreementData) {
+    agreementService.saveNewAgreement(agreementData).then((response) => {
+        return true;
+    }).catch(err => {
+        return false;
+    })
 }
 
 export async function updateAgreement(req, res) {
