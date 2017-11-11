@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { callApi } from "../../util/apiConnection.js";
+import { connect } from "react-redux";
+import { reviewSupervisor } from "./GraderActions.js";
 
-export default class Review extends Component {
+
+export class Review extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,11 +27,15 @@ export default class Review extends Component {
     }
 
     handleSave = () => {
+        let editedPerson = { ...this.state.person };
+        editedPerson.review = this.state.review;
         this.setState(
             {
-                isApproved: true
+                isApproved: true,
+                person: editedPerson
             }
         )
+        this.props.reviewSupervisor(editedPerson);
         this.props.closeModal();
     }
 
@@ -93,3 +100,17 @@ export default class Review extends Component {
         );
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    reviewSupervisor(data) {
+        dispatch(reviewSupervisor(data));
+    }
+});
+
+const mapStateToProps = (state) => {
+    return {
+        personToBeReviewed: state.person
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Review);

@@ -15,22 +15,29 @@ export const saveAddedGrader = (grader) => {
 }
 
 export const getSupervisors = () => {
-    const route = '/supervisors'
+    const route = '/supervisors';
     const prefix = "GET_ALL_";
     const method = "get";
     return callController(route, prefix, method);
 }
 
-export const deleteSupervisor = () => {
-    const route = '/supervisors'
+export const deleteSupervisor = (data) => {
+    const route = '/supervisors';
     const prefix = "DELETE_ONE_";
     const method = "delete";
     return callController(route, prefix, method);
 }
 
+export const reviewSupervisor = (data) => {
+    const route = '/supervisors/review';
+    const prefix = "REVIEW_ONE_";
+    const method = "put";
+    return callController(route, prefix, method);
+}
+
 const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
-    callApi(route, method, data) //TODO fix so that can use different paths
+    callApi(route, method, data)
         .then(res => dispatch(action(prefix + "SUCCESS", res)))
         .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

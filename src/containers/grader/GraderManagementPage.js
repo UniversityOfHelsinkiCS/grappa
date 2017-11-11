@@ -20,7 +20,6 @@ export class GraderManagementPage extends Component {
 
     componentDidMount() {
         document.title = "Grader and Supervisor Management";
-        console.log("Didmount")
 
         /*callApi("/supervisors").then((resp) => {
             let supervisors = resp.data.map((supervisors) => supervisors);
@@ -47,19 +46,7 @@ export class GraderManagementPage extends Component {
         this.props.removeSupervisor(grader);
     }
 
-    /* <h2>Thesis projects</h2>
-                    <ThesisList fields={4} />
-
-                    <h2>List of all supervisors</h2>
-                    <ul class="ui list"> {this.state.supervisors.map(supervisor => (
-                        <li> {supervisor.title} {supervisor.firstname} {supervisor.lastname} studyfield: {supervisor.studyfieldId}</li>
-                    ))
-                    }
-                    </ul>
-     */
-
     toggleEditModal = (e, person) => {
-        console.log(this.state.personToBeReviewed);
         let newValue = !this.state.showReview;
         this.setState(
             {
@@ -70,7 +57,6 @@ export class GraderManagementPage extends Component {
     }
 
     render() {
-        console.log("Props", this.props)
         return (
             <div className="ui segment">
                 <p>
@@ -86,7 +72,7 @@ export class GraderManagementPage extends Component {
                             <button key={person.personId} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >
                                 Review Supervisor
                             </button>
-                            <button key={person.personId + "key"} className="ui negative button" onClick={this.removeSupervisor(person)} >
+                            <button key={person.personId + "key"} className="ui negative disabled button" onClick={this.removeSupervisor(person)} >
                                 Remove Supervisor
                             </button>
                         </div>
@@ -111,24 +97,12 @@ const mapDispatchToProps = (dispatch) => ({
     getSupervisors(data) {
         dispatch(getSupervisors());
     },
-    removeSupervisor(data){
+    removeSupervisor(data) {
         dispatch(deleteSupervisor(data));
     }
-    //old
-    /*saveAddedGrader: function (data) {
-        dispatch(saveAddedGrader(data));
-    },
-    saveUpdatedGrader: function (data) {
-        dispatch(saveUpdatedGrader(data));
-    },
-    getGraders: function (data) {
-        dispatch(getGraders(data));
-    },
-    */
 });
 
 const mapStateToProps = (state) => {
-    console.log("Map state to props", state);
     return { 
         graders: state.grader
     };
