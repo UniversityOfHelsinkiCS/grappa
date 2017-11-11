@@ -25,6 +25,7 @@
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.1",
+    "busboy": "^0.2.14",
     "express": "^4.15.4",
     "knex": "^0.13.0",
     "pg": "^7.3.0",
