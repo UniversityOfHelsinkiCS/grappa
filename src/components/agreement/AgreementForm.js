@@ -32,13 +32,14 @@ class AgreementPage extends Component {
 
     parseResponceData = (data) => {
         var parsedData = data.agreement;
+        //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
             if (data.persons[i].personRoleId === 1) {
-                parsedData.thesisSupervisorMain = data.persons[i].name
-            } else if (data.persons[i].personRoleId === 2) {
-                parsedData.thesisSupervisorSecond = data.persons[i].name
-            } else if (data.persons[i].personRoleId === 3) {
-                parsedData.thesisSupervisorOther = data.persons[i].name
+                parsedData.thesisSupervisorMain = data.persons[i].firstname + " " + data.persons[i].lastname
+            } else if (parsedData.thesisSupervisorSecond === undefined) {
+                parsedData.thesisSupervisorSecond = data.persons[i].firstname + " " + data.persons[i].lastname
+            } else {
+                parsedData.thesisSupervisorOther = data.persons[i].firstname + " " + data.persons[i].lastname
             }
         }
         return parsedData;
