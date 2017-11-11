@@ -17,7 +17,7 @@ const combinedReducers = combineReducers({
 });
 
 let store;
-if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_NO_DEVTOOLS !== '1') {
+if (process.env.REACT_APP_DEVTOOLS == '1') {
     store = createStore(
         combinedReducers,
         compose(applyMiddleware(thunk),

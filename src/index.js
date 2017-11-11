@@ -25,7 +25,7 @@ import './media/App.css';
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
+        <Router basename='/v2'>
             <div className="App">
                 <NavBar />
                 <div className="ui left aligned container">
