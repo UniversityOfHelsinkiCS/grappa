@@ -10,7 +10,7 @@ export class Review extends Component {
         this.state = {
             showModal: props.showModal,
             person: props.person,
-            review: null,
+            statement: null,
             isApproved: null
         }
     }
@@ -21,38 +21,39 @@ export class Review extends Component {
             {
                 person: person,
                 isApproved: person.approved,
-                review: person.statement
+                statement: person.statement
             }
         );
     }
 
     handleSave = () => {
         let editedPerson = { ...this.state.person };
-        editedPerson.review = this.state.review;
-        this.setState(
-            {
-                isApproved: true,
-                person: editedPerson
-            }
-        )
+        editedPerson.statement = this.state.statement;
+        editedPerson.approved = true;
         this.props.reviewSupervisor(editedPerson);
         this.props.closeModal();
     }
 
     handleDisapproval = () => {
-        this.setState(
-            {
-                isApproved: false
-            }
-        )
+        let editedPerson = { ...this.state.person };
+        editedPerson.statement = this.state.statement;
+        editedPerson.approved = false;
+        this.props.reviewSupervisor(editedPerson);
         this.props.closeModal();
     }
 
     handleReviewChange = (event) => {
-        const old = this.state.review;
+        const old = this.state.statement;
         let newReview = old;
         newReview = event.target.value;
-        this.setState({ review: newReview });
+        this.setState({ statement: newReview });
+    }
+
+    renderIfApproved() {
+        if (this.state.person.approved === 1) {
+            return "yes";
+        }
+        return "no (or not supervising at all)"
     }
 
     renderTexts() {
@@ -60,13 +61,14 @@ export class Review extends Component {
             <div className="scrolling content">
                 <div className="description">
                     <p><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
-                        grader for thesis: THESISNAMEWILLBEHERE</p>
+                        grader for thesis: id: {this.state.person.agreementId} name: to be shown...</p>
+                    <p>The grader is approved to supervise this thesis: {this.renderIfApproved()}</p>
                     <p>Write a review, if this grader needs it. Other info to be shown here?</p>
                 </div>
                 <div>
                     <div className="field ui">
                         <label>Write your review here</label><br />
-                        <textarea rows="5" type="text" value={this.state.review} onChange={this.handleReviewChange} />
+                        <textarea rows="5" type="text" value={this.state.statement} onChange={this.handleReviewChange} />
                     </div>
 
                 </div>

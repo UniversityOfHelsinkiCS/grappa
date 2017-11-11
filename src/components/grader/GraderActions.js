@@ -15,7 +15,7 @@ export const saveAddedGrader = (grader) => {
 }
 
 export const getSupervisors = () => {
-    const route = '/supervisors';
+    const route = '/supervisors/agreementPersons';
     const prefix = "GET_ALL_";
     const method = "get";
     return callController(route, prefix, method);
@@ -28,127 +28,20 @@ export const deleteSupervisor = (data) => {
     return callController(route, prefix, method);
 }
 
-export const reviewSupervisor = (data) => {
+export const reviewSupervisor = (supervisor) => {
     const route = '/supervisors/review';
     const prefix = "REVIEW_ONE_";
     const method = "put";
-    return callController(route, prefix, method);
+    return callController(route, prefix, method, supervisor);
 }
 
 const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
-        .then(res => dispatch(action(prefix + "SUCCESS", res)))
-        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+        .then(res => {
+            console.log('res', res);
+            dispatch(action(prefix + "SUCCESS", res))})
+        .catch(err => {
+            console.log(err);
+            dispatch(action(prefix + "FAILURE", err.response))});
 }
-
-
-
-
-
-
-
-/*export const saveAddedAttempt = function () {
-    return {
-        type: ADD_GRADER_SAVE_ATTEMPT,
-        text: 'Trying to save a grader/supervisor'
-    };
-}
-*/
-
-/*
-export const saveAddedSuccess = function (data) {
-    return {
-        type: ADD_GRADER_SAVE_SUCCESS,
-        text: 'Grader/supervisor added',
-        data
-    };
-}
-
-export const saveAddedFailure = function (error) {
-    return {
-        type: ADD_GRADER_SAVE_FAILURE,
-        text: 'Couldn\'t save a grader/supervisor',
-        error
-    };
-}
-
-export const saveUpdatedAttempt = function () {
-    return {
-        type: UPDATE_GRADER_SAVE_ATTEMPT,
-        text: 'Trying to update a grader/supervisor'
-    };
-}
-
-export const saveUpdatedSuccess = function (data) {
-    return {
-        type: UPDATE_GRADER_SAVE_SUCCESS,
-        text: 'Grader/supervisor updated',
-        data
-    };
-}
-
-export const saveUpdatedFailure = function (error) {
-    return {
-        type: UPDATE_GRADER_SAVE_FAILURE,
-        text: 'Couldn\'t update a grader/supervisor',
-        error
-    };
-}
-
-
-export const getGradersAttempt = function () {
-    return {
-        type: GET_GRADERS_ATTEMPT,
-        text: 'Trying to get graders/supervisors'
-    };
-}
-
-export const getGradersSuccess = function (data) {
-    return {
-        type: GET_GRADERS_SUCCESS,
-        text: 'Managed to get graders/supervisors',
-        data
-    };
-}
-
-export const getGradersFailure = function (error) {
-    return {
-        type: GET_GRADERS_FAILURE,
-        text: 'Couldn\'t get graders/supervisors',
-        error
-    };
-}
-
-export const getGraders = (grader) => {
-    return (dispatch) => {
-        dispatch(getGradersAttempt());
-        callApi('/supervisors', 'get', grader)
-            .then(res =>  dispatch(getGradersSuccess(res)))
-            .catch(err => dispatch(getGradersFailure(err.response)));
-    }
-}
-
-//old one
-/*export const saveAddedGrader = (grader) => {
-    return (dispatch) => {
-        dispatch(saveAddedAttempt());
-        callApi('/supervisors/save', 'post', grader)
-            .then(res =>  dispatch(saveAddedSuccess(res)))
-            .catch(err => dispatch(saveAddedFailure(err.response)));
-    }
-}
-*/
-
-/*
-export const saveUpdatedGrader = (grader) => {
-    return (dispatch) => {
-        dispatch(saveUpdatedAttempt());
-        callApi('/supervisors/update', 'post', grader)
-            .then(res =>  dispatch(saveUpdatedSuccess(res)))
-            .catch(err => dispatch(saveUpdatedFailure(err.response)));
-    }
-}
-
-*/
-
