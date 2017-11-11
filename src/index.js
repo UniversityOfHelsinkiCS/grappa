@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 //components
@@ -25,7 +25,7 @@ import './media/App.css';
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter basename='/v2'>
+        <Router basename='/v2'>
             <div className="App">
                 <NavBar />
                 <div className="ui left aligned container">
@@ -42,7 +42,7 @@ ReactDOM.render(
                     </Switch>
                 </div>
             </div>
-        </BrowserRouter>
+        </Router>
     </Provider>,
     document.getElementById('root')
 );
