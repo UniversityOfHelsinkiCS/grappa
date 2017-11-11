@@ -33,8 +33,10 @@ export const getPersonById = (id) => {
 }
 
 export const getAgreementPersonsByAgreementId = (id) => {
-    return knex.select().from('agreementPerson')
-        .join('role', 'agreementPerson.roleId', '=', 'role.roleId')
+    //TODO: figure out why this returns duplicates without distinct
+    return knex.distinct('person.firstname', 'person.lastname', 'personRoleField.personRoleId').select().from('agreementPerson')
+        .leftJoin('personRoleField', 'agreementPerson.roleId', '=', 'personRoleField.roleId')
+        .leftJoin('person', 'personRoleField.personId', '=', 'person.personId')
         .where('agreementId', id)
         .then(persons => {
             return persons;
