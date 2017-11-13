@@ -63,6 +63,10 @@ const permissions = {
             show: [
                 nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment'], nav['councilMeeting'], nav['councilMeetings'], nav['emailDrafts']
             ]
+        },
+        'agreement': {
+            'create': ['studentAddress', 'studentEmail', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
+            'edit': ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorPrimary', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
         }
     }
 }

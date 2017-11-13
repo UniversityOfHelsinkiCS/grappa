@@ -27,14 +27,29 @@ export class AgreementPage extends Component {
         document.title = "Agreement Page";
         //TODO: REMOVE THIS
         callApi("/agreements/1").then((resp) => {
-            var original = Object.assign({}, resp.data[0]);
+            var data = this.parseResponceData(resp.data);
             this.setState(
                 {
-                    formData: resp.data[0],
-                    originalData: original
+                    formData: data,
+                    originalData: Object.assign({}, data)
                 }
             );
         }).catch((error) => console.error(error));
+    }
+
+    parseResponceData = (data) => {
+        var parsedData = data.agreement;
+        //TODO: refactor this when we can distinguish between secondary and other supervisor
+        for (let i = 0; i < data.persons.length; i++) {
+            if (data.persons[i].personRoleId === data.agreement.responsibleSupervisorId) {
+                parsedData.thesisSupervisorMain = data.persons[i].firstname + " " + data.persons[i].lastname
+            } else if (parsedData.thesisSupervisorSecond === undefined) {
+                parsedData.thesisSupervisorSecond = data.persons[i].firstname + " " + data.persons[i].lastname
+            } else {
+                parsedData.thesisSupervisorOther = data.persons[i].firstname + " " + data.persons[i].lastname
+            }
+        }
+        return parsedData;
     }
 
     toggleEditModal = () => {
@@ -49,14 +64,14 @@ export class AgreementPage extends Component {
     //TODO: REMOVE THIS
     sendForm = (e) => {
         //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements', this.state.formData)
+        service.oldPut('/agreements/1', this.state.formData)
             .then(resp => {
                 console.log(resp)
             }).catch((error) => {
                 console.error(error)
             });
         //Make this better
-        window.location.reload();
+        //window.location.reload();
     }
 
     startNewAgreement = () => {
