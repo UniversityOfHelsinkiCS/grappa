@@ -27,10 +27,7 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (data.agreementId === "" || data.agreementId == null) {
         try {
-            //REMOVE THIS WHEN AGREEMENT SAVE WORKS
-            data.personId = 1;
-            data.thesisSupervisorMain = 1;
-            /*const personData = {
+            const personData = {
                 personId: data.personId,
                 firstname: data.studentFirstName,
                 lastname: data.studentLastName,
@@ -58,7 +55,7 @@ export async function saveAgreement(req, res) {
                 meetingAgreement: data.thesisWorkMeetingAgreement,
                 other: data.thesisWorkOther
             };
-            const agreementId = await agreementService.saveNewAgreement(agreementData);*/
+            const agreementId = await agreementService.saveNewAgreement(agreementData);
             emailService.agreementCreated(data);
             res.status(200).json({ text: "agreement save successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {

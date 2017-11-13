@@ -19,13 +19,15 @@ const testSmtp = () => ({
 });
 
 export async function sendEmail(to, subject, body, attachments) {
-    console.log("sendEmail", to);
     var senderSettings = testSmtp();
     var transporter = nodemailer.createTransport(senderSettings);
 
     // if you don't want to spam people/yourself use this
-    //if (process.env.NODE_ENV === "dev")
-    //    return logMail(to, subject, body, attachments);
+    if (process.env.NODE_ENV !== "production") {
+        return logMail(to, subject, body, attachments);
+    }
+
+    console.log("email sent");
 
     const options = {
         from: senderSettings.from,
@@ -34,8 +36,6 @@ export async function sendEmail(to, subject, body, attachments) {
         text: body,
         attachments: attachments || []
     };
-
-    console.log("mail options", options);
 
     return new Promise((resolve, reject) => {
         transporter.sendMail(options, (err, info) => {
@@ -54,7 +54,7 @@ export async function sendEmail(to, subject, body, attachments) {
 
 const logMail = (to, subject, body, attachments) => {
     console.log("----------------");
-    console.log(smtp());
+    console.log(testSmtp());
     console.log(to);
     console.log(subject);
     console.log(body);
