@@ -9,7 +9,7 @@ class AgreementView extends Component {
                 <h4>Gradun tekijän tiedot</h4>
                 <p>
                     <div className="two fields">
-                        Gradun tekijän nimi: { data.studentName + "\t"}|
+                        Gradun tekijän nimi: { data.studentFirstName + " " + data.studentLastName + "\t"}|
                         Pääaine: { data.studentMajor }
                     </div>
                     <div className="two fields">

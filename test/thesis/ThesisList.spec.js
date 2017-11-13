@@ -4,8 +4,6 @@ import {Router, Link } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import ThesisList from '../../src/components/thesis/ThesisList';
-require('ignore-styles')
-
 
 const thesisApp = <ThesisList/>
 const wrapper = shallow(thesisApp);
