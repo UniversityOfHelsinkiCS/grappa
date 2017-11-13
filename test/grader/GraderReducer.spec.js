@@ -1,6 +1,32 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
+import reducer from '../../src/components/grader/GraderReducer';
+
+const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"}
+const councilmeetingEdited = { id: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: "date"}
+const councilmeeting2 = { id: 2, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date2"}
+
+const councilmeetings = [ councilmeeting, councilmeeting2 ]
+
+const stateWithACouncilmeeting = [ councilmeeting ];
+const stateWithCouncilmeetings = councilmeetings;
+const stateWithEditedCouncilmeeting = [ councilmeeting2 ];
+
+test.skip('get all success changes state correctly', reducerTest(
+    reducer,
+    [],
+    {
+        type: "GRADER_GET_ALL_SUCCESS", 
+        response: "test",
+    },
+    ["test"],
+));
+
+
+/*import test from 'ava';
+import { reducerTest } from 'redux-ava';
+
 import graderSave from '../../src/components/grader/GraderReducer';
 import reducer from '../../src/components/grader/GraderReducer';
 import { saveAddedSuccess,
@@ -86,3 +112,4 @@ test('getAttempt changes state correctly', reducerTest(
     getGradersAttempt(),
     stateWithGetAttempt,
 ));
+*/
