@@ -3,7 +3,7 @@ import test from 'ava';
 import { shallow } from 'enzyme';
 import { GraderManagementPage } from '../../src/containers/grader/GraderManagementPage.js';
 
-const wrapper = shallow(<GraderManagementPage/>);
+const wrapper = shallow(<GraderManagementPage graders={[]} getSupervisors={()=>{}}/>);
 
 test('contains grader editor component', t => {
     t.truthy(wrapper.find("GraderEditor"));

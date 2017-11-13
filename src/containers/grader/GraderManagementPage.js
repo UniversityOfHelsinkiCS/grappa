@@ -15,22 +15,12 @@ export class GraderManagementPage extends Component {
             personToBeReviewed: null,
             showReview: false
         }
-        this.props.getSupervisors();        
+                
     }
 
     componentDidMount() {
-        document.title = "Grader and Supervisor Management";
-
-        /*callApi("/supervisors").then((resp) => {
-            let supervisors = resp.data.map((supervisors) => supervisors);
-            this.setState({ supervisors: supervisors });
-        }).catch((error) => console.error(error));
-
-        callApi("/supervisors/agreementPersons").then((resp) => {
-            let persons = resp.data.map((persons) => persons);
-            this.setState({ agreementPersons: persons });
-        }).catch((error) => console.error(error));
-        */
+       this.props.getSupervisors();
+       document.title = "Grader and Supervisor Management";
     }
     
     handleSaveGrader = (grader) => {
