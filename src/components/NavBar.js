@@ -7,7 +7,6 @@ export class NavBar extends Component {
     state = {
         links: [
             { path: '/', text: 'Homepage' },
-            { path: '/agreementform', text: 'AgreementForm' },
             { path: '/agreement', text: 'Agreement' },
             { path: '/theses', text: 'Theses' },
             { path: '/gradermanagement', text: 'Supervisor management' },
