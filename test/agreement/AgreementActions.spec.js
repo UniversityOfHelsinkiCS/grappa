@@ -11,10 +11,7 @@ import {
     saveSuccess,
     saveFailure,
     saveAgreement,
-    AGREEMENT_SAVE_ATTEMPT,
-    AGREEMENT_SAVE_SUCCESS,
-    AGREEMENT_SAVE_FAILURE
-} from '../../src/components/agreement/AgreementActions';
+} from '../../src/containers/agreement/agreementActions';
 
 const agreementTestData = { some: 'data' };
 const agreementTestDataError = { response: { some: 'error' } };
@@ -28,20 +25,20 @@ test('saveSuccess returns correct type', actionTest(
     saveSuccess,
     { data: "some data" },
     agreementTestData,
-    { type: AGREEMENT_SAVE_SUCCESS, text: 'Sopimus talletettu onnistuneesti', data: { data: "some data" } },
+    { type: "AGREEMENT_SAVE_SUCCESS", text: 'Sopimus talletettu onnistuneesti', data: { data: "some data" } },
 ));
 
 test('saveFailure returns correct type', actionTest(
     saveFailure,
     { error: "some error" },
     agreementTestData,
-    { type: AGREEMENT_SAVE_FAILURE, text: 'Sopimuksen talletus epäonnistui', error: { error: "some error" } },
+    { type: "AGREEMENT_SAVE_FAILURE", text: 'Sopimuksen talletus epäonnistui', error: { error: "some error" } },
 ));
 
 test('saveAttempt returns correct type', actionTest(
     saveAttempt,
     agreementTestData,
-    { type: AGREEMENT_SAVE_ATTEMPT, text: 'Sopimuksen talletus käynnistetty' },
+    { type: "AGREEMENT_SAVE_ATTEMPT", text: 'Sopimuksen talletus käynnistetty' },
 ));
 
 test('saveAgreement calls saveSuccess on succesful callApi promise resolution', async t => {

@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk';
-import agreementReducer from "../components/agreement/AgreementReducer";
+import agreementReducer from "../containers/agreement/agreementReducer";
 import userReducer from "../components/user/UserReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
 import graderReducer from "../components/grader/GraderReducer";
@@ -19,7 +19,7 @@ const combinedReducers = combineReducers({
 });
 
 let store;
-if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_NO_DEVTOOLS !== '1') {
+if (process.env.REACT_APP_DEVTOOLS == '1') {
     store = createStore(
         combinedReducers,
         compose(applyMiddleware(thunk),
