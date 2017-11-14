@@ -6,7 +6,7 @@ import Agreement from '../../components/agreement/Agreement';
 
 //redux
 import { connect } from "react-redux";
-import { saveAgreement } from "./agreementActions";
+import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
 
 //TODO: REMOVE THIS
 import { callApi } from "../../util/apiConnection";
@@ -17,7 +17,6 @@ export class AgreementPage extends Component {
         super(props);
         this.state = {
             newAgreement: false,
-            formData: {},
             originalData: {},
             editMode: false
         }
@@ -25,19 +24,11 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-        //TODO: REMOVE THIS
-        callApi("/agreements/1").then((resp) => {
-            var data = this.parseResponceData(resp.data);
-            this.setState(
-                {
-                    formData: data,
-                    originalData: Object.assign({}, data)
-                }
-            );
-        }).catch((error) => console.error(error));
+
+        this.props.getAgreement();
     }
 
-    parseResponceData = (data) => {
+    parseResponseData = (data) => {
         var parsedData = data.agreement;
         //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
@@ -61,17 +52,8 @@ export class AgreementPage extends Component {
         this.setState({ formData: data });
     }
 
-    //TODO: REMOVE THIS
-    sendForm = (e) => {
-        //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements/1', this.state.formData)
-            .then(resp => {
-                console.log(resp)
-            }).catch((error) => {
-                console.error(error)
-            });
-        //Make this better
-        //window.location.reload();
+    sendForm = () => {
+        this.props.updateAgreement(this.state.formData)
     }
 
     startNewAgreement = () => {
@@ -98,8 +80,8 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.formData} originalData={this.state.originalData} updateFormData={this.updateFormData} />
-                    <AgreementView agreementData={this.state.formData} />
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.props.agreement} originalData={this.state.originalData} updateFormData={this.updateFormData} />
+                    <AgreementView agreementData={this.props.agreement} />
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
@@ -114,8 +96,14 @@ export class AgreementPage extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    getAgreement(data) {
+        dispatch(getAgreement(data));
+    },
     saveAgreement(data) {
         dispatch(saveAgreement(data));
+    },
+    updateAgreement(data) {
+        dispatch(updateAgreement(data));
     },
 });
 
