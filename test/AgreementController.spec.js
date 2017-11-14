@@ -86,6 +86,7 @@ test.cb('getAgreementById does not return incorrect information', t => {
 });
 */
 test.cb('saveAgreement', t => {
+    req.body.personId = 1;
     const stub = sinon.stub(agreementService, "saveNewAgreement");
     agreementController.service = agreementService;
     agreementController.saveAgreement(req, res)
