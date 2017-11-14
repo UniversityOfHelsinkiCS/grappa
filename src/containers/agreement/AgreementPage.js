@@ -83,8 +83,6 @@ export class AgreementPage extends Component {
     }
 
     render() {
-        //check if form data has changed
-        var changes = (JSON.stringify(this.state.formData) === JSON.stringify(this.state.originalData));
         if (this.state.newAgreement) {
             return (
                 <div>
@@ -94,6 +92,8 @@ export class AgreementPage extends Component {
                 </div>
             );
         } else {
+            //check if form data has changed
+            const disableSubmit = this.state.formData === this.state.originalData;
             return (
                 <div>
                     <br />
@@ -102,7 +102,7 @@ export class AgreementPage extends Component {
                     <AgreementView agreementData={this.state.formData} />
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
-                        <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
+                        <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
                         <br />
                         <br />
                         <p><Link to="/">Go back to HomePage</Link></p>

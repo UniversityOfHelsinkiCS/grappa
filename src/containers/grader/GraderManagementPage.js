@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { saveAddedGrader, getSupervisors, deleteSupervisor } from "./graderActions.js";
+import { saveAddedGrader, getSupervisors, deleteSupervisor, reviewSupervisor } from "./graderActions.js";
 
 import Review from "../../components/grader/Review.js";
 import GraderEditor from "../../components/grader/GraderEditor.js"
