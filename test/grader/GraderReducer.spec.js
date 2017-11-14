@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/components/grader/GraderReducer';
+import reducer from '../../src/containers/grader/graderReducer';
 
 const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"}
 const councilmeetingEdited = { id: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: "date"}
@@ -24,11 +24,13 @@ test.skip('get all success changes state correctly', reducerTest(
 ));
 
 
-/*import test from 'ava';
+/* ONLY TEST EACH COMPLETED ROUTE: DO NOT TEST ROUTES THAT ARE BOTH GOING TO DEFAULT
+
+import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import graderSave from '../../src/components/grader/GraderReducer';
-import reducer from '../../src/components/grader/GraderReducer';
+import graderSave from '../../src/containers/grader/graderReducer';
+import reducer from '../../src/containers/grader/graderReducer';
 import { saveAddedSuccess,
     saveAddedFailure,
     saveAddedAttempt,
@@ -37,7 +39,7 @@ import { saveAddedSuccess,
     saveUpdatedFailure,
     getGradersAttempt,
     getGradersSuccess,
-    getGradersFailure } from '../../src/components/grader/GraderActions';
+    getGradersFailure } from '../../src/containers/grader/graderActions';
 
 const initialState = [];
 const stateWithSaveSuccess = [{ id: 'ADD_GRADER_SAVE_SUCCESS', text: 'Grader/supervisor added', formClass: "success", completed: true }];

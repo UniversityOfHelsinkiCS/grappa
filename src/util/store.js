@@ -1,9 +1,9 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk';
-import agreementReducer from "../containers/agreement/agreementReducer";
 import userReducer from "../components/user/UserReducer";
+import agreementReducer from "../containers/agreement/agreementReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
-import graderReducer from "../components/grader/GraderReducer";
+import graderReducer from "../containers/grader/graderReducer";
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
