@@ -63,15 +63,18 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         const personData = getPersonData(data);
-        const personId =  updatePerson(personData);
+        const personSaveResponse =  updatePerson(personData);
         const thesisData = getThesisData(data);
-        const thesisId = saveThesis(thesisData);
-        const agreementData = getAgreementData(data, thesisId);
-        const agreementId = saveAgreementToService(agreementData);
-        if (personId && thesisId && agreementId) {
-            personData.personId = personId;
-            thesisData.thesisId = thesisId;
-            agreementData.agreementId = agreementId;
+        const thesisSaveResponse = saveThesis(thesisData);
+        const agreementData = getAgreementData(data, thesisSaveResponse);
+        const agreementSaveResponse = await saveAgreementToService(agreementData);
+        if (!personSaveResponse.errno && !thesisSaveResponse.errno && !agreementSaveResponse.errno) {
+            personData.personId = personSaveResponse;
+            thesisData.thesisId = thesisSaveResponse;
+            agreementData.agreementId = agreementSaveResponse;
+            console.log("personID" ,personSaveResponse);
+            console.log("ThesisID" ,thesisSaveResponse);
+            console.log("AgreementID" ,agreementSaveResponse);
             res.status(200).json({person: personData, thesis: thesisData, agreement: agreementData });
             }
         else {
@@ -85,7 +88,6 @@ export async function saveAgreement(req, res) {
 
 const updatePerson = async function(personData) {
    return await personService.updatePerson(personData);
-  
 }
 
 const saveThesis = async function(thesisData) {
