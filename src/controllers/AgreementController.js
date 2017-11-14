@@ -63,7 +63,7 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         const personData = getPersonData(data);
-        const personUpdatedSuccessfully = await updatePerson(personData);
+        const personUpdatedSuccessfully =  updatePerson(personData);
         console.log("PERSON UPDATE " + JSON.stringify(personUpdatedSuccessfully));
         const thesisData = getThesisData(data);
         const thesisSaveInformation = saveThesis(data);
