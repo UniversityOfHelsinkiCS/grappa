@@ -73,7 +73,7 @@
     "start": "API_URL=http://localhost:3100 node scripts/start.js",
     "start:dev": "REACT_APP_DEVTOOLS=1 API_URL=http://localhost:3100 node scripts/start.js",
     "start:win": "set API_URL=http://localhost:3100&&node scripts/start.js",
-    "build": "API_URL=/api/ node scripts/build.js",
+    "build": "API_URL=/api/ PUBLIC_URL=/v2/ node scripts/build.js",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
     "test:win": "ava",
     "report": "nyc report --reporter=html",
