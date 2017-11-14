@@ -1,32 +1,14 @@
-const agreementSave = (state = [], action) => {
+const reducer = (state = [], action) => {
     switch (action.type) {
-        case 'AGREEMENT_SAVE_SUCCESS':
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "success",
-                completed: true
-            }];
-        case 'AGREEMENT_SAVE_FAILURE':
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "error",
-                completed: true
-            }];
-        case 'AGREEMENT_SAVE_ATTEMPT':
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "",
-                completed: false
-            }];
+        case "AGREEMENT_GET_ONE_SUCCESS":
+            return [...state, action.response.data];
+        case "AGREEMENT_SAVE_ONE_SUCCESS":
+            return [...state, action.response.data];
+        case "AGREEMENT_DELETE_ONE_SUCCESS":
+            return state.filter(grader => grader.personId !== action.response.data.personId);
         default:
             return state;
     }
 };
 
-export default agreementSave;
+export default reducer;
