@@ -10,7 +10,7 @@ export const agreementCreated = (data) => {
         console.log("no template");
         return;
     }
-    getEmailAddressByPersonRoleFieldId(data.thesisSupervisorMain).then(address => {
+    getEmailAddressByPersonRoleId(data.thesisSupervisorMain).then(address => {
         return mailer.sendEmail(address, 'New Agreement created', body);
     })
 }
@@ -22,10 +22,10 @@ export const agreementUpdated = (data) => {
     //kova koodattu tässä vaiheessa
 }
 
-const getEmailAddressByPersonRoleFieldId = (id) => {
-    console.log("getEmailAddressByPersonRoleFieldId");
-    return knex.select('person.email').from('personRoleField')
-        .join('person', 'personRoleField.personId', '=', 'person.personId')
-        .where('personRoleField.personId', id)
+const getEmailAddressByPersonRoleId = (id) => {
+    console.log("getEmailAddressByPersonRoleId");
+    return knex.select('person.email').from('personWithRole')
+        .join('person', 'personWithRole.personId', '=', 'person.personId')
+        .where('personWithRole.personId', id)
         .then(to => { return to[0].email })
 }
