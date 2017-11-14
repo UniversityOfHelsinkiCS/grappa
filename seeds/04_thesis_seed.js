@@ -7,6 +7,8 @@ exports.seed = function (knex, Promise) {
                 {
                     thesisId: 1,
                     thesisTitle: 'Annin Grady',
+                    startDate: '6.5.2005',
+                    completionEta: '1.2.2006',
                     performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 4,
@@ -16,6 +18,8 @@ exports.seed = function (knex, Promise) {
                 {
                     thesisId: 2,
                     thesisTitle: 'Hieno Gradu',
+                    startDate: '1.1.2014',
+                    completionEta: '5.8.2014',
                     performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 1,
@@ -25,6 +29,8 @@ exports.seed = function (knex, Promise) {
                 {
                     thesisId: 3,
                     thesisTitle: 'Amazing Thesis',
+                    startDate: '13.2.1999',
+                    completionEta: '14.2.2000',
                     performancePlace: 'Hima',
                     urkund: 'http://',
                     grade: 4,
