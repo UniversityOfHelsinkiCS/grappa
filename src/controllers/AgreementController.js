@@ -1,9 +1,8 @@
-require('babel-polyfill');
+
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
-const express = require('express');
-const app = express();
+
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
@@ -20,10 +19,10 @@ export async function getAllAgreements(req, res) {
     res.status(200).json(agreements);
 }
 
-const agreementHasNoId = function(data) {
+const agreementHasNoId = (data) => {
     return data.agreementId === "" || data.agreementId == null;
 } 
-const getPersonData = function(data) {
+const getPersonData = (data) => {
     const personData = {
         personId: data.personId,
         firstname: data.studentFirstName,
@@ -35,7 +34,7 @@ const getPersonData = function(data) {
     return personData;
 }
 
-const getThesisData = function(data) {
+const getThesisData = (data) => {
     const thesisData = {
         thesisTitle: data.thesisTitle,
         startDate: data.thesisStartDate,
@@ -45,7 +44,7 @@ const getThesisData = function(data) {
     return thesisData;
 }
 
-const getAgreementData = function(data, thesisId) {
+const getAgreementData = (data, thesisId) => {
     const agreementData = {
         authorId: data.personId,
         thesisId: thesisId,
@@ -58,25 +57,24 @@ const getAgreementData = function(data, thesisId) {
         meetingAgreement: data.thesisWorkMeetingAgreement,
         other: data.thesisWorkOther
     };
+    return agreementData;
 }
 export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         const personData = getPersonData(data);
-        const personUpdatedSuccessfully =  updatePerson(personData);
-        console.log("PERSON UPDATE " + JSON.stringify(personUpdatedSuccessfully));
+        const personId =  updatePerson(personData);
         const thesisData = getThesisData(data);
-        const thesisSaveInformation = saveThesis(data);
-        console.log("thesisSaveInformation " + JSON.stringify(thesisSaveInformation));
-        const agreementData = getAgreementData(data, thesisSaveInformation.id);
-        const agreementSavedSuccesfully = saveAgreementToService(agreementData);
-        if (personUpdatedSuccessfully && thesisSaveInformation.success && agreementSavedSuccesfully) {
-            res.status(200).json({text: "Agreement saved successfully"});
+        const thesisId = saveThesis(thesisData);
+        const agreementData = getAgreementData(data, thesisId);
+        const agreementId = saveAgreementToService(agreementData);
+        if (personId && thesisId && agreementId) {
+            personData.personId = personId;
+            thesisData.thesisId = thesisId;
+            agreementData.agreementId = agreementId;
+            res.status(200).json({person: personData, thesis: thesisData, agreement: agreementData });
             }
         else {
-            console.log("personUpdatedSuccesfully " + personUpdatedSuccessfully);
-            console.log("thesisSave " + thesisSaveInformation.success);
-            console.log("agreementSave " + JSON.stringify(agreementSavedSuccesfully));
             res.status(500).json({text: "Error occured"});
         }
         
@@ -86,30 +84,16 @@ export async function saveAgreement(req, res) {
 }
 
 const updatePerson = async function(personData) {
-    await personService.updatePerson(personData).then((response) => {
-        console.log("Personin päivitys onnistui");
-        return true;
-    }).catch(err => {
-        console.log("Personin päivitys epäonnistui");
-        return false;
-    });
+   return await personService.updatePerson(personData);
+  
 }
 
 const saveThesis = async function(thesisData) {
-    await thesisService.saveThesis(thesisData).then((response) =>  {
-        return {success: true, id: response};
-    }
-    ).catch(err => {
-        return {success: false, id: null};
-    });
+    return await thesisService.saveThesis(thesisData);
 }
 
 const saveAgreementToService = async function(agreementData) {
-    await agreementService.saveNewAgreement(agreementData).then((response) => {
-        return true;
-    }).catch(err => {
-        return false;
-    })
+    return await agreementService.saveNewAgreement(agreementData);
 }
 
 export async function updateAgreement(req, res) {
