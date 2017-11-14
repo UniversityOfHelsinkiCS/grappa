@@ -6,22 +6,22 @@ export const getEmailDrafts = () => {
     return callController(prefix, method);
 }
 
-export const saveEmailDraft = (councilmeeting) => {
+export const saveEmailDraft = (emailDraft) => {
     const prefix = "SAVE_ONE_";
     const method = "post";
-    return callController(prefix, method);
+    return callController(prefix, method, emailDraft);
 }
 
-export const updateEmailDraft = (councilmeeting) => {
+export const updateEmailDraft = (emailDraft) => {
     const prefix = "UPDATE_ONE_";
     const method = "put";
-    return callController(prefix, method);
+    return callController(prefix, method, emailDraft);
 }
 
-export const deleteEmailDraft = (councilmeeting) => {
+export const deleteEmailDraft = (emailDraft) => {
     const prefix = "DELETE_ONE_";
     const method = "delete";
-    return callController(prefix, method);
+    return callController(prefix, method, emailDraft);
 }
 
 const action = (suffix, response) => {
@@ -31,9 +31,9 @@ const action = (suffix, response) => {
     }
 }
 
-const callController = (prefix, method) => (dispatch) => {
+const callController = (prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
-    callApi('/emaildrafts', method)
+    callApi('/emaildrafts', method, data)
         .then(res => dispatch(action(prefix + "SUCCESS", res)))
         .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

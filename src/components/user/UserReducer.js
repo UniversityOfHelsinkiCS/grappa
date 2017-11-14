@@ -1,11 +1,6 @@
-import { 
-     CHANGE_ROLE_ATTEMPT, CHANGE_ROLE_SUCCESS, CHANGE_ROLE_FAILURE,
-} from "./UserActions";
-
-
 const changeUserRole = (state = [], action) => {
     switch (action.type) {
-        case CHANGE_ROLE_SUCCESS:
+        case "CHANGE_ROLE_SUCCESS":
             return [...state,
             {
                 id: action.type,
@@ -14,7 +9,7 @@ const changeUserRole = (state = [], action) => {
                 formClass: "success",
                 completed: true
             }];
-        case CHANGE_ROLE_FAILURE:
+        case "CHANGE_ROLE_FAILURE":
             return [...state,
             {
                 id: action.type,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import { callApi } from "../../util/apiConnection.js";
+
 import AssesmentInFinnish from '../../resources/assesmentInFinnish.json';
 import AssesmentInEnglish from '../../resources/assesmentInEnglish.json';
 import AssesmentInSwedish from '../../resources/assesmentInSwedish.json';
@@ -17,7 +17,7 @@ class AssesmentOfTheses extends Component {
     }
 
     changeLanguage = (lang, e) => {
-        this.setState({language:lang});
+        this.setState({ language: lang });
     }
 
     renderAssesment() {
@@ -27,13 +27,13 @@ class AssesmentOfTheses extends Component {
         } else if (this.state.language === "swe") {
             assesment = AssesmentInSwedish;
         }
-        return assesment.map(all => (
-            <div>
+        return assesment.map((all, index) => (
+            <div key={index}>
                 <h2>{all.title}</h2>
                 <p>{all.text}</p>
-                <ul class="ui list"> {all.list !== undefined &&
-                    all.list.map(lista => (
-                        <li><b>{lista.title}</b> {lista.text}</li>
+                <ul className="ui list"> {all.list !== undefined &&
+                    all.list.map((lista, index) => (
+                        <li key={index}><b>{lista.title}</b> {lista.text}</li>
                     ))
                 }
                 </ul>

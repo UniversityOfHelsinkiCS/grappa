@@ -30,24 +30,6 @@ export class EmailDraftPage extends Component {
         return draftList.sort((a, b) => a.id > b.id);
     }
 
-    //TODO: CUID??
-    findSuitableDraftId = (draftList) => {
-        let id = 0;
-        if (draftList) {
-            let notOk = true;
-            this.sortDraftList(draftList);
-            while (notOk) {
-                draftList.forEach(draft => {
-                    if (draft.id == id) {
-                        id++;
-                    }
-                });
-                notOk = draftList.some(draft => draft.id == id);
-            }
-        }
-        return id;
-    }
-
     editName = (event) => {
         this.setState({ newDraftName: event.target.value });
     }
@@ -63,9 +45,7 @@ export class EmailDraftPage extends Component {
 
     handleAddDraft = () => {
         if (this.state.newDraftName) {
-            const id = this.findSuitableDraftId(this.props.EmailDrafts);
             const draft = {
-                id,
                 body: "",
                 title: "",
                 type: this.state.newDraftName,

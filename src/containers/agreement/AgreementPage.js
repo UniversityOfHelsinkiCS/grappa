@@ -8,10 +8,6 @@ import Agreement from '../../components/agreement/Agreement';
 import { connect } from "react-redux";
 import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
 
-//TODO: REMOVE THIS
-import { callApi } from "../../util/apiConnection";
-const service = require("../../util/apiConnection");
-
 export class AgreementPage extends Component {
     constructor(props) {
         super(props);
@@ -24,8 +20,7 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-
-        this.props.getAgreement();
+        this.props.getAgreement(1);
     }
 
     parseResponseData = (data) => {
