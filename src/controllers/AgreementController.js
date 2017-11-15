@@ -2,13 +2,8 @@
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
-<<<<<<< HEAD
-
-=======
 const emailService = require('../services/EmailService');
-const express = require('express');
-const app = express();
->>>>>>> trunk
+
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
