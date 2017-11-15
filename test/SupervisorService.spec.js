@@ -44,7 +44,7 @@ test.before(async t => {
         table.string('name');
     });
     //knex.schema.dropTableIfExists('personRoleField');
-    await knex.schema.createTable('personRoleField', function (table) {
+    await knex.schema.createTable('personWithRole', function (table) {
         table.increments('personRoleId').primary();
         table.integer('personId').unsigned();
         table.foreign('personId').references('person.personId');
@@ -58,11 +58,11 @@ test.before(async t => {
         table.integer('agreementId').unsigned();
         table.foreign('agreementId').references('agreement.agreementId');
         table.integer('personRoleId').unsigned(); //grader
-        table.foreign('personRoleId').references('personRoleField.personRoleId');
+        table.foreign('personRoleId').references('personWithRole.personRoleId');
         table.integer('roleId').unsigned();
         table.foreign('roleId').references('role.roleId');
         table.integer('approverId').unsigned();
-        table.foreign('approverId').references('personRoleField.personRoleId');
+        table.foreign('approverId').references('personWithRole.personRoleId');
         table.boolean('approved');
         table.date('approvalDate');
         table.string('statement');
@@ -77,8 +77,8 @@ test.beforeEach(async t => {
     await knex('studyfield').insert(mockStudyfields);
     await knex('role').del();
     await knex('role').insert(mockRoles);
-    await knex('personRoleField').del();
-    await knex('personRoleField').insert(mockPersonRoles);
+    await knex('personWithRole').del();
+    await knex('personWithRole').insert(mockPersonRoles);
     await knex('agreementPerson').del();
     await knex('agreementPerson').insert(mockAgreementPersons);
 });

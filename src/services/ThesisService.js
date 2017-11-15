@@ -5,9 +5,9 @@ const knex = require('../../connection');
 // don't know if export function is better than export const? Both are working.
 
 export function getAllTheses() {
-    return knex.select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
-        .join('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
-        .join('person', 'agreement.authorId', '=', 'person.personId')
+    return knex.distinct('thesis.thesisId').select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
+        .leftJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
+        .leftJoin('person', 'thesis.userId', '=', 'person.personId')
         .then(thesis => {
             return thesis;
         });

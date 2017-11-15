@@ -1,9 +1,13 @@
 const knex = require('../../connection');
 
 export const getAgreementById = (id) => {
-    return knex.select().from('agreement').where('agreementId', id)
+    return knex.select('thesis.title as thesisTitle', 'studyfield.name as studentMajor', 'agreement.studentGradeGoal', 'person.email as studentEmail', 'person.firstname as studentFirstName', 'person.lastname as studentLastName').from('agreement')
+        .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+        .join('person', 'agreement.authorId', '=', 'person.personId')
+        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .where('agreementId', id)
         .then(agreement => {
-            return agreement;
+            return parseAgreementData(agreement[0])
         });
 }
 
@@ -46,4 +50,36 @@ export const savePrevious = (data) => {
         .insert(data)
         .then(agreementId => agreementId[0])
         .catch(err => err);
+}
+
+//change data formatting from DB to front
+const parseAgreementData = (data) => {
+    let parsed = {
+        //person
+        personId: data.personId,
+        studentFirstName: data.firstname,
+        studentLastName: data.lastname,
+        studentNumber: data.studentNumber,
+        studentAddress: data.address,
+        studentPhone: data.phone,
+        studentEmail: data.email,
+        studentMajor: data.major,
+        //thesis
+        thesisTitle: data.thesisTitle,
+        thesisStartDate: data.startDate,
+        thesisCompletionEta: data.completionEta,
+        thesisPerformancePlace: data.performancePlace,
+        //agreement
+        authorId: data.personId,
+        thesisId: data.thesisId,
+        responsibleSupervisorId: data.responsibleSupervisorId,
+        studyFieldId: data.studyFieldId,
+        studentGradeGoal: data.studentGradeGoal,
+        thesisWorkStudentTime: data.studentWorkTime,
+        thesisWorkSupervisorTime: data.supervisorWorkTime,
+        thesisWorkIntermediateGoal: data.intermediateGoal,
+        thesisWorkMeetingAgreement: data.meetingAgreement,
+        thesisWorkOther: data.other
+    }
+    return parsed;
 }

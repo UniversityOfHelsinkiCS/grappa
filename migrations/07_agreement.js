@@ -8,7 +8,7 @@ exports.up = function (knex, Promise) {
             table.integer('thesisId').unsigned();
             table.foreign('thesisId').references('thesis.thesisId');
             table.integer('responsibleSupervisorId').unsigned();
-            table.foreign('responsibleSupervisorId').references('personRoleField.personRoleId');
+            table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
             table.integer('studyFieldId').unsigned();
             table.foreign('studyFieldId').references('studyfield.studyfieldId');
             table.boolean('fake');

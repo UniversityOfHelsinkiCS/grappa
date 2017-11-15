@@ -2,11 +2,18 @@
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
+<<<<<<< HEAD
 
+=======
+const emailService = require('../services/EmailService');
+const express = require('express');
+const app = express();
+>>>>>>> trunk
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
-    res.status(200).json(agreement);
+    const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
+    res.status(200).json({ agreement: agreement, persons: agreementPersons });
 }
 
 export async function getPreviousAgreementById(req, res) {
@@ -60,6 +67,7 @@ const getAgreementData = (data, thesisId) => {
     return agreementData;
 }
 export async function saveAgreement(req, res) {
+    console.log("saveAgreement");
     const data = req.body;
     data.personId = 1; //because front dont give id from shibboleth yet
     if (agreementHasNoId(data)) {
@@ -80,6 +88,7 @@ export async function saveAgreement(req, res) {
             }
         else {
             res.status(500).json({text: "Error occured"});
+
         }
         
     } else {
@@ -110,6 +119,7 @@ export async function updateAgreement(req, res) {
                 lastname: data.studentLastName,
                 studentNumber: data.studentNumber,
                 email: data.studentEmail,
+                address: data.studentAddress,
                 major: data.studentMajor
             };
             const cleanPersonData = removeUselessKeys(personData);
@@ -138,6 +148,7 @@ export async function updateAgreement(req, res) {
             };
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
+            emailService.agreementUpdated(data);
             res.status(200).json({ text: "agreement update successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
@@ -167,4 +178,3 @@ export async function savePrevious(req, res) {
         res.status(500).json({ text: "error occurred", error: err });
     }
 }
-
