@@ -70,8 +70,6 @@ export class AgreementPage extends Component {
             }).catch((error) => {
                 console.error(error)
             });
-        //Make this better
-        //window.location.reload();
     }
 
     startNewAgreement = () => {
@@ -103,9 +101,6 @@ export class AgreementPage extends Component {
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
-                        <br />
-                        <br />
-                        <p><Link to="/">Go back to HomePage</Link></p>
                     </div>
                 </div>
             );
