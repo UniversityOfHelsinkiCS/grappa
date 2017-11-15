@@ -34,7 +34,7 @@ const remove = (url) => {
     return getAxios().delete(url).then(res => {res.status === 200 ? res : Promise.reject()});
 }
 
-//todo: switch case for rest; richer argument possibilities
+//If you feel a sudden urge to call this from outside a Redux Action: Don't.
 export function callApi(url, method='get', content){
     switch(method) {
         case "get":

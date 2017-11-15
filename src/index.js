@@ -6,8 +6,7 @@ import { Provider } from 'react-redux';
 //components
 import App from './components/App';
 import NavBar from './components/NavBar';
-import AgreementForm from './components/agreement/AgreementForm';
-import Agreement from './components/agreement/Agreement';
+import AgreementPage from './containers/agreement/AgreementPage';
 import GraderManagement from './containers/grader/GraderManagementPage';
 import ThesisList from './components/thesis/ThesisList';
 import AssesmentOfTheses from './containers/thesis/AssesmentOfTheses';
@@ -26,14 +25,13 @@ import './media/App.css';
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
+        <Router basename='/v2'>
             <div className="App">
                 <NavBar />
                 <div className="ui left aligned container">
                     <Switch>
                         <Route exact path="/" component={App} />
-                        <Route exact path="/agreementform" component={AgreementForm} />
-                        <Route exact path="/agreement" component={Agreement} />
+                        <Route exact path="/agreement" component={AgreementPage} />
                         <Route exact path="/theses" component={ThesisList} />
                         <Route exact path="/gradermanagement" component={GraderManagement} />
                         <Route exact path="/thesis" component={ThesisManage} />

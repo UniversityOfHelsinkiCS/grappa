@@ -1,87 +1,17 @@
-import { 
-    ADD_GRADER_SAVE_SUCCESS, ADD_GRADER_SAVE_FAILURE, ADD_GRADER_SAVE_ATTEMPT, 
-    UPDATE_GRADER_SAVE_SUCCESS, UPDATE_GRADER_SAVE_FAILURE, UPDATE_GRADER_SAVE_ATTEMPT, 
-    GET_GRADERS_ATTEMPT, GET_GRADERS_SUCCESS, GET_GRADERS_FAILURE, 
-} from "./GraderActions";
-
-
-const graderSave = (state = [], action) => {
+const reducer = (state = [], action) => {
     switch (action.type) {
-        case ADD_GRADER_SAVE_SUCCESS:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "success",
-                completed: true
-            }];
-        case ADD_GRADER_SAVE_FAILURE:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "error",
-                completed: true
-            }];
-        case ADD_GRADER_SAVE_ATTEMPT:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "",
-                completed: false
-            }];
-        case UPDATE_GRADER_SAVE_SUCCESS:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "success",
-                completed: true
-            }];
-        case UPDATE_GRADER_SAVE_FAILURE:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "error",
-                completed: true
-            }];
-        case UPDATE_GRADER_SAVE_ATTEMPT:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "",
-                completed: false
-            }];
-        case GET_GRADERS_ATTEMPT:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "",
-                completed: false
-            }];
-        case GET_GRADERS_FAILURE:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "error",
-                completed: true
-            }];
-        case GET_GRADERS_SUCCESS:
-            return [...state,
-            {
-                id: action.type,
-                text: action.text,
-                formClass: "success",
-                completed: true
-            }];
+        case "GRADER_SAVE_ONE_SUCCESS":
+            return [...state, action.response.data];
+        case "GRADER_GET_ALL_SUCCESS":
+            return action.response.data;
+        case "GRADER_DELETE_ONE_SUCCESS":
+            return state.filter(grader => grader.personId !== action.response.data.personId);
+        case "GRADER_REVIEW_ONE_SUCCESS":
+            console.log(action);
+            return [...state, action.response.data];
         default:
             return state;
     }
 };
 
-export default graderSave;
+export default reducer;
