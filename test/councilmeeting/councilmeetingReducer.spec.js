@@ -4,7 +4,7 @@ import { reducerTest } from 'redux-ava';
 
 import reducer from '../../src/containers/councilmeeting/councilmeetingReducer';
 
-const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"}
+const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"};
 const councilmeetingEdited = { id: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: "date"}
 const councilmeeting2 = { id: 2, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date2"}
 

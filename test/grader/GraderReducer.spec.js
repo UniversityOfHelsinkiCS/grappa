@@ -1,115 +1,51 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
+import reducer from '../../src/components/grader/GraderReducer.js';
 
-import reducer from '../../src/components/grader/GraderReducer';
+const graders = [{id: 1, approved: false},{id: 2, approved: true}];
+const grader = {id: 3, approved: false};
+const reviewedGrader = {id: 3, approved: true};
 
-const councilmeeting = { id: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date"}
-const councilmeetingEdited = { id: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: "date"}
-const councilmeeting2 = { id: 2, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: "date2"}
+const stateWithGraders = graders;
+const stateWithGrader = [grader];
+const stateWithReviewedGrader = [reviewedGrader];
 
-const councilmeetings = [ councilmeeting, councilmeeting2 ]
-
-const stateWithACouncilmeeting = [ councilmeeting ];
-const stateWithCouncilmeetings = councilmeetings;
-const stateWithEditedCouncilmeeting = [ councilmeeting2 ];
-
-test.skip('get all success changes state correctly', reducerTest(
+test('get all success changes state correctly', reducerTest(
     reducer,
     [],
     {
         type: "GRADER_GET_ALL_SUCCESS", 
-        response: "test",
+        response: graders,
     },
-    ["test"],
+    stateWithGraders.data,
 ));
 
-
-/*import test from 'ava';
-import { reducerTest } from 'redux-ava';
-
-import graderSave from '../../src/components/grader/GraderReducer';
-import reducer from '../../src/components/grader/GraderReducer';
-import { saveAddedSuccess,
-    saveAddedFailure,
-    saveAddedAttempt,
-    saveUpdatedAttempt,
-    saveUpdatedSuccess,
-    saveUpdatedFailure,
-    getGradersAttempt,
-    getGradersSuccess,
-    getGradersFailure } from '../../src/components/grader/GraderActions';
-
-const initialState = [];
-const stateWithSaveSuccess = [{ id: 'ADD_GRADER_SAVE_SUCCESS', text: 'Grader/supervisor added', formClass: "success", completed: true }];
-const stateWithSaveFailure = [{ id: 'ADD_GRADER_SAVE_FAILURE', text: 'Couldn\'t save a grader/supervisor', formClass: "error", completed: true}];
-const stateWithSaveAttempt = [{ id: 'ADD_GRADER_SAVE_ATTEMPT', text: 'Trying to save a grader/supervisor', formClass: "", completed: false }];
-const stateWithUpdateSuccess = [{ id: 'UPDATE_GRADER_SAVE_SUCCESS', text: 'Grader/supervisor updated', formClass: "success", completed: true }];
-const stateWithUpdateFailure = [{ id: 'UPDATE_GRADER_SAVE_FAILURE', text: 'Couldn\'t update a grader/supervisor', formClass: "error", completed: true}];
-const stateWithUpdateAttempt = [{ id: 'UPDATE_GRADER_SAVE_ATTEMPT', text: 'Trying to update a grader/supervisor', formClass: "", completed: false }];
-const stateWithGetSuccess = [{ id: 'GET_GRADERS_SUCCESS', text: 'Managed to get graders/supervisors', formClass: "success", completed: true }];
-const stateWithGetFailure = [{ id: 'GET_GRADERS_FAILURE', text: 'Couldn\'t get graders/supervisors', formClass: "error", completed: true}];
-const stateWithGetAttempt = [{ id: 'GET_GRADERS_ATTEMPT', text: 'Trying to get graders/supervisors', formClass: "", completed: false }];
-
-test('saveSuccess changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveAddedSuccess(),
-    stateWithSaveSuccess,
+test('save added success changes state correctly', reducerTest(
+    reducer,
+    [],
+    {
+        type: "GRADER_SAVE_ONE_SUCCESS", 
+        response: grader,
+    },
+    [stateWithGrader.data],
 ));
 
-test('saveFailure changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveAddedFailure(),
-    stateWithSaveFailure,
+test.skip('delete success changes state correctly', reducerTest(
+    reducer,
+    [stateWithGrader.data],
+    {
+        type: "GRADER_DELETE_ONE_SUCCESS", 
+        response: grader.id,
+    },
+    [],
 ));
 
-test('saveAttempt changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveAddedAttempt(),
-    stateWithSaveAttempt,
+test.skip('review success changes state correctly', reducerTest(
+    reducer,
+    [stateWithGrader],
+    {
+        type: "GRADER_REVIEW_ONE_SUCCESS", 
+        response: reviewedGrader,
+    },
+    [stateWithReviewedGrader],
 ));
-
-test('updateSuccess changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveUpdatedSuccess(),
-    stateWithUpdateSuccess,
-));
-
-test('updateFailure changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveUpdatedFailure(),
-    stateWithUpdateFailure,
-));
-
-test('updateAttempt changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    saveUpdatedAttempt(),
-    stateWithUpdateAttempt,
-));
-
-test('getSuccess changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    getGradersSuccess(),
-    stateWithGetSuccess,
-));
-
-test('getFailure changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    getGradersFailure(),
-    stateWithGetFailure,
-));
-
-test('getAttempt changes state correctly', reducerTest(
-    graderSave,
-    initialState,
-    getGradersAttempt(),
-    stateWithGetAttempt,
-));
-*/
