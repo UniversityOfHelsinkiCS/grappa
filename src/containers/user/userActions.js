@@ -1,10 +1,7 @@
-import { callApi } from '../../util/apiConnection';
-
 const action = (suffix, response) => {
     return {
         type: "USER_" + suffix,
         response,
-
     }
 }
 

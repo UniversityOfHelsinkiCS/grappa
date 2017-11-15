@@ -1,3 +1,5 @@
+import { paths as nav } from './routes'
+
 export const getPermissions = (role, context, method) => {
     if (!(role && context && method))
         return undefined;
@@ -5,19 +7,6 @@ export const getPermissions = (role, context, method) => {
 }
 
 export const userRoles = ['student', 'supervisor', 'resp_professor', "other_supervisor", 'admin']
-
-const nav = {
-    home: {path: '/', text: 'Homepage'},
-    agreementForm: {path: '/agreementform', text: 'AgreementForm'},
-    agreement: {path: '/agreement', text: 'Agreement'},
-    theses: {path: '/theses', text: 'Theses'},
-    graderManagement: {path: '/graderManagement', text: 'Supervisor management'},
-    thesis: {path: '/thesis', text: 'New thesis'},
-    assesment: { path: '/assesment', text: 'Assesment of theses'},
-    councilMeeting: { path: '/councilmeeting', text: 'Next councilmeeting' },
-    councilMeetings: { path: '/councilmeetings', text: 'Councilmeetings' },
-    emailDrafts: { path: '/emaildrafts', text: 'Email drafts' }
-}
 
 const permissions = {
     //Supervisor

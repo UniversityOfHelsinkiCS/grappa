@@ -4,9 +4,6 @@ import { login } from "../containers/user/userActions";
 import { userRoles } from "../util/rolePermissions";
 
 export class App extends Component {
-    constructor() {
-        super();
-    }
 
     componentDidMount() {
         document.title = "Grappa: Main page";
@@ -27,7 +24,7 @@ export class App extends Component {
                     <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
                         <option value="">Choose a role</option>
                         {userRoles.map((role, index) => 
-                            <option value={role}>{role}</option>
+                            <option key={index} value={role}>{role}</option>
                         )}
                     </select>
                     <p>Your role is: {this.props.user ? this.props.user.type : "Not selected"} </p>
