@@ -18,6 +18,7 @@ exports.up = function (knex, Promise) {
             table.string('intermediateGoal');
             table.string('meetingAgreement');
             table.string('other');
+            table.string('whoNext').defaultTo('supervisor'); //student creates agreement
             table.timestamps();
         })
     ]);

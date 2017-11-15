@@ -23,14 +23,15 @@ export async function getAllAgreements(req, res) {
 
 const agreementHasNoId = (data) => {
     return data.agreementId === "" || data.agreementId == null;
-} 
+}
+
 const getPersonData = (data) => {
-    const name = data.studentName; // THIS NEEDS TO BE FIXED 
+    const name = data.studentName; // THIS NEEDS TO BE FIXED
     const nameSplitted = name.split(" ");
     const personData = {
         personId: data.personId,
-        firstname: nameSplitted[0],
-        lastname: nameSplitted[1],
+        firstname: (nameSplitted[0] ? nameSplitted[0] : ''),
+        lastname: (nameSplitted[1] ? nameSplitted[1] : ''),
         studentNumber: data.studentNumber,
         email: data.studentEmail,
         major: data.studentMajor
@@ -52,7 +53,7 @@ const getAgreementData = (data, thesisId) => {
     const agreementData = {
         authorId: data.personId,
         thesisId: thesisId,
-        responsibleSupervisorId: data.responsibleSupervisorId,
+        responsibleSupervisorId: data.thesisSupervisorMain,
         studyFieldId: data.studyFieldId,
         studentGradeGoal: data.studentGradeGoal,
         studentWorkTime: data.thesisWorkStudentTime,
@@ -63,13 +64,13 @@ const getAgreementData = (data, thesisId) => {
     };
     return agreementData;
 }
+
 export async function saveAgreement(req, res) {
-    console.log("saveAgreement");
     const data = req.body;
-    data.personId = 1; //because front dont give id from shibboleth yet
+    data.personId = 1; //because front doesn't give id from shibboleth yet
     if (agreementHasNoId(data)) {
         const personData = getPersonData(data);
-        const personSaveResponse =  await updatePerson(personData);
+        const personSaveResponse = await updatePerson(personData);
         const thesisData = getThesisData(data);
         const thesisSaveResponse = await saveThesis(thesisData);
         const agreementData = getAgreementData(data, thesisSaveResponse);
@@ -78,16 +79,11 @@ export async function saveAgreement(req, res) {
             personData.personId = personSaveResponse;
             thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
-            console.log("personID" ,personSaveResponse);
-            console.log("ThesisID" ,thesisSaveResponse);
-            console.log("AgreementID" ,agreementSaveResponse);
-            res.status(200).json({person: personData, thesis: thesisData, agreement: agreementData });
-            }
-        else {
-            res.status(500).json({text: "Error occured"});
-
+            emailService.agreementCreated(Object.assign(personData, thesisData, agreementData));
+            res.status(200).json({ person: personData, thesis: thesisData, agreement: agreementData });
+        } else {
+            res.status(500).json({ text: "Error occured" });
         }
-        
     } else {
         res.status(500).json({ text: "agreement already exists" });
     }
@@ -130,6 +126,7 @@ export async function updateAgreement(req, res) {
             };
             const cleanThesisData = removeUselessKeys(thesisData);
             const thesisResponse = await thesisService.updateThesis(cleanThesisData);
+            const receiver = await agreementService.getAgreementReceiver(agreementId);
             const agreementData = {
                 agreementId: agreementId,
                 authorId: data.personId,
@@ -141,11 +138,12 @@ export async function updateAgreement(req, res) {
                 supervisorWorkTime: data.thesisWorkSupervisorTime,
                 intermediateGoal: data.thesisWorkIntermediateGoal,
                 meetingAgreement: data.thesisWorkMeetingAgreement,
-                other: data.thesisWorkOther
+                other: data.thesisWorkOther,
+                whoNext: receiver
             };
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
-            emailService.agreementUpdated(data);
+            emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
             res.status(200).json({ text: "agreement update successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });

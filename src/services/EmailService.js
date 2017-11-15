@@ -5,27 +5,36 @@ const templates = require('../util/emailTemplates');
 export const agreementCreated = (data) => {
     console.log("agreementCreated", data);
     let body = templates.getEmailTemplate('createAgreement', data);
-    console.log("template", body);
-    if (!body) {
-        console.log("no template");
-        return;
-    }
-    getEmailAddressByPersonRoleId(data.thesisSupervisorMain).then(address => {
-        return mailer.sendEmail(address, 'New Agreement created', body);
-    })
+    getEmailAddressByPersonRoleId(data.responsibleSupervisorId).then(address => {
+        return mailer.sendEmail(address, 'New Agreement created by ' + data.firstname + ' ' + data.lastname, body);
+    });
 }
 
 export const agreementUpdated = (data) => {
     console.log("agreementUpdated", data);
-    let body = templates.getEmailTemplate('updateAgreement');
-    //selvitä kuka lähetti
-    //kova koodattu tässä vaiheessa
+    let body = templates.getEmailTemplate('updateAgreement', data);
+    getEmailAddressByAgreementAndRole(data).then(address => {
+        mailer.sendEmail(address, 'Agreement updated by ' + data.firstname + ' ' + data.lastname, body);
+    });
 }
 
 const getEmailAddressByPersonRoleId = (id) => {
-    console.log("getEmailAddressByPersonRoleId");
     return knex.select('person.email').from('personWithRole')
         .join('person', 'personWithRole.personId', '=', 'person.personId')
         .where('personWithRole.personId', id)
-        .then(to => { return to[0].email })
+        .then(to => to[0].email);
+}
+
+const getEmailAddressByAgreementAndRole = (data) => {
+    if (data.whoNext === 'supervisor') {
+        return knex.select('person.email').from('personWithRole')
+            .join('person', 'personWithRole.personId', '=', 'person.personId')
+            .where('personWithRole.personRoleId', data.responsibleSupervisorId)
+            .then(to => to);
+    } else if (data.whoNext === 'student') {
+        return knex.select('person.email').from('agreement')
+            .join('person', 'agreement.authorId', '=', 'person.personId')
+            .where('authorId', data.authorId)
+            .then(to => to);
+    }
 }
