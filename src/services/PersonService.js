@@ -22,11 +22,7 @@ export async function updatePerson(personData) {
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
-<<<<<<< HEAD
-        .then(personId => personId[0])
-=======
         .then(personId => personId)
->>>>>>> 20004689e306828d8008b3d7c027ca27417198a9
         .catch(err => err);
 }
 
