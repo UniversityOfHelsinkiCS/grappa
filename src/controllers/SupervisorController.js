@@ -42,11 +42,11 @@ export async function saveSupervisor(req, res) {
                 statement: ''
             };
             const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
-            res.status(200).json({ text: "supervisor save successful", personId: personId });
+            res.status(200).json(supervisorData);
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
         }
-    } else { //update
+    } else { //update doesn't work
         try {
             const supervisorRoleId = await supervisorService.getSupervisorRoleId();
             const personData = {
@@ -82,7 +82,8 @@ export async function saveSupervisor(req, res) {
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
-    if ((data.personRoleId != null || data.personRoleId === '') && (data.agreementId != null || data.agreementId === '')) {
+    //console.log("supervisorcontr, req: ", data);
+    if (data.personRoleId != null && data.agreementId != null) {
         try {
             let agreementPersonData = {
                 personRoleId: data.personRoleId,
@@ -93,7 +94,7 @@ export async function reviewSupervisor(req, res) {
                 approvalDate: new Date().toJSON()
             };
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
-            res.status(200).json({ text: "supervisor reviewed successfully", personRoleId: response });
+            res.status(200).json(data);
         } catch (err) {
             res.status(500).json({ text: "error occured", error: err });
         }
