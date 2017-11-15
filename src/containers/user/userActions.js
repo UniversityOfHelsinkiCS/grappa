@@ -13,7 +13,6 @@ export const login = (data) => {
     return callController(prefix, data);
 }
 
-
 export const logout = () => {
     const prefix = "LOGOUT_";
     return callController(prefix);

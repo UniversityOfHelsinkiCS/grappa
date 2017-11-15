@@ -4,6 +4,8 @@ export const getPermissions = (role, context, method) => {
     return permissions[role][context][method];
 }
 
+export const userRoles = ['student', 'supervisor', 'resp_professor', "other_supervisor", 'admin']
+
 const nav = {
     home: {path: '/', text: 'Homepage'},
     agreementForm: {path: '/agreementform', text: 'AgreementForm'},

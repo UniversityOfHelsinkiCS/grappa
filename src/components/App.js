@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login } from "../containers/user/userActions.js";
+import { login } from "../containers/user/userActions";
+import { userRoles } from "../util/rolePermissions";
 
 export class App extends Component {
     constructor() {
@@ -12,6 +13,7 @@ export class App extends Component {
     }
 
     handleRoleChange = (event) => {
+        if (!event.target.value) return
         const user = {
             type: event.target.value
         }
@@ -23,14 +25,12 @@ export class App extends Component {
             <div>
                 <div className="ui segment">
                     <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
-                        <option value="student">Choose a role</option>
-                        <option value="student">Opiskelija</option>
-                        <option value="supervisor">Vastuuohjaaja</option>
-                        <option value="other_supervisor">Muu ohjaaja</option>
-                        <option value="resp_professor">Vastuuprofessori</option>
-                        <option value="admin">Admin</option>
+                        <option value="">Choose a role</option>
+                        {userRoles.map((role, index) => 
+                            <option value={role}>{role}</option>
+                        )}
                     </select>
-                    <p>Your role is: {this.props.user ? this.props.user.type : "visitor"} </p>
+                    <p>Your role is: {this.props.user ? this.props.user.type : "Not selected"} </p>
                 </div>
             </div>
         );

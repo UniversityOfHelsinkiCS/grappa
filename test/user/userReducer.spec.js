@@ -2,26 +2,24 @@ import test from 'ava';
 import sinon from 'sinon';
 import { reducerTest } from 'redux-ava';
 
-import changeUserRole from '../../src/components/user/UserReducer';
+import reducer from '../../src/containers/user/userReducer';
+import { userRoles } from "../../src/util/rolePermissions";
 
-const testData = { some: 'data' };
-
-const initialState = [];
-// I wonder if actually the role should be visible here and not undefined...
-const stateWithSuccessChange = [{ id: 'CHANGE_ROLE_SUCCESS', text: 'User role changed', role: undefined, formClass: "success", completed: true }];
-const stateWithFailedChange = [{ id: 'CHANGE_ROLE_FAILURE', text: 'Couldn\'t change user role', formClass: "error", completed: true}];
-const stateWithAttemptedChange = [{ id: 'CHANGE_ROLE_FAILURE', text: 'Changing user role...', formClass: "", completed: false }];
-
-test('saveSuccess changes state correctly', reducerTest(
-    changeUserRole,
-    initialState,
-    changeSuccess(),
-    stateWithSuccessChange,
+test('login changes state correctly', reducerTest(
+    reducer,
+    [],
+    {
+        type: "USER_LOGIN_SUCCESS",
+        response: userRoles[0],
+    },
+    userRoles[0]
 ));
 
-test('saveFailure changes state correctly', reducerTest(
-    changeUserRole,
-    initialState,
-    changeFailure(),
-    stateWithFailedChange,
+test('logout changes state correctly', reducerTest(
+    reducer,
+    userRoles[0],
+    {
+        type: "USER_LOGOUT_SUCCESS",
+    },
+    [],
 ));

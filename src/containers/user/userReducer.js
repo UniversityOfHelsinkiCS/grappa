@@ -1,7 +1,6 @@
 const reducer = (state = [], action) => {
     switch (action.type) {
         case "USER_LOGIN_SUCCESS":
-            console.log(action);
             return action.response;
         case "USER_LOGOUT_SUCCESS":
             return [];
