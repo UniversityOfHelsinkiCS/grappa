@@ -1,64 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { changeUserRole } from "./user/UserActions.js";
+import { login } from "../containers/user/userActions.js";
 
 export class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            role: { id: props.role },
-        }
+    constructor() {
+        super();
     }
 
     componentDidMount() {
         document.title = "Grappa: Main page";
     }
 
-    handleRoleChange = (e) => {
-        e.preventDefault();
-        let newRole = document.getElementById('roles').value;
-        this.setState({
-            role: { id: newRole },
-        });
-        //newRole = this.state.role;
-        this.props.changeUserRole({id: newRole});
+    handleRoleChange = (event) => {
+        const user = {
+            type: event.target.value
+        }
+        this.props.login(user);
     }
 
     render() {
         return (
             <div>
                 <div className="ui segment">
-                    <form onSubmit={this.handleRoleChange}>
-                        <select id="roles" className="ui dropdown">
-                            <option value="">Choose a role</option>
-                            <option value="student">Opiskelija</option>
-                            <option value="supervisor">Vastuuohjaaja</option>
-                            <option value="other_supervisor">Muu ohjaaja</option>
-                            <option value="resp_professor">Vastuuprofessori</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <button className="ui button" type="submit">Choose</button>
-                    </form>
-                    <p>Your role is: {this.state.role.id} </p>
+                    <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
+                        <option value="student">Choose a role</option>
+                        <option value="student">Opiskelija</option>
+                        <option value="supervisor">Vastuuohjaaja</option>
+                        <option value="other_supervisor">Muu ohjaaja</option>
+                        <option value="resp_professor">Vastuuprofessori</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <p>Your role is: {this.props.user ? this.props.user.type : "visitor"} </p>
                 </div>
             </div>
         );
     }
 }
 
-//export default App;
-
 const mapDispatchToProps = (dispatch) => ({
-    changeUserRole: function (data) {
-        dispatch(changeUserRole(data));
+    login(data) {
+        dispatch(login(data));
     },
 });
 
 const mapStateToProps = (state) => {
-    console.log(state);
-    if (!state.user[0])
-        return {role: undefined};
-    return { role: state.user[0].role.id };
+    return {
+        user: state.user
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

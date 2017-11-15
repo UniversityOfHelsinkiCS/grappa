@@ -3,7 +3,6 @@ import sinon from 'sinon';
 import { reducerTest } from 'redux-ava';
 
 import changeUserRole from '../../src/components/user/UserReducer';
-import { changeAttempt, changeSuccess, changeFailure } from '../../src/components/user/UserActions';
 
 const testData = { some: 'data' };
 
