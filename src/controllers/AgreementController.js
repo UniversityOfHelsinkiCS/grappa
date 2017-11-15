@@ -69,7 +69,7 @@ export async function saveAgreement(req, res) {
         const thesisSaveResponse = await saveThesis(thesisData);
         const agreementData = getAgreementData(data, thesisSaveResponse);
         const agreementSaveResponse = await saveAgreementToService(agreementData);
-        if (!personSaveResponse.errno && !thesisSaveResponse.errno && !agreementSaveResponse.errno) {
+        if (personSaveResponse && !thesisSaveResponse.errno && !agreementSaveResponse.errno) {
             personData.personId = personSaveResponse;
             thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
