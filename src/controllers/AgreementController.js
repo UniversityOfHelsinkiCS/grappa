@@ -25,10 +25,12 @@ const agreementHasNoId = (data) => {
     return data.agreementId === "" || data.agreementId == null;
 } 
 const getPersonData = (data) => {
+    const name = data.studentName; // THIS NEEDS TO BE FIXED 
+    const nameSplitted = name.split(" ");
     const personData = {
         personId: data.personId,
-        firstname: data.studentFirstName,
-        lastname: data.studentLastName,
+        firstname: nameSplitted[0],
+        lastname: nameSplitted[1],
         studentNumber: data.studentNumber,
         email: data.studentEmail,
         major: data.studentMajor
