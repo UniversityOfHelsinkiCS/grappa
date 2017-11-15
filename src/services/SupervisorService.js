@@ -4,7 +4,7 @@ const knex = require('../../connection');
 export async function getAllSupervisors() {
     const supervisorRoleId = await getSupervisorRoleId();
     const supervisors = await knex.table('person')
-        .innerJoin('personRoleField', 'person.personId', '=', 'personRoleField.personId')
+        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId);
     return supervisors;
 }
