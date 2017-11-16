@@ -26,12 +26,10 @@ const agreementHasNoId = (data) => {
 }
 
 const getPersonData = (data) => {
-    const name = data.studentName; // THIS NEEDS TO BE FIXED
-    const nameSplitted = name.split(" ");
     const personData = {
         personId: data.personId,
-        firstname: (nameSplitted[0] ? nameSplitted[0] : ''),
-        lastname: (nameSplitted[1] ? nameSplitted[1] : ''),
+        firstname: data.firstName,
+        lastname: data.lastName,
         studentNumber: data.studentNumber,
         email: data.studentEmail,
         major: data.studentMajor
