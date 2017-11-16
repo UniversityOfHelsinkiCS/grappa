@@ -4,6 +4,9 @@ import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
 import graderReducer from "../containers/grader/graderReducer";
+import thesisReducer from "../containers/thesis/thesisReducer";
+import studyfieldReducer from "../containers/studyfield/studyfieldReducer";
+import emailReducer from "../containers/email/emailReducer";
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
@@ -15,7 +18,10 @@ const combinedReducers = combineReducers({
     agreement: agreementReducer,
     user: userReducer,
     councilmeeting: councilmeetingReducer,
-    grader: graderReducer
+    grader: graderReducer,
+    thesis: thesisReducer,
+    studyfield: studyfieldReducer,
+    email: emailReducer
 });
 
 let store;
