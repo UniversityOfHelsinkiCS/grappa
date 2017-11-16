@@ -13,7 +13,8 @@ export default class Agreement extends Component {
             supervision: "",
             misc: "",
             form: {
-                studentName: "",
+                firstName: "",
+                lastName: "",
                 studentNumber: "",
                 studentAddress: "",
                 studentPhone: "",
@@ -67,7 +68,8 @@ export default class Agreement extends Component {
         [{
             header: "Opinnäytetyön tekijä",
             fields: [
-                { inputType: "input", name: "studentName", label: "Nimi", extraClassNames: "nine wide", required: true, placeholder: "Etu- ja Sukunimi" },
+                { inputType: "input", name: "firstName", label:"Etunimi", extraClassName: "nine wide", required: true, placeholder:"Erkki"},
+                { inputType: "input", name: "lastName", label: "Sukunimi", extraClassNames: "nine wide", required: true, placeholder: "Esimerkki" },
                 { inputType: "input", name: "studentNumber", label: "Opiskelijanumero", extraClassNames: "nine wide", required: true, placeholder: "XXXXXXX" },
                 { inputType: "input", name: "studentAddress", label: "Lähiosoite", extraClassNames: "nine wide", required: true, placeholder: "Peräpolku 2 C 45, Nuppulinna" },
                 { inputType: "input", name: "studentPhone", label: "Puhelinnumero", extraClassNames: "nine wide", required: true, placeholder: "000 000 00 00" },
