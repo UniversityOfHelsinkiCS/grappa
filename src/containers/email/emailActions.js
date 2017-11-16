@@ -6,22 +6,30 @@ export const getEmailDrafts = () => {
     return callController(prefix, method);
 }
 
-export const saveEmailDraft = (councilmeeting) => {
+export const saveEmailDraft = (emailDraft) => {
     const prefix = "SAVE_ONE_";
     const method = "post";
-    return callController(prefix, method);
+    return callController(prefix, method, emailDraft);
 }
 
-export const updateEmailDraft = (councilmeeting) => {
+export const updateEmailDraft = (emailDraft) => {
     const prefix = "UPDATE_ONE_";
     const method = "put";
-    return callController(prefix, method);
+    return callController(prefix, method, emailDraft);
 }
 
-export const deleteEmailDraft = (councilmeeting) => {
+export const deleteEmailDraft = (emailDraftId) => {
     const prefix = "DELETE_ONE_";
     const method = "delete";
-    return callController(prefix, method);
+    const route = "/emaildrafts/" + emailDraftId;
+    return callController(prefix, method, emailDraftId, route);
+}
+
+export const sendReminder = (thesisId, emailType) => {
+    const prefix = "SEND_REMINDER_";
+    const method = "post";
+    const route = "email"
+    return callController(prefix, method, { thesisId, emailType }, route)
 }
 
 const action = (suffix, response) => {
@@ -31,9 +39,9 @@ const action = (suffix, response) => {
     }
 }
 
-const callController = (prefix, method) => (dispatch) => {
+const callController = (prefix, method, data, route = "/emaildrafts") => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
-    callApi('/emaildrafts', method)
+    callApi(route, method, data)
         .then(res => dispatch(action(prefix + "SUCCESS", res)))
         .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

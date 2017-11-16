@@ -1,19 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router"
 
-import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
+import { connect } from "react-redux";
+import { saveThesis, updateThesis, deleteThesis, downloadTheses } from './thesisActions';
+import { updateGraders } from '../grader/graderActions';
+import { getCouncilmeetings } from '../councilmeeting/councilmeetingActions';
+import { sendReminder } from '../email/emailActions';
+import { getStudyfields } from '../studyfield/studyfieldActions';
 
+import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
 import ThesisUploadWidget from "../../components/thesis/ThesisUploadWidget";
-
 import GraderSelecter from "../../components/grader/GraderSelecter";
 import GraderEditor from "../../components/grader/GraderEditor";
-
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
-
 import ThesisEmails from "../../components/thesis/ThesisEmails"
 
-export default class ThesisCreatePage extends Component {
+export class ThesisManagePage extends Component {
     /**
      *  If editMode is false we are creating a new thesis
      *  If editMode is true and allowEdit is false, we are viewing a thesis
@@ -273,11 +276,6 @@ export default class ThesisCreatePage extends Component {
     );
   }
 }*/
-/* 
-import { connect } from "react-redux";
-
-import { saveThesis, updateThesis, deleteThesis, downloadTheses } from '????';
-import { etc. } from 'etc.'
 
 const mapDispatchToProps = (dispatch) => ({
   saveThesis(thesis) {
@@ -314,6 +312,6 @@ const mapStateToProps = (state) => {
     graders: state.graders,
     theses: state.theses,
   };
-};*/
+};
 
-//export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage);
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisManagePage);

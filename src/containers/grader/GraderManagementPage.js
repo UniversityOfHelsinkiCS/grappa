@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-//import service from "../../util/apiConnection.js";
-import { callApi } from "../../util/apiConnection.js";
-import GraderEditor from "../../components/grader/GraderEditor.js"
-//import ThesisList from "../../components/thesis/ThesisList.js"
 import { connect } from "react-redux";
-import { saveAddedGrader, getSupervisors, deleteSupervisor } from "../../components/grader/GraderActions.js";
+import { saveAddedGrader, getSupervisors, deleteSupervisor, reviewSupervisor } from "./graderActions.js";
+
 import Review from "../../components/grader/Review.js";
+import GraderEditor from "../../components/grader/GraderEditor.js"
 
 export class GraderManagementPage extends Component {
     constructor(props) {
@@ -72,7 +70,7 @@ export class GraderManagementPage extends Component {
                 ))
                 }
                 </div>
-                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} />
+                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} reviewSupervisor={this.props.reviewSupervisor} />
                 <h2>Edit supervisor list</h2>
                 <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={this.props.graders}/>
             </div>
@@ -89,12 +87,16 @@ const mapDispatchToProps = (dispatch) => ({
     },
     removeSupervisor(data) {
         dispatch(deleteSupervisor(data));
+    },
+    reviewSupervisor(data) {
+        dispatch(reviewSupervisor(data));
     }
 });
 
 const mapStateToProps = (state) => {
     return { 
-        graders: state.grader
+        graders: state.grader,
+        personToBeReviewed: state.person
     };
 }
 

@@ -1,28 +1,19 @@
+import { paths as nav } from './routes'
+
 export const getPermissions = (role, context, method) => {
     if (!(role && context && method))
         return undefined;
     return permissions[role][context][method];
 }
 
-const nav = {
-    home: {path: '/', text: 'Homepage'},
-    agreementForm: {path: '/agreementform', text: 'AgreementForm'},
-    agreement: {path: '/agreement', text: 'Agreement'},
-    theses: {path: '/theses', text: 'Theses'},
-    graderManagement: {path: '/graderManagement', text: 'Supervisor management'},
-    thesis: {path: '/thesis', text: 'New thesis'},
-    assesment: { path: '/assesment', text: 'Assesment of theses'},
-    councilMeeting: { path: '/councilmeeting', text: 'Next councilmeeting' },
-    councilMeetings: { path: '/councilmeetings', text: 'Councilmeetings' },
-    emailDrafts: { path: '/emaildrafts', text: 'Email drafts' }
-}
+export const userRoles = ['student', 'supervisor', 'resp_professor', "other_supervisor", 'admin']
 
 const permissions = {
     //Supervisor
     'supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         },
         'agreement': {
@@ -33,7 +24,7 @@ const permissions = {
     'other_supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         }
     },
@@ -41,7 +32,7 @@ const permissions = {
     'student': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['thesis'], nav['assesment']
+                nav['home'], nav['agreement'], nav['thesis'], nav['assesment']
             ]
         },
         'agreement': {
@@ -53,7 +44,7 @@ const permissions = {
     'resp_professor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
             ]
         }
     },
@@ -61,7 +52,7 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment'], nav['councilMeeting'], nav['councilMeetings'], nav['emailDrafts']
+                nav.home, nav.agreement, nav.theses, nav.graderManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
             ]
         },
         'agreement': {

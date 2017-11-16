@@ -7,7 +7,7 @@ class AgreementView extends Component {
             <div className="ui padded segment">
                 <h2 className="ui header">{ data.thesisTitle }</h2>
                 <h4>Gradun tekijän tiedot</h4>
-                <p>
+                <div>
                     <div className="two fields">
                         Gradun tekijän nimi: { data.studentFirstName + " " + data.studentLastName + "\t"}|
                         Pääaine: { data.studentMajor }
@@ -20,7 +20,7 @@ class AgreementView extends Component {
                         Sähköpostiosoite: { data.studentEmail + "\t"}|
                         Puhelinnumero: { data.studentPhone }
                     </div>
-                </p>
+                </div>
                 <h4>Opinnäytetyön tiedot</h4>
                 <p>
                     Aloitusajankohta: { data.thesisStartDate }<br/>

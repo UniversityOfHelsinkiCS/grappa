@@ -4,10 +4,11 @@ import EventMessage from '../EventMessage';
 import FormCreator from '../form/FormCreator'
 
 export default class Agreement extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            serverResponseReceived: "",
+            sent: false,
+            lengthBefore: props.agreement.length,
             completionEta: "",
             supervision: "",
             misc: "",
@@ -38,31 +39,16 @@ export default class Agreement extends Component {
         }
     }
 
-    getLastAgreementAction() {
-        const forReturn = this.props.agreement[this.props.agreement.length - 1];
-
-        return (forReturn === undefined ? {} : forReturn);
-    }
-
     getResponseMessage = () => {
-        const lastAction = this.getLastAgreementAction();
-
-        if (lastAction === undefined) { return '' }
-        else {
-            if (lastAction.id === 'AGREEMENT_SAVE_SUCCESS') {
-                return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
-            }
-            else if (lastAction.id === 'AGREEMENT_SAVE_FAILURE') {
-                return <EventMessage type='error' message='Ilmestyi ongelmia' />;
-            }
-            else {
-                return '';
-            }
+        if (this.props.agreement.length > this.state.lengthBefore && this.state.sent) {
+            return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
+        } else if (this.state.sent) {
+            return <EventMessage type='error' message='Ilmestyi ongelmia' />;
         }
+        return undefined;
     }
 
     handleFormChange = (event) => {
-        //console.log("handler called " + event.target.name + " " + event.target.value);
         const oldForm = this.state.form;
         let newForm = oldForm;
         newForm[event.target.name] = event.target.value;
@@ -70,14 +56,13 @@ export default class Agreement extends Component {
     }
 
     sendForm = (event) => {
-        this.setState({ serverResponseReceived: "" });
-
         if (event !== undefined)
             event.preventDefault();
         this.props.saveAgreement(this.state.form);
+        this.setState({ sent: true });
     }
 
-    formFieldInfo =  {
+    formFieldInfo = {
         sections:
         [{
             header: "Opinnäytetyön tekijä",
@@ -119,14 +104,15 @@ export default class Agreement extends Component {
         {
             header: "Tavoitearvosana",
             fields: [
-                { inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true, 
+                {
+                    inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true,
                     responses: [
-                        {value: 0, text: 'Choose...'},
-                        {value: 5, text: '5 (Excellent)'},
-                        {value: 4, text: '4 (Very Good)'},
-                        {value: 3, text: '3 (Good)'},
-                        {value: 2, text: '2 (Satisfactory)'},
-                        {value: 1, text: '1 (Passable)'},
+                        { value: 0, text: 'Choose...' },
+                        { value: 5, text: '5 (Excellent)' },
+                        { value: 4, text: '4 (Very Good)' },
+                        { value: 3, text: '3 (Good)' },
+                        { value: 2, text: '2 (Satisfactory)' },
+                        { value: 1, text: '1 (Passable)' },
                     ]
                 },
             ]
@@ -180,17 +166,17 @@ export default class Agreement extends Component {
     render() {
         return (
             <div>
-                    <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
-                    <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
+                <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
+                <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
-                    <FormCreator 
-                        formFieldInfo={this.formFieldInfo}
-                        onSubmitFunc={(e)=>{if (e !== undefined){e.preventDefault();}}} 
-                        buttonOnClickFunc={this.sendForm} 
-                        accessToStore={this.props.agreement}
-                        fieldOnChangeFunc={this.handleFormChange} />
-                        {this.getResponseMessage()}
-                    <br />
+                <FormCreator
+                    formFieldInfo={this.formFieldInfo}
+                    onSubmitFunc={(e) => { if (e !== undefined) { e.preventDefault(); } }}
+                    buttonOnClickFunc={this.sendForm}
+                    accessToStore={this.props.agreement}
+                    fieldOnChangeFunc={this.handleFormChange} />
+                {this.getResponseMessage()}
+                <br />
             </div>
 
         );

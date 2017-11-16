@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { callApi } from "../../util/apiConnection.js";
-import { connect } from "react-redux";
-import { reviewSupervisor } from "./GraderActions.js";
 
-
-export class Review extends Component {
+export default class Review extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -77,7 +73,6 @@ export class Review extends Component {
     }
 
     render() {
-        //console.log(this.props, this.state);
         if (!this.props.showModal) {
             return (<div />);
         }
@@ -102,17 +97,3 @@ export class Review extends Component {
         );
     }
 }
-
-const mapDispatchToProps = (dispatch) => ({
-    reviewSupervisor(data) {
-        dispatch(reviewSupervisor(data));
-    }
-});
-
-const mapStateToProps = (state) => {
-    return {
-        personToBeReviewed: state.person
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Review);
