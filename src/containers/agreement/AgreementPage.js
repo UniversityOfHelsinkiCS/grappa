@@ -79,10 +79,7 @@ export class AgreementPage extends Component {
                     <AgreementView agreementData={this.props.agreement} />
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
-                        <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
-                        <br />
-                        <br />
-                        <p><Link to="/">Go back to HomePage</Link></p>
+                        <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
                     </div>
                 </div>
             );
