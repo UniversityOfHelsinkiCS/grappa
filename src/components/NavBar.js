@@ -36,7 +36,7 @@ export class NavBar extends Component {
         return (
             <div>
                 <div className="ui inverted segment">
-                    <h2>Grappa</h2>
+                    <h1><Link to="/">Grappa</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
                     {this.state.links ? this.state.links.map((elem, index) => <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>) : undefined}
