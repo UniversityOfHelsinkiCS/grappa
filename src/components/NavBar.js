@@ -11,7 +11,15 @@ export class NavBar extends Component {
         }
     }
 
+    componentDidMount() {
+        this.refreshLinks(this.props)
+    }
+
     componentWillReceiveProps(props) {
+        this.refreshLinks(props);
+    }
+
+    refreshLinks = (props) => {
         if (props.user) {
             const links = getPermissions(props.user.type, 'nav-bar', 'show');
             this.setState({ links });
@@ -25,7 +33,6 @@ export class NavBar extends Component {
             else
                 return <Link key={elem.text} to={elem.path} className="item">{elem.text}</Link>
          });*/
-         console.log(this.state.links);
         return (
             <div>
                 <div className="ui inverted segment">
