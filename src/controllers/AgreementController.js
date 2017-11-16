@@ -30,6 +30,8 @@ const getPersonData = (data) => {
         personId: data.personId,
         firstname: data.firstName,
         lastname: data.lastName,
+        phone: data.studentPhone,
+        address: data.studentAddress,
         studentNumber: data.studentNumber,
         email: data.studentEmail,
         major: data.studentMajor
