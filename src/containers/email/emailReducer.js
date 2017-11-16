@@ -5,7 +5,7 @@ const reducer = (state = [], action) => {
         case "EMAILDRAFT_SAVE_ONE_SUCCESS":
             return [...state, action.response];
         case "EMAILDRAFT_UPDATE_ONE_SUCCESS":
-            return [...state.filter(draft => draft.id == action.response.id), action.response];
+            return [...state.filter(draft => draft.id === action.response.id), action.response];
         case "EMAILDRAFT_DELETE_ONE_SUCCESS":
             return state.filter(draft => draft.id !== action.response);
         default:
