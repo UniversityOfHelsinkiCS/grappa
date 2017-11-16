@@ -1,13 +1,13 @@
 const reducer = (state = [], action) => {
     switch (action.type) {
         case "THESIS_GET_ALL_SUCCESS":
-            return action.response.data;
+            return action.response;
         case "THESIS_SAVE_ONE_SUCCESS":
-            return [...state, action.response.data];
+            return [...state, action.response];
         case "THESIS_UPDATE_ONE_SUCCESS":
-            return [...state.filter(thesis => thesis.id === action.response.id), action.response];
+            return [...state.filter(thesis => thesis.id !== action.response.id), action.response];
         case "THESIS_DELETE_ONE_SUCCESS":
-            return state.filter(thesis => thesis.id !== action.response.data.id);
+            return state.filter(thesis => thesis.id !== action.response);
         default:
             return state;
     }
