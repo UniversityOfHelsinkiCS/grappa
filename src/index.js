@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 //nav
@@ -21,7 +21,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router basename='/v2'>
             <div className="App">
-                <NavBar />
+                <Route component={NavBar} />
                 <div className="ui left aligned container">
                     {routes()}
                 </div>
