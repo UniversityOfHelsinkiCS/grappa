@@ -80,7 +80,7 @@ export class EmailDraftPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        EmailDrafts: [{ id: 1, title: "Otsikko", body: "Sisältö" }, {id: 2, title: "Otsikko1", body: "Sisältö1"}],//state.emailDrafts,
+        EmailDrafts: state.emailDrafts,
     };
 };
 

@@ -8,6 +8,7 @@ import GraderManagement from '../containers/grader/GraderManagementPage';
 import ThesisList from '../components/thesis/ThesisList';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisManage from '../containers/thesis/ThesisManagePage';
+import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
 import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
 import EmailDraftPage from '../containers/email/EmailDraftPage';
@@ -21,7 +22,8 @@ export const paths = {
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
     councilMeeting: { path: '/councilmeeting', component: CouncilmeetingView, navText: 'Next councilmeeting'},
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings'},
-    emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts'}
+    emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts'},
+    statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics'}
 }
 
 export default () => {

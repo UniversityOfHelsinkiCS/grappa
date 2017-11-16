@@ -13,7 +13,7 @@ const permissions = {
     'supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         },
         'agreement': {
@@ -24,7 +24,7 @@ const permissions = {
     'other_supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
             ]
         }
     },
@@ -32,7 +32,7 @@ const permissions = {
     'student': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['thesis'], nav['assesment']
+                nav['home'], nav['agreement'], nav['thesis'], nav['assesment']
             ]
         },
         'agreement': {
@@ -44,7 +44,7 @@ const permissions = {
     'resp_professor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
             ]
         }
     },
@@ -52,7 +52,7 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreementForm'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['thesis'], nav['assesment'], nav['councilMeeting'], nav['councilMeetings'], nav['emailDrafts']
+                nav.home, nav.agreement, nav.theses, nav.graderManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
             ]
         },
         'agreement': {

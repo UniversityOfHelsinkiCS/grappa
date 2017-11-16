@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
@@ -79,7 +78,7 @@ export class AgreementPage extends Component {
                     <AgreementView agreementData={this.props.agreement} />
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
-                        <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
+                        <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
                     </div>
                 </div>
             );

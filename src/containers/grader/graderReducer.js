@@ -7,7 +7,6 @@ const reducer = (state = [], action) => {
         case "GRADER_DELETE_ONE_SUCCESS":
             return state.filter(grader => grader.personId !== action.response.data.personId);
         case "GRADER_REVIEW_ONE_SUCCESS":
-            console.log(action);
             return [...state, action.response.data];
         default:
             return state;
