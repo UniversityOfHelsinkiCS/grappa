@@ -87,7 +87,7 @@ export default class GraderEditor extends Component {
                 <label>Title</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state.newGrader.title}
+                    value={this.state[whichOne].title}
                     onChange={this.handleChange("title", whichOne)}
                 >
                     <option value="">Select title</option>
@@ -103,7 +103,7 @@ export default class GraderEditor extends Component {
                 <label>Studyfield</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state.newGrader.studyfieldId}
+                    value={this.state[whichOne].studyfieldId}
                     onChange={this.handleChange("studyfieldId", whichOne)}
                 >
                     <option value="">Select studyfield</option>
@@ -149,10 +149,10 @@ export default class GraderEditor extends Component {
                             )}
                         </select>
                     </div>
-                    {this.renderTitleList("updateGrader")}
-                    {this.renderNameField("First name", "updateGrader")}
-                    {this.renderNameField("Last name", "updateGrader")}
-                    {this.renderStudyfieldList("updateGrader")}
+                    {this.renderTitleList("updateSupervisor")}
+                    {this.renderNameField("First name", "updateSupervisor")}
+                    {this.renderNameField("Last name", "updateSupervisor")}
+                    {this.renderStudyfieldList("updateSupervisor")}
                     <div className="field">
                         <label>&nbsp;</label>
                         <button id="update" className="ui blue button" onClick={this.updateSupervisor}>

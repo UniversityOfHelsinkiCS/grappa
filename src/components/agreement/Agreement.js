@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import EventMessage from '../EventMessage';
-import FormCreator from '../form/FormCreator'
+import FormCreator from '../form/FormCreator';
 
 export default class Agreement extends Component {
     constructor(props) {
@@ -36,6 +36,8 @@ export default class Agreement extends Component {
                 thesisWorkOther: "",
 
                 studentGradeGoal: "",
+
+                attachments: [],
             }
         }
     }
@@ -52,7 +54,11 @@ export default class Agreement extends Component {
     handleFormChange = (event) => {
         const oldForm = this.state.form;
         let newForm = oldForm;
-        newForm[event.target.name] = event.target.value;
+        if(event.target) {  //input field
+            newForm[event.target.name] = event.target.value;            
+        } else { //a file 
+            newForm.attachments.push(event);
+        }
         this.setState({ form: newForm })
     }
 
@@ -118,7 +124,17 @@ export default class Agreement extends Component {
                     ]
                 },
             ]
-        }]
+        },
+        {
+            header: "Lisää liite",
+            fields: [
+                {
+                    inputType: "attachment", name: "attachment", label: "Lisää liite tarvittaessa, esim. mahdollinen työnantajan lausunto.",
+                    
+                }
+            ]
+        }
+    ]
     }
 
     /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
