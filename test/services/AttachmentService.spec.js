@@ -1,9 +1,9 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../connection';
+import knex from '../../connection';
 
-const attachmentService = require('../src/services/AttachmentService');
-const mockAttachments = require('../src/mockdata/MockAttachments');
+const attachmentService = require('../../src/services/AttachmentService');
+const mockAttachments = require('../../src/mockdata/MockAttachments');
 
 test.before(async t => {
     await knex.schema.createTable('attachment', function (table) {
