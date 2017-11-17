@@ -35,6 +35,13 @@ export const reviewSupervisor = (supervisor) => {
     return callController(route, prefix, method, supervisor);
 }
 
+export const updateSupervisor = (supervisor) => {
+    const route = '/supervisors/update';
+    const prefix = "UPDATE_ONE_";
+    const method = "put";
+    return callController(route, prefix, method, supervisor);
+}
+
 const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
