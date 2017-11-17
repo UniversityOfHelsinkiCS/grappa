@@ -1,10 +1,10 @@
 import test from 'ava';
 import sinon from 'sinon';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const agreementService = require('../src/services/AgreementService');
-const mockAgreements = require('../src/mockdata/MockAgreements');
-const mockPrevAgreements = require('../src/mockdata/MockPrevAgreements');
+const agreementService = require('../../src/services/AgreementService');
+const mockAgreements = require('../../src/mockdata/MockAgreements');
+const mockPrevAgreements = require('../../src/mockdata/MockPrevAgreements');
 
 test.before(async t => {
     await knex.schema.createTable('agreement', function (table) {

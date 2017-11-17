@@ -1,8 +1,8 @@
 import test from 'ava';
 import sinon from 'sinon';
 
-import router from '../src/routes/theses.js';
-import app from '../index';
+import router from '../../src/routes/theses.js';
+import app from '../../index';
 
 const reqres = require('reqres');
 const request = require('supertest');
@@ -15,8 +15,8 @@ let service;
 test.beforeEach(async t => {
     req = reqres.req();
     res = reqres.res();
-    service = require('../src/services/ThesisService');
-    thesisController = require('../src/controllers/ThesisController');
+    service = require('../../src/services/ThesisService');
+    thesisController = require('../../src/controllers/ThesisController');
 });
 
 
