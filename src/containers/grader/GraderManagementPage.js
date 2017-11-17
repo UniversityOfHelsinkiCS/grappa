@@ -54,7 +54,7 @@ export class GraderManagementPage extends Component {
                 <div>{this.props.graders.map(person => (
                     <div className="two fields">
                         <div className="ui field">{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
-                            &nbsp;&nbsp;
+                            
                         </div>
                         <div className="ui field">
                             <button key={person.personId} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >

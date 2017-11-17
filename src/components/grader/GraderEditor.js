@@ -143,7 +143,7 @@ export default class GraderEditor extends Component {
                             <option value="">Select grader</option>
                             {this.props.graders.map((grader, index) =>
                                 <option key={index} className="item" value={grader.personId}>
-                                    {grader.title}&nbsp;&nbsp;{grader.firstname}&nbsp;&nbsp;{grader.lastname}&nbsp;&nbsp;Studyfield:&nbsp;{grader.studyfieldId}
+                                    {grader.title} {grader.firstname} {grader.lastname} Studyfield: {grader.studyfieldId}
                                 </option>
                             )}
                         </select>

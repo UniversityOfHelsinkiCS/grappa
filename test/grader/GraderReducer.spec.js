@@ -1,6 +1,6 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
-import reducer from '../../src/components/grader/GraderReducer.js';
+import reducer from '../../src/containers/grader/graderReducer.js';
 
 const graders = [{id: 1, approved: false},{id: 2, approved: true}];
 const grader = {id: 3, approved: false};
@@ -30,6 +30,7 @@ test('save added success changes state correctly', reducerTest(
     [stateWithGrader.data],
 ));
 
+//not working, not sure why
 test.skip('delete success changes state correctly', reducerTest(
     reducer,
     [stateWithGrader.data],
@@ -40,6 +41,7 @@ test.skip('delete success changes state correctly', reducerTest(
     [],
 ));
 
+//not working, not sure why
 test.skip('review success changes state correctly', reducerTest(
     reducer,
     [stateWithGrader],
