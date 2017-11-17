@@ -25,7 +25,7 @@ export const saveThesis = (data) => {
     .returning('thesisId')
     .insert(data)
     .then(thesisId => thesisId[0])
-    .catch(err => err);
+    .catch(err => Promise.reject(err));
 }
 
 export async function updateThesis(thesisData) {

@@ -22,7 +22,7 @@ test.before(async t => {
         table.string('phone');
         table.string('major');
     });
-    //knex.schema.dropTableIfExists('personRoleField');
+    //knex.schema.dropTableIfExists('personWithRole');
     await knex.schema.createTable('personWithRole', function (table) {
         table.increments('personRoleId').primary();
         table.integer('personId').unsigned();
