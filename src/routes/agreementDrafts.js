@@ -8,4 +8,8 @@ router.get('/:id', (req, res) => {
     agreementDraftController.getAgreementDraftById(req, res);
 });
 
+router.post('/', jsonParser, (req, res) => {
+    agreementDraftController.saveAgreementDraft(req, res);
+});
+
 module.exports = router;

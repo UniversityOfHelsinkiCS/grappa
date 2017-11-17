@@ -34,6 +34,19 @@ export async function getAgreementPersonsNeedingApproval() {
         });
 }
 
+export async function getSupervisorByEmail(email) {
+    return knex.table('agreementPerson')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .where('email', email)
+        .then(supervisor => {
+            return supervisor[0];
+        })
+        .catch(error => {
+            throw error;
+        }) 
+}
+
 export async function saveAgreementPerson(agreementPersonData) {
     return await knex('agreementPerson')
         .returning('agreementId')
