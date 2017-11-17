@@ -15,7 +15,7 @@ export default class FormCreator extends Component {
 
         if (lastAction === undefined) { return workableButton }
         else {
-            if (lastAction.id == 'AGREEMENT_SAVE_ATTEMPT') { return disabledLoadingButton }
+            if (lastAction.id === 'AGREEMENT_SAVE_ATTEMPT') { return disabledLoadingButton }
             else { return workableButton }
         }
     }

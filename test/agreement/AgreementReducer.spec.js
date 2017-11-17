@@ -3,39 +3,52 @@ import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
 // internal modules
-import agreementSave from '../../src/containers/agreement/agreementReducer';
-import { saveAttempt, saveSuccess, saveFailure } from '../../src/containers/agreement/agreementActions';
+import reducer from '../../src/containers/agreement/agreementReducer';
 
-const testData = { some: 'data' };
+const agreement = { id: 1, title: "test" } // Other fields as well
+const agreement2 = { id: 2, title: "test2" } // Other fields as well
+const agreementEdited = { id: 1, title: "totally different" } // Other fields as well
 
-const initialState = [];
-const stateWithSuccessSave = [{ id: 'AGREEMENT_SAVE_SUCCESS', text: 'Sopimus talletettu onnistuneesti', formClass: "success", completed: true }];
-const stateWithFailedSave = [{ id: 'AGREEMENT_SAVE_FAILURE', text: 'Sopimuksen talletus epäonnistui', formClass: "error", completed: true}];
-const stateWithAttemptedSave = [{ id: 'AGREEMENT_SAVE_ATTEMPT', text: 'Sopimuksen talletus käynnistetty', formClass: "", completed: false }];
+const stateWithAgreement = [agreement];
+const stateWithAgreements = [agreement, agreement2];
+const stateWithEditedAgreement = [agreementEdited];
 
-
-test('saveSuccess changes state correctly', reducerTest(
-    agreementSave,
-    initialState,
-    saveSuccess(),
-    stateWithSuccessSave,
-));
-test('saveFailure changes state correctly', reducerTest(
-    agreementSave,
-    initialState,
-    saveFailure(),
-    stateWithFailedSave,
-));
-test('saveAttempt changes state correctly', reducerTest(
-    agreementSave,
-    initialState,
-    saveAttempt(),
-    stateWithAttemptedSave,
+test('get one success changes state correctly', reducerTest(
+    reducer,
+    stateWithAgreement,
+    {
+        type: "AGREEMENT_GET_ONE_SUCCESS",
+        response: agreement2,
+    },
+    stateWithAgreements,
 ));
 
+test('update one success changes state correctly', reducerTest(
+    reducer,
+    stateWithAgreement,
+    {
+        type: "AGREEMENT_UPDATE_ONE_SUCCESS",
+        response: agreementEdited,
+    },
+    stateWithEditedAgreement,
+));
 
-/*
-AGREEMENT_SAVE_ATTEMPT
-AGREEMENT_SAVE_SUCCESS
-AGREEMENT_SAVE_FAILURE
-*/
+test('save one success changes state correctly', reducerTest(
+    reducer,
+    [],
+    {
+        type: "AGREEMENT_SAVE_ONE_SUCCESS",
+        response: agreement,
+    },
+    stateWithAgreement,
+));
+
+test('delete one success changes state correctly', reducerTest(
+    reducer,
+    stateWithAgreements,
+    {
+        type: "AGREEMENT_DELETE_ONE_SUCCESS",
+        response: 2,
+    },
+    stateWithAgreement,
+));
