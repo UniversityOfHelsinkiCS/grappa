@@ -22,5 +22,3 @@ export async function saveThesis(req, res) {
         res.status(500).json(err);
     });
 }
-
-
