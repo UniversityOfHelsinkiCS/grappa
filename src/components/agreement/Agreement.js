@@ -63,8 +63,8 @@ export default class Agreement extends Component {
         this.setState({ sent: true });
     }
 
-    formFieldInfo = {
-        sections:
+    formFieldInfo = (supervisors) => {
+        return { sections:
         [{
             header: "Opinnäytetyön tekijä",
             fields: [
@@ -89,7 +89,10 @@ export default class Agreement extends Component {
         {
             header: "Ohjausvastuut",
             fields: [
-                { inputType: "input", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+                {
+                    inputType: "dropdown", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true,
+                    responses: supervisors
+                },
                 { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
             ]
         },
@@ -119,6 +122,7 @@ export default class Agreement extends Component {
                 },
             ]
         }]
+        }
     }
 
     /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
@@ -165,6 +169,12 @@ export default class Agreement extends Component {
     }
     */
 
+    createSupervisorArray = (supervisors) => {
+        return supervisors[0].data.map((supervisor) =>
+            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname })
+        );
+    }
+
     render() {
         return (
             <div>
@@ -172,7 +182,7 @@ export default class Agreement extends Component {
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
                 <FormCreator
-                    formFieldInfo={this.formFieldInfo}
+                    formFieldInfo={this.formFieldInfo(this.createSupervisorArray(this.props.supervisors))}
                     onSubmitFunc={(e) => { if (e !== undefined) { e.preventDefault(); } }}
                     buttonOnClickFunc={this.sendForm}
                     accessToStore={this.props.agreement}
