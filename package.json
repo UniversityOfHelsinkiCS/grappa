@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test nyc ava -s",
     "start": "NODE_ENV=dev TEST_MAIL=grabbarobot EMAIL_HOST=gmail.com MAIL_PSWD=grabbasalasana nodemon index.js",
+    "start:win": "nodemon index.js",
     "start:prod": "node index.js",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
