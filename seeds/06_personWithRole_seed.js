@@ -1,9 +1,9 @@
 exports.seed = function (knex, Promise) {
     // Deletes ALL existing entries
-    return knex('personRoleField').del()
+    return knex('personWithRole').del()
         .then(function () {
             // Inserts seed entries
-            return knex('personRoleField').insert([
+            return knex('personWithRole').insert([
                 {
                     personRoleId: 1,
                     personId: 1,

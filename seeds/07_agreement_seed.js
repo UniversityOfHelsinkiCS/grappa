@@ -16,8 +16,7 @@ exports.seed = function (knex, Promise) {
                     supervisorWorkTime: "tsiigaillaan",
                     intermediateGoal: "oispa valmistunut",
                     meetingAgreement: "just just",
-                    other: "eihän tässä muuta",
-
+                    other: "eihän tässä muuta"
                 },
                 {
                     agreementId: 2,
@@ -31,7 +30,7 @@ exports.seed = function (knex, Promise) {
                     supervisorWorkTime: "jee",
                     intermediateGoal: "valmistun",
                     meetingAgreement: "joka päivä",
-                    other: "ddd",
+                    other: "ddd"
                 },
                 {
                     agreementId: 3,
@@ -45,7 +44,7 @@ exports.seed = function (knex, Promise) {
                     supervisorWorkTime: "jees",
                     intermediateGoal: "valmistunen",
                     meetingAgreement: "joka toinen päivä",
-                    other: "eee",
+                    other: "eee"
                 }
             ]);
         });
