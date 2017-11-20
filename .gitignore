@@ -63,3 +63,7 @@ coverage
 
 # Sqlite db
 *.sqlite
+
+#testfiles
+testfile
+data/file/20.pdf

@@ -1,10 +1,10 @@
 import test from 'ava';
 import sinon from 'sinon';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const agreementService = require('../src/services/AgreementService');
-const mockAgreements = require('../src/mockdata/MockAgreements');
-const mockPrevAgreements = require('../src/mockdata/MockPrevAgreements');
+const agreementService = require('../../src/services/AgreementService');
+const mockAgreements = require('../../src/mockdata/MockAgreements');
+const mockPrevAgreements = require('../../src/mockdata/MockPrevAgreements');
 
 test.before(async t => {
     await knex.schema.createTable('agreement', function (table) {
@@ -14,7 +14,7 @@ test.before(async t => {
         table.integer('thesisId').unsigned();
         table.foreign('thesisId').references('thesis.thesisId');
         table.integer('responsibleSupervisorId').unsigned();
-        table.foreign('responsibleSupervisorId').references('personRoleField.personRoleId');
+        table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
         table.integer('studyFieldId').unsigned();
         table.foreign('studyFieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
@@ -79,7 +79,7 @@ test.serial('updateAgreement', async t => {
         other: 'this agreement is updated'
     };
     let response = await agreementService.updateAgreement(updatedAgreement);
-    t.deepEqual(response, undefined);
+    t.deepEqual(response, 1);
 });
 
 test.serial('saveNewAgreement call returns agreementId = 4', async t => {

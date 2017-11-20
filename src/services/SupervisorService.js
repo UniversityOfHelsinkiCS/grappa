@@ -4,7 +4,7 @@ const knex = require('../../connection');
 export async function getAllSupervisors() {
     const supervisorRoleId = await getSupervisorRoleId();
     const supervisors = await knex.table('person')
-        .innerJoin('personRoleField', 'person.personId', '=', 'personRoleField.personId')
+        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId);
     return supervisors;
 }
@@ -12,6 +12,39 @@ export async function getAllSupervisors() {
 export async function getSupervisorRoleId() {
     const roleData = await knex.select().from('role').where('name', 'supervisor');
     return roleData[0].roleId;
+}
+
+export async function getAllAgreementPersons() {
+    return knex.table('agreementPerson')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
+        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
+        .then(persons => {
+            return persons;
+        });
+}
+
+export async function getAgreementPersonsNeedingApproval() {
+    return knex.table('agreementPerson')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
+        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
+        .where('approved', false)
+        .andWhereNot('agreementId', null)
+        .then(persons => {
+            return persons;
+        });
+}
+
+export async function getSupervisorByEmail(email) {
+    return knex.table('agreementPerson')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .where('email', email)
+        .then(supervisor => {
+            return supervisor[0];
+        })
+        .catch(error => {
+            throw error;
+        }) 
 }
 
 export async function saveAgreementPerson(agreementPersonData) {
@@ -26,7 +59,7 @@ export async function updateAgreementPerson(agreementPersonData) {
     return await knex('agreementPerson')
         .returning('personRoleId')
         .where('personRoleId', '=', agreementPersonData.personRoleId)
-        .andWhere('agreementId', '=', agreementPersonData.agreementId)       
+        .andWhere('agreementId', '=', agreementPersonData.agreementId)
         .update(agreementPersonData)
         .then(personRoleId => personRoleId[0])
         .catch(err => err);

@@ -1,8 +1,8 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../connection';
+import knex from '../../connection';
 
-const fileService = require('../src/services/FileService');
+const fileService = require('../../src/services/FileService');
 const fs = require('fs');
 
 test.serial('savePdfFile', async t => {
