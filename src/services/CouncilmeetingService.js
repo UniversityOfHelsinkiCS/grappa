@@ -26,7 +26,7 @@ export async function updateCouncilmeeting(councilmeeting, councilmeetingId) {
 
 export async function deleteCouncilmeeting(councilmeetingId) {
     return knex('councilmeeting')
-        .where(('councilmeetingId', '=', councilmeetingId))
+        .where('councilmeetingId', '=', councilmeetingId)
         .del()
         .then(() => councilmeetingId)
         .catch(err => err);
