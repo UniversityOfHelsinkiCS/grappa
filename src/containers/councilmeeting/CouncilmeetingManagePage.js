@@ -87,7 +87,6 @@ export class CouncilmeetingManagePage extends Component {
       instructorDeadline,
       studentDeadline,
     }
-    console.log(councilmeeting);
     this.props.saveCouncilmeeting(councilmeeting);
   }
 
@@ -100,7 +99,7 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   deleteMeeting = (meeting) => () => {
-    this.props.deleteCouncilmeeting(meeting);    
+    this.props.deleteCouncilmeeting(meeting.councilmeetingId);    
   }
 
   renderCreate(newCouncilmeeting) {

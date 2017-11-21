@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-export default class CouncilmeetingViewPage extends Component {
+import { connect } from "react-redux";
+import { updateThesis, getTheses, downloadTheses, moveTheses } from "../thesis/thesisActions";
+import { getCouncilmeetings } from "./councilmeetingActions";
+import { sendReminder } from "../email/emailActions";
+
+export class CouncilmeetingViewPage extends Component {
     constructor() {
         super();
         this.state = {
@@ -14,21 +19,21 @@ export default class CouncilmeetingViewPage extends Component {
     }
 
     componentDidMount() {
+        this.props.getCouncilmeetings();
         this.initState(this.props);
     }
 
     componentWillReceiveProps(newProps) {
         // if on different page reset also selected theses
-        if (this.props.params.id !== newProps.params.id) {
-            this.initState(newProps);
-        } else {
+        if (this.props.theses) {
             // have to sort stuff as it is always in disorder
             const currentTheses = this.props.theses.sort((a, b) => a.id - b.id)
             const newTheses = newProps.theses.sort((a, b) => a.id - b.id)
-            if (currentTheses !== newTheses) {
-                this.initState(newProps);
+            if (currentTheses === newTheses) {
+                return;
             }
         }
+        this.initState(newProps);
     }
 
     initState(props) {
@@ -37,7 +42,7 @@ export default class CouncilmeetingViewPage extends Component {
         const previousMeeting = foundIndex > 0 ? props.councilmeetings[foundIndex - 1] : undefined;
         const currentMeeting = props.councilmeetings[foundIndex];
         const nextMeeting = foundIndex === props.councilmeetings.length - 1 ? undefined : props.councilmeetings[foundIndex + 1];
-        const theses = currentMeeting ? this.filterThesesByMeeting(props.theses, currentMeeting) : [];
+        const theses = currentMeeting & props.theses ? this.filterThesesByMeeting(props.theses, currentMeeting) : [];
         this.setState({
             index: foundIndex,
             previousMeeting,
@@ -53,7 +58,7 @@ export default class CouncilmeetingViewPage extends Component {
         const previousMeeting = index > 0 ? this.props.councilmeetings[index - 1] : undefined;
         const currentMeeting = this.props.councilmeetings[index];
         const nextMeeting = index === this.props.councilmeetings.length - 1 ? undefined : this.props.councilmeetings[index + 1];
-        const theses = currentMeeting ? this.filterThesesByMeeting(this.props.theses, currentMeeting) : [];
+        const theses = currentMeeting & this.props.theses ? this.filterThesesByMeeting(this.props.theses, currentMeeting) : [];
         this.setState({
             index,
             previousMeeting,
@@ -66,19 +71,19 @@ export default class CouncilmeetingViewPage extends Component {
     }
 
     filterThesesByMeeting(theses, meeting) {
-        return theses.filter(thesis => thesis.CouncilMeetingId === meeting.id);
+        return theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
     }
 
     findIndexFromProps(props) {
         let foundIndex;
-        if (props.params && props.params.id !== "next") {
+        if (props.match.params && props.match.params.id !== "next") {
             let cmID;
             try {
-                cmID = parseInt(props.params.id, 10);
+                cmID = parseInt(props.match.params.id, 10);
             } catch (e) {
                 return;
             }
-            foundIndex = props.councilmeetings.findIndex(meeting => meeting.id === cmID);
+            foundIndex = props.councilmeetings.findIndex(meeting => meeting.councilmeetingId === cmID);
         } else {
             foundIndex = this.findNextMeeting(new Date(), props.councilmeetings);
         }
@@ -98,11 +103,11 @@ export default class CouncilmeetingViewPage extends Component {
     changeMeeting = (where) => () => {
         switch (where) {
             case "previous":
-                //browserHistory.replace(`/councilmeeting/${this.state.previousMeeting.id}`);
+                //browserHistory.replace(`/councilmeeting/${this.state.previousMeeting.councilmeetingId}`);
                 this.incrementIndex(false);
                 return;
             case "next":
-                //browserHistory.replace(`/councilmeeting/${this.state.nextMeeting.id}`);
+                //browserHistory.replace(`/councilmeeting/${this.state.nextMeeting.councilmeetingId}`);
                 this.incrementIndex(true);
                 return;
             default:
@@ -114,7 +119,7 @@ export default class CouncilmeetingViewPage extends Component {
         const meeting = this.state.previousMeeting;
         this.props.moveTheses({
             thesisIds,
-            CouncilMeetingId: meeting.id || 0,
+            councilmeetingId: meeting.councilmeetingId || 0,
         });
     }
 
@@ -122,11 +127,12 @@ export default class CouncilmeetingViewPage extends Component {
         const meeting = this.state.nextMeeting;
         this.props.moveTheses({
             thesisIds,
-            CouncilMeetingId: meeting.id || 0,
+            councilmeetingId: meeting.councilmeetingId || 0,
         });
     }
 
     render() {
+        console.log(this.props.councilmeetings);
         return (
             <div>
                 <div>
@@ -147,7 +153,7 @@ export default class CouncilmeetingViewPage extends Component {
                                 :
                                 "No Councilmeeting found"
                             }
-                    </span>
+                        </span>
                     </h2>
                 </div>
                 {/*<ThesisList???
@@ -160,35 +166,30 @@ export default class CouncilmeetingViewPage extends Component {
         );
     }
 }
-/*
-import { connect } from "react-redux";
-import { updateThesis, getTheses, downloadTheses, moveTheses } from "../thesis/thesis.actions";
-import { sendReminder } from "../email/email.actions";
 
 const mapStateToProps = (state) => {
-  const auth = state.get("auth");
-  const cm_r = state.get("councilmeeting");
-  const thesis = state.get("thesis");
-  return {
-    user: auth.get("user").toJS(),
-    councilmeetings: cm_r.get("councilmeetings").toJS(),
-    theses: thesis.get("theses").toJS(),
-  };
+    return {
+        councilmeetings: state.councilmeeting,
+        theses: state.theses,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateThesis(id, thesis) {
-    dispatch(updateThesis(id, thesis));
-  },
-  getTheses() {
-    dispatch(getTheses());
-  },
-  downloadTheses(theses) {
-    dispatch(downloadTheses(theses));
-  },
-  moveTheses(data) {
-    dispatch(moveTheses(data));
-  },
+    getCouncilmeetings() {
+        dispatch(getCouncilmeetings());
+    },
+    updateThesis(id, thesis) {
+        dispatch(updateThesis(id, thesis));
+    },
+    getTheses() {
+        dispatch(getTheses());
+    },
+    downloadTheses(theses) {
+        dispatch(downloadTheses(theses));
+    },
+    moveTheses(data) {
+        dispatch(moveTheses(data));
+    },
 });
-export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingShow);
-*/
+
+export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);
