@@ -54,8 +54,8 @@ export default class Agreement extends Component {
     handleFormChange = (event) => {
         const oldForm = this.state.form;
         let newForm = oldForm;
-        if(event.target) {  //input field
-            newForm[event.target.name] = event.target.value;            
+        if (event.target) {  //input field
+            newForm[event.target.name] = event.target.value;
         } else { //a file 
             newForm.attachments.push(event);
         }
@@ -69,72 +69,77 @@ export default class Agreement extends Component {
         this.setState({ sent: true });
     }
 
-    formFieldInfo = {
-        sections:
-        [{
-            header: "Opinnäytetyön tekijä",
-            fields: [
-                { inputType: "input", name: "firstName", label:"Etunimi", extraClassName: "nine wide", required: true, placeholder:"Erkki"},
-                { inputType: "input", name: "lastName", label: "Sukunimi", extraClassNames: "nine wide", required: true, placeholder: "Esimerkki" },
-                { inputType: "input", name: "studentNumber", label: "Opiskelijanumero", extraClassNames: "nine wide", required: true, placeholder: "XXXXXXX" },
-                { inputType: "input", name: "studentAddress", label: "Lähiosoite", extraClassNames: "nine wide", required: true, placeholder: "Peräpolku 2 C 45, Nuppulinna" },
-                { inputType: "input", name: "studentPhone", label: "Puhelinnumero", extraClassNames: "nine wide", required: true, placeholder: "000 000 00 00" },
-                { inputType: "input", name: "studentEmail", label: "Sähköpostiosoite", extraClassNames: "nine wide", required: true, placeholder: "nimi@domain.com" },
-                { inputType: "input", name: "studentMajor", label: "Pääaine", extraClassNames: "nine wide", required: true, placeholder: "(jos muu kuin TKTL)" },
-            ]
-        },
-        {
-            header: "Opinnäytetyö",
-            fields: [
-                { inputType: "textarea", rows: 2, name: "thesisTitle", label: "Opinnäytetyön otsikko (työnimi) tekokielellä", extraClassNames: "fluid", required: true, placeholder: "Opinnäytetyön otsikko (työnimi) tekokielellä" },
-                { inputType: "input", name: "thesisStartDate", label: "Aloitusajankohta", extraClassNames: "", required: true, placeholder: "" },
-                { inputType: "input", name: "thesisCompletionEta", label: "Arvioitu valmistumisajankohta", extraClassNames: "", required: true, placeholder: "" },
-                { inputType: "textarea", rows: 2, name: "thesisPerformancePlace", label: "Suorituspaikka", extraClassNames: "fluid ", required: true, placeholder: "(projekti, työnantaja, tms.) ja yhteystiedot" },
-            ]
-        },
-        {
-            header: "Ohjausvastuut",
-            fields: [
-                { inputType: "input", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
-                { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
-            ]
-        },
-        {
-            header: "Työskentelyn tavoitteet ja ajankäyttö",
-            fields: [
-                { inputType: "textarea", rows: 1, name: "thesisWorkStudentTime", label: "Opiskelijan arvioima opinnäytetyöhön käytettävä työaika", extraClassNames: "fluid", required: true, placeholder: "(esim. tuntia / vko)" },
-                { inputType: "textarea", rows: 2, name: "thesisWorkSupervisorTime", label: "Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)", extraClassNames: "fluid", required: true, placeholder: "" },
-                { inputType: "textarea", rows: 2, name: "thesisWorkIntermediateGoal", label: "Välitavoitteet (deadlinet työn eri vaiheille)", extraClassNames: "fluid", required: true, placeholder: "" },
-                { inputType: "textarea", rows: 2, name: "thesisWorkMeetingAgreement", label: "Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta", extraClassNames: "fluid", required: true, placeholder: "" },
-                { inputType: "textarea", rows: 2, name: "thesisWorkOther", label: "Muuta", extraClassNames: "fluid", required: false, placeholder: "(esim. opiskelijan odotukset ohjaajalle / ohjaajan odotukset opiskelijalle" },
-            ]
-        },
-        {
-            header: "Tavoitearvosana",
-            fields: [
-                {
-                    inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true,
-                    responses: [
-                        { value: 0, text: 'Choose...' },
-                        { value: 5, text: '5 (Excellent)' },
-                        { value: 4, text: '4 (Very Good)' },
-                        { value: 3, text: '3 (Good)' },
-                        { value: 2, text: '2 (Satisfactory)' },
-                        { value: 1, text: '1 (Passable)' },
-                    ]
-                },
-            ]
-        },
-        {
-            header: "Lisää liite",
-            fields: [
-                {
-                    inputType: "attachment", name: "attachment", label: "Lisää liite tarvittaessa, esim. mahdollinen työnantajan lausunto.",
-                    
-                }
+    formFieldInfo = (supervisors) => {
+        return {
+            sections:
+            [{
+                header: "Opinnäytetyön tekijä",
+                fields: [
+                    { inputType: "input", name: "firstName", label: "Etunimi", extraClassName: "nine wide", required: true, placeholder: "Erkki" },
+                    { inputType: "input", name: "lastName", label: "Sukunimi", extraClassNames: "nine wide", required: true, placeholder: "Esimerkki" },
+                    { inputType: "input", name: "studentNumber", label: "Opiskelijanumero", extraClassNames: "nine wide", required: true, placeholder: "XXXXXXX" },
+                    { inputType: "input", name: "studentAddress", label: "Lähiosoite", extraClassNames: "nine wide", required: true, placeholder: "Peräpolku 2 C 45, Nuppulinna" },
+                    { inputType: "input", name: "studentPhone", label: "Puhelinnumero", extraClassNames: "nine wide", required: true, placeholder: "000 000 00 00" },
+                    { inputType: "input", name: "studentEmail", label: "Sähköpostiosoite", extraClassNames: "nine wide", required: true, placeholder: "nimi@domain.com" },
+                    { inputType: "input", name: "studentMajor", label: "Pääaine", extraClassNames: "nine wide", required: true, placeholder: "(jos muu kuin TKTL)" },
+                ]
+            },
+            {
+                header: "Opinnäytetyö",
+                fields: [
+                    { inputType: "textarea", rows: 2, name: "thesisTitle", label: "Opinnäytetyön otsikko (työnimi) tekokielellä", extraClassNames: "fluid", required: true, placeholder: "Opinnäytetyön otsikko (työnimi) tekokielellä" },
+                    { inputType: "input", name: "thesisStartDate", label: "Aloitusajankohta", extraClassNames: "", required: true, placeholder: "" },
+                    { inputType: "input", name: "thesisCompletionEta", label: "Arvioitu valmistumisajankohta", extraClassNames: "", required: true, placeholder: "" },
+                    { inputType: "textarea", rows: 2, name: "thesisPerformancePlace", label: "Suorituspaikka", extraClassNames: "fluid ", required: true, placeholder: "(projekti, työnantaja, tms.) ja yhteystiedot" },
+                ]
+            },
+            {
+                header: "Ohjausvastuut",
+                fields: [
+                    {
+                        inputType: "dropdown", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true,
+                        responses: supervisors
+                    },
+                    { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+                ]
+            },
+            {
+                header: "Työskentelyn tavoitteet ja ajankäyttö",
+                fields: [
+                    { inputType: "textarea", rows: 1, name: "thesisWorkStudentTime", label: "Opiskelijan arvioima opinnäytetyöhön käytettävä työaika", extraClassNames: "fluid", required: true, placeholder: "(esim. tuntia / vko)" },
+                    { inputType: "textarea", rows: 2, name: "thesisWorkSupervisorTime", label: "Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)", extraClassNames: "fluid", required: true, placeholder: "" },
+                    { inputType: "textarea", rows: 2, name: "thesisWorkIntermediateGoal", label: "Välitavoitteet (deadlinet työn eri vaiheille)", extraClassNames: "fluid", required: true, placeholder: "" },
+                    { inputType: "textarea", rows: 2, name: "thesisWorkMeetingAgreement", label: "Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta", extraClassNames: "fluid", required: true, placeholder: "" },
+                    { inputType: "textarea", rows: 2, name: "thesisWorkOther", label: "Muuta", extraClassNames: "fluid", required: false, placeholder: "(esim. opiskelijan odotukset ohjaajalle / ohjaajan odotukset opiskelijalle" },
+                ]
+            },
+            {
+                header: "Tavoitearvosana",
+                fields: [
+                    {
+                        inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true,
+                        responses: [
+                            { value: 0, text: 'Choose...' },
+                            { value: 5, text: '5 (Excellent)' },
+                            { value: 4, text: '4 (Very Good)' },
+                            { value: 3, text: '3 (Good)' },
+                            { value: 2, text: '2 (Satisfactory)' },
+                            { value: 1, text: '1 (Passable)' },
+                        ]
+                    },
+                ]
+            },
+            {
+                header: "Lisää liite",
+                fields: [
+                    {
+                        inputType: "attachment", name: "attachment", label: "Lisää liite tarvittaessa, esim. mahdollinen työnantajan lausunto.",
+
+                    }
+                ]
+            }
             ]
         }
-    ]
     }
 
     /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
@@ -181,6 +186,12 @@ export default class Agreement extends Component {
     }
     */
 
+    createSupervisorArray = (supervisors) => {
+        return supervisors[0].data.map((supervisor) =>
+            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname })
+        );
+    }
+
     render() {
         return (
             <div>
@@ -188,7 +199,7 @@ export default class Agreement extends Component {
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
                 <FormCreator
-                    formFieldInfo={this.formFieldInfo}
+                    formFieldInfo={this.formFieldInfo(this.createSupervisorArray(this.props.supervisors))}
                     onSubmitFunc={(e) => { if (e !== undefined) { e.preventDefault(); } }}
                     buttonOnClickFunc={this.sendForm}
                     accessToStore={this.props.agreement}

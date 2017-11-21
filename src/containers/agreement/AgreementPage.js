@@ -6,6 +6,7 @@ import Agreement from '../../components/agreement/Agreement';
 //redux
 import { connect } from "react-redux";
 import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
+import { getSupervisors } from "../supervisor/supervisorActions";
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ export class AgreementPage extends Component {
     componentDidMount() {
         document.title = "Agreement Page";
         this.props.getAgreement(1);
+        this.props.getSupervisors();
     }
 
     parseResponseData = (data) => {
@@ -64,7 +66,7 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
-                    <Agreement agreement={this.props.agreement} saveAgreement={this.handleSaveAgreement} />
+                    <Agreement agreement={this.props.agreement} supervisors={this.props.supervisors} saveAgreement={this.handleSaveAgreement} />
                 </div>
             );
         } else {
@@ -96,11 +98,15 @@ const mapDispatchToProps = (dispatch) => ({
     updateAgreement(data) {
         dispatch(updateAgreement(data));
     },
+    getSupervisors(data) {
+        dispatch(getSupervisors(data));
+    }
 });
 
 const mapStateToProps = (state) => {
     return {
-        agreement: state.agreement
+        agreement: state.agreement,
+        supervisors: state.supervisor
     };
 }
 
