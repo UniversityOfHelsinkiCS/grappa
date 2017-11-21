@@ -8,9 +8,9 @@ export async function getAgreementDraftById(req, res) {
     const agreementDraftId = req.params.id;
     if (agreementDraftId > 0) {
         try {
-            const agreementDraft = await draftService.getAgreementDraftById(agreementDraftId);
-            const agreementDraftPersons = await draftService.getAgreementDraftPersonsByAgreementDraftId(agreementDraftId);
-            res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPerson: agreementDraftPersons });
+            let agreementDraft = await draftService.getAgreementDraftById(agreementDraftId);
+            let draftPersons = await draftService.getAgreementDraftPersonsByAgreementDraftId(agreementDraftId);
+            res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPerson: draftPersons });
         } catch (error) {
             res.status(500).json({ text: "error occured", error: error });
         }
@@ -21,18 +21,25 @@ export async function getAgreementDraftById(req, res) {
 
 export async function saveAgreementDraft(req, res) {
     const data = req.body;
+    const agreementDraftData = getAgreementDraftData(data);
+    let agreementResponse;
+    let textResponse;
+    let agreementDraftId = data.agreementDraftId;
+    
     try {
-        const agreementDraftData = getAgreementDraftData(data);
-        let agreementResponse;
-        let textResponse;
-        if (agreementDraftData.agreementDraftId > 0) {
+        if (agreementDraftId > 0) {
             agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
+            // why is agreementResponse always 1 here ??
             textResponse = "agreementDraft updated successfully";
         } else {
             agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
-            // const supervisors = await getSupervisorsByEmails(data.emails);
-            // const agreementDraftPersons = await saveAgreementDraftPersons(supervisors, agreementDraftId);
+            agreementDraftId = agreementResponse;
             textResponse = "new agreementDraft saved successfully";
+        }
+        if (data.emails) {
+            let supervisors = await getSupervisorsByEmails(data.emails);
+            let removalResponse = await removeAgreementDraftPersons(agreementDraftId);
+            let response = await saveAgreementDraftPersons(supervisors, agreementDraftId);
         }
         res.status(200).json({ agreementDraft: agreementResponse, text: textResponse });
     } catch (error) {
@@ -40,32 +47,41 @@ export async function saveAgreementDraft(req, res) {
     }
 }
 
-async function saveAgreementDraftPersons(supervisorData, agreementDraftId) {
-    try {
-        // TO DO: check if agreementDraftPerson already exists!!
-        const agreementDraftPersonData = {
+async function saveAgreementDraftPersons(draftPersons, agreementDraftId) {
+    draftPersons.forEach(async element => {
+        let draftPerson = {
             agreementDraftId: agreementDraftId,
-            personRoleId: supervisorData.personRoleId
+            personRoleId: element.personRoleId
         };
-        const response = await draftService.saveAgreementDraftPerson(agreementDraftPersonData);
-    } catch(error) {
-        res.status(500).json({ text: "error occured", error: error });
+        try {
+            let response = await draftService.saveAgreementDraftPerson(draftPerson);
+        } catch(error) {
+            throw error;
+        }
+    })
+}
+
+async function removeAgreementDraftPersons(agreementDraftId) {
+    try {
+        await draftService.removeAgreementDraftPersons(agreementDraftId);
+    } catch (err) {
+        throw err;
     }
 }
 
 async function getSupervisorsByEmails(emails) {
     let supervisors = [];
-    emails.forEach(async email => {
-        try {
-            console.log(email);
-            let supervisor = await supervisorService.getSupervisorByEmail(email);
-            supervisors.push(supervisor);
-        } catch (error) {
-            console.log(error);
-            throw error;
+    try {
+        for (let i = 0; emails.length > i; i++) {
+            let supervisor = await supervisorService.getSupervisorByEmail(emails[i]);
+            if (supervisor) {
+                supervisors.push(supervisor);
+            }
         }
-    })
-    return supervisors;
+        return supervisors;
+    } catch (error) {
+        throw error;
+    }
 }
 
 const getAgreementDraftData = (data) => {

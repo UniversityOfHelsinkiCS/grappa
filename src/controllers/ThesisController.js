@@ -14,11 +14,25 @@ export async function getThesisById(req, res) {
 }
 
 export async function saveThesis(req, res) {
-    const thesisData = req.body;
-    thesisService.saveThesis(thesisData).then((response) =>  {
-        res.status(200).json("Thesis saved succesfully " + response);
+    const data = req.body;
+    try {
+        let response = await thesisService.saveThesis(data);
+        res.status(200).json({ text: "Thesis saved succesfully", thesisId: response });
+    } catch (e) {
+        res.status(500).json(e);
     }
-    ).catch(err => {
-        res.status(500).json(err);
-    });
+}
+
+function getThesisData(data) {
+    let thesis = {
+        thesisTitle: data.thesisTitle,
+        startDate: data.startDate,
+        completionEta: data.completionEta,
+        performancePlace: data.performancePlace,
+        urkund: data.urkund,
+        grade: data.grade,
+        graderEval: data.graderEval,
+        userId: data.authorId
+    };
+    return thesis;
 }

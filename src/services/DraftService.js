@@ -15,7 +15,9 @@ export const saveNewAgreementDraft = (data) => {
         .returning('agreementDraftId')
         .insert(data)
         .then(agreementDraftId => agreementDraftId[0])
-        .catch(err => err);
+        .catch(err => {
+            throw err;
+        });
 }
 
 export const updateAgreementDraft = (data) => {
@@ -24,26 +26,30 @@ export const updateAgreementDraft = (data) => {
     .where('agreementDraftId', '=', data.agreementDraftId)
     .update(data)
     .then(agreementDraftId => agreementDraftId)
-    .catch(err => err);
+    .catch(err => {
+        throw err;
+    });
 }
 
 export const saveAgreementDraftPerson = (data) => {
     return knex('agreementDraftPerson')
         .returning('personRoleId')
         .insert(data)
-        .then(personRoleId => personRoleId[0])
-        .catch(err => err);
+        .then(personRoleId => personRoleId)
+        .catch(err => {
+            throw err;
+        });
 }
 
-export const getAgreementDraftPersonByIds = (agreementDraftId, personRoleId) => {
-    return knex.select().from('agreementDraftPerson')
-        .where('agreementDraftId', id)
-        .andWhere('personRoleId', personRoleId)
-        .then(agreementDraftPerson => {
-            return agreementDraftPerson;
+export const removeAgreementDraftPersons = (agreementDraftId) => {
+    return knex('agreementDraftPerson')
+        .where('agreementDraftId', agreementDraftId)
+        .del()
+        .then(res => {
+            return res;
         })
-        .catch(error => {
-            throw error;
+        .catch(err => {
+            throw err;
         })
 }
 
