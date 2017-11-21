@@ -16,7 +16,6 @@ export async function updatePerson(req, res) {
     };
     
     if (personData.personId != null || personData.personId != '') {
-        try {
             let updateData = {};
             // remove useless keys from data
             Object.keys(personData).map(key => {
@@ -24,13 +23,14 @@ export async function updatePerson(req, res) {
                     updateData[key] = personData[key];
                 }
             });
-            let personId = await personService.updatePerson(updateData);
-            // why is personId undefined here?
-            res.status(200).json({text: "person update successful", personId: personData.personId});
-        } catch (err) {
-            res.status(500).json({text: "error occurred", error: err});
-        }
-    } else {
+            let personId = await personService.updatePerson(updateData).then((response) =>  {
+                res.status(200).json("person updated succesfully " + response);
+            }
+            ).catch(err => {
+                res.status(500).json(err);
+            });
+        } 
+     else {
         res.status(500).json({text: "person does not exist"});
     }
 }

@@ -1,11 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const personService = require('../src/services/PersonService');
-const mockPersons = require('../src/mockdata/MockPersons');
-const mockPersonRoles = require('../src/mockdata/MockPersonRoleFields');
+const personService = require('../../src/services/PersonService');
+const mockPersons = require('../../src/mockdata/MockPersons');
+const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 
 test.before(async t => {
     //knex.schema.dropTableIfExists('person');
@@ -22,8 +22,8 @@ test.before(async t => {
         table.string('phone');
         table.string('major');
     });
-    //knex.schema.dropTableIfExists('personRoleField');
-    await knex.schema.createTable('personRoleField', function (table) {
+    //knex.schema.dropTableIfExists('personWithRole');
+    await knex.schema.createTable('personWithRole', function (table) {
         table.increments('personRoleId').primary();
         table.integer('personId').unsigned();
         table.foreign('personId').references('person.personId');
@@ -38,8 +38,8 @@ test.beforeEach(async t => {
     //knex.schema.dropTableIfExists('agreement');
     await knex('person').del();
     await knex('person').insert(mockPersons);
-    await knex('personRoleField').del();
-    await knex('personRoleField').insert(mockPersonRoles);
+    await knex('personWithRole').del();
+    await knex('personWithRole').insert(mockPersonRoles);
 });
 
 test.serial('savePerson returns new personId', async t => {

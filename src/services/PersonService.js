@@ -10,7 +10,7 @@ export async function savePerson(personData) {
 }
 
 export async function savePersonRole(personRoleData) {
-    return await knex('personRoleField')
+    return await knex('personWithRole')
         .returning('personRoleId')
         .insert(personRoleData)
         .then(personRoleId => personRoleId[0])
@@ -34,9 +34,9 @@ export const getPersonById = (id) => {
 
 export const getAgreementPersonsByAgreementId = (id) => {
     //TODO: figure out why this returns duplicates without distinct
-    return knex.distinct('person.firstname', 'person.lastname', 'personRoleField.personRoleId').select().from('agreementPerson')
-        .leftJoin('personRoleField', 'agreementPerson.roleId', '=', 'personRoleField.roleId')
-        .leftJoin('person', 'personRoleField.personId', '=', 'person.personId')
+    return knex.distinct('person.firstname', 'person.lastname', 'personWithRole.personRoleId').select().from('agreementPerson')
+        .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
         .where('agreementId', id)
         .then(persons => {
             return persons;

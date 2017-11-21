@@ -7,7 +7,7 @@ exports.up = function (knex, Promise) {
             table.date('completionEta');
             table.string('performancePlace');
             table.string('urkund');
-            table.integer('grade');
+            table.string('grade').defaultTo('-');
             table.string('graderEval');
             table.integer('userId');
         })
