@@ -69,23 +69,23 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     data.personId = 1; //because front doesn't give id from shibboleth yet
     if (agreementHasNoId(data)) {
-        const personData = getPersonData(data);
-        const personSaveResponse = await updatePerson(personData);
-        const thesisData = getThesisData(data);
-        const thesisSaveResponse = await saveThesis(thesisData);
-        const agreementData = getAgreementData(data, thesisSaveResponse);
-        const agreementSaveResponse = await saveAgreementToService(agreementData);
-        if (personSaveResponse && !thesisSaveResponse.errno && !agreementSaveResponse.errno) {
+        try {
+            const personData = getPersonData(data);
+            const personSaveResponse = await updatePerson(personData);
+            const thesisData = getThesisData(data);
+            const thesisSaveResponse = await saveThesis(thesisData);
+            const agreementData = getAgreementData(data, thesisSaveResponse);
+            const agreementSaveResponse = await saveAgreementToService(agreementData);
             personData.personId = personSaveResponse;
             thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
             //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
             //AttachmentController.saveAttachment(req, res);
             res.status(200).json({ person: personData, thesis: thesisData, agreement: agreementData });
-        } else {
+        }
+        catch(error) {
             res.status(500).json({ text: "Error occured" });
         }
-        AttachmentController.saveAttachment(req, res);
     } else {
         res.status(500).json({ text: "agreement already exists" });
     }
