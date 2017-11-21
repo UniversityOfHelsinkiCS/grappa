@@ -1,11 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const personService = require('../src/services/PersonService');
-const mockPersons = require('../src/mockdata/MockPersons');
-const mockPersonRoles = require('../src/mockdata/MockPersonRoleFields');
+const personService = require('../../src/services/PersonService');
+const mockPersons = require('../../src/mockdata/MockPersons');
+const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 
 test.before(async t => {
     //knex.schema.dropTableIfExists('person');

@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import router from '../src/routes/agreements.js';
+import router from '../../src/routes/agreements.js';
 
 const reqres = require('reqres');
 
@@ -13,9 +13,9 @@ let personService;
 test.beforeEach(async t => {
     req = reqres.req();
     res = reqres.res();
-    agreementService = require('../src/services/AgreementService');
-    personService = require('../src/services/PersonService');
-    agreementController = require('../src/controllers/AgreementController');
+    agreementService = require('../../src/services/AgreementService');
+    personService = require('../../src/services/PersonService');
+    agreementController = require('../../src/controllers/AgreementController');
 });
 
 test.afterEach(async t => {

@@ -1,14 +1,14 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const supervisorService = require('../src/services/SupervisorService');
-const mockPersons = require('../src/mockdata/MockPersons');
-const mockRoles = require('../src/mockdata/MockRoles');
-const mockStudyfields = require('../src/mockdata/MockStudyfields');
-const mockPersonRoles = require('../src/mockdata/MockPersonRoleFields');
-const mockAgreementPersons = require('../src/mockdata/MockAgreementPersons');
+const supervisorService = require('../../src/services/SupervisorService');
+const mockPersons = require('../../src/mockdata/MockPersons');
+const mockRoles = require('../../src/mockdata/MockRoles');
+const mockStudyfields = require('../../src/mockdata/MockStudyfields');
+const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
+const mockAgreementPersons = require('../../src/mockdata/MockAgreementPersons');
 
 let supervisorRoleId;
 mockRoles.map(role => {

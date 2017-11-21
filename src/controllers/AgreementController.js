@@ -26,7 +26,7 @@ const agreementHasNoId = (data) => {
 }
 
 const getPersonData = (data) => {
-    const personData = {
+    return ({
         personId: data.personId,
         firstname: data.firstName,
         lastname: data.lastName,
@@ -35,22 +35,21 @@ const getPersonData = (data) => {
         studentNumber: data.studentNumber,
         email: data.studentEmail,
         major: data.studentMajor
-    };
-    return personData;
+    });
 }
 
 const getThesisData = (data) => {
-    const thesisData = {
+    return ({
         thesisTitle: data.thesisTitle,
         startDate: data.thesisStartDate,
         completionEta: data.thesisCompletionEta,
-        performancePlace:  data.thesisPerformancePlace
-    };
-    return thesisData;
+        performancePlace: data.thesisPerformancePlace,
+        userId: data.personId
+    });
 }
 
 const getAgreementData = (data, thesisId) => {
-    const agreementData = {
+    return ({
         authorId: data.personId,
         thesisId: thesisId,
         responsibleSupervisorId: data.thesisSupervisorMain,
@@ -61,8 +60,7 @@ const getAgreementData = (data, thesisId) => {
         intermediateGoal: data.thesisWorkIntermediateGoal,
         meetingAgreement: data.thesisWorkMeetingAgreement,
         other: data.thesisWorkOther
-    };
-    return agreementData;
+    });
 }
 
 export async function saveAgreement(req, res) {
