@@ -4,6 +4,8 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 
+const AttachmentController = require('./AttachmentController');
+
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
@@ -77,11 +79,13 @@ export async function saveAgreement(req, res) {
             personData.personId = personSaveResponse;
             thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
-            emailService.agreementCreated(Object.assign(personData, thesisData, agreementData));
+            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
+            //AttachmentController.saveAttachment(req, res);
             res.status(200).json({ person: personData, thesis: thesisData, agreement: agreementData });
         } else {
             res.status(500).json({ text: "Error occured" });
         }
+        AttachmentController.saveAttachment(req, res);
     } else {
         res.status(500).json({ text: "agreement already exists" });
     }
