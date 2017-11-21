@@ -26,7 +26,7 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   initDates(props) {
-    let councilmeetings = props.Councilmeetings;
+    let councilmeetings = props.councilmeetings;
     if (!councilmeetings) {
       return;
     }
@@ -40,11 +40,12 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   componentDidMount() {
+    this.props.getCouncilmeetings();
     this.initDates(this.props);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.Councilmeetings !== newProps.Councilmeetings) {
+    if (this.props.councilmeetings !== newProps.councilmeetings) {
       this.initDates(newProps);
     }
   }
@@ -77,7 +78,17 @@ export class CouncilmeetingManagePage extends Component {
   }
 
   saveMeeting = () => {
-    this.props.saveCouncilmeeting(this.state.newCouncilmeeting);
+    //Since users only think about the difference but we want to save the date.
+    const date = this.state.newCouncilmeeting.date;
+    const instructorDeadline = moment(date).subtract(this.state.newCouncilmeeting.instructorDeadlineDays, 'days');
+    const studentDeadline = moment(instructorDeadline).subtract(this.state.newCouncilmeeting.studentDeadlineDays, 'days');
+    const councilmeeting = {
+      date,
+      instructorDeadline,
+      studentDeadline,
+    }
+    console.log(councilmeeting);
+    this.props.saveCouncilmeeting(councilmeeting);
   }
 
   updateMeeting = () => {
@@ -312,7 +323,7 @@ export class CouncilmeetingManagePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    Councilmeetings: state.councilmeetings,
+    councilmeetings: state.councilmeeting,
   };
 };
 

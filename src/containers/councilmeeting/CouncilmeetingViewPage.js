@@ -13,7 +13,7 @@ export default class CouncilmeetingViewPage extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initState(this.props);
     }
 
