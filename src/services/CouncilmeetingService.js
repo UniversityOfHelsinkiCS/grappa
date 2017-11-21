@@ -9,7 +9,7 @@ export async function getAllCouncilmeetings() {
 
 export async function saveCouncilmeeting(councilmeeting) {
     return knex('councilmeeting')
-        .returning('*')
+        .returning('councilmeetingId')
         .insert(councilmeeting)
         .then(councilmeetings => councilmeetings[0])
         .catch(err => err);
@@ -17,8 +17,8 @@ export async function saveCouncilmeeting(councilmeeting) {
 
 export async function updateCouncilmeeting(councilmeeting, councilmeetingId) {
     return knex('councilmeeting')
-        .returning('*')
-        .where('id', '=', councilmeetingId)
+        .returning('councilmeetingId')
+        .where('councilmeetingId', '=', councilmeetingId)
         .update(councilmeeting)
         .then(councilmeetings => councilmeetings[0])
         .catch(err => err);
@@ -26,7 +26,7 @@ export async function updateCouncilmeeting(councilmeeting, councilmeetingId) {
 
 export async function deleteCouncilmeeting(councilmeetingId) {
     return knex('councilmeeting')
-        .where(('id', '=', councilmeetingId))
+        .where(('councilmeetingId', '=', councilmeetingId))
         .del()
         .then(() => councilmeetingId)
         .catch(err => err);
@@ -34,7 +34,7 @@ export async function deleteCouncilmeeting(councilmeetingId) {
 
 export async function getCouncilmeeting(councilmeetingId) {
     return knex.select('*').from('councilmeeting')
-        .where('id', '=', councilmeetingId)
+        .where('councilmeetingId', '=', councilmeetingId)
         .then(councilmeetings => councilmeetings[0])
         .catch(err => err);
 }

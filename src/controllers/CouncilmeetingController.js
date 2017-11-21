@@ -8,7 +8,8 @@ export async function getAllCouncilmeetings(req, res) {
 export async function saveCouncilmeeting(req, res) {
     const councilmeeting = req.body;
     if (councilmeeting) {
-        const savedMeeting = await councilmeetingService.saveCouncilmeeting(councilmeeting);
+        const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
+        const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
         res.status(200).json(savedMeeting);
     }
 }
@@ -17,7 +18,8 @@ export async function updateCouncilmeeting(req, res) {
     const councilmeetingId = req.params.id;
     const councilmeeting = req.body;
     if (councilmeetingId && councilmeeting) {
-        const updatedMeeting = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId)
+        const updatedMeetingId = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId)
+        const updatedMeeting = await councilmeetingService.getCouncilmeeting(updatedMeetingId);
         res.status(200).json(updatedMeeting);
     }
 }

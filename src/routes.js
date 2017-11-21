@@ -18,7 +18,7 @@ module.exports = (app) => {
     app.use('/persons', persons);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
-    app.use('/councilmeeting', councilmeeting)
+    app.use('/councilmeetings', councilmeeting)
     app.use('/zippolet', shibboleth);
 
 
