@@ -7,6 +7,7 @@ import Agreement from '../../components/agreement/Agreement';
 import { connect } from "react-redux";
 import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
 import { getSupervisors } from "../supervisor/supervisorActions";
+import { getStudyfields } from "../studyfield/studyfieldActions";
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ export class AgreementPage extends Component {
         if (this.props.user)
             this.props.getAgreement(this.props.user.id);
         this.props.getSupervisors();
+        this.props.getStudyfields();
     }
 
     componentWillReceiveProps(newProps) {
@@ -73,6 +75,7 @@ export class AgreementPage extends Component {
     }
 
     handleSaveAgreement = (agreement) => {
+        console.log("handleSaveAgreement", agreement);
         this.props.saveAgreement(agreement);
     }
 
@@ -82,7 +85,7 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
-                    <Agreement agreement={this.state.agreement} supervisors={this.props.supervisors} saveAgreement={this.handleSaveAgreement} />
+                    <Agreement agreement={this.state.agreement} supervisors={this.props.supervisors} studyfields={this.props.studyfields} saveAgreement={this.handleSaveAgreement} />
                 </div>
             );
         } else {
@@ -122,6 +125,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getSupervisors(data) {
         dispatch(getSupervisors(data));
+    },
+    getStudyfields(data) {
+        dispatch(getStudyfields(data));
     }
 });
 
@@ -129,6 +135,7 @@ const mapStateToProps = (state) => {
     return {
         agreement: state.agreement,
         supervisors: state.supervisor,
+        studyfields: state.studyfield,
         user: state.user
     };
 }

@@ -7,18 +7,18 @@ const action = (suffix, response) => {
     }
 }
 
-export const getStudyfields = (studyfield) => {
+export const getStudyfields = () => {
     const route = '/studyfields';
     const prefix = "GET_ALL_";
     const method = "get";
-    return callController(route, prefix, method, studyfield);
+    return callController(route, prefix, method);
 }
 
-export const saveStudyfield = () => {
+export const saveStudyfield = (studyfield) => {
     const route = '/studyfields';
     const prefix = "SAVE_ONE_";
     const method = "post";
-    return callController(route, prefix, method);
+    return callController(route, prefix, method, studyfield);
 }
 
 export const updateStudyfield = (studyfield) => {
