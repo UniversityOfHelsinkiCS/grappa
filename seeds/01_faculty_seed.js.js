@@ -6,15 +6,15 @@ exports.seed = function (knex, Promise) {
           return knex('faculty').insert([
               {
                   facultyId: 1,
-                  name: 'Faculty 1'
+                  name: 'Matemaattis-luonnontieteellinen tiedekunta'
               },
               {
                   facultyId: 2,
-                  name: 'Faculty 2'
+                  name: 'Oikeustieteellinen tiedekunta'
               },
               {
                   facultyId: 3,
-                  name: 'Faculty 3'
+                  name: 'Valtiotieteellinen tiedekunta'
               }
           ]);
       });
