@@ -36,6 +36,6 @@ const action = (suffix, response) => {
 const callController = (prefix, method, data, route = '/agreements') => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
-        .then(res => dispatch(action(prefix + "SUCCESS", res)))
+        .then(res => dispatch(action(prefix + "SUCCESS", res.data)))
         .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

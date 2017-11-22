@@ -14,14 +14,22 @@ export class AgreementPage extends Component {
         this.state = {
             newAgreement: false,
             originalData: {},
-            editMode: false
+            editMode: false,
+            agreement: { personId: 1 }
         }
     }
 
     componentDidMount() {
         document.title = "Agreement Page";
-        this.props.getAgreement(1);
+        this.props.getAgreement(this.state.agreement.personId);
         this.props.getSupervisors();
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps && this.props !== newProps && newProps.agreement) {
+            const agreement = newProps.agreement.find(agreement => agreement.personId === this.state.agreement.personId)
+            if (agreement) this.setState({ agreement });
+        }
     }
 
     parseResponseData = (data) => {
@@ -66,7 +74,7 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
-                    <Agreement agreement={this.props.agreement} supervisors={this.props.supervisors} saveAgreement={this.handleSaveAgreement} />
+                    <Agreement agreement={this.state.agreement} supervisors={this.props.supervisors} saveAgreement={this.handleSaveAgreement} />
                 </div>
             );
         } else {
@@ -76,8 +84,8 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.props.agreement} originalData={this.state.originalData} updateFormData={this.updateFormData} />
-                    <AgreementView agreementData={this.props.agreement} />
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalData={this.state.originalData} updateFormData={this.updateFormData} />
+                    <AgreementView agreementData={this.state.agreement} />
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>

@@ -20,7 +20,7 @@ export const paths = {
     graderManagement: { path: '/graderManagement', component: GraderManagement, navText: 'Supervisor management'},
     thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis'},
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
-    councilMeeting: { path: '/councilmeeting', component: CouncilmeetingView, navText: 'Next councilmeeting'},
+    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting'},
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings'},
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts'},
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics'}
