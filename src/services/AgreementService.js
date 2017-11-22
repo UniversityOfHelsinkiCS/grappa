@@ -73,6 +73,7 @@ const parseAgreementData = (data) => {
         thesisCompletionEta: data.completionEta,
         thesisPerformancePlace: data.performancePlace,
         //agreement
+        agreementId: data.agreementId,
         authorId: data.personId,
         thesisId: data.thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
