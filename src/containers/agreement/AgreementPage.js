@@ -15,19 +15,19 @@ export class AgreementPage extends Component {
             newAgreement: false,
             originalData: {},
             editMode: false,
-            agreement: { personId: 1 }
+            agreement: undefined
         }
     }
 
     componentDidMount() {
         document.title = "Agreement Page";
-        this.props.getAgreement(this.state.agreement.personId);
+        if (this.props.user) this.props.getAgreement(this.props.user.id);
         this.props.getSupervisors();
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreement) {
-            const agreement = newProps.agreement.find(agreement => agreement.personId === this.state.agreement.personId)
+            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.id)
             if (agreement) this.setState({ agreement });
         }
     }
@@ -85,7 +85,7 @@ export class AgreementPage extends Component {
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
                     <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalData={this.state.originalData} updateFormData={this.updateFormData} />
-                    <AgreementView agreementData={this.state.agreement} />
+                    {this.state.agreement? <AgreementView agreementData={this.state.agreement} /> : undefined}
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
@@ -114,7 +114,8 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         agreement: state.agreement,
-        supervisors: state.supervisor
+        supervisors: state.supervisor,
+        user: state.user
     };
 }
 

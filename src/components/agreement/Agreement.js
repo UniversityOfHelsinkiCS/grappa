@@ -8,7 +8,6 @@ export default class Agreement extends Component {
         super(props);
         this.state = {
             sent: false,
-            lengthBefore: props.agreement.length,
             completionEta: "",
             supervision: "",
             misc: "",
@@ -43,7 +42,7 @@ export default class Agreement extends Component {
     }
 
     getResponseMessage = () => {
-        if (this.props.agreement.length > this.state.lengthBefore && this.state.sent) {
+        if (this.props.agreement && this.state.sent) {
             return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
         } else if (this.state.sent) {
             return <EventMessage type='error' message='Ilmestyi ongelmia' />;
