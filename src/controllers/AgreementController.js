@@ -1,4 +1,3 @@
-
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
