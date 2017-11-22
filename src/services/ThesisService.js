@@ -4,12 +4,18 @@ export function getAllTheses() {
     return knex.distinct('thesis.thesisId').select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
         .leftJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
         .leftJoin('person', 'thesis.userId', '=', 'person.personId')
-        .then(thesis => thesis);
+        .then(thesis => thesis)
+        .catch(error => {
+            throw error;
+        });
 }
 
 export const getThesisById = (id) => {
-    return knex.select().from('thesis').where('thesisId', id)
-        .then(thesis => thesis);
+    return knex.select().from('thesis').where('thesisId', id) 
+        .then(thesis => thesis)
+        .catch(error => {
+            throw error;
+        });
 }
 
 export const saveThesis = (data) => {
@@ -17,7 +23,9 @@ export const saveThesis = (data) => {
     .returning('thesisId')
     .insert(data)
     .then(thesisId => thesisId[0])
-    .catch(err => Promise.reject(err));
+    .catch(error => {
+        throw error;
+    });
 }
 
 export async function updateThesis(thesisData) {
@@ -26,5 +34,7 @@ export async function updateThesis(thesisData) {
     .where('thesisId', '=', thesisData.thesisId)
     .update(thesisData)
     .then(thesisId => thesisId[0])
-    .catch(err => err);
+    .catch(err => {
+        throw error;
+    });
 }

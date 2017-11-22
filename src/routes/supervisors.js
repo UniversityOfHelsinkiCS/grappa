@@ -17,8 +17,8 @@ router.post('/save', jsonParser, (req, res) => {
     supervisorController.saveSupervisor(req, res);
 });
 
-router.post('/update', jsonParser, (req, res) => {
-    supervisorController.saveSupervisor(req, res); //edit later
+router.put('/update', jsonParser, (req, res) => {
+    supervisorController.updateSupervisor(req, res);
 });
 
 router.put('/review', jsonParser, (req, res) => {

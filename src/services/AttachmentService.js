@@ -6,7 +6,8 @@ export async function saveAttachment(attachmentData) {
     .returning('attachmentId')
     .insert(attachmentData)
     .then(attachmentId => attachmentId[0])
-    .catch(err => err);
+    .catch(error => {
+        throw error});
 }
 
 export async function updateAttachment(attachmentData) {
@@ -15,5 +16,6 @@ export async function updateAttachment(attachmentData) {
     .where('attachmentId', '=', attachmentData.attachmentId)
     .update(attachmentData)
     .then(attachmentId => attachmentId[0])
-    .catch(err => err);
+    .catch(error => {
+        throw error});
 }

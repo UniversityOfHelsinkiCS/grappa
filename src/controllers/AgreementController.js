@@ -3,11 +3,13 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 
+const AttachmentController = require('./AttachmentController');
+
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    res.status(200).json(agreement);// persons: agreementPersons });
+    res.status(200).json(agreement);
 }
 
 export async function getPreviousAgreementById(req, res) {
@@ -66,19 +68,23 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     data.personId = 1; //because front doesn't give id from shibboleth yet
     if (agreementHasNoId(data)) {
-        const personData = getPersonData(data);
-        const personSaveResponse = await updatePerson(personData);
-        const thesisData = getThesisData(data);
-        const thesisSaveResponse = await saveThesis(thesisData);
-        const agreementData = getAgreementData(data, thesisSaveResponse);
-        const agreementSaveResponse = await saveAgreementToService(agreementData);
-        if (personSaveResponse && !thesisSaveResponse.errno && !agreementSaveResponse.errno) {
+        try {
+            const personData = getPersonData(data);
+            const personSaveResponse = await updatePerson(personData);
+            const thesisData = getThesisData(data);
+            const thesisSaveResponse = await saveThesis(thesisData);
+            const agreementData = getAgreementData(data, thesisSaveResponse);
+            const agreementSaveResponse = await saveAgreementToService(agreementData);
             personData.personId = personSaveResponse;
             thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
-            emailService.agreementCreated(Object.assign(personData, thesisData, agreementData));
-            res.status(200).json({ person: personData, thesis: thesisData, agreement: agreementData });
-        } else {
+            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
+            //AttachmentController.saveAttachment(req, res);
+            res.status(200).json(agreementData);
+            console.log("palautan 200");
+        }
+        catch(error) {
+            console.log("ERROR",error);
             res.status(500).json({ text: "Error occured" });
         }
     } else {

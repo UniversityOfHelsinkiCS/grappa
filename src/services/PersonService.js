@@ -6,7 +6,8 @@ export async function savePerson(personData) {
         .returning('personId')
         .insert(personData)
         .then(personId => personId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export async function savePersonRole(personRoleData) {
@@ -14,7 +15,8 @@ export async function savePersonRole(personRoleData) {
         .returning('personRoleId')
         .insert(personRoleData)
         .then(personRoleId => personRoleId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export async function updatePerson(personData) {
@@ -23,13 +25,15 @@ export async function updatePerson(personData) {
         .where('personId', '=', personData.personId)
         .update(personData)
         .then(personId => personId)
-        .catch(err => err);
+        .catch(error =>  {
+            throw error});
 }
 
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id)
         .then(person => person)
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export const getAgreementPersonsByAgreementId = (id) => {
