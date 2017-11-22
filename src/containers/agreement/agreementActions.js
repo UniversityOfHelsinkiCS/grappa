@@ -3,7 +3,7 @@ import { callApi } from '../../util/apiConnection';
 export const getAgreement = (agreementId) => {
     const prefix = "GET_ONE_";
     const method = "get";
-    const route = "/agreements/" + agreementId    
+    const route = "/agreements/" + agreementId
     return callController(prefix, method, agreementId, route);
 }
 
@@ -24,7 +24,7 @@ export const deleteAgreement = (agreement) => {
 export const updateAgreement = (agreement) => {
     const prefix = "UPDATE_ONE_";
     const method = "put";
-    const route = "/agreements/" + agreement.id
+    const route = "/agreements/" + agreement.agreementId
     return callController(prefix,method, agreement, route)
 }
 

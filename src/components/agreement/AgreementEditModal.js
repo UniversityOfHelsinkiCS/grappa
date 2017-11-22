@@ -59,7 +59,7 @@ export class AgreementEditModal extends Component {
     parseAgreementData = (data) => {
         var parsedList = [];
         for (var p in data) {
-            var originalData = this.props.originalData;
+            var originalData = this.props.originalAgreement;
             if(data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
                 parsedList.push({
                     fieldName: p,

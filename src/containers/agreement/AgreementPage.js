@@ -13,7 +13,7 @@ export class AgreementPage extends Component {
         super(props);
         this.state = {
             newAgreement: false,
-            originalData: {},
+            originalAgreement: {},
             editMode: false,
             agreement: undefined
         }
@@ -21,14 +21,22 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-        if (this.props.user) this.props.getAgreement(this.props.user.id);
+        if (this.props.user)
+            this.props.getAgreement(this.props.user.id);
         this.props.getSupervisors();
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreement) {
             const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.id)
-            if (agreement) this.setState({ agreement });
+            if (agreement) {
+                this.setState(
+                    {
+                        agreement : agreement,
+                        originalAgreement: Object.assign({}, agreement)
+                    }
+                );
+            }
         }
     }
 
@@ -53,15 +61,15 @@ export class AgreementPage extends Component {
     }
 
     updateFormData = (data) => {
-        this.setState({ formData: data });
+        this.setState({ agreement: data });
     }
 
     sendForm = () => {
-        this.props.updateAgreement(this.state.formData)
+        this.props.updateAgreement(this.state.agreement);
     }
 
     startNewAgreement = () => {
-        this.setState({ newAgreement: !this.state.newAgreement })
+        this.setState({ newAgreement: !this.state.newAgreement });
     }
 
     handleSaveAgreement = (agreement) => {
@@ -79,12 +87,18 @@ export class AgreementPage extends Component {
             );
         } else {
             //check if form data has changed
-            const disableSubmit = this.state.formData === this.state.originalData;
+            /*
+            console.log("this.state.agreement", this.state.agreement);
+            console.log("this.state.originalAgreement", this.state.originalAgreement);
+            console.log(Object.is(this.state.agreement, this.state.originalAgreement));
+            */
+            //doesn't work
+            const disableSubmit = Object.is(this.state.agreement, this.state.originalAgreement);
             return (
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalData={this.state.originalData} updateFormData={this.updateFormData} />
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
                     {this.state.agreement? <AgreementView agreementData={this.state.agreement} /> : undefined}
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>

@@ -186,7 +186,7 @@ export default class Agreement extends Component {
     */
 
     createSupervisorArray = (supervisors) => {
-        return supervisors[0].data.map((supervisor) =>
+        return supervisors[supervisors.length - 1].map((supervisor) =>
             ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname })
         );
     }
