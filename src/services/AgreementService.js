@@ -32,7 +32,8 @@ export const saveNewAgreement = (data) => {
         .returning('agreementId')
         .insert(data)
         .then(agreementId => agreementId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export const updateAgreement = (data) => {
@@ -41,7 +42,8 @@ export const updateAgreement = (data) => {
         .where('agreementId', '=', data.agreementId)
         .update(data)
         .then(agreementId => agreementId)
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export const savePrevious = (data) => {
@@ -49,7 +51,8 @@ export const savePrevious = (data) => {
         .returning('agreementId')
         .insert(data)
         .then(agreementId => agreementId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 //change data formatting from DB to front
