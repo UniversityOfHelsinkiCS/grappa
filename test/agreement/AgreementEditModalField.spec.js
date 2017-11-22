@@ -50,7 +50,7 @@ test('when agreement edit modal textarea value changes handleChange is called', 
     wrapper.find('textarea').simulate('change', {target: {value: 'a'}});
     t.truthy(changeStub.calledOnce);
 });
-
+/*
 test('when agreement edit modal field reset button is clicked onChange is called', t => {
     const changeStub = sinon.stub();
     const wrapper = shallow(<AgreementEditModalField fieldName={ "tname" } content={ "tcontent" } originalContent={ "toriginal" } textField={ false } onChange={changeStub}/>);
@@ -64,3 +64,4 @@ test('when agreement edit modal textarea reset button is clicked onChange is cal
     wrapper.find('button').simulate('click');
     t.truthy(changeStub.calledOnce);
 });
+*/
