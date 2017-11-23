@@ -8,7 +8,6 @@ export default class Agreement extends Component {
         super(props);
         this.state = {
             sent: false,
-            lengthBefore: props.agreement.length,
             completionEta: "",
             supervision: "",
             misc: "",
@@ -27,6 +26,7 @@ export default class Agreement extends Component {
                 thesisPerformancePlace: "",
 
                 thesisSupervisorMain: "",
+                thesisSupervisorSecond: "",
                 thesisSupervisorOther: "",
 
                 thesisWorkStudentTime: "",
@@ -43,7 +43,7 @@ export default class Agreement extends Component {
     }
 
     getResponseMessage = () => {
-        if (this.props.agreement.length > this.state.lengthBefore && this.state.sent) {
+        if (this.props.agreement && this.state.sent) {
             return <EventMessage type='success' message='Tiedot tallennettiin onnistuneesti' />;
         } else if (this.state.sent) {
             return <EventMessage type='error' message='Ilmestyi ongelmia' />;
@@ -56,7 +56,7 @@ export default class Agreement extends Component {
         let newForm = oldForm;
         if (event.target) {  //input field
             newForm[event.target.name] = event.target.value;
-        } else { //a file 
+        } else { //a file
             newForm.attachments.push(event);
         }
         this.setState({ form: newForm })
@@ -69,7 +69,7 @@ export default class Agreement extends Component {
         this.setState({ sent: true });
     }
 
-    formFieldInfo = (supervisors) => {
+    formFieldInfo = (supervisors, studyfields) => {
         return {
             sections:
             [{
@@ -81,7 +81,10 @@ export default class Agreement extends Component {
                     { inputType: "input", name: "studentAddress", label: "Lähiosoite", extraClassNames: "nine wide", required: true, placeholder: "Peräpolku 2 C 45, Nuppulinna" },
                     { inputType: "input", name: "studentPhone", label: "Puhelinnumero", extraClassNames: "nine wide", required: true, placeholder: "000 000 00 00" },
                     { inputType: "input", name: "studentEmail", label: "Sähköpostiosoite", extraClassNames: "nine wide", required: true, placeholder: "nimi@domain.com" },
-                    { inputType: "input", name: "studentMajor", label: "Pääaine", extraClassNames: "nine wide", required: true, placeholder: "(jos muu kuin TKTL)" },
+                    {
+                        inputType: "dropdown", name: "studentMajor", label: "Pääaine", extraClassNames: "nine wide fluid", required: true,
+                        responses: studyfields
+                    },
                 ]
             },
             {
@@ -100,7 +103,11 @@ export default class Agreement extends Component {
                         inputType: "dropdown", name: "thesisSupervisorMain", label: "Vastuuohjaaja", extraClassNames: "nine wide fluid", required: true,
                         responses: supervisors
                     },
-                    { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: true, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
+                    {
+                        inputType: "dropdown", name: "thesisSupervisorSecond", label: "Toinen ohjaaja", extraClassNames: "nine wide fluid", required: true,
+                        responses: supervisors
+                    },
+                    { inputType: "input", name: "thesisSupervisorOther", label: "Muu ohjaaja", extraClassNames: "nine wide fluid", required: false, placeholder: "(nimi, oppiarvo ja/tai tehtävänimike, organisaatio, yhteystiedot)" },
                 ]
             },
             {
@@ -119,7 +126,7 @@ export default class Agreement extends Component {
                     {
                         inputType: "dropdown", name: "studentGradeGoal", label: "Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:", extraClassNames: "nine wide", required: true,
                         responses: [
-                            { value: 0, text: 'Choose...' },
+                            { value: -1, text: 'Choose a grade' },
                             { value: 5, text: '5 (Excellent)' },
                             { value: 4, text: '4 (Very Good)' },
                             { value: 3, text: '3 (Good)' },
@@ -142,64 +149,32 @@ export default class Agreement extends Component {
         }
     }
 
-    /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
-    getWizardLine() {
-        return (<div className="ui mini steps">
-            <a className={"step " + (this.state.formSteps == 0 ? 'active' : (this.state.formSteps > 0 ? 'completed' : ''))} onClick={() => this.wizardOnClick(0)}>
-                <i className="small address card outline icon"></i>
-                <div className="content">
-                    <div className="title">Personal Info</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 1 ? 'active' : (this.state.formSteps > 1 ? 'completed' : ''))} onClick={() => this.wizardOnClick(1)}>
-                <i className="small file text outline icon"></i>
-                <div className="content">
-                    <div className="title">Thesis</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 2 ? 'active' : (this.state.formSteps > 2 ? 'completed' : ''))} onClick={() => this.wizardOnClick(2)}>
-                <i className="small user icon"></i>
-                <div className="content">
-                    <div className="title">Supervisor</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 3 ? 'active' : (this.state.formSteps > 3 ? 'completed' : ''))} onClick={() => this.wizardOnClick(3)}>
-                <i className="small edit outline icon"></i>
-                <div className="content">
-                    <div className="title">Agreement</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 4 ? 'active' : (this.state.formSteps > 4 ? 'completed' : ''))} onClick={() => this.wizardOnClick(4)}>
-                <i className="small comments outline icon"></i>
-                <div className="content">
-                    <div className="title">Other</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 5 ? 'active' : (this.state.formSteps > 5 ? 'completed' : ''))} onClick={() => this.wizardOnClick(5)}>
-                <i className="small info icon"></i>
-                <div className="content">
-                    <div className="title">Confirm</div>
-
-                </div>
-            </a>
-        </div>);
-    }
-    */
-
     createSupervisorArray = (supervisors) => {
-        return supervisors[0].data.map((supervisor) =>
-            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname })
+        let data = supervisors[supervisors.length - 1].map((supervisor) =>
+            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname})
         );
+        data.unshift({ value: -1, text: 'Choose a supervisor' });
+        return data;
+    }
+
+    createStudyFieldArray = (studyfields) => {
+        let data = studyfields.map((studyfields) =>
+            ({ value: studyfields.studyfieldId, text: studyfields.name })
+        );
+        data.unshift({ value: -1, text: 'Choose a major' });
+        return data;
     }
 
     render() {
+        let supervisors = this.createSupervisorArray(this.props.supervisors);
+        let studyfields = this.createStudyFieldArray(this.props.studyfields);
         return (
             <div>
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
 
                 <FormCreator
-                    formFieldInfo={this.formFieldInfo(this.createSupervisorArray(this.props.supervisors))}
+                    formFieldInfo={this.formFieldInfo(supervisors, studyfields)}
                     onSubmitFunc={(e) => { if (e !== undefined) { e.preventDefault(); } }}
                     buttonOnClickFunc={this.sendForm}
                     accessToStore={this.props.agreement}
@@ -210,4 +185,48 @@ export default class Agreement extends Component {
 
         );
     }
+
+      /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
+      getWizardLine() {
+          return (<div className="ui mini steps">
+              <a className={"step " + (this.state.formSteps == 0 ? 'active' : (this.state.formSteps > 0 ? 'completed' : ''))} onClick={() => this.wizardOnClick(0)}>
+                  <i className="small address card outline icon"></i>
+                  <div className="content">
+                      <div className="title">Personal Info</div>
+                  </div>
+              </a>
+              <a className={"step " + (this.state.formSteps == 1 ? 'active' : (this.state.formSteps > 1 ? 'completed' : ''))} onClick={() => this.wizardOnClick(1)}>
+                  <i className="small file text outline icon"></i>
+                  <div className="content">
+                      <div className="title">Thesis</div>
+                  </div>
+              </a>
+              <a className={"step " + (this.state.formSteps == 2 ? 'active' : (this.state.formSteps > 2 ? 'completed' : ''))} onClick={() => this.wizardOnClick(2)}>
+                  <i className="small user icon"></i>
+                  <div className="content">
+                      <div className="title">Supervisor</div>
+                  </div>
+              </a>
+              <a className={"step " + (this.state.formSteps == 3 ? 'active' : (this.state.formSteps > 3 ? 'completed' : ''))} onClick={() => this.wizardOnClick(3)}>
+                  <i className="small edit outline icon"></i>
+                  <div className="content">
+                      <div className="title">Agreement</div>
+                  </div>
+              </a>
+              <a className={"step " + (this.state.formSteps == 4 ? 'active' : (this.state.formSteps > 4 ? 'completed' : ''))} onClick={() => this.wizardOnClick(4)}>
+                  <i className="small comments outline icon"></i>
+                  <div className="content">
+                      <div className="title">Other</div>
+                  </div>
+              </a>
+              <a className={"step " + (this.state.formSteps == 5 ? 'active' : (this.state.formSteps > 5 ? 'completed' : ''))} onClick={() => this.wizardOnClick(5)}>
+                  <i className="small info icon"></i>
+                  <div className="content">
+                      <div className="title">Confirm</div>
+
+                  </div>
+              </a>
+          </div>);
+      }
+      */
 }

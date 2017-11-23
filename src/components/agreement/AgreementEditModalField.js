@@ -24,7 +24,7 @@ class AgreementElement extends Component {
                 content: originalContent
             }
         );
-        console.log("resetContent");
+        e.preventDefault();
         this.props.onChange(this.props.fieldName, originalContent);
     }
 

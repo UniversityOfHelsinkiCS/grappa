@@ -12,7 +12,8 @@ export class App extends Component {
     handleRoleChange = (event) => {
         if (!event.target.value) return
         const user = {
-            type: event.target.value
+            type: event.target.value,
+            id: 1
         }
         this.props.login(user);
     }
