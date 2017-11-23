@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AttachmentAdder from "../attachment/AttachmentAdder.js"
 
 export default class Field extends Component {
     defineFieldClasses = (extraClassNames, fieldType, required) => {
@@ -42,7 +43,7 @@ export default class Field extends Component {
                             ];
                 break;
             case "dropdown":
-            forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
                             <select className="ui dropdown" onChange={this.props.fieldOnChangeFunc} name={this.props.fieldData.name} >
                                 {this.props.fieldData.responses.map(
                                     (response) => {
@@ -50,7 +51,13 @@ export default class Field extends Component {
                                     })}
                             </select>
                         ];
-            break;
+                break;
+            case "attachment":
+                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+                            
+                            <AttachmentAdder sendChange={this.props.fieldOnChangeFunc}/>
+                        ];
+                break;
             default:
                 console.error("FormField error ("+this.props.fieldData.name+"): inputType not defined!");
         }

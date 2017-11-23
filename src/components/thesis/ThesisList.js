@@ -46,9 +46,6 @@ class ThesisList extends Component {
                         <th>Author</th>
                         <th>Title</th>
                         <th>Grade</th>
-                        {this.props.fields === 4 && //is 4 on supervisor management page
-                            <th>Action needed, if any</th>
-                        }
                     </tr>
                 </thead>
                 <tbody>{this.state.filteredTheses.map((thesis) =>
@@ -56,9 +53,6 @@ class ThesisList extends Component {
                         <td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td>
                         <td>{thesis.thesisTitle}</td>
                         <td>{thesis.grade}</td>
-                        {this.props.fields === 4 &&
-                            <td>Process needs approval? Needs grader approval?</td>
-                        }
                     </tr>
                 )}</tbody>
             </table>

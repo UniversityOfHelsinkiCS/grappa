@@ -18,7 +18,7 @@ export default class ThesisUploadWidget extends Component {
     getLabel = () => {
         switch (this.props.type) {
             case "reviewFile":
-                return "Upload Thesis review as PDF (max. 1 MB)";            
+                return "Upload Thesis review as PDF (max. 1 MB)";
             case "abstractFile":
                 return "Upload Thesis with abstract on 2nd page (max. 40 MB)";
             case "attachment":
@@ -37,13 +37,15 @@ export default class ThesisUploadWidget extends Component {
         const attachmentElements = [];
         for (let i = 0; i < this.state.attachments.length; i++) {
             console.log("filu: " + this.state.attachments[i].name);
-            const element = <p>{this.state.attachments[i].name}</p>  
-            attachmentElements.push(element); 
+            const element = <p>{this.state.attachments[i].name}</p>
+            attachmentElements.push(element);
         }
-        return (<div class ="fileList">
-                    {this.getFileNumberLabel()}
-                    {attachmentElements}
-                </div>);
+        return (
+            <div className="fileList">
+                {this.getFileNumberLabel()}
+                {attachmentElements}
+            </div>
+        );
 
     }
 
@@ -57,13 +59,13 @@ export default class ThesisUploadWidget extends Component {
     render() {
         return (
             <div>
-                <div className="field" style={{borderStyle: 'dashed'}}>
+                <div className="field" style={{ borderStyle: 'dashed' }}>
                     <label>{this.getLabel()}</label>
                     <Dropzone className="field upload-box" onDrop={this.onDrop} multiple={false}>
                         <p className="upload-p">Click to navigate to the file or drop them from your file system.</p>
                     </Dropzone>
-            </div>
-            {this.getFileList()}
+                </div>
+                {this.getFileList()}
             </div>
 
         );

@@ -51,7 +51,7 @@ export default class StudyfieldManagePage extends Component {
 
   saveStudyfield = () => {
     console.log("Save");
-      //this.props.saveStudyfield(this.state.newStudyfield.values);
+      //this.props.saveStudyfield(this.state.newStudyfield);
   }
 
   updateStudyfield = () => {
@@ -103,18 +103,14 @@ export default class StudyfieldManagePage extends Component {
     );
   }
 }
-/*
 import { connect } from "react-redux";
 import { getStudyfields, saveStudyfield, updateStudyfield, deleteStudyfield } from "./studyfield.actions";
 
 const mapStateToProps = (state) => {
-  const auth = state.get("auth");  
-  const studyfield_r = state.get("studyfield");
-  const user_r = state.get("user");
   return {
-    user: auth.get("user").toJS(),
-    Studyfields: studyfield_r.get("studyfields").toJS(),
-    Users: user_r.get("users").toJS(),
+    user: state.user,
+    Studyfields: state.Studyfields,
+    Users: state.users,
   };
 };
 
@@ -134,4 +130,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyfieldListPage);
-*/

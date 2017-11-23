@@ -9,19 +9,21 @@ export const getCouncilmeetings = () => {
 export const saveCouncilmeeting = (councilmeeting) => {
     const prefix = "SAVE_ONE_";
     const method = "post";
-    return callController(prefix, method);
+    return callController(prefix, method, councilmeeting);
 }
 
 export const updateCouncilmeeting = (councilmeeting) => {
     const prefix = "UPDATE_ONE_";
     const method = "put";
-    return callController(prefix, method);
+    const route = "/councilmeetings/" + councilmeeting.councilmeetingId;
+    return callController(prefix, method, councilmeeting, route);
 }
 
-export const deleteCouncilmeeting = (councilmeeting) => {
+export const deleteCouncilmeeting = (councilmeetingId) => {
     const prefix = "DELETE_ONE_";
     const method = "delete";
-    return callController(prefix, method);
+    const route = "/councilmeetings/" + councilmeetingId;    
+    return callController(prefix, method, councilmeetingId, route);
 }
 
 const action = (suffix, response) => {
@@ -31,9 +33,9 @@ const action = (suffix, response) => {
     }
 }
 
-const callController = (prefix, method) => (dispatch) => {
+const callController = (prefix, method, data, route = '/councilmeetings') => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
-    callApi('/councilmeetings', method)
-        .then(res => dispatch(action(prefix + "SUCCESS", res)))
+    callApi(route, method, data)
+        .then(res => dispatch(action(prefix + "SUCCESS", res.data)))
         .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

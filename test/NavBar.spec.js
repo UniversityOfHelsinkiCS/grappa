@@ -6,9 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 
 import { NavBar } from '../src/components/NavBar.js';
 
-const expectedLinkAmount = 7;
-
-test('Basic NavBar has elements', t => {
-    const wrapper = shallow(<NavBar/>);
+test('NavBar has elements for admin', t => {
+    const wrapper = shallow(<NavBar user={{ type: "admin" }} />);
     t.truthy(wrapper.find('NavLink').length > 0);
 });

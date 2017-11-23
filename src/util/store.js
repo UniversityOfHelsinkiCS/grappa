@@ -1,9 +1,13 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk';
+import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
-import userReducer from "../components/user/UserReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
-import graderReducer from "../components/grader/GraderReducer";
+import graderReducer from "../containers/grader/graderReducer";
+import thesisReducer from "../containers/thesis/thesisReducer";
+import studyfieldReducer from "../containers/studyfield/studyfieldReducer";
+import emailReducer from "../containers/email/emailReducer";
+import supervisorReducer from "../containers/supervisor/supervisorReducer";
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
@@ -15,11 +19,15 @@ const combinedReducers = combineReducers({
     agreement: agreementReducer,
     user: userReducer,
     councilmeeting: councilmeetingReducer,
-    grader: graderReducer
+    grader: graderReducer,
+    thesis: thesisReducer,
+    studyfield: studyfieldReducer,
+    email: emailReducer,
+    supervisor: supervisorReducer
 });
 
 let store;
-if (process.env.REACT_APP_DEVTOOLS == '1') {
+if (process.env.REACT_APP_DEVTOOLS === '1') {
     store = createStore(
         combinedReducers,
         compose(applyMiddleware(thunk),

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-//import service from "../../util/apiConnection.js";
-import { callApi } from "../../util/apiConnection.js";
-import GraderEditor from "../../components/grader/GraderEditor.js"
-//import ThesisList from "../../components/thesis/ThesisList.js"
 import { connect } from "react-redux";
-import { saveAddedGrader, getSupervisors, deleteSupervisor } from "../../components/grader/GraderActions.js";
+import { saveAddedGrader, getSupervisors, deleteSupervisor, reviewSupervisor, updateSupervisor } from "./graderActions.js";
+
 import Review from "../../components/grader/Review.js";
+import GraderEditor from "../../components/grader/GraderEditor.js"
 
 export class GraderManagementPage extends Component {
     constructor(props) {
@@ -15,26 +13,30 @@ export class GraderManagementPage extends Component {
             personToBeReviewed: null,
             showReview: false
         }
-                
     }
 
     componentDidMount() {
-       this.props.getSupervisors();
-       document.title = "Grader and Supervisor Management";
+        this.props.getSupervisors();
+        document.title = "Grader and Supervisor Management";
     }
-    
+
     handleSaveGrader = (grader) => {
         this.props.saveAddedGrader(grader);
     }
 
-    handleUpdateGrader = (grader) => {
-        this.props.saveUpdatedGrader(grader);
+    handleUpdateSupervisor = (grader) => {
+        this.props.updateSupervisor(grader);
     }
 
-    removeSupervisor = (grader) => (e) => {
+    handleDeleteGrader = (grader) => {
+        this.props.deleteGrader(grader);
+    }
+
+    /*removeSupervisor = (grader) => (e) => {
         console.log("removed", grader);
         this.props.removeSupervisor(grader);
     }
+    */
 
     toggleEditModal = (e, person) => {
         let newValue = !this.state.showReview;
@@ -46,35 +48,37 @@ export class GraderManagementPage extends Component {
         );
     }
 
-    render() {
+    renderList() {
         return (
-            <div className="ui segment">
-                <p>
-                    Add and edit supervisor list here or review thesis projects. This page will be displayed to studyfields' professors and admins only.
-                </p>
-                <h2>List of thesis supervisors (atm showing all, in future those needing approval)</h2>
-                <div>{this.props.graders.map(person => (
-                    <div className="two fields">
+            <div>
+                <h2>List of thesis supervisors </h2>
+                <div>At the moment showing all who are supervising a thesis now, in future only those needing approval?</div>
+                <div>{this.props.graders.map((person, index) => (
+                    <div key={index} className="two fields">
                         <div className="ui field">{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
-                            &nbsp;&nbsp;
                         </div>
                         <div className="ui field">
-                            <button key={person.personId} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >
+                            <button key={"review" + index} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >
                                 Review Supervisor
                             </button>
-                            <button key={person.personId + "key"} className="ui negative disabled button" onClick={this.removeSupervisor(person)} >
-                                Remove Supervisor
-                            </button>
                         </div>
-                        <br/>
+                        <br />
                     </div>
-                    
                 ))
                 }
                 </div>
-                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} />
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div className="ui segment">
+                Add and edit supervisor list here or review thesis projects. This page will be displayed to studyfields' professors and admins only.
+                {this.renderList()}
+                <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} reviewSupervisor={this.props.reviewSupervisor} />
                 <h2>Edit supervisor list</h2>
-                <GraderEditor saveGrader={this.handleSaveGrader} updateGrader={this.handleUpdateGrader} graders={this.props.graders}/>
+                <GraderEditor saveGrader={this.handleSaveGrader} updateSupervisor={this.handleUpdateSupervisor} deleteGrader={this.handleDeleteGrader} graders={this.props.graders} />
             </div>
         );
     }
@@ -87,14 +91,21 @@ const mapDispatchToProps = (dispatch) => ({
     getSupervisors(data) {
         dispatch(getSupervisors());
     },
-    removeSupervisor(data) {
+    updateSupervisor(data) {
+        dispatch(updateSupervisor(data));
+    },
+    deleteSupervisor(data) {
         dispatch(deleteSupervisor(data));
+    },
+    reviewSupervisor(data) {
+        dispatch(reviewSupervisor(data));
     }
 });
 
 const mapStateToProps = (state) => {
-    return { 
-        graders: state.grader
+    return {
+        graders: state.grader,
+        personToBeReviewed: state.person
     };
 }
 

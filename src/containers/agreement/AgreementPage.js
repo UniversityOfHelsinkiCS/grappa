@@ -1,43 +1,48 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
 
 //redux
 import { connect } from "react-redux";
-import { saveAgreement } from "./agreementActions";
-
-//TODO: REMOVE THIS
-import { callApi } from "../../util/apiConnection";
-const service = require("../../util/apiConnection");
+import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
+import { getSupervisors } from "../supervisor/supervisorActions";
+import { getStudyfields } from "../studyfield/studyfieldActions";
 
 export class AgreementPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             newAgreement: false,
-            formData: {},
-            originalData: {},
-            editMode: false
+            originalAgreement: {},
+            editMode: false,
+            agreement: undefined
         }
     }
 
     componentDidMount() {
         document.title = "Agreement Page";
-        //TODO: REMOVE THIS
-        callApi("/agreements/1").then((resp) => {
-            var data = this.parseResponceData(resp.data);
-            this.setState(
-                {
-                    formData: data,
-                    originalData: Object.assign({}, data)
-                }
-            );
-        }).catch((error) => console.error(error));
+        if (this.props.user)
+            this.props.getAgreement(this.props.user.id);
+        this.props.getSupervisors();
+        this.props.getStudyfields();
     }
 
-    parseResponceData = (data) => {
+    componentWillReceiveProps(newProps) {
+        if (newProps && this.props !== newProps && newProps.agreement) {
+            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.id)
+            if (agreement) {
+                this.setState(
+                    {
+                        agreement : agreement,
+                        originalAgreement: Object.assign({}, agreement)
+                    }
+                );
+            }
+        }
+    }
+
+    parseResponseData = (data) => {
         var parsedData = data.agreement;
         //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
@@ -58,54 +63,49 @@ export class AgreementPage extends Component {
     }
 
     updateFormData = (data) => {
-        this.setState({ formData: data });
+        this.setState({ agreement: data });
     }
 
-    //TODO: REMOVE THIS
-    sendForm = (e) => {
-        //TODO sent agreement to correct url based on id
-        service.oldPut('/agreements/1', this.state.formData)
-            .then(resp => {
-                console.log(resp)
-            }).catch((error) => {
-                console.error(error)
-            });
-        //Make this better
-        //window.location.reload();
+    sendForm = () => {
+        this.props.updateAgreement(this.state.agreement);
     }
 
     startNewAgreement = () => {
-        this.setState({ newAgreement: !this.state.newAgreement })
+        this.setState({ newAgreement: !this.state.newAgreement });
     }
 
     handleSaveAgreement = (agreement) => {
+        console.log("handleSaveAgreement", agreement);
         this.props.saveAgreement(agreement);
     }
 
     render() {
-        //check if form data has changed
-        var changes = (JSON.stringify(this.state.formData) === JSON.stringify(this.state.originalData));
         if (this.state.newAgreement) {
             return (
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
-                    <Agreement agreement={this.props.agreement} saveAgreement={this.handleSaveAgreement} />
+                    <Agreement agreement={this.state.agreement} supervisors={this.props.supervisors} studyfields={this.props.studyfields} saveAgreement={this.handleSaveAgreement} />
                 </div>
             );
         } else {
+            //check if form data has changed
+            /*
+            console.log("this.state.agreement", this.state.agreement);
+            console.log("this.state.originalAgreement", this.state.originalAgreement);
+            console.log(Object.is(this.state.agreement, this.state.originalAgreement));
+            */
+            //doesn't work
+            const disableSubmit = Object.is(this.state.agreement, this.state.originalAgreement);
             return (
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.formData} originalData={this.state.originalData} updateFormData={this.updateFormData} />
-                    <AgreementView agreementData={this.state.formData} />
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
+                    {this.state.agreement? <AgreementView agreementData={this.state.agreement} /> : undefined}
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
-                        <button className="ui primary button" type="submit" disabled={changes} onClick={this.sendForm}>Save Agreement</button>
-                        <br />
-                        <br />
-                        <p><Link to="/">Go back to HomePage</Link></p>
+                        <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
                     </div>
                 </div>
             );
@@ -114,14 +114,29 @@ export class AgreementPage extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    getAgreement(data) {
+        dispatch(getAgreement(data));
+    },
     saveAgreement(data) {
         dispatch(saveAgreement(data));
     },
+    updateAgreement(data) {
+        dispatch(updateAgreement(data));
+    },
+    getSupervisors(data) {
+        dispatch(getSupervisors(data));
+    },
+    getStudyfields(data) {
+        dispatch(getStudyfields(data));
+    }
 });
 
 const mapStateToProps = (state) => {
     return {
-        agreement: state.agreement
+        agreement: state.agreement,
+        supervisors: state.supervisor,
+        studyfields: state.studyfield,
+        user: state.user
     };
 }
 

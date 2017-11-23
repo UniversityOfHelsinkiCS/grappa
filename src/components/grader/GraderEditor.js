@@ -10,7 +10,7 @@ export default class GraderEditor extends Component {
                 title: "",
                 studyfieldId: ""
             },
-            updateGrader: {
+            updateSupervisor: {
                 id: undefined,
                 firstname: "",
                 lastname: "",
@@ -34,9 +34,9 @@ export default class GraderEditor extends Component {
     }
 
     selectGrader = (event) => {
-        const updateGrader = this.props.graders.find(grader => grader.personId.toString() === event.target.value);
-        if (!updateGrader) return;
-        this.setState({ updateGrader });
+        const updateSupervisor = this.props.graders.find(grader => grader.personId.toString() === event.target.value);
+        if (!updateSupervisor) return;
+        this.setState({ updateSupervisor });
     }
 
     saveNewGrader = () => {
@@ -44,49 +44,50 @@ export default class GraderEditor extends Component {
         this.props.saveGrader(grader);
     }
 
-    updateGrader = () => {
-        const grader = this.state.updateGrader;
-        this.props.updateGrader(grader);
+    updateSupervisor = () => {
+        const grader = this.state.updateSupervisor;
+        console.log("editorissa grader on", grader);
+        this.props.updateSupervisor(grader);
         this.setState(
             {
-                updateGrader: {
+                updateSupervisor: {
                     id: grader.id
                 }
             }
         )
     }
 
-    //not functioning yet in Grappa 2, to be added later
+    //not functioning yet in Grappa 2
     deleteGrader = () => {
-        //const grader = this.state.updateGrader;
-        //console.log("deleting");
-        //console.log(grader);
-        //this.props.deleteGrader(grader);
+        const grader = this.state.updateSupervisor;
+        console.log("deleting");
+        console.log(grader);
+        this.props.deleteGrader(grader);
     }
 
-    renderNameField(name) {
+    renderNameField(name, whichOne) {
         let nameLowCase = name.toLowerCase();
         nameLowCase = nameLowCase.replace(/\s/g, '');
         return (
-            <div className="ui field">
+            <div id={name + whichOne} className="ui field">
                 <label>{name}</label>
                 <input
                     type="text"
                     value={this.state.newGrader.nameLowCase}
                     placeholder={name}
-                    onChange={this.handleChange(nameLowCase, "newGrader")}
+                    onChange={this.handleChange(nameLowCase, whichOne)}
                 />
             </div>)
     }
 
-    renderTitleList() {
+    renderTitleList(whichOne) {
         return (
-            <div className="ui field">
+            <div id={"titles" + whichOne} className="ui field">
                 <label>Title</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state.newGrader.title}
-                    onChange={this.handleChange("title", "newGrader")}
+                    value={this.state[whichOne].title}
+                    onChange={this.handleChange("title", whichOne)}
                 >
                     <option value="">Select title</option>
                     {this.getTitles().map((title, index) => <option key={index} value={title}>{title}</option>)}
@@ -95,14 +96,14 @@ export default class GraderEditor extends Component {
         )
     }
 
-    renderStudyfieldList() {
+    renderStudyfieldList(whichOne) {
         return (
-            <div className="ui field">
+            <div id={"studyfields" + whichOne} className="ui field">
                 <label>Studyfield</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state.newGrader.studyfieldId}
-                    onChange={this.handleChange("studyfieldId", "newGrader")}
+                    value={this.state[whichOne].studyfieldId}
+                    onChange={this.handleChange("studyfieldId", whichOne)}
                 >
                     <option value="">Select studyfield</option>
                     {this.getStudyfields().map((studyfield, index) => <option key={index} value={studyfield}>{studyfield}</option>)}
@@ -116,13 +117,12 @@ export default class GraderEditor extends Component {
             <div>
                 <p>Add new grader</p>
                 <div className="five fields">
-                    {this.renderTitleList()}
-                    {this.renderNameField("First name")}
-                    {this.renderNameField("Last name")}
-                    {this.renderStudyfieldList()}
+                    {this.renderTitleList("newGrader")}
+                    {this.renderNameField("First name", "newGrader")}
+                    {this.renderNameField("Last name", "newGrader")}
+                    {this.renderStudyfieldList("newGrader")}
                     <div className="ui field">
                         <label>&nbsp;</label>
-
                         <button id="add" className="ui green button" onClick={this.saveNewGrader}>
                             Create Supervisor
                         </button>
@@ -135,27 +135,31 @@ export default class GraderEditor extends Component {
     renderUpdate() {
         return (
             <div>
-                <p>Updating not working on backend yet, sorry</p>
-                <div className="five fields">
+                <p>Update information related to a grader</p>
+                <div className="six fields">
                     <div className="field">
                         <label>Who</label>
                         <select className="ui fluid search dropdown" onChange={this.selectGrader}>
                             <option value="">Select grader</option>
                             {this.props.graders.map((grader, index) =>
                                 <option key={index} className="item" value={grader.personId}>
-                                    {grader.title}&nbsp;&nbsp;{grader.firstname}&nbsp;&nbsp;{grader.lastname}&nbsp;&nbsp;Studyfield:&nbsp;{grader.studyfieldId}
+                                    {grader.title} {grader.firstname} {grader.lastname} Studyfield: {grader.studyfieldId}
                                 </option>
                             )}
                         </select>
                     </div>
-                    {this.renderTitleList()}
-                    {this.renderNameField("First name")}
-                    {this.renderNameField("Last name")}
-                    {this.renderStudyfieldList()}
+                    {this.renderTitleList("updateSupervisor")}
+                    {this.renderNameField("First name", "updateSupervisor")}
+                    {this.renderNameField("Last name", "updateSupervisor")}
+                    {this.renderStudyfieldList("updateSupervisor")}
                     <div className="field">
                         <label>&nbsp;</label>
-                        <button id="update" className="ui blue button disabled" onClick={this.updateGrader}>
+                        <button id="update" className="ui blue button" onClick={this.updateSupervisor}>
                             Update Supervisor
+                        </button>
+                        <label>&nbsp;</label>
+                        <button id="update" className="ui red button disabled" onClick={this.deleteGrader}>
+                            Delete Supervisor
                         </button>
                     </div>
                 </div>
@@ -167,8 +171,7 @@ export default class GraderEditor extends Component {
         return (
             <div className="ui form">
                 {this.renderCreate()}
-                {this.renderUpdate()
-                }
+                {this.renderUpdate()}
             </div>
         );
     }

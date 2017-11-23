@@ -1,42 +1,43 @@
 import { callApi } from '../../util/apiConnection';
 
-export const saveAttempt = function () {
-    return {
-        type: 'AGREEMENT_SAVE_ATTEMPT',
-        text: 'Sopimuksen talletus käynnistetty'
-    };
-}
-
-export const saveSuccess = function (data) {
-    return {
-        type: 'AGREEMENT_SAVE_SUCCESS',
-        text: 'Sopimus talletettu onnistuneesti',
-        data
-    };
-}
-
-export const saveFailure = function (error) {
-    return {
-        type: 'AGREEMENT_SAVE_FAILURE',
-        text: 'Sopimuksen talletus epäonnistui',
-        error
-    };
+export const getAgreement = (agreementId) => {
+    const prefix = "GET_ONE_";
+    const method = "get";
+    const route = "/agreements/" + agreementId
+    return callController(prefix, method, agreementId, route);
 }
 
 export const saveAgreement = (agreement) => {
-    return (dispatch) => {
-        dispatch(saveAttempt());
-        callApi('/agreements', 'post', agreement)
-            .then(res =>  dispatch(saveSuccess(res)))
-            .catch(err => dispatch(saveFailure(err.response)));
+    const prefix = "SAVE_ONE_";
+    const method = "post";
+    const wtf = callController(prefix,method,agreement);
+    console.log("agreementActions",wtf);
+    return wtf;
+}
+
+export const deleteAgreement = (agreement) => {
+    const prefix = "DELETE_ONE_";
+    const method = "delete";
+    return callController(prefix, method, agreement);
+}
+
+export const updateAgreement = (agreement) => {
+    const prefix = "UPDATE_ONE_";
+    const method = "put";
+    const route = "/agreements/" + agreement.agreementId
+    return callController(prefix,method, agreement, route)
+}
+
+const action = (suffix, response) => {
+    return {
+        type: "AGREEMENT_" + suffix,
+        response,
     }
 }
 
-/*export const getAgreement = (agreementId) => {
-    return (dispatch) => {
-        dispatch(getAttempt());
-        callApi('/agreements/' + agreementId, 'get')
-            .then(res => dispatch(getSuccess(res)))
-            .catch(err => dispatch(getFailure(err.response)));
-    //}
-}*/
+const callController = (prefix, method, data, route = '/agreements') => (dispatch) => {
+    dispatch(action(prefix + "ATTEMPT"));
+    callApi(route, method, data)
+        .then(res => dispatch(action(prefix + "SUCCESS", res.data)))
+        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+}
