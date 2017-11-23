@@ -2,13 +2,15 @@ import test from 'ava';
 import { reducerTest } from 'redux-ava';
 import reducer from '../../src/containers/grader/graderReducer.js';
 
-const graders = [{id: 1, approved: false},{id: 2, approved: true}];
-const grader = {id: 3, approved: false};
-const reviewedGrader = {id: 3, approved: true};
+const graders = [{id: 1, lastname:"abc", approved: false},{id: 2, lastname:"def", approved: true}];
+const grader = {id: 3, lastname:"asdf", approved: false};
+const graderEdited = {id: 3, lastname:"qwerty", approved: false}
+const reviewedGrader = {id: 3, lastname:"asdf", approved: false};
 
 const stateWithGraders = graders;
 const stateWithGrader = [grader];
 const stateWithReviewedGrader = [reviewedGrader];
+const stateWithEditedGrader = [grader, graderEdited];
 
 test('get all success changes state correctly', reducerTest(
     reducer,
@@ -30,24 +32,23 @@ test('save added success changes state correctly', reducerTest(
     [stateWithGrader.data],
 ));
 
-//not working, not sure why
-test.skip('delete success changes state correctly', reducerTest(
+test('update success changes state correctly', reducerTest(
     reducer,
-    [stateWithGrader.data],
+    [grader],
     {
-        type: "GRADER_DELETE_ONE_SUCCESS", 
-        response: grader.id,
+        type: "GRADER_UPDATE_ONE_SUCCESS", 
+        response: graderEdited,
     },
-    [],
+    stateWithEditedGrader,
 ));
 
 //not working, not sure why
 test.skip('review success changes state correctly', reducerTest(
     reducer,
-    [stateWithGrader],
+    stateWithGrader,
     {
         type: "GRADER_REVIEW_ONE_SUCCESS", 
         response: reviewedGrader,
     },
-    [stateWithReviewedGrader],
+    stateWithReviewedGrader,
 ));

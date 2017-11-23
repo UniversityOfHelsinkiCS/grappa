@@ -46,9 +46,7 @@ const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
         .then(res => {
-            console.log('res', res);
             dispatch(action(prefix + "SUCCESS", res))})
         .catch(err => {
-            console.log(err);
             dispatch(action(prefix + "FAILURE", err.response))});
 }

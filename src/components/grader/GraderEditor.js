@@ -29,7 +29,6 @@ export default class GraderEditor extends Component {
     }
 
     handleChange = (field, formname) => (event) => {
-        console.log("handle change", field, formname);
         const value = event.target.value;
         this.setState({ [formname]: { ...this.state[formname], [field]: value } })
     }
