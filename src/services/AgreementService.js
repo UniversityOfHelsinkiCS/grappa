@@ -1,7 +1,7 @@
 const knex = require('../../connection');
 
 export const getAgreementById = (id) => {
-    return knex.select('thesis.title as thesisTitle', 'studyfield.name as studentMajor', 'agreement.studentGradeGoal', 'person.email as studentEmail', 'person.firstname as studentFirstName', 'person.lastname as studentLastName').from('agreement')
+    return knex.select().from('agreement')
         .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .join('person', 'agreement.authorId', '=', 'person.personId')
         .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
@@ -32,7 +32,8 @@ export const saveNewAgreement = (data) => {
         .returning('agreementId')
         .insert(data)
         .then(agreementId => agreementId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export const updateAgreement = (data) => {
@@ -40,8 +41,9 @@ export const updateAgreement = (data) => {
         .returning('agreementId')
         .where('agreementId', '=', data.agreementId)
         .update(data)
-        .then(agreementId => agreementId[0])
-        .catch(err => err);
+        .then(agreementId => agreementId)
+        .catch(error => {
+            throw error});
 }
 
 export const savePrevious = (data) => {
@@ -49,7 +51,8 @@ export const savePrevious = (data) => {
         .returning('agreementId')
         .insert(data)
         .then(agreementId => agreementId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 //change data formatting from DB to front
@@ -70,6 +73,7 @@ const parseAgreementData = (data) => {
         thesisCompletionEta: data.completionEta,
         thesisPerformancePlace: data.performancePlace,
         //agreement
+        agreementId: data.agreementId,
         authorId: data.personId,
         thesisId: data.thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
@@ -82,4 +86,26 @@ const parseAgreementData = (data) => {
         thesisWorkOther: data.other
     }
     return parsed;
+}
+
+/*
+Figures out who should next receive the agreement for approval,
+this requires the program to be able to know who sent the agreement update
+by tracking personId's. After that agreement also needs a finished attribute and
+some way to know which people have approved the agreement to keep track of where
+in the agreement approval process we are at.
+*/
+//REDO THIS LATER
+export const getAgreementReceiver = (id) => {
+    console.log("getAgreementReceiver", id);
+    return knex.select('whoNext').from('agreement')
+        .where('agreementId', id)
+        .then(agreement => {
+            console.log("whoNext", agreement[0].whoNext)
+            if (agreement[0].whoNext === "supervisor") {
+                return "student";
+            } else {
+                return "supervisor";
+            }
+        });
 }

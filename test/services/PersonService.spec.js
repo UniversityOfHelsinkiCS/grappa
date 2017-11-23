@@ -1,11 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../connection');
+const knex = require('../../connection');
 
-const personService = require('../src/services/PersonService');
-const mockPersons = require('../src/mockdata/MockPersons');
-const mockPersonRoles = require('../src/mockdata/MockPersonRoleFields');
+const personService = require('../../src/services/PersonService');
+const mockPersons = require('../../src/mockdata/MockPersons');
+const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 
 test.before(async t => {
     //knex.schema.dropTableIfExists('person');
@@ -22,7 +22,7 @@ test.before(async t => {
         table.string('phone');
         table.string('major');
     });
-    //knex.schema.dropTableIfExists('personRoleField');
+    //knex.schema.dropTableIfExists('personWithRole');
     await knex.schema.createTable('personWithRole', function (table) {
         table.increments('personRoleId').primary();
         table.integer('personId').unsigned();

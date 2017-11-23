@@ -16,8 +16,8 @@ export async function getSupervisorRoleId() {
 
 export async function getAllAgreementPersons() {
     return knex.table('agreementPerson')
-        .innerJoin('personRoleField', 'agreementPerson.personRoleId', "=", "personRoleField.personRoleId")
-        .innerJoin('person', 'personRoleField.personId', "=", "person.personId")
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
+        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
         .then(persons => {
             return persons;
         });
@@ -25,13 +25,26 @@ export async function getAllAgreementPersons() {
 
 export async function getAgreementPersonsNeedingApproval() {
     return knex.table('agreementPerson')
-        .innerJoin('personRoleField', 'agreementPerson.personRoleId', "=", "personRoleField.personRoleId")
-        .innerJoin('person', 'personRoleField.personId', "=", "person.personId")
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
+        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
         .where('approved', false)
         .andWhereNot('agreementId', null)
         .then(persons => {
             return persons;
         });
+}
+
+export async function getSupervisorByEmail(email) {
+    return knex.table('agreementPerson')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .where('email', email)
+        .then(supervisor => {
+            return supervisor[0];
+        })
+        .catch(error => {
+            throw error;
+        }) 
 }
 
 export async function saveAgreementPerson(agreementPersonData) {

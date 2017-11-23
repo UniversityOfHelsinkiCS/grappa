@@ -6,7 +6,8 @@ export async function savePerson(personData) {
         .returning('personId')
         .insert(personData)
         .then(personId => personId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export async function savePersonRole(personRoleData) {
@@ -14,7 +15,8 @@ export async function savePersonRole(personRoleData) {
         .returning('personRoleId')
         .insert(personRoleData)
         .then(personRoleId => personRoleId[0])
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export async function updatePerson(personData) {
@@ -23,19 +25,21 @@ export async function updatePerson(personData) {
         .where('personId', '=', personData.personId)
         .update(personData)
         .then(personId => personId)
-        .catch(err => err);
+        .catch(error =>  {
+            throw error});
 }
 
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id)
         .then(person => person)
-        .catch(err => err);
+        .catch(error => {
+            throw error});
 }
 
 export const getAgreementPersonsByAgreementId = (id) => {
     //TODO: figure out why this returns duplicates without distinct
     return knex.distinct('person.firstname', 'person.lastname', 'personWithRole.personRoleId').select().from('agreementPerson')
-        .leftJoin('personWithRole', 'agreementPerson.roleId', '=', 'personWithRole.roleId')
+        .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
         .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
         .where('agreementId', id)
         .then(persons => {

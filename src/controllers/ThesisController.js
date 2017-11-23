@@ -14,11 +14,25 @@ export async function getThesisById(req, res) {
 }
 
 export async function saveThesis(req, res) {
-    const thesisData = req.body;
-        try {
-            const daoResponse = await thesisService.saveThesis(thesisData);
-            res.status(200).json({ text: "agreement update successful", agreementId: daoResponse });
-        } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
-        }
+    const data = req.body;
+    try {
+        let response = await thesisService.saveThesis(data);
+        res.status(200).json({ text: "Thesis saved succesfully", thesisId: response });
+    } catch (e) {
+        res.status(500).json(e);
+    }
+}
+
+function getThesisData(data) {
+    let thesis = {
+        thesisTitle: data.thesisTitle,
+        startDate: data.startDate,
+        completionEta: data.completionEta,
+        performancePlace: data.performancePlace,
+        urkund: data.urkund,
+        grade: data.grade,
+        graderEval: data.graderEval,
+        userId: data.authorId
+    };
+    return thesis;
 }

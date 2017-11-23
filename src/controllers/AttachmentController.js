@@ -11,7 +11,8 @@ export async function saveAttachment(req, res) {
         let busboy = new Busboy({ headers: req.headers });
         busboy.on('file', async function (fieldname, file, filename, encoding, mimetype) {
             const attachmentData = {
-                agreementId: req.params.id,
+                //agreementId: req.params.id, won't work atm since req.params doesn't have anything
+                agreementId: 1,
                 savedOnDisk: false,
                 filename: filename,
                 type: mimetype
@@ -28,9 +29,11 @@ export async function saveAttachment(req, res) {
                 res.status(500).json({ text: "could not save file" });
             }
         });
+        console.log("attachmentcontroller says 200");
         res.status(200).json({ text: "attachment save successful" });
         return req.pipe(busboy);
     } catch (error) {
+        console.log("attachment controller says 500 :(")
         res.status(500).json({ text: "error occured", error: error });
     }
 }

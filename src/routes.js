@@ -1,11 +1,14 @@
-const agreements = require('./routes/agreements.js');
-const theses = require('./routes/theses.js');
-const index = require('./routes/index.js');
-const app = require('../index.js');
-const supervisors = require('./routes/supervisors.js');
-const persons = require('./routes/persons.js');
-const attachments = require('./routes/attachments.js');
-const agreementDrafts = require('./routes/agreementDrafts.js');
+const agreements = require('./routes/agreements');
+const theses = require('./routes/theses');
+const index = require('./routes/index');
+const app = require('../index');
+const supervisors = require('./routes/supervisors');
+const studyfields = require('./routes/studyfields');
+const persons = require('./routes/persons');
+const attachments = require('./routes/attachments');
+const agreementDrafts = require('./routes/agreementDrafts');
+const shibboleth = require('./routes/shibboleth');
+const councilmeeting = require('./routes/councilmeeting')
 
 module.exports = (app) => {
 
@@ -13,9 +16,11 @@ module.exports = (app) => {
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/supervisors', supervisors);
+    app.use('/studyfields', studyfields);
     app.use('/persons', persons);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
+    app.use('/councilmeetings', councilmeeting)
+    app.use('/zippolet', shibboleth);
 
 };
-

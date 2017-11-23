@@ -3,49 +3,62 @@ const knex = require('../../connection');
 export const getAgreementDraftById = (id) => {
     return knex.select().from('agreementDraft').where('agreementDraftId', id)
         .then(agreementDraft => {
-            return parseAgreementDraftData(agreementDraft);
+            return agreementDraft;
         })
-        .catch(err =>{
-            throw(err);
+        .catch(error => {
+            throw error;
+        })
+}
+
+export const saveNewAgreementDraft = (data) => {
+    return knex('agreementDraft')
+        .returning('agreementDraftId')
+        .insert(data)
+        .then(agreementDraftId => agreementDraftId[0])
+        .catch(err => {
+            throw err;
         });
 }
 
-export const getPersonRoleDraftsByAgreementDraftId = (id) => {
-    return knex.select().from('personWithRole').where('agreementDraftId', id)
-    .then(personsWithRole => {
-        return personsWithRole;
-    })
-    .catch(err =>{
-        throw(err);
+export const updateAgreementDraft = (data) => {
+    return knex('agreementDraft')
+    .returning('agreementDraftId')
+    .where('agreementDraftId', '=', data.agreementDraftId)
+    .update(data)
+    .then(agreementDraftId => agreementDraftId)
+    .catch(err => {
+        throw err;
     });
 }
 
+export const saveAgreementDraftPerson = (data) => {
+    return knex('agreementDraftPerson')
+        .returning('personRoleId')
+        .insert(data)
+        .then(personRoleId => personRoleId)
+        .catch(err => {
+            throw err;
+        });
+}
 
-const parseAgreementDraftData = (data) => {
-    let parsed = {
-        //person
-        personId: data.personId,
-        studentFirstName: data.firstname,
-        studentLastName: data.lastname,
-        studentNumber: data.studentNumber,
-        studentAddress: data.address,
-        studentPhone: data.phone,
-        studentEmail: data.email,
-        studentMajor: data.major,
-        //thesis
-        thesisTitle: data.thesisTitle,
-        thesisStartDate: data.startDate,
-        thesisCompletionEta: data.completionEta,
-        thesisPerformancePlace: data.performancePlace,
-        //agreement
-        responsibleSupervisorId: data.responsibleSupervisorId,
-        studyFieldId: data.studyFieldId,
-        studentGradeGoal: data.studentGradeGoal,
-        thesisWorkStudentTime: data.studentWorkTime,
-        thesisWorkSupervisorTime: data.supervisorWorkTime,
-        thesisWorkIntermediateGoal: data.intermediateGoal,
-        thesisWorkMeetingAgreement: data.meetingAgreement,
-        thesisWorkOther: data.other
-    }
-    return parsed;
+export const removeAgreementDraftPersons = (agreementDraftId) => {
+    return knex('agreementDraftPerson')
+        .where('agreementDraftId', agreementDraftId)
+        .del()
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            throw err;
+        })
+}
+
+export const getAgreementDraftPersonsByAgreementDraftId = (id) => {
+    return knex.select().from('agreementDraftPerson').where('agreementDraftId', id)
+        .then(agreementDraftPerson => {
+            return agreementDraftPerson;
+        })
+        .catch(error => {
+            throw error;
+        });
 }

@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import router from '../src/routes/persons.js';
+import router from '../../src/routes/persons.js';
 
 const reqres = require('reqres');
 
@@ -13,9 +13,9 @@ let fileService;
 test.beforeEach(async t => {
     req = reqres.req();
     res = reqres.res();
-    attachmentService = require('../src/services/AttachmentService');
-    attachmentController = require('../src/controllers/AttachmentController');
-    fileService = require('../src/services/FileService');
+    attachmentService = require('../../src/services/AttachmentService');
+    attachmentController = require('../../src/controllers/AttachmentController');
+    fileService = require('../../src/services/FileService');
 });
 
 test.afterEach(async t => {

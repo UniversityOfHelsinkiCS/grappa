@@ -1,15 +1,15 @@
-require('babel-polyfill');
 const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
-const express = require('express');
-const app = express();
+
+const AttachmentController = require('./AttachmentController');
+
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    res.status(200).json({ agreement: agreement, persons: agreementPersons });
+    res.status(200).json(agreement);
 }
 
 export async function getPreviousAgreementById(req, res) {
@@ -22,48 +22,86 @@ export async function getAllAgreements(req, res) {
     res.status(200).json(agreements);
 }
 
+const agreementHasNoId = (data) => {
+    return data.agreementId === "" || data.agreementId == null;
+}
+
+const getPersonData = (data) => {
+    return ({
+        personId: data.personId,
+        firstname: data.firstName,
+        lastname: data.lastName,
+        phone: data.studentPhone,
+        address: data.studentAddress,
+        studentNumber: data.studentNumber,
+        email: data.studentEmail,
+        major: data.studentMajor
+    });
+}
+
+const getThesisData = (data) => {
+    return ({
+        thesisTitle: data.thesisTitle,
+        startDate: data.thesisStartDate,
+        completionEta: data.thesisCompletionEta,
+        performancePlace: data.thesisPerformancePlace,
+        userId: data.personId
+    });
+}
+
+const getAgreementData = (data, thesisId) => {
+    return ({
+        authorId: data.personId,
+        thesisId: thesisId,
+        responsibleSupervisorId: data.thesisSupervisorMain,
+        studyFieldId: data.studyFieldId,
+        studentGradeGoal: data.studentGradeGoal,
+        studentWorkTime: data.thesisWorkStudentTime,
+        supervisorWorkTime: data.thesisWorkSupervisorTime,
+        intermediateGoal: data.thesisWorkIntermediateGoal,
+        meetingAgreement: data.thesisWorkMeetingAgreement,
+        other: data.thesisWorkOther
+    });
+}
+
 export async function saveAgreement(req, res) {
-    console.log("saveAgreement");
     const data = req.body;
-    if (data.agreementId === "" || data.agreementId == null) {
+    data.personId = 1; //because front doesn't give id from shibboleth yet
+    if (agreementHasNoId(data)) {
         try {
-            const personData = {
-                personId: data.personId,
-                firstname: data.studentFirstName,
-                lastname: data.studentLastName,
-                studentNumber: data.studentNumber,
-                email: data.studentEmail,
-                major: data.studentMajor
-            };
-            await personService.updatePerson(personData);
-            const thesisData = {
-                thesisTitle: data.thesisTitle,
-                startDate: data.thesisStartDate,
-                completionEta: data.thesisCompletionEta,
-                performancePlace:  data.thesisPerformancePlace
-            };
-            const thesisId = await thesisService.saveThesis(thesisData);
-            const agreementData = {
-                authorId: data.personId,
-                thesisId: thesisId,
-                responsibleSupervisorId: data.responsibleSupervisorId,
-                studyFieldId: data.studyFieldId,
-                studentGradeGoal: data.studentGradeGoal,
-                studentWorkTime: data.thesisWorkStudentTime,
-                supervisorWorkTime: data.thesisWorkSupervisorTime,
-                intermediateGoal: data.thesisWorkIntermediateGoal,
-                meetingAgreement: data.thesisWorkMeetingAgreement,
-                other: data.thesisWorkOther
-            };
-            const agreementId = await agreementService.saveNewAgreement(agreementData);
-            emailService.agreementCreated(data);
-            res.status(200).json({ text: "agreement save successfull(/SQL error)", agreementId: agreementId });
-        } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
+            const personData = getPersonData(data);
+            const personSaveResponse = await updatePerson(personData);
+            const thesisData = getThesisData(data);
+            const thesisSaveResponse = await saveThesis(thesisData);
+            const agreementData = getAgreementData(data, thesisSaveResponse);
+            const agreementSaveResponse = await saveAgreementToService(agreementData);
+            personData.personId = personSaveResponse;
+            thesisData.thesisId = thesisSaveResponse;
+            agreementData.agreementId = agreementSaveResponse;
+            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
+            //AttachmentController.saveAttachment(req, res);
+            res.status(200).json(agreementData);
+            console.log("palautan 200");
+        }
+        catch(error) {
+            console.log("ERROR",error);
+            res.status(500).json({ text: "Error occured" });
         }
     } else {
         res.status(500).json({ text: "agreement already exists" });
     }
+}
+
+const updatePerson = async function(personData) {
+   return await personService.updatePerson(personData);
+}
+
+const saveThesis = async function(thesisData) {
+    return await thesisService.saveThesis(thesisData);
+}
+
+const saveAgreementToService = async function(agreementData) {
+    return await agreementService.saveNewAgreement(agreementData);
 }
 
 export async function updateAgreement(req, res) {
@@ -91,6 +129,7 @@ export async function updateAgreement(req, res) {
             };
             const cleanThesisData = removeUselessKeys(thesisData);
             const thesisResponse = await thesisService.updateThesis(cleanThesisData);
+            const receiver = await agreementService.getAgreementReceiver(agreementId);
             const agreementData = {
                 agreementId: agreementId,
                 authorId: data.personId,
@@ -102,11 +141,12 @@ export async function updateAgreement(req, res) {
                 supervisorWorkTime: data.thesisWorkSupervisorTime,
                 intermediateGoal: data.thesisWorkIntermediateGoal,
                 meetingAgreement: data.thesisWorkMeetingAgreement,
-                other: data.thesisWorkOther
+                other: data.thesisWorkOther,
+                whoNext: receiver
             };
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
-            emailService.agreementUpdated(data);
+            emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
             res.status(200).json({ text: "agreement update successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });

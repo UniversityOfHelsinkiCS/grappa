@@ -1,11 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../connection';
+import knex from '../../connection';
 
-const thesisService = require('../src/services/ThesisService');
-const mockTheses = require('../src/mockdata/MockTheses');
-const mockAgreements = require('../src/mockdata/MockAgreements');
-const mockPersons = require('../src/mockdata/MockPersons');
+const thesisService = require('../../src/services/ThesisService');
+const mockTheses = require('../../src/mockdata/MockTheses');
+const mockAgreements = require('../../src/mockdata/MockAgreements');
+const mockPersons = require('../../src/mockdata/MockPersons');
 
 test.before(async t => {
     await knex.schema.createTable('thesis', function (table) {
@@ -26,7 +26,7 @@ test.before(async t => {
         table.integer('thesisId').unsigned();
         table.foreign('thesisId').references('thesis.thesisId');
         table.integer('responsibleSupervisorId').unsigned();
-        table.foreign('responsibleSupervisorId').references('personRoleField.personRoleId');
+        table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
         table.integer('studyFieldId').unsigned();
         table.foreign('studyFieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
