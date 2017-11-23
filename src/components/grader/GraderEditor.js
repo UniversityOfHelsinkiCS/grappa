@@ -135,7 +135,7 @@ export default class GraderEditor extends Component {
     renderUpdate() {
         return (
             <div>
-                <p>Updating not working on backend yet, sorry</p>
+                <p>Update information related to a grader</p>
                 <div className="six fields">
                     <div className="field">
                         <label>Who</label>
@@ -158,7 +158,7 @@ export default class GraderEditor extends Component {
                             Update Supervisor
                         </button>
                         <label>&nbsp;</label>
-                        <button id="update" className="ui red button" onClick={this.deleteGrader}>
+                        <button id="update" className="ui red button disabled" onClick={this.deleteGrader}>
                             Delete Supervisor
                         </button>
                     </div>

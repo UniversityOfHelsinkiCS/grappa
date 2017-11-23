@@ -52,7 +52,7 @@ export class GraderManagementPage extends Component {
         return (
             <div>
                 <h2>List of thesis supervisors </h2>
-                atm showing all who are supervising a thesis now, in future only those needing approval?
+                <div>At the moment showing all who are supervising a thesis now, in future only those needing approval?</div>
                 <div>{this.props.graders.map((person, index) => (
                     <div key={index} className="two fields">
                         <div className="ui field">{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
@@ -92,7 +92,6 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(getSupervisors());
     },
     updateSupervisor(data) {
-        console.log("dispatch to props:", data);
         dispatch(updateSupervisor(data));
     },
     deleteSupervisor(data) {
