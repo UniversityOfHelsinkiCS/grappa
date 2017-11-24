@@ -1,7 +1,6 @@
 const agreements = require('./routes/agreements');
 const theses = require('./routes/theses');
 const index = require('./routes/index');
-const app = require('../index');
 const supervisors = require('./routes/supervisors');
 const studyfields = require('./routes/studyfields');
 const persons = require('./routes/persons');
