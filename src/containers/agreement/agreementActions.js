@@ -10,9 +10,7 @@ export const getAgreement = (agreementId) => {
 export const saveAgreement = (agreement) => {
     const prefix = "SAVE_ONE_";
     const method = "post";
-    const wtf = callController(prefix,method,agreement);
-    console.log("agreementActions",wtf);
-    return wtf;
+    return callController(prefix,method,agreement);
 }
 
 export const deleteAgreement = (agreement) => {
