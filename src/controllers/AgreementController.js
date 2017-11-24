@@ -9,7 +9,7 @@ const AttachmentController = require('./AttachmentController');
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    res.status(200).json(agreement);
+    res.status(200).json({ agreement: agreement, persons: agreementPersons });
 }
 
 export async function getPreviousAgreementById(req, res) {
