@@ -10,9 +10,13 @@ export const getAgreement = (agreementId) => {
 export const saveAgreement = (agreement) => {
     const prefix = "SAVE_ONE_";
     const method = "post";
-    const wtf = callController(prefix,method,agreement);
-    console.log("agreementActions",wtf);
-    return wtf;
+    return callController(prefix,method,agreement);
+}
+
+export const saveAttachment = (attachments) => {
+    const prefix = "SAVE_ONE_";
+    const method = "post";
+    return callAttachmentController(prefix,method,attachments);
 }
 
 export const deleteAgreement = (agreement) => {
@@ -33,6 +37,14 @@ const action = (suffix, response) => {
         type: "AGREEMENT_" + suffix,
         response,
     }
+}
+
+//shpuld res be res.data and err err.response?
+const callAttachmentController = (prefix, method, data, route = '/attachments/1') => (dispatch) => {
+    dispatch({type: "ATTACHMENT_SAVE_ONE_ATTEMPT"});
+    callApi(route, method, data)
+        .then(res => dispatch({type: "ATTACHMENT_SAVE_ONE_SUCCESS", res}))
+        .catch(err => dispatch({type: "ATTACHMENT_SAVE_ONE_FAILURE", err}));
 }
 
 const callController = (prefix, method, data, route = '/agreements') => (dispatch) => {
