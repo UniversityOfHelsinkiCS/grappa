@@ -9,7 +9,8 @@ const AttachmentController = require('./AttachmentController');
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    res.status(200).json({ agreement: agreement, persons: agreementPersons });
+   // res.status(200).json({ agreement: agreement, persons: agreementPersons });
+    res.status(200).json(agreement);
 }
 
 export async function getPreviousAgreementById(req, res) {
@@ -83,6 +84,7 @@ export async function saveAgreement(req, res) {
             res.status(200).json(agreementData);
         }
         catch(error) {
+
             res.status(500).json({ text: "Error occured" });
         }
     } else {
