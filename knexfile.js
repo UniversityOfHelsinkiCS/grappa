@@ -4,13 +4,15 @@ module.exports = {
         connection: {
             filename: './grappa2db.sqlite'
         },
-        useNullAsDefault: true
-    }, 
+        useNullAsDefault: true,
+        //debug: true
+    },
     test: {
         client: 'sqlite3',
         connection: {
             filename: ':memory:'
         },
-        useNullAsDefault: true
+        useNullAsDefault: true,
+        //debug: true
     }
 }
