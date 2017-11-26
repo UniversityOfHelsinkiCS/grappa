@@ -7,6 +7,7 @@ import graderReducer from "../containers/grader/graderReducer";
 import thesisReducer from "../containers/thesis/thesisReducer";
 import studyfieldReducer from "../containers/studyfield/studyfieldReducer";
 import emailReducer from "../containers/email/emailReducer";
+import personReducer from "../containers/person/personReducer";
 import supervisorReducer from "../containers/supervisor/supervisorReducer";
 
 //TODO: Comments in english
@@ -23,7 +24,8 @@ const combinedReducers = combineReducers({
     thesis: thesisReducer,
     studyfield: studyfieldReducer,
     email: emailReducer,
-    supervisor: supervisorReducer
+    supervisor: supervisorReducer,
+    persons: personReducer,
 });
 
 let store;
@@ -37,10 +39,4 @@ if (process.env.REACT_APP_DEVTOOLS === '1') {
         combinedReducers,
         applyMiddleware(thunk));
 }
-/*
-const store = createStore(
-    combinedReducers,
-    compose(applyMiddleware(thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
-*/
 export default store;

@@ -7,6 +7,15 @@ import { NavLink, Link } from 'react-router-dom';
 import { NavBar } from '../src/components/NavBar.js';
 
 test('NavBar has elements for admin', t => {
-    const wrapper = shallow(<NavBar user={{ type: "admin" }} />);
+    const wrapper = shallow(
+        <NavBar
+            user={{
+                roles: [
+                    { role: "admin" }
+                ]
+            }}
+            login={() => { }}
+            history={{ push: () => { } }}
+        />);
     t.truthy(wrapper.find('NavLink').length > 0);
 });

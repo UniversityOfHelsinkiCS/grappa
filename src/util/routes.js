@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 //components
-import App from '../components/App';
+import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
 import GraderManagement from '../containers/grader/GraderManagementPage';
 import ThesisList from '../components/thesis/ThesisList';
@@ -14,7 +14,7 @@ import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewP
 import EmailDraftPage from '../containers/email/EmailDraftPage';
 
 export const paths = {
-    home: { path: '/', component: App, navText: 'Homepage' },
+    home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisList, navText: 'Thesis List'},
     graderManagement: { path: '/graderManagement', component: GraderManagement, navText: 'Supervisor management'},

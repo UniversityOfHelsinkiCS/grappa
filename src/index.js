@@ -15,7 +15,7 @@ import './media/index.css';
 import './media/App.css';
 
 //routes
-import routes from './util/routes.js';
+import routes from './util/routes';
 
 ReactDOM.render(
     <Provider store={store}>
