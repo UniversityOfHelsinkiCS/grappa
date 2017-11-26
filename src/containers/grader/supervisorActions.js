@@ -2,23 +2,25 @@ import { callApi } from '../../util/apiConnection';
 
 const action = (suffix, response) => {
     return {
-        type: "GRADER_" + suffix,
+        type: "SUPERVISOR_" + suffix,
         response,
     }
 }
 
-export const saveAddedGrader = (grader) => {
+export const saveAddedSupervisor = (supervisor) => {
     const route = '/supervisors/save';
     const prefix = "SAVE_ONE_";
     const method = "post";
-    return callController(route, prefix, method, grader);
+    return callController(route, prefix, method, supervisor);
 }
 
 export const getSupervisors = () => {
     const route = '/supervisors/agreementPersons';
     const prefix = "GET_ALL_";
     const method = "get";
-    return callController(route, prefix, method);
+    const ret = callController(route, prefix, method)
+    console.log(ret)
+    return ret;
 }
 
 export const deleteSupervisor = (data) => {

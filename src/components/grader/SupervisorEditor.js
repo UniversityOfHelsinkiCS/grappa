@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-export default class GraderEditor extends Component {
+export default class SupervisorEditor extends Component {
     constructor() {
         super();
         this.state = {
-            newGrader: {
+            newSupervisor: {
                 firstname: "",
                 lastname: "",
                 title: "",
@@ -33,36 +33,35 @@ export default class GraderEditor extends Component {
         this.setState({ [formname]: { ...this.state[formname], [field]: value } })
     }
 
-    selectGrader = (event) => {
-        const updateSupervisor = this.props.graders.find(grader => grader.personId.toString() === event.target.value);
+    selectSupervisor = (event) => {
+        const updateSupervisor = this.props.supervisors.find(supervisor => supervisor.personId.toString() === event.target.value);
         if (!updateSupervisor) return;
         this.setState({ updateSupervisor });
     }
 
-    saveNewGrader = () => {
-        const grader = this.state.newGrader;
-        this.props.saveGrader(grader);
+    saveNewSupervisor = () => {
+        const supervisor = this.state.newSupervisor;
+        this.props.saveSupervisor(supervisor);
     }
 
     updateSupervisor = () => {
-        const grader = this.state.updateSupervisor;
-        console.log("editorissa grader on", grader);
-        this.props.updateSupervisor(grader);
+        const supervisor = this.state.updateSupervisor;
+        this.props.updateSupervisor(supervisor);
         this.setState(
             {
                 updateSupervisor: {
-                    id: grader.id
+                    id: supervisor.id
                 }
             }
         )
     }
 
     //not functioning yet in Grappa 2
-    deleteGrader = () => {
-        const grader = this.state.updateSupervisor;
+    deleteSupervisor = () => {
+        const supervisor = this.state.updateSupervisor;
         console.log("deleting");
-        console.log(grader);
-        this.props.deleteGrader(grader);
+        console.log(supervisor);
+        this.props.deleteSupervisor(supervisor);
     }
 
     renderNameField(name, whichOne) {
@@ -73,7 +72,7 @@ export default class GraderEditor extends Component {
                 <label>{name}</label>
                 <input
                     type="text"
-                    value={this.state.newGrader.nameLowCase}
+                    value={this.state.newSupervisor.nameLowCase}
                     placeholder={name}
                     onChange={this.handleChange(nameLowCase, whichOne)}
                 />
@@ -115,15 +114,15 @@ export default class GraderEditor extends Component {
     renderCreate() {
         return (
             <div>
-                <p>Add new grader</p>
+                <p>Add new supervisor</p>
                 <div className="five fields">
-                    {this.renderTitleList("newGrader")}
-                    {this.renderNameField("First name", "newGrader")}
-                    {this.renderNameField("Last name", "newGrader")}
-                    {this.renderStudyfieldList("newGrader")}
+                    {this.renderTitleList("newSupervisor")}
+                    {this.renderNameField("First name", "newSupervisor")}
+                    {this.renderNameField("Last name", "newSupervisor")}
+                    {this.renderStudyfieldList("newSupervisor")}
                     <div className="ui field">
                         <label>&nbsp;</label>
-                        <button id="add" className="ui green button" onClick={this.saveNewGrader}>
+                        <button id="add" className="ui green button" onClick={this.saveNewSupervisor}>
                             Create Supervisor
                         </button>
                     </div>
@@ -135,15 +134,15 @@ export default class GraderEditor extends Component {
     renderUpdate() {
         return (
             <div>
-                <p>Update information related to a grader</p>
+                <p>Update information related to a supervisor</p>
                 <div className="six fields">
                     <div className="field">
                         <label>Who</label>
-                        <select className="ui fluid search dropdown" onChange={this.selectGrader}>
-                            <option value="">Select grader</option>
-                            {this.props.graders.map((grader, index) =>
-                                <option key={index} className="item" value={grader.personId}>
-                                    {grader.title} {grader.firstname} {grader.lastname} Studyfield: {grader.studyfieldId}
+                        <select className="ui fluid search dropdown" onChange={this.selectSupervisor}>
+                            <option value="">Select supervisor</option>
+                            {this.props.supervisors.map((supervisor, index) =>
+                                <option key={index} className="item" value={supervisor.personId}>
+                                    {supervisor.title} {supervisor.firstname} {supervisor.lastname} Studyfield: {supervisor.studyfieldId}
                                 </option>
                             )}
                         </select>
@@ -158,7 +157,7 @@ export default class GraderEditor extends Component {
                             Update Supervisor
                         </button>
                         <label>&nbsp;</label>
-                        <button id="update" className="ui red button disabled" onClick={this.deleteGrader}>
+                        <button id="update" className="ui red button disabled" onClick={this.deleteSupervisor}>
                             Delete Supervisor
                         </button>
                     </div>

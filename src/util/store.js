@@ -3,12 +3,12 @@ import thunk from 'redux-thunk';
 import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
-import graderReducer from "../containers/grader/graderReducer";
+import supervisorReducer from "../containers/grader/supervisorReducer";
 import thesisReducer from "../containers/thesis/thesisReducer";
 import studyfieldReducer from "../containers/studyfield/studyfieldReducer";
 import emailReducer from "../containers/email/emailReducer";
 import personReducer from "../containers/person/personReducer";
-import supervisorReducer from "../containers/supervisor/supervisorReducer";
+import supervisorReducer2 from "../containers/supervisor/supervisorReducer";
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
@@ -20,11 +20,11 @@ const combinedReducers = combineReducers({
     agreement: agreementReducer,
     user: userReducer,
     councilmeeting: councilmeetingReducer,
-    grader: graderReducer,
+    supervisors: supervisorReducer,
     thesis: thesisReducer,
     studyfield: studyfieldReducer,
     email: emailReducer,
-    supervisor: supervisorReducer,
+    supervisor: supervisorReducer2,
     persons: personReducer,
 });
 
