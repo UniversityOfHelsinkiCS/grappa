@@ -21,7 +21,7 @@ const permissions = {
         }
     },
     //Other Supervisor
-    'other_supervisor': {
+    'other': {
         'nav-bar': {
             show: [
                 nav['home'], nav['agreement'], nav['theses'], nav['assesment']
@@ -29,7 +29,7 @@ const permissions = {
         }
     },
     //Student
-    'student': {
+    'author': {
         'nav-bar': {
             show: [
                 nav['home'], nav['agreement'], nav['thesis'], nav['assesment']
