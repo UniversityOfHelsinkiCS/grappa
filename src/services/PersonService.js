@@ -1,6 +1,21 @@
 require('babel-polyfill');
 const knex = require('../../connection');
 
+export async function getAllPersons() {
+    return await knex.select().from('person');
+}
+
+export const getPersonById = (id) => {
+    return knex.select().from('person').where('personId', id)
+        .then(person => person)
+        .catch(error => {
+            throw error});
+}
+
+export const getPersonByShibbolethId = (shibbolethId) => {
+    return knex.select().from('person').where('shibbolethId', shibbolethId);
+}
+
 export async function savePerson(personData) {
     return await knex('person')
         .returning('personId')
@@ -26,13 +41,6 @@ export async function updatePerson(personData) {
         .update(personData)
         .then(personId => personId)
         .catch(error =>  {
-            throw error});
-}
-
-export const getPersonById = (id) => {
-    return knex.select().from('person').where('personId', id)
-        .then(person => person)
-        .catch(error => {
             throw error});
 }
 

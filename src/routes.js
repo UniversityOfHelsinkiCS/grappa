@@ -10,8 +10,8 @@ const shibboleth = require('./routes/shibboleth');
 const councilmeeting = require('./routes/councilmeeting')
 
 module.exports = (app) => {
-
     app.use('/', index);
+    app.use('/login', shibboleth)
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/supervisors', supervisors);
@@ -20,6 +20,4 @@ module.exports = (app) => {
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
     app.use('/councilmeetings', councilmeeting)
-    app.use('/zippolet', shibboleth);
-
 };
