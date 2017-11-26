@@ -75,7 +75,6 @@ export class AgreementPage extends Component {
     }
 
     handleSaveAgreement = (agreement) => {
-        //console.log("handleSaveAgreement", agreement);
         this.props.saveAgreement(agreement);
         this.props.saveAttachment(agreement.attachments);
     }
