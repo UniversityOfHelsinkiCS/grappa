@@ -3,7 +3,7 @@ import { Link } from "react-router"
 
 import { connect } from "react-redux";
 import { saveThesis, updateThesis, deleteThesis, downloadTheses } from './thesisActions';
-import { updateGraders } from '../grader/supervisorActions';
+import { updateGraders } from '../supervisor/supervisorActions';
 import { getCouncilmeetings } from '../councilmeeting/councilmeetingActions';
 import { sendReminder } from '../email/emailActions';
 import { getStudyfields } from '../studyfield/studyfieldActions';
@@ -11,8 +11,8 @@ import { getStudyfields } from '../studyfield/studyfieldActions';
 import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
 import ThesisUploadWidget from "../../components/thesis/ThesisUploadWidget";
-import GraderSelecter from "../../components/grader/GraderSelecter";
-import SupervisorEditor from "../../components/grader/SupervisorEditor";
+import GraderSelecter from "../../components/supervisor/GraderSelecter";
+import SupervisorEditor from "../../components/supervisor/SupervisorEditor";
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
 import ThesisEmails from "../../components/thesis/ThesisEmails"
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import { GraderManagementPage } from '../../src/containers/grader/GraderManagementPage.js';
+import { GraderManagementPage } from '../../src/containers/supervisor/GraderManagementPage.js';
 
 const wrapper = shallow(<GraderManagementPage graders={[]} getSupervisors={()=>{}}/>);
 

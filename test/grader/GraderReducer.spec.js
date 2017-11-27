@@ -1,6 +1,6 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
-import reducer from '../../src/containers/grader/graderReducer.js';
+import reducer from '../../src/containers/supervisor/graderReducer.js';
 
 const graders = [{id: 1, lastname:"abc", approved: false},{id: 2, lastname:"def", approved: true}];
 const grader = {id: 3, lastname:"asdf", approved: false};

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { saveAddedSupervisor, getSupervisors, deleteSupervisor, reviewSupervisor, updateSupervisor } from "./supervisorActions.js";
+import { saveAddedSupervisor, getSupervisors, getAgreementPersons, deleteSupervisor, reviewSupervisor, updateSupervisor } from "./supervisorActions.js";
 
-import Review from "../../components/grader/Review.js";
-import SupervisorEditor from "../../components/grader/SupervisorEditor.js"
+import Review from "../../components/supervisor/Review.js";
+import SupervisorEditor from "../../components/supervisor/SupervisorEditor.js"
 
-export class GraderManagementPage extends Component {
+export class SupervisorManagementPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -49,7 +49,6 @@ export class GraderManagementPage extends Component {
     }
 
     renderList() {
-        console.log(this.props);
         return (
             <div>
                 <h2>List of thesis supervisors </h2>
@@ -95,6 +94,9 @@ const mapDispatchToProps = (dispatch) => ({
     getSupervisors(data) {
         dispatch(getSupervisors());
     },
+    getAgreementPersons(data) {
+        dispatch(getAgreementPersons());
+    },
     updateSupervisor(data) {
         dispatch(updateSupervisor(data));
     },
@@ -113,4 +115,4 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GraderManagementPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SupervisorManagementPage);
