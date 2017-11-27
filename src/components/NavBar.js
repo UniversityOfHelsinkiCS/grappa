@@ -26,15 +26,20 @@ export class NavBar extends Component {
     }
 
     refreshLinks = (props) => {
+        let links = [];
+        //Get all links that the user could require in their work.
         if (props.user && props.user.roles) {
-            let links = [];
-            //Get all links that the user could require in their work.
             props.user.roles.forEach(roleObject => {
                 const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show');
                 links = links.concat(linkPermissions.filter(link => !links.includes(link)));
             })
-            this.setState({ links });
         }
+        //Everyone who can access Grappa is a student
+        const linkPermissions = getPermissions('student', 'nav-bar', 'show');
+        links = links.concat(linkPermissions.filter(link => !links.includes(link)));
+
+        this.setState({ links });
+
     }
 
     render() {
@@ -44,7 +49,15 @@ export class NavBar extends Component {
                     <h1><Link to="/">Grappa</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
-                    {this.state.links ? this.state.links.map((elem, index) => <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>) : undefined}
+                    {this.state.links ? this.state.links.map((elem, index) => {
+                        //Handle special cases:
+                        switch (elem.path) {
+                            case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
+                                return <NavLink key={index} to={'/councilemeeting/next'} exact className="item">{elem.navText}</NavLink>
+                            default:
+                                return <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>
+                        }
+                    }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
                         <Link to="/" className="item">Logout</Link>
