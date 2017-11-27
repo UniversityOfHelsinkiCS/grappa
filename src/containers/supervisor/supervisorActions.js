@@ -25,7 +25,7 @@ export const getSupervisors = () => {
 
 export const getAgreementPersons = () => {
     const route = '/supervisors/agreementPersons';
-    const prefix = "GET_AGREEMENT_PERSONS";
+    const prefix = "GET_AGREEMENT_PERSONS_";
     const method = "get";
     const ret = callController(route, prefix, method)
     console.log(ret)
