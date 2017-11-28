@@ -22,7 +22,6 @@ exports.up = function (knex, Promise) {
             table.string('intermediateGoal');
             table.string('meetingAgreement');
             table.string('other');
-            table.timestamps();
         })
     ]);
 };

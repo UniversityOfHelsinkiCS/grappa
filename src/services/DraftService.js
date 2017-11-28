@@ -3,7 +3,7 @@ const knex = require('../../connection');
 export const getAgreementDraftById = (id) => {
     return knex.select().from('agreementDraft').where('agreementDraftId', id)
         .then(agreementDraft => {
-            return agreementDraft;
+            return agreementDraft[0];
         })
         .catch(error => {
             throw error;
@@ -14,18 +14,19 @@ export const saveNewAgreementDraft = (data) => {
     return knex('agreementDraft')
         .returning('agreementDraftId')
         .insert(data)
-        .then(agreementDraftId => agreementDraftId[0])
+        .then(agreementDraft => agreementDraft[0])
         .catch(err => {
             throw err;
         });
 }
+
 
 export const updateAgreementDraft = (data) => {
     return knex('agreementDraft')
     .returning('agreementDraftId')
     .where('agreementDraftId', '=', data.agreementDraftId)
     .update(data)
-    .then(agreementDraftId => agreementDraftId)
+    .then(agreementDraft => agreementDraft)
     .catch(err => {
         throw err;
     });

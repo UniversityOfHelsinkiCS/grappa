@@ -1,6 +1,5 @@
 import test from 'ava';
 import sinon from 'sinon';
-import router from '../../src/routes/persons.js';
 
 const reqres = require('reqres');
 
