@@ -56,8 +56,6 @@ export const updateSupervisor = (supervisor) => {
 const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
-        .then(res => {
-            dispatch(action(prefix + "SUCCESS", res))})
-        .catch(err => {
-            dispatch(action(prefix + "FAILURE", err.response))});
+        .then(res => dispatch(action(prefix + "SUCCESS", res)))
+        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
 }

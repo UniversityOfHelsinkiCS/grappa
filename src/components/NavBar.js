@@ -53,7 +53,7 @@ export class NavBar extends Component {
                         //Handle special cases:
                         switch (elem.path) {
                             case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
-                                return <NavLink key={index} to={'/councilemeeting/next'} exact className="item">{elem.navText}</NavLink>
+                                return <NavLink key={index} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>
                             default:
                                 return <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>
                         }
