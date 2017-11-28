@@ -137,7 +137,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         agreement: state.agreement,
-        supervisors: state.supervisor,
+        supervisors: state.supervisors,
         studyfields: state.studyfield,
         user: state.user
     };

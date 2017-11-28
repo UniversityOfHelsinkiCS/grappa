@@ -14,22 +14,20 @@ export const saveAddedSupervisor = (supervisor) => {
     return callController(route, prefix, method, supervisor);
 }
 
+//all users who are supervisors
 export const getSupervisors = () => {
-    const route = '/supervisors/agreementPersons';
+    const route = '/supervisors';
     const prefix = "GET_ALL_";
     const method = "get";
-    const ret = callController(route, prefix, method)
-    console.log(ret)
-    return ret;
+    return callController(route, prefix, method);
 }
 
+//all users supervising a thesis atm
 export const getAgreementPersons = () => {
     const route = '/supervisors/agreementPersons';
     const prefix = "GET_AGREEMENT_PERSONS_";
     const method = "get";
-    const ret = callController(route, prefix, method)
-    console.log(ret)
-    return ret;
+    return callController(route, prefix, method);
 }
 
 export const deleteSupervisor = (data) => {
