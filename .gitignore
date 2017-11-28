@@ -67,3 +67,6 @@ coverage
 #testfiles
 testfile
 data/file/20.pdf
+
+#credentials
+src/util/ethesis_credentials.js
