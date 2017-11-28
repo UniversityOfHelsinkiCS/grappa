@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
 import GraderManagement from '../containers/grader/GraderManagementPage';
-import ThesisList from '../components/thesis/ThesisList';
+import ThesisListPage from '../containers/thesis/ThesisListPage';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisManage from '../containers/thesis/ThesisManagePage';
 import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
@@ -16,7 +16,7 @@ import EmailDraftPage from '../containers/email/EmailDraftPage';
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
-    theses: { path: '/theses', component: ThesisList, navText: 'Thesis List'},
+    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List'},
     graderManagement: { path: '/graderManagement', component: GraderManagement, navText: 'Supervisor management'},
     thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis'},
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
