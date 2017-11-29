@@ -1,12 +1,5 @@
 import { callApi } from '../../util/apiConnection';
 
-export const getSupervisors = () => {
-    const prefix = "GET_ALL_";
-    const method = "get";
-    const route = "/supervisors"
-    return callController(prefix, method, '', route);
-}
-
 const action = (suffix, response) => {
     return {
         type: "SUPERVISOR_" + suffix,
@@ -14,7 +7,51 @@ const action = (suffix, response) => {
     }
 }
 
-const callController = (prefix, method, data, route = '/supervisors') => (dispatch) => {
+export const saveAddedSupervisor = (supervisor) => {
+    const route = '/supervisors/save';
+    const prefix = "SAVE_ONE_";
+    const method = "post";
+    return callController(route, prefix, method, supervisor);
+}
+
+//all users who are supervisors
+export const getSupervisors = () => {
+    const route = '/supervisors';
+    const prefix = "GET_ALL_";
+    const method = "get";
+    return callController(route, prefix, method);
+}
+
+//all users supervising a thesis atm
+export const getAgreementPersons = () => {
+    const route = '/supervisors/agreementPersons';
+    const prefix = "GET_AGREEMENT_PERSONS_";
+    const method = "get";
+    return callController(route, prefix, method);
+}
+
+export const deleteSupervisor = (data) => {
+    const route = '/supervisors';
+    const prefix = "DELETE_ONE_";
+    const method = "delete";
+    return callController(route, prefix, method);
+}
+
+export const reviewSupervisor = (supervisor) => {
+    const route = '/supervisors/review';
+    const prefix = "REVIEW_ONE_";
+    const method = "put";
+    return callController(route, prefix, method, supervisor);
+}
+
+export const updateSupervisor = (supervisor) => {
+    const route = '/supervisors/update';
+    const prefix = "UPDATE_ONE_";
+    const method = "put";
+    return callController(route, prefix, method, supervisor);
+}
+
+const callController = (route, prefix, method, data) => (dispatch) => {
     dispatch(action(prefix + "ATTEMPT"));
     callApi(route, method, data)
         .then(res => dispatch(action(prefix + "SUCCESS", res)))

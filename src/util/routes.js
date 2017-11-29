@@ -4,8 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 //components
 import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
-import GraderManagement from '../containers/grader/GraderManagementPage';
-import ThesisListPage from '../containers/thesis/ThesisListPage';
+import SupervisorManagement from '../containers/supervisor/SupervisorManagementPage';
+import ThesisList from '../components/thesis/ThesisList';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisManage from '../containers/thesis/ThesisManagePage';
 import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
@@ -17,7 +17,7 @@ export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List'},
-    graderManagement: { path: '/graderManagement', component: GraderManagement, navText: 'Supervisor management'},
+    supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management'},
     thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis'},
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
     councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting'},

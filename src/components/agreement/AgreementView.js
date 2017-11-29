@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 class AgreementView extends Component {
     render() {
         var data = this.props.agreementData;
+        console.log("agreementData",data);
         return (
             <div className="ui padded segment">
                 <h2 className="ui header">{ data.thesisTitle }</h2>
@@ -35,14 +36,14 @@ class AgreementView extends Component {
                 </p>
                 <h4>Työskentelyn tavoitteet ja ajankäyttö</h4>
                 <p>
-                    Viikoittainen työaika: { data.thesisWorkStudentTime }<br/>
-                    Ohjaajien varmaama ohjausaika: { data.thesisWorkSupervisorTime }<br/>
-                    Välitavoitteet: { data.thesisWorkIntermediateGoal }<br/>
-                    Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta: { data.thesisWorkMeetingAgreement }<br/>
+                    Viikoittainen työaika: { data.studentWorkTime }<br/>
+                    Ohjaajien varmaama ohjausaika: { data.supervisorWorkTime }<br/>
+                    Välitavoitteet: { data.intermediateGoal }<br/>
+                    Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta: { data.meetingAgreement }<br/>
                     Tavoitearvosana: { data.studentGradeGoal }
                 </p>
                 <p>
-                    Muuta: { data.thesisWorkOther }
+                    Muuta: { data.other }
                 </p>
             </div>
         );
