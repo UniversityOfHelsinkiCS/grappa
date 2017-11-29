@@ -3,7 +3,7 @@ const reducer = (state = [], action) => {
         case "SUPERVISOR_SAVE_ONE_SUCCESS":
             return [...state, action.response];
         case "SUPERVISOR_GET_ALL_SUCCESS":
-            return [...state, action.response];
+            return action.response;
         case "SUPERVISOR_GET_AGREEMENT_PERSONS_SUCCESS":
             return action.response;
         case "SUPERVISOR_DELETE_ONE_SUCCESS":

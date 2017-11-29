@@ -12,7 +12,7 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav.home, nav.agreement, nav.theses, nav.graderManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
+                nav.home, nav.agreement, nav.theses, nav.supervisorManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
             ]
         },
         'agreement': {
@@ -23,7 +23,7 @@ const permissions = {
     'manager': {
         'nav-bar': {
             show: [
-                nav.home, nav.agreement, nav.theses, nav.graderManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
+                nav.home, nav.agreement, nav.theses, nav.supervisorManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
             ]
         },
         'agreement': {
