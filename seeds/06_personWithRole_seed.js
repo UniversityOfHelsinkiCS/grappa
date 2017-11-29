@@ -69,7 +69,13 @@ exports.seed = function (knex, Promise) {
                 {
                     personRoleId: 15,
                     personId: 11, // Erkki Erikoistapaus
-                    roleId: 4, // supervisor
+                    roleId: 4, // resp_professor
+                    studyfieldId: 1 // Tietojenkäsittelytiede
+                },
+                {
+                    personRoleId: 16,
+                    personId: 12, // Erkki Erikoistapaus
+                    roleId: 6, // supervisor
                     studyfieldId: 1 // Tietojenkäsittelytiede
                 }
             ]);

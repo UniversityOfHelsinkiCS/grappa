@@ -146,6 +146,19 @@ exports.seed = function (knex, Promise) {
                 address: ('Intiankatu'),
                 phone: '050 1234567',
                 major: 'mathematics'
+              },
+              {
+                personId: 12,
+                shibbolethId: 'tubotöhönshibboId',
+                email: 'turbo@töhö.com',
+                title: 'Dr.',
+                firstname: 'Turbo',
+                lastname: 'Töhö',
+                isRetired: false,
+                studentNumber: ('24877292'),
+                address: ('Hesen Maikkari'),
+                phone: '050 98765432',
+                major: 'käpistely'
               }
           ]);
       });
