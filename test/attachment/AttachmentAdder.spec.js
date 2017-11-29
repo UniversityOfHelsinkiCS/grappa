@@ -6,9 +6,9 @@ import Dropzone from "react-dropzone";
 
 import AttachmentAdder from "../../src/components/attachment/AttachmentAdder";
 
-const defaultAttachmentAdder = <AttachmentAdder sendChange = {(file) => {}} />
+const defaultAttachmentAdder = <AttachmentAdder attachments={[]} removeAttachment={() => {}} addAttachment={(file) => {}} />
 
-const limitOfOne = <AttachmentAdder sendChange = {(file) => {}}  limit = {1}/>
+const limitOfOne = <AttachmentAdder attachments={[]} removeAttachment={() => {}} addAttachment={(file) => {}}  limit = {1}/>
 
 test('has Dropzone element', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
