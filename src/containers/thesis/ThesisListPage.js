@@ -11,12 +11,16 @@ class ThesisListPage extends Component {
         this.state = {
             filteredTheses: [],
         }
-        this.props.getTheses();
     }
 
     componentDidMount() {
         document.title = "Thesis List";
-
+        this.props.getTheses();
+        if(this.props.theses) {
+            this.setState({
+                filteredTheses: this.props.theses,
+            })
+        }
     }
     componentWillReceiveProps(newProps) {
         if (newProps.theses) {
