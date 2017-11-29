@@ -44,7 +44,7 @@ const permissions = {
     'resp_professor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav['graderManagement'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav['supervisorManagement'], nav['assesment']
             ]
         }
     },
@@ -62,7 +62,6 @@ const permissions = {
             ]
         }
     },
-    //Student
     'student': {
         'nav-bar': {
             show: [
