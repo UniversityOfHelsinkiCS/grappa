@@ -1,52 +1,36 @@
-import { callApi } from '../../util/apiConnection';
-
-const action = (suffix, response) => {
-    return {
-        type: "GRADER_" + suffix,
-        response,
-    }
-}
+import { callController } from '../../util/apiConnection';
 
 export const saveAddedGrader = (grader) => {
     const route = '/supervisors/save';
-    const prefix = "SAVE_ONE_";
+    const prefix = "GRADER_SAVE_ONE_";
     const method = "post";
-    return callController(route, prefix, method, grader);
+    return callController(route, prefix, grader, method);
 }
 
 export const getSupervisors = () => {
     const route = '/supervisors/agreementPersons';
-    const prefix = "GET_ALL_";
+    const prefix = "GRADER_GET_ALL_";
     const method = "get";
-    return callController(route, prefix, method);
+    return callController(route, prefix);
 }
 
 export const deleteSupervisor = (data) => {
     const route = '/supervisors';
-    const prefix = "DELETE_ONE_";
+    const prefix = "GRADER_DELETE_ONE_";
     const method = "delete";
-    return callController(route, prefix, method);
+    return callController(route, prefix);
 }
 
 export const reviewSupervisor = (supervisor) => {
     const route = '/supervisors/review';
-    const prefix = "REVIEW_ONE_";
+    const prefix = "GRADER_REVIEW_ONE_";
     const method = "put";
-    return callController(route, prefix, method, supervisor);
+    return callController(route, prefix, supervisor, method);
 }
 
 export const updateSupervisor = (supervisor) => {
     const route = '/supervisors/update';
-    const prefix = "UPDATE_ONE_";
+    const prefix = "GRADER_UPDATE_ONE_";
     const method = "put";
-    return callController(route, prefix, method, supervisor);
-}
-
-const callController = (route, prefix, method, data) => (dispatch) => {
-    dispatch(action(prefix + "ATTEMPT"));
-    callApi(route, method, data)
-        .then(res => {
-            dispatch(action(prefix + "SUCCESS", res))})
-        .catch(err => {
-            dispatch(action(prefix + "FAILURE", err.response))});
+    return callController(route, prefix, supervisor, method);
 }

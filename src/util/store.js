@@ -1,5 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk';
+import { handleRequest } from './apiConnection';
+
 import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
@@ -32,11 +34,11 @@ let store;
 if (process.env.REACT_APP_DEVTOOLS === '1') {
     store = createStore(
         combinedReducers,
-        compose(applyMiddleware(thunk),
+        compose(applyMiddleware(thunk, handleRequest),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
 } else {
     store = createStore(
         combinedReducers,
-        applyMiddleware(thunk));
+        applyMiddleware(thunk, handleRequest));
 }
 export default store;

@@ -1,43 +1,28 @@
-import { callApi } from '../../util/apiConnection';
-
-const action = (suffix, response) => {
-    return {
-        type: "STUDYFIELD_" + suffix,
-        response,
-    }
-}
+import { callController } from '../../util/apiConnection';
 
 export const getStudyfields = () => {
     const route = '/studyfields';
-    const prefix = "GET_ALL_";
-    const method = "get";
-    return callController(route, prefix, method);
+    const prefix = "STUDYFIELD_GET_ALL_";
+    return callController(route, prefix);
 }
 
 export const saveStudyfield = (studyfield) => {
     const route = '/studyfields';
-    const prefix = "SAVE_ONE_";
+    const prefix = "STUDYFIELD_SAVE_ONE_";
     const method = "post";
-    return callController(route, prefix, method, studyfield);
+    return callController(route, prefix, studyfield, method);
 }
 
 export const updateStudyfield = (studyfield) => {
     const route = '/studyfields';
-    const prefix = "UPDATE_ONE_";
+    const prefix = "STUDYFIELD_UPDATE_ONE_";
     const method = "put";
-    return callController(route, prefix, method, studyfield);
+    return callController(route, prefix, studyfield, method);
 }
 
 export const deleteStudyfield = (studyfieldId) => {
     const route = '/studyfields/' + studyfieldId;
-    const prefix = "DELETE_ONE_";
+    const prefix = "STUDYFIELD_DELETE_ONE_";
     const method = "delete";
-    return callController(route, prefix, method, studyfieldId);
-}
-
-const callController = (route, prefix, method, data) => (dispatch) => {
-    dispatch(action(prefix + "ATTEMPT"));
-    callApi(route, method, data)
-        .then(res => dispatch(action(prefix + "SUCCESS", res)))
-        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+    return callController(route, prefix, studyfieldId, method);
 }
