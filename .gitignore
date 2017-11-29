@@ -67,3 +67,9 @@ coverage
 #testfiles
 testfile
 data/file/20.pdf
+
+#credentials
+src/util/ethesis_credentials.js
+
+# ignore package-lock.json for now
+package-lock.json

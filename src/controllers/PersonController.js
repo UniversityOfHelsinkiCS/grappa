@@ -35,6 +35,11 @@ export async function updatePerson(req, res) {
     }
 }
 
+export async function getAllPersons(req, res) {
+    const persons = await personService.getAllPersons();
+    res.status(200).json(persons);
+}
+
 export async function getPersonById(req, res) {
     const person = await personService.getPersonById(req.params.id);
     res.status(200).json(person);

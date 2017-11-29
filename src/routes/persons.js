@@ -12,5 +12,9 @@ router.get('/:id', (req, res) => {
     personController.getPersonById(req, res);
 });
 
+router.get('/', (req, res) => {
+    personController.getAllPersons(req, res);
+})
+
 
 module.exports = router;

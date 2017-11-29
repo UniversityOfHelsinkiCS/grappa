@@ -1,13 +1,15 @@
-var config = require('./knexfile.js');
-var env = 'development';
+const config = require('./knexfile.js');
+let env = 'development';
 if (process.env.NODE_ENV === 'test') {
     env = 'test';
 }
-//console.log(process.env);
-console.log("ENVIRONMENT IS ", env);
-var knex = require('knex')(config[env]);
-module.exports = knex;
+console.log("ENVIRONMENT IS", env);
+const knex = require('knex')(config[env]);
 
-if (process.env.NODE_ENV !== 'test') {
-    knex.migrate.latest([config]);
-}  
+knex.migrate.latest(config[env]).then((msg) => {
+    console.log("KNEX MIGRATE SUCCESS", msg);
+}).catch((err) => {
+    console.log("KNEX MIGRATE FAILURE", err);
+});
+
+module.exports = knex;
