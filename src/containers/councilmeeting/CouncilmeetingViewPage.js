@@ -6,6 +6,8 @@ import { updateThesis, getTheses, downloadTheses, moveTheses } from "../thesis/t
 import { getCouncilmeetings } from "./councilmeetingActions";
 import { sendReminder } from "../email/emailActions";
 
+import ThesisList from "../../components/thesis/ThesisList"
+
 export class CouncilmeetingViewPage extends Component {
     constructor() {
         super();
@@ -36,6 +38,7 @@ export class CouncilmeetingViewPage extends Component {
         this.initState(newProps);
     }
 
+    //TODO: Remove copypaste
     initState(props) {
         if (!props.councilmeetings) return;
         const foundIndex = this.findIndexFromProps(props);
@@ -100,14 +103,15 @@ export class CouncilmeetingViewPage extends Component {
         });
     }
 
+    //TODO: Fix switch case
     changeMeeting = (where) => () => {
         switch (where) {
             case "previous":
-                //browserHistory.replace(`/councilmeeting/${this.state.previousMeeting.councilmeetingId}`);
+                this.props.history.push('/councilmeeting/' + this.state.previousMeeting.councilmeetingId)
                 this.incrementIndex(false);
                 return;
             case "next":
-                //browserHistory.replace(`/councilmeeting/${this.state.nextMeeting.councilmeetingId}`);
+                this.props.history.push('/councilmeeting/' + this.state.nextMeeting.councilmeetingId)
                 this.incrementIndex(true);
                 return;
             default:
@@ -132,7 +136,6 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     render() {
-        console.log(this.props.councilmeetings);
         return (
             <div>
                 <div>
@@ -156,12 +159,12 @@ export class CouncilmeetingViewPage extends Component {
                         </span>
                     </h2>
                 </div>
-                {/*<ThesisList???
-          theses={this.state.theses}
-          userRole={this.props.user.role}
-          moveToPreviousMeeting={this.moveToPreviousMeeting}
-          moveToNextMeeting={this.moveToNextMeeting}
-        />*/}
+                <ThesisList
+                    theses={this.state.theses}
+                    userRoles={this.props.user.roles}
+                    moveToPreviousMeeting={this.moveToPreviousMeeting}
+                    moveToNextMeeting={this.moveToNextMeeting}
+                />
             </div>
         );
     }
@@ -169,8 +172,9 @@ export class CouncilmeetingViewPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.user,
         councilmeetings: state.councilmeeting,
-        theses: state.theses,
+        theses: state.thesis,
     };
 };
 

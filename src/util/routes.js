@@ -16,7 +16,7 @@ import EmailDraftPage from '../containers/email/EmailDraftPage';
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
-    theses: { path: '/theses', component: ThesisList, navText: 'Thesis List'},
+    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List'},
     supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management'},
     thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis'},
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
