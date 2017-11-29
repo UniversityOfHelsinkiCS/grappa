@@ -216,6 +216,7 @@ export class ThesisManagePage extends Component {
     }
 
     //GraderEditor ei tule olemaan tällä sivulla vaan GraderManagement-sivulla
+    //TODO: Grader Editor + Supervisor Editor fix
     renderGraderControl() {
         return (
             <div>
@@ -224,8 +225,8 @@ export class ThesisManagePage extends Component {
                     one of them isn't at least a professor and the other a doctor an evaluation of
                     the graders will be done by the thesis' studyfield's professor.
                 </p>
-                <GraderSelecter graders={this.props.graders ? this.props.graders : []} alreadySelected={this.state.thesis.graders} addSupervisor={this.handleAddGrader} removeGrader={this.handleRemoveGrader} allowEdit={this.state.allowEdit || !this.state.editMode}/>
-                {(this.state.allowEdit || !this.state.editMode) ? <SupervisorEditor graders={this.props.graders ? this.props.graders : []} /> : undefined}
+                <GraderSelecter graders={this.props.graders ? this.props.graders : []} alreadySelected={this.state.thesis.graders} addSupervisor={this.handleAddGrader} removeGrader={this.handleRemoveGrader} allowEdit={this.state.allowEdit || !this.state.editMode} />
+                {(this.state.allowEdit || !this.state.editMode) ? <SupervisorEditor supervisors={this.props.supervisor ? this.props.supervisors : []} /> : undefined}
             </div>
         )
     }
@@ -278,40 +279,40 @@ export class ThesisManagePage extends Component {
 }*/
 
 const mapDispatchToProps = (dispatch) => ({
-  saveThesis(thesis) {
-    dispatch(saveThesis(thesis));
-  },
-  updateThesis(thesis) {
-    dispatch(updateThesis(thesis));
-  },
-  deleteThesis(thesisId) {
-    dispatch(deleteThesis(thesisId));
-  },
-  downloadTheses(theses) {
-    dispatch(downloadTheses(theses));
-  },
-  getCouncilmeetings() {
-    dispatch(getCouncilmeetings());
-  },
-  getStudyfields() {
-    dispatch(getStudyfields());
-  },
-  updateGraders(graders) {
-    dispatch(updateGraders(graders));
-  },
-  sendReminder(thesisId, type) {
-    dispatch(sendReminder(thesisId, type));
-  },
+    saveThesis(thesis) {
+        dispatch(saveThesis(thesis));
+    },
+    updateThesis(thesis) {
+        dispatch(updateThesis(thesis));
+    },
+    deleteThesis(thesisId) {
+        dispatch(deleteThesis(thesisId));
+    },
+    downloadTheses(theses) {
+        dispatch(downloadTheses(theses));
+    },
+    getCouncilmeetings() {
+        dispatch(getCouncilmeetings());
+    },
+    getStudyfields() {
+        dispatch(getStudyfields());
+    },
+    updateGraders(graders) {
+        dispatch(updateGraders(graders));
+    },
+    sendReminder(thesisId, type) {
+        dispatch(sendReminder(thesisId, type));
+    },
 });
 
 const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-    councilmeetings: state.councilmeeting,
-    studyfields: state.studyfields,
-    graders: state.graders,
-    theses: state.theses,
-  };
+    return {
+        user: state.user,
+        councilmeetings: state.councilmeeting,
+        studyfields: state.studyfields,
+        graders: state.graders,
+        theses: state.theses,
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisManagePage);
