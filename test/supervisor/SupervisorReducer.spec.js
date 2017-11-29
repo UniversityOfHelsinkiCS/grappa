@@ -19,7 +19,7 @@ test('get all success changes state correctly', reducerTest(
         type: "SUPERVISOR_GET_ALL_SUCCESS", 
         response: supervisors,
     },
-    [stateWithSupervisors.data],
+    stateWithSupervisors,
 ));
 
 // doesn't work, passes only when expectation has empty list?!
@@ -30,7 +30,7 @@ test.skip('get all agreement persons success changes state correctly', reducerTe
         type: "SUPERVISOR_GET_ALL_AGREEMENT_PERSONS_SUCCESS", 
         response: supervisors,
     },
-    [stateWithSupervisors.data],
+    [stateWithSupervisors],
 ));
 
 test('save added success changes state correctly', reducerTest(
@@ -40,7 +40,7 @@ test('save added success changes state correctly', reducerTest(
         type: "SUPERVISOR_SAVE_ONE_SUCCESS", 
         response: supervisor,
     },
-    [stateWithSupervisor.data],
+    stateWithSupervisor,
 ));
 
 test('update success changes state correctly', reducerTest(
