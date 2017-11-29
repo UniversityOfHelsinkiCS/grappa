@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
 import SupervisorManagement from '../containers/supervisor/SupervisorManagementPage';
-import ThesisList from '../components/thesis/ThesisList';
+import ThesisListPage from '../containers/thesis/ThesisListPage';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisManage from '../containers/thesis/ThesisManagePage';
 import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
