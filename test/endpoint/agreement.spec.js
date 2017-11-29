@@ -33,7 +33,7 @@ const agreementWithId = {
     agreementId: 1
 }
 
-test('agreement post & creates id', async t => {
+test.skip('agreement post & creates id', async t => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/agreement')

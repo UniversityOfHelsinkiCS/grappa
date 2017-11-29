@@ -46,37 +46,6 @@ export async function saveSupervisor(req, res) {
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
         }
-    } else { //update doesn't work
-        try {
-            const supervisorRoleId = await supervisorService.getSupervisorRoleId();
-            const personData = {
-                personId: supervisorData.personId,
-                firstname: supervisorData.firstname,
-                lastname: supervisorData.lastname,
-                title: supervisorData.title,
-                email: supervisorData.email,
-                shibbolethId: supervisorData.shibbolethId,
-                isRetired: supervisorData.isRetired
-            };
-            const personRoleData = {
-                personId: supervisorData.personId,
-                studyfieldId: supervisorData.studyfieldId,
-                roleId: supervisorRoleId
-            };
-            const personRoleId = await personService.savePersonRole(personRoleData);
-            const agreementPersonData = {
-                agreementId: supervisorData.agreementId,
-                personRoleId: personRoleId,
-                roleId: supervisorRoleId,
-                approved: false,
-                statement: ''
-            };
-            
-            const agreementId = await supervisorService.updateAgreementPerson(agreementPersonData);
-            res.status(200).json({ text: "supervisor save successful", personId: personId });
-        } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
-        }
     }
 }
 
