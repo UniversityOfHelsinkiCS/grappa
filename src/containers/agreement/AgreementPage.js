@@ -5,7 +5,7 @@ import Agreement from '../../components/agreement/Agreement';
 
 //redux
 import { connect } from "react-redux";
-import { getAgreement, saveAgreement, updateAgreement } from "./agreementActions";
+import { getAgreement, saveAgreement, updateAgreement, saveAttachment } from "./agreementActions";
 import { getSupervisors } from "../supervisor/supervisorActions";
 import { getStudyfields } from "../studyfield/studyfieldActions";
 
@@ -75,8 +75,8 @@ export class AgreementPage extends Component {
     }
 
     handleSaveAgreement = (agreement) => {
-        console.log("handleSaveAgreement", agreement);
         this.props.saveAgreement(agreement);
+        this.props.saveAttachment(agreement.attachments);
     }
 
     render() {
@@ -120,6 +120,9 @@ const mapDispatchToProps = (dispatch) => ({
     saveAgreement(data) {
         dispatch(saveAgreement(data));
     },
+    saveAttachment(data) {
+        dispatch(saveAttachment(data));
+    },
     updateAgreement(data) {
         dispatch(updateAgreement(data));
     },
@@ -134,7 +137,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         agreement: state.agreement,
-        supervisors: state.supervisor,
+        supervisors: state.supervisors,
         studyfields: state.studyfield,
         user: state.user
     };

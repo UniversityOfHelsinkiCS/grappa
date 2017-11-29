@@ -3,7 +3,7 @@ import { Link } from "react-router"
 
 import { connect } from "react-redux";
 import { saveThesis, updateThesis, deleteThesis, downloadTheses } from './thesisActions';
-import { updateGraders } from '../grader/graderActions';
+import { updateGraders } from '../supervisor/supervisorActions';
 import { getCouncilmeetings } from '../councilmeeting/councilmeetingActions';
 import { sendReminder } from '../email/emailActions';
 import { getStudyfields } from '../studyfield/studyfieldActions';
@@ -11,8 +11,8 @@ import { getStudyfields } from '../studyfield/studyfieldActions';
 import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
 import ThesisUploadWidget from "../../components/thesis/ThesisUploadWidget";
-import GraderSelecter from "../../components/grader/GraderSelecter";
-import GraderEditor from "../../components/grader/GraderEditor";
+import GraderSelecter from "../../components/supervisor/GraderSelecter";
+import SupervisorEditor from "../../components/supervisor/SupervisorEditor";
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
 import ThesisEmails from "../../components/thesis/ThesisEmails"
 
@@ -224,8 +224,8 @@ export class ThesisManagePage extends Component {
                     one of them isn't at least a professor and the other a doctor an evaluation of
                     the graders will be done by the thesis' studyfield's professor.
                 </p>
-                <GraderSelecter graders={this.props.graders ? this.props.graders : []} alreadySelected={this.state.thesis.graders} addGrader={this.handleAddGrader} removeGrader={this.handleRemoveGrader} allowEdit={this.state.allowEdit || !this.state.editMode}/>
-                {(this.state.allowEdit || !this.state.editMode) ? <GraderEditor graders={this.props.graders ? this.props.graders : []} /> : undefined}
+                <GraderSelecter graders={this.props.graders ? this.props.graders : []} alreadySelected={this.state.thesis.graders} addSupervisor={this.handleAddGrader} removeGrader={this.handleRemoveGrader} allowEdit={this.state.allowEdit || !this.state.editMode}/>
+                {(this.state.allowEdit || !this.state.editMode) ? <SupervisorEditor graders={this.props.graders ? this.props.graders : []} /> : undefined}
             </div>
         )
     }

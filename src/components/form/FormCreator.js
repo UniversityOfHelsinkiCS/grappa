@@ -9,7 +9,9 @@ export default class FormCreator extends Component {
     }
 
     getButton(clickFunc) {
-        const lastAction = this.getLastAction();
+        //next line doesn't work, why? (TODO)
+        //const lastAction = this.getLastAction();
+        const lastAction = undefined;
         const workableButton = <button className="ui primary button" type="submit" onClick={clickFunc}>Save</button>;
         const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={clickFunc}>Save</button>;
 
