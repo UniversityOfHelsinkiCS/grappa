@@ -149,15 +149,20 @@ export default class Agreement extends Component {
         }
     }
 
-    createSupervisorArray = (supervisors) => {
-        let data = supervisors[supervisors.length - 1].map((supervisor) =>
-            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname})
+    createSupervisorArray = () => {
+        let chosenStudyfield = this.state.form.studentMajor;
+        if (chosenStudyfield === -1 || chosenStudyfield === "")
+            return [{ value: -1, text: 'Choose a major first' }];
+        let supervisorsByStudyfield = this.props.supervisors[this.props.supervisors.length - 1].filter((s) => s.studyfieldId == chosenStudyfield);
+        let data = supervisorsByStudyfield.map((supervisor) =>
+            ({ value: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname })
         );
         data.unshift({ value: -1, text: 'Choose a supervisor' });
         return data;
     }
 
-    createStudyFieldArray = (studyfields) => {
+    createStudyFieldArray = () => {
+        let studyfields = this.props.studyfields;
         let data = studyfields.map((studyfields) =>
             ({ value: studyfields.studyfieldId, text: studyfields.name })
         );
@@ -166,8 +171,8 @@ export default class Agreement extends Component {
     }
 
     render() {
-        let supervisors = this.createSupervisorArray(this.props.supervisors);
-        let studyfields = this.createStudyFieldArray(this.props.studyfields);
+        let studyfields = this.createStudyFieldArray();
+        let supervisors = this.createSupervisorArray();
         return (
             <div>
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
