@@ -10,15 +10,14 @@ const makeApp = () => {
     return app;
 }
 
-test.beforeEach(async t => {
-// probably everything here needs to be done differently
+test.before(async t => {
     const knex = require('knex')(config['test']);
-    // await knex.migrate.rollback().then(() => {
-    //     //console.log("Rollback happened")
-    //     return;
-    // }).catch(err => {
-    //     console.log(err);
-    // })
+    await knex.migrate.rollback().then(() => {
+        console.log("Rollback happened")
+        return;
+    }).catch(err => {
+        console.log(err);
+    })
 })
 
 const agreementWithoutId = {
@@ -34,8 +33,7 @@ const agreementWithId = {
     agreementId: 1
 }
 
-// needs work, so skip for now
-test.skip('agreement post & creates id', async t => {
+test('agreement post & creates id', async t => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/agreement')
@@ -70,5 +68,5 @@ test.skip('agreement post & creates id', async t => {
 
 
 test('', t => {
-    t.truthy(1===1);
+    t.truthy(1 === 1);
 })

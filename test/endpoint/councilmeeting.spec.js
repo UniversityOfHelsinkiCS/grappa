@@ -10,7 +10,7 @@ const makeApp = () => {
     return app;
 }
 
-test.beforeEach(async t => {
+test.before(async t => {
     const knex = require('knex')(config['test']);
     await knex.migrate.rollback().then(() => {
         console.log("Rollback happened")
