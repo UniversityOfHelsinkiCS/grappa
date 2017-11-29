@@ -5,7 +5,7 @@ export default class SupervisingInfoForm extends Component {
     constructor() {
         super();
         this.state = {
-            chosenStudyfield = undefined,
+            chosenStudyfield: undefined,
         }
     }
 
