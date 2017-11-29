@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 
 export default class SupervisingInfoForm extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            chosenStudyfield = undefined,
+        }
+    }
+
     field = (label, formName) => {
         return (
             <div>
@@ -38,6 +45,11 @@ export default class SupervisingInfoForm extends Component {
     }
 
     render() {
+        if (this.state.chosenStudyfield) {
+            const supervisorsByStudyfield = this.props.supervisors.filter(supervisor => supervisor.studyfieldId == this.state.chosenStudyfield);
+        } else {
+            const supervisorsByStudyfield = this.props.supervisors;
+        }
         return (
             <div>
                 <h1>Ohjausvastuut</h1>
