@@ -67,7 +67,7 @@ const getAgreementData = (data, thesisId) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    data.personId = 1; //because front doesn't give id from shibboleth yet
+    data.personId = 1; //because front doesn't give id from shibboleth yet    
     if (agreementHasNoId(data)) {
         try {
             const personData = getPersonData(data);
