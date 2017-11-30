@@ -23,14 +23,14 @@ export class AgreementPage extends Component {
     componentDidMount() {
         document.title = "Agreement Page";
         if (this.props.user)
-            this.props.getAgreement(this.props.user.id);
+            this.props.getAgreement(this.props.user.personId);
         this.props.getSupervisors();
         this.props.getStudyfields();
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreement) {
-            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.id)
+            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.personId);
             if (agreement) {
                 this.setState(
                     {
