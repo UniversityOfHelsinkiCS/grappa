@@ -13,6 +13,8 @@ router.get('/agreementPersons', (req, res) => {
     supervisorController.getAgreementPersons(req, res);
 });
 
+//TODO routes for getting supervisors and agreement person by studyFieldId
+
 router.post('/save', jsonParser, (req, res) => {
     supervisorController.saveSupervisor(req, res);
 });

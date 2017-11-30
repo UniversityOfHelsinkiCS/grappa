@@ -8,9 +8,17 @@ export async function getAllSupervisors(req, res) {
     const supervisors = await supervisorService.getAllSupervisors();
     res.status(200).json(supervisors);
 }
+export async function getAllSupervisorsByStudyfield(req, res) {
+    const supervisors = await supervisorService.getAllSupervisorsByStudyfield(req.body.studyfieldId);
+    res.status(200).json(supervisors);
+}
 
 export async function getAgreementPersons(req, res) {
-    const agreementPersons = await supervisorService.getAllAgreementPersons(); //in future will call getAlLAgreementPersonsNeedingAction
+    const agreementPersons = await supervisorService.getAllAgreementPersons();
+    res.status(200).json(agreementPersons);
+}
+export async function getAgreementPersonsByStudyfield(req, res) {
+    const agreementPersons = await supervisorService.getAllAgreementPersonsByStudyfield(req.body.studyfieldId);
     res.status(200).json(agreementPersons);
 }
 
