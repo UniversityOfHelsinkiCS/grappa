@@ -1,13 +1,16 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
+const bookshelf = require('../db/bookshelf')
+const Thesis = require('../models/thesis');
 
 export function getAllTheses() {
-    return knex.distinct('thesis.thesisId').select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
+    return Thesis.fetchAll();
+    /*return knex.distinct('thesis.thesisId').select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
         .leftJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
         .leftJoin('person', 'thesis.userId', '=', 'person.personId')
         .then(thesis => thesis)
         .catch(error => {
             throw error;
-        });
+        });*/
 }
 
 export const getThesisById = (id) => {

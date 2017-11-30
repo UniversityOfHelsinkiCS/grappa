@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export async function getAllPersons() {
     return await knex.select().from('person');

@@ -3,7 +3,7 @@
  *
  */
 module.exports.authenticate = (req, res, next) => {
-    //const userId = req.headers.;
+    //const shibbolethId = req.headers.shibbolointiId;
     /*const userId = req.body.userId;
     const data = req.body.data;
 

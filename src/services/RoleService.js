@@ -1,4 +1,4 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export async function getPersonRoles(personId) {
     const roleToId = await knex.select().from('role');

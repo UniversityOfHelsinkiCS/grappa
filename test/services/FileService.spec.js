@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../../connection';
+import knex from '../db/connection';
 
 const fileService = require('../../src/services/FileService');
 const fs = require('fs');
