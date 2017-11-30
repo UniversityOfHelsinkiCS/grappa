@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../db/connection';
+import knex from '../../src/db/connection';
 
 const attachmentService = require('../../src/services/AttachmentService');
 const mockAttachments = require('../../src/mockdata/MockAttachments');

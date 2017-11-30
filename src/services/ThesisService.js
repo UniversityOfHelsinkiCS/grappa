@@ -13,31 +13,39 @@ export function getAllTheses() {
         });*/
 }
 
-export const getThesisById = (id) => {
-    return knex.select().from('thesis').where('thesisId', id) 
-        .then(thesis => thesis)
+export const getThesisById = (thesisId) => {
+    return Thesis.where({ thesisId }).fetchAll();
+    /*
+  return knex.select().from('thesis').where('thesisId', id) 
+      .then(thesis => thesis)
+      .catch(error => {
+          throw error;
+      });*/
+}
+
+export const saveThesis = (thesis) => {
+    return Thesis.forge(thesis).save().then(model => {
+        return model.fetch();
+    }).catch(error => {
+        throw error;
+    })
+    /*return knex('thesis')
+        .insert(thesis)
+        .returning('*')
+        .then(theses => 12)
         .catch(error => {
             throw error;
         });
-}
-
-export const saveThesis = (data) => {
-    return knex('thesis')
-    .returning('thesisId')
-    .insert(data)
-    .then(thesisId => thesisId[0])
-    .catch(error => {
-        throw error;
-    });
+        */
 }
 
 export async function updateThesis(thesisData) {
     return await knex('thesis')
-    .returning('thesisId')
-    .where('thesisId', '=', thesisData.thesisId)
-    .update(thesisData)
-    .then(thesisId => thesisId[0])
-    .catch(err => {
-        throw error;
-    });
+        .returning('thesisId')
+        .where('thesisId', '=', thesisData.thesisId)
+        .update(thesisData)
+        .then(thesisId => thesisId[0])
+        .catch(err => {
+            throw error;
+        });
 }

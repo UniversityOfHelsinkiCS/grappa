@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../db/connection');
+const knex = require('../../src/db/connection');
 
 const supervisorService = require('../../src/services/SupervisorService');
 const mockPersons = require('../../src/mockdata/MockPersons');
