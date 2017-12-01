@@ -16,8 +16,8 @@ export async function getThesisById(req, res) {
 export async function saveThesis(req, res) {
     const data = req.body;
     try {
-        let response = await thesisService.saveThesis(data);
-        res.status(200).json({ text: "Thesis saved succesfully", thesisId: response });
+        const thesis = await thesisService.saveThesis(data);
+        res.status(200).json(thesis);
     } catch (e) {
         res.status(500).json(e);
     }

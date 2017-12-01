@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 //people whose role is supervisor
 export async function getAllSupervisors() {

@@ -1,11 +1,11 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
-export const getAgreementById = (id) => {
+export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
         .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .join('person', 'agreement.authorId', '=', 'person.personId')
         .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
-        .where('agreementId', id)
+        .where('agreementId', agreementId)
         .then(agreement => {
             return parseAgreementData(agreement[0])
         });
@@ -20,8 +20,9 @@ export const getPreviousAgreementById = (id) => {
         });
 }
 
-export const getAllAgreements = () => {
+export const getAllAgreements = (personId) => {
     return knex.select().from('agreement')
+        .where('authorId', personId)
         .then(agreements => {
             return agreements;
         });
@@ -77,7 +78,7 @@ const parseAgreementData = (data) => {
         authorId: data.personId,
         thesisId: data.thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
-        studyFieldId: data.studyFieldId,
+        studyfieldId: data.studyfieldId,
         studentGradeGoal: data.studentGradeGoal,
         thesisWorkStudentTime: data.studentWorkTime,
         thesisWorkSupervisorTime: data.supervisorWorkTime,

@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const knex = require('../../connection');
+const knex = require('../db/connection');
 const fs = require('fs');
 
 

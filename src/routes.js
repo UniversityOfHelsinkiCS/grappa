@@ -9,14 +9,18 @@ const agreementDrafts = require('./routes/agreementDrafts');
 const shibboleth = require('./routes/shibboleth');
 const councilmeeting = require('./routes/councilmeeting')
 
+const auth = require('./middleware/auth');
+
+
 module.exports = (app) => {
     app.use('/', index);
     app.use('/login', shibboleth)
+    app.use('/persons', persons);
+    app.use(auth.authenticate);    
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/supervisors', supervisors);
     app.use('/studyfields', studyfields);
-    app.use('/persons', persons);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
     app.use('/councilmeetings', councilmeeting)

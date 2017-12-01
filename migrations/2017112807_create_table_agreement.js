@@ -9,8 +9,8 @@ exports.up = function (knex, Promise) {
             table.foreign('thesisId').references('thesis.thesisId');
             table.integer('responsibleSupervisorId').unsigned();
             table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
-            table.integer('studyFieldId').unsigned();
-            table.foreign('studyFieldId').references('studyfield.studyfieldId');
+            table.integer('studyfieldId').unsigned();
+            table.foreign('studyfieldId').references('studyfield.studyfieldId');
             table.boolean('fake');
             table.integer('studentGradeGoal');
             table.string('studentWorkTime');
