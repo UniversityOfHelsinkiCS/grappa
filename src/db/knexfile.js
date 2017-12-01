@@ -18,6 +18,12 @@ module.exports = {
             filename: ':memory:'
         },
         useNullAsDefault: true,
+        migrations: {
+            directory: './src/db/migrations'
+        },
+        seeds: {
+            directory: './src/db/seeds'
+        },
         //debug: true
     }
 }
