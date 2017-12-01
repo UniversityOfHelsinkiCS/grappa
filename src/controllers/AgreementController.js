@@ -75,9 +75,12 @@ const getAgreementData = (data, thesisId) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    data.personId = 1; //because front doesn't give id from shibboleth yet    
     if (agreementHasNoId(data)) {
         try {
+            const shibboId = req.headers.grappashibbolethid;
+            const persons = await personService.getPersonByShibbolethId(shibboId);  
+            const person = persons[0];
+            data.personId = person.personId; 
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
