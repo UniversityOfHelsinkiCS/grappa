@@ -1,4 +1,4 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export const getAgreementById = (id) => {
     return knex.select().from('agreement')

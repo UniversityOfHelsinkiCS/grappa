@@ -1,4 +1,4 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 const mailer = require('../util/mailer');
 const templates = require('../util/emailTemplates');
 

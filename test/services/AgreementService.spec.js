@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-const knex = require('../../connection');
+const knex = require('../../src/db/connection');
 
 const agreementService = require('../../src/services/AgreementService');
 const mockAgreements = require('../../src/mockdata/MockAgreements');

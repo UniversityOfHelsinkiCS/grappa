@@ -1,4 +1,4 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export async function getAllCouncilmeetings() {
     return knex.select().from('councilmeeting')

@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../../connection';
+import knex from '../../src/db/connection';
 
 const thesisService = require('../../src/services/ThesisService');
 const mockTheses = require('../../src/mockdata/MockTheses');
