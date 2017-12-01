@@ -2,14 +2,14 @@ module.exports = {
     development: {
         client: 'sqlite3',
         connection: {
-            filename: './src/db/grappa2db.sqlite'
+            filename: './grappa2db.sqlite'
         },
         useNullAsDefault: true,
         migrations: {
-            directory: './src/db/migrations'
+            directory: './migrations'
         },
         seeds: {
-            directory: './src/db/seeds'
+            directory: './seeds'
         }
     },
     test: {
