@@ -8,8 +8,8 @@
     "start": "NODE_ENV=dev TEST_MAIL=grabbarobot EMAIL_HOST=gmail.com MAIL_PSWD=grabbasalasana nodemon index.js",
     "start:win": "nodemon index.js",
     "start:prod": "node index.js",
-    "db:migrate": "knex migrate:latest",
-    "db:seed": "knex seed:run",
+    "db:migrate": "knex --knexfile ./src/db/knexfile.js migrate:latest",
+    "db:seed": "knex --knexfile ./src/db/knexfile.js seed:run",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
     "lint": "eslint ./**/*.js || true"
