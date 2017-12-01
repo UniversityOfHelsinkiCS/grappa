@@ -2,6 +2,7 @@ const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
+const roleService = require('../services/RoleService');
 
 const AttachmentController = require('./AttachmentController');
 
@@ -9,7 +10,7 @@ const AttachmentController = require('./AttachmentController');
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-   // res.status(200).json({ agreement: agreement, persons: agreementPersons });
+    // res.status(200).json({ agreement: agreement, persons: agreementPersons });
     res.status(200).json(agreement);
 }
 
@@ -18,9 +19,29 @@ export async function getPreviousAgreementById(req, res) {
     res.status(200).json(agreement);
 }
 
+//TODO: refactor
 export async function getAllAgreements(req, res) {
-    const agreements = await agreementService.getAllAgreements();
-    res.status(200).json(agreements);
+    //All = return agreements that a user might be interested in.
+    const shibboId = req.headers.grappashibbolethid;
+    try {
+        const persons = await personService.getPersonByShibbolethId(shibboId);
+        const personId = persons[0].personId;
+        const roles = await roleService.getPersonRoles(personId);
+        let agreements = [];
+        agreements = await Promise.all(roles.map(async role => {
+            const personRoleId = role.personRoleId;
+            const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
+            const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
+                const agreementId = agreementPerson.agreementId;
+                const agreement = await agreementService.getAgreementById(agreementId);
+                return agreement;
+            }))
+            return agreements;
+        }))
+        res.status(200).json(agreements)
+    } catch (err) {
+        res.status(500).json(err);
+    }
 }
 
 const agreementHasNoId = (data) => {
@@ -55,7 +76,7 @@ const getAgreementData = (data, thesisId) => {
         authorId: data.personId,
         thesisId: thesisId,
         responsibleSupervisorId: data.thesisSupervisorMain,
-        studyFieldId: data.studyFieldId,
+        studyfieldId: data.studyfieldId,
         studentGradeGoal: data.studentGradeGoal,
         studentWorkTime: data.thesisWorkStudentTime,
         supervisorWorkTime: data.thesisWorkSupervisorTime,
@@ -83,7 +104,7 @@ export async function saveAgreement(req, res) {
             //AttachmentController.saveAttachment(req, res);
             res.status(200).json(agreementData);
         }
-        catch(error) {
+        catch (error) {
 
             res.status(500).json({ text: "Error occured" });
         }
@@ -92,15 +113,15 @@ export async function saveAgreement(req, res) {
     }
 }
 
-const updatePerson = async function(personData) {
-   return await personService.updatePerson(personData);
+const updatePerson = async function (personData) {
+    return await personService.updatePerson(personData);
 }
 
-const saveThesis = async function(thesisData) {
+const saveThesis = async function (thesisData) {
     return await thesisService.saveThesis(thesisData);
 }
 
-const saveAgreementToService = async function(agreementData) {
+const saveAgreementToService = async function (agreementData) {
     return await agreementService.saveNewAgreement(agreementData);
 }
 
@@ -125,7 +146,7 @@ export async function updateAgreement(req, res) {
                 thesisTitle: data.thesisTitle,
                 startDate: data.thesisStartDate,
                 completionEta: data.thesisCompletionEta,
-                performancePlace:  data.thesisPerformancePlace
+                performancePlace: data.thesisPerformancePlace
             };
             const cleanThesisData = removeUselessKeys(thesisData);
             const thesisResponse = await thesisService.updateThesis(cleanThesisData);
@@ -135,7 +156,7 @@ export async function updateAgreement(req, res) {
                 authorId: data.personId,
                 thesisId: data.thesisId,
                 responsibleSupervisorId: data.responsibleSupervisorId,
-                studyFieldId: data.studyFieldId,
+                studyfieldId: data.studyfieldId,
                 studentGradeGoal: data.studentGradeGoal,
                 studentWorkTime: data.thesisWorkStudentTime,
                 supervisorWorkTime: data.thesisWorkSupervisorTime,

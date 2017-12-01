@@ -3,18 +3,16 @@
  *
  */
 module.exports.authenticate = (req, res, next) => {
-    //const shibbolethId = req.headers.shibbolointiId;
-    /*const userId = req.body.userId;
-    const data = req.body.data;
+    //if dev then
+    const shibbolethId = req.headers.shibbolointiid;
 
-    if (!userId) {
+    //if actual then
+    //const shibbolethId = req.headers.
+
+    if (!shibbolethId) {
         res.sendStatus(403);
     }
 
-    req.body = {
-        userId,
-        data
-    }*/
-
+    req.headers.grappashibbolethid = shibbolethId
     next();
 };
