@@ -1,5 +1,6 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService')
 
 //Used with Shibboleth
 export async function login(req, res) {
@@ -22,8 +23,18 @@ export async function fakeLogin(req, res) {
     try {
         const persons = await personService.getPersonByShibbolethId(shibbolethId);
         let user = persons[0]
-        const roles = await roleService.getPersonRoles(user.personId);
-        user.roles = roles;
+
+        const roleToId = await roleService.getRoles();
+        const studyfieldToId = await studyfieldService.getAllStudyfields();
+        const personRoles = await roleService.getPersonRoles(user.personId);
+        const readableRoles = personRoles.map(role => {
+            return {
+                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+            }
+        })
+        user.roles = readableRoles;
+        
         res.status(200).json(user);
     } catch (err) {
         res.status(500);
