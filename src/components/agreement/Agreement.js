@@ -30,6 +30,8 @@ export default class Agreement extends Component {
                 thesisWorkOther: "",
 
                 studentGradeGoal: "",
+
+                studyfieldId: undefined,
             },
             attachments: []
         }
