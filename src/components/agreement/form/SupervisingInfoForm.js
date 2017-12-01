@@ -6,6 +6,7 @@ export default class SupervisingInfoForm extends Component {
         super();
         this.state = {
             chosenStudyfield: undefined,
+            selectedSupervisors: { thesisSupervisorMain: -1, thesisSupervisorSecond: -1 }
         }
     }
 
@@ -23,20 +24,34 @@ export default class SupervisingInfoForm extends Component {
 
     sendDropDownChange = (event) => {
         if (event.target.value) {
-            this.props.handleChange(event)
+            let list = Object.assign({}, this.state.selectedSupervisors);
+            list[event.target.name] = event.target.value;
+            this.setState({ selectedSupervisors: list });
+            this.props.handleChange(event);
         }
     }
 
-    dropDown = (label, formName, supervisorList) => {
-        if (!supervisorList) return;
+    studyfieldChange = (event) => {
+        if (event.target.value) {
+            this.setState(
+                {
+                    chosenStudyfield: event.target.value,
+                    selectedSupervisors: { thesisSupervisorMain: -1, thesisSupervisorSecond: -1 }
+                 }
+            );
+            this.props.resetSupervisors();
+        }
+    }
+
+    studyfieldSelecter = (list) => {
         return (
             <div>
-                <b>{label}</b>
+                <b>Valitse ensin gradun aine</b>
                 <div>
-                    <select className="ui dropdown" onChange={this.sendDropDownChange} name={formName} >
-                        <option value="" >Select a supervisor</option>
-                        {supervisorList.map((supervisor, index) => {
-                            return <option key={index} value={supervisor}>{`${supervisor.firstname} ${supervisor.lastname} ${supervisor.email}`}</option>;
+                    <select className="ui dropdown" onChange={this.studyfieldChange}>
+                        <option>Valitse ensin gradun tieteenala</option>
+                        {list.map((obj, index) => {
+                            return <option key={index} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
                 </div>
@@ -44,17 +59,44 @@ export default class SupervisingInfoForm extends Component {
         );
     }
 
+    supervisorSelecter = (label, placeholder, formName, list) => {
+        return (
+            <div>
+                <b>{label}</b>
+                <div>
+                    <select className="ui dropdown" value={this.state.selectedSupervisors[formName]} disabled={list[0] === undefined} onChange={this.sendDropDownChange} name={formName}>
+                        <option value={-1}>{placeholder}</option>
+                        {list.map((obj, index) => {
+                            return <option key={index} value={obj.id}>{obj.text}</option>;
+                        })}
+                    </select>
+                </div>
+            </div>
+        );
+    }
+
+    getSupervisorData = () => {
+        if (this.state.chosenStudyfield === undefined)
+            return [];
+        return this.props.supervisors.filter((supervisor) => supervisor.studyfieldId == this.state.chosenStudyfield).map((supervisor) => {
+            return { id: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname + " - " + supervisor.email }
+        });
+    }
+
     render() {
-        if (this.state.chosenStudyfield) {
-            const supervisorsByStudyfield = this.props.supervisors.filter(supervisor => supervisor.studyfieldId == this.state.chosenStudyfield);
-        } else {
-            const supervisorsByStudyfield = this.props.supervisors;
-        }
+        let supervisors = this.getSupervisorData();
         return (
             <div>
                 <h1>Ohjausvastuut</h1>
-                {this.dropDown("Vastuuohjaaja", "thesisSupervisorMain", this.props.supervisors)}
-                {this.dropDown("Toinen ohjaaja", "thesisSupervisorSecond", this.props.supervisors)}
+                {this.studyfieldSelecter(this.props.studyfields.map((field) => {
+                    return { id: field.studyfieldId, text: field.name }
+                }))}
+                <br />
+                {this.supervisorSelecter("Vastuuohjaaja", "Valitse ohjaaja", "thesisSupervisorMain",
+                supervisors.filter((s) => s.id != this.state.selectedSupervisors.thesisSupervisorSecond ))}
+                <br />
+                {this.supervisorSelecter("Toinen ohjaaja", "Valitse ohjaaja", "thesisSupervisorSecond",
+                supervisors.filter((s) => s.id != this.state.selectedSupervisors.thesisSupervisorMain ))}
                 {this.field("Muu ohjaaja", "thesisSupervisorOther")}
             </div>
         )

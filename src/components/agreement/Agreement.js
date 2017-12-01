@@ -43,7 +43,15 @@ export default class Agreement extends Component {
         } else { //a file
             newForm.attachments.push(event);
         }
-        this.setState({ form: newForm })
+        this.setState({ form: newForm });
+    }
+
+    resetSupervisors = () => {
+        const oldForm = this.state.form;
+        let newForm = oldForm;
+        newForm['thesisSupervisorMain'] = '';
+        newForm['thesisSupervisorSecond'] = '';
+        this.setState({ form: newForm });
     }
 
     addAttachment = (file) => {
@@ -73,9 +81,13 @@ export default class Agreement extends Component {
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
                 <StudentInfoForm user={this.props.user} />
+                <br />
                 <ThesisInfoForm handleChange={this.handleFormChange} />
-                <SupervisingInfoForm handleChange={this.handleFormChange} supervisors={this.props.supervisors} />
+                <br />
+                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} studyfields={this.props.studyfields}/>
+                <br />
                 <GoalInfoForm handleChange={this.handleFormChange} />
+                <br />
                 <AttachmentAdder
                     attachments={this.state.attachments}
                     addAttachment={this.addAttachment}

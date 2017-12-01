@@ -53,8 +53,7 @@ export default class Field extends Component {
                 break;
             case "attachment":
                 forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
-
-                <AttachmentAdder sendChange={this.props.fieldOnChangeFunc} />
+                    <AttachmentAdder sendChange={this.props.fieldOnChangeFunc}/>
                 ];
                 break;
             default:
