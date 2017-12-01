@@ -7,7 +7,7 @@ export async function saveToEThesis(meta, pdf){
     const config = { headers: { 'auth': creds } };
 
     var doc = xml.create({
-        feed: {
+        entry: {
             '@xmlns': 'http://www.w3.org/2005/Atom',
             '@xmlns:sword': 'http://purl.org/net/sword/',
             title: 'harjoittelusyöttö',
@@ -15,11 +15,32 @@ export async function saveToEThesis(meta, pdf){
                 name: {
                 '#text': 'harjoittelusyöttö'
                 }
-            }
+            },
+            summary:{
+                '@type': 'text',
+                '#text': 'The abstract'
+            },
+            'dcterms:abstract': 'The abstract',
+            'dcterms:accessRights': 'Access Rights',
+            'dcterms:alternative': 'Alternative Title',
+            'dcterms:available': 'Date Available',
+            'dcterms:bibliographicCitation': 'Bibliographic Citation',
+            'dcterms:contributor': 'Contributor',
+            'dcterms:description': 'Description',
+            'dcterms:hasPart': 'Has Part',
+            'dcterms:hasVersion': 'Has Version',
+            'dcterms:identifier': 'Identifier',
+            'dcterms:isPartOf': 'Is Part Of',
+            'dcterms:publisher': 'Publisher',
+            'dcterms:references': 'References',
+            'dcterms:rightsHolder': 'Rights Holder',
+            'dcterms:source': 'Source',
+            'dcterms:title': 'Title',
+            'dcterms:type': 'Type'
         }
       }).end({ pretty: true});
     
-    console.log(doc.toString({ pretty: true }));
+    console.log(doc.toString());
 
     /*
     <?xml version="1.0"?>
@@ -56,7 +77,9 @@ export async function saveToEThesis(meta, pdf){
 
     const data = new FormData();
     data.append('action', 'ADD');
-    data.append('file', pdf, { type: 'application/pdf' });
+    data.append('meta', doc, { type: 'application/atomserv+xml' });
+    data.append('file', new Blob(['test payload'], { type: 'text/csv' }));
+    //data.append('file', pdf, { type: 'application/pdf' });
 
     axios.post('http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13', data, config)
     .then(response => console.log(response))
