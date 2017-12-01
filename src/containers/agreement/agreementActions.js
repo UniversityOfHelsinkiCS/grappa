@@ -1,8 +1,13 @@
 import { callController } from '../../util/apiConnection';
 
+export const getAgreements = () => {
+    const prefix = "AGREEMENT_GET_ALL_";
+    const route = "/agreements"
+    return callController(route, prefix)
+}
+
 export const getAgreement = (agreementId) => {
     const prefix = "AGREEMENT_GET_ONE_";
-    const method = "get";
     const route = "/agreements/" + agreementId
     return callController(route, prefix)
 }
