@@ -13,10 +13,11 @@ const auth = require('./middleware/auth');
 
 
 module.exports = (app) => {
+    app.use(auth.shibRegister);
     app.use('/', index);
     app.use('/login', shibboleth)
     app.use('/persons', persons);
-    app.use(auth.authenticate);    
+    app.use(auth.checkAuth);
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/supervisors', supervisors);
