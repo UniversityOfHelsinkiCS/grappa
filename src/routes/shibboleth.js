@@ -4,11 +4,14 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const loginController = require('../controllers/LoginController');
 
-//For now we use post to login.
+// logins with shibboleth are automatic and code is in auth middleware
+
+// this returns logged in user
 router.get('/', jsonParser, (req, res) => {
-    loginController.login(req, res);
+    loginController.showUser(req, res);
 });
 
+//For now we use get to login for dev.
 router.get('/:id', jsonParser, (req, res) => {
     loginController.fakeLogin(req, res);
 });
