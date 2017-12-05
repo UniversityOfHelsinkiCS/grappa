@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export async function saveAttachment(attachmentData) {
     return knex('attachment')

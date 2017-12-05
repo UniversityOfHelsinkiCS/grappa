@@ -1,17 +1,45 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService')
 
 //Used with Shibboleth
-export async function login(req, res) {
-    const headers = req.headers;
-    console.log("HEADERS START\n", headers, "\nHEADERS END");
-    let user = undefined;
-    //This will do the magic to log a person in.
-    //Get person with shibbolethid??
-    if (user) {
-        res.status(200).json(user);
+// export async function login(req, res) {
+//     const headers = req.headers;
+//     console.log("HEADERS START\n", headers, "\nHEADERS END");
+//     let user = undefined;
+//     //This will do the magic to log a person in.
+//     //Get person with shibbolethid??
+//     if (user) {
+//         res.status(200).json(user);
+//     } else {
+//         res.status(500);
+//     }
+// }
+
+//Return user
+export async function showUser(req, res) {
+    if (req.session.user_id) {
+        try {
+            const persons = await personService.getPersonById(req.session.user_id);
+            let user = persons[0]
+
+            const roleToId = await roleService.getRoles();
+            const studyfieldToId = await studyfieldService.getAllStudyfields();
+            const personRoles = await roleService.getPersonRoles(user.personId);
+            const readableRoles = personRoles.map(role => {
+                return {
+                    studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+                    role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+                }
+            })
+            user.roles = readableRoles;
+
+            res.status(200).json(user);
+        } catch (err) {
+            res.status(500).end();
+        }
     } else {
-        res.status(500);
+        res.status(401).end();
     }
 }
 
@@ -22,10 +50,22 @@ export async function fakeLogin(req, res) {
     try {
         const persons = await personService.getPersonByShibbolethId(shibbolethId);
         let user = persons[0]
-        const roles = await roleService.getPersonRoles(user.personId);
-        user.roles = roles;
+
+        req.session.user_id = user.personId;
+
+        const roleToId = await roleService.getRoles();
+        const studyfieldToId = await studyfieldService.getAllStudyfields();
+        const personRoles = await roleService.getPersonRoles(user.personId);
+        const readableRoles = personRoles.map(role => {
+            return {
+                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+            }
+        })
+        user.roles = readableRoles;
+
         res.status(200).json(user);
     } catch (err) {
-        res.status(500);
+        res.status(500).end();
     }
 }

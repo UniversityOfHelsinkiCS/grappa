@@ -2,7 +2,7 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
-const config = require('../../knexfile');
+const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
@@ -10,15 +10,11 @@ const makeApp = () => {
     return app;
 }
 
-test.beforeEach(async t => {
-// probably everything here needs to be done differently
-    const knex = require('knex')(config['test']);
-    // await knex.migrate.rollback().then(() => {
-    //     //console.log("Rollback happened")
-    //     return;
-    // }).catch(err => {
-    //     console.log(err);
-    // })
+test.before(async t => {
+    //TODO: Fix this waiting.
+    //Waiting for migrations to finish (in db/connection.js )
+    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
+    console.log(waitString);
 })
 
 const agreementWithoutId = {
@@ -34,7 +30,6 @@ const agreementWithId = {
     agreementId: 1
 }
 
-// needs work, so skip for now
 test.skip('agreement post & creates id', async t => {
     t.plan(2);
     const res = await request(makeApp())
@@ -70,5 +65,5 @@ test.skip('agreement post & creates id', async t => {
 
 
 test('', t => {
-    t.truthy(1===1);
+    t.truthy(1 === 1);
 })

@@ -2,10 +2,10 @@ const router = require('express').Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
-const studyFieldController = require('../controllers/StudyFieldController');
+const studyfieldController = require('../controllers/StudyfieldController');
 
 router.get('/', (req, res) => {
-    studyFieldController.getAllStudyFields(req, res);
+    studyfieldController.getAllStudyfields(req, res);
 });
 
 module.exports = router;

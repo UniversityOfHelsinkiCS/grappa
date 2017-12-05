@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import knex from '../../connection';
+import knex from '../../src/db/connection';
 
 const thesisService = require('../../src/services/ThesisService');
 const mockTheses = require('../../src/mockdata/MockTheses');
@@ -27,8 +27,8 @@ test.before(async t => {
         table.foreign('thesisId').references('thesis.thesisId');
         table.integer('responsibleSupervisorId').unsigned();
         table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
-        table.integer('studyFieldId').unsigned();
-        table.foreign('studyFieldId').references('studyfield.studyfieldId');
+        table.integer('studyfieldId').unsigned();
+        table.foreign('studyfieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
         table.integer('studentGradeGoal');
         table.string('studentWorkTime');

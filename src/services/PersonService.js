@@ -1,15 +1,29 @@
 require('babel-polyfill');
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
 export async function getAllPersons() {
     return await knex.select().from('person');
 }
 
+export async function getLoggedPerson(req) {
+    let user;
+    if (req.session.user_id) {
+        const userId = req.session.user_id;
+        user = getPersonById(userId);
+    } else if (req.headers['uid']) {
+        const shibbolethId = req.headers['uid'];
+        user = getPersonByShibbolethId(shibbolethId);
+    }
+    return user;
+}
+
+
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id)
         .then(person => person)
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export const getPersonByShibbolethId = (shibbolethId) => {
@@ -22,7 +36,8 @@ export async function savePerson(personData) {
         .insert(personData)
         .then(personId => personId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export async function savePersonRole(personRoleData) {
@@ -31,7 +46,8 @@ export async function savePersonRole(personRoleData) {
         .insert(personRoleData)
         .then(personRoleId => personRoleId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export async function updatePerson(personData) {
@@ -40,16 +56,25 @@ export async function updatePerson(personData) {
         .where('personId', '=', personData.personId)
         .update(personData)
         .then(personId => personId)
-        .catch(error =>  {
-            throw error});
+        .catch(error => {
+            throw error
+        });
 }
 
-export const getAgreementPersonsByAgreementId = (id) => {
+export const getAgreementPersonsByAgreementId = (agreementId) => {
     //TODO: figure out why this returns duplicates without distinct
     return knex.distinct('person.firstname', 'person.lastname', 'personWithRole.personRoleId').select().from('agreementPerson')
         .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
         .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
-        .where('agreementId', id)
+        .where('agreementId', agreementId)
+        .then(persons => {
+            return persons;
+        });
+}
+
+export const getAgreementPersonsByPersonRoleId = (personRoleId) => {
+    return knex.select().from('agreementPerson')
+        .where('personRoleId', personRoleId)
         .then(persons => {
             return persons;
         });
