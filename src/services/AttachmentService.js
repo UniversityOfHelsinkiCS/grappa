@@ -2,6 +2,7 @@ require('babel-polyfill');
 const knex = require('../db/connection');
 
 export async function saveAttachment(attachmentData) {
+    console.log("service")
     return knex('attachment')
     .returning('attachmentId')
     .insert(attachmentData)

@@ -7,18 +7,25 @@ const app = express();
 const fs = require('fs');
 
 export async function saveAttachment(req, res) {
+    console.log("controller")
+    console.log("req.params", req.params);
     try {
         let busboy = new Busboy({ headers: req.headers });
+        console.log(1)
         busboy.on('file', async function (fieldname, file, filename, encoding, mimetype) {
+            console.log("busboy")
             const attachmentData = {
                 //agreementId: req.params.id, won't work atm since req.params doesn't have anything
+                
                 agreementId: 1,
                 savedOnDisk: false,
                 filename: filename,
                 type: mimetype
             };
+            console.log(2)
             const attachmentId = await attachmentService.saveAttachment(attachmentData);
             const fileResponse = await fileService.savePdfFile(file, attachmentId);
+            console.log("fileres", fileResponse)
             if (fileResponse) {
                 let successData = {
                     attachmentId: attachmentId,
