@@ -40,9 +40,9 @@ export default class Agreement extends Component {
         let newForm = oldForm;
         if (event.target) {  //input field
             newForm[event.target.name] = event.target.value;
-        } else { //a file
-            newForm.attachments.push(event);
-        }
+        } //else { //a file
+            //newForm.attachments.push(event);
+        //}
         this.setState({ form: newForm });
     }
 
@@ -70,6 +70,8 @@ export default class Agreement extends Component {
     sendForm = (event) => {
         event.preventDefault();
         this.props.saveAgreement(this.state.form);
+        console.log("this.state.form", this.state.form);
+        this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
     render() {

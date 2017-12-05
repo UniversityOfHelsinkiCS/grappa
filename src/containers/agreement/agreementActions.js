@@ -19,12 +19,20 @@ export const saveAgreement = (agreement) => {
     return callController(route, prefix, agreement, method)
 }
 
-export const saveAttachment = (attachments, agreementId) => {
+export const saveAttachment = (attachment, agreement) => {
+    const prefix = "ATTACHMENT_SAVE_ONE_";
+    const method = "post";
+    const route = "/attachments" //+ attachment[0];
+    console.log("actions, attachment", attachment)
+    return callController(route, prefix, attachment, method);
+}
+
+/*export const saveAttachment = (attachments, agreementId) => {
     const prefix = "ATTACHMENT_SAVE_ONE_";
     const method = "post";
     const route = "/attachments/" + agreementId;
     return callController(route, prefix, attachments, method);
-}
+}*/
 
 export const deleteAgreement = (agreementId) => {
     const prefix = "AGREEMENT_DELETE_ONE_";

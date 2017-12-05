@@ -75,7 +75,10 @@ export class AgreementPage extends Component {
 
     handleSaveAgreement = (agreement) => {
         this.props.saveAgreement(agreement);
-        this.props.saveAttachment(agreement.attachments);
+    }
+
+    handleSaveAttachment = (attachment) => {
+        this.props.saveAttachment(attachment);        
     }
 
     render() {
@@ -90,6 +93,7 @@ export class AgreementPage extends Component {
                         studyfields={this.props.studyfields}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
+                        saveAttachment={this.handleSaveAttachment}
                     />
                 </div>
             );
