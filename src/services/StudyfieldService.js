@@ -1,6 +1,6 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
 
-export const getAllStudyFields = () => {
+export const getAllStudyfields = () => {
     return knex.select('studyfieldId', 'name').from('studyfield')
         .then(studyfield => studyfield);
 }

@@ -12,7 +12,6 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Amanda',
                   lastname: 'Admin',
                   isRetired: false,
-                  studentNumber: ('012345678'),
                   address: ('Leppäsuonkatu'),
                   phone: '050 1234567',
                   major: 'Käpistely'
@@ -25,7 +24,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Harri',
                   lastname: 'CS-Hallinto',
                   isRetired: false,
-                  studentNumber: ('012345678'),
+                  studentNumber: ('0123845679'),
                   address: ('Leppäsuonkatu'),
                   phone: '050 1234567',
                   major: 'Matte'
@@ -38,7 +37,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Petra',
                   lastname: 'CS-Printtaaja',
                   isRetired: false,
-                  studentNumber: ('012345678'),
+                  studentNumber: ('0123456787'),
                   address: ('Väinö Auerin katu'),
                   phone: '050 1234567',
                   major: 'Kemma'
@@ -51,7 +50,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Victoria',
                   lastname: 'CS-Vastuuproffa',
                   isRetired: true,
-                  studentNumber: ('012345678'),
+                  studentNumber: ('0128345676'),
                   address: ('Mannerheimintie'),
                   phone: '050 1234567',
                   major: 'geologiaa'
@@ -64,7 +63,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Thomas',
                   lastname: 'CS-Tarkastaja',
                   isRetired: false,
-                  studentNumber: ('87654321'),
+                  studentNumber: ('876548321'),
                   address: ('Intiankatu'),
                   phone: '050 1234567',
                   major: 'mathematics'
@@ -77,7 +76,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Olli',
                   lastname: 'CS-Ohjaaja',
                   isRetired: false,
-                  studentNumber: ('87654321'),
+                  studentNumber: ('8768325'),
                   address: ('Intiankatu'),
                   phone: '050 1234567',
                   major: 'mathematics'
@@ -90,7 +89,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Olivia',
                   lastname: 'CS-Opiskelija',
                   isRetired: false,
-                  studentNumber: ('87654321'),
+                  studentNumber: ('876544'),
                   address: ('Intiankatu'),
                   phone: '050 1234567',
                   major: 'mathematics'
@@ -103,7 +102,7 @@ exports.seed = function (knex, Promise) {
                   firstname: 'Venla',
                   lastname: 'Math-Vastuuproffa',
                   isRetired: false,
-                  studentNumber: ('87654321'),
+                  studentNumber: ('654323'),
                   address: ('Intiankatu'),
                   phone: '050 1234567',
                   major: 'mathematics'
@@ -116,7 +115,7 @@ exports.seed = function (knex, Promise) {
                 firstname: 'Anna',
                 lastname: 'Puu',
                 isRetired: false,
-                studentNumber: ('87654321'),
+                studentNumber: ('854322'),
                 address: ('Intiankatu'),
                 phone: '050 1234567',
                 major: 'mathematics'
@@ -129,7 +128,7 @@ exports.seed = function (knex, Promise) {
                 firstname: 'Tarja',
                 lastname: 'Math+CS-Opiskelija',
                 isRetired: false,
-                studentNumber: ('87654321'),
+                studentNumber: ('8763219'),
                 address: ('Intiankatu'),
                 phone: '050 1234567',
                 major: 'mathematics'
@@ -142,7 +141,7 @@ exports.seed = function (knex, Promise) {
                 firstname: 'Erkki',
                 lastname: 'Erikoistapaus',
                 isRetired: false,
-                studentNumber: ('87654321'),
+                studentNumber: ('8765419'),
                 address: ('Intiankatu'),
                 phone: '050 1234567',
                 major: 'mathematics'

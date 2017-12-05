@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 //import knex from 'knex';
-const knex = require('../../connection');
+const knex = require('../../src/db/connection');
 
 const supervisorService = require('../../src/services/SupervisorService');
 const mockPersons = require('../../src/mockdata/MockPersons');
@@ -100,10 +100,6 @@ test.serial('saveAgreementPerson returns agreementId', async t => {
     t.truthy(returnValue, mockAgreementPerson.agreementId);
 });
 
-test.serial('getSupervisorRoleId returns correct ID', async t => {
-    let returnValue = await supervisorService.getSupervisorRoleId();
-    t.deepEqual(returnValue, supervisorRoleId);
-});
 
 test.serial('updateAgreementPerson returns correct ID', async t => {
     const mockAgreementPerson = {

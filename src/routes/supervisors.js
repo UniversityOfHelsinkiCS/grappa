@@ -9,16 +9,16 @@ router.get('/', (req, res) => {
     supervisorController.getAllSupervisors(req, res);
 });
 
-router.get('/agreementPersons', (req, res) => {
-    supervisorController.getAgreementPersons(req, res);
-});
-
-router.post('/save', jsonParser, (req, res) => {
+router.post('/', jsonParser, (req, res) => {
     supervisorController.saveSupervisor(req, res);
 });
 
-router.put('/update', jsonParser, (req, res) => {
+router.put('/:id', jsonParser, (req, res) => {
     supervisorController.updateSupervisor(req, res);
+});
+
+router.get('/agreementPersons', (req, res) => {
+    supervisorController.getAgreementPersons(req, res);
 });
 
 router.put('/review', jsonParser, (req, res) => {

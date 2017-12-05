@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-const knex = require('../../connection');
+const knex = require('../../src/db/connection');
 
 const agreementService = require('../../src/services/AgreementService');
 const mockAgreements = require('../../src/mockdata/MockAgreements');
@@ -15,8 +15,8 @@ test.before(async t => {
         table.foreign('thesisId').references('thesis.thesisId');
         table.integer('responsibleSupervisorId').unsigned();
         table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
-        table.integer('studyFieldId').unsigned();
-        table.foreign('studyFieldId').references('studyfield.studyfieldId');
+        table.integer('studyfieldId').unsigned();
+        table.foreign('studyfieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
         table.integer('studentGradeGoal');
         table.string('studentWorkTime');
@@ -75,7 +75,7 @@ test.serial('updateAgreement', async t => {
         agreementId: 1,
         authorId: 1,
         thesisId: 1,
-        studyFieldId: 1,
+        studyfieldId: 1,
         other: 'this agreement is updated'
     };
     let response = await agreementService.updateAgreement(updatedAgreement);
@@ -87,7 +87,7 @@ test.serial('saveNewAgreement call returns agreementId = 4', async t => {
         authorId: 1,
         thesisId: 1,
         responsibleSupervisorId: 1,
-        studyFieldId: 1,
+        studyfieldId: 1,
         fake: 0
     };
 
