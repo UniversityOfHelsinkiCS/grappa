@@ -1,41 +1,28 @@
-import { callApi } from '../../util/apiConnection';
+import { callController } from '../../util/apiConnection';
 
 export const getCouncilmeetings = () => {
-    const prefix = "GET_ALL_";
-    const method = "get";
-    return callController(prefix, method);
+    const prefix = "COUNCILMEETING_GET_ALL_";
+    const route = "/councilmeetings";
+    return callController(route, prefix);
 }
 
 export const saveCouncilmeeting = (councilmeeting) => {
-    const prefix = "SAVE_ONE_";
+    const prefix = "COUNCILMEETING_SAVE_ONE_";
     const method = "post";
-    return callController(prefix, method, councilmeeting);
+    const route = "/councilmeetings";
+    return callController(route, prefix, councilmeeting, method);
 }
 
 export const updateCouncilmeeting = (councilmeeting) => {
-    const prefix = "UPDATE_ONE_";
+    const prefix = "COUNCILMEETING_UPDATE_ONE_";
     const method = "put";
     const route = "/councilmeetings/" + councilmeeting.councilmeetingId;
-    return callController(prefix, method, councilmeeting, route);
+    return callController(route, prefix, councilmeeting, method);
 }
 
 export const deleteCouncilmeeting = (councilmeetingId) => {
-    const prefix = "DELETE_ONE_";
+    const prefix = "COUNCILMEETING_DELETE_ONE_";
     const method = "delete";
     const route = "/councilmeetings/" + councilmeetingId;    
-    return callController(prefix, method, councilmeetingId, route);
-}
-
-const action = (suffix, response) => {
-    return {
-        type: "COUNCILMEETING_" + suffix,
-        response,
-    }
-}
-
-const callController = (prefix, method, data, route = '/councilmeetings') => (dispatch) => {
-    dispatch(action(prefix + "ATTEMPT"));
-    callApi(route, method, data)
-        .then(res => dispatch(action(prefix + "SUCCESS", res.data)))
-        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+    return callController(route, prefix, councilmeetingId, method);
 }

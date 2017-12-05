@@ -1,55 +1,41 @@
-import { callApi } from '../../util/apiConnection';
+import { callController } from '../../util/apiConnection';
+
+export const getAgreements = () => {
+    const prefix = "AGREEMENT_GET_ALL_";
+    const route = "/agreements"
+    return callController(route, prefix)
+}
 
 export const getAgreement = (agreementId) => {
-    const prefix = "GET_ONE_";
-    const method = "get";
+    const prefix = "AGREEMENT_GET_ONE_";
     const route = "/agreements/" + agreementId
-    return callController(prefix, method, agreementId, route);
+    return callController(route, prefix)
 }
 
 export const saveAgreement = (agreement) => {
-    const prefix = "SAVE_ONE_";
+    const prefix = "AGREEMENT_SAVE_ONE_";
     const method = "post";
-    return callController(prefix,method,agreement);
+    const route = '/agreements'
+    return callController(route, prefix, agreement, method)
 }
 
-export const saveAttachment = (attachments) => {
-    const prefix = "SAVE_ONE_";
+export const saveAttachment = (attachments, agreementId) => {
+    const prefix = "ATTACHMENT_SAVE_ONE_";
     const method = "post";
-    return callAttachmentController(prefix,method,attachments);
+    const route = "/attachments/" + agreementId;
+    return callController(route, prefix, attachments, method);
 }
 
-export const deleteAgreement = (agreement) => {
-    const prefix = "DELETE_ONE_";
+export const deleteAgreement = (agreementId) => {
+    const prefix = "AGREEMENT_DELETE_ONE_";
     const method = "delete";
-    return callController(prefix, method, agreement);
+    const route = '/agreements/' + agreementId;
+    return callController(route, prefix, agreementId, method)
 }
 
 export const updateAgreement = (agreement) => {
-    const prefix = "UPDATE_ONE_";
+    const prefix = "AGREEMENT_UPDATE_ONE_";
     const method = "put";
     const route = "/agreements/" + agreement.agreementId
-    return callController(prefix,method, agreement, route)
-}
-
-const action = (suffix, response) => {
-    return {
-        type: "AGREEMENT_" + suffix,
-        response,
-    }
-}
-
-//shpuld res be res.data and err err.response?
-const callAttachmentController = (prefix, method, data, route = '/attachments/1') => (dispatch) => {
-    dispatch({type: "ATTACHMENT_SAVE_ONE_ATTEMPT"});
-    callApi(route, method, data)
-        .then(res => dispatch({type: "ATTACHMENT_SAVE_ONE_SUCCESS", res}))
-        .catch(err => dispatch({type: "ATTACHMENT_SAVE_ONE_FAILURE", err}));
-}
-
-const callController = (prefix, method, data, route = '/agreements') => (dispatch) => {
-    dispatch(action(prefix + "ATTEMPT"));
-    callApi(route, method, data)
-        .then(res => dispatch(action(prefix + "SUCCESS", res.data)))
-        .catch(err => dispatch(action(prefix + "FAILURE", err.response)));
+    return callController(route, prefix, agreement, method)
 }

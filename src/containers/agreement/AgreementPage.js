@@ -5,7 +5,7 @@ import Agreement from '../../components/agreement/Agreement';
 
 //redux
 import { connect } from "react-redux";
-import { getAgreement, saveAgreement, updateAgreement, saveAttachment } from "./agreementActions";
+import { getAgreements, saveAgreement, updateAgreement, saveAttachment } from "./agreementActions";
 import { getSupervisors } from "../supervisor/supervisorActions";
 import { getStudyfields } from "../studyfield/studyfieldActions";
 
@@ -22,19 +22,18 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-        if (this.props.user)
-            this.props.getAgreement(this.props.user.id);
+        this.props.getAgreements();
         this.props.getSupervisors();
         this.props.getStudyfields();
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps && this.props !== newProps && newProps.agreement) {
-            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.id)
+        if (newProps && this.props !== newProps && newProps.agreements) {
+            const agreement = newProps.agreements.find(agreement => agreement.personId === this.props.user.personId);
             if (agreement) {
                 this.setState(
                     {
-                        agreement : agreement,
+                        agreement: agreement,
                         originalAgreement: Object.assign({}, agreement)
                     }
                 );
@@ -85,7 +84,13 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
-                    <Agreement agreement={this.state.agreement} supervisors={this.props.supervisors} studyfields={this.props.studyfields} saveAgreement={this.handleSaveAgreement} />
+                    <Agreement
+                        agreement={this.state.agreement}
+                        supervisors={this.props.supervisors}
+                        studyfields={this.props.studyfields}
+                        user={this.props.user}
+                        saveAgreement={this.handleSaveAgreement}
+                    />
                 </div>
             );
         } else {
@@ -102,7 +107,7 @@ export class AgreementPage extends Component {
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
                     <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
-                    {this.state.agreement? <AgreementView agreementData={this.state.agreement} /> : undefined}
+                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} /> : undefined}
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
@@ -114,8 +119,8 @@ export class AgreementPage extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAgreement(data) {
-        dispatch(getAgreement(data));
+    getAgreements(data) {
+        dispatch(getAgreements(data));
     },
     saveAgreement(data) {
         dispatch(saveAgreement(data));
@@ -136,7 +141,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        agreement: state.agreement,
+        agreements: state.agreement,
         supervisors: state.supervisors,
         studyfields: state.studyfield,
         user: state.user

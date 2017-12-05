@@ -3,42 +3,26 @@ import React, { Component } from "react";
 import Dropzone from "react-dropzone";
 
 export default class AttachmentAdder extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            attachments: [],
-        }
-    }
 
     onDrop = (files) => {
         const droppedFile = files[0];
-        this.addAttachment(droppedFile);
-        this.props.sendChange(droppedFile);
+        this.props.addAttachment(droppedFile);
     }
 
-    addAttachment = (attachment) => {
-        const newAttachmentsList = this.state.attachments;
-        newAttachmentsList.push(attachment);
-        this.setState({ attachments: newAttachmentsList });
-    }
-
-    removeAttachment = (attachment) => {
-        const newAttachmentsList = this.state.attachments;
-        const index =  newAttachmentsList.indexOf(attachment);
-        newAttachmentsList.splice(index, 1);
-        this.setState({attachments: newAttachmentsList});
+    removeAttachment = () => (attachment) => {
+        this.props.removeAttachment(attachment);
     }
 
     getFileList = () => {
         return (
             <div className="ui form">
                 {this.getFileNumberLabel()}
-                {this.state.attachments.map(attachment =>
+                {this.props.attachments.map((attachment, index) =>
 
-                    <div>
-                        <button 
+                    <div key={index}>
+                        <button
                             className="negative ui icon button "
-                            onClick= { () =>this.removeAttachment(attachment)}>
+                            onClick={this.removeAttachment(attachment)}>
                             <i className="remove icon"></i>
                         </button>
                         &nbsp;
@@ -61,7 +45,7 @@ export default class AttachmentAdder extends Component {
 
 
     getFileNumberLabel = () => {
-        const attachmentsUploaded = this.state.attachments.length;
+        const attachmentsUploaded = this.props.attachments.length;
         if (attachmentsUploaded === 0) {
             return <h2>No attachments uploaded</h2>;
         }
@@ -75,19 +59,17 @@ export default class AttachmentAdder extends Component {
 
     renderDropzone = () => {
         if (this.canAttachmentBeUploaded()) {
-            return (<div className="field" style={{ borderStyle: 'dashed' }}>
-                    <Dropzone 
-                        className="field upload-box"
-                        onDrop={this.onDrop}
-                        multiple={false}
-                    >
-                    <p className="upload-p">
-                    Click to navigate to the file or drop them from your file system.
-                    </p>
+            return (
+                <div className="field" style={{ borderStyle: 'dashed' }}>
+                    <Dropzone className="field upload-box" onDrop={this.onDrop} multiple={false}>
+                        <p className="upload-p">
+                            Click to navigate to the file or drop them from your file system.
+                        </p>
                     </Dropzone>
-        </div>);
+                </div>
+            );
         }
-        return <br/>;
+        return <br />;
 
     }
 
@@ -96,10 +78,10 @@ export default class AttachmentAdder extends Component {
     }
 
     thereIsRoomForAttachment = () => {
-        return this.state.attachments.length < this.props.limit;
+        return this.props.attachments.length < this.props.limit;
     }
 
-    canAttachmentBeUploaded = ()  => {
+    canAttachmentBeUploaded = () => {
         return this.thereIsNoLimit() || this.thereIsRoomForAttachment();
     }
 
