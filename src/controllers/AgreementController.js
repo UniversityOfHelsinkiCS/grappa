@@ -77,10 +77,7 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         try {
-            const shibboId = req.headers.shibbolointiid;
-            const persons = await personService.getPersonByShibbolethId(shibboId);
-            const person = persons[0];
-            data.personId = person.personId;
+            data.personId = req.session.user_id;
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
