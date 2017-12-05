@@ -3,11 +3,17 @@ import xml from 'xmlbuilder'
 import creds from './ethesis_credentials'
 import FormData from 'form-data'
 
+export function getExamplePDF(){
+    const fs = require('fs');
+    return fs.readFileSync('./data/file/example_thesis.pdf');
+}
+
 export async function saveToEThesis(meta, pdf){
 
-    const config = { headers: { 'auth': creds } };
-
-    var doc = xml.create({
+    const auth_config = { 'auth': creds };
+    const config = {headers: {'X-Requested-With': 'XMLHttpRequest'}};
+    
+    var metaData = xml.create({
         entry: {
             '@xmlns': 'http://www.w3.org/2005/Atom',
             '@xmlns:sword': 'http://purl.org/net/sword/',
@@ -41,19 +47,37 @@ export async function saveToEThesis(meta, pdf){
         }
       }).end({ pretty: true});
     
-    console.log(doc.toString());
+    console.log(metaData.toString());
     console.log('--- --- ---')
-    console.log(new Buffer(['test payload'], { type: 'text/csv' }))
-    console.log('--- --- ---')
-
+    
     const data = new FormData();
-    data.append('action', 'ADD');
-    data.append('meta', doc, { type: 'application/atomserv+xml' });
-    data.append('file', new Blob(['test payload'], { type: 'text/csv' }));
+    data.append('meta', metaData, { type: 'application/atomserv+xml' });
+    console.log(pdf);
     //data.append('file', pdf, { type: 'application/pdf' });
 
-    axios.post('http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13', data, config)
-    .then(response => console.log(response))
-    .catch(errors => console.log(errors));
+    axios.post('http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13', data, auth_config, config)
+    .then(
+        (response) => {
+            console.log(response)
+        }
+    ).catch(
+        (errors) => {
+            console.log('--- --- ---');
+            console.log('--- --- REQUEST HEADERS --- ---');
+            console.log(errors.request._header);
+            console.log('--- --- FULL REQUEST --- ---');
+            console.log(errors.request);
+            console.log('--- --- RESPONSE STATUS --- ---');
+            console.log(errors.response.status);
+            console.log('--- --- RESPONSE TEXT --- ---');
+            console.log(errors.response.statusText);
+            console.log('--- --- RESPONSE MESSAGE --- ---');
+            console.log(errors.response.message);
+            console.log('--- --- RESPONSE HEADERS --- ---');
+            console.log(errors.response.headers);
+            console.log('--- --- RESPONSE CONFIG --- ---');
+            console.log(errors.response.config);
+        }
+    );
 
 }

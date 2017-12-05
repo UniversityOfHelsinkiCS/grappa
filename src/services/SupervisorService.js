@@ -1,9 +1,10 @@
 require('babel-polyfill');
 const knex = require('../db/connection');
+const roleService = require('./RoleService');
 
 //people whose role is supervisor
 export async function getAllSupervisors() {
-    const supervisorRoleId = await getSupervisorRoleId();
+    const supervisorRoleId = await roleService.getRoleId("supervisor");
     const supervisors = await knex.table('person')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId);
@@ -12,15 +13,13 @@ export async function getAllSupervisors() {
 
 //people whose role is supervisor in a studyfield
 export async function getAllSupervisorsByStudyfield(studyfieldId) {
-    const supervisorRoleId = await getSupervisorRoleId();
+    const supervisorRoleId = await roleService.getRoleId("supervisor");
     const supervisors = await knex.table('person')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId)
         .andWhere('studyfieldId', studyfieldId);
     return supervisors;
 }
-
-
 
 //people who are supervising theses at the moment
 export async function getAllAgreementPersons() {

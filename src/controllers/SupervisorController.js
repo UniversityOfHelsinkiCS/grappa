@@ -57,6 +57,9 @@ export async function saveSupervisor(req, res) {
             res.status(500).json({ text: "error occurred", error: err });
         }
     }
+    else {
+        res.status(500).json({ text: "person already has id"});
+    }
 }
 
 export async function reviewSupervisor(req, res) {
