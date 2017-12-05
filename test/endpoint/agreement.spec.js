@@ -18,16 +18,33 @@ test.before(async t => {
 })
 
 const agreementWithoutId = {
-    personId: 10,
-    firstname: 'Testi',
-    lastname: 'Testinen',
+    authorId: 1,
+    thesisId: 1,
+    personId: 1,
+    responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "tsiigaillaan",
+    intermediateGoal: "oispa valmistunut",
+    meetingAgreement: "just just",
+    other: "eihän tässä muuta"
 }
 
 const agreementWithId = {
-    personId: 10,
-    firstname: 'Testi',
-    lastname: 'Testinen',
-    agreementId: 1
+    agreementId: 1,
+    authorId: 1,
+    thesisId: 1,
+    responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "tsiigaillaan",
+    intermediateGoal: "oispa valmistunut",
+    meetingAgreement: "just just",
+    other: "eihän tässä muuta"
 }
 
 test.skip('agreement post & creates id', async t => {

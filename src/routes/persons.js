@@ -4,6 +4,10 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const personController = require('../controllers/PersonController');
 
+router.post('/', jsonParser, (req, res) => {
+    personController.addPerson(req, res);
+});
+
 router.put('/', jsonParser, (req, res) => {
     personController.updatePerson(req, res);
 });
