@@ -77,7 +77,7 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         try {
-            const shibboId = req.headers.grappashibbolethid;
+            const shibboId = req.headers.shibbolointiid;
             const persons = await personService.getPersonByShibbolethId(shibboId);
             const person = persons[0];
             data.personId = person.personId;
