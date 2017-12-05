@@ -9,8 +9,8 @@ const AttachmentController = require('./AttachmentController');
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
-    const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-    // res.status(200).json({ agreement: agreement, persons: agreementPersons });
+    //const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
+    //res.status(200).json({ agreement: agreement, persons: agreementPersons });
     res.status(200).json(agreement);
 }
 
@@ -36,9 +36,9 @@ export async function getAllAgreements(req, res) {
                 const agreement = await agreementService.getAgreementById(agreementId);
                 return agreement;
             }))
-            return agreements;
+            return agreements[0];
         }))
-        res.status(200).json(agreements)
+        res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -77,16 +77,16 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         try {
-            const shibboId = req.headers.grappashibbolethid;
-            const persons = await personService.getPersonByShibbolethId(shibboId);  
+            const shibboId = req.headers.shibbolointiid;
+            const persons = await personService.getPersonByShibbolethId(shibboId);
             const person = persons[0];
-            data.personId = person.personId; 
+            data.personId = person.personId;
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
             const agreementSaveResponse = await saveAgreementToService(agreementData);
             agreementData.agreementId = agreementSaveResponse;
-            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
+            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined
             //AttachmentController.saveAttachment(req, res);
             res.status(200).json(agreementData);
         }

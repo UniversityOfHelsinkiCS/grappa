@@ -20,7 +20,14 @@ export const getPreviousAgreementById = (id) => {
         });
 }
 
-export const getAllAgreements = (personId) => {
+export const getAllAgreements = () => {
+    return knex.select().from('agreement')
+        .then(agreements => {
+            return agreements;
+        });
+}
+
+export const getAgreementsByAuthor = (personId) => {
     return knex.select().from('agreement')
         .where('authorId', personId)
         .then(agreements => {
