@@ -22,10 +22,8 @@ export async function getPreviousAgreementById(req, res) {
 //TODO: refactor
 export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
-    const shibboId = req.headers.grappashibbolethid;
     try {
-        const persons = await personService.getPersonByShibbolethId(shibboId);
-        const personId = persons[0].personId;
+        const personId = req.session.user_id
         const roles = await roleService.getPersonRoles(personId);
         let agreements = [];
         agreements = await Promise.all(roles.map(async role => {
@@ -77,17 +75,13 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     if (agreementHasNoId(data)) {
         try {
-            const shibboId = req.headers.grappashibbolethid;
-            const persons = await personService.getPersonByShibbolethId(shibboId);
-            const person = persons[0];
-            data.personId = person.personId;
+            data.personId = req.session.user_id;
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
             const agreementSaveResponse = await saveAgreementToService(agreementData);
             agreementData.agreementId = agreementSaveResponse;
             //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined
-            //AttachmentController.saveAttachment(req, res);
             res.status(200).json(agreementData);
         }
         catch (error) {

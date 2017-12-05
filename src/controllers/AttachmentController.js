@@ -9,9 +9,10 @@ const fs = require('fs');
 export async function saveAttachment(req, res) {
     try {
         let busboy = new Busboy({ headers: req.headers });
+        //atm never gets here, don't know why. seems to lost information what front end have sent
         busboy.on('file', async function (fieldname, file, filename, encoding, mimetype) {
             const attachmentData = {
-                //agreementId: req.params.id, won't work atm since req.params doesn't have anything
+                //agreementId: req.params.id, won't work atm since req.params doesn't have anything                
                 agreementId: 1,
                 savedOnDisk: false,
                 filename: filename,
@@ -29,11 +30,11 @@ export async function saveAttachment(req, res) {
                 res.status(500).json({ text: "could not save file" });
             }
         });
-        console.log("attachmentcontroller says 200");
+        console.log("attachmentcontroller says 200, saved");
         res.status(200).json({ text: "attachment save successful" });
         return req.pipe(busboy);
     } catch (error) {
-        console.log("attachment controller says 500 :(")
+        console.log("attachment controller says 500, didn't save attachment :(")
         res.status(500).json({ text: "error occured", error: error });
     }
 }
