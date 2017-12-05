@@ -100,10 +100,6 @@ test.serial('saveAgreementPerson returns agreementId', async t => {
     t.truthy(returnValue, mockAgreementPerson.agreementId);
 });
 
-test.serial('getSupervisorRoleId returns correct ID', async t => {
-    let returnValue = await supervisorService.getSupervisorRoleId();
-    t.deepEqual(returnValue, supervisorRoleId);
-});
 
 test.serial('updateAgreementPerson returns correct ID', async t => {
     const mockAgreementPerson = {
