@@ -2,7 +2,8 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const supervisors = require('../../src/routes/supervisors');
-const config = require('../../knexfile');
+const roleService = require('../../src/services/RoleService');
+const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
@@ -10,7 +11,7 @@ const makeApp = () => {
     return app;
 }
 
-test.beforeEach(async t => {
+test.before(async t => {
     const knex = require('knex')(config['test']);
     await knex.migrate.rollback().then(() => {
         //console.log("Rollback happened")
@@ -18,6 +19,7 @@ test.beforeEach(async t => {
     }).catch(err => {
         console.log(err);
     })
+    roleService.saveRole("supervisor");
 })
 
 const supervisorWithoutId = {
@@ -28,12 +30,11 @@ const supervisorWithoutId = {
     title: "",
     shibbolethId: "",
 
-    /*agreementId: 1,
+  /*  agreementId: 1,
     approvalDate: null,
     approved: 1,
     approverId: 2,
     created_at: null,
-    email: "",
     isRetired: 0,
     major: "",
     personId: 1,
@@ -43,8 +44,8 @@ const supervisorWithoutId = {
     statement: "",
     studentNumber: "",
     studyfieldId: 1,
-    updated_at: null
-    */
+    updated_at: null*/
+    
 }
 
 const supervisorWithId = {
@@ -56,13 +57,11 @@ const supervisorWithId = {
 test('supervisor post & creates id', async t => {
     t.plan(2);
     const res = await request(makeApp())
-        .post('/supervisors/save')
+        .post('/supervisors/')
         .send(supervisorWithoutId);
     t.is(res.status, 200);
     const body = res.body;
-    const supervisor = supervisorWithId;
-    console.log(JSON.stringify(body), JSON.stringify(supervisor));
-    t.is(JSON.stringify(body), JSON.stringify(supervisor));
+    t.is(body.personId, 1);
 })
 
 test.skip('councilmeeting get all', async t => {

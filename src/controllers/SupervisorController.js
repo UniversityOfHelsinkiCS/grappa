@@ -1,6 +1,7 @@
 require('babel-polyfill');
 const supervisorService = require('../services/SupervisorService');
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
 const express = require('express');
 const app = express();
 
@@ -26,7 +27,7 @@ export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
     if (supervisorData.personId == null || supervisorData.personId == '') { //save new
         try {
-            const supervisorRoleId = await supervisorService.getSupervisorRoleId();
+            const supervisorRoleId = await roleService.getRoleId("supervisor");
             const personData = {
                 firstname: supervisorData.firstname,
                 lastname: supervisorData.lastname,
@@ -50,7 +51,8 @@ export async function saveSupervisor(req, res) {
                 statement: ''
             };
             const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
-            res.status(200).json(supervisorData);
+            personData.personId = personId;
+            res.status(200).json(personData);
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
         }

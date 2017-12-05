@@ -20,10 +20,7 @@ export async function getAllSupervisorsByStudyfield(studyfieldId) {
     return supervisors;
 }
 
-export async function getSupervisorRoleId() {
-    const roleData = await knex.select().from('role').where('name', 'supervisor');
-    return roleData[0].roleId;
-}
+
 
 //people who are supervising theses at the moment
 export async function getAllAgreementPersons() {

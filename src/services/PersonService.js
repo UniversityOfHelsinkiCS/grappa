@@ -9,18 +9,10 @@ export async function getLoggedPerson(req) {
     let user;
     if (req.session.user_id) {
         const userId = req.session.user_id;
-        user = knex.select().from('person').where('personId', id)
-            .then(person => person)
-            .catch(error => {
-                throw error
-            });
+        user = getPersonById(userId);
     } else if (req.headers['uid']) {
         const shibbolethId = req.headers['uid'];
-        user = knex.select().from('person').where('shibbolethId', shibbolethId)
-            .then(person => person)
-            .catch(error => {
-                throw error;
-            });
+        user = getPersonByShibbolethId(shibbolethId);
     }
     return user;
 }
