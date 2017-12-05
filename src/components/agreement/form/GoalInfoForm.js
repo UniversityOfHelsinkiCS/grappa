@@ -66,7 +66,7 @@ export default class GoalInfoForm extends Component {
                 <div>
                     <select className="ui dropdown" onChange={this.props.handleChange} name="studentGradeGoal" >
                         {this.grades(this.state.old).map((grade, index) => {
-                            return <option key={index} value={grade}>{grade.text}</option>;
+                            return <option key={index} value={grade.value}>{grade.text}</option>;
                         })}
                     </select>
                 </div>

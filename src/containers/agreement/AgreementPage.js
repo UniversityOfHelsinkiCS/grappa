@@ -28,8 +28,8 @@ export class AgreementPage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps && this.props !== newProps && newProps.agreement) {
-            const agreement = newProps.agreement.find(agreement => agreement.personId === this.props.user.personId);
+        if (newProps && this.props !== newProps && newProps.agreements) {
+            const agreement = newProps.agreements.find(agreement => agreement.personId === this.props.user.personId);
             if (agreement) {
                 this.setState(
                     {

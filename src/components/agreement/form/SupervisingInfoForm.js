@@ -40,6 +40,7 @@ export default class SupervisingInfoForm extends Component {
                  }
             );
             this.props.resetSupervisors();
+            this.props.handleChange(event);
         }
     }
 
@@ -48,7 +49,7 @@ export default class SupervisingInfoForm extends Component {
             <div>
                 <b>Valitse ensin gradun aine</b>
                 <div>
-                    <select className="ui dropdown" onChange={this.studyfieldChange}>
+                    <select className="ui dropdown"  name= "studyfieldId" onChange={this.studyfieldChange}>
                         <option>Valitse ensin gradun tieteenala</option>
                         {list.map((obj, index) => {
                             return <option key={index} value={obj.id}>{obj.text}</option>;
