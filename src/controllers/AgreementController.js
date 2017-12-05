@@ -2,14 +2,15 @@ const agreementService = require('../services/AgreementService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
+const roleService = require('../services/RoleService');
 
 const AttachmentController = require('./AttachmentController');
 
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
-    const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
-   // res.status(200).json({ agreement: agreement, persons: agreementPersons });
+    //const agreementPersons = await personService.getAgreementPersonsByAgreementId(req.params.id);
+    //res.status(200).json({ agreement: agreement, persons: agreementPersons });
     res.status(200).json(agreement);
 }
 
@@ -18,26 +19,31 @@ export async function getPreviousAgreementById(req, res) {
     res.status(200).json(agreement);
 }
 
+//TODO: refactor
 export async function getAllAgreements(req, res) {
-    const agreements = await agreementService.getAllAgreements();
-    res.status(200).json(agreements);
+    //All = return agreements that a user might be interested in.
+    try {
+        const personId = req.session.user_id
+        const roles = await roleService.getPersonRoles(personId);
+        let agreements = [];
+        agreements = await Promise.all(roles.map(async role => {
+            const personRoleId = role.personRoleId;
+            const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
+            const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
+                const agreementId = agreementPerson.agreementId;
+                const agreement = await agreementService.getAgreementById(agreementId);
+                return agreement;
+            }))
+            return agreements[0];
+        }))
+        res.status(200).json(agreements);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 }
 
 const agreementHasNoId = (data) => {
     return data.agreementId === "" || data.agreementId == null;
-}
-
-const getPersonData = (data) => {
-    return ({
-        personId: data.personId,
-        firstname: data.firstName,
-        lastname: data.lastName,
-        phone: data.studentPhone,
-        address: data.studentAddress,
-        studentNumber: data.studentNumber,
-        email: data.studentEmail,
-        major: data.studentMajor
-    });
 }
 
 const getThesisData = (data) => {
@@ -55,7 +61,7 @@ const getAgreementData = (data, thesisId) => {
         authorId: data.personId,
         thesisId: thesisId,
         responsibleSupervisorId: data.thesisSupervisorMain,
-        studyFieldId: data.studyFieldId,
+        studyfieldId: data.studyfieldId,
         studentGradeGoal: data.studentGradeGoal,
         studentWorkTime: data.thesisWorkStudentTime,
         supervisorWorkTime: data.thesisWorkSupervisorTime,
@@ -67,24 +73,18 @@ const getAgreementData = (data, thesisId) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    data.personId = 1; //because front doesn't give id from shibboleth yet
     if (agreementHasNoId(data)) {
         try {
-            const personData = getPersonData(data);
-            const personSaveResponse = await updatePerson(personData);
+            data.personId = req.session.user_id;
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await saveThesis(thesisData);
-            const agreementData = getAgreementData(data, thesisSaveResponse);
+            const agreementData = getAgreementData(data, thesisSaveResponse.id);
             const agreementSaveResponse = await saveAgreementToService(agreementData);
-            personData.personId = personSaveResponse;
-            thesisData.thesisId = thesisSaveResponse;
             agreementData.agreementId = agreementSaveResponse;
-            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined 
-            //AttachmentController.saveAttachment(req, res);
+            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined
             res.status(200).json(agreementData);
         }
-        catch(error) {
-
+        catch (error) {
             res.status(500).json({ text: "Error occured" });
         }
     } else {
@@ -92,15 +92,15 @@ export async function saveAgreement(req, res) {
     }
 }
 
-const updatePerson = async function(personData) {
-   return await personService.updatePerson(personData);
+const updatePerson = async function (personData) {
+    return await personService.updatePerson(personData);
 }
 
-const saveThesis = async function(thesisData) {
+const saveThesis = async function (thesisData) {
     return await thesisService.saveThesis(thesisData);
 }
 
-const saveAgreementToService = async function(agreementData) {
+const saveAgreementToService = async function (agreementData) {
     return await agreementService.saveNewAgreement(agreementData);
 }
 
@@ -125,7 +125,7 @@ export async function updateAgreement(req, res) {
                 thesisTitle: data.thesisTitle,
                 startDate: data.thesisStartDate,
                 completionEta: data.thesisCompletionEta,
-                performancePlace:  data.thesisPerformancePlace
+                performancePlace: data.thesisPerformancePlace
             };
             const cleanThesisData = removeUselessKeys(thesisData);
             const thesisResponse = await thesisService.updateThesis(cleanThesisData);
@@ -135,7 +135,7 @@ export async function updateAgreement(req, res) {
                 authorId: data.personId,
                 thesisId: data.thesisId,
                 responsibleSupervisorId: data.responsibleSupervisorId,
-                studyFieldId: data.studyFieldId,
+                studyfieldId: data.studyfieldId,
                 studentGradeGoal: data.studentGradeGoal,
                 studentWorkTime: data.thesisWorkStudentTime,
                 supervisorWorkTime: data.thesisWorkSupervisorTime,

@@ -5,7 +5,7 @@ RUN mkdir -p /usr/src/app
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-# Update - are these two needed?
+# Update & install pdftk
 RUN apt-get update
 RUN apt-get install -y pdftk
 

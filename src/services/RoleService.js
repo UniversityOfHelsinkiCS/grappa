@@ -1,14 +1,24 @@
-const knex = require('../../connection');
+const knex = require('../db/connection');
+
+export async function getRoles() {
+    return knex.select().from('role');
+}
 
 export async function getPersonRoles(personId) {
-    const roleToId = await knex.select().from('role');
-    const studyfieldToId = await knex.select().from('studyfield');
-    const roles = await knex.select().from('personWithRole').where('personId', personId);
-    const personRoles = roles.map(role => {
-        return {
-            studyfield: studyfieldToId.find(stoid => stoid.studyfieldId === role.studyfieldId).name,
-            role: roleToId.find(rtoid => rtoid.roleId === role.roleId).name
-        }
-    })
-    return personRoles;
+    return knex.select().from('personWithRole').where('personId', personId);
+}
+
+export async function getRoleId(roleName) {
+    const roleData = await knex.select().from('role').where('name', roleName);
+    return roleData[0].roleId;
+}
+
+export async function saveRole(roleName) {
+    return await knex('role')
+    .returning('roleId')
+    .insert({name: roleName})
+    .then(roleId => roleId[0])
+    .catch(error => {
+        throw error
+    });
 }
