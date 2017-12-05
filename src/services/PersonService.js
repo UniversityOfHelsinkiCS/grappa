@@ -5,6 +5,27 @@ export async function getAllPersons() {
     return await knex.select().from('person');
 }
 
+export async function getLoggedPerson(req) {
+    let user;
+    if (req.session.user_id) {
+        const userId = req.session.user_id;
+        user = knex.select().from('person').where('personId', id)
+            .then(person => person)
+            .catch(error => {
+                throw error
+            });
+    } else if (req.headers['uid']) {
+        const shibbolethId = req.headers['uid'];
+        user = knex.select().from('person').where('shibbolethId', shibbolethId)
+            .then(person => person)
+            .catch(error => {
+                throw error;
+            });
+    }
+    return user;
+}
+
+
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id)
         .then(person => person)
