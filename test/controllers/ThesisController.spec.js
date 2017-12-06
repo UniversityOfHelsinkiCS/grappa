@@ -51,7 +51,7 @@ test.cb('getAllTheses returns correct information', t => {
     service.getAllTheses.restore();
 });
 
-test('saveAgreement calls services method', async t => {
+test('saveThesis calls services method', async t => {
     const body ={
         title: 'Annin Grady',
         urkund: 'http://',
