@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 class AgreementView extends Component {
     render() {
         var data = this.props.agreementData;
-        console.log("agreementData",data);
         return (
             <div className="ui padded segment">
                 <h2 className="ui header">{ data.thesisTitle }</h2>
