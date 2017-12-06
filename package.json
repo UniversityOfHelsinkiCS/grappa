@@ -11,6 +11,7 @@
     "db:migrate": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest",
     "db:seed": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "db:remove": "rm ./src/db/grappa2db.sqlite",
+    "db:reset": "rm ./src/db/grappa2db.sqlite && knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest && knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
     "lint": "eslint ./**/*.js || true"
@@ -39,6 +40,7 @@
     "knex": "^0.13.0",
     "nodemailer": "^4.4.0",
     "pg": "^7.3.0",
+    "request": "^2.83.0",
     "sqlite3": "^3.1.12",
     "xmlbuilder": "^9.0.4"
   },

@@ -5,6 +5,19 @@ export async function getAllPersons() {
     return await knex.select().from('person');
 }
 
+export async function getLoggedPerson(req) {
+    let user;
+    if (req.session.user_id) {
+        const userId = req.session.user_id;
+        user = getPersonById(userId);
+    } else if (req.headers['uid']) {
+        const shibbolethId = req.headers['uid'];
+        user = getPersonByShibbolethId(shibbolethId);
+    }
+    return user;
+}
+
+
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id)
         .then(person => person)

@@ -23,11 +23,9 @@ export async function getPreviousAgreementById(req, res) {
 //TODO: refactor
 export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
-    const shibboId = req.headers.grappashibbolethid;
     try {
         let agreements = [];
-        const persons = await personService.getPersonByShibbolethId(shibboId);
-        const personId = persons[0].personId;
+        const personId = req.session.user_id        
         const roleToId = await roleService.getRoles();
         const studyfieldToId = await studyfieldService.getAllStudyfields();
         const personRoles = await roleService.getPersonRoles(personId);

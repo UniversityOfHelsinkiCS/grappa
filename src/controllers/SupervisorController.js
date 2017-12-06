@@ -1,6 +1,7 @@
 require('babel-polyfill');
 const supervisorService = require('../services/SupervisorService');
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
 const express = require('express');
 const app = express();
 
@@ -8,9 +9,17 @@ export async function getAllSupervisors(req, res) {
     const supervisors = await supervisorService.getAllSupervisors();
     res.status(200).json(supervisors);
 }
+export async function getAllSupervisorsByStudyfield(req, res) {
+    const supervisors = await supervisorService.getAllSupervisorsByStudyfield(req.body.studyfieldId);
+    res.status(200).json(supervisors);
+}
 
 export async function getAgreementPersons(req, res) {
-    const agreementPersons = await supervisorService.getAllAgreementPersons(); //in future will call getAlLAgreementPersonsNeedingAction
+    const agreementPersons = await supervisorService.getAllAgreementPersons();
+    res.status(200).json(agreementPersons);
+}
+export async function getAgreementPersonsByStudyfield(req, res) {
+    const agreementPersons = await supervisorService.getAllAgreementPersonsByStudyfield(req.body.studyfieldId);
     res.status(200).json(agreementPersons);
 }
 
@@ -18,7 +27,7 @@ export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
     if (supervisorData.personId == null || supervisorData.personId == '') { //save new
         try {
-            const supervisorRoleId = await supervisorService.getSupervisorRoleId();
+            const supervisorRoleId = await roleService.getRoleId("supervisor");
             const personData = {
                 firstname: supervisorData.firstname,
                 lastname: supervisorData.lastname,
@@ -42,41 +51,14 @@ export async function saveSupervisor(req, res) {
                 statement: ''
             };
             const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
-            res.status(200).json(supervisorData);
+            personData.personId = personId;
+            res.status(200).json(personData);
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
         }
-    } else { //update doesn't work
-        try {
-            const supervisorRoleId = await supervisorService.getSupervisorRoleId();
-            const personData = {
-                personId: supervisorData.personId,
-                firstname: supervisorData.firstname,
-                lastname: supervisorData.lastname,
-                title: supervisorData.title,
-                email: supervisorData.email,
-                shibbolethId: supervisorData.shibbolethId,
-                isRetired: supervisorData.isRetired
-            };
-            const personRoleData = {
-                personId: supervisorData.personId,
-                studyfieldId: supervisorData.studyfieldId,
-                roleId: supervisorRoleId
-            };
-            const personRoleId = await personService.savePersonRole(personRoleData);
-            const agreementPersonData = {
-                agreementId: supervisorData.agreementId,
-                personRoleId: personRoleId,
-                roleId: supervisorRoleId,
-                approved: false,
-                statement: ''
-            };
-            
-            const agreementId = await supervisorService.updateAgreementPerson(agreementPersonData);
-            res.status(200).json({ text: "supervisor save successful", personId: personId });
-        } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
-        }
+    }
+    else {
+        res.status(500).json({ text: "person already has id"});
     }
 }
 
