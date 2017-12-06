@@ -10,6 +10,7 @@ exports.up = function (knex, Promise) {
             table.string('grade').defaultTo('-');
             table.string('graderEval');
             table.integer('userId');
+            table.boolean('printDone').defaultTo(false);
         })
     ]);
 };

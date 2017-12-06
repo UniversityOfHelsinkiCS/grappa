@@ -1,6 +1,6 @@
 const knex = require('../db/connection');
 const bookshelf = require('../db/bookshelf')
-const Thesis = require('../models/thesis');
+const Thesis = require('../db/models/thesis');
 
 export function getAllTheses() {
     return Thesis.fetchAll();

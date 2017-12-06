@@ -1,8 +1,36 @@
-require('babel-polyfill');
 const knex = require('../db/connection');
+
+const personSchema = [
+    "person.personId",
+    "shibbolethId",
+    "email",
+    "firstname",
+    "lastname",
+    "title",
+    "isRetired",
+    "studentNumber",
+    "address",
+    "phone",
+    "major",
+]
 
 export async function getAllPersons() {
     return await knex.select().from('person');
+}
+
+export async function getPersonsWithRole(roleId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .select(personSchema);
+}
+
+export async function getPersonsWithRoleInStudyfield(roleId, studyfieldId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .where('personWithRole.studyfieldId', studyfieldId)
+        .select(personSchema);
 }
 
 export async function getLoggedPerson(req) {

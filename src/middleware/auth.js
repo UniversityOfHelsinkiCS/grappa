@@ -9,13 +9,17 @@ module.exports.checkAuth = async (req, res, next) => {
         if (!req.headers['shib-session-id']) {
             // forbid if in production and bypassed shibboleth
             if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'dev') {
-                res.sendStatus(403);
+                res.status(403).end();
             }
         }
         // log user in if shibboleth session id exists
         req.session.shib_session_id = req.headers['shib-session-id'];
         const shibUid = req.headers['uid'];
-        const userdata = await personService.getPersonByShibbolethId(shibUid);
+        try {
+            const userdata = await personService.getPersonByShibbolethId(shibUid);
+        } catch (err) {
+            res.status(404).end();
+        }
         let user = userdata[0];
         if (user) {
             req.session.user_id = user.personId;

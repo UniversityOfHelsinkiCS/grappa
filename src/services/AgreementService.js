@@ -1,6 +1,6 @@
 const knex = require('../db/connection');
 const bookshelf = require('../db/bookshelf');
-const Agreement = require('../models/agreement');
+const Agreement = require('../db/models/agreement');
 
 
 export const getAgreementById = (agreementId) => {
