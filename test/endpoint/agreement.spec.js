@@ -6,7 +6,11 @@ const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
-    app.use('/agreement', agreement)
+    app.use('/agreements', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, agreement)
     return app;
 }
 
@@ -18,52 +22,33 @@ test.before(async t => {
 })
 
 const agreementWithoutId = {
-    personId: 10,
-    firstname: 'Testi',
-    lastname: 'Testinen',
+    authorId: 1,
+    thesisId: 1,
+    responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "2h viikossa",
+    intermediateGoal: "20 sivua ensi perjantaina",
+    meetingAgreement: "Jepsis",
+    other: "eihän tässä muuta",
+    whoNext: "supervisor",    
 }
 
-const agreementWithId = {
-    personId: 10,
-    firstname: 'Testi',
-    lastname: 'Testinen',
-    agreementId: 1
-}
-
-test.skip('agreement post & creates id', async t => {
-    t.plan(2);
+test('agreement post & creates id', async t => {
+    t.plan(15);
     const res = await request(makeApp())
-        .post('/agreement')
+        .post('/agreements')
         .send(agreementWithoutId);
     t.is(res.status, 200);
-    const body = res.body;
-    const agreement = agreementWithId;
-    t.is(JSON.stringify(body), JSON.stringify(agreement));
-})
-
-// test.skip('councilmeeting post & creates id', async t => {
-//     t.plan(2);
-//     const res = await request(makeApp())
-//         .post('/councilmeetings')
-//         .send(councilmeetingWithoutId);
-//     t.is(res.status, 200);
-//     const body = res.body;
-//     const meeting = councilmeetingWithId
-//     t.is(JSON.stringify(body), JSON.stringify(meeting));
-// })
-
-// test.skip('councilmeeting get all', async t => {
-//     t.plan(2);
-//     const app = makeApp();
-//     const res = await request(app)
-//         .get('/councilmeetings');
-//     t.is(res.status, 200);
-//     const body = res.body;
-//     const meetings = [ councilmeetingWithId ];
-//     t.is(JSON.stringify(body), JSON.stringify(meetings));    
-// })
-
-
-test('', t => {
-    t.truthy(1 === 1);
+    let body = res.body;
+    body.fake = body.fake !== 0;
+    let agreement = agreementWithoutId;
+    agreement.agreementId = 1;
+    Object.keys(agreement).forEach(key => {
+        t.is(agreement[key], body[key], "Key: " + key)
+    })
+    //Ignore createdat and updatedat
+    t.is(Object.keys(agreement).length, Object.keys(body).length - 2, "Key length");
 })

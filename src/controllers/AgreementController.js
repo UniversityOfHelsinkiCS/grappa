@@ -3,6 +3,7 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService');
 
 const AttachmentController = require('./AttachmentController');
 
@@ -24,28 +25,46 @@ export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
     const shibboId = req.headers.grappashibbolethid;
     try {
+        let agreements = [];
         const persons = await personService.getPersonByShibbolethId(shibboId);
         const personId = persons[0].personId;
-        const roles = await roleService.getPersonRoles(personId);
-        let agreements = [];
-        agreements = await Promise.all(roles.map(async role => {
-            const personRoleId = role.personRoleId;
-            const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
-            const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
-                const agreementId = agreementPerson.agreementId;
-                const agreement = await agreementService.getAgreementById(agreementId);
-                return agreement;
+        const roleToId = await roleService.getRoles();
+        const studyfieldToId = await studyfieldService.getAllStudyfields();
+        const personRoles = await roleService.getPersonRoles(personId);
+        const readableRoles = personRoles.map(role => {
+            return {
+                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+            }
+        })
+        //First get all user is the "student" of.
+        agreements = await agreementService.getAgreementsByAuthor(personId);
+        //Get all if admin
+        if (readableRoles.find(readable => readable.role === 'admin')) {
+            const allAgreements = await agreementService.getAllAgreements();
+            agreements.concat(allAgreements);
+        } else {
+            //Get all where agreementPerson
+            const agreementsWhereAgreementPerson = await Promise.all(personRoles.map(async role => {
+                const personRoleId = role.personRoleId;
+                const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
+                const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
+                    const agreementId = agreementPerson.agreementId;
+                    const agreement = await agreementService.getAgreementById(agreementId);
+                    return agreement;
+                }))
+                return agreements[0];
             }))
-            return agreements[0];
-        }))
+            agreements.concat(agreementsWhereAgreementPerson);
+        }
         res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
     }
 }
 
-const agreementHasNoId = (data) => {
-    return data.agreementId === "" || data.agreementId == null;
+const agreementHasNoId = (agreement) => {
+    return !agreement.agreementId
 }
 
 const getThesisData = (data) => {
@@ -75,22 +94,36 @@ const getAgreementData = (data, thesisId) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
+    const personId = req.session.user_id
+    if (!personId) res.status(500).json({ text: "No user_id in session" });
+    if (!data.agreementId) {
+        try {
+            let newAgreement = await agreementService.saveAgreement(data);
+            return res.status(200).json(newAgreement);
+        } catch (err) {
+            return res.status(500).json(err);
+        }
+    }
+    res.status(500).json({ text: "Agreement had an id" });
+}
+
+export async function saveAgreementForm(req, res) {
+    const data = req.body;
+    const personId = req.session.user_id;
+    if (!personId) res.status(500).json({ text: "No user_id in session" });
     if (agreementHasNoId(data)) {
         try {
-            const shibboId = req.headers.grappashibbolethid;
-            const persons = await personService.getPersonByShibbolethId(shibboId);
-            const person = persons[0];
-            data.personId = person.personId;
+            data.personId = personId;
             const thesisData = getThesisData(data);
-            const thesisSaveResponse = await saveThesis(thesisData);
+            const thesisSaveResponse = await thesisService.saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
-            const agreementSaveResponse = await saveAgreementToService(agreementData);
+            const agreementSaveResponse = await agreementService.saveNewAgreement(agreementData);
             agreementData.agreementId = agreementSaveResponse;
-            //emailService.agreementCreated(Object.assign(personData, thesisData, agreementData)); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined
+            //emailService.agreementCreated(personData, thesisData, agreementData); //says atm: Unhandled rejection TypeError: Cannot read property 'email' of undefined
             //AttachmentController.saveAttachment(req, res);
             res.status(200).json(agreementData);
-        }
-        catch (error) {
+        } catch (error) {
+            console.log("Errori", error)
             res.status(500).json({ text: "Error occured" });
         }
     } else {

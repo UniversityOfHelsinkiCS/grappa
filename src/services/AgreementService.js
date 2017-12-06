@@ -1,4 +1,7 @@
 const knex = require('../db/connection');
+const bookshelf = require('../db/bookshelf');
+const Agreement = require('../models/agreement');
+
 
 export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
@@ -35,13 +38,22 @@ export const getAgreementsByAuthor = (personId) => {
         });
 }
 
+export const saveAgreement = (agreement) => {
+    return Agreement.forge(agreement).save().then(model => {
+        return model.fetch();
+    }).catch(error => {
+        throw error;
+    })
+}
+
 export const saveNewAgreement = (data) => {
     return knex('agreement')
         .returning('agreementId')
         .insert(data)
         .then(agreementId => agreementId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export const updateAgreement = (data) => {
@@ -51,7 +63,8 @@ export const updateAgreement = (data) => {
         .update(data)
         .then(agreementId => agreementId)
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export const savePrevious = (data) => {
@@ -60,7 +73,8 @@ export const savePrevious = (data) => {
         .insert(data)
         .then(agreementId => agreementId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 //change data formatting from DB to front
