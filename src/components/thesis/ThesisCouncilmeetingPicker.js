@@ -11,14 +11,14 @@ export default class ThesisCouncilmeetingPicker extends Component {
     }
 
     componentDidMount() {
-        if (this.props.councilMeetings) {
-            this.setState({ filteredMeetings: [{ id: "", content: "Select Date" }, ...this.formatMeetings(this.props.councilMeetings)] });
+        if (this.props.councilmeetings) {
+            this.setState({ filteredMeetings: [{ id: "", content: "Select Date" }, ...this.formatMeetings(this.props.councilmeetings)] });
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.councilMeetings) {
-            const formatted = this.formatMeetings(newProps.councilMeetings);
+        if (newProps.councilmeetings) {
+            const formatted = this.formatMeetings(newProps.councilmeetings);
             this.setState({ filteredMeetings: [{ id: "", content: "Select Date" }, ...formatted] });
         }
     }
@@ -26,7 +26,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
     formatMeetings = (councilmeetings) => {
         const today = new Date();
         return councilmeetings.filter(meeting => {
-            const mdate = new Date(meeting.date);
+            const mdate = new Date(meeting.instructorDeadline);
             return mdate >= today;
         }).map(meeting => {
             return {

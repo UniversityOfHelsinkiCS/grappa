@@ -51,21 +51,21 @@ const permissions = {
     'grader': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav.thesis, nav['assesment']
             ]
         }
     },
     'supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
+                nav['home'], nav['agreement'], nav['theses'], nav.thesis, nav['assesment']
             ]
         }
     },
     'student': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['thesis'], nav['assesment']
+                nav['home'], nav['agreement'], nav['assesment']
             ]
         },
         'agreement': {

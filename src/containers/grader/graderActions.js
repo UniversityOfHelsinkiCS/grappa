@@ -1,36 +1,29 @@
 import { callController } from '../../util/apiConnection';
 
 export const saveAddedGrader = (grader) => {
-    const route = '/supervisors/save';
-    const prefix = "GRADER_SAVE_ONE_";
+    const route = '/graders';
+    const prefix = "SUPERVISOR_SAVE_ONE_";
     const method = "post";
     return callController(route, prefix, grader, method);
 }
 
-export const getSupervisors = () => {
-    const route = '/supervisors/agreementPersons';
-    const prefix = "GRADER_GET_ALL_";
+export const getGraders = () => {
+    const route = '/graders';
+    const prefix = "SUPERVISOR_GET_ALL_";
     const method = "get";
     return callController(route, prefix);
 }
 
-export const deleteSupervisor = (data) => {
-    const route = '/supervisors';
-    const prefix = "GRADER_DELETE_ONE_";
-    const method = "delete";
+export const deleteGrader = (graderId) => {
+    const route = '/graders/' + graderId;
+    const prefix = "SUPERVISOR_DELETE_ONE_";
+    const method = "delete"
     return callController(route, prefix);
 }
 
-export const reviewSupervisor = (supervisor) => {
-    const route = '/supervisors/review';
-    const prefix = "GRADER_REVIEW_ONE_";
-    const method = "put";
-    return callController(route, prefix, supervisor, method);
-}
-
-export const updateSupervisor = (supervisor) => {
-    const route = '/supervisors/update';
+export const updateGrader = (grader) => {
+    const route = '/graders';
     const prefix = "GRADER_UPDATE_ONE_";
     const method = "put";
-    return callController(route, prefix, supervisor, method);
+    return callController(route, prefix, grader, method);
 }

@@ -9,7 +9,7 @@ export default class AttachmentAdder extends Component {
         this.props.addAttachment(droppedFile);
     }
 
-    removeAttachment = () => (attachment) => {
+    removeAttachment = (attachment) => () => {
         this.props.removeAttachment(attachment);
     }
 
@@ -37,24 +37,23 @@ export default class AttachmentAdder extends Component {
 
     getHeader = () => {
         if (this.props.limit === undefined) {
-            return <h1>Upload attachments as much as you want</h1>
+            return <h2>Upload attachments as much as you want</h2>
         }
-        return <h1>Upload maximum {this.props.limit} attachments</h1>
+        return <h2>Upload maximum {this.props.limit} attachments</h2>
     }
 
 
 
     getFileNumberLabel = () => {
         const attachmentsUploaded = this.props.attachments.length;
-        if (attachmentsUploaded === 0) {
-            return <h2>No attachments uploaded</h2>;
-        }
-        else if (attachmentsUploaded === 1) {
-            return <h2>One attachment uploaded:</h2>
-        }
-        return (<h2>
-            {attachmentsUploaded + " attachments uploaded:"}
-        </h2>);
+        return (
+            <h3>
+                {(attachmentsUploaded === 0) ? "No attachments uploaded" :
+                    (attachmentsUploaded === 1) ? "One attachment uploaded:" :
+                        attachmentsUploaded + " attachments uploaded:"}
+            </h3>
+        )
+
     }
 
     renderDropzone = () => {
