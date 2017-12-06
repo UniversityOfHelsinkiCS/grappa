@@ -4,41 +4,23 @@ const personService = require('../services/PersonService');
  * Authentication middleware that is called before any requests.
  *
  */
-module.exports.authenticate = (req, res, next) => {
-    //if dev then
-    //const shibbolethId = req.headers.shibbolointiid;
-
-    //if actual then
-    //const shibbolethId = req.headers.
-
-    // if (!shibbolethId) {
-    //      res.sendStatus(403);
-    //}
-
-    //req.headers.grappashibbolethid = shibbolethId
-    next();
-};
-
 module.exports.checkAuth = async (req, res, next) => {
     if (!req.session.user_id) {
-        if (req.headers['shib-session-id']) {
-            // log user in if shibboleth session id exists
-            req.session.shib_session_id = req.headers['shib-session-id'];
-            const shibUid = req.headers['uid'];
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
-            let user = userdata[0];
-            if (user) {
-                req.session.user_id = user.personId;
-            }
-            next();
-        } else {
+        if (!req.headers['shib-session-id']) {
             // forbid if in production and bypassed shibboleth
             if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'dev') {
                 res.sendStatus(403);
-            } else {
-                next();
             }
         }
+        // log user in if shibboleth session id exists
+        req.session.shib_session_id = req.headers['shib-session-id'];
+        const shibUid = req.headers['uid'];
+        const userdata = await personService.getPersonByShibbolethId(shibUid);
+        let user = userdata[0];
+        if (user) {
+            req.session.user_id = user.personId;
+        }
+        next();
     } else {
         next();
     }
