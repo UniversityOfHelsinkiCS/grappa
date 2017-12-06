@@ -3,7 +3,6 @@ const mailer = require('../util/mailer');
 const templates = require('../util/emailTemplates');
 
 export const agreementCreated = (data) => {
-    console.log("agreementCreated", data);
     let body = templates.getEmailTemplate('createAgreement', data);
     getEmailAddressByPersonRoleId(data.responsibleSupervisorId).then(address => {
         return mailer.sendEmail(address, 'New Agreement created by ' + data.firstname + ' ' + data.lastname, body);
@@ -11,7 +10,6 @@ export const agreementCreated = (data) => {
 }
 
 export const agreementUpdated = (data) => {
-    console.log("agreementUpdated", data);
     let body = templates.getEmailTemplate('updateAgreement', data);
     getEmailAddressByAgreementAndRole(data).then(address => {
         mailer.sendEmail(address, 'Agreement updated by ' + data.firstname + ' ' + data.lastname, body);
