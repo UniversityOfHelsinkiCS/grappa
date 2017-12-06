@@ -75,10 +75,23 @@ export class AgreementPage extends Component {
 
     handleSaveAgreement = (agreement) => {
         this.props.saveAgreement(agreement);
+        if (agreement.attachments !== undefined)
+            this.props.saveAttachment(agreement.attachments);
     }
 
-    handleSaveAttachment = (attachment) => {
-        this.props.saveAttachment(attachment);        
+    checkForChanges = (a,b) => {
+        if (a === undefined || b === undefined)
+            return false;
+        // Create arrays of property names
+        var aProps = Object.getOwnPropertyNames(a);
+        var bProps = Object.getOwnPropertyNames(b);
+
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+            if (a[propName] !== b[propName])
+                return false;
+        }
+        return true;
     }
 
     render() {
@@ -99,13 +112,7 @@ export class AgreementPage extends Component {
             );
         } else {
             //check if form data has changed
-            /*
-            console.log("this.state.agreement", this.state.agreement);
-            console.log("this.state.originalAgreement", this.state.originalAgreement);
-            console.log(Object.is(this.state.agreement, this.state.originalAgreement));
-            */
-            //doesn't work
-            const disableSubmit = Object.is(this.state.agreement, this.state.originalAgreement);
+            let disableSubmit = this.checkForChanges(this.state.agreement, this.state.originalAgreement);
             return (
                 <div>
                     <br />
