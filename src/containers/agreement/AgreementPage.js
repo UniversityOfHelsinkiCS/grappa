@@ -75,7 +75,8 @@ export class AgreementPage extends Component {
 
     handleSaveAgreement = (agreement) => {
         this.props.saveAgreement(agreement);
-        this.props.saveAttachment(agreement.attachments);
+        if (agreement.attachments !== undefined)
+            this.props.saveAttachment(agreement.attachments);
     }
 
     render() {
