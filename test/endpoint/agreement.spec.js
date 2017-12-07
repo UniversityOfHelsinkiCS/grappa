@@ -4,6 +4,7 @@ const express = require('express');
 const agreement = require('../../src/routes/agreements');
 const config = require('../../src/db/knexfile');
 const reqres = require('reqres');
+const personService = require("../../src/services/PersonService");
 
 const makeApp = () => {
     const app = express();
@@ -65,12 +66,22 @@ test('agreement post with agreement which has agreementId returns 500', async t 
     //t.is(JSON.stringify(body), JSON.stringify(agreement));
 })
 
-test.skip('agreement post with correct agreement returns 200', async t => {
+const makeAppWithUserId = () => {
+    const app = express();
+    app.use('/agreement', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, agreement)
+    return app;
+}
+
+test('agreement post with correct agreement returns 200', async t => {
     t.plan(1);
+    personService.savePerson({shibbolethId: "shibboId", studentNumber: "1234" });
     const session = {user_id: 1};
-    const res = await request(makeApp())
+    const res = await request(makeAppWithUserId())
         .post('/agreement')
-        .set({session: session})
         .send(correctAgreement);
     t.is(res.status, 200);
 })
