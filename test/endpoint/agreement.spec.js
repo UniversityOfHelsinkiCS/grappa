@@ -52,7 +52,7 @@ const correctAgreement = {
     studyfieldId: 1,
 }
 
-test.only('agreement post with agreement which has agreementId returns 500', async t => {
+test('agreement post with agreement which has agreementId returns 500', async t => {
     t.plan(1);
     let req = reqres.req();
     const agreementWithId = {agreementId: 1}
@@ -67,15 +67,11 @@ test.only('agreement post with agreement which has agreementId returns 500', asy
 
 test.skip('agreement post with correct agreement returns 200', async t => {
     t.plan(1);
-    let req = reqres.req();
     const session = {user_id: 1};
-    req.session = session;
-    req.body = correctAgreement;
-    correctAgreement.session = session;
-    console.log("TESTISSÄ",req.session);
     const res = await request(makeApp())
         .post('/agreement')
-        .send(req);
+        .set({session: session})
+        .send(correctAgreement);
     t.is(res.status, 200);
 })
 
