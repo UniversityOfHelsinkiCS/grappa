@@ -7,8 +7,6 @@ const Busboy = require('busboy');
 const fs = require('fs');
 
 export async function saveAttachment(req, res) {
-    console.log("attach contr")
-    console.log("req.files", req.files, Object.keys(req))
     try {
         let busboy = new Busboy({ headers: req.headers });
         console.log("inside busboy")
