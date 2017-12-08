@@ -64,6 +64,7 @@ export async function saveSupervisor(req, res) {
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
+    console.log("contr")
     if (data.personRoleId != null && data.agreementId != null) {
         try {
             let agreementPersonData = {
@@ -74,6 +75,7 @@ export async function reviewSupervisor(req, res) {
                 approverId: data.approverId,
                 approvalDate: new Date().toJSON()
             };
+            console.log("data.approved controller", data.approved);
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
             res.status(200).json(data);
         } catch (err) {

@@ -22,6 +22,7 @@ router.get('/agreementPersons', (req, res) => {
 });
 
 router.put('/review', jsonParser, (req, res) => {
+    console.log("routes")
     supervisorController.reviewSupervisor(req, res);
 });
     
