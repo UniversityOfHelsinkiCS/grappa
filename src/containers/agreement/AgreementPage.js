@@ -75,8 +75,10 @@ export class AgreementPage extends Component {
 
     handleSaveAgreement = (agreement) => {
         this.props.saveAgreement(agreement);
-        if (agreement.attachments !== undefined)
+        if (agreement.attachments !== undefined) {
+            console.log("there is attachemnt")
             this.props.saveAttachment(agreement.attachments);
+        }
     }
 
     checkForChanges = (a,b) => {
@@ -106,7 +108,6 @@ export class AgreementPage extends Component {
                         studyfields={this.props.studyfields}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
-                        saveAttachment={this.handleSaveAttachment}
                     />
                 </div>
             );

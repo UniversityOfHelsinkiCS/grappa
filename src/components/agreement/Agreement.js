@@ -84,9 +84,8 @@ export default class Agreement extends Component {
 
     sendForm = (event) => {
         event.preventDefault();
-        this.props.saveAgreement(this.state.form);
-        console.log("this.state.form", this.state.form);
-        this.props.saveAttachment(this.state.attachments, this.state.form);
+        this.props.saveAgreement({...this.state.form, attachments: this.state.attachments});
+        //this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
     render() {
