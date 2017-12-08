@@ -2,6 +2,20 @@ const knex = require('../db/connection');
 const bookshelf = require('../db/bookshelf');
 const Agreement = require('../db/models/agreement');
 
+const agreementSchema = [
+    "agreementId",
+    "authorId",
+    "thesisId",
+    "responsibleSupervisorId",
+    "studyfieldId",
+    "fake",
+    "studentGradeGoal",
+    "studentWorkTime",
+    "supervisorWorkTime",
+    "intermediateGoal",
+    "meetingAgreement",
+    "other"
+]
 
 export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
