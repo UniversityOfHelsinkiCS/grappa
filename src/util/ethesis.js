@@ -1,4 +1,4 @@
-import axios from 'axios'
+import request from 'request'
 import xml from 'xmlbuilder'
 import creds from './ethesis_credentials'
 import FormData from 'form-data'
@@ -9,9 +9,6 @@ export function getExamplePDF(){
 }
 
 export async function saveToEThesis(meta, pdf){
-
-    const auth_config = { 'auth': creds };
-    const config = {headers: {'X-Requested-With': 'XMLHttpRequest'}};
     
     var metaData = xml.create({
         entry: {
@@ -55,6 +52,33 @@ export async function saveToEThesis(meta, pdf){
     console.log(pdf);
     //data.append('file', pdf, { type: 'application/pdf' });
 
+    request({
+        method: 'POST',
+        preambleCRLF: false,
+        postambleCRLF: false,
+        uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13',
+        'auth': creds,
+        multipart: [
+            {
+                'content-type': 'application/atomserv+xml',
+                body: metaData.toString()
+            },
+            { 
+                'content-type': 'application/pdf',
+                body: pdf
+            }
+        ],
+    },
+    function (error, response, body) {
+        console.log('statusCode:', response && response.statusCode); 
+        if (error) {
+            return console.error('upload failed:', error);
+        }
+        console.log('Upload successful!  Server responded with:', body);
+    })
+
+
+/*
     axios.post('http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13', data, auth_config, config)
     .then(
         (response) => {
@@ -65,8 +89,6 @@ export async function saveToEThesis(meta, pdf){
             console.log('--- --- ---');
             console.log('--- --- REQUEST HEADERS --- ---');
             console.log(errors.request._header);
-            console.log('--- --- FULL REQUEST --- ---');
-            console.log(errors.request);
             console.log('--- --- RESPONSE STATUS --- ---');
             console.log(errors.response.status);
             console.log('--- --- RESPONSE TEXT --- ---');
@@ -79,5 +101,5 @@ export async function saveToEThesis(meta, pdf){
             console.log(errors.response.config);
         }
     );
-
+*/
 }
