@@ -1,30 +1,22 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService');
 
 export async function getGraders(req, res) {
-    console.log("getGraders start");
     try {
+        // TODO: Filter them
         const roleId = await roleService.getRoleId("grader");
-        const studyfield = await studyfieldService.getStudyfield(2);
-        const studyfieldId = studyfield.studyfieldId;
-        console.log(studyfield);
-        console.log("StudyfieldId", studyfieldId)
-        let persons = await personService.getPersonsWithRole(roleId)
-        console.log("Persons 1",persons)
-        persons = await personService.getPersonsWithRoleInStudyfield(roleId, studyfieldId);
-        console.log("Persons 2",persons)
-        res.status(200).json([]).end();
+        const persons = await personService.getPersonsWithRole(roleId);
+        //const persons = await personService.getPersonsWithRoleInStudyfield(roleId, studyfieldId);
+        res.status(200).json(persons).end();
     } catch (err) {
-        console.log(err);
-        res.status(500).json(err).end()
+        res.status(500).json(err).end();
     }
 }
 
 export async function saveGrader(req, res) {
     try {
         const grader = req.body;
-        const newGrader = await graderService.saveGrader(grader);
+        //Add role to a person
     } catch (err) {
         res.status(500).json(err).end()
     }
@@ -33,6 +25,7 @@ export async function saveGrader(req, res) {
 export async function updateGrader(req, res) {
     try {
         const grader = req.body;
+        //
     } catch (err) {
         res.status(500).json(err).end()
     }
@@ -41,6 +34,7 @@ export async function updateGrader(req, res) {
 export async function deleteGrader(req, res) {
     try {
         const graderId = req.params.id;
+        //Remove role from a person.
     } catch (err) {
         res.status(500).json(err).end()
     }
