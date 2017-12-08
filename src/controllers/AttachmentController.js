@@ -3,12 +3,15 @@ const attachmentService = require('../services/AttachmentService');
 const fileService = require('../services/FileService');
 const express = require('express');
 const Busboy = require('busboy');
-const app = express();
+//const app = express();
 const fs = require('fs');
 
 export async function saveAttachment(req, res) {
+    console.log("attach contr")
+    console.log("req.files", req.files, Object.keys(req))
     try {
         let busboy = new Busboy({ headers: req.headers });
+        console.log("inside busboy")
         //atm never gets here, don't know why. seems to lost information what front end have sent
         busboy.on('file', async function (fieldname, file, filename, encoding, mimetype) {
             const attachmentData = {
