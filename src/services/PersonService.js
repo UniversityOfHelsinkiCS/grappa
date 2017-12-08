@@ -31,13 +31,15 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    return await knex('person')
-        .returning('personId')
-        .insert(personData)
-        .then(personId => personId[0])
-        .catch(error => {
-            throw error
-        });
+    return knex('person')
+    .returning('personId')
+    .insert(personData)
+    .then(persons => {
+        return persons[0];
+    })
+    .catch(err => {
+        throw err;
+    });
 }
 
 export async function savePersonRole(personRoleData) {

@@ -10,7 +10,7 @@ export async function getAgreementDraftById(req, res) {
         try {
             let agreementDraft = await draftService.getAgreementDraftById(agreementDraftId);
             let draftPersons = await draftService.getAgreementDraftPersonsByAgreementDraftId(agreementDraftId);
-            res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPerson: draftPersons });
+            res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPersons: draftPersons });
         } catch (error) {
             res.status(500).json({ text: "error occured", error: error });
         }
@@ -22,26 +22,26 @@ export async function getAgreementDraftById(req, res) {
 export async function saveAgreementDraft(req, res) {
     const data = req.body;
     const agreementDraftData = getAgreementDraftData(data);
-    let agreementResponse;
     let textResponse;
+    let savedAgreementDraft;
     let agreementDraftId = data.agreementDraftId;
     
     try {
         if (agreementDraftId > 0) {
-            agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
-            // why is agreementResponse always 1 here ??
-            textResponse = "agreementDraft updated successfully";
+            let agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
+            // TODO: why is agreementResponse always 1 here??
+            savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse)
         } else {
-            agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
+            let agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
+            savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse);
             agreementDraftId = agreementResponse;
-            textResponse = "new agreementDraft saved successfully";
         }
         if (data.emails) {
             let supervisors = await getSupervisorsByEmails(data.emails);
             let removalResponse = await removeAgreementDraftPersons(agreementDraftId);
             let response = await saveAgreementDraftPersons(supervisors, agreementDraftId);
         }
-        res.status(200).json({ agreementDraft: agreementResponse, text: textResponse });
+        res.status(200).json(savedAgreementDraft);
     } catch (error) {
         res.status(500).json({ text: "error occured", error: error });
     }
