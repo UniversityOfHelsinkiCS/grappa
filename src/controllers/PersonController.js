@@ -13,6 +13,7 @@ export async function addPerson(req, res) {
             })
             .catch(error => {
                 res.status(500).json(error);
+                console.log(error);
             });
     } else {
         res.status(500).json();
@@ -44,16 +45,20 @@ function getPersonData(data) {
         shibbolethId: data.shibbolethId,
         email: data.email,
         title: data.title,
-        isRetired: data.isRetired
+        isRetired: data.isRetired,
+        studentNumber: data.studentNumber,
+        address: data.address,
+        phone: data.phone,
+        major: data.major
     };
     return personData;
 }
 
-function removeEmptyKeys(data) {
+function removeEmptyKeys(personData) {
     let parsedData = {};
     Object.keys(personData).map(key => {
         if (personData[key] != null) {
-            updateData[key] = personData[key];
+            parsedData[key] = personData[key];
         }
     });
     return parsedData;

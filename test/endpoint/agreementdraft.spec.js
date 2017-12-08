@@ -2,7 +2,7 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreementdrafts = require('../../src/routes/agreementDrafts');
-const config = require('../../knexfile');
+const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();

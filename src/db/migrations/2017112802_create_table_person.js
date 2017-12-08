@@ -12,7 +12,6 @@ exports.up = function(knex, Promise) {
             table.string('address');
             table.string('phone');
             table.string('major');
-            table.timestamps();
         })
     ]);
 };
