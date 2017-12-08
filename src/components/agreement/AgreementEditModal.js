@@ -10,7 +10,8 @@ export class AgreementEditModal extends Component {
             editedFormData: {},
             editableFields: [],
             ignoredFields: ['agreementId', 'created_at', 'updated_at'],
-            textFields: ['thesisWorkStudentTime', 'thesisWorkSupervisorTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
+            textFields: ['thesisWorkStudentTime', 'thesisWorkSupervisorTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
+            mandatoryDataFilled: true
         }
     }
 
@@ -41,6 +42,15 @@ export class AgreementEditModal extends Component {
                 editedFormData: newEditedFormData
             }
         );
+        this.validateData();
+    }
+
+    validateData = () => {
+        let hasEmptyField = Object.keys(this.state.editedFormData)
+            .filter((key) => this.state.editableFields.indexOf(key) !== -1)
+            .map((key) => this.state.editedFormData[key])
+            .some((field) => (field === ""));
+        this.setState({ mandatoryDataFilled: !hasEmptyField });
     }
 
     generateFormFields = () => {
@@ -101,8 +111,8 @@ export class AgreementEditModal extends Component {
                         </div>
                     </div>
                     <br />
-                    <button className="ui fluid positive button" onClick={ this.handleFormSave }>
-                        Save local changes
+                    <button className="ui fluid positive button" disabled={ !this.state.mandatoryDataFilled } onClick={ this.handleFormSave }>
+                        {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save local changes'}
                     </button>
                 </div>
             </div>

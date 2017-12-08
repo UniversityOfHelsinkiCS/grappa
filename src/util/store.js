@@ -19,6 +19,7 @@ import personReducer from "../containers/person/personReducer";
 
 const combinedReducers = combineReducers({
     agreement: agreementReducer,
+    attachment: agreementReducer, //DOES IT WORK?? do we need this?
     user: userReducer,
     councilmeeting: councilmeetingReducer,
     supervisors: supervisorReducer,
