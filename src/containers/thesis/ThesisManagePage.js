@@ -11,7 +11,7 @@ import { getStudyfields } from '../studyfield/studyfieldActions';
 import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
 import AttachmentAdder from "../../components/attachment/AttachmentAdder";
-import GraderSelecter from "../../components/supervisor/GraderSelecter";
+import PersonSelecter from "../../components/person/PersonSelecter";
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
 import ThesisEmails from "../../components/thesis/ThesisEmails"
 
@@ -138,48 +138,6 @@ export class ThesisManagePage extends Component {
                 </div>
             );
         }
-        /* Depending on user access state do stuff:
-        return (
-            <div className="field">
-                {this.state.grading ?
-                    <div className="ui blue button" onClick={this.saveThesis}>Save</div>
-                    :
-                    <div className="ui green button" onClick={this.toggleGrading}>Evaluate graders</div>
-                }
-                <button className="ui violet button" onClick={this.downloadThesis}>Download as PDF</button>
-            </div>
-        );
-        return (
-            <div className="field">
-                <button className="ui violet button" onClick={this.downloadThesis}>Download as PDF</button>
-            </div>
-        );
-        */
-    }
-
-    renderThesisFileButtons() {
-        return (
-            <div className="m-bot">
-                <h3 className="ui dividing header">Thesis Files</h3>
-                <p>
-                    Click to open the pdf-document in a new tab.
-                </p>
-                <div className="three fields">
-                    <div className="field">
-                        <Link className="ui orange button" to={`/thesis/${this.state.updateThesis.values.id}/review`} target="_blank">
-                            <i className="external icon"></i>
-                            Review
-                        </Link>
-                    </div>
-                    <div className="field">
-                        <Link className="ui orange button" to={`/thesis/${this.state.updateThesis.values.id}/abstract`} target="_blank">
-                            <i className="external icon"></i>
-                            Abstract
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        );
     }
 
     renderEmails() {
@@ -188,7 +146,11 @@ export class ThesisManagePage extends Component {
 
     renderGraderSelecter() {
         const studyfieldGraders = this.props.graders
-        return <GraderSelecter graders={studyfieldGraders}/>        
+        return <PersonSelecter
+            persons={studyfieldGraders}
+            selected={this.state.thesis.graders}
+            changeList={(list) => this.handleChange("graders", list)}
+        />
     }
 
     render() {
@@ -198,7 +160,7 @@ export class ThesisManagePage extends Component {
                 <ThesisConfirmModal sendSaveThesis={this.handleSaveThesis} closeModal={this.toggleModal} showModal={this.state.showModal} />
                 <div className="ui form">
                     {this.state.editMode ? this.renderControlButtons() : undefined}
-                    <ThesisInformation sendChange={this.handleChange} thesis={this.state.thesis} studyfields={this.props.studyfields ? this.props.studyfields : []} allowEdit={this.state.allowEdit} />
+                    <ThesisInformation sendChange={this.handleChange} thesis={this.state.thesis} studyfields={this.props.studyfields} allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder attachments={this.state.thesis.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
                     <br />

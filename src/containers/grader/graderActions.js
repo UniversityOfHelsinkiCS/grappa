@@ -2,21 +2,21 @@ import { callController } from '../../util/apiConnection';
 
 export const saveAddedGrader = (grader) => {
     const route = '/graders';
-    const prefix = "SUPERVISOR_SAVE_ONE_";
+    const prefix = "GRADER_SAVE_ONE_";
     const method = "post";
     return callController(route, prefix, grader, method);
 }
 
 export const getGraders = () => {
     const route = '/graders';
-    const prefix = "SUPERVISOR_GET_ALL_";
+    const prefix = "GRADER_GET_ALL_";
     const method = "get";
     return callController(route, prefix);
 }
 
 export const deleteGrader = (graderId) => {
     const route = '/graders/' + graderId;
-    const prefix = "SUPERVISOR_DELETE_ONE_";
+    const prefix = "GRADER_DELETE_ONE_";
     const method = "delete"
     return callController(route, prefix);
 }

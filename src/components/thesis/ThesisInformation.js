@@ -59,7 +59,6 @@ export default class ThesisInformation extends Component {
     }
 
     renderThesisInformation() {
-        const activeStudyfields = this.props.studyfields.filter(field => field.isActive);
         const oldGradeFields = [
             { id: "Approbatur", name: "Approbatur" },
             { id: "Lubenter Approbatur", name: "Lubenter Approbatur" },
@@ -79,7 +78,7 @@ export default class ThesisInformation extends Component {
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField("Studyfield", activeStudyfields, "StudyfieldId")}
+                    {this.renderDropdownField("Studyfield", this.props.studyfields, "StudyfieldId")}
                     {this.renderTextField("Title", "title", "Title")}
                     {this.renderTextField("Urkund-link", "urkund", "Link to Urkund")}
 
