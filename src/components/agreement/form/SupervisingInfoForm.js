@@ -5,7 +5,7 @@ export default class SupervisingInfoForm extends Component {
     constructor() {
         super();
         this.state = {
-            chosenStudyfield: undefined,
+            chosenStudyfield: -1,
             selectedSupervisors: { thesisSupervisorMain: -1, thesisSupervisorSecond: -1 }
         }
     }
@@ -50,7 +50,7 @@ export default class SupervisingInfoForm extends Component {
                 <b>Valitse ensin gradun aine</b>
                 <div>
                     <select className="ui dropdown"  name= "studyfieldId" onChange={this.studyfieldChange}>
-                        <option>Valitse ensin gradun tieteenala</option>
+                        <option value={-1}>Valitse ensin gradun tieteenala</option>
                         {list.map((obj, index) => {
                             return <option key={index} value={obj.id}>{obj.text}</option>;
                         })}
@@ -77,7 +77,7 @@ export default class SupervisingInfoForm extends Component {
     }
 
     getSupervisorData = () => {
-        if (this.state.chosenStudyfield === undefined)
+        if (this.state.chosenStudyfield === -1)
             return [];
         return this.props.supervisors.filter((supervisor) => supervisor.studyfieldId == this.state.chosenStudyfield).map((supervisor) => {
             return { id: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname + " - " + supervisor.email }

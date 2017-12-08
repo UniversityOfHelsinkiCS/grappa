@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(getSupervisors());
     },
     getAgreementPersons(data) {
-        dispatch(getAgreementPersons());
+        dispatch(getAgreementPersons(data));
     },
     updateSupervisor(data) {
         dispatch(updateSupervisor(data));

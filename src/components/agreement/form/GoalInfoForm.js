@@ -35,11 +35,11 @@ export default class GoalInfoForm extends Component {
         }
         return [
             { value: -1, text: 'Choose a grade' },
-            { value: 5, text: '5 (Excellent)' },
-            { value: 4, text: '4 (Very Good)' },
-            { value: 3, text: '3 (Good)' },
-            { value: 2, text: '2 (Satisfactory)' },
-            { value: 1, text: '1 (Passable)' }
+            { value: "5", text: '5 (Excellent)' },
+            { value: "4", text: '4 (Very Good)' },
+            { value: "3", text: '3 (Good)' },
+            { value: "2", text: '2 (Satisfactory)' },
+            { value: "1", text: '1 (Passable)' }
         ]
     }
 
@@ -54,21 +54,21 @@ export default class GoalInfoForm extends Component {
                 {this.field("Muuta", "thesisWorkOther")}
 
                 <h1>Tavoitearvosana</h1>
-                <button className="ui mini button" onClick={() => this.setState({ old: !this.state.old })}>
-                    Vaihda arvosana-asteikko
-                </button>
                 <br />
-                <div>
+                <p>
                     <b>
                         Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:
                     </b>
-                </div>
+                </p>
                 <div>
                     <select className="ui dropdown" onChange={this.props.handleChange} name="studentGradeGoal" >
                         {this.grades(this.state.old).map((grade, index) => {
                             return <option key={index} value={grade.value}>{grade.text}</option>;
                         })}
                     </select>
+                    <button className="ui button" onClick={() => this.setState({ old: !this.state.old })} style={{ marginLeft: '2em' }}>
+                        Vaihda arvosana-asteikko
+                    </button>
                 </div>
 
             </div>

@@ -30,10 +30,10 @@ export default class Agreement extends Component {
                 thesisWorkOther: "",
 
                 studentGradeGoal: "",
-
-                studyfieldId: undefined,
+                studyfieldId: -1
             },
-            attachments: []
+            attachments: [],
+            mandatoryDataFilled: false
         }
     }
 
@@ -42,10 +42,11 @@ export default class Agreement extends Component {
         let newForm = oldForm;
         if (event.target) {  //input field
             newForm[event.target.name] = event.target.value;
-        } else { //a file
-            newForm.attachments.push(event);
-        }
+        } //else { //a file
+            //newForm.attachments.push(event);
+        //}
         this.setState({ form: newForm });
+        this.validateData();
     }
 
     resetSupervisors = () => {
@@ -53,7 +54,19 @@ export default class Agreement extends Component {
         let newForm = oldForm;
         newForm['thesisSupervisorMain'] = '';
         newForm['thesisSupervisorSecond'] = '';
-        this.setState({ form: newForm });
+        this.setState({ form: newForm, mandatoryDataFilled: false });
+    }
+
+    validateData = () => {
+        //PITÄÄ MYÖHEMMIN VALIDOIDA ROOLIKOHTAISESTI VAIN OIKEILLE FIELDEILLE
+        let fieldsToValidate = ['thesisTitle']; //TODO LISTAT VALIDOITAVISTA FIELDEISTÄ
+        let hasEmptyField = Object.keys(this.state.form)
+            .filter((key) => fieldsToValidate.indexOf(key) !== -1)
+            .map((key) => this.state.form[key])
+            .some((field) => (field === "" || field === -1));
+        //validoi kaikki fieldit => tuskin fiksua
+        //let hasEmptyField = Object.values(this.state.form).some((field) => (field === "" || field === -1));
+        this.setState({ mandatoryDataFilled: !hasEmptyField });
     }
 
     addAttachment = (file) => {
@@ -71,7 +84,8 @@ export default class Agreement extends Component {
 
     sendForm = (event) => {
         event.preventDefault();
-        this.props.saveAgreement(this.state.form);
+        this.props.saveAgreement({...this.state.form, attachments: this.state.attachments});
+        //this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
     render() {
@@ -96,8 +110,8 @@ export default class Agreement extends Component {
                     removeAttachment={this.removeAttachment}
                 />
                 <br />
-                <button className="massive green fluid ui button" onClick={this.sendForm}>
-                    Save agreement
+                <button className="massive green fluid ui button" disabled={ !this.state.mandatoryDataFilled } onClick={this.sendForm}>
+                    {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save agreement'}
                 </button>
                 <br />
             </div>
