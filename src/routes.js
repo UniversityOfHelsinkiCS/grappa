@@ -19,6 +19,7 @@ module.exports = (app) => {
     app.use('/login', shibboleth)
     app.use('/persons', persons);
     app.use(auth.checkAuth);
+    app.use('/logout', shibboleth)
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/graders', graders)

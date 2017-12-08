@@ -3,6 +3,8 @@ const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
 const config = require('../../src/db/knexfile');
+const reqres = require('reqres');
+const personService = require("../../src/services/PersonService");
 
 const makeApp = () => {
     const app = express();

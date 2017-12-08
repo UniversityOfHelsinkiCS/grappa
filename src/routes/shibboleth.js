@@ -11,6 +11,10 @@ router.get('/', jsonParser, (req, res) => {
     loginController.showUser(req, res);
 });
 
+router.get('/logout', jsonParser, (req, res) => {
+    loginController.logout(req, res);
+});
+
 //For now we use get to login for dev.
 router.get('/:id', jsonParser, (req, res) => {
     loginController.fakeLogin(req, res);

@@ -41,6 +41,8 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['displayname'] = 'Olli';
     // req.headers['uid'] = 'oopiskelija';
     // req.headers['mail'] = 'opiskelija@example.com';
+    // req.headers['edupersonaffiliation'] = 'student;member';
+    // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
     if (!req.session.user_id) {
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
@@ -62,7 +64,7 @@ module.exports.shibRegister = async (req, res, next) => {
                 user.updated_at = Date.now();
                 await personService.updatePerson(user);
             } else {
-                console.log('user was undefined');
+                // console.log('new user logged in');
                 user = {
                     firstname: req.headers['givenname'],
                     lastname: req.headers['sn'],

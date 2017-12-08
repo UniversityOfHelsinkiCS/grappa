@@ -16,6 +16,19 @@ const studyfieldService = require('../services/StudyfieldService')
 //     }
 // }
 
+export async function logout(req, res) {
+    if (req.session && req.session.user_id) {
+        delete req.session.user_id;
+        delete req.session.shib_session_id;
+    }
+    if (req.headers['shib_logout_url']) {
+        res.redirect(req.headers['shib_logout_url']);
+    } else {
+        res.status(200).send('OK');
+    }
+}
+
+
 //Return user
 export async function showUser(req, res) {
     if (req.session.user_id) {
@@ -23,16 +36,7 @@ export async function showUser(req, res) {
             const persons = await personService.getPersonById(req.session.user_id);
             let user = persons[0]
 
-            const roleToId = await roleService.getRoles();
-            const studyfieldToId = await studyfieldService.getAllStudyfields();
-            const personRoles = await roleService.getPersonRoles(user.personId);
-            const readableRoles = personRoles.map(role => {
-                return {
-                    studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
-                    role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-                }
-            })
-            user.roles = readableRoles;
+            user = await buildPerson(user);
 
             res.status(200).json(user);
         } catch (err) {
@@ -53,19 +57,25 @@ export async function fakeLogin(req, res) {
 
         req.session.user_id = user.personId;
 
-        const roleToId = await roleService.getRoles();
-        const studyfieldToId = await studyfieldService.getAllStudyfields();
-        const personRoles = await roleService.getPersonRoles(user.personId);
-        const readableRoles = personRoles.map(role => {
-            return {
-                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
-                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-            }
-        })
-        user.roles = readableRoles;
+        user = await buildPerson(user);
 
         res.status(200).json(user);
     } catch (err) {
         res.status(500).end();
     }
+}
+
+async function buildPerson(user) {
+    const roleToId = await roleService.getRoles();
+    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const personRoles = await roleService.getPersonRoles(user.personId);
+    const readableRoles = personRoles.map(role => {
+        return {
+            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+        }
+    })
+    user.roles = readableRoles;
+
+    return user;
 }
