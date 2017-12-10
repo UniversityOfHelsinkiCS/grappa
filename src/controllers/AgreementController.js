@@ -40,6 +40,17 @@ export async function getAllAgreements(req, res) {
     }
 }
 
+export async function getAgreementsByLoggedAuthor(req, res) {
+    //return agreements where user is set as author.
+    try {
+        const person = await personService.getLoggedPerson(req);
+        const agreements = await agreementService.getAgreementsByAuthor(person.personId);
+        res.status(200).json(agreements);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
 const agreementHasNoId = (data) => {
     return data.agreementId === "" || data.agreementId == null;
 }
