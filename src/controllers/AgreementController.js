@@ -91,11 +91,11 @@ export async function saveAgreement(req, res) {
             const agreementSaveResponse = await saveAgreementToService(agreementData);
             agreementData.agreementId = agreementSaveResponse;
             let personData = await personService.getPersonById(data.personId);
-            emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+            //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
             res.status(200).json(agreementData);
         }
         catch (error) {
-            res.status(500).json({ text: "Error occured" });
+            res.status(500).json({ text: "Error occured", error });
         }
     } else {
         res.status(500).json({ text: "agreement already exists" });
