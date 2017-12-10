@@ -16,7 +16,7 @@ test.before(async t => {
     //TODO: Fix this waiting.
     //Waiting for migrations to finish (in db/connection.js )
     const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    console.log(waitString);
+    // console.log(waitString);
 })
 
 const agreementWithoutId = {

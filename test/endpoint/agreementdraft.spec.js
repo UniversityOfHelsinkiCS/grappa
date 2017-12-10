@@ -10,15 +10,23 @@ const makeApp = () => {
     return app;
 }
 
-test.beforeEach(async t => {
-    const knex = require('knex')(config['test']);
-    await knex.migrate.rollback().then(() => {
-        console.log("Rollback happened")
-        return;
-    }).catch(err => {
-        console.log(err);
-    })
+// test.beforeEach(async t => {
+//     const knex = require('knex')(config['test']);
+//     await knex.migrate.rollback().then(() => {
+//         // console.log("Rollback happened")
+//         return;
+//     }).catch(err => {
+//         // console.log(err);
+//     })
+// })
+
+test.before(async t => {
+    //TODO: Fix this waiting.
+    //Waiting for migrations to finish (in db/connection.js )
+    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
+    // console.log(waitString);
 })
+
 
 const agreementDraftWithoutId = {
     mainSupervisorId: 1,
