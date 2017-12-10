@@ -9,12 +9,12 @@ export async function getLoggedPerson(req) {
     let user;
     if (req.session.user_id) {
         const userId = req.session.user_id;
-        user = getPersonById(userId);
+        user = await getPersonById(userId);
     } else if (req.headers['uid']) {
         const shibbolethId = req.headers['uid'];
-        user = getPersonByShibbolethId(shibbolethId);
+        user = await getPersonByShibbolethId(shibbolethId);
     }
-    return user;
+    return user[0];
 }
 
 
