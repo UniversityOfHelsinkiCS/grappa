@@ -14,18 +14,17 @@ router.post('/', jsonParser, (req, res) => {
     supervisorController.saveSupervisor(req, res);
 });
 
+router.put('/review', jsonParser, (req, res) => {
+    supervisorController.reviewSupervisor(req, res);
+});
+
 router.put('/:id', jsonParser, (req, res) => {
     // front should not use this route for this, but one for person
-    personController.updateSupervisor(req, res);
+    personController.updatePerson(req, res);
 });
 
 router.get('/agreementPersons', (req, res) => {
     supervisorController.getAgreementPersons(req, res);
-});
-
-router.put('/review', jsonParser, (req, res) => {
-    console.log("routes")
-    supervisorController.reviewSupervisor(req, res);
 });
     
 module.exports = router;
