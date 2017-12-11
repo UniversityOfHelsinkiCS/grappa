@@ -49,17 +49,17 @@ export default class Review extends Component {
         if (this.state.person.approved === 1) {
             return "yes";
         }
-        return "no (or not supervising at all)"
+        return "no"
     }
 
     renderTexts() {
         return (
             <div className="scrolling content">
                 <div className="description">
-                    <p><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
-                        supervisor for thesis: id: {this.state.person.agreementId} name: to be shown...</p>
-                    <p>The supervisor is approved to supervise this thesis: {this.renderIfApproved()}</p>
-                    <p>Write a review, if this supervisor needs it. Other info to be shown here?</p>
+                    <div><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
+                        supervisor for thesis {this.state.person.thesisTitle}</div>
+                    <div>The supervisor is approved to supervise this thesis: <b>{this.renderIfApproved()}</b></div>
+                    <div>Write a review, if this supervisor needs it. Other info to be shown here?</div>
                 </div>
                 <div>
                     <div className="field ui">

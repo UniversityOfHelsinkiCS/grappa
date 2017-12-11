@@ -114,7 +114,7 @@ export default class SupervisorEditor extends Component {
     renderCreate() {
         return (
             <div>
-                <p>Add new supervisor</p>
+                <div>Add new supervisor</div>
                 <div className="five fields">
                     {this.renderTitleList("newSupervisor")}
                     {this.renderNameField("First name", "newSupervisor")}
@@ -134,7 +134,7 @@ export default class SupervisorEditor extends Component {
     renderUpdate() {
         return (
             <div>
-                <p>Update information related to a supervisor</p>
+                <div>Update information related to a supervisor</div>
                 <div className="six fields">
                     <div className="field">
                         <label>Who</label>
