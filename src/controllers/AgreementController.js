@@ -7,7 +7,6 @@ const studyfieldService = require('../services/StudyfieldService');
 
 const AttachmentController = require('./AttachmentController');
 
-
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
     res.status(200).json(agreement);
@@ -124,8 +123,8 @@ export async function saveAgreementForm(req, res) {
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await thesisService.saveThesis(thesisData);
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
-            const agreementSaveResponse = await agreementService.saveNewAgreement(agreementData);
-            agreementData.agreementId = agreementSaveResponse;
+            const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
+            agreementData.agreementId = agreementSaveResponse.agreementId;
             let personData = await personService.getPersonById(data.personId);
             //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
             res.status(200).json(agreementData);
@@ -147,7 +146,8 @@ const saveThesis = async function (thesisData) {
 }
 
 const saveAgreementToService = async function (agreementData) {
-    return await agreementService.saveNewAgreement(agreementData);
+    const agreement = await agreementService.saveAgreement(agreementData);
+    return agreement.agreementId;
 }
 
 export async function updateAgreement(req, res) {

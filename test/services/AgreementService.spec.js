@@ -82,7 +82,7 @@ test.serial('updateAgreement', async t => {
     t.deepEqual(response, 1);
 });
 
-test.serial('saveNewAgreement call returns agreementId = 4', async t => {
+test.serial('saveAgreement call returns agreementId = 4', async t => {
     const testData = {
         authorId: 1,
         thesisId: 1,
@@ -92,9 +92,9 @@ test.serial('saveNewAgreement call returns agreementId = 4', async t => {
     };
 
 
-    var temp = await agreementService.saveNewAgreement(testData);
+    var temp = await agreementService.saveAgreement(testData);
     //console.log(temp);
-    t.truthy(temp == 4);
+    t.truthy(temp.agreementId == 4);
     /*
     await knex('agreement')
     .returning('agreementId')

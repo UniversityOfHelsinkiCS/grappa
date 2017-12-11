@@ -1,4 +1,5 @@
 const thesisService = require('../services/ThesisService');
+const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 
 export async function getAllTheses(req, res) {
@@ -14,21 +15,13 @@ export async function getThesisById(req, res) {
 export async function saveThesis(req, res) {
     const data = req.body;
     try {
-        //If it has attachments handle those.
-        if (data.attachments) {
-            await data.attachments.forEach(async attachment => {
-                await attachmentService.saveAttachment(attachment)                
-            })
-        }
-        //DB breaks if we try adding too many fields
-        delete data.attachments;        
-        //TODO: Find better solution 
-        //(Validate all requests before sending to db.)
-
         const thesis = await thesisService.saveThesis(data);
+        const agreement = await agreementService.createFakeAgreement(thesis.thesisId);
+        await attachmentService.saveAttachments(req, res, agreement.agreementId);
+        const attachments = await attachmentService.getAttachmentsForAgreement(agreement.agreementId)
+        console.log(attachments);
         res.status(200).json(thesis);
     } catch (error) {
-        console.log(error);
         res.status(500).json(error);
     }
 }

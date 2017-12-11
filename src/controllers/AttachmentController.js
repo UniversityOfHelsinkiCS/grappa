@@ -1,13 +1,8 @@
-require('babel-polyfill');
 const attachmentService = require('../services/AttachmentService');
-const fileService = require('../services/FileService');
-const express = require('express');
-const Busboy = require('busboy');
-//const app = express();
-const fs = require('fs');
 
 export async function saveAttachment(req, res) {
-    try {
+    res.status(404).send({ text: "NOT YET IMPLEMENTED" }).end();
+    /*try {
         let busboy = new Busboy({ headers: req.headers });
         console.log("inside busboy")
         //atm never gets here, don't know why. seems to lost information what front end have sent
@@ -38,5 +33,5 @@ export async function saveAttachment(req, res) {
     } catch (error) {
         console.log("attachment controller says 500, didn't save attachment :(")
         res.status(500).json({ text: "error occured", error: error });
-    }
+    }*/
 }

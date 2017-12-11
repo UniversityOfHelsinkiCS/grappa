@@ -60,14 +60,29 @@ export const saveAgreement = (agreement) => {
     })
 }
 
-export const saveNewAgreement = (data) => {
-    return knex('agreement')
-        .returning('agreementId')
-        .insert(data)
-        .then(agreementId => agreementId[0])
-        .catch(error => {
-            throw error
-        });
+export const createFakeAgreement = (thesisId) => {
+    console.log("ThesisId", thesisId);
+    const fakeAgreement = {
+        authorId: null,
+        thesisId: thesisId,
+        responsibleSupervisorId: null,
+        studyfieldId: null,
+        fake: true,
+        studentGradeGoal: null,
+        studentWorkTime: null,
+        supervisorWorkTime: null,
+        intermediateGoal: null,
+        meetingAgreement: null,
+        other: null,
+        whoNext: null
+    }
+    return Agreement.forge(fakeAgreement).save().then(model => {
+        return model.fetch();
+    }).then(model => {
+        return model.attributes;
+    }).catch(error => {
+        throw error;
+    })
 }
 
 export const updateAgreement = (data) => {

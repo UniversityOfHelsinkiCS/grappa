@@ -4,6 +4,7 @@ const thesisController = require('../controllers/ThesisController');
 const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+
 router.get('/', (req, res) => {
     thesisController.getAllTheses(req, res);
 });
@@ -12,7 +13,7 @@ router.get('/:id', (req, res) => {
     thesisController.getThesisById(req, res);
 });
 
-router.post('/', jsonParser, (req, res) => {
+router.post('/', (req, res) => {
     thesisController.saveThesis(req, res);
 });
 
