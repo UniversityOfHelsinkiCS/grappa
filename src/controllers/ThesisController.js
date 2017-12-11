@@ -1,7 +1,5 @@
-require('babel-polyfill');
 const thesisService = require('../services/ThesisService');
-const express = require('express');
-const app = express();
+const attachmentService = require('../services/AttachmentService');
 
 export async function getAllTheses(req, res) {
     const theses = await thesisService.getAllTheses();
@@ -16,23 +14,21 @@ export async function getThesisById(req, res) {
 export async function saveThesis(req, res) {
     const data = req.body;
     try {
+        //If it has attachments handle those.
+        if (data.attachments) {
+            await data.attachments.forEach(async attachment => {
+                await attachmentService.saveAttachment(attachment)                
+            })
+        }
+        //DB breaks if we try adding too many fields
+        delete data.attachments;        
+        //TODO: Find better solution 
+        //(Validate all requests before sending to db.)
+
         const thesis = await thesisService.saveThesis(data);
         res.status(200).json(thesis);
-    } catch (e) {
-        res.status(500).json(e);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
     }
-}
-
-function getThesisData(data) {
-    let thesis = {
-        thesisTitle: data.thesisTitle,
-        startDate: data.startDate,
-        completionEta: data.completionEta,
-        performancePlace: data.performancePlace,
-        urkund: data.urkund,
-        grade: data.grade,
-        graderEval: data.graderEval,
-        userId: data.authorId
-    };
-    return thesis;
 }

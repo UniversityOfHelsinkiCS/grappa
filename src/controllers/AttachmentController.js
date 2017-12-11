@@ -18,7 +18,8 @@ export async function saveAttachment(req, res) {
                 filename: filename,
                 type: mimetype
             };
-            const attachmentId = await attachmentService.saveAttachment(attachmentData);
+            const attachment = await attachmentService.saveAttachment(attachmentData);
+            const attachmentId = attachment.attachmentId;
             const fileResponse = await fileService.savePdfFile(file, attachmentId);
             if (fileResponse) {
                 let successData = {
