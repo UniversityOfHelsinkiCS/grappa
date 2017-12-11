@@ -7,9 +7,13 @@ console.log("ENVIRONMENT IS", env);
 const knex = require('knex')(config[env]);
 
 knex.migrate.latest(config[env]).then((msg) => {
-    console.log("KNEX MIGRATE SUCCESS", msg);
+    if (env !== "test") {
+        console.log("KNEX MIGRATE SUCCESS", msg);
+    }
 }).catch((err) => {
-    console.log("KNEX MIGRATE FAILURE", err);
+    if (env !== "test") {
+        console.log("KNEX MIGRATE FAILURE", err);
+    }
 });
 
 module.exports = knex;

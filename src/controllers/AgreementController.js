@@ -59,7 +59,18 @@ export async function getAllAgreements(req, res) {
     }
 }
 
-const agreementHasNoId = (agreement) => {
+export async function getAgreementsByLoggedAuthor(req, res) {
+    //return agreements where user is set as author.
+    try {
+        const person = await personService.getLoggedPerson(req);
+        const agreements = await agreementService.getAgreementsByAuthor(person.personId);
+        res.status(200).json(agreements);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+const agreementHasNoId = (data) => {
     return !agreement.agreementId
 }
 
@@ -115,11 +126,12 @@ export async function saveAgreementForm(req, res) {
             const agreementData = getAgreementData(data, thesisSaveResponse.id);
             const agreementSaveResponse = await agreementService.saveNewAgreement(agreementData);
             agreementData.agreementId = agreementSaveResponse;
-            emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
-            //AttachmentController.saveAttachment(req, res);
-        } catch (error) {
-            console.log("Errori", error)
-            res.status(500).json({ text: "Error occured" });
+            let personData = await personService.getPersonById(data.personId);
+            //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+            res.status(200).json(agreementData);
+        }
+        catch (error) {
+            res.status(500).json({ text: "Error occured", error });
         }
     } else {
         res.status(500).json({ text: "agreement already exists" });

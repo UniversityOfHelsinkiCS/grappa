@@ -17,7 +17,7 @@ test.before(async t => {
         //console.log("Rollback happened")
         return;
     }).catch(err => {
-        console.log(err);
+        //console.log(err);
     })
     roleService.saveRole("supervisor");
 })

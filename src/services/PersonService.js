@@ -37,12 +37,12 @@ export async function getLoggedPerson(req) {
     let user;
     if (req.session.user_id) {
         const userId = req.session.user_id;
-        user = getPersonById(userId);
+        user = await getPersonById(userId);
     } else if (req.headers['uid']) {
         const shibbolethId = req.headers['uid'];
-        user = getPersonByShibbolethId(shibbolethId);
+        user = await getPersonByShibbolethId(shibbolethId);
     }
-    return user;
+    return user[0];
 }
 
 
@@ -59,13 +59,15 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    return await knex('person')
-        .returning('personId')
-        .insert(personData)
-        .then(personId => personId[0])
-        .catch(error => {
-            throw error
-        });
+    return knex('person')
+    .returning('personId')
+    .insert(personData)
+    .then(persons => {
+        return persons[0];
+    })
+    .catch(err => {
+        throw err;
+    });
 }
 
 export async function savePersonRole(personRoleData) {

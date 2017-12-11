@@ -20,13 +20,57 @@ test.before(async t => {
     //TODO: Fix this waiting.
     //Waiting for migrations to finish (in db/connection.js )
     const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    console.log(waitString);
+    // console.log(waitString);
 })
 
 const agreementWithoutId = {
     authorId: 1,
     thesisId: 1,
+    personId: 1,
     responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "tsiigaillaan",
+    intermediateGoal: "oispa valmistunut",
+    meetingAgreement: "just just",
+    other: "eihän tässä muuta"
+}
+
+const agreementWithId = {
+    agreementId: 1,
+    authorId: 1,
+    thesisId: 1,
+    responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "tsiigaillaan",
+    intermediateGoal: "oispa valmistunut",
+    meetingAgreement: "just just",
+    other: "eihän tässä muuta"
+}
+
+const correctAgreement = {
+    thesisTitle: "my Thesis",
+    thesisStartDate: "9.9.2017",
+    thesisCompletionEta: "9.9.2018",
+    thesisPerformancePlace: "helsinki",
+
+    thesisSupervisorMain: "matti luukkainen",
+    thesisSupervisorSecond: "sauli niinnistö",
+    thesisSupervisorOther: "",
+
+    thesisWorkStudentTime: "1h viikossa",
+    thesisWorkSupervisorTime: "2h viikossa",
+    thesisWorkIntermediateGoal: "vain taivas on rajana",
+    thesisWorkMeetingAgreement: "joka toinen viikko",
+    thesisWorkOther: "",
+
+    studentGradeGoal: "5",
+
     studyfieldId: 1,
     fake: false,
     studentGradeGoal: 5,
