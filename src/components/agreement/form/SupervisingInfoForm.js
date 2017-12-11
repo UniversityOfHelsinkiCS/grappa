@@ -17,6 +17,10 @@ export default class SupervisingInfoForm extends Component {
                 <b>{label}</b>
                 <div className="ui fluid input">
                     <input type="text" name={formName} onChange={this.props.handleChange} />
+                    {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
+                    (<div className="ui left pointing red basic label">
+                      Täytä ohjaajan tiedot
+                    </div>) : ''}
                 </div>
             </div>
         )
@@ -55,6 +59,10 @@ export default class SupervisingInfoForm extends Component {
                             return <option key={index} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
+                    {(Object.keys(this.props.requiredFields).includes('studyfieldId') && !this.props.requiredFields['studyfieldId']) ?
+                    (<div className="ui left pointing red basic label">
+                      Valitse oppiaine
+                    </div>) : ''}
                 </div>
             </div>
         );
@@ -71,6 +79,10 @@ export default class SupervisingInfoForm extends Component {
                             return <option key={index} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
+                    {(Object.keys(this.props.requiredFields).includes(formName)) && !this.props.requiredFields[formName] ?
+                    (<div className="ui left pointing red basic label">
+                      Valitse ohjaaja
+                    </div>) : ''}
                 </div>
             </div>
         );

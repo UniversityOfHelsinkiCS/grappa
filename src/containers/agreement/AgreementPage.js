@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
+import { getRequiredFields } from './agreementValidations';
 
 //redux
 import { connect } from "react-redux";
@@ -16,7 +17,8 @@ export class AgreementPage extends Component {
             newAgreement: false,
             originalAgreement: {},
             editMode: false,
-            agreement: undefined //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            agreement: undefined, //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            requiredFields: getRequiredFields(this.props.user.roles)
         }
     }
 
@@ -108,6 +110,7 @@ export class AgreementPage extends Component {
                         studyfields={this.props.studyfields}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
+                        requiredFields={this.state.requiredFields}
                     />
                 </div>
             );

@@ -16,6 +16,10 @@ export default class GoalInfoForm extends Component {
                 <b>{label}</b>
                 <div className="ui fluid input">
                     <input type="text" name={formName} onChange={this.props.handleChange} />
+                    {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
+                    (<div className="ui left pointing red basic label">
+                      Täytä tiedot
+                    </div>) : ''}
                 </div>
             </div>
         )
@@ -66,7 +70,11 @@ export default class GoalInfoForm extends Component {
                             return <option key={index} value={grade.value}>{grade.text}</option>;
                         })}
                     </select>
-                    <button className="ui button" onClick={() => this.setState({ old: !this.state.old })} style={{ marginLeft: '2em' }}>
+                    {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields['studentGradeGoal']) ?
+                    (<div className="ui left pointing red basic label">
+                      Valitse tavoitearvosana
+                    </div>) : ''}
+                    <button className="ui button" onClick={() => this.setState({ old: !this.state.old })} style={{ marginLeft: '1em' }}>
                         Vaihda arvosana-asteikko
                     </button>
                 </div>
