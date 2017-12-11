@@ -13,12 +13,11 @@ export default class AttachmentAdder extends Component {
         this.props.removeAttachment(attachment);
     }
 
-    getFileList = () => {
+    getFileList = () => { 
         return (
             <div className="ui form">
                 {this.getFileNumberLabel()}
-                {this.props.attachments.map((attachment, index) =>
-
+                {this.props.attachments ? this.props.attachments.map((attachment, index) =>
                     <div key={index}>
                         <button
                             className="negative ui icon button "
@@ -29,7 +28,7 @@ export default class AttachmentAdder extends Component {
                         {attachment.name}
                         <hr />
                     </div>
-                )}
+                ) : undefined}
             </div>
         );
 
@@ -45,12 +44,11 @@ export default class AttachmentAdder extends Component {
 
 
     getFileNumberLabel = () => {
-        const attachmentsUploaded = this.props.attachments.length;
         return (
             <h3>
-                {(attachmentsUploaded === 0) ? "No attachments uploaded" :
-                    (attachmentsUploaded === 1) ? "One attachment uploaded:" :
-                        attachmentsUploaded + " attachments uploaded:"}
+                {!this.props.attachments ? "No attachments uploaded" :
+                    (this.props.attachments.length === 1) ? "One attachment uploaded:" :
+                        this.props.attachments.length + " attachments uploaded:"}
             </h3>
         )
 

@@ -40,8 +40,8 @@ export class ThesisManagePage extends Component {
                     graderEvalReminder: undefined,
                     printReminder: undefined,
                 },
-                attachments: [],
             },
+            attachments: [],
             showModal: false,
             loading: false,
             editMode: false,
@@ -67,8 +67,12 @@ export class ThesisManagePage extends Component {
     }
 
     handleSaveThesis = () => {
-        const thesis = this.state.thesis;
-        this.props.saveThesis(thesis);
+        const form = new FormData();
+        this.state.attachments.forEach(attachment => {
+            form.append("attachment", attachment);            
+        })
+        form.append("json", this.state.thesis);
+        this.props.saveThesis(form);
     }
 
     deleteThesis = () => {
@@ -107,15 +111,12 @@ export class ThesisManagePage extends Component {
     }
 
     addAttachment = (attachment) => {
-        const thesis = this.state.thesis;
-        thesis.attachments = [...thesis.attachments, attachment];
-        this.setState({ thesis });
+        this.setState({ attachments: [...this.state.attachments, attachment] });
     }
 
     removeAttachment = (attachment) => {
-        const thesis = this.state.thesis;
-        thesis.attachments = thesis.attachments.filter(inList => inList !== attachment)
-        this.setState({ thesis });
+        const attachments = this.state.attachments.filter(inList => inList !== attachment)
+        this.setState({ attachments });
     }
 
     handleEmail = (reminderType) => {
@@ -162,7 +163,7 @@ export class ThesisManagePage extends Component {
                     {this.state.editMode ? this.renderControlButtons() : undefined}
                     <ThesisInformation sendChange={this.handleChange} thesis={this.state.thesis} studyfields={this.props.studyfields} allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
-                    <AttachmentAdder attachments={this.state.thesis.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
+                    <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
                     <br />
                     {(this.state.allowEdit || !this.state.editMode) ? <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} /> : undefined}
                     {(this.state.allowEdit && this.state.editMode) ? this.renderEmails() : undefined}
