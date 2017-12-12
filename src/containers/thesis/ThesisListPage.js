@@ -57,7 +57,7 @@ class ThesisListPage extends Component {
             const values = [
                 thesis.authorLastname.toLowerCase(),
                 thesis.authorFirstname.toLowerCase(),
-                thesis.thesisTitle.toLowerCase(),
+                thesis.title.toLowerCase(),
                 thesis.grade.toString().toLowerCase(),
             ]
             return values.find(value => value.includes(searchValue))

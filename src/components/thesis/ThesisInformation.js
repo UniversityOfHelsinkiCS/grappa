@@ -78,7 +78,7 @@ export default class ThesisInformation extends Component {
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField("Studyfield", this.props.studyfields, "StudyfieldId")}
+                    {this.renderDropdownField("Studyfield", this.props.studyfields, "studyfieldId")}
                     {this.renderTextField("Title", "title", "Title")}
                     {this.renderTextField("Urkund-link", "urkund", "Link to Urkund")}
 
