@@ -101,9 +101,11 @@ const getAgreementData = (data, thesisId) => {
 export async function saveAgreement(req, res) {
     const data = req.body;
     const personId = req.session.user_id
+    console.log("Saving agreement");
     if (!personId) res.status(500).json({ text: "No user_id in session" });
     if (!data.agreementId) {
         try {
+            console.log("Before await");
             let newAgreement = await agreementService.saveAgreement(data);
             return res.status(200).json(newAgreement);
         } catch (err) {

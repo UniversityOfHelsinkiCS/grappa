@@ -3,16 +3,20 @@ const bookshelf = require('../db/bookshelf')
 const Attachment = require('../db/models/attachment');
 const multer = require('multer');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './uploads/')
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname)
+const storage = () => {
+    if (process.env.NODE_ENV === "test") {
+        return multer.memoryStorage();
     }
-})
-
-const upload = multer({ storage: storage }).array('attachment')
+    return multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, './uploads/')
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname)
+        }
+    })
+}
+const upload = multer({ storage: storage() }).array('attachment')
 
 const attachmentSchema = [
     "attachmentId",
@@ -37,7 +41,6 @@ export async function saveAttachments(req, res, agreementId) {
             })
         })
         const request = await uploaded
-        
         // agreementId is not null when saving a thesis, 
         // and in that case it's not in request.body.json
         let id = agreementId;
@@ -51,13 +54,11 @@ export async function saveAttachments(req, res, agreementId) {
                 filename: file.filename,
                 type: file.mimetype
             };
-            return await Attachment.forge(attachment).save().then(model => {
-                return model.fetch();
-            }).then(model => {
-                return model.attributes;
-            }).catch(error => {
-                throw error;
-            })
+            const attachmentIds = await knex('attachment')
+                .returning('attachmentId')
+                .insert(attachment)
+            const attachmentId = attachmentIds[0]
+            return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first()
         }))
         return { attachments: attachments, json: JSON.parse(request.body.json) }
     } catch (error) {

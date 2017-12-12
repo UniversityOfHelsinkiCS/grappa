@@ -23,25 +23,9 @@ test.before(async t => {
 const agreementWithoutId = {
     authorId: 1,
     thesisId: 1,
-    personId: 1,
     responsibleSupervisorId: 1,
     studyfieldId: 1,
-    fake: false,
-    studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "tsiigaillaan",
-    intermediateGoal: "oispa valmistunut",
-    meetingAgreement: "just just",
-    other: "eihän tässä muuta"
-}
-
-const agreementWithId = {
-    agreementId: 1,
-    authorId: 1,
-    thesisId: 1,
-    responsibleSupervisorId: 1,
-    studyfieldId: 1,
-    fake: false,
+    fake: 0,
     studentGradeGoal: 5,
     studentWorkTime: "1h viikossa",
     supervisorWorkTime: "tsiigaillaan",
@@ -76,22 +60,17 @@ const correctAgreement = {
     intermediateGoal: "20 sivua ensi perjantaina",
     meetingAgreement: "Jepsis",
     other: "eihän tässä muuta",
-    whoNext: "supervisor",    
+    whoNext: "supervisor",
 }
 
 test('agreement post & creates id', async t => {
-    t.plan(15);
+    t.plan(2);
     const res = await request(makeApp())
         .post('/agreements')
         .send(agreementWithoutId);
     t.is(res.status, 200);
     let body = res.body;
-    body.fake = body.fake !== 0;
     let agreement = agreementWithoutId;
     agreement.agreementId = 1;
-    Object.keys(agreement).forEach(key => {
-        t.is(agreement[key], body[key], "Key: " + key)
-    })
-    //Ignore createdat and updatedat
-    t.is(Object.keys(agreement).length, Object.keys(body).length - 2, "Key length");
+    t.deepEqual(agreement, body);
 })
