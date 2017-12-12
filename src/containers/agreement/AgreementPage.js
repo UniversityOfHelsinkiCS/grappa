@@ -98,6 +98,13 @@ export class AgreementPage extends Component {
         return true;
     }
 
+    /*
+    {this.state.agreement ? this.state.agreement.map((agreement, index) =>
+                        <div key={agreement.agreementId}> <AgreementView agreementData={this.state.agreement[index]} />
+                        </div>
+                    ): undefined}
+                     */
+
     render() {
         if (this.state.newAgreement) {
             return (
@@ -123,10 +130,8 @@ export class AgreementPage extends Component {
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
                     <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
                     
-                    {this.state.agreement ? this.state.agreement.map((agreement, index) =>
-                        <div key={index}> <AgreementView agreementData={this.state.agreement[index]} />
-                        </div>
-                    ): undefined}
+                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} />: undefined}
+                      
 
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
