@@ -10,16 +10,6 @@ const makeApp = () => {
     return app;
 }
 
-// test.beforeEach(async t => {
-//     const knex = require('knex')(config['test']);
-//     await knex.migrate.rollback().then(() => {
-//         console.log("Rollback happened")
-//         return;
-//     }).catch(err => {
-//         console.log(err);
-//     })
-// })
-
 test.before(async t => {
     //TODO: Fix this waiting.
     //Waiting for migrations to finish (in db/connection.js )

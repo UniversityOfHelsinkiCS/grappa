@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/OhtuGrappa2/back-grappa2#readme",
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",

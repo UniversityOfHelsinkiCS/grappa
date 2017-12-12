@@ -56,7 +56,7 @@ test('thesis get all', async t => {
     thesis.thesisId = 1;
     const theses = [thesis];
     Object.keys(thesis).forEach(key => {
-        t.is(thesis[key], bodyThesis[key], "Key: " + key)
+         t.is(thesis[key], bodyThesis[key], "Key: " + key)
     })
     t.is(Object.keys(thesis).length, Object.keys(bodyThesis).length, "Key length");
     t.is(body.length, theses.length);

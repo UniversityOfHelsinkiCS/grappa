@@ -1,7 +1,7 @@
 import request from 'request'
 import xml from 'xmlbuilder'
 import creds from './ethesis_credentials'
-import FormData from 'form-data'
+import zip from 'adm-zip';
 
 export function getExamplePDF(){
     const fs = require('fs');
@@ -47,10 +47,16 @@ export async function saveToEThesis(meta, pdf){
     console.log(metaData.toString());
     console.log('--- --- ---')
     
-    const data = new FormData();
-    data.append('meta', metaData, { type: 'application/atomserv+xml' });
+    //const data = new FormData();
+    //data.append('meta', metaData, { type: 'application/atomserv+xml' });
     console.log(pdf);
     //data.append('file', pdf, { type: 'application/pdf' });
+
+    var zip=require('adm-zip');
+    var dataBuffer = new Buffer(metaData,'utf-8');//console.log(dataBuffer.toString());
+    var zipper = new zip();
+    zipper.addFile('mets.xml',dataBuffer);
+    zipper.addFile('gradu.pdf',pdf);
 
     request({
         method: 'POST',
@@ -58,6 +64,14 @@ export async function saveToEThesis(meta, pdf){
         postambleCRLF: false,
         uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13',
         'auth': creds,
+        headers: {
+            'Packaging': 'http://purl.org/net/sword/package/SimpleZip',
+            'content-type':'application/zip',
+            'Content-Disposition': 'filename=zip.zip'
+        },
+        body: zipper.toBuffer()
+
+        /*
         multipart: [
             {
                 'content-type': 'application/atomserv+xml',
@@ -67,14 +81,20 @@ export async function saveToEThesis(meta, pdf){
                 'content-type': 'application/pdf',
                 body: pdf
             }
-        ],
+        ],*/
     },
     function (error, response, body) {
         console.log('statusCode:', response && response.statusCode); 
         if (error) {
             return console.error('upload failed:', error);
         }
-        console.log('Upload successful!  Server responded with:', body);
+        console.log('Upload successful!');
+        console.log('Response headers:');
+        console.log(response.headers);
+        console.log('Response body:\n', body);
+        console.log('Request:');
+        console.log(response.request);
+        
     })
 
 
