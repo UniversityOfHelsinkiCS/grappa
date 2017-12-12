@@ -29,6 +29,9 @@ export const getAllAgreements = () => {
 
 export const getAgreementsByAuthor = (personId) => {
     return knex.select().from('agreement')
+        .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+        .join('person', 'agreement.authorId', '=', 'person.personId')
+        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
         .where('authorId', personId)
         .then(agreements => {
             return agreements;
@@ -41,7 +44,8 @@ export const saveNewAgreement = (data) => {
         .insert(data)
         .then(agreementId => agreementId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export const updateAgreement = (data) => {
@@ -51,7 +55,8 @@ export const updateAgreement = (data) => {
         .update(data)
         .then(agreementId => agreementId)
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 export const savePrevious = (data) => {
@@ -60,7 +65,8 @@ export const savePrevious = (data) => {
         .insert(data)
         .then(agreementId => agreementId[0])
         .catch(error => {
-            throw error});
+            throw error
+        });
 }
 
 //change data formatting from DB to front
