@@ -19,7 +19,7 @@ app.listen(3100, () => {
   console.log('Grappa app listening on port 3100!');
 })
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }, store: store, resave: false, saveUninitialized: false}));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 6000000 }, store: store, resave: false, saveUninitialized: false}));
 
 routes(app);
 

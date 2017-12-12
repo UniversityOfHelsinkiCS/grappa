@@ -35,7 +35,7 @@ const agreementWithoutId = {
 }
 
 const correctAgreement = {
-    thesisTitle: "my Thesis",
+    title: "my Thesis",
     thesisStartDate: "9.9.2017",
     thesisCompletionEta: "9.9.2018",
     thesisPerformancePlace: "helsinki",

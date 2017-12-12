@@ -4,7 +4,7 @@ const Thesis = require('../db/models/thesis');
 
 const thesisSchema = [
     "thesis.thesisId",
-    "thesisTitle",
+    "thesis.title",
     "startDate",
     "completionEta",
     "performancePlace",
@@ -47,14 +47,13 @@ export const getThesisById = (thesisId) => {
         .where('thesisId', thesisId).first();
 }
 
-export const saveThesis = (thesis) => {
-    return Thesis.forge(thesis).save().then(model => {
-        return model.fetch();
-    }).then(model => {
-        return model.attributes;
-    }).catch(error => {
-        throw error;
-    })
+export const saveThesis = async (thesis) => {
+    const thesisIds = await knex('thesis')
+        .returning('thesisId')
+        .insert(thesis)
+    const thesisId = thesisIds[0]
+    return knex.select(thesisSchema).from('thesis').where('thesisId', thesisId).first()
+
 }
 
 export async function updateThesis(thesisData) {

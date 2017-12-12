@@ -75,7 +75,7 @@ const agreementHasNoId = (data) => {
 
 const getThesisData = (data) => {
     return ({
-        thesisTitle: data.thesisTitle,
+        title: data.title,
         startDate: data.thesisStartDate,
         completionEta: data.thesisCompletionEta,
         performancePlace: data.thesisPerformancePlace,
@@ -170,7 +170,7 @@ export async function updateAgreement(req, res) {
             const personResponse = await personService.updatePerson(cleanPersonData);
             const thesisData = {
                 thesisId: data.thesisId,
-                thesisTitle: data.thesisTitle,
+                title: data.title,
                 startDate: data.thesisStartDate,
                 completionEta: data.thesisCompletionEta,
                 performancePlace: data.thesisPerformancePlace

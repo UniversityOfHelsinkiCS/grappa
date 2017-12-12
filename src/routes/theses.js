@@ -14,7 +14,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    thesisController.saveThesis(req, res);
+    thesisController.saveThesisForm(req, res);
 });
 
 module.exports = router;

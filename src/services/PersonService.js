@@ -6,7 +6,7 @@ const personSchema = [
     "email",
     "firstname",
     "lastname",
-    "title",
+    "person.title",
     "isRetired",
     "studentNumber",
     "address",
@@ -59,15 +59,12 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    return knex('person')
-    .returning('personId')
-    .insert(personData)
-    .then(persons => {
-        return persons[0];
-    })
-    .catch(err => {
-        throw err;
-    });
+    const personIds = await knex('person')
+        .returning('personId')
+        .insert(personData)
+    const personId = personIds[0]
+    return knex.select(personSchema).from('person').where('personId', personId).first()
+
 }
 
 export async function savePersonRole(personRoleData) {
