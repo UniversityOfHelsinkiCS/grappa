@@ -35,7 +35,7 @@ export default class AttachmentAdder extends Component {
     }
 
     getHeader = () => {
-        if (this.props.limit === undefined) {
+        if (!this.props.limit) {
             return <h2>Upload attachments as much as you want</h2>
         }
         return <h2>Upload maximum {this.props.limit} attachments</h2>
