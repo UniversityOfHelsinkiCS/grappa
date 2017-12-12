@@ -48,15 +48,15 @@ module.exports.checkAuth = async (req, res, next) => {
 
 module.exports.shibRegister = async (req, res, next) => {
     // fake shibboleth headers for testing
-    req.headers['shib-session-id'] = 'asdf';
-    req.headers['unique-code'] = 'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789';
-    req.headers['sn'] = 'Opiskelija';
-    req.headers['givenname'] = 'Olli O';
-    req.headers['displayname'] = 'Olli';
-    req.headers['uid'] = 'oopiskelija';
-    req.headers['mail'] = 'opiskelija@example.com';
-    req.headers['edupersonaffiliation'] = 'student;member';
-    req.headers['shib_logout_url'] = 'https://example.com/logout/';
+    // req.headers['shib-session-id'] = 'asdf';
+    // req.headers['unique-code'] = 'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789';
+    // req.headers['sn'] = 'Opiskelija';
+    // req.headers['givenname'] = 'Olli O';
+    // req.headers['displayname'] = 'Olli';
+    // req.headers['uid'] = 'oopiskelija';
+    // req.headers['mail'] = 'opiskelija@example.com';
+    // req.headers['edupersonaffiliation'] = 'student;member';
+    // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
     if (!req.session.user_id) {
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
