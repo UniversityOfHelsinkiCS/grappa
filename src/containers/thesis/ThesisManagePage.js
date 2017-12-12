@@ -69,9 +69,9 @@ export class ThesisManagePage extends Component {
     handleSaveThesis = () => {
         const form = new FormData();
         this.state.attachments.forEach(attachment => {
-            form.append("attachment", attachment);            
+            form.append("attachment", attachment);
         })
-        form.append("json", this.state.thesis);
+        form.append("json", JSON.stringify(this.state.thesis));
         this.props.saveThesis(form);
     }
 
