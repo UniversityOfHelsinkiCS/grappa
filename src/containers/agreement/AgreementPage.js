@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
+import { getRequiredFields } from './agreementValidations';
 
 //redux
 import { connect } from "react-redux";
@@ -16,7 +17,8 @@ export class AgreementPage extends Component {
             newAgreement: false,
             originalAgreement: {},
             editMode: false,
-            agreement: undefined //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            agreement: undefined, //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            requiredFields: getRequiredFields(this.props.user.roles)
         }
     }
 
@@ -96,6 +98,13 @@ export class AgreementPage extends Component {
         return true;
     }
 
+    /*
+    {this.state.agreement ? this.state.agreement.map((agreement, index) =>
+                        <div key={agreement.agreementId}> <AgreementView agreementData={this.state.agreement[index]} />
+                        </div>
+                    ): undefined}
+                     */
+
     render() {
         if (this.state.newAgreement) {
             return (
@@ -108,6 +117,7 @@ export class AgreementPage extends Component {
                         studyfields={this.props.studyfields}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
+                        requiredFields={this.state.requiredFields}
                     />
                 </div>
             );
@@ -120,10 +130,8 @@ export class AgreementPage extends Component {
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
                     <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
                     
-                    {this.state.agreement ? this.state.agreement.map((agreement, index) =>
-                        <div key={index}> <AgreementView agreementData={this.state.agreement[index]} />
-                        </div>
-                    ): undefined}
+                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} />: undefined}
+                      
 
                     <div className="ui segment">
                         <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>

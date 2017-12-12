@@ -33,8 +33,13 @@ export default class Agreement extends Component {
                 studyfieldId: -1
             },
             attachments: [],
-            mandatoryDataFilled: false
+            filledRequiredFields: {}
         }
+    }
+
+    componentDidMount() {
+        let fields = this.props.requiredFields.reduce((obj, value) => (Object.assign(obj, {[value]: false})), {});
+        this.setState({ filledRequiredFields: fields });
     }
 
     handleFormChange = (event) => {
@@ -46,7 +51,7 @@ export default class Agreement extends Component {
             //newForm.attachments.push(event);
         //}
         this.setState({ form: newForm });
-        this.validateData();
+        this.validateData(event.target.name, event.target.value);
     }
 
     resetSupervisors = () => {
@@ -54,19 +59,22 @@ export default class Agreement extends Component {
         let newForm = oldForm;
         newForm['thesisSupervisorMain'] = '';
         newForm['thesisSupervisorSecond'] = '';
-        this.setState({ form: newForm, mandatoryDataFilled: false });
+        const fields = this.state.filledRequiredFields;
+        let fieldsCopy = fields;
+        if (fieldsCopy['thesisSupervisorMain'] !== undefined)
+            fieldsCopy['thesisSupervisorMain'] = false;
+        if (fieldsCopy['thesisSupervisorSecond'] !== undefined)
+            fieldsCopy['thesisSupervisorSecond'] = false;
+        this.setState({ form: newForm, filledRequiredFields: fieldsCopy });
     }
 
-    validateData = () => {
-        //PITÄÄ MYÖHEMMIN VALIDOIDA ROOLIKOHTAISESTI VAIN OIKEILLE FIELDEILLE
-        let fieldsToValidate = ['thesisTitle']; //TODO LISTAT VALIDOITAVISTA FIELDEISTÄ
-        let hasEmptyField = Object.keys(this.state.form)
-            .filter((key) => fieldsToValidate.indexOf(key) !== -1)
-            .map((key) => this.state.form[key])
-            .some((field) => (field === "" || field === -1));
-        //validoi kaikki fieldit => tuskin fiksua
-        //let hasEmptyField = Object.values(this.state.form).some((field) => (field === "" || field === -1));
-        this.setState({ mandatoryDataFilled: !hasEmptyField });
+    validateData = (fieldName, value) => {
+        if (this.state.filledRequiredFields[fieldName] !== undefined) {
+            const fields = this.state.filledRequiredFields;
+            let fieldsCopy = fields;
+            fieldsCopy[fieldName] = !(value === '' || value == -1);
+            this.setState({ filledRequiredFields: fieldsCopy });
+        }
     }
 
     addAttachment = (file) => {
@@ -90,28 +98,29 @@ export default class Agreement extends Component {
 
     render() {
         if (!this.props.user.firstname) {
-            return <div>Login to add agreement</div>
+            return (<div>Login to add agreement</div>);
+        }
+        if (Object.keys(this.state.filledRequiredFields).length === 0) {
+            var buttonDisabled = false;
+        } else {
+            var buttonDisabled = Object.values(this.state.filledRequiredFields).some((field) => field === false);
         }
         return (
             <div>
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
-                <StudentInfoForm user={this.props.user} />
+                <StudentInfoForm user={this.props.user}/>
                 <br />
-                <ThesisInfoForm handleChange={this.handleFormChange} />
+                <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
                 <br />
-                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} studyfields={this.props.studyfields}/>
+                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} studyfields={this.props.studyfields} requiredFields={this.state.filledRequiredFields}/>
                 <br />
-                <GoalInfoForm handleChange={this.handleFormChange} />
+                <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
                 <br />
-                <AttachmentAdder
-                    attachments={this.state.attachments}
-                    addAttachment={this.addAttachment}
-                    removeAttachment={this.removeAttachment}
-                />
+                <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment}/>
                 <br />
-                <button className="massive green fluid ui button" disabled={ !this.state.mandatoryDataFilled } onClick={this.sendForm}>
-                    {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save agreement'}
+                <button className="massive green fluid ui button" disabled={buttonDisabled} onClick={this.sendForm}>
+                    {(buttonDisabled) ? 'Kaikkia pakollisia tietoja ei ole täytetty' : 'Save agreement'}
                 </button>
                 <br />
             </div>
