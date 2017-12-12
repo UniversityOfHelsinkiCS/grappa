@@ -24,26 +24,45 @@ const attachmentSchema = [
 
 export async function saveAttachments(req, res, agreementId) {
     console.log("Saving to disk");
-    let uploaded = new Promise((resolve, reject) => {
-        upload(req, res, error => {
-            if (error) {
-                reject(error);
-            }
-            console.log('Attachments saved to disk');
-            resolve(req);
+    //TODO: Transaction
+
+    try {
+        const uploaded = new Promise((resolve, reject) => {
+            upload(req, res, error => {
+                if (error) {
+                    reject(error);
+                }
+                console.log('Attachments saved to disk');
+                resolve(req);
+            })
         })
-    })
-    const request = await uploaded
-    
-    return Promise.all(request.files.map(async file => {
-        const attachment = {
-            agreementId: agreementId,
-            savedOnDisk: true,
-            filename: file.filename,
-            type: file.mimetype
-        };
-        await Attachment.forge(attachment).save()
-    }))
+        const request = await uploaded
+        
+        // agreementId is not null when saving a thesis, 
+        // and in that case it's not in request.body.json
+        let id = agreementId;
+        if (!id) {
+            id = JSON.parse(request.body.json).agreementId;
+        }
+        const attachments = await Promise.all(request.files.map(async file => {
+            const attachment = {
+                agreementId: id,
+                savedOnDisk: true,
+                filename: file.filename,
+                type: file.mimetype
+            };
+            return await Attachment.forge(attachment).save().then(model => {
+                return model.fetch();
+            }).then(model => {
+                return model.attributes;
+            }).catch(error => {
+                throw error;
+            })
+        }))
+        return { attachments: attachments, json: JSON.parse(request.body.json) }
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }
 
 export async function getAttachmentsForAgreement(agreementId) {

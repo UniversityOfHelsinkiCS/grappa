@@ -25,14 +25,15 @@ const thesisWithoutId = {
     urkund: "https://",
     grade: "4",
     graderEval: "Tarkastajien esittely",
-    userId: 1
+    userId: 1,
+    printDone: 0
 }
 
 test('thesis post & creates id', async t => {
-    t.plan(11);    
+    t.plan(12);    
     const res = await request(makeApp())
         .post('/theses')
-        .send(thesisWithoutId);
+        .field('json', JSON.stringify(thesisWithoutId))
     t.is(res.status, 200);
     const body = res.body;
     let thesis = thesisWithoutId;
@@ -44,7 +45,7 @@ test('thesis post & creates id', async t => {
 })
 
 test('thesis get all', async t => {
-    t.plan(12);
+    t.plan(13);
     const app = makeApp();
     const res = await request(app)
         .get('/theses');

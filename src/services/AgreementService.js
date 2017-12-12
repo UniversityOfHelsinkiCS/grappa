@@ -55,16 +55,17 @@ export const getAgreementsByAuthor = (personId) => {
 export const saveAgreement = (agreement) => {
     return Agreement.forge(agreement).save().then(model => {
         return model.fetch();
+    }).then(model => {
+        return model.attributes;
     }).catch(error => {
         throw error;
     })
 }
 
-export const createFakeAgreement = (thesisId) => {
-    console.log("ThesisId", thesisId);
+export const createFakeAgreement = () => {
     const fakeAgreement = {
         authorId: null,
-        thesisId: thesisId,
+        thesisId: null,
         responsibleSupervisorId: null,
         studyfieldId: null,
         fake: true,
@@ -85,13 +86,16 @@ export const createFakeAgreement = (thesisId) => {
     })
 }
 
-export const updateAgreement = (data) => {
+export const updateAgreement = (agreement) => {
     return knex('agreement')
         .returning('agreementId')
-        .where('agreementId', '=', data.agreementId)
-        .update(data)
-        .then(agreementId => agreementId)
-        .catch(error => {
+        .where('agreementId', '=', agreement.agreementId)
+        .update(agreement)
+        .then(agreementId =>
+            knex.select().from('agreement')
+                .where('agreementId', '=', agreementId)
+                .first()
+        ).catch(error => {
             throw error
         });
 }
