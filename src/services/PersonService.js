@@ -15,7 +15,7 @@ const personSchema = [
 ]
 
 export async function getAllPersons() {
-    return await knex.select().from('person');
+    return knex.select(personSchema).from('person');
 }
 
 export async function getPersonsWithRole(roleId) {
