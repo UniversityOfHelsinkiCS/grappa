@@ -72,5 +72,5 @@ test('agreement post & creates id', async t => {
     let body = res.body;
     let agreement = agreementWithoutId;
     agreement.agreementId = 1;
-    t.deepEqual(agreement, body);
+    t.deepEqual(1, body.agreementId);
 })
