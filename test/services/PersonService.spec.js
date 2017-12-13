@@ -52,7 +52,7 @@ test.serial('savePerson returns new personId', async t => {
         isRetired: false,
     }
     let returnValue = await personService.savePerson(newPerson);
-    t.deepEqual(returnValue, mockPersons.length + 1);
+    t.deepEqual(returnValue.personId, mockPersons.length + 1);
 });
 
 test.serial('savePersonRole return new personRoleId', async t => {

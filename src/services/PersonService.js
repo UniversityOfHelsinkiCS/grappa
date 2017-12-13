@@ -1,8 +1,36 @@
-require('babel-polyfill');
 const knex = require('../db/connection');
 
+const personSchema = [
+    "person.personId",
+    "shibbolethId",
+    "email",
+    "firstname",
+    "lastname",
+    "person.title",
+    "isRetired",
+    "studentNumber",
+    "address",
+    "phone",
+    "major",
+]
+
 export async function getAllPersons() {
-    return await knex.select().from('person');
+    return knex.select(personSchema).from('person');
+}
+
+export async function getPersonsWithRole(roleId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .select(personSchema);
+}
+
+export async function getPersonsWithRoleInStudyfield(roleId, studyfieldId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .where('personWithRole.studyfieldId', studyfieldId)
+        .select(personSchema);
 }
 
 export async function getLoggedPerson(req) {
@@ -31,15 +59,12 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    return knex('person')
-    .returning('personId')
-    .insert(personData)
-    .then(persons => {
-        return persons[0];
-    })
-    .catch(err => {
-        throw err;
-    });
+    const personIds = await knex('person')
+        .returning('personId')
+        .insert(personData)
+    const personId = personIds[0]
+    return knex.select(personSchema).from('person').where('personId', personId).first()
+
 }
 
 export async function savePersonRole(personRoleData) {

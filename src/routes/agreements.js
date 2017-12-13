@@ -20,6 +20,10 @@ router.post('/', jsonParser, (req, res) => {
     agreementController.saveAgreement(req, res);
 });
 
+router.post('/form', jsonParser, (req, res) => {
+    agreementController.saveAgreementForm(req, res);
+})
+
 router.put('/:id', jsonParser, (req, res) => {
     agreementController.updateAgreement(req, res);
 });

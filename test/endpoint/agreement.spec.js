@@ -2,13 +2,14 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
-const config = require('../../src/db/knexfile');
-const reqres = require('reqres');
-const personService = require("../../src/services/PersonService");
 
 const makeApp = () => {
     const app = express();
-    app.use('/agreement', agreement)
+    app.use('/agreements', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, agreement)
     return app;
 }
 
@@ -22,25 +23,9 @@ test.before(async t => {
 const agreementWithoutId = {
     authorId: 1,
     thesisId: 1,
-    personId: 1,
     responsibleSupervisorId: 1,
     studyfieldId: 1,
-    fake: false,
-    studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "tsiigaillaan",
-    intermediateGoal: "oispa valmistunut",
-    meetingAgreement: "just just",
-    other: "eihän tässä muuta"
-}
-
-const agreementWithId = {
-    agreementId: 1,
-    authorId: 1,
-    thesisId: 1,
-    responsibleSupervisorId: 1,
-    studyfieldId: 1,
-    fake: false,
+    fake: 0,
     studentGradeGoal: 5,
     studentWorkTime: "1h viikossa",
     supervisorWorkTime: "tsiigaillaan",
@@ -50,7 +35,7 @@ const agreementWithId = {
 }
 
 const correctAgreement = {
-    thesisTitle: "my Thesis",
+    title: "my Thesis",
     thesisStartDate: "9.9.2017",
     thesisCompletionEta: "9.9.2018",
     thesisPerformancePlace: "helsinki",
@@ -68,64 +53,24 @@ const correctAgreement = {
     studentGradeGoal: "5",
 
     studyfieldId: 1,
+    fake: false,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "2h viikossa",
+    intermediateGoal: "20 sivua ensi perjantaina",
+    meetingAgreement: "Jepsis",
+    other: "eihän tässä muuta",
+    whoNext: "supervisor",
 }
 
-test('agreement post with agreement which has agreementId returns 500', async t => {
-    t.plan(1);
-    let req = reqres.req();
-    const agreementWithId = {agreementId: 1}
+test('agreement post & creates id', async t => {
+    t.plan(2);
     const res = await request(makeApp())
-        .post('/agreement')
-        .send(agreementWithId);
-    t.is(res.status, 500);
-    //const body = res.body;
-    //const agreement = agreementWithId;
-    //t.is(JSON.stringify(body), JSON.stringify(agreement));
-})
-
-const makeAppWithUserId = () => {
-    const app = express();
-    app.use('/agreement', (req, res, next) => {
-        req.session = {};
-        req.session.user_id = 1;
-        next();
-    }, agreement)
-    return app;
-}
-
-test('agreement post with correct agreement returns 200', async t => {
-    t.plan(1);
-    personService.savePerson({shibbolethId: "shibboId", studentNumber: "1234" });
-    const session = {user_id: 1};
-    const res = await request(makeAppWithUserId())
-        .post('/agreement')
-        .send(correctAgreement);
+        .post('/agreements')
+        .send(agreementWithoutId);
     t.is(res.status, 200);
-})
-
-// test.skip('councilmeeting post & creates id', async t => {
-//     t.plan(2);
-//     const res = await request(makeApp())
-//         .post('/councilmeetings')
-//         .send(councilmeetingWithoutId);
-//     t.is(res.status, 200);
-//     const body = res.body;
-//     const meeting = councilmeetingWithId
-//     t.is(JSON.stringify(body), JSON.stringify(meeting));
-// })
-
-// test.skip('councilmeeting get all', async t => {
-//     t.plan(2);
-//     const app = makeApp();
-//     const res = await request(app)
-//         .get('/councilmeetings');
-//     t.is(res.status, 200);
-//     const body = res.body;
-//     const meetings = [ councilmeetingWithId ];
-//     t.is(JSON.stringify(body), JSON.stringify(meetings));    
-// })
-
-
-test('', t => {
-    t.truthy(1 === 1);
+    let body = res.body;
+    let agreement = agreementWithoutId;
+    agreement.agreementId = 1;
+    t.deepEqual(agreement, body);
 })

@@ -36,7 +36,8 @@ export async function saveSupervisor(req, res) {
                 shibbolethId: supervisorData.shibbolethId,
                 isRetired: supervisorData.isRetired
             };
-            const personId = await personService.savePerson(personData);
+            const person = await personService.savePerson(personData);
+            const personId = person.personId;
             const personRoleData = {
                 personId: personId,
                 studyfieldId: supervisorData.studyfieldId,

@@ -1,6 +1,7 @@
 const agreements = require('./routes/agreements');
 const theses = require('./routes/theses');
 const index = require('./routes/index');
+const graders = require('./routes/graders');
 const supervisors = require('./routes/supervisors');
 const studyfields = require('./routes/studyfields');
 const persons = require('./routes/persons');
@@ -21,6 +22,7 @@ module.exports = (app) => {
     app.use('/logout', shibboleth)
     app.use('/agreements', agreements);
     app.use('/theses', theses);
+    app.use('/graders', graders)
     app.use('/supervisors', supervisors);
     app.use('/studyfields', studyfields);
     app.use('/attachments', attachments);

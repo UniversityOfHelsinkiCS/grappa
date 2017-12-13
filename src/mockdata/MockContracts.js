@@ -8,7 +8,7 @@ module.exports = [
         studentEmail: "maija.vilkkumaa@hotmail.com",
         studentMajor: "Fysiikka",
     
-        thesisTitle: "Maijan grady fysiikasta",
+        title: "Maijan grady fysiikasta",
         thesisStartDate: "01.01.2010",
         thesisCompletionEta: "01.01.2011",
         thesisPerformancePlace: "Helsinki",
@@ -37,7 +37,7 @@ module.exports = [
         studentEmail: "anna.puu@hotmail.com",
         studentMajor: "Kemia",
     
-        thesisTitle: "Annan gradu kemiasta",
+        title: "Annan gradu kemiasta",
         thesisStartDate: "01.01.2005",
         thesisCompletionEta: "01.01.2006",
         thesisPerformancePlace: "Helsinki",

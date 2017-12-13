@@ -10,7 +10,7 @@ const mockPersons = require('../../src/mockdata/MockPersons');
 test.before(async t => {
     await knex.schema.createTable('thesis', function (table) {
         table.increments('thesisId').primary();
-        table.string('thesisTitle');
+        table.string('title');
         table.date('startDate');
         table.date('completionEta');
         table.string('performancePlace');
@@ -81,7 +81,7 @@ test.serial('getAllTheses returns list of right length ', async t => {
 test.serial('updateThesis', async t => {
     const updatedThesisData = {
         thesisId: 3,
-        thesisTitle: 'Updated title',
+        title: 'Updated title',
         performancePlace: 'Hima',
         urkund: 'http://',
         grade: 4,
