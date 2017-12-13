@@ -73,10 +73,10 @@ export class SupervisorManagementPage extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.supervisors.map((person, index) =>
+                    {this.props.supervisors.map((person, index) => //change index -> some id
                         <tr key={index}>
-                            <td>{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}</td>
-                            <td>{person.thesisTitle}</td>
+                            <td>{person.firstname} {person.lastname} studyfield: {person.studyfieldId}</td>
+                            <td>{person.title}</td>
                             <td>{this.renderReviewButton(person)}</td>
                         </tr>
                     )}
