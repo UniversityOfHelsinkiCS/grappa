@@ -28,7 +28,7 @@ export class AgreementEditModal extends Component {
             this.setState(
                 {
                     editedFormData: original,
-                    editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'title']
+                    editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle']
                 }
             );
         }

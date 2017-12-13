@@ -13,6 +13,6 @@ export const getRequiredFields = (roles) => {
 }
 
 const requiredField = {
-    'student': ['title', 'thesisStartDate', 'thesisPerformancePlace', 'studyfieldId', 'thesisSupervisorMain', 'studentGradeGoal'],
+    'student': ['thesisTitle', 'thesisStartDate', 'thesisPerformancePlace', 'studyfieldId', 'thesisSupervisorMain', 'studentGradeGoal'],
     'supervisor': ['thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement']
 }

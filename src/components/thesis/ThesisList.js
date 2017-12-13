@@ -19,7 +19,7 @@ export default class ThesisList extends Component {
                         <tr key={thesis.thesisId}>
                             <td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td>
                             <td>{thesis.email}</td>
-                            <td>{thesis.title}</td>
+                            <td>{thesis.thesisTitle}</td>
                             <td>{thesis.grade}</td>
                             <td>{thesis.printDone}</td>
                         </tr>
