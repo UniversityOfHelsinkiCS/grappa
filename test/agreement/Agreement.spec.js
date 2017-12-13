@@ -45,8 +45,8 @@ test.skip("TBD: change in redux state leads to change in UI", t => {
     const spy = sinon.spy(instance, "getResponseMessage");
     instance.forceUpdate();
 
-    wrapper.find('textarea[name="thesisTitle"]')
-        .simulate('change', { target: { name: "thesisTitle", value: getRandomString() } });
+    wrapper.find('textarea[name="title"]')
+        .simulate('change', { target: { name: "title", value: getRandomString() } });
 
     wrapper.find('button[type="submit"]').simulate('click');
 

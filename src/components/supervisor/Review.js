@@ -57,7 +57,7 @@ export default class Review extends Component {
             <div className="scrolling content">
                 <div className="description">
                     <div><b>{this.state.person.title} {this.state.person.firstname} {this.state.person.lastname}</b>,&nbsp;
-                        supervisor for thesis {this.state.person.thesisTitle}</div>
+                        supervisor for thesis {this.state.person.title}</div>
                     <div>The supervisor is approved to supervise this thesis: <b>{this.renderIfApproved()}</b></div>
                     <div>Write a review, if this supervisor needs it. Other info to be shown here?</div>
                 </div>

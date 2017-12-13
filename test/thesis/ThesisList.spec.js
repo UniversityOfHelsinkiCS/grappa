@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import ThesisList from '../../src/components/thesis/ThesisList';
 
 const thesis = {authorFirstname: "Teppo", authorLastname: "Testaaja",
-thesisTitle: "Gradu", grade: "5", thesisId: "1"};
+title: "Gradu", grade: "5", thesisId: "1"};
 const thesisList = [thesis];     
 const thesisApp = <ThesisList theses = {thesisList}/>
 const wrapper = shallow(thesisApp);

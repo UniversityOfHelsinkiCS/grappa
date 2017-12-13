@@ -9,47 +9,60 @@ class ThesisListPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            formattedTheses: [],
             filteredTheses: [],
         }
+        this.props.getTheses();
     }
 
     componentDidMount() {
         document.title = "Thesis List";
-        this.props.getTheses();
-        if(this.props.theses) {
-            this.setState({
-                filteredTheses: this.props.theses,
-            })
-        }
-    }
-    componentWillReceiveProps(newProps) {
-        if (newProps.theses) {
-            this.setState({
-                filteredTheses: this.props.theses,
-            })
-        }
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setTheses(newProps.theses);
+    }
+
+    setTheses(theses) {
+        const persons = this.props.persons;
+        if (!theses || !persons) return;
+        const formatted = theses.map(thesis => {
+            const person = persons.find(person => person.personId === thesis.userId)
+            let formattedThesis = thesis
+            if (!person) {
+                formattedThesis.email = "No user"
+                formattedThesis.authorFirstname = "Keplo"
+                formattedThesis.authorLastname = "Leutokalma"
+            } else {
+                formattedThesis.email = person.email
+                formattedThesis.authorFirstname = person.firstname
+                formattedThesis.authorLastname = person.lastname
+            }
+            return formattedThesis
+        })
+        this.setState({
+            formattedTheses: formatted,
+            filteredTheses: formatted
+        })
+    }
 
     search = (event) => {
         if (!event.target.value) {
-            this.setState({ filteredTheses: this.props.theses })
+            this.setState({ filteredTheses: this.state.formattedTheses })
             return;
         }
         const searchValue = event.target.value.toLowerCase();
         //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
-        const filteredTheses = this.props.theses.filter(thesis => {
+        const filteredTheses = this.state.formattedTheses.filter(thesis => {
             const values = [
                 thesis.authorLastname.toLowerCase(),
                 thesis.authorFirstname.toLowerCase(),
-                thesis.thesisTitle.toLowerCase(),
+                thesis.title.toLowerCase(),
                 thesis.grade.toString().toLowerCase(),
             ]
             return values.find(value => value.includes(searchValue))
         });
-        this.setState({
-            filteredTheses
-        });
+        this.setState({ filteredTheses });
     }
 
     render() {
@@ -73,6 +86,7 @@ class ThesisListPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        persons: state.persons,
         user: state.user,
         theses: state.thesis,
     };

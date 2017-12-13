@@ -29,7 +29,7 @@ const formItems = {
         "thesisSupervisorOther",
     ],
     textarea: [
-        "thesisTitle",
+        "title",
         "thesisPerformancePlace",
         "thesisWorkStudentTime",
         "thesisWorkSupervisorTime",
@@ -129,8 +129,8 @@ test.skip("when sendForm method is called,saveAgreement() is called with correct
     instance.forceUpdate();
     wrapper.update();
 
-    wrapper.find('textarea[name="thesisTitle"]')
-        .simulate('change', { target: { name: "thesisTitle", value: getRandomString() } });
+    wrapper.find('textarea[name="title"]')
+        .simulate('change', { target: { name: "title", value: getRandomString() } });
 
     wrapper.instance().sendForm();
 

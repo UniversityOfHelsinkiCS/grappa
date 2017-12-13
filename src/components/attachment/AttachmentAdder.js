@@ -9,16 +9,15 @@ export default class AttachmentAdder extends Component {
         this.props.addAttachment(droppedFile);
     }
 
-    removeAttachment = () => (attachment) => {
+    removeAttachment = (attachment) => () => {
         this.props.removeAttachment(attachment);
     }
 
-    getFileList = () => {
+    getFileList = () => { 
         return (
             <div className="ui form">
                 {this.getFileNumberLabel()}
-                {this.props.attachments.map((attachment, index) =>
-
+                {this.props.attachments ? this.props.attachments.map((attachment, index) =>
                     <div key={index}>
                         <button
                             className="negative ui icon button "
@@ -29,32 +28,30 @@ export default class AttachmentAdder extends Component {
                         {attachment.name}
                         <hr />
                     </div>
-                )}
+                ) : undefined}
             </div>
         );
 
     }
 
     getHeader = () => {
-        if (this.props.limit === undefined) {
-            return <h1>Upload attachments as much as you want</h1>
+        if (!this.props.limit) {
+            return <h2>Upload attachments as much as you want</h2>
         }
-        return <h1>Upload maximum {this.props.limit} attachments</h1>
+        return <h2>Upload maximum {this.props.limit} attachments</h2>
     }
 
 
 
     getFileNumberLabel = () => {
-        const attachmentsUploaded = this.props.attachments.length;
-        if (attachmentsUploaded === 0) {
-            return <h2>No attachments uploaded</h2>;
-        }
-        else if (attachmentsUploaded === 1) {
-            return <h2>One attachment uploaded:</h2>
-        }
-        return (<h2>
-            {attachmentsUploaded + " attachments uploaded:"}
-        </h2>);
+        return (
+            <h3>
+                {!this.props.attachments ? "No attachments uploaded" :
+                    (this.props.attachments.length === 1) ? "One attachment uploaded:" :
+                        this.props.attachments.length + " attachments uploaded:"}
+            </h3>
+        )
+
     }
 
     renderDropzone = () => {
