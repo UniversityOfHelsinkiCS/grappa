@@ -61,7 +61,7 @@ module.exports.shibRegister = async (req, res, next) => {
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
                 user.email = req.headers['mail'];
-                user.updated_at = Date.now();
+                // user.updated_at = Date.now();
                 await personService.updatePerson(user);
             } else {
                 // console.log('new user logged in');
@@ -71,8 +71,7 @@ module.exports.shibRegister = async (req, res, next) => {
                     studentNumber,
                     shibbolethId: req.headers['uid'],
                     email: req.headers['mail'],
-                    created_at: Date.now(),
-                    updated_at: Date.now()
+                    // updated_at: Date.now()
                 };
                 await personService.savePerson(user);
             }

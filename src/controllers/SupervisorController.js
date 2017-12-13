@@ -65,7 +65,7 @@ export async function saveSupervisor(req, res) {
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
-    console.log("contr")
+    console.log("controller")
     if (data.personRoleId != null && data.agreementId != null) {
         try {
             let agreementPersonData = {

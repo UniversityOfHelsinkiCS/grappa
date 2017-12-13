@@ -126,7 +126,7 @@ const parseAgreementData = (data) => {
         studentEmail: data.email,
         studentMajor: data.major,
         //thesis
-        title: data.title,
+        thesisTitle: data.thesisTitle,
         thesisStartDate: data.startDate,
         thesisCompletionEta: data.completionEta,
         thesisPerformancePlace: data.performancePlace,

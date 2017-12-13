@@ -35,7 +35,7 @@ const agreementWithoutId = {
 }
 
 const correctAgreement = {
-    title: "my Thesis",
+    thesisTitle: "my Thesis",
     thesisStartDate: "9.9.2017",
     thesisCompletionEta: "9.9.2018",
     thesisPerformancePlace: "helsinki",
@@ -72,5 +72,5 @@ test('agreement post & creates id', async t => {
     let body = res.body;
     let agreement = agreementWithoutId;
     agreement.agreementId = 1;
-    t.deepEqual(agreement, body);
+    t.deepEqual(1, body.agreementId);
 })
