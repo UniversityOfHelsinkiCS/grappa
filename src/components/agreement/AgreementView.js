@@ -19,7 +19,7 @@ class AgreementView extends Component {
             <div>
                 {this.state.showAgreements[index] ?
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">{agreement.thesisTitle}</h2>
+                        <h2 className="ui header">{agreement.title}</h2>
                         <h4>Gradun tekijän tiedot</h4>
                         <div>
                             <div className="two fields">
@@ -91,7 +91,7 @@ class AgreementView extends Component {
             <div>
                 {data.map((agreement, index) =>
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.thesisTitle}</h2>
+                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.title}</h2>
 
                         <b>Ohjausvastuut: </b> <br />
                         Vastuuohjaaja: {agreement.thesisSupervisorMain}<br />

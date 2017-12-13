@@ -14,7 +14,7 @@ export default class Agreement extends Component {
         super(props);
         this.state = {
             form: {
-                thesisTitle: "",
+                title: "",
                 thesisStartDate: "",
                 thesisCompletionEta: "",
                 thesisPerformancePlace: "",

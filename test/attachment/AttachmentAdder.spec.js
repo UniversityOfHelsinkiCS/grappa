@@ -7,8 +7,13 @@ import Dropzone from "react-dropzone";
 import AttachmentAdder from "../../src/components/attachment/AttachmentAdder";
 
 const defaultAttachmentAdder = <AttachmentAdder attachments={[]} removeAttachment={() => {}} addAttachment={(file) => {}} />
-
 const limitOfOne = <AttachmentAdder attachments={[]} removeAttachment={() => {}} addAttachment={(file) => {}}  limit = {1}/>
+
+const getFileList = () => {
+    const file = {name: "MattiLuukkainenFullStack.sql"};
+    const fileArray = [file];
+    return fileArray;
+}
 
 test('has Dropzone element', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
@@ -17,13 +22,13 @@ test('has Dropzone element', t=> {
 
 test('if no maximum size, header tells it', t => {
     const wrapper = shallow(defaultAttachmentAdder);
-    const header = <h1>Upload attachments as much as you want</h1>;
+    const header = "Upload attachments as much as you want";
     t.truthy(wrapper.contains(header));
 })
 
 test('header informs no files uploaded when started', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
-    const noElementsHeader = <h2>No attachments uploaded</h2>;
+    const noElementsHeader = "0 attachments uploaded:";
     t.truthy(wrapper.contains(noElementsHeader));
 })
 
@@ -31,7 +36,7 @@ test('headers changes when attachment is added', t=> {
     const files = getFileList();
     const adder = <AttachmentAdder attachments={files} removeAttachment={(file) => {files.splice(file , 1)}} addAttachment={(file) => {files.push(file)}} />
     const wrapper = shallow(adder);
-    const oneElementAddedHeader = <h2>One attachment uploaded:</h2>;
+    const oneElementAddedHeader = "One attachment uploaded:";
     t.truthy(wrapper.contains(oneElementAddedHeader));
 })
 
@@ -53,17 +58,11 @@ test('when button is clicked, it removes file from the list', t => {
     //t.truthy(wrapper.contains(noElementsHeader));
 })
 
-const getFileList = () => {
-    const file = {name: "MattiLuukkainenFullStack.sql"};
-    const fileArray = [file];
-    return fileArray;
-}
-
 test("when limit is given, it is told", t => {
     const files = getFileList();
     const adder = <AttachmentAdder attachments={files} removeAttachment={(file) => {files.splice(files.indexOf(file) , 1)}} addAttachment={(file) => {files.push(file)}} limit = {1} />
     const wrapper = shallow(adder);
-    const header = <h1>Upload maximum 1 attachments</h1>;
+    const header = <h2>Upload maximum 1 attachments</h2>;
     t.truthy(wrapper.contains(header));
 })
 
