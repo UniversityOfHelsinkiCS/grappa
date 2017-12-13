@@ -7,9 +7,6 @@ exports.up = function (knex, Promise) {
             table.integer('userId').unsigned();
             table.foreign('userId').references('person.personId');
             table.string('title');
-            table.date('startDate');
-            table.date('completionEta');
-            table.string('performancePlace');
             table.string('urkund');
             table.string('grade').defaultTo('-');
             table.string('graderEval');
