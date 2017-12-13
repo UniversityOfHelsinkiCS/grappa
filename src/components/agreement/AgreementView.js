@@ -108,7 +108,7 @@ class AgreementView extends Component {
     }
 
     render() {
-        if (this.props.agreementData.length > 1) return <div>{this.renderList()}</div>
+        if (this.props.agreementData.length > 0) return <div>{this.renderList()}</div>
         return (
             <div>{this.renderOne(this.props.agreementData)}</div>
         );
