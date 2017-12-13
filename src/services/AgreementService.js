@@ -9,6 +9,9 @@ const agreementSchema = [
     "responsibleSupervisorId",
     "studyfieldId",
     "fake",
+    "startDate",
+    "completionEta",
+    "performancePlace",
     "studentGradeGoal",
     "studentWorkTime",
     "supervisorWorkTime",
@@ -78,13 +81,8 @@ export const createFakeAgreement = () => {
         other: null,
         whoNext: null
     }
-    return Agreement.forge(fakeAgreement).save().then(model => {
-        return model.fetch();
-    }).then(model => {
-        return model.attributes;
-    }).catch(error => {
-        throw error;
-    })
+
+    return saveAgreement(fakeAgreement)
 }
 
 export const updateAgreement = (agreement) => {
