@@ -12,38 +12,45 @@ class AgreementView extends Component {
 
     renderOne(agreement) {
         let index = this.props.agreementData.findIndex(x => x.agreementId === agreement.agreementId);
+        console.log('agreement');
+        console.log(agreement);
 
         return (
             <div>
                 {this.state.showAgreements[index] ?
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">{agreement.title}</h2>
+                        <h2 className="ui header">{agreement.thesisTitle}</h2>
                         <h4>Gradun tekijän tiedot</h4>
                         <div>
                             <div className="two fields">
-                                Gradun tekijän nimi: {agreement.studentFirstName + " " + agreement.studentLastName + "\t"}|
-                        Pääaine: {agreement.studentMajor}
+                                Gradun tekijän nimi: {agreement.firstname + " " + agreement.lastname + "\t"}|
+                        Pääaine: {agreement.major}
                             </div>
                             <div className="two fields">
                                 Opiskelijanumero: {agreement.studentNumber + "\t"}|
-                        Lähiosoite: {agreement.studentAddress}
+                        Lähiosoite: {agreement.address}
                             </div>
                             <div className="two fields">
-                                Sähköpostiosoite: {agreement.studentEmail + "\t"}|
-                        Puhelinnumero: {agreement.studentPhone}
+                                Sähköpostiosoite: {agreement.email + "\t"}|
+                        Puhelinnumero: {agreement.phone}
                             </div>
                         </div>
                         <h4>Opinnäytetyön tiedot</h4>
                         <p>
-                            Aloitusajankohta: {agreement.thesisStartDate}<br />
-                            Arvioitu valmistumisajankohta: {agreement.thesisCompletionEta}<br />
-                            Suorituspaikka: {agreement.thesisPerformancePlace}<br />
+                            Aloitusajankohta: {agreement.startDate}<br />
+                            Arvioitu valmistumisajankohta: {agreement.completionEta}<br />
+                            Suorituspaikka: {agreement.performancePlace}<br />
                         </p>
                         <h4>Ohjausvastuut</h4>
                         <p>
-                            Vastuuohjaaja: {agreement.thesisSupervisorMain}<br />
-                            Muuohjaaja: {agreement.thesisSupervisorSecond}<br />
-                            2. ohjaaja: {agreement.thesisSupervisorOther}<br />
+                            {/* TODO: pass other supervisors as a list from backend with other
+                            agreement info. */}
+                            Vastuuohjaaja: {agreement.responsibleSupervisorId}<br />
+
+                            {/* These variable names do not exist in database. Other supervisors need 
+                            to be selected from AgreementPerson-table */}
+                            Muuohjaaja: {agreement.supervisorSecond}<br />
+                            2. ohjaaja: {agreement.supervisorOther}<br />
                         </p>
                         <h4>Työskentelyn tavoitteet ja ajankäyttö</h4>
                         <p>
@@ -84,7 +91,7 @@ class AgreementView extends Component {
             <div>
                 {data.map((agreement, index) =>
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.title}</h2>
+                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.thesisTitle}</h2>
 
                         <b>Ohjausvastuut: </b> <br />
                         Vastuuohjaaja: {agreement.thesisSupervisorMain}<br />
@@ -101,7 +108,7 @@ class AgreementView extends Component {
     }
 
     render() {
-        if (this.props.agreementData.length > 1) return <div>{this.renderList()}</div>
+        if (this.props.agreementData.length > 0) return <div>{this.renderList()}</div>
         return (
             <div>{this.renderOne(this.props.agreementData)}</div>
         );

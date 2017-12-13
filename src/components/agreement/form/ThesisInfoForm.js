@@ -21,7 +21,7 @@ export default class ThesisInfoForm extends Component {
         return (
             <div>
                 <h1>Opinnäytetyö</h1>
-                {this.field("Opinnäytetyön otsikko (työnimi) tekokielellä", "title")}
+                {this.field("Opinnäytetyön otsikko (työnimi) tekokielellä", "thesisTitle")}
                 {this.field("Aloitusajankohta", "thesisStartDate")}
                 {this.field("Arvioitu valmistumisajankohta", "thesisCompletionEta")}
                 {this.field("Suorituspaikka", "thesisPerformancePlace")}
