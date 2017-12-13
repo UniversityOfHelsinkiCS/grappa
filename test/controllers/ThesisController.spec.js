@@ -53,7 +53,7 @@ test.cb('getAllTheses returns correct information', t => {
 
 test('saveThesisForm calls services method', async t => {
     const body ={
-        title: 'Annin Grady',
+        thesisTitle: 'Annin Grady',
         urkund: 'http://',
         grade: 4,
         graderEval: 'Tarkastajien esittely',

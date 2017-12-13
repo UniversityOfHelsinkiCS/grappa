@@ -14,7 +14,7 @@ export async function saveToEThesis(meta, pdf){
         entry: {
             '@xmlns': 'http://www.w3.org/2005/Atom',
             '@xmlns:sword': 'http://purl.org/net/sword/',
-            title: 'harjoittelusyöttö',
+            thesisTitle: 'harjoittelusyöttö',
             author:{
                 name: {
                 '#text': 'harjoittelusyöttö'

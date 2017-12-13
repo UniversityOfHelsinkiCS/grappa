@@ -95,7 +95,7 @@ const getAgreementDraftData = (data) => {
         studentAddress: data.studentAddress,
         studentPhone: data.studentPhone,
         studentMajor: data.studentMajor,
-        title: data.title,
+        thesisTitle: data.thesisTitle,
         thesisStartDate: data.thesisStartDate,
         thesisCompletionEta: data.thesisCompletionEta,
         thesisPerformancePlace: data.thesisPerformancePlace,

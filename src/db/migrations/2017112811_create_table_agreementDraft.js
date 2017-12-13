@@ -12,7 +12,7 @@ exports.up = function (knex, Promise) {
             table.string('studentAddress');
             table.string('studentPhone');
             table.string('studentMajor');
-            table.string('title');
+            table.string('thesisTitle');
             table.date('thesisStartDate');
             table.date('thesisCompletionEta');
             table.string('thesisPerformancePlace');
