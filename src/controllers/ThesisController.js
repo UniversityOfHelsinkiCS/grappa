@@ -24,33 +24,42 @@ export async function saveThesisForm(req, res) {
         let thesis = attachmentObject.json;
         let person = {
             email: thesis.authorEmail,
-            firstname: thesis.authorLastname,
-            lastname: thesis.authorFirstname
+            firstname: thesis.authorFirstname,
+            lastname: thesis.authorLastname
         }
-        person = await personService.savePerson(person)
-        thesis.userId = person.personId;
+        const savedPerson = await personService.savePerson(person)
+        thesis.userId = savedPerson.personId;
         delete thesis.authorFirstname
         delete thesis.authorLastname
         delete thesis.authorEmail
 
         agreement.studyfieldId = thesis.studyfieldId;
         delete thesis.studyfieldId;
-
+        let savedGraders = []
         if (thesis.graders) {
-            thesis.graders.forEach(grader => {
-                console.log(grader)
-            })
+            //TODO: Handle creating new links between persons and agreement
+            /*
+            savedGraders = thesis.graders.map(grader => {
+                //Return personroleservice.linkGraders
+                return grader
+            })*/
             delete thesis.graders
         }
 
+        //TODO: Email system
         delete thesis.thesisEmails
 
         const savedThesis = await thesisService.saveThesis(thesis);
         // Agreement was missing the thesisId completing linking.
         agreement.thesisId = savedThesis.thesisId;
-        agreement = await agreementService.updateAgreement(agreement)
+        const savedAgreement = await agreementService.updateAgreement(agreement)
 
-        res.status(200).json(savedThesis);
+        const response = {
+            thesis: savedThesis,
+            author: savedPerson,
+            agreement: savedAgreement,
+        }
+        res.status(200).json(response);
     } catch (error) {
         console.log(error);
         res.status(500).json(error);

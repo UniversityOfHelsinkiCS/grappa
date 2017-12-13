@@ -17,7 +17,8 @@ const agreementSchema = [
     "supervisorWorkTime",
     "intermediateGoal",
     "meetingAgreement",
-    "other"
+    "other",
+    "whoNext"
 ]
 
 export const getAgreementById = (agreementId) => {
@@ -73,6 +74,9 @@ export const createFakeAgreement = () => {
         responsibleSupervisorId: null,
         studyfieldId: null,
         fake: true,
+        startDate: null,
+        completionEta: null,
+        performancePlace: null,
         studentGradeGoal: null,
         studentWorkTime: null,
         supervisorWorkTime: null,
@@ -91,7 +95,7 @@ export const updateAgreement = (agreement) => {
         .where('agreementId', '=', agreement.agreementId)
         .update(agreement)
         .then(agreementId =>
-            knex.select().from('agreement')
+            knex.select(agreementSchema).from('agreement')
                 .where('agreementId', '=', agreementId)
                 .first()
         ).catch(error => {

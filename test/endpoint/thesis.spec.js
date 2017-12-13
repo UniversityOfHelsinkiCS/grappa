@@ -2,7 +2,6 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const theses = require('../../src/routes/theses');
-const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
@@ -17,11 +16,42 @@ test.before(async t => {
     //console.log(waitString);
 })
 
-const thesisWithoutId = {
+const thesisForm = {
+    id: undefined,
+    authorFirstname: "Etunimi",
+    authorLastname: "Sukunimi",
+    authorEmail: "Email",
     title: "Annin Grady",
-    startDate: "6.5.2005",
-    completionEta: "1.2.2006",
-    performancePlace: "Hima",
+    urkund: "https://",
+    grade: "4",
+    graders: [{
+        address: "Intiankatu",
+        email: "thomas@tarkastaja.com",
+        firstname: "Thomas",
+        isRetired: 0,
+        lastname: "CS-Tarkastaja",
+        major: "mathematics",
+        personId: 5,
+        phone: "050 1234567",
+        shibbolethId: "thomastarkastajashibboId",
+        studentNumber: "876548321",
+        title: "",
+    }],
+    graderEval: "Tarkastajien esittely",
+    studyfieldId: 2,
+    councilmeetingId: 1,
+    printDone: false,
+    thesisEmails: {
+        graderEvalReminder: 3,
+        printReminder: 2,
+    },
+}
+
+const graders = thesisForm.graders
+
+const thesisWithId = {
+    thesisId: 1,
+    title: "Annin Grady",
     urkund: "https://",
     grade: "4",
     graderEval: "Tarkastajien esittely",
@@ -29,36 +59,65 @@ const thesisWithoutId = {
     printDone: 0
 }
 
-test('thesis post & creates id', async t => {
-    t.plan(12);    
+const person = {
+    personId: 1,
+    shibbolethId: null,
+    firstname: "Etunimi",
+    lastname: "Sukunimi",
+    email: "Email",
+    title: null,
+    isRetired: null,
+    studentNumber: null,
+    address: null,
+    phone: null,
+    major: null
+}
+
+const fakeAgreement = {
+    agreementId: 1,
+    authorId: null,
+    thesisId: thesisWithId.thesisId,
+    responsibleSupervisorId: null,
+    studyfieldId: thesisForm.studyfieldId,
+    fake: 1,
+    startDate: null,
+    completionEta: null,
+    performancePlace: null,
+    studentGradeGoal: null,
+    studentWorkTime: null,
+    supervisorWorkTime: null,
+    intermediateGoal: null,
+    meetingAgreement: null,
+    other: null,
+    whoNext: null
+}
+
+test('thesisForm post & creates id without attachment', async t => {
+    t.plan(4);
     const res = await request(makeApp())
         .post('/theses')
-        .field('json', JSON.stringify(thesisWithoutId))
+        .field('json', JSON.stringify(thesisForm))
     t.is(res.status, 200);
-    const body = res.body;
-    let thesis = thesisWithoutId;
-    thesis.thesisId = 1;
-    Object.keys(thesis).forEach(key => {
-        t.is(thesis[key], body[key], "Key: " + key)
-    })
-    t.is(Object.keys(thesis).length, Object.keys(body).length, "Key length");
+    const thesis = res.body.thesis;
+    const author = res.body.author;
+    const agreement = res.body.agreement;
+    t.deepEqual(thesis, thesisWithId, "Thesis is correct");
+    t.deepEqual(author, person, "Author person is correct");
+    t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
 })
-
+/*
+test('thesisForm post & creates id with attachment', async t => {
+    t.plan(2);
+})
+*/
 test('thesis get all', async t => {
-    t.plan(13);
+    t.plan(3);
     const app = makeApp();
     const res = await request(app)
         .get('/theses');
     t.is(res.status, 200);
     const body = res.body;
     const bodyThesis = body[0]
-    let thesis = thesisWithoutId;
-    thesis.thesisId = 1;
-    const theses = [thesis];
-    Object.keys(thesis).forEach(key => {
-         t.is(thesis[key], bodyThesis[key], "Key: " + key)
-    })
-    t.is(Object.keys(thesis).length, Object.keys(bodyThesis).length, "Key length");
-    t.is(body.length, theses.length);
-
+    t.deepEqual(thesisWithId, bodyThesis)
+    t.is(body.length, 1);
 })
