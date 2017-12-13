@@ -45,7 +45,6 @@ export async function saveThesisForm(req, res) {
 
         delete thesis.thesisEmails
 
-        console.log(thesis);
         const savedThesis = await thesisService.saveThesis(thesis);
         // Agreement was missing the thesisId completing linking.
         agreement.thesisId = savedThesis.thesisId;
