@@ -1,8 +1,7 @@
 module.exports = [
     { 
         thesisId: 1,
-        thesisTitle: 'Annin Grady',
-        performancePlace: 'Hima',
+        title: 'Annin Grady',
         urkund: 'http://',
         grade: 4,
         graderEval: 'Tarkastajien esittely',
@@ -10,8 +9,7 @@ module.exports = [
     },
     {
         thesisId: 2,
-        thesisTitle: 'Hieno Gradu',
-        performancePlace: 'Hima',
+        title: 'Hieno Gradu',
         urkund: 'http://',
         grade: 1,
         graderEval: 'Tarkastajien esittely',
@@ -19,8 +17,7 @@ module.exports = [
     },
     {
         thesisId: 3,
-        thesisTitle: 'Amazing Thesis',
-        performancePlace: 'Hima',
+        title: 'Amazing Thesis',
         urkund: 'http://',
         grade: 4,
         graderEval: 'Tarkastajien esittely',

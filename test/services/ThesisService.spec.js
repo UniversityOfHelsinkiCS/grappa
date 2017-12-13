@@ -10,15 +10,13 @@ const mockPersons = require('../../src/mockdata/MockPersons');
 test.before(async t => {
     await knex.schema.createTable('thesis', function (table) {
         table.increments('thesisId').primary();
-        table.string('thesisTitle');
-        table.date('startDate');
-        table.date('completionEta');
-        table.string('performancePlace');
-        table.string('urkund');
-        table.integer('grade');
-        table.string('graderEval');
         table.integer('userId');
-    });
+        table.string('title');
+        table.string('urkund');
+        table.string('grade').defaultTo('-');
+        table.string('graderEval');
+        table.boolean('printDone').defaultTo(false);
+    });    
     await knex.schema.createTable('agreement', function (table) {
         table.increments('agreementId').primary();
         table.integer('authorId').unsigned(); //author
@@ -30,6 +28,9 @@ test.before(async t => {
         table.integer('studyfieldId').unsigned();
         table.foreign('studyfieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
+        table.date('startDate');
+        table.date('completionEta');
+        table.string('performancePlace');
         table.integer('studentGradeGoal');
         table.string('studentWorkTime');
         table.string('supervisorWorkTime');
@@ -79,15 +80,15 @@ test.serial('getAllTheses returns list of right length ', async t => {
 // });
 
 test.serial('updateThesis', async t => {
-    const updatedThesisData = {
-        thesisId: 3,
-        thesisTitle: 'Updated title',
-        performancePlace: 'Hima',
+    let updatedThesisData = {
+        thesisId: 2,
+        title: 'Updated title',
         urkund: 'http://',
-        grade: 4,
         graderEval: 'Tarkastajien esittely',
         userId: 5
     }
     let returnValue = await thesisService.updateThesis(updatedThesisData);
-    t.deepEqual(returnValue, undefined);
+    updatedThesisData.printDone = 0
+    updatedThesisData.grade = '1'
+    t.deepEqual(returnValue, updatedThesisData);
 });

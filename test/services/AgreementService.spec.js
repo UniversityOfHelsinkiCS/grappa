@@ -18,6 +18,9 @@ test.before(async t => {
         table.integer('studyfieldId').unsigned();
         table.foreign('studyfieldId').references('studyfield.studyfieldId');
         table.boolean('fake');
+        table.date('startDate');
+        table.date('completionEta');
+        table.string('performancePlace');
         table.integer('studentGradeGoal');
         table.string('studentWorkTime');
         table.string('supervisorWorkTime');

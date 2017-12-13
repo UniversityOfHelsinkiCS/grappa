@@ -53,13 +53,13 @@ export const saveThesis = async (thesis) => {
 
 }
 
-export async function updateThesis(thesisData) {
-    return await knex('thesis')
-        .returning('thesisId')
+export const updateThesis = async (thesisData) => {
+    return knex('thesis')
         .where('thesisId', '=', thesisData.thesisId)
         .update(thesisData)
-        .then(thesisId => thesisId[0])
-        .catch(err => {
+        .then(() => {
+            return getThesisById(thesisData.thesisId);
+        }).catch(error => {
             throw error;
         });
 }
