@@ -33,6 +33,7 @@ export class ThesisManagePage extends Component {
                 urkund: "",
                 grade: "",
                 graders: [],
+                graderEval: "",                
                 studyfieldId: "",
                 councilmeetingId: "",
                 printDone: undefined,
