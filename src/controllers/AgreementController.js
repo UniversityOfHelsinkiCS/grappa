@@ -69,9 +69,6 @@ export async function getAgreementsByLoggedAuthor(req, res) {
     }
 }
 
-const agreementHasNoId = (data) => {
-    return !agreement.agreementId
-}
 
 const getThesisData = (data) => {
     return ({
@@ -119,7 +116,6 @@ export async function saveAgreementForm(req, res) {
     const data = req.body;
     const personId = req.session.user_id;
     if (!personId) res.status(500).json({ text: "No user_id in session" });
-    if (agreementHasNoId(data)) {
         try {
             data.personId = personId;
             const thesisData = getThesisData(data);
@@ -134,9 +130,6 @@ export async function saveAgreementForm(req, res) {
         catch (error) {
             res.status(500).json({ text: "Error occured", error });
         }
-    } else {
-        res.status(500).json({ text: "agreement already exists" });
-    }
 }
 
 const updatePerson = async function (personData) {

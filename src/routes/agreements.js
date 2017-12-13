@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', jsonParser, (req, res) => {
-    agreementController.saveAgreement(req, res);
+    agreementController.saveAgreementForm(req, res);
 });
 
 router.post('/form', jsonParser, (req, res) => {
