@@ -45,21 +45,8 @@ test.beforeEach(async t => {
 
 test.serial('getAllAgreements returns list of right length ', async t => {
     let listOfAgreements = await agreementService.getAllAgreements();
-    t.deepEqual(listOfAgreements.length, mockAgreements.length);
+    t.is(listOfAgreements.length, mockAgreements.length);
 });
-
-// test.serial('AgreementService returns an agreement by id correctly', async t => {
-//     let id = '1';
-//     let returnValue = await agreementService.getAgreementById(id);
-//     console.log('returned' + returnValue);
-//     let mockAgreement;
-//     mockAgreements.map(agreement => {
-//         if (agreement.agreementId === 1 || agreement.agreementId === '1') {
-//             mockAgreement = agreement;
-//         }
-//     })
-//     console.log('mock' + mockAgreement.agreementId);
-// });
 
 test.serial('saves previousAgreement and returns Id', async t => {
     const prevData = {
@@ -78,11 +65,15 @@ test.serial('updateAgreement', async t => {
         studyfieldId: 1,
         other: 'this agreement is updated'
     };
-    let response = await agreementService.updateAgreement(updatedAgreement);
-    t.deepEqual(response, 1);
+    const response = await agreementService.updateAgreement(updatedAgreement);
+    Object.keys(updatedAgreement).forEach(key => {
+        if (Object.keys(response).includes(key)) {
+            t.is(response[key], updatedAgreement[key])
+        }
+    })
 });
 
-test.serial('saveNewAgreement call returns agreementId = 4', async t => {
+test.serial('saveAgreement call returns agreementId = 4', async t => {
     const testData = {
         authorId: 1,
         thesisId: 1,
@@ -91,18 +82,6 @@ test.serial('saveNewAgreement call returns agreementId = 4', async t => {
         fake: 0
     };
 
-
-    var temp = await agreementService.saveNewAgreement(testData);
-    //console.log(temp);
-    t.truthy(temp == 4);
-    /*
-    await knex('agreement')
-    .returning('agreementId')
-    .insert(testData)
-    .then((agreementId) => {
-        console.log( {text: 'New agreement saved to backend', agreementId: agreementId[0]});
-        t.truthy(agreementId[0]==3)
-      });
-      */
-
+    let temp = await agreementService.saveAgreement(testData);
+    t.is(temp.agreementId, 4);
 });

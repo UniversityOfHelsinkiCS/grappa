@@ -65,8 +65,12 @@ function removeEmptyKeys(personData) {
 }
 
 export async function getAllPersons(req, res) {
-    const persons = await personService.getAllPersons();
-    res.status(200).json(persons);
+    try {
+        const persons = await personService.getAllPersons();
+        res.status(200).json(persons);
+    } catch (error) {
+        res.status(500).json(error)
+    }
 }
 
 export async function getPersonById(req, res) {

@@ -1,4 +1,21 @@
 const knex = require('../db/connection');
+const bookshelf = require('../db/bookshelf');
+const Agreement = require('../db/models/agreement');
+
+const agreementSchema = [
+    "agreementId",
+    "authorId",
+    "thesisId",
+    "responsibleSupervisorId",
+    "studyfieldId",
+    "fake",
+    "studentGradeGoal",
+    "studentWorkTime",
+    "supervisorWorkTime",
+    "intermediateGoal",
+    "meetingAgreement",
+    "other"
+]
 
 export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
@@ -38,23 +55,48 @@ export const getAgreementsByAuthor = (personId) => {
         });
 }
 
-export const saveNewAgreement = (data) => {
-    return knex('agreement')
+export const saveAgreement = async (agreement) => {
+    const agreementIds = await knex('agreement')
         .returning('agreementId')
-        .insert(data)
-        .then(agreementId => agreementId[0])
-        .catch(error => {
-            throw error
-        });
+        .insert(agreement)
+    const agreementId = agreementIds[0]
+    return knex.select(agreementSchema).from('agreement').where('agreementId', agreementId).first()
 }
 
-export const updateAgreement = (data) => {
+export const createFakeAgreement = () => {
+    const fakeAgreement = {
+        authorId: null,
+        thesisId: null,
+        responsibleSupervisorId: null,
+        studyfieldId: null,
+        fake: true,
+        studentGradeGoal: null,
+        studentWorkTime: null,
+        supervisorWorkTime: null,
+        intermediateGoal: null,
+        meetingAgreement: null,
+        other: null,
+        whoNext: null
+    }
+    return Agreement.forge(fakeAgreement).save().then(model => {
+        return model.fetch();
+    }).then(model => {
+        return model.attributes;
+    }).catch(error => {
+        throw error;
+    })
+}
+
+export const updateAgreement = (agreement) => {
     return knex('agreement')
         .returning('agreementId')
-        .where('agreementId', '=', data.agreementId)
-        .update(data)
-        .then(agreementId => agreementId)
-        .catch(error => {
+        .where('agreementId', '=', agreement.agreementId)
+        .update(agreement)
+        .then(agreementId =>
+            knex.select().from('agreement')
+                .where('agreementId', '=', agreementId)
+                .first()
+        ).catch(error => {
             throw error
         });
 }
@@ -82,7 +124,7 @@ const parseAgreementData = (data) => {
         studentEmail: data.email,
         studentMajor: data.major,
         //thesis
-        thesisTitle: data.thesisTitle,
+        title: data.title,
         thesisStartDate: data.startDate,
         thesisCompletionEta: data.completionEta,
         thesisPerformancePlace: data.performancePlace,

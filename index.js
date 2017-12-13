@@ -5,7 +5,6 @@ const express = require('express');
 const app = express();
 const routes = require('./src/routes.js');
 const session = require('express-session');
-const fileUpload = require('express-fileupload');
 const KnexSessionStore = require('connect-session-knex')(session);
 const knex = require('./src/db/connection.js');
 
@@ -21,7 +20,6 @@ app.listen(3100, () => {
 })
 
 app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 6000000 }, store: store, resave: false, saveUninitialized: false}));
-app.use(fileUpload());
 
 routes(app);
 
