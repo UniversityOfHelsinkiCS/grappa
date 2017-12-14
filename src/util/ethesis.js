@@ -3,6 +3,13 @@ import xml from 'xmlbuilder';
 
 import creds from './ethesis_credentials';
 
+/*
+to test:
+console.log('LETS START E-THESIS!');
+ethesis = require( './src/util/ethesis');
+ethesis.saveToEThesis('test_meta', './data/file/example_thesis.pdf');
+*/
+
 export async function saveToEThesis(meta, pdfAddr) {
     const fs = require('fs');
     const JSZip = require("jszip");
