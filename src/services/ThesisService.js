@@ -4,7 +4,7 @@ const Thesis = require('../db/models/thesis');
 
 const thesisSchema = [
     "thesis.thesisId",
-    "thesis.title",
+    "thesis.thesisTitle",
     "startDate",
     "completionEta",
     "performancePlace",

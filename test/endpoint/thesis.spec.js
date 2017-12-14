@@ -18,7 +18,7 @@ test.before(async t => {
 })
 
 const thesisWithoutId = {
-    title: "Annin Grady",
+    thesisTitle: "Annin Grady",
     startDate: "6.5.2005",
     completionEta: "1.2.2006",
     performancePlace: "Hima",

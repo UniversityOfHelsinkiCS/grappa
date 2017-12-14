@@ -6,7 +6,7 @@ exports.seed = function (knex, Promise) {
             return knex('thesis').insert([
                 {
                     thesisId: 1,
-                    title: 'Annin Grady',
+                    thesisTitle: 'Annin Grady',
                     startDate: '6.5.2005',
                     completionEta: '1.2.2006',
                     performancePlace: 'Hima',
@@ -17,7 +17,7 @@ exports.seed = function (knex, Promise) {
                 },
                 {
                     thesisId: 2,
-                    title: 'Hieno Gradu',
+                    thesisTitle: 'Hieno Gradu',
                     startDate: '1.1.2014',
                     completionEta: '5.8.2014',
                     performancePlace: 'Hima',
@@ -28,7 +28,7 @@ exports.seed = function (knex, Promise) {
                 },
                 {
                     thesisId: 3,
-                    title: 'Amazing Thesis',
+                    thesisTitle: 'Amazing Thesis',
                     startDate: '13.2.1999',
                     completionEta: '14.2.2000',
                     performancePlace: 'Hima',
