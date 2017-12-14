@@ -126,7 +126,7 @@ export async function saveToEThesis(meta, pdfAddr) {
     //console.log(metaData.toString());
 
     var dataBuffer = new Buffer(metaData, 'utf-8');
- 
+
     var zip = new JSZip();
     zip.file('gradu.pdf', pdf);
     zip.file('mets.xml', metaData.toString());
@@ -141,27 +141,37 @@ export async function saveToEThesis(meta, pdfAddr) {
         console.log("out.zip written.");
     });
     */
-    
-        request({
+
+    request({
             method: 'POST',
             preambleCRLF: false,
             postambleCRLF: false,
             uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-sword/deposit/123456789/13',
             'auth': creds,
             headers: {
-                'Content-Disposition': 'filename=ex.zip', 
-                'Content-Type': 'application/zip', 
-                'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP', 
-                'X-No-Op': 'false', 
+                'Content-Disposition': 'filename=ex.zip',
+                'Content-Type': 'application/zip',
+                'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP',
+                'X-No-Op': 'false',
                 'X-Verbose': 'true',
             },
-            body: zip.generateNodeStream({type:'nodebuffer',streamFiles:true}) 
+            body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
         },
         function (error, response, body) {
-            console.log('statusCode:', response && response.statusCode); 
             if (error) {
                 return console.error('upload failed:', error);
             }
-            console.log('Upload successful!');
+            if(response){
+                if(response.statusCode == 201){
+                    console.log('Upload successful!');
+                    console.log('statusCode:', response && response.statusCode);
+                    
+                    var parseString = require('xml2js').parseString;
+                    parseString(body, function (err, result) {
+                        console.dir(result);
+                    });
+                }
+            }
+
         })
 }
