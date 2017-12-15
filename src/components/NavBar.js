@@ -47,8 +47,7 @@ export class NavBar extends Component {
                 </div>
                 <div className="ui stackable secondary pointing menu">
                     {this.state.links ? this.state.links.map((elem, index) => {
-                        //Handle special cases: NOT WORKING
-                        
+                        //Handle special cases:
                         switch (elem.path) {
                             case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
                                 return <NavLink key={index} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>

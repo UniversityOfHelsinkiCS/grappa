@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class ThesisList extends Component {
 
@@ -19,7 +20,7 @@ export default class ThesisList extends Component {
                         <tr key={thesis.thesisId}>
                             <td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td>
                             <td>{thesis.email}</td>
-                            <td>{thesis.title}</td>
+                            <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                             <td>{thesis.grade}</td>
                             <td>{thesis.printDone}</td>
                         </tr>

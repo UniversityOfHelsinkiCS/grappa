@@ -133,7 +133,7 @@ export default class PersonSelecter extends Component {
             <div>
                 <div className="ui fluid multiple search selection dropdown empty visible"
                     onMouseDown={this.focusMenu}>
-                    {this.renderSelected()}
+                    {this.props.selected ? this.renderSelected() : undefined}
                     {this.renderSearch()}
                     {this.renderDropdown()}
                 </div>
