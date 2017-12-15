@@ -71,7 +71,7 @@ export const createFakeAgreement = () => {
         studyfieldId: null,
         fake: true,
         studentGradeGoal: null,
-        studentWorkTime: "0000",
+        studentWorkTime: null,
         supervisorWorkTime: null,
         intermediateGoal: null,
         meetingAgreement: null,
