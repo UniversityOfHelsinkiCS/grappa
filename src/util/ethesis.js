@@ -48,25 +48,25 @@ export async function saveToEThesis(meta, pdfAddr) {
                             {
                                 '@mdschema': 'dc',
                                 '@element': 'title',
-                                '#text': 'The title of this awesome thesis'
+                                '#text': meta.thesisTitle
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'creator',
-                                '#text': 'Author Awesome'
+                                '#text': meta.author
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'issued',
-                                '#text': '2017'
+                                '#text': Date.getFullYear()
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'abstract',
                                 '@lang': 'en',
-                                '#text': 'The english abstract of this awesome thesis'
+                                '#text': meta.abstract.en
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'abstract',
                                 '@lang': 'fi',
-                                '#text': 'Tämän kerrassaan mahtavan gradun tiivistelmä'
+                                '#text': meta.abstract.fi
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'subject',
