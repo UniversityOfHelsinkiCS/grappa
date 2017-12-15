@@ -10,9 +10,6 @@ const reducer = (state = [], action) => {
             return [...state, action.response];
         case "AGREEMENT_DELETE_ONE_SUCCESS":
             return state.filter(agreement => agreement.id !== action.response);
-        case "ATTACHMENT_SAVE_ONE_SUCCESS":
-            console.log("acton.response", action.response)
-            return [...state, action.response];
         case "THESIS_SAVE_ONE_SUCCESS":
             //Saving thesis response has multiple fields.
             return [...state, action.response.agreement];
