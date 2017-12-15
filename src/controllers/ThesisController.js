@@ -40,8 +40,7 @@ export async function saveThesisForm(req, res) {
             //TODO: Handle creating new links between persons and agreement
             /*
             savedGraders = thesis.graders.map(grader => {
-                //Return personroleservice.linkGraders
-                return grader
+                //return personroleservice.linkGraders
             })*/
             delete thesis.graders
         }
@@ -58,6 +57,7 @@ export async function saveThesisForm(req, res) {
             thesis: savedThesis,
             author: savedPerson,
             agreement: savedAgreement,
+            attachments: attachments,
         }
         res.status(200).json(response);
     } catch (error) {

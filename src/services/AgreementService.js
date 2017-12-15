@@ -98,7 +98,7 @@ export const updateAgreement = (agreement) => {
         .update(agreement)
         .then(agreementId =>
             knex.select(agreementSchema).from('agreement')
-                .where('agreementId', '=', agreementId)
+                .where('agreementId', '=', agreement.agreementId)
                 .first()
         ).catch(error => {
             throw error
