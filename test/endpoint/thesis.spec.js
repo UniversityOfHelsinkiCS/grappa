@@ -105,11 +105,7 @@ test('thesisForm post & creates id without attachment', async t => {
     t.deepEqual(author, person, "Author person is correct");
     t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
 })
-/*
-test('thesisForm post & creates id with attachment', async t => {
-    t.plan(2);
-})
-*/
+
 test('thesis get all', async t => {
     t.plan(3);
     const app = makeApp();
@@ -120,4 +116,34 @@ test('thesis get all', async t => {
     const bodyThesis = body[0]
     t.deepEqual(thesisWithId, bodyThesis)
     t.is(body.length, 1);
+})
+
+const attachment = {
+    attachmentId: 1,
+    agreementId: 2,
+    filename: null, //Saving to memory has no filename
+    type: 'application/octet-stream',
+    savedOnDisk: 1
+}
+
+test('thesisForm post & creates id with attachment', async t => {
+    t.plan(5);
+    const res = await request(makeApp())
+        .post('/theses')
+        .field('json', JSON.stringify(thesisForm))
+        .attach('attachment', './LICENSE')
+    t.is(res.status, 200);
+    const thesis = res.body.thesis;
+    const author = res.body.author;
+    const agreement = res.body.agreement;
+    const attachments = res.body.attachments;
+    let testThesis = thesisWithId;
+    testThesis.thesisId = 2;
+    let testAgreement = fakeAgreement;
+    fakeAgreement.thesisId = 2;
+    fakeAgreement.agreementId = 2;
+    t.deepEqual(thesis, testThesis, "Thesis is correct");
+    t.deepEqual(author, person, "Author person is correct");
+    t.deepEqual(agreement, testAgreement, "Agreement is correct");
+    t.deepEqual(attachments, [attachment], "Attachments are correct");
 })
