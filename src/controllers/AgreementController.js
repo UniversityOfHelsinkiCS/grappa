@@ -120,7 +120,8 @@ export async function saveAgreementForm(req, res) {
             data.personId = personId;
             const thesisData = getThesisData(data);
             const thesisSaveResponse = await thesisService.saveThesis(thesisData);
-            const agreementData = getAgreementData(data, thesisSaveResponse.id);
+            console.log("thesisSaveResponse",thesisSaveResponse);
+            const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
             const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
             agreementData.agreementId = agreementSaveResponse.agreementId;
             let personData = await personService.getPersonById(data.personId);
