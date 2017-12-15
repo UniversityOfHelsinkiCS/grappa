@@ -60,11 +60,13 @@ export const getAgreementsByAuthor = (personId) => {
 }
 
 export const saveAgreement = async (agreement) => {
-    const agreementIds = await knex('agreement')
-        .returning('agreementId')
-        .insert(agreement)
-    const agreementId = agreementIds[0]
-    return knex.select(agreementSchema).from('agreement').where('agreementId', agreementId).first()
+    return Agreement.forge(agreement).save().then(model => {
+        return model.fetch();
+    }).then(model => {
+        return model.attributes;
+    }).catch(error => {
+        throw error;
+    });
 }
 
 export const createFakeAgreement = () => {

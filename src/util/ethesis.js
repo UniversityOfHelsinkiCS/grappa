@@ -1,125 +1,184 @@
-import request from 'request'
-import xml from 'xmlbuilder'
-import creds from './ethesis_credentials'
-import zip from 'adm-zip';
+import request from 'request';
+import xml from 'xmlbuilder';
 
-export function getExamplePDF(){
-    const fs = require('fs');
-    return fs.readFileSync('./data/file/example_thesis.pdf');
-}
-
-export async function saveToEThesis(meta, pdf){
-    
-    var metaData = xml.create({
-        entry: {
-            '@xmlns': 'http://www.w3.org/2005/Atom',
-            '@xmlns:sword': 'http://purl.org/net/sword/',
-            thesisTitle: 'harjoittelusyöttö',
-            author:{
-                name: {
-                '#text': 'harjoittelusyöttö'
-                }
-            },
-            summary:{
-                '@type': 'text',
-                '#text': 'The abstract'
-            },
-            'dcterms:abstract': 'The abstract',
-            'dcterms:accessRights': 'Access Rights',
-            'dcterms:alternative': 'Alternative Title',
-            'dcterms:available': 'Date Available',
-            'dcterms:bibliographicCitation': 'Bibliographic Citation',
-            'dcterms:contributor': 'Contributor',
-            'dcterms:description': 'Description',
-            'dcterms:hasPart': 'Has Part',
-            'dcterms:hasVersion': 'Has Version',
-            'dcterms:identifier': 'Identifier',
-            'dcterms:isPartOf': 'Is Part Of',
-            'dcterms:publisher': 'Publisher',
-            'dcterms:references': 'References',
-            'dcterms:rightsHolder': 'Rights Holder',
-            'dcterms:source': 'Source',
-            'dcterms:title': 'Title',
-            'dcterms:type': 'Type'
-        }
-      }).end({ pretty: true});
-    
-    console.log(metaData.toString());
-    console.log('--- --- ---')
-    
-    //const data = new FormData();
-    //data.append('meta', metaData, { type: 'application/atomserv+xml' });
-    console.log(pdf);
-    //data.append('file', pdf, { type: 'application/pdf' });
-
-    var zip=require('adm-zip');
-    var dataBuffer = new Buffer(metaData,'utf-8');//console.log(dataBuffer.toString());
-    var zipper = new zip();
-    zipper.addFile('mets.xml',dataBuffer);
-    zipper.addFile('gradu.pdf',pdf);
-
-    request({
-        method: 'POST',
-        preambleCRLF: false,
-        postambleCRLF: false,
-        uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13',
-        'auth': creds,
-        headers: {
-            'Packaging': 'http://purl.org/net/sword/package/SimpleZip',
-            'content-type':'application/zip',
-            'Content-Disposition': 'filename=zip.zip'
-        },
-        body: zipper.toBuffer()
-
-        /*
-        multipart: [
-            {
-                'content-type': 'application/atomserv+xml',
-                body: metaData.toString()
-            },
-            { 
-                'content-type': 'application/pdf',
-                body: pdf
-            }
-        ],*/
-    },
-    function (error, response, body) {
-        console.log('statusCode:', response && response.statusCode); 
-        if (error) {
-            return console.error('upload failed:', error);
-        }
-        console.log('Upload successful!');
-        console.log('Response headers:');
-        console.log(response.headers);
-        console.log('Response body:\n', body);
-        console.log('Request:');
-        console.log(response.request);
-        
-    })
-
+import creds from './ethesis_credentials';
 
 /*
-    axios.post('http://kirjasto-test.hulib.helsinki.fi/ethesis-swordv2/collection/123456789/13', data, auth_config, config)
-    .then(
-        (response) => {
-            console.log(response)
-        }
-    ).catch(
-        (errors) => {
-            console.log('--- --- ---');
-            console.log('--- --- REQUEST HEADERS --- ---');
-            console.log(errors.request._header);
-            console.log('--- --- RESPONSE STATUS --- ---');
-            console.log(errors.response.status);
-            console.log('--- --- RESPONSE TEXT --- ---');
-            console.log(errors.response.statusText);
-            console.log('--- --- RESPONSE MESSAGE --- ---');
-            console.log(errors.response.message);
-            console.log('--- --- RESPONSE HEADERS --- ---');
-            console.log(errors.response.headers);
-            console.log('--- --- RESPONSE CONFIG --- ---');
-            console.log(errors.response.config);
-        }
-    );
+to test:
+console.log('LETS START E-THESIS!');
+ethesis = require( './src/util/ethesis');
+ethesis.saveToEThesis('test_meta', './data/file/example_thesis.pdf');
 */
+
+export async function saveToEThesis(meta, pdfAddr) {
+    const fs = require('fs');
+    const JSZip = require("jszip");
+
+    var metaData = xml.create({
+        mets: {
+            '@ID': 'sort-mets_mets',
+            '@OBJID': 'sword-mets',
+            '@LABEL': 'DSpace SWORD Item',
+            '@PROFILE': 'DSpace METS SIP Profile 1.0',
+            '@xmlns': 'http://www.loc.gov/METS/',
+            '@xmlns:xlink': 'http://www.w3.org/1999/xlink',
+            '@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+            '@xsi:schemaLocation': 'http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd',
+            metsHdr: {
+                '@CREATEDATE': '2007-09-01T00:00:00',
+                agent: {
+                    '@ROLE': 'CUSTODIAN',
+                    '@TYPE': 'ORGANIZATION',
+                    name: {
+                        '#text': 'Richard Jones'
+                    }
+                }
+            },
+            dmdSec: {
+                '@ID': 'sword-mets-dmd-1',
+                '@GROUPID': 'sword-mets-dmd-1_group-1',
+                mdWrap: {
+                    '@LABEL': 'Metadata',
+                    '@MDTYPE': 'OTHER',
+                    '@OTHERMDTYPE': 'dim',
+                    '@MIMETYPE': 'text/xml',
+                    xmlData: {
+                        '@xmlns:dim': 'http://www.dspace.org/xmlns/dspace/dim',
+                        'dim:field': [
+                            {
+                                '@mdschema': 'dc',
+                                '@element': 'title',
+                                '#text': meta.thesisTitle
+                            }, {
+                                '@mdschema': 'dct',
+                                '@element': 'creator',
+                                '#text': meta.author
+                            }, {
+                                '@mdschema': 'dct',
+                                '@element': 'issued',
+                                '#text': Date.getFullYear()
+                            }, {
+                                '@mdschema': 'dct',
+                                '@element': 'abstract',
+                                '@lang': 'en',
+                                '#text': meta.abstract.en
+                            }, {
+                                '@mdschema': 'dct',
+                                '@element': 'abstract',
+                                '@lang': 'fi',
+                                '#text': meta.abstract.fi
+                            }, {
+                                '@mdschema': 'dct',
+                                '@element': 'subject',
+                                '#text': 'Gradunala'
+                            }, {
+                                '@mdschema': 'ethesis',
+                                '@element': 'language',
+                                '@lang': 'en',
+                                '#text': 'English'
+                            }, {
+                                '@mdschema': 'ethesis',
+                                '@element': 'thesistype',
+                                '@lang': 'en',
+                                '#text': 'master\'s thesis'
+                            }, {
+                                '@mdschema': 'ethesis',
+                                '@element': 'discipline',
+                                '@lang': 'en',
+                                '#text': 'discipline'
+                            }
+                        ],
+                    }
+                },
+            },
+            fileSec: {
+                fileGrp: {
+                    '@ID': 'sword-mets-fgrp-1',
+                    '@USE': 'CONTENT',
+                    file: {
+                        '@GROUPID': 'sword-mets-fgid-0',
+                        '@ID': 'sword-mets-file-1',
+                        '@MIMETYPE': 'application/pdf',
+                        FLocat: {
+                            '@LOCTYPE': 'URL',
+                            '@xlink:href': 'gradu.pdf'
+                        },
+                    },
+                },
+            },
+            structMap: {
+                '@ID': 'sword-mets-struct-1',
+                '@LABEL': 'structure',
+                '@TYPE': 'LOGICAL',
+                div: {
+                    '@ID': 'sword-mets-div-1',
+                    '@DMDID': 'sword-mets-dmd-1',
+                    '@TYPE': 'SWORD Object',
+                    div: {
+                        '@ID': 'sword-mets-div-2',
+                        '@TYPE': 'File',
+                        fptr: {
+                            '@FILEID': 'sword-mets-file-1'
+                        }
+                    }
+                }
+            }
+        }
+    },
+        { version: '1.0', encoding: 'UTF-8', standalone: false }).end({ pretty: true });
+
+    const pdf = fs.readFileSync(pdfAddr);
+
+    //xml structure test output
+    //console.log(metaData.toString());
+
+    var dataBuffer = new Buffer(metaData, 'utf-8');
+
+    var zip = new JSZip();
+    zip.file('gradu.pdf', pdf);
+    zip.file('mets.xml', metaData.toString());
+
+    /* to test zip-output to disc
+    zip
+    .generateNodeStream({type:'nodebuffer',streamFiles:true})
+    .pipe(fs.createWriteStream('/tmp/test.zip'))
+    .on('finish', function () {
+        // JSZip generates a readable stream with a "end" event,
+        // but is piped here in a writable stream which emits a "finish" event.
+        console.log("out.zip written.");
+    });
+    */
+
+    request({
+            method: 'POST',
+            preambleCRLF: false,
+            postambleCRLF: false,
+            uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-sword/deposit/123456789/13',
+            'auth': creds,
+            headers: {
+                'Content-Disposition': 'filename=ex.zip',
+                'Content-Type': 'application/zip',
+                'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP',
+                'X-No-Op': 'false',
+                'X-Verbose': 'true',
+            },
+            body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+        },
+        function (error, response, body) {
+            if (error) {
+                return console.error('upload failed:', error);
+            }
+            if(response){
+                if(response.statusCode == 201){
+                    console.log('Upload successful!');
+                    console.log('statusCode:', response && response.statusCode);
+                    
+                    var parseString = require('xml2js').parseString;
+                    parseString(body, function (err, result) {
+                        console.dir(result);
+                    });
+                }
+            }
+
+        })
 }
