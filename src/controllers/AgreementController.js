@@ -63,35 +63,72 @@ export async function getAgreementsByLoggedAuthor(req, res) {
     try {
         const person = await personService.getLoggedPerson(req);
         const agreements = await agreementService.getAgreementsByAuthor(person.personId);
+        //TO DO! refactor frontend and call getAgreementRelatedData here
         res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
     }
 }
 
+const getAgreementRelatedData = async function (data) {
+    const mainSupervisor = await personService.getPersonByPersonRoleId(data.responsibleSupervisorId);
+    data.responsibleSupervisorId = mainSupervisor;
+    let agreement = getAgreementData(data);
+    const thesis = getThesisData(data);
+    const author = getPersonData(data);
+    let supervisors = await getAgreementPersonsByAgreementId(agreement.agreementId);
+    const agreementRelatedData = {
+        agreement: agreement,
+        thesis: thesis,
+        author: author,
+        supervisors: supervisors
+    };
+    return agreementRelatedData;
+}
+
+const getAgreementPersonsByAgreementId = async function (agreementId) {
+    return await personService.getAgreementPersonsByAgreementId(agreementId);
+}
 
 const getThesisData = (data) => {
     return ({
+        thesisId: data.thesisId,
         thesisTitle: data.thesisTitle,
-        startDate: data.thesisStartDate,
-        completionEta: data.thesisCompletionEta,
-        performancePlace: data.thesisPerformancePlace,
+        startDate: data.startDate,
+        completionEta: data.completionEta,
+        performancePlace: data.performancePlace,
         userId: data.personId
     });
 }
 
 const getAgreementData = (data, thesisId) => {
     return ({
+        agreementId: data.agreementId,
         authorId: data.personId,
         thesisId: thesisId,
-        responsibleSupervisorId: data.thesisSupervisorMain,
+        responsibleSupervisorId: data.responsibleSupervisorId,
         studyfieldId: data.studyfieldId,
         studentGradeGoal: data.studentGradeGoal,
-        studentWorkTime: data.thesisWorkStudentTime,
-        supervisorWorkTime: data.thesisWorkSupervisorTime,
-        intermediateGoal: data.thesisWorkIntermediateGoal,
-        meetingAgreement: data.thesisWorkMeetingAgreement,
-        other: data.thesisWorkOther
+        studentWorkTime: data.studentWorkTime,
+        supervisorWorkTime: data.supervisorWorkTime,
+        intermediateGoal: data.intermediateGoal,
+        meetingAgreement: data.meetingAgreement,
+        other: data.other
+    });
+}
+
+const getPersonData = (data) => {
+    return ({
+        personId: data.personId,
+        shibbolethId: data.shibbolethId,
+        email: data.email,
+        title: data.title,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        isRetired: data.isRetired,
+        address: data.address,
+        phone: data.phone,
+        major: data.major
     });
 }
 
