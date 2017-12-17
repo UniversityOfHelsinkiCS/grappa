@@ -107,6 +107,19 @@ export const getAgreementPersonsByAgreementId = (agreementId) => {
         });
 }
 
+export const getPersonByPersonRoleId = (personRoleId) => {
+    return knex.select().from('person')
+    .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+    .where('personRoleId', personRoleId)
+    .then(persons => {
+        return persons[0];
+    })
+    .catch(error => {
+        console.log(error);
+        throw error;
+    });
+}
+
 export const getAgreementPersonsByPersonRoleId = (personRoleId) => {
     return knex.select().from('agreementPerson')
         .where('personRoleId', personRoleId)
