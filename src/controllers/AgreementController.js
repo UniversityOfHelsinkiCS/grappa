@@ -63,6 +63,7 @@ export async function getAgreementsByLoggedAuthor(req, res) {
     try {
         const person = await personService.getLoggedPerson(req);
         const agreements = await agreementService.getAgreementsByAuthor(person.personId);
+        //TO DO! refactor frontend and call getAgreementRelatedData here
         res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
