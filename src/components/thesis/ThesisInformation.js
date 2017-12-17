@@ -2,6 +2,13 @@ import React, { Component } from "react";
 
 export default class ThesisInformation extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            oldGrading: false,
+        }
+    }
+
     changeField = (fieldName) => (event) => {
         this.props.sendChange(fieldName, event.target.value);
     }
@@ -12,8 +19,8 @@ export default class ThesisInformation extends Component {
                 <label>{label}</label>
                 <input
                     type="text"
-                    disabled={ this.props.allowEdit ? "" : "true" }
-                    value={ this.props.thesis[fieldName] }
+                    disabled={this.props.allowEdit ? "" : "true"}
+                    value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
                     placeholder={placeholder}
                 />
@@ -27,8 +34,8 @@ export default class ThesisInformation extends Component {
                 <label>{label}</label>
                 <select
                     className="ui fluid search dropdown"
-                    disabled={ this.props.allowEdit ? "" : "true" }
-                    value={ this.props.thesis[fieldName] }
+                    disabled={this.props.allowEdit ? "" : "true"}
+                    value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}>
                     <option key="0" value="">Select {label}</option>
                     {fieldArray.map((field, index) =>
@@ -47,12 +54,11 @@ export default class ThesisInformation extends Component {
                 {this.renderTextField("First name", "authorFirstname", "First Name")}
                 {this.renderTextField("Last name", "authorLastname", "Last Name")}
                 {this.renderTextField("Email", "authorEmail", "Email Address")}
-             </div>
+            </div>
         );
     }
 
     renderThesisInformation() {
-        const activeStudyfields = this.props.studyfields.filter(field => field.isActive);
         const oldGradeFields = [
             { id: "Approbatur", name: "Approbatur" },
             { id: "Lubenter Approbatur", name: "Lubenter Approbatur" },
@@ -62,15 +68,33 @@ export default class ThesisInformation extends Component {
             { id: "Eximia Cum Laude Approbatur", name: "Eximia Cum Laude Approbatur" },
             { id: "Laudatur", name: "Laudatur" },
         ]
+        const gradeFields = [
+            { id: "1", name: "1" },
+            { id: "2", name: "2" },
+            { id: "3", name: "3" },
+            { id: "4", name: "4" },
+            { id: "5", name: "5" }
+        ]
         return (
             <div className="m-bot">
                 <div className="three fields">
+                    {this.renderDropdownField("Studyfield", this.props.studyfields, "studyfieldId")}
                     {this.renderTextField("Title", "title", "Title")}
-                    {this.renderDropdownField("Studyfield", activeStudyfields, "StudyfieldId")}
-                    {this.renderDropdownField("Grade", oldGradeFields, "grade")}
+                    {this.renderTextField("Urkund-link", "urkund", "Link to Urkund")}
+
                 </div>
                 <div className="three fields">
-                    {this.renderTextField("Urkund-link", "urkund", "Link to Urkund")}
+                    {this.state.oldGrading ?
+                        this.renderDropdownField("Grade", oldGradeFields, "grade") :
+                        this.renderDropdownField("Grade", gradeFields, "grade")
+                    }
+                    <div className="field">
+                        <label>&nbsp;   </label>
+                        <button className="ui button" onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}>
+                            {this.state.oldGrading ?
+                                "Enable new grading" : "Enable old grading"}
+                        </button>
+                    </div>
                 </div>
             </div>
         );

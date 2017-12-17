@@ -22,11 +22,10 @@ export const deleteSupervisor = (supervisorId) => {
 }
 
 //all users supervising a thesis atm
-export const getAgreementPersons = (studyfield) => {
+export const getAgreementPersons = () => {
     const route = '/supervisors/agreementPersons';
     const prefix = "SUPERVISOR_GET_AGREEMENT_PERSONS_";
-    console.log(studyfield)
-    return callController(route, studyfield, prefix);
+    return callController(route, prefix);
 }
 
 export const reviewSupervisor = (supervisor) => {

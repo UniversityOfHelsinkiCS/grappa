@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class AgreementElement extends Component {
+class AgreementEditModalField extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,4 +53,4 @@ class AgreementElement extends Component {
     }
 }
 
-export default AgreementElement;
+export default AgreementEditModalField;

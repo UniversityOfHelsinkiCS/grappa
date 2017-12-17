@@ -47,30 +47,45 @@ export class SupervisorManagementPage extends Component {
             }
         );
     }
-
-    renderList() {
+    
+    renderReviewButton(person) {
+        let text = "Review supervisor";
+        let buttonClass = "ui green button";
+        if (person.approved) {
+            text = "Supervisor approved";
+            buttonClass = "ui button";
+        }
         return (
-            <div>
-                <h2>List of thesis supervisors </h2>
-                <div>At the moment showing all who are supervising a thesis now, in future only those needing approval?</div>
-                <div>{this.props.supervisors.map((person, index) => (
-                    <div key={index} className="two fields">
-                        <div className="ui field">{person.title} {person.firstname} {person.lastname} studyfield: {person.studyfieldId}
-                        </div>
-                        <div className="ui field">
-                            <button key={"review" + index} className="ui button" onClick={(e) => this.toggleEditModal(e, person)} >
-                                Review Supervisor
-                            </button>
-                        </div>
-                        <br />
-                    </div>
-                ))
-                }
-                </div>
-            </div>
+            <button key={person.personId} className={buttonClass} onClick={(e) => this.toggleEditModal(e, person)} >
+                {text}
+            </button>
         )
     }
 
+    renderList() {
+        return (
+            <table className="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Supervisor</th>
+                        <th>Thesis</th>
+                        <th>Action, if needed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.props.supervisors.map((person, index) => //change index -> some id
+                        <tr key={index}>
+                            <td>{person.firstname} {person.lastname} studyfield: {person.studyfieldId}</td>
+                            <td>{person.thesisTitle}</td>
+                            <td>{this.renderReviewButton(person)}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        )
+    }
+    //TODO Known bugs: when reviewing/updating, one 'new supervisor' shows up in the list but it goes away when page refreshed...
+    // should fix this by filtering redux state?
     render() {
         if (!this.props.supervisors) {
             return <div>nothing here</div>
@@ -78,6 +93,7 @@ export class SupervisorManagementPage extends Component {
         return (
             <div className="ui segment">
                 Add and edit supervisor list here or review thesis projects. This page will be displayed to studyfields' professors and admins only.
+                <h2>List of thesis supervisors </h2>
                 {this.renderList()}
                 <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} reviewSupervisor={this.props.reviewSupervisor} />
                 <h2>Edit supervisor list</h2>

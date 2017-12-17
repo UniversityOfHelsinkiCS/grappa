@@ -15,10 +15,7 @@ export class NavBar extends Component {
     componentDidMount() {
         //This login will allow shibboleth to check on page reload
         this.props.login();
-        this.refreshLinks(this.props)
-        if (!this.props.user.roles) {
-            this.props.history.push("/")
-        }
+        this.refreshLinks(this.props)   
     }
 
     componentWillReceiveProps(props) {
