@@ -4,6 +4,7 @@ import { handleRequest } from './apiConnection';
 
 import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
+import attachmentReducer from "../containers/attachment/attachmentReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
 import graderReducer from "../containers/grader/graderReducer";
 import supervisorReducer from "../containers/supervisor/supervisorReducer";
@@ -20,7 +21,7 @@ import personReducer from "../containers/person/personReducer";
 
 const combinedReducers = combineReducers({
     agreement: agreementReducer,
-    attachment: agreementReducer, //DOES IT WORK?? do we need this?
+    attachment: attachmentReducer,
     user: userReducer,
     councilmeeting: councilmeetingReducer,
     graders: graderReducer,

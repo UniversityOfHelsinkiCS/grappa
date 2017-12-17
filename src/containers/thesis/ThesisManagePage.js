@@ -33,6 +33,7 @@ export class ThesisManagePage extends Component {
                 urkund: "",
                 grade: "",
                 graders: [],
+                graderEval: "",
                 studyfieldId: "",
                 councilmeetingId: "",
                 printDone: undefined,
@@ -57,9 +58,10 @@ export class ThesisManagePage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.params && newProps.params.id) {
+        if (newProps.match.params && newProps.match.params.id) {
+            const thesisId = newProps.match.params.id;
             //if there is such thing as "params.id" given as a prop we should be editing thesis with that id
-            const thesis = newProps.theses.find(thesis => thesis.id === newProps.params.id)
+            const thesis = newProps.theses.find(thesis => thesis.thesisId == thesisId)
             if (thesis) {
                 this.setState({ thesis, editMode: true })
             }
@@ -207,7 +209,7 @@ const mapStateToProps = (state) => {
         councilmeetings: state.councilmeeting,
         studyfields: state.studyfield,
         graders: state.graders,
-        theses: state.theses,
+        theses: state.thesis,
     };
 };
 
