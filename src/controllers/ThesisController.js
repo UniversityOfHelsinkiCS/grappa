@@ -1,7 +1,7 @@
-require('babel-polyfill');
 const thesisService = require('../services/ThesisService');
-const express = require('express');
-const app = express();
+const agreementService = require('../services/AgreementService');
+const attachmentService = require('../services/AttachmentService');
+const personService = require('../services/PersonService');
 
 export async function getAllTheses(req, res) {
     const theses = await thesisService.getAllTheses();
@@ -13,26 +13,47 @@ export async function getThesisById(req, res) {
     res.status(200).json(thesis);
 }
 
-export async function saveThesis(req, res) {
+export async function saveThesisForm(req, res) {
     const data = req.body;
     try {
-        const thesis = await thesisService.saveThesis(data);
-        res.status(200).json(thesis);
-    } catch (e) {
-        res.status(500).json(e);
-    }
-}
+        // Order so that agreementId is available to save attachments.
+        // Attachmentservice gives back the parsed multipart formdata
+        let agreement = await agreementService.createFakeAgreement();
+        const attachmentObject = await attachmentService.saveAttachments(req, res, agreement.agreementId);
+        const attachments = attachmentObject.attachments;
+        let thesis = attachmentObject.json;
+        let person = {
+            email: thesis.authorEmail,
+            firstname: thesis.authorLastname,
+            lastname: thesis.authorFirstname
+        }
+        person = await personService.savePerson(person)
+        thesis.userId = person.personId;
+        delete thesis.authorFirstname
+        delete thesis.authorLastname
+        delete thesis.authorEmail
 
-function getThesisData(data) {
-    let thesis = {
-        thesisTitle: data.thesisTitle,
-        startDate: data.startDate,
-        completionEta: data.completionEta,
-        performancePlace: data.performancePlace,
-        urkund: data.urkund,
-        grade: data.grade,
-        graderEval: data.graderEval,
-        userId: data.authorId
-    };
-    return thesis;
+        agreement.studyfieldId = thesis.studyfieldId;
+        delete thesis.studyfieldId;
+
+        if (thesis.graders) {
+            thesis.graders.forEach(grader => {
+                console.log(grader)
+            })
+            delete thesis.graders
+        }
+
+        delete thesis.thesisEmails
+
+        console.log(thesis);
+        const savedThesis = await thesisService.saveThesis(thesis);
+        // Agreement was missing the thesisId completing linking.
+        agreement.thesisId = savedThesis.thesisId;
+        agreement = await agreementService.updateAgreement(agreement)
+
+        res.status(200).json(savedThesis);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
 }

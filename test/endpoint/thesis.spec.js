@@ -14,7 +14,7 @@ test.before(async t => {
     //TODO: Fix this waiting.
     //Waiting for migrations to finish (in db/connection.js )
     const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    console.log(waitString);
+    //console.log(waitString);
 })
 
 const thesisWithoutId = {
@@ -25,14 +25,15 @@ const thesisWithoutId = {
     urkund: "https://",
     grade: "4",
     graderEval: "Tarkastajien esittely",
-    userId: 1
+    userId: 1,
+    printDone: 0
 }
 
 test('thesis post & creates id', async t => {
-    t.plan(11);    
+    t.plan(12);    
     const res = await request(makeApp())
         .post('/theses')
-        .send(thesisWithoutId);
+        .field('json', JSON.stringify(thesisWithoutId))
     t.is(res.status, 200);
     const body = res.body;
     let thesis = thesisWithoutId;
@@ -44,7 +45,7 @@ test('thesis post & creates id', async t => {
 })
 
 test('thesis get all', async t => {
-    t.plan(12);
+    t.plan(13);
     const app = makeApp();
     const res = await request(app)
         .get('/theses');
@@ -55,7 +56,7 @@ test('thesis get all', async t => {
     thesis.thesisId = 1;
     const theses = [thesis];
     Object.keys(thesis).forEach(key => {
-        t.is(thesis[key], bodyThesis[key], "Key: " + key)
+         t.is(thesis[key], bodyThesis[key], "Key: " + key)
     })
     t.is(Object.keys(thesis).length, Object.keys(bodyThesis).length, "Key length");
     t.is(body.length, theses.length);

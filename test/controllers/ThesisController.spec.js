@@ -51,9 +51,9 @@ test.cb('getAllTheses returns correct information', t => {
     service.getAllTheses.restore();
 });
 
-test('saveAgreement calls services method', async t => {
+test('saveThesisForm calls services method', async t => {
     const body ={
-        title: 'Annin Grady',
+        thesisTitle: 'Annin Grady',
         urkund: 'http://',
         grade: 4,
         graderEval: 'Tarkastajien esittely',
@@ -61,8 +61,8 @@ test('saveAgreement calls services method', async t => {
     };
     req.body = body;
     const spy = sinon.spy(service, "saveThesis");
-    thesisController.saveThesis(req, res).then((response) => {
-        t.is(spy.calledOnce, true, "saveThesis calls services method saveThesis");
+    thesisController.saveThesisForm(req, res).then((response) => {
+        t.is(spy.calledOnce, true, "saveThesisForm calls services method saveThesis");
     })
    
 });

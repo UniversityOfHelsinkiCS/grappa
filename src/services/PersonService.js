@@ -1,20 +1,48 @@
-require('babel-polyfill');
 const knex = require('../db/connection');
 
+const personSchema = [
+    "person.personId",
+    "shibbolethId",
+    "email",
+    "firstname",
+    "lastname",
+    "person.title",
+    "isRetired",
+    "studentNumber",
+    "address",
+    "phone",
+    "major",
+]
+
 export async function getAllPersons() {
-    return await knex.select().from('person');
+    return knex.select(personSchema).from('person');
+}
+
+export async function getPersonsWithRole(roleId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .select(personSchema);
+}
+
+export async function getPersonsWithRoleInStudyfield(roleId, studyfieldId) {
+    return knex.table('person')
+        .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('roleId', roleId)
+        .where('personWithRole.studyfieldId', studyfieldId)
+        .select(personSchema);
 }
 
 export async function getLoggedPerson(req) {
     let user;
     if (req.session.user_id) {
         const userId = req.session.user_id;
-        user = getPersonById(userId);
+        user = await getPersonById(userId);
     } else if (req.headers['uid']) {
         const shibbolethId = req.headers['uid'];
-        user = getPersonByShibbolethId(shibbolethId);
+        user = await getPersonByShibbolethId(shibbolethId);
     }
-    return user;
+    return user[0];
 }
 
 
@@ -31,13 +59,12 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    return await knex('person')
+    const personIds = await knex('person')
         .returning('personId')
         .insert(personData)
-        .then(personId => personId[0])
-        .catch(error => {
-            throw error
-        });
+    const personId = personIds[0]
+    return knex.select(personSchema).from('person').where('personId', personId).first()
+
 }
 
 export async function savePersonRole(personRoleData) {

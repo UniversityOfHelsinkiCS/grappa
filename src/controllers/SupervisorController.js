@@ -36,7 +36,8 @@ export async function saveSupervisor(req, res) {
                 shibbolethId: supervisorData.shibbolethId,
                 isRetired: supervisorData.isRetired
             };
-            const personId = await personService.savePerson(personData);
+            const person = await personService.savePerson(personData);
+            const personId = person.personId;
             const personRoleData = {
                 personId: personId,
                 studyfieldId: supervisorData.studyfieldId,
@@ -64,6 +65,7 @@ export async function saveSupervisor(req, res) {
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
+    console.log("controller")
     if (data.personRoleId != null && data.agreementId != null) {
         try {
             let agreementPersonData = {
@@ -74,6 +76,7 @@ export async function reviewSupervisor(req, res) {
                 approverId: data.approverId,
                 approvalDate: new Date().toJSON()
             };
+            console.log("data.approved controller", data.approved);
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
             res.status(200).json(data);
         } catch (err) {

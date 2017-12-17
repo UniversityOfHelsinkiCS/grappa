@@ -4,41 +4,27 @@ const personService = require('../services/PersonService');
  * Authentication middleware that is called before any requests.
  *
  */
-module.exports.authenticate = (req, res, next) => {
-    //if dev then
-    //const shibbolethId = req.headers.shibbolointiid;
-
-    //if actual then
-    //const shibbolethId = req.headers.
-
-    // if (!shibbolethId) {
-    //      res.sendStatus(403);
-    //}
-
-    //req.headers.grappashibbolethid = shibbolethId
-    next();
-};
-
 module.exports.checkAuth = async (req, res, next) => {
     if (!req.session.user_id) {
-        if (req.headers['shib-session-id']) {
-            // log user in if shibboleth session id exists
-            req.session.shib_session_id = req.headers['shib-session-id'];
-            const shibUid = req.headers['uid'];
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
-            let user = userdata[0];
-            if (user) {
-                req.session.user_id = user.personId;
-            }
-            next();
-        } else {
+        if (!req.headers['shib-session-id']) {
             // forbid if in production and bypassed shibboleth
             if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'dev') {
-                res.sendStatus(403);
-            } else {
-                next();
+                res.status(403).end();
             }
         }
+        // log user in if shibboleth session id exists
+        req.session.shib_session_id = req.headers['shib-session-id'];
+        const shibUid = req.headers['uid'];
+        try {
+            const userdata = await personService.getPersonByShibbolethId(shibUid);
+        } catch (err) {
+            res.status(404).end();
+        }
+        let user = userdata[0];
+        if (user) {
+            req.session.user_id = user.personId;
+        }
+        next();
     } else {
         next();
     }
@@ -75,7 +61,7 @@ module.exports.shibRegister = async (req, res, next) => {
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
                 user.email = req.headers['mail'];
-                user.updated_at = Date.now();
+                // user.updated_at = Date.now();
                 await personService.updatePerson(user);
             } else {
                 // console.log('new user logged in');
@@ -85,8 +71,7 @@ module.exports.shibRegister = async (req, res, next) => {
                     studentNumber,
                     shibbolethId: req.headers['uid'],
                     email: req.headers['mail'],
-                    created_at: Date.now(),
-                    updated_at: Date.now()
+                    // updated_at: Date.now()
                 };
                 await personService.savePerson(user);
             }

@@ -1,42 +1,59 @@
 const knex = require('../db/connection');
 const bookshelf = require('../db/bookshelf')
-const Thesis = require('../models/thesis');
+const Thesis = require('../db/models/thesis');
 
+const thesisSchema = [
+    "thesis.thesisId",
+    "thesis.thesisTitle",
+    "startDate",
+    "completionEta",
+    "performancePlace",
+    "urkund",
+    "grade",
+    "graderEval",
+    "thesis.userId",
+    "printDone"
+]
+
+//In case we need all theses
 export function getAllTheses() {
-    return Thesis.fetchAll();
-    /*return knex.distinct('thesis.thesisId').select('thesis.thesisId', 'thesis.thesisTitle', 'thesis.grade', 'person.firstName as authorFirstname', 'person.lastName as authorLastname').from('thesis')
-        .leftJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
-        .leftJoin('person', 'thesis.userId', '=', 'person.personId')
-        .then(thesis => thesis)
-        .catch(error => {
-            throw error;
-        });*/
+    return knex.select(thesisSchema).from('thesis');
+}
+
+//In cases we need theses for a person (student)
+export function getThesesByPersonId(personId) {
+    return knex.select(thesisSchema).from('thesis')
+        .where('userId', personId)
+}
+
+//In cases we need theses for a studyfield (resp_prof)
+export function getThesesByStudyfield(studyfieldId) {
+    return knex.select(thesisSchema).from('thesis')
+        .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
+        .where('agreement.studyfieldId', studyfieldId);
+}
+
+//In cases we need theses for a supervisor/grader
+export function getThesesByAgreementPerson(personId) {
+    return knex.distinct('thesis.thesisId').select(thesisSchema).from('personWithRole')
+        .where('personWithRole.personId', personId)
+        .innerJoin('agreementPerson', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('agreement', 'agreement.agreementId', '=', 'agreementPerson.agreementId')
+        .innerJoin('thesis', 'thesis.thesisId', '=', 'agreement.thesisId')
 }
 
 export const getThesisById = (thesisId) => {
-    return Thesis.where({ thesisId }).fetchAll();
-    /*
-  return knex.select().from('thesis').where('thesisId', id) 
-      .then(thesis => thesis)
-      .catch(error => {
-          throw error;
-      });*/
+    return knex.select(thesisSchema).from('thesis')
+        .where('thesisId', thesisId).first();
 }
 
-export const saveThesis = (thesis) => {
-    return Thesis.forge(thesis).save().then(model => {
-        return model.fetch();
-    }).catch(error => {
-        throw error;
-    })
-    /*return knex('thesis')
+export const saveThesis = async (thesis) => {
+    const thesisIds = await knex('thesis')
+        .returning('thesisId')
         .insert(thesis)
-        .returning('*')
-        .then(theses => 12)
-        .catch(error => {
-            throw error;
-        });
-        */
+    const thesisId = thesisIds[0]
+    return knex.select(thesisSchema).from('thesis').where('thesisId', thesisId).first()
+
 }
 
 export async function updateThesis(thesisData) {

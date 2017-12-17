@@ -26,6 +26,8 @@ export async function getAllAgreementPersons() {
     return knex.table('agreementPerson')
         .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
         .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
+        .innerJoin('agreement', "agreementPerson.agreementId", "=", 'agreement.agreementId')
+        .innerJoin('thesis', 'agreement.thesisId', "=", "thesis.thesisId")
         .then(persons => {
             return persons;
         });
@@ -36,6 +38,8 @@ export async function getAllAgreementPersonsByStudyfield(studyfieldId) {
     return knex.table('agreementPerson')
         .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
         .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
+        .innerJoin('agreement', "agreementPerson.agreementId", "=", 'agreement.agreementId')
+        .innerJoin('thesis', 'agreement.thesisId', "=", "thesis.thesisId")
         .where('studyfieldId', studyfieldId)
         .then(persons => {
             return persons;
@@ -75,6 +79,7 @@ export async function saveAgreementPerson(agreementPersonData) {
 }
 
 export async function updateAgreementPerson(agreementPersonData) {
+    console.log("agreementperson datasta approved, service", agreementPersonData.approved)
     return await knex('agreementPerson')
         .returning('personRoleId')
         .where('personRoleId', '=', agreementPersonData.personRoleId)

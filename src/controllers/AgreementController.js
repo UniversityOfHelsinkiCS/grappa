@@ -3,9 +3,9 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService');
 
 const AttachmentController = require('./AttachmentController');
-
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
@@ -21,28 +21,54 @@ export async function getPreviousAgreementById(req, res) {
 export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
     try {
-        const personId = req.session.user_id
-        const roles = await roleService.getPersonRoles(personId);
         let agreements = [];
-        agreements = await Promise.all(roles.map(async role => {
-            const personRoleId = role.personRoleId;
-            const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
-            const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
-                const agreementId = agreementPerson.agreementId;
-                const agreement = await agreementService.getAgreementById(agreementId);
-                return agreement;
+        const personId = req.session.user_id        
+        const roleToId = await roleService.getRoles();
+        const studyfieldToId = await studyfieldService.getAllStudyfields();
+        const personRoles = await roleService.getPersonRoles(personId);
+        const readableRoles = personRoles.map(role => {
+            return {
+                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+            }
+        })
+        //First get all user is the "student" of.
+        agreements = await agreementService.getAgreementsByAuthor(personId);
+        //Get all if admin
+        if (readableRoles.find(readable => readable.role === 'admin')) {
+            const allAgreements = await agreementService.getAllAgreements();
+            agreements.concat(allAgreements);
+        } else {
+            //Get all where agreementPerson
+            const agreementsWhereAgreementPerson = await Promise.all(personRoles.map(async role => {
+                const personRoleId = role.personRoleId;
+                const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
+                const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
+                    const agreementId = agreementPerson.agreementId;
+                    const agreement = await agreementService.getAgreementById(agreementId);
+                    return agreement;
+                }))
+                return agreements[0];
             }))
-            return agreements[0];
-        }))
+            agreements.concat(agreementsWhereAgreementPerson);
+        }
         res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
     }
 }
 
-const agreementHasNoId = (data) => {
-    return data.agreementId === "" || data.agreementId == null;
+export async function getAgreementsByLoggedAuthor(req, res) {
+    //return agreements where user is set as author.
+    try {
+        const person = await personService.getLoggedPerson(req);
+        const agreements = await agreementService.getAgreementsByAuthor(person.personId);
+        res.status(200).json(agreements);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 }
+
 
 const getThesisData = (data) => {
     return ({
@@ -71,24 +97,39 @@ const getAgreementData = (data, thesisId) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    if (agreementHasNoId(data)) {
+    const personId = req.session.user_id
+    console.log("Saving agreement");
+    if (!personId) res.status(500).json({ text: "No user_id in session" });
+    if (!data.agreementId) {
         try {
-            data.personId = req.session.user_id;
+            console.log("Before await");
+            let newAgreement = await agreementService.saveAgreement(data);
+            return res.status(200).json(newAgreement);
+        } catch (err) {
+            return res.status(500).json(err);
+        }
+    }
+    res.status(500).json({ text: "Agreement had an id" });
+}
+
+export async function saveAgreementForm(req, res) {
+    const data = req.body;
+    const personId = req.session.user_id;
+    if (!personId) res.status(500).json({ text: "No user_id in session" });
+        try {
+            data.personId = personId;
             const thesisData = getThesisData(data);
-            const thesisSaveResponse = await saveThesis(thesisData);
-            const agreementData = getAgreementData(data, thesisSaveResponse.id);
-            const agreementSaveResponse = await saveAgreementToService(agreementData);
-            agreementData.agreementId = agreementSaveResponse;
+            const thesisSaveResponse = await thesisService.saveThesis(thesisData);
+            const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
+            const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
+            agreementData.agreementId = agreementSaveResponse.agreementId;
             let personData = await personService.getPersonById(data.personId);
-            emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+            //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
             res.status(200).json(agreementData);
         }
         catch (error) {
-            res.status(500).json({ text: "Error occured" });
+            res.status(500).json({ text: "Error occured", error });
         }
-    } else {
-        res.status(500).json({ text: "agreement already exists" });
-    }
 }
 
 const updatePerson = async function (personData) {
@@ -100,7 +141,8 @@ const saveThesis = async function (thesisData) {
 }
 
 const saveAgreementToService = async function (agreementData) {
-    return await agreementService.saveNewAgreement(agreementData);
+    const agreement = await agreementService.saveAgreement(agreementData);
+    return agreement.agreementId;
 }
 
 export async function updateAgreement(req, res) {
