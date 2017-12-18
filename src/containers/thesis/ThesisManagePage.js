@@ -3,10 +3,7 @@ import { Link } from "react-router"
 
 import { connect } from "react-redux";
 import { saveThesis, updateThesis, deleteThesis } from './thesisActions';
-import { getGraders } from '../grader/graderActions';
-import { getCouncilmeetings } from '../councilmeeting/councilmeetingActions';
 import { sendReminder } from '../email/emailActions';
-import { getStudyfields } from '../studyfield/studyfieldActions';
 
 import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
@@ -52,29 +49,23 @@ export class ThesisManagePage extends Component {
     }
 
     componentDidMount() {
-        this.props.getStudyfields();
-        this.props.getCouncilmeetings();
-        this.props.getGraders();
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (newProps.match.params && newProps.match.params.id) {
-            const thesisId = newProps.match.params.id;
+        if (this.props.match.params && this.props.match.params.id) {
+            const thesisId = this.props.match.params.id;
             //if there is such thing as "params.id" given as a prop we should be viewing thesis with that id
-            const thesis = this.findAndFormatThesis(newProps.theses, newProps.persons, newProps.graders, thesisId)
+            const thesis = this.findAndFormatThesis(this.props.theses, this.props.persons, thesisId)
             if (thesis) {
                 this.setState({ thesis, editMode: true })
             }
         }
     }
 
-    findAndFormatThesis = (theses, persons, graders, thesisId) => {
+    findAndFormatThesis = (theses, persons, thesisId) => {
         let thesis = theses.find(thesis => thesis.thesisId == thesisId)
         const author = persons.find(person => person.personId == thesis.userId)
         thesis.authorFirstname = author.firstname;
         thesis.authorLastname = author.lastname;
         thesis.authorEmail = author.email;
-        thesis.graders = graders;
+        thesis.graders = [];
         thesis.thesisEmails = {
             graderEvalReminder: undefined,
             printReminder: undefined,
@@ -200,15 +191,6 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteThesis(thesisId) {
         dispatch(deleteThesis(thesisId));
-    },
-    getCouncilmeetings() {
-        dispatch(getCouncilmeetings());
-    },
-    getStudyfields() {
-        dispatch(getStudyfields());
-    },
-    getGraders() {
-        dispatch(getGraders());
     },
     sendReminder(thesisId, type) {
         dispatch(sendReminder(thesisId, type));

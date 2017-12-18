@@ -16,21 +16,21 @@ export default class StudyfieldManagePage extends Component {
   }
 
   componentDidMount() {
-    const studyfields = []//this.setUsersForStudyfields(this.props.Studyfields, this.props.Users);
+    const studyfields = []//this.setUsersForStudyfields(this.props.studfields, this.props.users);
     this.setState({ studyfields });
   }
 
 
   componentWillReceiveProps(newProps) {
-    if (this.props.Studyfields !== newProps.Studyfields || this.props.Users !== newProps.Users) {
-      const studyfields = []//this.setUsersForStudyfields(newProps.Studyfields, newProps.Users);
+    if (this.props.studfields !== newProps.studfields || this.props.users !== newProps.users) {
+      const studyfields = []//this.setUsersForStudyfields(newProps.studfields, newProps.users);
       this.setState({ studyfields });
     }
   }
 
   setUsersForStudyfields(studyfields, users) {
     return studyfields.map(field => {
-      field.Users = users.filter(user => user.studyfieldId && parseInt(user.studyfieldId) === field.id);
+      field.users = users.filter(user => user.studyfieldId && parseInt(user.studyfieldId) === field.id);
       field.professor = users.find(user => user.studyfieldId && parseInt(user.studyfieldId) === field.id && user.role === "professor");
       field.professor = field.professor ? "" : `${field.professor.firstname} ${field.professor.lastname}`;
       return field;
@@ -95,7 +95,7 @@ export default class StudyfieldManagePage extends Component {
             </p>
             <StudyfieldList
               selectField={this.selectStudyfield}
-              studyfields={this.props.Studyfields}
+              studyfields={this.props.studfields}
             />
           </div>
         </div>
@@ -104,20 +104,17 @@ export default class StudyfieldManagePage extends Component {
   }
 }
 import { connect } from "react-redux";
-import { getStudyfields, saveStudyfield, updateStudyfield, deleteStudyfield } from "./studyfield.actions";
+import { saveStudyfield, updateStudyfield, deleteStudyfield } from "./studyfield.actions";
 
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    Studyfields: state.Studyfields,
-    Users: state.users,
+    studyfields: state.studyfields,
+    users: state.users,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getStudyfields() {
-    dispatch(getStudyfields());
-  },
   saveStudyfield(data) {
     dispatch(saveStudyfield(data));
   },

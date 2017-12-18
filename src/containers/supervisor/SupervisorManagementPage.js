@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { saveAddedSupervisor, getSupervisors, getAgreementPersons, deleteSupervisor, reviewSupervisor, updateSupervisor } from "./supervisorActions.js";
 
 import Review from "../../components/supervisor/Review.js";
 import SupervisorEditor from "../../components/supervisor/SupervisorEditor.js"
@@ -104,7 +103,7 @@ export class SupervisorManagementPage extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    saveAddedSupervisor(data) {
+    /*saveAddedSupervisor(data) {
         dispatch(saveAddedSupervisor(data));
     },
     getSupervisors(data) {
@@ -121,12 +120,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     reviewSupervisor(data) {
         dispatch(reviewSupervisor(data));
-    }
+    }*/
 });
 
 const mapStateToProps = (state) => {
     return {
-        supervisors: state.supervisors,
+        roles: state.roles,
         personToBeReviewed: state.person
     };
 }

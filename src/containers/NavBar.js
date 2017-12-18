@@ -4,22 +4,38 @@ import { connect } from "react-redux";
 import { getPermissions } from "../util/rolePermissions";
 import { login } from "../containers/user/userActions";
 
+//TODO: redux persistent storage
+import { getStudyfields } from "../containers/studyfield/studyfieldActions"
+import { getAgreements } from "../containers/agreement/agreementActions"
+import { getCouncilmeetings } from "../containers/councilmeeting/councilmeetingActions"
+import { getTheses } from "../containers/thesis/thesisActions"
+
+
 export class NavBar extends Component {
     constructor() {
         super();
         this.state = {
-            links: []
+            links: [],
+            loaded: false,
         }
     }
 
     componentDidMount() {
         //This login will allow shibboleth to check on page reload
         this.props.login();
-        this.refreshLinks(this.props)   
+        this.refreshLinks(this.props)
     }
 
-    componentWillReceiveProps(props) {
-        this.refreshLinks(props);
+    componentWillReceiveProps(newProps) {
+        this.refreshLinks(newProps);
+        //TODO: redux persistent storage
+        if (newProps.user && !this.state.loaded) {
+            this.props.getStudyfields();
+            this.props.getAgreements();
+            this.props.getCouncilmeetings();
+            this.props.getTheses();
+            this.setState({ loaded: true })
+        }
     }
 
     refreshLinks = (props) => {
@@ -68,6 +84,18 @@ export class NavBar extends Component {
 const mapDispatchToProps = (dispatch) => ({
     login(data) {
         dispatch(login(data));
+    },
+    getStudyfields() {
+        dispatch(getStudyfields());
+    },
+    getAgreements() {
+        dispatch(getAgreements());
+    },
+    getCouncilmeetings() {
+        dispatch(getCouncilmeetings());
+    },
+    getTheses() {
+        dispatch(getTheses());
     }
 });
 
