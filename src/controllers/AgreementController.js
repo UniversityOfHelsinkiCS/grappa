@@ -93,10 +93,7 @@ const getAgreementPersonsByAgreementId = async function (agreementId) {
 const getThesisData = (data) => {
     return ({
         thesisId: data.thesisId,
-        thesisTitle: data.thesisTitle,
-        startDate: data.startDate,
-        completionEta: data.completionEta,
-        performancePlace: data.performancePlace,
+        title: data.thesisTitle,
         userId: data.personId
     });
 }
@@ -108,6 +105,9 @@ const getAgreementData = (data, thesisId) => {
         thesisId: thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
         studyfieldId: data.studyfieldId,
+        startDate: data.startDate,
+        completionEta: data.completionEta,
+        performancePlace: data.performancePlace,
         studentGradeGoal: data.studentGradeGoal,
         studentWorkTime: data.studentWorkTime,
         supervisorWorkTime: data.supervisorWorkTime,
