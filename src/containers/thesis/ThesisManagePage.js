@@ -60,37 +60,45 @@ export class ThesisManagePage extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps.match.params && newProps.match.params.id) {
             const thesisId = newProps.match.params.id;
-            //if there is such thing as "params.id" given as a prop we should be editing thesis with that id
-            const thesis = newProps.theses.find(thesis => thesis.thesisId == thesisId)
+            //if there is such thing as "params.id" given as a prop we should be viewing thesis with that id
+            const thesis = this.findAndFormatThesis(newProps.theses, newProps.persons, newProps.graders, thesisId)
             if (thesis) {
                 this.setState({ thesis, editMode: true })
             }
         }
     }
 
+    findAndFormatThesis = (theses, persons, graders, thesisId) => {
+        let thesis = theses.find(thesis => thesis.thesisId == thesisId)
+        const author = persons.find(person => person.personId == thesis.userId)
+        thesis.authorFirstname = author.firstname;
+        thesis.authorLastname = author.lastname;
+        thesis.authorEmail = author.email;
+        thesis.graders = graders;
+        thesis.thesisEmails = {
+            graderEvalReminder: undefined,
+            printReminder: undefined,
+        }
+        return thesis;
+    }
+
+
     handleSaveThesis = () => {
+        const thesisIsNew = !this.state.thesis.id;
         const form = new FormData();
         this.state.attachments.forEach(attachment => {
             form.append("attachment", attachment);
         })
         form.append("json", JSON.stringify(this.state.thesis));
-        this.props.saveThesis(form);
+        if (thesisIsNew) {
+            this.props.saveThesis(form);
+        } else {
+            this.props.updateThesis(form);
+        }
     }
 
     deleteThesis = () => {
         this.props.deleteThesis(this.state.thesis.id);
-    }
-
-    handleAddGrader = (grader) => {
-        const thesis = this.state.thesis;
-        thesis.graders = [...thesis.graders, grader];
-        this.setState({ thesis });
-    }
-
-    handleRemoveGrader = (grader) => {
-        const thesis = this.state.thesis;
-        thesis.graders = thesis.graders.filter(grdr => grdr !== grader);
-        this.setState({ thesis });
     }
 
     toggleModal = () => {
@@ -144,7 +152,11 @@ export class ThesisManagePage extends Component {
     }
 
     renderEmails() {
-        return <ThesisEmails thesisProgress={this.state.thesis.thesisProgress} sendEmail={this.handleEmail} sendDone={this.setReminderDone} />
+        const thesisEmails = this.state.thesis.thesisEmails;
+        return <ThesisEmails
+            thesisEmails={thesisEmails}
+            sendEmail={this.handleEmail}
+            sendDone={this.setReminderDone} />
     }
 
     renderGraderSelecter() {
@@ -210,6 +222,7 @@ const mapStateToProps = (state) => {
         studyfields: state.studyfield,
         graders: state.graders,
         theses: state.thesis,
+        persons: state.persons,
     };
 };
 
