@@ -49,7 +49,13 @@ export const getAllAgreements = () => {
 }
 
 export const getAgreementsByAuthor = (personId) => {
-    return knex.select(agreementSchema).from('agreement').where('authorId', personId)
+    return knex.select('agreement.*', 
+                        'thesis.title as thesisTitle', 
+                        'studyfield.name as studyfieldName')
+        .from('agreement')
+        .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .where('authorId', personId)
         .then(agreements => {
             return agreements;
         });
