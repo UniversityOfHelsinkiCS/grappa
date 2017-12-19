@@ -13,6 +13,21 @@ export async function getRoleId(roleName) {
     return roleData[0].roleId;
 }
 
+const roleSchema = [
+    'personWithRole.personRoleId',
+    'personWithRole.personId',
+    'personWithRole.studyfieldId',
+    'role.name',
+    'agreementPerson.agreementId',
+    'agreementPerson.statement',
+]
+
+export async function getRolesForAllPersons() {
+    return knex.select(roleSchema).from('personWithRole')
+        .innerJoin('role','personWithRole.roleId' , '=', 'role.roleId')
+        .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+}
+
 export async function saveRole(roleName) {
     return await knex('role')
         .returning('roleId')

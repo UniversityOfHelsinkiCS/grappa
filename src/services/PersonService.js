@@ -123,7 +123,7 @@ export const getPersonsWithAgreementInStudyfield = (studyfieldId) => {
         .where('personWithRole.studyfieldId', studyfieldId)
 }
 
-export const getPersonsWithRoleInStudyfield = (studyfieldId) => {
+export const getPersonsAsAgreementPersonInStudyfield = (studyfieldId) => {
     return knex.select(personSchema).from('person')
         .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
         .where('personWithRole.studyfieldId', studyfieldId)

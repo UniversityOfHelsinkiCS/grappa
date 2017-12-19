@@ -1,7 +1,6 @@
-require('babel-polyfill');
 const personService = require('../services/PersonService');
-const express = require('express');
-const app = express();
+const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService');
 
 export async function addPerson(req, res) {
     const personData = getPersonData(req.body);
@@ -64,13 +63,75 @@ function removeEmptyKeys(personData) {
     return parsedData;
 }
 
-export async function getAllPersons(req, res) {
+/**
+ * Get persons that are of interest to the person doing query
+ */
+export async function getPersons(req, res) {
     try {
-        const persons = await personService.getAllPersons();
-        res.status(200).json(persons);
+        let user = undefined;
+        try {
+            user = await personService.getLoggedPerson(req);
+        } catch (error) {
+            console.log("No logged in persons");
+            console.log("PersonController", process.env.NODE_ENV)
+            if (process.env.NODE_ENV === "dev") {
+                const persons = await personService.getAllPersons();
+                res.status(200).json(persons).end();
+                return;
+            }
+            throw error;
+        }
+        //Persons who are writing theses I have access to as 
+        //a agreementperson (supervisor, grader etc)
+        let persons = []
+        let newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
+        persons = [...new Set([...persons, ...newPersons])];
+
+        const rolesInStudyfields = await getUsersRoles(user);
+        rolesInStudyfields.forEach(async item => {
+            // As resp_prof persons who are writing theses in studyfield
+            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+                newPersons = await personService.getPersonsWithAgreementInStudyfield(item.studyfield.studyfieldId);
+                persons = [...new Set([...persons, ...newPersons])];
+                //As manager persons who are agreementpersons in studyfield
+                if (item.role.name === 'manager') {
+                    newPersons = await personService.getPersonsAsAgreementPersonInStudyfield(item.studyfield.studyfieldId)
+                    persons = [...new Set([...persons, ...newPersons])];
+                }
+            }
+        })
+
+        //Persons who are supervisors / supervising for new thesis / agreement supervisor list 
+        const supervisorId = await roleService.getRoleId("supervisor")
+        newPersons = await personService.getPersonsWithRole(supervisorId);
+        persons = [...new Set([...persons, ...newPersons])];
+        //or grading / graders for new thesis / agreement graders list.
+        const graderId = await roleService.getRoleId("grader")
+        newPersons = await personService.getPersonsWithRole(graderId)
+        persons = [...new Set([...persons, ...newPersons])];
+        //All required persons found, now role objects for front
+        const roles = await roleService.getRolesForAllPersons()
+        console.log(roles);
+        const responseObject = {
+            roles,
+            persons
+        }
+        res.status(200).json(responseObject).end();
     } catch (error) {
         res.status(500).json(error)
     }
+}
+
+const getUsersRoles = async (user) => {
+    const roleToId = await roleService.getRoles();
+    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const personRoles = await roleService.getPersonRoles(user.personId);
+    return personRoles.map(role => {
+        return {
+            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+        }
+    })
 }
 
 export async function getPersonById(req, res) {

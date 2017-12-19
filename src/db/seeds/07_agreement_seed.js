@@ -6,7 +6,7 @@ exports.seed = function (knex, Promise) {
             return knex('agreement').insert([
                 {
                     agreementId: 1,
-                    authorId: 1,
+                    authorId: 10,
                     thesisId: 1,
                     responsibleSupervisorId: 1,
                     studyfieldId: 1,
