@@ -104,16 +104,16 @@ const getAgreementData = (data, thesisId) => {
         agreementId: data.agreementId,
         authorId: data.personId,
         thesisId: thesisId,
-        responsibleSupervisorId: data.responsibleSupervisorId,
+        responsibleSupervisorId: data.thesisSupervisorMain,
         studyfieldId: data.studyfieldId,
-        startDate: data.startDate,
-        completionEta: data.completionEta,
-        performancePlace: data.performancePlace,
+        startDate: data.thesisStartDate,
+        completionEta: data.thesisCompletionEta,
+        performancePlace: data.thesisPerformancePlace,
         studentGradeGoal: data.studentGradeGoal,
-        studentWorkTime: data.studentWorkTime,
-        supervisorWorkTime: data.supervisorWorkTime,
-        intermediateGoal: data.intermediateGoal,
-        meetingAgreement: data.meetingAgreement,
+        studentWorkTime: data.thesisWorkStudentTime,
+        supervisorWorkTime: data.thesisWorkSupervisorTime,
+        intermediateGoal: data.thesisWorkIntermediateGoal,
+        meetingAgreement: data.thesisWorkMeetingAgreement,
         other: data.other
     });
 }
@@ -135,8 +135,9 @@ const getPersonData = (data) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    const personId = req.session.user_id
-    console.log("Saving agreement");
+    const user = await personService.getLoggedPerson(req);
+    const personId = user.personId;
+    // console.log("Saving agreement");
     if (!personId) res.status(500).json({ text: "No user_id in session" });
     if (!data.agreementId) {
         try {
@@ -152,8 +153,14 @@ export async function saveAgreement(req, res) {
 
 export async function saveAgreementForm(req, res) {
     const data = req.body;
-    const personId = req.session.user_id;
-    if (!personId) res.status(500).json({ text: "No user_id in session" });
+    console.log(data);
+    const user = await personService.getLoggedPerson(req);
+    console.log(user);
+    const personId = user.personId;
+    data.personId = personId;
+    if (!personId) {
+        res.status(500).json({ text: "No user_id in session" });
+    }
     try {
         data.personId = personId;
         const thesisData = getThesisData(data);
