@@ -59,12 +59,20 @@ export const getPersonByShibbolethId = (shibbolethId) => {
 }
 
 export async function savePerson(personData) {
-    const personIds = await knex('person')
-        .returning('personId')
-        .insert(personData)
-    const personId = personIds[0]
-    return knex.select(personSchema).from('person').where('personId', personId).first()
-
+    //If already exists then return that person
+    let person = await knex.select(personSchema).from('person').where({
+        email: personData.email,
+        firstname: personData.firstname,
+        lastname: personData.lastname,
+    }).first();
+    if (!person) {
+        const personIds = await knex('person')
+            .returning('personId')
+            .insert(personData)
+        const personId = personIds[0]
+        person = knex.select(personSchema).from('person').where('personId', personId).first()
+    }
+    return person;
 }
 
 export async function savePersonRole(personRoleData) {
@@ -97,6 +105,19 @@ export const getAgreementPersonsByAgreementId = (agreementId) => {
         .then(persons => {
             return persons;
         });
+}
+
+export const getPersonByPersonRoleId = (personRoleId) => {
+    return knex.select().from('person')
+    .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+    .where('personRoleId', personRoleId)
+    .then(persons => {
+        return persons[0];
+    })
+    .catch(error => {
+        console.log(error);
+        throw error;
+    });
 }
 
 export const getAgreementPersonsByPersonRoleId = (personRoleId) => {

@@ -24,6 +24,5 @@ module.exports = {
         seeds: {
             directory: './src/db/seeds'
         },
-        //debug: true
     }
 }

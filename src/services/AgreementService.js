@@ -9,12 +9,16 @@ const agreementSchema = [
     "responsibleSupervisorId",
     "studyfieldId",
     "fake",
+    "startDate",
+    "completionEta",
+    "performancePlace",
     "studentGradeGoal",
     "studentWorkTime",
     "supervisorWorkTime",
     "intermediateGoal",
     "meetingAgreement",
-    "other"
+    "other",
+    "whoNext"
 ]
 
 export const getAgreementById = (agreementId) => {
@@ -45,9 +49,11 @@ export const getAllAgreements = () => {
 }
 
 export const getAgreementsByAuthor = (personId) => {
-    return knex.select().from('agreement')
+    return knex.select('agreement.*', 
+                        'thesis.title as thesisTitle', 
+                        'studyfield.name as studyfieldName')
+        .from('agreement')
         .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-        .join('person', 'agreement.authorId', '=', 'person.personId')
         .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
         .where('authorId', personId)
         .then(agreements => {
@@ -70,6 +76,9 @@ export const createFakeAgreement = () => {
         responsibleSupervisorId: null,
         studyfieldId: null,
         fake: true,
+        startDate: null,
+        completionEta: null,
+        performancePlace: null,
         studentGradeGoal: null,
         studentWorkTime: null,
         supervisorWorkTime: null,
@@ -78,13 +87,8 @@ export const createFakeAgreement = () => {
         other: null,
         whoNext: null
     }
-    return Agreement.forge(fakeAgreement).save().then(model => {
-        return model.fetch();
-    }).then(model => {
-        return model.attributes;
-    }).catch(error => {
-        throw error;
-    })
+
+    return saveAgreement(fakeAgreement)
 }
 
 export const updateAgreement = (agreement) => {
@@ -93,8 +97,8 @@ export const updateAgreement = (agreement) => {
         .where('agreementId', '=', agreement.agreementId)
         .update(agreement)
         .then(agreementId =>
-            knex.select().from('agreement')
-                .where('agreementId', '=', agreementId)
+            knex.select(agreementSchema).from('agreement')
+                .where('agreementId', '=', agreement.agreementId)
                 .first()
         ).catch(error => {
             throw error

@@ -20,21 +20,7 @@ test.before(async t => {
     // console.log(waitString);
 })
 
-const agreementWithoutId = {
-    authorId: 1,
-    thesisId: 1,
-    responsibleSupervisorId: 1,
-    studyfieldId: 1,
-    fake: 0,
-    studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "tsiigaillaan",
-    intermediateGoal: "oispa valmistunut",
-    meetingAgreement: "just just",
-    other: "eihän tässä muuta"
-}
-
-const correctAgreement = {
+const agreementForm = {
     thesisTitle: "my Thesis",
     thesisStartDate: "9.9.2017",
     thesisCompletionEta: "9.9.2018",
@@ -63,14 +49,30 @@ const correctAgreement = {
     whoNext: "supervisor",
 }
 
-test('agreement post & creates id', async t => {
+const agreementWithId = {
+    agreementId: 1,
+    authorId: 1,
+    thesisId: 1,
+    responsibleSupervisorId: 1,
+    studyfieldId: 1,
+    fake: 0,
+    studentGradeGoal: 5,
+    studentWorkTime: "1h viikossa",
+    supervisorWorkTime: "tsiigaillaan",
+    intermediateGoal: "oispa valmistunut",
+    meetingAgreement: "just just",
+    other: "eihän tässä muuta"
+}
+
+//TODO: Test something like thesis: thesisForm post & creates id without attachment
+test.skip('agreement post & correct response', async t => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/agreements')
-        .send(agreementWithoutId);
+        .send(agreementForm);
     t.is(res.status, 200);
-    let body = res.body;
-    let agreement = agreementWithoutId;
-    agreement.agreementId = 1;
-    t.deepEqual(1, body.agreementId);
+    const thesis = res.body.thesis;
+    const author = res.body.author;
+    const agreement = res.body.agreement;
+    
 })

@@ -3,10 +3,12 @@ require('babel-polyfill');
 
 const express = require('express');
 const app = express();
+const gracefulExit = require('express-graceful-exit');
 const routes = require('./src/routes.js');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const knex = require('./src/db/connection.js');
+const server = require('http').createServer(app);
 
 const store = new KnexSessionStore({
   knex: knex,
@@ -19,7 +21,8 @@ app.listen(3100, () => {
   console.log('Grappa app listening on port 3100!');
 })
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 6000000 }, store: store, resave: false, saveUninitialized: false}));
+app.use(gracefulExit.middleware(app));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 6000000 }, store: store, resave: false, saveUninitialized: false }));
 
 routes(app);
 
@@ -30,7 +33,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 process.on('SIGTERM', function () {
-  server.close(function () {
-    process.exit(0);
+  gracefulExit.gracefulExitHandler(app, server, {
+    socketio: app.settings.socketio
   });
 });

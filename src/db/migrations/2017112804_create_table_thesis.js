@@ -6,10 +6,7 @@ exports.up = function (knex, Promise) {
             table.foreign('councilmeetingId').references('councilmeeting.councilmeetingId');
             table.integer('userId').unsigned();
             table.foreign('userId').references('person.personId');
-            table.string('thesisTitle');
-            table.date('startDate');
-            table.date('completionEta');
-            table.string('performancePlace');
+            table.string('title');
             table.string('urkund');
             table.string('grade').defaultTo('-');
             table.string('graderEval');

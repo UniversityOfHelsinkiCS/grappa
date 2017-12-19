@@ -1,6 +1,5 @@
 exports.up = function (knex, Promise) {
     return Promise.all([
-
         knex.schema.createTable('agreement', function (table) {
             table.increments('agreementId').primary();
             table.integer('authorId').unsigned(); //author
@@ -12,6 +11,9 @@ exports.up = function (knex, Promise) {
             table.integer('studyfieldId').unsigned();
             table.foreign('studyfieldId').references('studyfield.studyfieldId');
             table.boolean('fake');
+            table.date('startDate');
+            table.date('completionEta');
+            table.string('performancePlace');
             table.integer('studentGradeGoal');
             table.string('studentWorkTime');
             table.string('supervisorWorkTime');
