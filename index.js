@@ -8,6 +8,7 @@ const routes = require('./src/routes.js');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const knex = require('./src/db/connection.js');
+const server = require('http').createServer(app);
 
 const store = new KnexSessionStore({
   knex: knex,
