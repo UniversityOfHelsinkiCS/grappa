@@ -26,7 +26,7 @@ test('save one changes state correctly', reducerTest(
     [thesis],
     {
         type: "THESIS_SAVE_ONE_SUCCESS",
-        response: thesis2,
+        response: { thesis: thesis2 },
     },
     theses
 ));

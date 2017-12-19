@@ -16,14 +16,15 @@ import EmailDraftPage from '../containers/email/EmailDraftPage';
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
-    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List'},
-    supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management'},
-    thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis'},
-    assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses'},
-    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting'},
-    councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings'},
-    emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts'},
-    statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics'}
+    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
+    supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management' },
+    thesisView: { path: '/thesis/:id', component: ThesisManage },
+    thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis' },
+    assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
+    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting' },
+    councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings' },
+    emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
+    statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' }
 }
 
 export default () => {
