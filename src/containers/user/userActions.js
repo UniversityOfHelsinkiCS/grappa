@@ -5,8 +5,3 @@ export const login = (shibbolethId) => {
     const route = shibbolethId ? '/login/' + shibbolethId : '/login';
     return callController(route, prefix);
 }
-
-export const getAllPersons = (data) => {
-    const prefix = "USER_GET_ALL_";
-    return callController('/persons', prefix);
-}

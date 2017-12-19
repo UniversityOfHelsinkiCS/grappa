@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { getPermissions } from "../util/rolePermissions";
 import { login } from "../containers/user/userActions";
 
-//TODO: redux persistent storage
+//TODO: redux persistent storage & fetch in middleware
 import { getStudyfields } from "../containers/studyfield/studyfieldActions"
 import { getAgreements } from "../containers/agreement/agreementActions"
 import { getCouncilmeetings } from "../containers/councilmeeting/councilmeetingActions"
 import { getTheses } from "../containers/thesis/thesisActions"
-
+import { getPersons } from "../containers/person/personActions"
 
 export class NavBar extends Component {
     constructor() {
@@ -28,12 +28,13 @@ export class NavBar extends Component {
 
     componentWillReceiveProps(newProps) {
         this.refreshLinks(newProps);
-        //TODO: redux persistent storage
+        //TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
             this.props.getStudyfields();
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
+            this.props.getPersons();
             this.setState({ loaded: true })
         }
     }
@@ -96,6 +97,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getTheses() {
         dispatch(getTheses());
+    },
+    getPersons() {
+        dispatch(getPersons());
     }
 });
 
