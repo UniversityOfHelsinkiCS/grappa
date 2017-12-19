@@ -22,7 +22,7 @@ export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
     try {
         let agreements = [];
-        const loggedPerson = personService.getLoggedPerson(req);
+        const loggedPerson = await personService.getLoggedPerson(req);
         const personId = loggedPerson.personId;
         const roleToId = await roleService.getRoles();
         const studyfieldToId = await studyfieldService.getAllStudyfields();
