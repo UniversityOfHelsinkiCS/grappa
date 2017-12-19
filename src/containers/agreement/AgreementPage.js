@@ -16,6 +16,7 @@ export class AgreementPage extends Component {
         this.state = {
             newAgreement: false,
             originalAgreement: {},
+            editableAgreement: undefined,
             editMode: false,
             agreement: undefined, //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
             requiredFields: getRequiredFields(this.props.user.roles)
@@ -59,9 +60,10 @@ export class AgreementPage extends Component {
         return parsedData;
     }
 
-    toggleEditModal = () => {
+    //TODO strange warnings when closing a modal
+    toggleEditModal = (agreement) => {
         var editable = !this.state.editMode;
-        this.setState({ editMode: editable });
+        this.setState({ editMode: editable, editableAgreement: agreement });
     }
 
     updateFormData = (data) => {
@@ -98,14 +100,8 @@ export class AgreementPage extends Component {
         return true;
     }
 
-    /*
-    {this.state.agreement ? this.state.agreement.map((agreement, index) =>
-                        <div key={agreement.agreementId}> <AgreementView agreementData={this.state.agreement[index]} />
-                        </div>
-                    ): undefined}
-                     */
-
     render() {
+        
         if (this.state.newAgreement) {
             return (
                 <div>
@@ -128,13 +124,11 @@ export class AgreementPage extends Component {
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.agreement} originalAgreement={this.state.originalAgreement} updateFormData={this.updateFormData} />
+                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.editableAgreement} originalAgreement={this.state.editableAgreement} updateFormData={this.updateFormData} />
                     
-                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} />: undefined}
+                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} handleEditAgreement={this.toggleEditModal} editableAgreement={this.state.editableAgreement}/>: undefined}
                       
-
                     <div className="ui segment">
-                        <button className="ui primary button" onClick={this.toggleEditModal}>Edit agreement</button>
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
                     </div>
                 </div>
@@ -169,7 +163,8 @@ const mapStateToProps = (state) => {
         agreements: state.agreement,
         supervisors: state.supervisors,
         studyfields: state.studyfield,
-        user: state.user
+        user: state.user,
+        editableAgreement: state.editableAgreement
     };
 }
 
