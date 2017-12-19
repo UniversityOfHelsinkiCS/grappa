@@ -19,6 +19,14 @@ export const saveAgreement = (agreement) => {
     return callController(route, prefix, agreement, method)
 }
 
+export const saveAgreementDraft = (agreementDraft) => {
+    console.log(agreementDraft);
+    const prefix = "AGREEMENT_DRAFT_SAVE_ONE";
+    const method = "post";
+    const route = '/agreement-drafts';
+    return callController(route, prefix, agreementDraft, method);
+}
+
 export const saveAttachment = (attachment, agreement) => {
     const prefix = "ATTACHMENT_SAVE_ONE_";
     const method = "post";

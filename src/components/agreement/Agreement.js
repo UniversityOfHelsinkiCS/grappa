@@ -96,7 +96,13 @@ export default class Agreement extends Component {
         //this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
+    sendFormDraft = (event) => {
+        event.preventDefault();
+        this.props.saveAgreementDraft({...this.state.form});
+    }
+
     render() {
+        //--TO DO--!: display users agreementDraft data here if user has created a draft!
         if (!this.props.user.firstname) {
             return (<div>Login to add agreement</div>);
         }
@@ -119,8 +125,11 @@ export default class Agreement extends Component {
                 <br />
                 <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment}/>
                 <br />
-                <button className="massive green fluid ui button" disabled={buttonDisabled} onClick={this.sendForm}>
+                <button className="green massive ui button" disabled={buttonDisabled} onClick={this.sendForm}>
                     {(buttonDisabled) ? 'Kaikkia pakollisia tietoja ei ole täytetty' : 'Save agreement'}
+                </button>
+                <button className="gray massive ui button" onClick={this.sendFormDraft}>
+                    Save draft
                 </button>
                 <br />
             </div>
