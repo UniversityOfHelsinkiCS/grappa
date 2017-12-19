@@ -107,17 +107,39 @@ export const getAgreementPersonsByAgreementId = (agreementId) => {
         });
 }
 
+export const getPersonsWithAgreementPerson = (agreementpersonId) => {
+    return knex.select(personSchema).from('person')
+        .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
+        .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .where('personWithRole.personId', agreementpersonId)
+}
+
+export const getPersonsWithAgreementInStudyfield = (studyfieldId) => {
+    return knex.select(personSchema).from('person')
+        .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
+        .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .where('personWithRole.studyfieldId', studyfieldId)
+}
+
+export const getPersonsWithRoleInStudyfield = (studyfieldId) => {
+    return knex.select(personSchema).from('person')
+        .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
+        .where('personWithRole.studyfieldId', studyfieldId)
+}
+
 export const getPersonByPersonRoleId = (personRoleId) => {
     return knex.select().from('person')
-    .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
-    .where('personRoleId', personRoleId)
-    .then(persons => {
-        return persons[0];
-    })
-    .catch(error => {
-        console.log(error);
-        throw error;
-    });
+        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .where('personRoleId', personRoleId)
+        .then(persons => {
+            return persons[0];
+        })
+        .catch(error => {
+            console.log(error);
+            throw error;
+        });
 }
 
 export const getAgreementPersonsByPersonRoleId = (personRoleId) => {

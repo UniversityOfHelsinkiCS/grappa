@@ -15,10 +15,10 @@ export async function getRoleId(roleName) {
 
 export async function saveRole(roleName) {
     return await knex('role')
-    .returning('roleId')
-    .insert({name: roleName})
-    .then(roleId => roleId[0])
-    .catch(error => {
-        throw error
-    });
+        .returning('roleId')
+        .insert({ name: roleName })
+        .then(roleId => roleId[0])
+        .catch(error => {
+            throw error
+        });
 }
