@@ -48,9 +48,13 @@ function generateMetaXML(meta){
                                 '@mdschema': 'dc',
                                 '@element': 'title',
                                 '#text': meta.thesisTitle
-                            },{
+                            },
+                            //result wanted: <dim:field mdschema="dct" element="identifier" qualifier="urn">URN-testitunnus</dim:field>
+                            // x.y.z -> x = mdschema, y = element, z = qualifier
+                            {
                                 '@mdschema': 'dct',
-                                '@element': 'identifier.urn',
+                                '@element': 'identifier',
+                                '@qualifier':'urn',
                                 '#text': meta.URN
                             }, {
                                 '@mdschema': 'dct',
@@ -146,6 +150,17 @@ async function eThesisAPI(meta, pdfAddr){
         zip.file('gradu.pdf', pdf);
         zip.file('mets.xml', metaData.toString());
 
+       // /* to test zip-output to disc
+    zip
+    .generateNodeStream({type:'nodebuffer',streamFiles:true})
+    .pipe(fs.createWriteStream('/tmp/test.zip'))
+    .on('finish', function () {
+        // JSZip generates a readable stream with a "end" event,
+        // but is piped here in a writable stream which emits a "finish" event.
+        console.log("out.zip written.");
+    });
+    //*/
+
         request({
             method: 'POST',
             preambleCRLF: false,
@@ -162,6 +177,9 @@ async function eThesisAPI(meta, pdfAddr){
             body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
         },
         function (error, response, body) {
+            console.log('does it work?');
+            console.log(response);
+            console.log(response.statusCode);
             if (error) {
                 console.error('upload failed:', error);
             }
@@ -184,7 +202,10 @@ export async function saveToEThesis(meta, pdfAddr) {
     const today = new Date();
     meta.yearNow = today.getFullYear();
 
-    request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn', 
+    //haetaan urn-tunnus
+    //yleinen generaattori: http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn
+    //hulib aliavaruuden generaattori (vaatii serverin white listingin): http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib
+    request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib', 
     function (error, response, body) {
         if(error) {
             return error;
