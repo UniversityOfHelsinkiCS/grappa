@@ -7,14 +7,13 @@ import creds from './ethesis_credentials';
 to test:
 console.log('LETS START E-THESIS!');
 ethesis = require( './src/util/ethesis');
-ethesis.saveToEThesis('test_meta', './data/file/example_thesis.pdf');
+ethesis.saveToEThesis(
+    {thesisTitle: 'the awesome thesis', author: 'awesome author', abstract: {en: 'english abstract', fi: 'finnish abstract'}}, 
+    './data/file/example_thesis.pdf');
 */
 
-export async function saveToEThesis(meta, pdfAddr) {
-    const fs = require('fs');
-    const JSZip = require("jszip");
-
-    var metaData = xml.create({
+function generateMetaXML(meta){
+    return xml.create({
         mets: {
             '@ID': 'sort-mets_mets',
             '@OBJID': 'sword-mets',
@@ -30,7 +29,7 @@ export async function saveToEThesis(meta, pdfAddr) {
                     '@ROLE': 'CUSTODIAN',
                     '@TYPE': 'ORGANIZATION',
                     name: {
-                        '#text': 'Richard Jones'
+                        '#text': 'Grappa 2.0'
                     }
                 }
             },
@@ -49,6 +48,10 @@ export async function saveToEThesis(meta, pdfAddr) {
                                 '@mdschema': 'dc',
                                 '@element': 'title',
                                 '#text': meta.thesisTitle
+                            },{
+                                '@mdschema': 'dct',
+                                '@element': 'identifier.urn',
+                                '#text': meta.URN
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'creator',
@@ -56,7 +59,7 @@ export async function saveToEThesis(meta, pdfAddr) {
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'issued',
-                                '#text': Date.getFullYear()
+                                '#text': meta.yearNow
                             }, {
                                 '@mdschema': 'dct',
                                 '@element': 'abstract',
@@ -126,13 +129,81 @@ export async function saveToEThesis(meta, pdfAddr) {
         }
     },
         { version: '1.0', encoding: 'UTF-8', standalone: false }).end({ pretty: true });
+}
 
-    const pdf = fs.readFileSync(pdfAddr);
+async function eThesisAPI(meta, pdfAddr){
+    const fs = require('fs');
+    const JSZip = require("jszip");
+    
+    const pdf = await fs.readFileSync(pdfAddr);
+    
+        const metaData = await generateMetaXML(meta);
+        //xml structure test output
+        //console.log(metaData.toString());
+        const dataBuffer = new Buffer(metaData, 'utf-8');
 
+        var zip = new JSZip();
+        zip.file('gradu.pdf', pdf);
+        zip.file('mets.xml', metaData.toString());
+
+        request({
+            method: 'POST',
+            preambleCRLF: false,
+            postambleCRLF: false,
+            uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-sword/deposit/123456789/13',
+            'auth': creds,
+            headers: {
+                'Content-Disposition': 'filename=ex.zip',
+                'Content-Type': 'application/zip',
+                'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP',
+                'X-No-Op': 'false',
+                'X-Verbose': 'true',
+            },
+            body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+        },
+        function (error, response, body) {
+            if (error) {
+                console.error('upload failed:', error);
+            }
+            if(response){
+                if(response.statusCode == 201){
+                    console.log('Upload successful!');
+                    console.log('statusCode:', response && response.statusCode);
+                    
+                    var parseString = require('xml2js').parseString;
+                    parseString(body, function (err, result) {
+                        console.dir(result);
+                    });
+                }
+            }
+
+        })
+}
+
+export async function saveToEThesis(meta, pdfAddr) {
+    const today = new Date();
+    meta.yearNow = today.getFullYear();
+
+    request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn', 
+    function (error, response, body) {
+        if(error) {
+            return error;
+        }
+        if(body.toLowerCase().indexOf('error') != -1 || body === ''){
+            return 'ERROR: could not get URN.'
+        } else {
+            meta.URN = body;
+            eThesisAPI(meta, pdfAddr)
+        }
+    });/*
+    console.log(meta);
+
+    const pdf = await fs.readFileSync(pdfAddr);
+
+    const metaData = await generateMetaXML(meta);
     //xml structure test output
-    //console.log(metaData.toString());
-
-    var dataBuffer = new Buffer(metaData, 'utf-8');
+    console.log(metaData.toString());
+    const dataBuffer = new Buffer(metaData, 'utf-8');
 
     var zip = new JSZip();
     zip.file('gradu.pdf', pdf);
@@ -147,7 +218,7 @@ export async function saveToEThesis(meta, pdfAddr) {
         // but is piped here in a writable stream which emits a "finish" event.
         console.log("out.zip written.");
     });
-    */
+    * /
 
     request({
             method: 'POST',
@@ -180,5 +251,5 @@ export async function saveToEThesis(meta, pdfAddr) {
                 }
             }
 
-        })
+        })*/
 }
