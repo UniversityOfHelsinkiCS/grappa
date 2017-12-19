@@ -6,7 +6,7 @@ import { getRequiredFields } from './agreementValidations';
 
 //redux
 import { connect } from "react-redux";
-import { getAgreements, saveAgreement, updateAgreement, saveAttachment } from "./agreementActions";
+import { getAgreements, saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from "./agreementActions";
 import { getSupervisors } from "../supervisor/supervisorActions";
 import { getStudyfields } from "../studyfield/studyfieldActions";
 
@@ -85,6 +85,10 @@ export class AgreementPage extends Component {
         }
     }
 
+    handleSaveAgreementDraft = (agreementDraft) => {
+        this.props.saveAgreementDraft(agreementDraft);
+    }
+
     checkForChanges = (a, b) => {
         if (a === undefined || b === undefined)
             return false;
@@ -113,6 +117,7 @@ export class AgreementPage extends Component {
                         studyfields={this.props.studyfields}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
+                        saveAgreementDraft={this.handleSaveAgreementDraft}
                         requiredFields={this.state.requiredFields}
                     />
                 </div>
@@ -143,6 +148,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     saveAgreement(data) {
         dispatch(saveAgreement(data));
+    },
+    saveAgreementDraft(data) {
+        dispatch(saveAgreementDraft(data));
     },
     saveAttachment(data) {
         dispatch(saveAttachment(data));
