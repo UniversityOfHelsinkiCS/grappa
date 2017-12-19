@@ -153,9 +153,7 @@ export async function saveAgreement(req, res) {
 
 export async function saveAgreementForm(req, res) {
     const data = req.body;
-    console.log(data);
     const user = await personService.getLoggedPerson(req);
-    console.log(user);
     const personId = user.personId;
     data.personId = personId;
     if (!personId) {
