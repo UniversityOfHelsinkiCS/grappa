@@ -67,19 +67,23 @@ function removeEmptyKeys(personData) {
  * Get persons that are of interest to the person doing query
  */
 export async function getPersons(req, res) {
+    //TODO test & refactor
     try {
         let user = undefined;
         try {
             user = await personService.getLoggedPerson(req);
         } catch (error) {
-            console.log("No logged in persons");
-            console.log("PersonController", process.env.NODE_ENV)
-            if (process.env.NODE_ENV === "dev") {
-                const persons = await personService.getAllPersons();
-                res.status(200).json(persons).end();
-                return;
+            if (process.env.NODE_ENV !== "dev") {
+                throw error;
             }
-            throw error;
+            console.log("It indeed is a developer.")
+            const persons = await personService.getAllPersons();
+            const roles = await roleService.getRolesForAllPersons()
+            const responseObject = {
+                roles,
+                persons
+            }
+            res.status(200).json(responseObject).end();
         }
         //Persons who are writing theses I have access to as 
         //a agreementperson (supervisor, grader etc)
@@ -111,14 +115,13 @@ export async function getPersons(req, res) {
         persons = [...new Set([...persons, ...newPersons])];
         //All required persons found, now role objects for front
         const roles = await roleService.getRolesForAllPersons()
-        console.log(roles);
         const responseObject = {
             roles,
             persons
         }
         res.status(200).json(responseObject).end();
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json(error).end();
     }
 }
 

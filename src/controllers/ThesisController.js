@@ -3,7 +3,7 @@ const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 
-export async function getAllTheses(req, res) {
+export async function getTheses(req, res) {
     const theses = await thesisService.getAllTheses();
     res.status(200).json(theses);
 }
