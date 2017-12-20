@@ -70,6 +70,9 @@ export async function getPersons(req, res) {
     //TODO test & refactor
     try {
         let user = undefined;
+        let persons = []
+        let newPersons = []
+
         try {
             user = await personService.getLoggedPerson(req);
         } catch (error) {
@@ -77,18 +80,17 @@ export async function getPersons(req, res) {
                 throw error;
             }
             console.log("It indeed is a developer.")
-            const persons = await personService.getAllPersons();
-            const roles = await roleService.getRolesForAllPersons()
+            persons = await personService.getAllPersons();
+            roles = await roleService.getRolesForAllPersons()
             const responseObject = {
                 roles,
                 persons
             }
             res.status(200).json(responseObject).end();
         }
-        //Persons who are writing theses I have access to as 
+        //Persons (students) who are writing theses I have access to as 
         //a agreementperson (supervisor, grader etc)
-        let persons = []
-        let newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
+        newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
         persons = [...new Set([...persons, ...newPersons])];
 
         const rolesInStudyfields = await getUsersRoles(user);
