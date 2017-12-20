@@ -1,8 +1,8 @@
 # Deployment
 
 Both front and back end are ready to use with Docker. You can build your own Docker images or use automatic builds in Dockerhub:
-https://hub.docker.com/r/joonassa/front-grappa2/
-https://hub.docker.com/r/joonassa/back-grappa2/
+- https://hub.docker.com/r/joonassa/front-grappa2/
+- https://hub.docker.com/r/joonassa/back-grappa2/
 
 ## Shibboleth
 
@@ -49,7 +49,7 @@ File shib.conf contains Apache configuration specific to Shibboleth module. You 
   ProxyPassReverse http://backalias:3100/
 </Location>
 ```
-Replace path with path to back end. Depending on your other configuration, this might be root (/) or some other path. Replace also backalias with alias you have defined for your docker container.
+Replace path with path to back end. Depending on your other configuration, this might be root (/) or some other path. Replace also backalias with alias you have defined for your back end docker container.
 
 
 ### ssl.conf
@@ -76,6 +76,7 @@ Directory idp_metadata should contain metadata from idp server.
 
 Copy original attribute-map.xml as your base and add or uncomment following attributes:
 
+```
 <Attribute name="urn:mace:funet.fi:haka:logout-url" id="SHIB_LOGOUT_URL"/>
 <Attribute name="urn:oid:1.3.6.1.4.1.16161.3.1" id="SHIB_LOGOUT_URL"/> 
 <Attribute name="urn:oid:1.3.6.1.4.1.25178.1.2.14" id="unique-code"/>
@@ -86,5 +87,6 @@ Copy original attribute-map.xml as your base and add or uncomment following attr
 <Attribute name="urn:oid:2.16.840.1.113730.3.1.241" id="displayName"/>
 <Attribute name="urn:oid:0.9.2342.19200300.100.1.1" id="uid"/>
 <Attribute name="urn:oid:0.9.2342.19200300.100.1.3" id="mail"/>
+```
 
 You can change attribute ids to something more descriptive, but if you do, you need to change them also in back end code (src/middleware/auth.js and test/endpoint/auth.spec.js).
