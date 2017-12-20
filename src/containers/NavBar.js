@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { getPermissions } from "../util/rolePermissions";
-import { login } from "../containers/user/userActions";
+import { login, logout } from "../containers/user/userActions";
 
 //TODO: redux persistent storage & fetch in middleware
 import { getStudyfields } from "../containers/studyfield/studyfieldActions"
@@ -23,6 +23,7 @@ export class NavBar extends Component {
     componentDidMount() {
         //This login will allow shibboleth to check on page reload
         this.props.login();
+        this.props.getPersons();
         this.refreshLinks(this.props)
     }
 
@@ -34,7 +35,6 @@ export class NavBar extends Component {
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
-            this.props.getPersons();
             this.setState({ loaded: true })
         }
     }
@@ -74,7 +74,7 @@ export class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <Link to="/" className="item">Logout</Link>
+                        <a className="item" onClick={this.props.logout}>Logout</a>
                     </div>
                 </div>
             </div>
@@ -85,6 +85,9 @@ export class NavBar extends Component {
 const mapDispatchToProps = (dispatch) => ({
     login(data) {
         dispatch(login(data));
+    },
+    logout() {
+        dispatch(logout());
     },
     getStudyfields() {
         dispatch(getStudyfields());
