@@ -25,31 +25,23 @@ const councilmeetingWithoutId = {
     studentDeadline: '2017-11-10T22:00:00.000Z',
 }
 
-const councilmeetingWithId = {
-    councilmeetingId: 1,
-    date: '2017-11-29T22:00:00.000Z',
-    instructorDeadline: '2017-11-20T22:00:00.000Z',
-    studentDeadline: '2017-11-10T22:00:00.000Z',
-}
-
 test('councilmeeting post & creates id', async t => {
-    t.plan(2);
+    t.plan(3);
     const res = await request(makeApp(1))
         .post('/councilmeetings')
         .send(councilmeetingWithoutId);
     t.is(res.status, 200);
-    const body = res.body;
-    const meeting = councilmeetingWithId
-    t.is(JSON.stringify(body), JSON.stringify(meeting));
+    let councilmeeting = res.body;
+    t.truthy(councilmeeting.councilmeetingId);
+    delete councilmeeting.councilmeetingId;
+    t.deepEqual(councilmeeting, councilmeetingWithoutId);
 })
 
 test('councilmeeting get all', async t => {
     t.plan(2);
-    const app = makeApp(1);
-    const res = await request(app)
+    const res = await request(makeApp(1))
         .get('/councilmeetings');
     t.is(res.status, 200);
-    const body = res.body;
-    const meetings = [councilmeetingWithId];
-    t.is(JSON.stringify(body), JSON.stringify(meetings));
+    const councilmeetings = res.body;
+    t.truthy(councilmeetings.length > 0);
 })
