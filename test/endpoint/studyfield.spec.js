@@ -27,5 +27,6 @@ test('studyfield get all', async t => {
         .get('/studyfields');
     t.is(res.status, 200);
     const body = res.body;
-    t.is(JSON.stringify(body.length), JSON.stringify(mockStudyfields.length));
+    
+    t.deepEqual(body, mockStudyfields);
 });
