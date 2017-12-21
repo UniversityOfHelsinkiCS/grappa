@@ -18,55 +18,7 @@ mockRoles.map(role => {
 })
 
 test.before(async t => {
-    //knex.schema.dropTableIfExists('person');
-    await knex.schema.createTable('person', function (table) {
-        table.increments('personId').primary();
-        table.string('shibbolethId');
-        table.string('email');
-        table.string('firstname');
-        table.string('lastname');
-        table.string('title')
-        table.boolean('isRetired');
-        table.string('studentNumber');
-        table.string('address');
-        table.string('phone');
-        table.string('major');
-    });
-    await knex.schema.createTable('studyfield', function (table) {
-        table.increments('studyfieldId').primary();
-        table.integer('facultyId').unsigned();
-        table.foreign('facultyId').references('faculty.facultyId');
-        table.string('name');
-        table.timestamps();
-    });
-    await knex.schema.createTable('role', function (table) {
-        table.increments('roleId').primary();
-        table.string('name');
-    });
-    //knex.schema.dropTableIfExists('personWithRole');
-    await knex.schema.createTable('personWithRole', function (table) {
-        table.increments('personRoleId').primary();
-        table.integer('personId').unsigned();
-        table.foreign('personId').references('person.personId');
-        table.integer('roleId').unsigned();
-        table.foreign('roleId').references('role.roleId');
-        table.integer('studyfieldId').unsigned();
-        table.foreign('studyfieldId').references('studyfield.studyfieldId');
-    });
-
-    await knex.schema.createTable('agreementPerson', function (table) {
-        table.integer('agreementId').unsigned();
-        table.foreign('agreementId').references('agreement.agreementId');
-        table.integer('personRoleId').unsigned(); //grader
-        table.foreign('personRoleId').references('personWithRole.personRoleId');
-        table.integer('roleId').unsigned();
-        table.foreign('roleId').references('role.roleId');
-        table.integer('approverId').unsigned();
-        table.foreign('approverId').references('personWithRole.personRoleId');
-        table.boolean('approved');
-        table.date('approvalDate');
-        table.string('statement');
-    });
+    await knex.migrate.latest();
 });
 
 test.beforeEach(async t => {
@@ -85,7 +37,7 @@ test.beforeEach(async t => {
 
 test.serial('getAllSupervisors returns list of right length ', async t => {
     let listOfSupervisors = await supervisorService.getAllSupervisors();
-    t.deepEqual(listOfSupervisors.length, 3);
+    t.deepEqual(listOfSupervisors.length, 4);
 });
 
 test.serial('saveAgreementPerson returns agreementId', async t => {
