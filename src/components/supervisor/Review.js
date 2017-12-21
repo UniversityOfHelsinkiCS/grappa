@@ -52,7 +52,7 @@ export default class Review extends Component {
         return "no"
     }
 
-    //TODO person title not showing because thesis tilte has the same name atm
+    //TODO person title not showing because thesis title has the same name atm
     renderTexts() {
         return (
             <div className="scrolling content">

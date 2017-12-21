@@ -6,25 +6,24 @@ class AgreementView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAgreements: []
+            showAgreements: [],
         }
     }
 
     renderOne(agreement) {
         let index = this.props.agreementData.findIndex(x => x.agreementId === agreement.agreementId);
-        console.log('agreement');
-        console.log(agreement);
-
         return (
             <div>
                 {this.state.showAgreements[index] ?
                     <div className="ui padded segment" key={agreement.agreementId}>
                         <h2 className="ui header">{agreement.thesisTitle}</h2>
+                        {/*
+                        atm doesn't get the information from back end. Is it needed?
                         <h4>Gradun tekijän tiedot</h4>
                         <div>
                             <div className="two fields">
                                 Gradun tekijän nimi: {agreement.firstname + " " + agreement.lastname + "\t"}|
-                        Pääaine: {agreement.major}
+                                Gradun ala: {agreement.studyfieldName}
                             </div>
                             <div className="two fields">
                                 Opiskelijanumero: {agreement.studentNumber + "\t"}|
@@ -34,7 +33,8 @@ class AgreementView extends Component {
                                 Sähköpostiosoite: {agreement.email + "\t"}|
                         Puhelinnumero: {agreement.phone}
                             </div>
-                        </div>
+                        </div>*/}
+
                         <h4>Opinnäytetyön tiedot</h4>
                         <p>
                             Aloitusajankohta: {agreement.startDate}<br />
@@ -45,12 +45,9 @@ class AgreementView extends Component {
                         <p>
                             {/* TODO: pass other supervisors as a list from backend with other
                             agreement info. */}
-                            Vastuuohjaaja: {agreement.responsibleSupervisorId}<br />
-
-                            {/* These variable names do not exist in database. Other supervisors need 
-                            to be selected from AgreementPerson-table */}
-                            Muuohjaaja: {agreement.supervisorSecond}<br />
-                            2. ohjaaja: {agreement.supervisorOther}<br />
+                            Vastuuohjaaja: {agreement.title} {agreement.firstname} {agreement.lastname}<br />
+                            Muu ohjaaja: the be shown here<br />
+                            2. ohjaaja: to be shown here<br />
                         </p>
                         <h4>Työskentelyn tavoitteet ja ajankäyttö</h4>
                         <p>
@@ -63,7 +60,7 @@ class AgreementView extends Component {
                         <p>
                             Muuta: {agreement.other}
                         </p>
-                    </div>
+                       </div>
                     : undefined}
             </div>
         );
@@ -85,23 +82,26 @@ class AgreementView extends Component {
         });
     }
 
+    handleEdit= (e, agreement) => {
+        this.props.handleEditAgreement(agreement);
+
+    }
+
     renderList() {
         var data = this.props.agreementData;
         return (
             <div>
                 {data.map((agreement, index) =>
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.thesisTitle}</h2>
-
+                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {agreement.thesisTitle}</h2>                        
                         <b>Ohjausvastuut: </b> <br />
-                        Vastuuohjaaja: {agreement.thesisSupervisorMain}<br />
-                        Muuohjaaja: {agreement.thesisSupervisorSecond}<br />
-                        2. ohjaaja: {agreement.thesisSupervisorOther}<br />
-
-                        {this.renderOne(agreement)}
-                                                                                           
+                        Vastuuohjaaja: {agreement.title} {agreement.firstname} {agreement.lastname}<br />
+                        Muuohjaaja: to be shown here<br />
+                        2. ohjaaja: to be shown here<br />
                         <button key={agreement.agreementId} className="ui primary button" onClick={(e) => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
-                    </div>
+                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>                    
+                        {this.renderOne(agreement)}
+                     </div>
                 )}
             </div>
         );
