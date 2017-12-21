@@ -22,7 +22,8 @@ export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
     try {
         let agreements = [];
-        const personId = req.session.user_id        
+        const loggedPerson = await personService.getLoggedPerson(req);
+        const personId = loggedPerson.personId;
         const roleToId = await roleService.getRoles();
         const studyfieldToId = await studyfieldService.getAllStudyfields();
         const personRoles = await roleService.getPersonRoles(personId);
@@ -93,10 +94,7 @@ const getAgreementPersonsByAgreementId = async function (agreementId) {
 const getThesisData = (data) => {
     return ({
         thesisId: data.thesisId,
-        thesisTitle: data.thesisTitle,
-        startDate: data.startDate,
-        completionEta: data.completionEta,
-        performancePlace: data.performancePlace,
+        title: data.thesisTitle,
         userId: data.personId
     });
 }
@@ -106,13 +104,16 @@ const getAgreementData = (data, thesisId) => {
         agreementId: data.agreementId,
         authorId: data.personId,
         thesisId: thesisId,
-        responsibleSupervisorId: data.responsibleSupervisorId,
+        responsibleSupervisorId: data.thesisSupervisorMain,
         studyfieldId: data.studyfieldId,
+        startDate: data.thesisStartDate,
+        completionEta: data.thesisCompletionEta,
+        performancePlace: data.thesisPerformancePlace,
         studentGradeGoal: data.studentGradeGoal,
-        studentWorkTime: data.studentWorkTime,
-        supervisorWorkTime: data.supervisorWorkTime,
-        intermediateGoal: data.intermediateGoal,
-        meetingAgreement: data.meetingAgreement,
+        studentWorkTime: data.thesisWorkStudentTime,
+        supervisorWorkTime: data.thesisWorkSupervisorTime,
+        intermediateGoal: data.thesisWorkIntermediateGoal,
+        meetingAgreement: data.thesisWorkMeetingAgreement,
         other: data.other
     });
 }
@@ -134,8 +135,9 @@ const getPersonData = (data) => {
 
 export async function saveAgreement(req, res) {
     const data = req.body;
-    const personId = req.session.user_id
-    console.log("Saving agreement");
+    const user = await personService.getLoggedPerson(req);
+    const personId = user.personId;
+    // console.log("Saving agreement");
     if (!personId) res.status(500).json({ text: "No user_id in session" });
     if (!data.agreementId) {
         try {
@@ -151,22 +153,26 @@ export async function saveAgreement(req, res) {
 
 export async function saveAgreementForm(req, res) {
     const data = req.body;
-    const personId = req.session.user_id;
-    if (!personId) res.status(500).json({ text: "No user_id in session" });
-        try {
-            data.personId = personId;
-            const thesisData = getThesisData(data);
-            const thesisSaveResponse = await thesisService.saveThesis(thesisData);
-            const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
-            const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
-            agreementData.agreementId = agreementSaveResponse.agreementId;
-            let personData = await personService.getPersonById(data.personId);
-            //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
-            res.status(200).json(agreementData);
-        }
-        catch (error) {
-            res.status(500).json({ text: "Error occured", error });
-        }
+    const user = await personService.getLoggedPerson(req);
+    const personId = user.personId;
+    data.personId = personId;
+    if (!personId) {
+        res.status(500).json({ text: "No user_id in session" });
+    }
+    try {
+        data.personId = personId;
+        const thesisData = getThesisData(data);
+        const thesisSaveResponse = await thesisService.saveThesis(thesisData);
+        const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
+        const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
+        agreementData.agreementId = agreementSaveResponse.agreementId;
+        let personData = await personService.getPersonById(data.personId);
+        //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+        res.status(200).json(agreementData);
+    }
+    catch (error) {
+        res.status(500).json({ text: "Error occured", error });
+    }
 }
 
 const updatePerson = async function (personData) {
