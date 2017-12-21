@@ -200,10 +200,9 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        councilmeetings: state.councilmeeting,
-        studyfields: state.studyfield,
-        graders: state.graders,
-        theses: state.thesis,
+        councilmeetings: state.councilmeetings,
+        studyfields: state.studyfields,
+        theses: state.theses,
         persons: state.persons,
     };
 };

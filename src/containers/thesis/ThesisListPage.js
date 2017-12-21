@@ -81,7 +81,7 @@ const mapStateToProps = (state) => {
     return {
         persons: state.persons,
         user: state.user,
-        theses: state.thesis,
+        theses: state.theses,
     };
 };
 

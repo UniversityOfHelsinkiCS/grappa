@@ -173,8 +173,8 @@ export class CouncilmeetingViewPage extends Component {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        councilmeetings: state.councilmeeting,
-        theses: state.thesis,
+        councilmeetings: state.councilmeetings,
+        theses: state.theses,
     };
 };
 

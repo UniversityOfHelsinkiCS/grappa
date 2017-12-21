@@ -19,14 +19,14 @@ import roleReducer from "../containers/role/roleReducer";
 
 
 const combinedReducers = combineReducers({
-    agreement: agreementReducer,
-    attachment: attachmentReducer,
+    agreements: agreementReducer,
+    attachments: attachmentReducer,
     user: userReducer,
-    councilmeeting: councilmeetingReducer,
+    councilmeetings: councilmeetingReducer,
     roles: roleReducer,
-    thesis: thesisReducer,
-    studyfield: studyfieldReducer,
-    email: emailReducer,
+    theses: thesisReducer,
+    studyfields: studyfieldReducer,
+    emails: emailReducer,
     persons: personReducer,
 });
 

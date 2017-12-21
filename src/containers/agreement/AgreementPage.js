@@ -6,7 +6,7 @@ import { getRequiredFields } from './agreementValidations';
 
 //redux
 import { connect } from "react-redux";
-import { saveAgreement, updateAgreement, saveAttachment } from "./agreementActions";
+import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from "./agreementActions";
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -154,11 +154,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        agreements: state.agreement,
-        supervisors: state.supervisors,
-        studyfields: state.studyfield,
+        agreements: state.agreements,
+        persons: state.persons,
+        studyfields: state.studyfields,
         user: state.user,
-        editableAgreement: state.editableAgreement
     };
 }
 

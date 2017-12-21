@@ -126,7 +126,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
     return {
         roles: state.roles,
-        personToBeReviewed: state.person
+        personToBeReviewed: state.persons
     };
 }
 

@@ -60,7 +60,7 @@ export class AgreementEditModal extends Component {
         return (
             <div>
                 <form>
-                    <div className="ui form">{ elements }</div>
+                    <div className="ui form">{elements}</div>
                 </form>
             </div>
         );
@@ -70,7 +70,7 @@ export class AgreementEditModal extends Component {
         var parsedList = [];
         for (var p in data) {
             var originalData = this.props.originalAgreement;
-            if(data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
+            if (data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
                 parsedList.push({
                     fieldName: p,
                     content: data[p],
@@ -84,7 +84,7 @@ export class AgreementEditModal extends Component {
 
     createFormField = (c) => {
         return (
-            <AgreementEditModalField key={ c.fieldName } fieldName={ c.fieldName } content={ c.content } originalContent={ c.originalContent } textField={ c.textField } onChange={ this.onFieldChange }/>
+            <AgreementEditModalField key={c.fieldName} fieldName={c.fieldName} content={c.content} originalContent={c.originalContent} textField={c.textField} onChange={this.onFieldChange} />
         );
     }
 
@@ -99,19 +99,19 @@ export class AgreementEditModal extends Component {
         }
         return (
             <div>
-                <div className="ui dimmer modals page transition visible active" onClick={ this.props.closeModal } />
+                <div className="ui dimmer modals page transition visible active" onClick={this.props.closeModal} />
                 <div className="ui active modal" style={{ top: 45, border: '2px solid black', borderRadius: '7px' }}>
-                    <i className="close icon" onClick={ this.props.closeModal }></i>
+                    <i className="close icon" onClick={this.props.closeModal}></i>
                     <div className="header">
                         Edit agreement
                     </div>
                     <div className="scrolling content">
                         <div className="description">
-                            { this.generateFormFields() }
+                            {this.generateFormFields()}
                         </div>
                     </div>
                     <br />
-                    <button className="ui fluid positive button" disabled={ !this.state.mandatoryDataFilled } onClick={ this.handleFormSave }>
+                    <button className="ui fluid positive button" disabled={!this.state.mandatoryDataFilled} onClick={this.handleFormSave}>
                         {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save local changes'}
                     </button>
                 </div>
@@ -121,9 +121,9 @@ export class AgreementEditModal extends Component {
 };
 
 const mapStateToProps = (state) => {
-    if (!state.user[0])
-        return { role: undefined };
-    return { role: state.user[state.user.length - 1].role.id };
+    return {
+        roles: state.user.roles
+    };
 }
 
 export default connect(mapStateToProps)(AgreementEditModal);
