@@ -6,12 +6,11 @@ import userReducer from "../containers/user/userReducer";
 import agreementReducer from "../containers/agreement/agreementReducer";
 import attachmentReducer from "../containers/attachment/attachmentReducer";
 import councilmeetingReducer from "../containers/councilmeeting/councilmeetingReducer";
-import graderReducer from "../containers/grader/graderReducer";
-import supervisorReducer from "../containers/supervisor/supervisorReducer";
 import thesisReducer from "../containers/thesis/thesisReducer";
 import studyfieldReducer from "../containers/studyfield/studyfieldReducer";
 import emailReducer from "../containers/email/emailReducer";
 import personReducer from "../containers/person/personReducer";
+import roleReducer from "../containers/role/roleReducer";
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
@@ -20,15 +19,14 @@ import personReducer from "../containers/person/personReducer";
 
 
 const combinedReducers = combineReducers({
-    agreement: agreementReducer,
-    attachment: attachmentReducer,
+    agreements: agreementReducer,
+    attachments: attachmentReducer,
     user: userReducer,
-    councilmeeting: councilmeetingReducer,
-    graders: graderReducer,
-    supervisors: supervisorReducer,
-    thesis: thesisReducer,
-    studyfield: studyfieldReducer,
-    email: emailReducer,
+    councilmeetings: councilmeetingReducer,
+    roles: roleReducer,
+    theses: thesisReducer,
+    studyfields: studyfieldReducer,
+    emails: emailReducer,
     persons: personReducer,
 });
 

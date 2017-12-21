@@ -13,13 +13,14 @@ export default class ThesisInformation extends Component {
         this.props.sendChange(fieldName, event.target.value);
     }
 
-    renderTextField(label, fieldName, placeholder) {
+    renderTextField(label, fieldName, placeholder, disabled) {
+
         return (
             <div className="field">
                 <label>{label}</label>
                 <input
                     type="text"
-                    disabled={this.props.allowEdit ? "" : "true"}
+                    disabled={disabled ? "true" : ""}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
                     placeholder={placeholder}
@@ -28,13 +29,13 @@ export default class ThesisInformation extends Component {
         );
     }
 
-    renderDropdownField(label, fieldArray, fieldName) {
+    renderDropdownField(label, fieldArray, fieldName, disabled) {
         return (
             <div className="field">
                 <label>{label}</label>
                 <select
                     className="ui fluid search dropdown"
-                    disabled={this.props.allowEdit ? "" : "true"}
+                    disabled={disabled ? "true" : ""}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}>
                     <option key="0" value="">Select {label}</option>
@@ -51,9 +52,9 @@ export default class ThesisInformation extends Component {
     renderThesisAuthor() {
         return (
             <div className="three fields">
-                {this.renderTextField("First name", "authorFirstname", "First Name")}
-                {this.renderTextField("Last name", "authorLastname", "Last Name")}
-                {this.renderTextField("Email", "authorEmail", "Email Address")}
+                {this.renderTextField("First name", "authorFirstname", "First Name", true)}
+                {this.renderTextField("Last name", "authorLastname", "Last Name", true)}
+                {this.renderTextField("Email", "authorEmail", "Email Address", true)}
             </div>
         );
     }
@@ -78,15 +79,15 @@ export default class ThesisInformation extends Component {
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField("Studyfield", this.props.studyfields, "studyfieldId")}
-                    {this.renderTextField("Title", "title", "Title")}
-                    {this.renderTextField("Urkund-link", "urkund", "Link to Urkund")}
+                    {this.renderDropdownField("Studyfield", this.props.studyfields, "studyfieldId", !this.props.allowEdit)}
+                    {this.renderTextField("Title", "title", "Title", !this.props.allowEdit)}
+                    {this.renderTextField("Urkund-link", "urkund", "Link to Urkund", !this.props.allowEdit)}
 
                 </div>
                 <div className="three fields">
                     {this.state.oldGrading ?
-                        this.renderDropdownField("Grade", oldGradeFields, "grade") :
-                        this.renderDropdownField("Grade", gradeFields, "grade")
+                        this.renderDropdownField("Grade", oldGradeFields, "grade", !this.props.allowEdit) :
+                        this.renderDropdownField("Grade", gradeFields, "grade", !this.props.allowEdit)
                     }
                     <div className="field">
                         <label>&nbsp;   </label>

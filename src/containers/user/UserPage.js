@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login, getAllPersons } from "./userActions";
+import { login } from "./userActions";
 
 export class UserPage extends Component {
 
@@ -15,7 +15,6 @@ export class UserPage extends Component {
 
     componentDidMount() {
         document.title = "Grappa: Main page";
-        this.props.getAllPersons();
     }
 
     handleRoleChange = (event) => {
@@ -34,10 +33,10 @@ export class UserPage extends Component {
                             <option key={index} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
                         )}
                     </select>
-                    <p>Your roles are: {this.props.user.roles ? 
+                    <p>Your roles are: {this.props.user.roles ?
                         this.props.user.roles.map(roleObject => {
-                            return roleObject.studyfield + ": " + roleObject.role; 
-                        }) 
+                            return roleObject.studyfield + ": " + roleObject.role;
+                        })
                         : "No user in redux"} </p>
                 </div>
             </div>
@@ -48,9 +47,6 @@ export class UserPage extends Component {
 const mapDispatchToProps = (dispatch) => ({
     login(data) {
         dispatch(login(data));
-    },
-    getAllPersons() {
-        dispatch(getAllPersons());
     }
 });
 

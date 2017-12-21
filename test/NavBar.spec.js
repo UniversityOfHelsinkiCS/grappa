@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
-import { NavBar } from '../src/components/NavBar.js';
+import { NavBar } from '../src/containers/NavBar.js';
 
 test('NavBar has elements for admin', t => {
     const wrapper = shallow(
@@ -15,6 +15,7 @@ test('NavBar has elements for admin', t => {
                 ]
             }}
             login={() => { }}
+            getPersons={() => {}}
             history={{ push: () => { } }}
         />);
     t.truthy(wrapper.find('NavLink').length > 0);

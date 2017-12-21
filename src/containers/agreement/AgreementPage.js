@@ -6,9 +6,7 @@ import { getRequiredFields } from './agreementValidations';
 
 //redux
 import { connect } from "react-redux";
-import { getAgreements, saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from "./agreementActions";
-import { getSupervisors } from "../supervisor/supervisorActions";
-import { getStudyfields } from "../studyfield/studyfieldActions";
+import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from "./agreementActions";
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -25,9 +23,6 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = "Agreement Page";
-        this.props.getAgreements();
-        this.props.getSupervisors();
-        this.props.getStudyfields();
     }
 
     componentWillReceiveProps(newProps) {
@@ -143,9 +138,6 @@ export class AgreementPage extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAgreements() {
-        dispatch(getAgreements());
-    },
     saveAgreement(data) {
         dispatch(saveAgreement(data));
     },
@@ -158,21 +150,14 @@ const mapDispatchToProps = (dispatch) => ({
     updateAgreement(data) {
         dispatch(updateAgreement(data));
     },
-    getSupervisors(data) {
-        dispatch(getSupervisors(data));
-    },
-    getStudyfields(data) {
-        dispatch(getStudyfields(data));
-    }
 });
 
 const mapStateToProps = (state) => {
     return {
-        agreements: state.agreement,
-        supervisors: state.supervisors,
-        studyfields: state.studyfield,
+        agreements: state.agreements,
+        persons: state.persons,
+        studyfields: state.studyfields,
         user: state.user,
-        editableAgreement: state.editableAgreement
     };
 }
 

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 //nav
-import NavBar from './components/NavBar';
+import NavBar from './containers/NavBar';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';

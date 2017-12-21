@@ -19,6 +19,9 @@ export default class ThesisEmails extends Component {
     }
 
     renderReminder(displayName, type, reminderObject, isDone) {
+        if (!displayName && !type) {
+            return undefined;
+        }
         return (
             <div className="field">
                 <div className="ui right input">
@@ -31,16 +34,16 @@ export default class ThesisEmails extends Component {
                     </div>
                     <div className="field">
                         <label>Last sent</label>
-                        <p>{reminderObject ? moment(reminderObject.lastSent).format("DD/MM/YYYY HH:mm") : "Never"}</p> 
+                        <p>{reminderObject ? moment(reminderObject.lastSent).format("DD/MM/YYYY HH:mm") : "Never"}</p>
                     </div>
-                    {isDone ? 
+                    {isDone ?
                         <div className="field">
                             <label>&nbsp;</label>
                             <button className="ui red button" onClick={this.sendReminder(type)}>
                                 Send another email
                             </button>
-                        </div> 
-                            :
+                        </div>
+                        :
                         <div className="two fields">
                             <div className="field">
                                 <label>&nbsp;</label>
@@ -62,15 +65,20 @@ export default class ThesisEmails extends Component {
     }
 
     render() {
-        const thesisProgress = this.props.thesisProgress;
+        const thesisEmails = this.props.thesisEmails;
+        const eThesisDone = false;
+        const graderEvaluationDone = false;
+        const thesisPrinted = false;
+        const studentReceivedNotification = false;
+        const supervisingProfessorReceivedNotification = false;
         return (
             <div className="ui form">
                 <h2 className="ui dividing header">Sent reminders</h2>
-                {this.renderReminder("Ethesis Reminder", "EthesisReminder", thesisProgress.ethesisReminder, thesisProgress.ethesisDone)}
-                {this.renderReminder("Grader Evaluation Reminder", "GraderEvalReminder", thesisProgress.graderEvalReminder, thesisProgress.graderEvalDone)}
-                {this.renderReminder("Print Thesis Reminder", "PrintReminder", thesisProgress.printReminder, thesisProgress.printDone)}
-                {this.renderReminder("Student Notification", "StudentRegistrationNotification", thesisProgress.studentRegistrationNotification, thesisProgress.studentRegistrationNotification != null)}
-                {this.renderReminder("Supervising Professor Notification", "SupervisingProfessorNotification", thesisProgress.supervisingProfessorNotification, thesisProgress.supervisingProfessorNotification != null)}
+                {this.renderReminder("Ethesis Reminder", "EthesisReminder", thesisEmails.ethesisReminder, eThesisDone)}
+                {this.renderReminder("Grader Evaluation Reminder", "GraderEvalReminder", thesisEmails.graderEvalReminder, graderEvaluationDone)}
+                {this.renderReminder("Print Thesis Reminder", "PrintReminder", thesisEmails.printReminder, thesisPrinted)}
+                {this.renderReminder("Student Notification", "StudentRegistrationNotification", thesisEmails.studentRegistrationNotification, studentReceivedNotification)}
+                {this.renderReminder("Supervising Professor Notification", "SupervisingProfessorNotification", thesisEmails.supervisingProfessorNotification, supervisingProfessorReceivedNotification)}
             </div>
         );
     }

@@ -322,7 +322,7 @@ export class CouncilmeetingManagePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    councilmeetings: state.councilmeeting,
+    councilmeetings: state.councilmeetings,
   };
 };
 

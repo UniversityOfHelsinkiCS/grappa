@@ -8,22 +8,18 @@ import ThesisList from '../../components/thesis/ThesisList';
 class ThesisListPage extends Component {
     constructor(props) {
         super(props);
+        const theses = this.formatTheses(this.props.theses);
         this.state = {
-            formattedTheses: [],
-            filteredTheses: [],
+            formattedTheses: theses,
+            filteredTheses: theses,
         }
-        this.props.getTheses();
     }
 
     componentDidMount() {
         document.title = "Thesis List";
     }
 
-    componentWillReceiveProps(newProps) {
-        this.setTheses(newProps.theses);
-    }
-
-    setTheses(theses) {
+    formatTheses(theses) {
         const persons = this.props.persons;
         if (!theses || !persons) return;
         const formatted = theses.map(thesis => {
@@ -40,10 +36,7 @@ class ThesisListPage extends Component {
             }
             return formattedThesis
         })
-        this.setState({
-            formattedTheses: formatted,
-            filteredTheses: formatted
-        })
+        return formatted;
     }
 
     search = (event) => {
@@ -88,14 +81,11 @@ const mapStateToProps = (state) => {
     return {
         persons: state.persons,
         user: state.user,
-        theses: state.thesis,
+        theses: state.theses,
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getTheses() {
-        dispatch(getTheses());
-    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);

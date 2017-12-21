@@ -2,24 +2,41 @@ import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { getPermissions } from "../util/rolePermissions";
-import { login } from "../containers/user/userActions";
+import { login, logout } from "../containers/user/userActions";
+
+//TODO: redux persistent storage & fetch in middleware
+import { getStudyfields } from "../containers/studyfield/studyfieldActions"
+import { getAgreements } from "../containers/agreement/agreementActions"
+import { getCouncilmeetings } from "../containers/councilmeeting/councilmeetingActions"
+import { getTheses } from "../containers/thesis/thesisActions"
+import { getPersons } from "../containers/person/personActions"
 
 export class NavBar extends Component {
     constructor() {
         super();
         this.state = {
-            links: []
+            links: [],
+            loaded: false,
         }
     }
 
     componentDidMount() {
         //This login will allow shibboleth to check on page reload
         this.props.login();
-        this.refreshLinks(this.props)   
+        this.props.getPersons();
+        this.refreshLinks(this.props)
     }
 
-    componentWillReceiveProps(props) {
-        this.refreshLinks(props);
+    componentWillReceiveProps(newProps) {
+        this.refreshLinks(newProps);
+        //TODO: redux persistent storage & fetch in middleware
+        if (newProps.user && !this.state.loaded) {
+            this.props.getStudyfields();
+            this.props.getAgreements();
+            this.props.getCouncilmeetings();
+            this.props.getTheses();
+            this.setState({ loaded: true })
+        }
     }
 
     refreshLinks = (props) => {
@@ -57,7 +74,7 @@ export class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <Link to="/" className="item">Logout</Link>
+                        <a className="item" onClick={this.props.logout}>Logout</a>
                     </div>
                 </div>
             </div>
@@ -68,6 +85,24 @@ export class NavBar extends Component {
 const mapDispatchToProps = (dispatch) => ({
     login(data) {
         dispatch(login(data));
+    },
+    logout() {
+        dispatch(logout());
+    },
+    getStudyfields() {
+        dispatch(getStudyfields());
+    },
+    getAgreements() {
+        dispatch(getAgreements());
+    },
+    getCouncilmeetings() {
+        dispatch(getCouncilmeetings());
+    },
+    getTheses() {
+        dispatch(getTheses());
+    },
+    getPersons() {
+        dispatch(getPersons());
     }
 });
 
