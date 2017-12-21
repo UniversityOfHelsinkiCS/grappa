@@ -2,18 +2,21 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const theses = require('../../src/routes/theses');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/theses', theses)
+    app.use('/theses', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, theses)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    //console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 const thesisForm = {
@@ -50,17 +53,14 @@ const thesisForm = {
 const graders = thesisForm.graders
 
 const thesisWithId = {
-    thesisId: 1,
     title: "Annin Grady",
     urkund: "https://",
     grade: "4",
     graderEval: "Tarkastajien esittely",
-    userId: 1,
     printDone: 0
 }
 
 const person = {
-    personId: 1,
     shibbolethId: null,
     firstname: "Etunimi",
     lastname: "Sukunimi",
@@ -74,9 +74,6 @@ const person = {
 }
 
 const fakeAgreement = {
-    agreementId: 1,
-    authorId: null,
-    thesisId: thesisWithId.thesisId,
     responsibleSupervisorId: null,
     studyfieldId: thesisForm.studyfieldId,
     fake: 1,
@@ -93,57 +90,70 @@ const fakeAgreement = {
 }
 
 test('thesisForm post & creates id without attachment', async t => {
-    t.plan(4);
-    const res = await request(makeApp())
+    t.plan(6);
+    const res = await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(thesisForm))
     t.is(res.status, 200);
-    const thesis = res.body.thesis;
-    const author = res.body.author;
-    const agreement = res.body.agreement;
+    let thesis = res.body.thesis;
+    let author = res.body.author;
+    let agreement = res.body.agreement;
+    //Check the linking is right
+    t.is(thesis.thesisId, agreement.thesisId);
+    t.is(agreement.authorId, author.personId);
+    delete thesis.thesisId;
+    delete author.personId;
+    delete agreement.agreementId;
+    delete agreement.thesisId;
+    delete agreement.authorId;
+    //Check the contents are right
     t.deepEqual(thesis, thesisWithId, "Thesis is correct");
     t.deepEqual(author, person, "Author person is correct");
     t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
 })
 
 test('thesis get all', async t => {
-    t.plan(3);
-    const app = makeApp();
+    t.plan(2);
+    const app = makeApp(1);
     const res = await request(app)
         .get('/theses');
     t.is(res.status, 200);
-    const body = res.body;
-    const bodyThesis = body[0]
-    t.deepEqual(thesisWithId, bodyThesis)
-    t.is(body.length, 1);
+    const theses = res.body;
+    t.is(theses.length, 4);
 })
 
 const attachment = {
-    attachmentId: 1,
-    agreementId: 2,
     filename: null, //Saving to memory has no filename
     type: 'application/octet-stream',
     savedOnDisk: 1
 }
 
 test('thesisForm post & creates id with attachment', async t => {
-    t.plan(5);
-    const res = await request(makeApp())
+    t.plan(8);
+    const res = await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(thesisForm))
         .attach('attachment', './LICENSE')
     t.is(res.status, 200);
-    const thesis = res.body.thesis;
-    const author = res.body.author;
-    const agreement = res.body.agreement;
-    const attachments = res.body.attachments;
-    let testThesis = thesisWithId;
-    testThesis.thesisId = 2;
-    let testAgreement = fakeAgreement;
-    fakeAgreement.thesisId = 2;
-    fakeAgreement.agreementId = 2;
-    t.deepEqual(thesis, testThesis, "Thesis is correct");
+    let thesis = res.body.thesis;
+    let author = res.body.author;
+    let agreement = res.body.agreement;
+    let attachments = res.body.attachments;
+    //Check the linking is right
+    t.is(thesis.thesisId, agreement.thesisId);
+    t.is(agreement.authorId, author.personId);
+    t.is(attachments[0].agreementId, agreement.agreementId);
+    delete thesis.thesisId;
+    delete author.personId;
+    delete attachments[0].attachmentId;
+    delete agreement.agreementId;
+
+    delete agreement.thesisId;
+    delete agreement.authorId;
+    delete attachments[0].agreementId;
+    //Check the contents are right
+    t.deepEqual(thesis, thesisWithId, "Thesis is correct");
     t.deepEqual(author, person, "Author person is correct");
-    t.deepEqual(agreement, testAgreement, "Agreement is correct");
-    t.deepEqual(attachments, [attachment], "Attachments are correct");
+    t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
+    t.deepEqual(attachments[0], attachment, "Attachments are correct");
 })

@@ -8,30 +8,7 @@ const mockPersons = require('../../src/mockdata/MockPersons');
 const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 
 test.before(async t => {
-    //knex.schema.dropTableIfExists('person');
-    await knex.schema.createTable('person', function (table) {
-        table.increments('personId').primary();
-        table.string('shibbolethId');
-        table.string('email');
-        table.string('firstname');
-        table.string('lastname');
-        table.string('title')
-        table.boolean('isRetired');
-        table.string('studentNumber');
-        table.string('address');
-        table.string('phone');
-        table.string('major');
-    });
-    //knex.schema.dropTableIfExists('personWithRole');
-    await knex.schema.createTable('personWithRole', function (table) {
-        table.increments('personRoleId').primary();
-        table.integer('personId').unsigned();
-        table.foreign('personId').references('person.personId');
-        table.integer('roleId').unsigned();
-        table.foreign('roleId').references('role.roleId');
-        table.integer('studyfieldId').unsigned();
-        table.foreign('studyfieldId').references('studyfield.studyfieldId');
-    });
+    await knex.migrate.latest();
 });
 
 test.beforeEach(async t => {
@@ -62,7 +39,7 @@ test.serial('savePersonRole return new personRoleId', async t => {
         studyfieldId: 1,
     }
     let returnValue = await personService.savePersonRole(newPersonRole);
-    t.deepEqual(returnValue, mockPersonRoles.length + 1);
+    t.deepEqual(returnValue, mockPersonRoles[mockPersonRoles.length - 1].personRoleId + 1);
 });
 
 test.serial('updatePerson', async t => {

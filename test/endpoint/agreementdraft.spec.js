@@ -2,23 +2,25 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreementdrafts = require('../../src/routes/agreementDrafts');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/agreement-drafts', agreementdrafts)
+    app.use('/agreement-drafts', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, agreementdrafts)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 
-const agreementDraftWithoutId = {
+const testAgreementDraft = {
     mainSupervisorId: 1,
     studentEmail: 'test@tets.com',
     studentFirstname: 'Test',
@@ -39,54 +41,38 @@ const agreementDraftWithoutId = {
     other: "uuu"
 };
 
-const agreementDraftWithId = {
-    agreementDraftId: 1,
-    mainSupervisorId: 1,
-    studentEmail: 'test@tets.com',
-    studentFirstname: 'Test',
-    studentLastname: 'User',
-    studentNumber: '012345678',
-    studentAddress: 'Helsinginkatu',
-    studentPhone: '050 1234567',
-    studentMajor: 'Kemia',
-    thesisTitle: 'Thesis Title',
-    thesisStartDate: '6.5.2005',
-    thesisCompletionEta: '1.2.2006',
-    thesisPerformancePlace: 'paikka',
-    studentGradeGoal: 5,
-    studentTime: "1h viikossa",
-    supervisorTime: "1h kuussa",
-    intermediateGoal: "hmm",
-    meetingAgreement: "juu",
-    other: "uuu"
-};
-
 const agreementDraftPersons = [{
     agreementDraftId: 1,
     personRoleId: 1
 }];
 
 test('agreementDraft post & creates id', async t => {
-    t.plan(2);
-    const res = await request(makeApp())
+    t.plan(3);
+    const res = await request(makeApp(1))
         .post('/agreement-drafts')
-        .send(agreementDraftWithoutId);
+        .send(testAgreementDraft);
     t.is(res.status, 200);
     const body = res.body;
-    const draft = agreementDraftWithId
-    t.is(JSON.stringify(body), JSON.stringify(draft));
+    const draft = testAgreementDraft
+    t.truthy(body.agreementDraftId > 0)
+    delete body.agreementDraftId
+    t.deepEqual(body, draft);
 });
 
 test('get agreementDraft by ID', async t => {
-    t.plan(2);
-    const draft = agreementDraftWithId;
+    t.plan(3);
+    const draft = testAgreementDraft;
     const draftPersons = [];
-    const res = await request(makeApp())
-        .get('/agreement-drafts/' + draft.agreementDraftId);
+    const res = await request(makeApp(1))
+        .get('/agreement-drafts/' + 3);
     t.is(res.status, 200);
     const body = res.body;
 
-    t.is(JSON.stringify({ agreementDraft: body.agreementDraft, agreementDraftPersons: body.agreementDraftPersons }), 
-        JSON.stringify({ agreementDraft: draft, agreementDraftPersons: [] }));
+    const agreementDraft = res.body.agreementDraft;
+    const agreementDraftPersons = res.body.agreementDraftPersons;
+
+    delete agreementDraft.agreementDraftId;
+    t.deepEqual(agreementDraft, draft, "Drafts equal");
+    t.deepEqual(agreementDraftPersons, draftPersons, "Persons equal");
 })
 

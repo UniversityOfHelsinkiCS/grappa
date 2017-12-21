@@ -3,7 +3,7 @@ const request = require('supertest');
 const express = require('express');
 const index = require('../../src/routes/index');
 const shibboleth = require('../../src/routes/shibboleth');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 const auth = require('../../src/middleware/auth');
 
 const makeApp = () => {
@@ -24,16 +24,13 @@ const makeApp = () => {
     app.use(auth.shibRegister);
     app.use('/', index)
     app.use(auth.checkAuth);
-    app.use('/login', shibboleth)
-    app.use('/logout', shibboleth)
+    app.use('/user', shibboleth)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 test('new shibboleth login passes register', async t => {
@@ -49,11 +46,11 @@ test('new shibboleth login creates user', async t => {
     t.plan(3);
     const app = makeApp();
     const res = await request(app)
-        .get('/login');
+        .get('/user/login');
     t.is(res.status, 200);
     // t.true(res.body.personId !== undefined);
     // or at the moment:
-    t.is(res.body.personId, 1);
+    t.is(res.body.personId, 13);
     t.is(res.body.shibbolethId, 'oopiskelija');
 });
 
@@ -61,6 +58,6 @@ test('logout gives redirect', async t => {
     t.plan(1);
     const app = makeApp();
     const res = await request(app)
-        .get('/logout/logout');
+        .get('/user/logout');
     t.is(res.status, 302);
 });

@@ -1,6 +1,6 @@
 module.exports = [
-    { 
-        agreementId: 4,
+    {
+        agreementId: 3,
         previousAgreementId: 1
     }
 ]

@@ -6,4 +6,4 @@ module.exports = [
         type: 'pdf',
         savedOnDisk: true
     }
-];
+]

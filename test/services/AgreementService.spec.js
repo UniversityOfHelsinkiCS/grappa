@@ -7,39 +7,10 @@ const mockAgreements = require('../../src/mockdata/MockAgreements');
 const mockPrevAgreements = require('../../src/mockdata/MockPrevAgreements');
 
 test.before(async t => {
-    await knex.schema.createTable('agreement', function (table) {
-        table.increments('agreementId').primary();
-        table.integer('authorId').unsigned();
-        table.foreign('authorId').references('person.personId');
-        table.integer('thesisId').unsigned();
-        table.foreign('thesisId').references('thesis.thesisId');
-        table.integer('responsibleSupervisorId').unsigned();
-        table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
-        table.integer('studyfieldId').unsigned();
-        table.foreign('studyfieldId').references('studyfield.studyfieldId');
-        table.boolean('fake');
-        table.date('startDate');
-        table.date('completionEta');
-        table.string('performancePlace');
-        table.integer('studentGradeGoal');
-        table.string('studentWorkTime');
-        table.string('supervisorWorkTime');
-        table.string('intermediateGoal');
-        table.string('meetingAgreement');
-        table.string('other');
-    });
-    await knex.schema.createTable('previousagreements', function (table) {
-        table.integer('agreementId');
-        table.foreign('agreementId').references('agreement.agreementId')
-        table.integer('previousAgreementId');
-        table.foreign('previousAgreementId').references('agreement.agreementId')
-        table.primary(['agreementId', 'previousAgreementId']);
-    });
+    await knex.migrate.latest();
 });
 
 test.beforeEach(async t => {
-    //knex.schema.dropTableIfExists('agreement');
-    //let temp = knex.raw('SELECT * FROM agreement');
     await knex('agreement').del();
     await knex('agreement').insert(mockAgreements);
     await knex('previousagreements').del();

@@ -4,8 +4,6 @@ exports.up = function (knex, Promise) {
             table.increments('thesisId').primary();
             table.integer('councilmeetingId').unsigned();
             table.foreign('councilmeetingId').references('councilmeeting.councilmeetingId');
-            table.integer('userId').unsigned();
-            table.foreign('userId').references('person.personId');
             table.string('title');
             table.string('urkund');
             table.string('grade').defaultTo('-');

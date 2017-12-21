@@ -17,14 +17,15 @@ const studyfieldService = require('../services/StudyfieldService')
 // }
 
 export async function logout(req, res) {
+    const logoutUrl = req.headers.shib_logout_url;
     if (req.session && req.session.user_id) {
         delete req.session.user_id;
         delete req.session.shib_session_id;
     }
-    if (req.headers['shib_logout_url']) {
-        res.redirect(req.headers['shib_logout_url']);
+    if (logoutUrl) {
+        res.redirect(logoutUrl);
     } else {
-        res.status(200).send('OK');
+        res.status(200).send('OK').end();
     }
 }
 

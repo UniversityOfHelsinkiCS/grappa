@@ -2,10 +2,44 @@ const thesisService = require('../services/ThesisService');
 const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService');
 
-export async function getAllTheses(req, res) {
-    const theses = await thesisService.getAllTheses();
-    res.status(200).json(theses);
+export async function getTheses(req, res) {
+    try {
+        const user = await personService.getLoggedPerson(req);
+        let theses = []
+        let newTheses = []
+
+        const rolesInStudyfields = await getUsersRoles(user);
+        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+            // As an admin, get all theses
+            const allTheses = await thesisService.getAllTheses();
+            res.status(200).json(allTheses).end();
+            return;
+        }
+
+        // Get theses in studyfield where user is ...
+        rolesInStudyfields.forEach(async item => {
+            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+                // ... As resp_professor, manager or print-person theses in studyfield
+                newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
+                theses = [...new Set([...theses, ...newTheses])];
+            }
+        })
+
+        // Get theses where user is agreementperson
+        newTheses = await thesisService.getThesesByAgreementPerson(user.personId)
+        theses = [...new Set([...theses, ...newTheses])];
+
+        // Get theses where user is author
+        newTheses = await thesisService.getThesesByPersonId(user.personId)
+        theses = [...new Set([...theses, ...newTheses])];
+
+        res.status(200).json(theses).end();
+    } catch (error) {
+        res.status(500).json(error).end();
+    }
 }
 
 export async function getThesisById(req, res) {
@@ -28,7 +62,7 @@ export async function saveThesisForm(req, res) {
             lastname: thesis.authorLastname
         }
         const savedPerson = await personService.savePerson(person)
-        thesis.userId = savedPerson.personId;
+        agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname
         delete thesis.authorLastname
         delete thesis.authorEmail
@@ -44,7 +78,6 @@ export async function saveThesisForm(req, res) {
             })*/
             delete thesis.graders
         }
-
         //TODO: Email system
         delete thesis.thesisEmails
 
@@ -63,4 +96,16 @@ export async function saveThesisForm(req, res) {
     } catch (error) {
         res.status(500).json(error);
     }
+}
+
+const getUsersRoles = async (user) => {
+    const roleToId = await roleService.getRoles();
+    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const personRoles = await roleService.getPersonRoles(user.personId);
+    return personRoles.map(role => {
+        return {
+            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+        }
+    })
 }

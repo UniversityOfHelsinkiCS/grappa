@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    personController.getAllPersons(req, res);
+    personController.getPersons(req, res);
 })
 
 
