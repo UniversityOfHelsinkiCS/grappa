@@ -9,6 +9,8 @@ const knex = require('knex')(config[env]);
 knex.migrate.latest(config[env]).then((msg) => {
     if (env !== "test") {
         console.log("KNEX MIGRATE SUCCESS", msg);
+    } else {
+        knex.seed.run(config[env])
     }
 }).catch((err) => {
     if (env !== "test") {

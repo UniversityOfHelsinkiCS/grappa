@@ -7,7 +7,11 @@ const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
-    app.use('/supervisors', supervisors)
+    app.use('/supervisors', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, supervisors)
     return app;
 }
 
@@ -30,22 +34,22 @@ const supervisorWithoutId = {
     title: "",
     shibbolethId: "",
 
-  /*  agreementId: 1,
-    approvalDate: null,
-    approved: 1,
-    approverId: 2,
-    created_at: null,
-    isRetired: 0,
-    major: "",
-    personId: 1,
-    personRoleId: 1,
-    phone: "",
-    roleId: 1,
-    statement: "",
-    studentNumber: "",
-    studyfieldId: 1,
-    updated_at: null*/
-    
+    /*  agreementId: 1,
+      approvalDate: null,
+      approved: 1,
+      approverId: 2,
+      created_at: null,
+      isRetired: 0,
+      major: "",
+      personId: 1,
+      personRoleId: 1,
+      phone: "",
+      roleId: 1,
+      statement: "",
+      studentNumber: "",
+      studyfieldId: 1,
+      updated_at: null*/
+
 }
 
 const supervisorWithId = {
@@ -71,6 +75,6 @@ test.skip('councilmeeting get all', async t => {
         .get('/councilmeetings');
     t.is(res.status, 200);
     const body = res.body;
-    const meetings = [ councilmeetingWithId ];
-    t.is(JSON.stringify(body), JSON.stringify(meetings));    
+    const meetings = [councilmeetingWithId];
+    t.is(JSON.stringify(body), JSON.stringify(meetings));
 })

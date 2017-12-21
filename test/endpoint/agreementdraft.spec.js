@@ -6,7 +6,11 @@ const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
-    app.use('/agreement-drafts', agreementdrafts)
+    app.use('/agreement-drafts', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, agreementdrafts)
     return app;
 }
 
@@ -86,7 +90,7 @@ test('get agreementDraft by ID', async t => {
     t.is(res.status, 200);
     const body = res.body;
 
-    t.is(JSON.stringify({ agreementDraft: body.agreementDraft, agreementDraftPersons: body.agreementDraftPersons }), 
+    t.is(JSON.stringify({ agreementDraft: body.agreementDraft, agreementDraftPersons: body.agreementDraftPersons }),
         JSON.stringify({ agreementDraft: draft, agreementDraftPersons: [] }));
 })
 

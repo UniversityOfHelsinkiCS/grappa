@@ -37,11 +37,11 @@ test.cb('getThesisById', t => {
     service.getThesisById.restore();
 });
 
-test.cb('getAllTheses returns correct information', t => {
+test.cb('getTheses returns correct information', t => {
     const stub = sinon.stub(service, "getAllTheses");
     stub.returns({ test: "xoxo" });
     thesisController.service = service;
-    thesisController.getAllTheses(req, res)
+    thesisController.getTheses(req, res)
         .then(() => {
             t.is(stub.calledOnce, true, "getAllTheses is called once");
             t.is(res.status.calledWith(200), true, "getAllTheses returns status 200");

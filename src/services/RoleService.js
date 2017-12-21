@@ -9,8 +9,8 @@ export async function getPersonRoles(personId) {
 }
 
 export async function getRoleId(roleName) {
-    const roleData = await knex.select().from('role').where('name', roleName);
-    return roleData[0].roleId;
+    const role = await knex.select().from('role').where('name', roleName).first();
+    return role.roleId;
 }
 
 const roleSchema = [
@@ -24,7 +24,7 @@ const roleSchema = [
 
 export async function getRolesForAllPersons() {
     return knex.select(roleSchema).from('personWithRole')
-        .innerJoin('role','personWithRole.roleId' , '=', 'role.roleId')
+        .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
 }
 

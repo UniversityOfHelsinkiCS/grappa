@@ -6,7 +6,11 @@ const config = require('../../src/db/knexfile');
 
 const makeApp = () => {
     const app = express();
-    app.use('/councilmeetings', councilmeetings)
+    app.use('/councilmeetings', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, councilmeetings)
     return app;
 }
 
@@ -48,6 +52,6 @@ test('councilmeeting get all', async t => {
         .get('/councilmeetings');
     t.is(res.status, 200);
     const body = res.body;
-    const meetings = [ councilmeetingWithId ];
-    t.is(JSON.stringify(body), JSON.stringify(meetings));    
+    const meetings = [councilmeetingWithId];
+    t.is(JSON.stringify(body), JSON.stringify(meetings));
 })

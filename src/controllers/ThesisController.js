@@ -22,6 +22,7 @@ export async function getTheses(req, res) {
                 // ... But if anywhere as an admin, get all theses
                 const allTheses = await thesisService.getAllTheses();
                 res.status(200).json(allTheses).end();
+                return;
             }
         })
 

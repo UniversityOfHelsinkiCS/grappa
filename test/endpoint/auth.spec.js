@@ -24,8 +24,7 @@ const makeApp = () => {
     app.use(auth.shibRegister);
     app.use('/', index)
     app.use(auth.checkAuth);
-    app.use('/login', shibboleth)
-    app.use('/logout', shibboleth)
+    app.use('/user', shibboleth)
     return app;
 }
 
@@ -49,7 +48,7 @@ test('new shibboleth login creates user', async t => {
     t.plan(3);
     const app = makeApp();
     const res = await request(app)
-        .get('/login');
+        .get('/user/login');
     t.is(res.status, 200);
     // t.true(res.body.personId !== undefined);
     // or at the moment:
@@ -61,6 +60,6 @@ test('logout gives redirect', async t => {
     t.plan(1);
     const app = makeApp();
     const res = await request(app)
-        .get('/logout/logout');
+        .get('/user/logout');
     t.is(res.status, 302);
 });

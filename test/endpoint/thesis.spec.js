@@ -5,7 +5,11 @@ const theses = require('../../src/routes/theses');
 
 const makeApp = () => {
     const app = express();
-    app.use('/theses', theses)
+    app.use('/theses', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = 1;
+        next();
+    }, theses)
     return app;
 }
 
