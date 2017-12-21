@@ -2,6 +2,8 @@ const thesisService = require('../services/ThesisService');
 const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
+const studyfieldService = require('../services/StudyfieldService');
 
 export async function getTheses(req, res) {
     try {
@@ -33,6 +35,7 @@ export async function getTheses(req, res) {
 
         res.status(200).json(theses).end();
     } catch (error) {
+        console.log(error);
         res.status(500).json(error).end();
     }
 }

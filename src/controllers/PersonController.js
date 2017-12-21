@@ -81,7 +81,7 @@ export async function getPersons(req, res) {
             }
             console.log("It indeed is a developer.")
             persons = await personService.getAllPersons();
-            roles = await roleService.getRolesForAllPersons()
+            const roles = await roleService.getRolesForAllPersons()
             const responseObject = {
                 roles,
                 persons
