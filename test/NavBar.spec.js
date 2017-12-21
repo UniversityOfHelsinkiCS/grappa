@@ -15,6 +15,7 @@ test('NavBar has elements for admin', t => {
                 ]
             }}
             login={() => { }}
+            getPersons={() => {}}
             history={{ push: () => { } }}
         />);
     t.truthy(wrapper.find('NavLink').length > 0);
