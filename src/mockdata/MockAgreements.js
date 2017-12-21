@@ -1,7 +1,7 @@
 module.exports = [
     {
         agreementId: 1,
-        authorId: 1,
+        authorId: 10,
         thesisId: 1,
         responsibleSupervisorId: 1,
         studyfieldId: 1,
@@ -50,4 +50,4 @@ module.exports = [
         meetingAgreement: "joka toinen päivä",
         other: "eee"
     }
-];
+]

@@ -1,15 +1,10 @@
+const councilmeetings = require('../../mockdata/MockCouncilmeetings');
+
 exports.seed = function (knex, Promise) {
     // Deletes ALL existing entries
     return knex('councilmeeting').del()
         .then(function () {
             // Inserts seed entries
-            return knex('councilmeeting').insert([
-                {
-                    councilmeetingId: 1,
-                    date: "2017-11-20T22:00:00.000Z",
-                    instructorDeadline: "2017-11-12T22:00:00.000Z",
-                    studentDeadline: "2017-11-04T22:00:00.000Z",
-                }
-            ]);
+            return knex('councilmeeting').insert(councilmeetings);
         });
 };
