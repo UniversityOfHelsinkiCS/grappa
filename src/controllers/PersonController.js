@@ -81,25 +81,24 @@ export async function getPersons(req, res) {
             }
             res.status(200).json(responseObject).end();
         }
-        //Persons (students) who are writing theses I have access to as 
-        //a agreementperson (supervisor, grader etc)
-        newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
-        persons = [...new Set([...persons, ...newPersons])];
         const rolesInStudyfields = await getUsersRoles(user);
+        //If user is an admin, get everything
+        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+            persons = await personService.getAllPersons();
+            const roles = await roleService.getRolesForAllPersons()
+            const responseObject = {
+                roles,
+                persons,
+            }
+            res.status(200).json(responseObject).end();
+            return;
+        }
+
         rolesInStudyfields.forEach(async item => {
             // As resp_prof persons who are writing theses in studyfield
             if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
                 newPersons = await personService.getPersonsWithAgreementInStudyfield(item.studyfield.studyfieldId);
                 persons = [...new Set([...persons, ...newPersons])];
-            } else if (item.role.name === 'admin') {
-                const allPersons = await personService.getAllPersons();
-                const roles = await roleService.getRolesForAllPersons()
-                const responseObject = {
-                    roles,
-                    persons
-                }
-                res.status(200).json(responseObject).end();
-                return;
             }
         })
         //Persons who are supervisors / supervising for new thesis / agreement supervisor list 
@@ -110,15 +109,22 @@ export async function getPersons(req, res) {
         const graderId = await roleService.getRoleId("grader")
         newPersons = await personService.getPersonsWithRole(graderId)
         persons = [...new Set([...persons, ...newPersons])];
+
+        //Persons (students) who are writing theses user has access to as 
+        //a agreementperson (supervisor, grader etc)
+        newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
+        persons = [...new Set([...persons, ...newPersons])];
+
         //All required persons found, now role objects for front
         const roles = await roleService.getRolesForAllPersons()
         const responseObject = {
             roles,
             persons
         }
-        res.status(200).json(responseObject).end();
+        res.status(200).json(responseObject);
     } catch (error) {
-        res.status(500).json(error).end();
+        console.log(error);
+        res.status(500).json(error);
     }
 }
 

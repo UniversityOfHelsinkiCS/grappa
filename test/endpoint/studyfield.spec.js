@@ -2,27 +2,27 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const studyfields = require('../../src/routes/studyfields');
-const config = require('../../src/db/knexfile');
-const knex = require('../../src/db/connection');
 const mockStudyfields = require('../../src/mockdata/MockStudyfields');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/studyfields', studyfields)
+    app.use('/persons', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, persons)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" });
-    await knex('studyfield').del();
-    await knex('studyfield').insert(mockStudyfields);
-});
+    await knex.migrate.latest();
+    await knex.seed.run();
+})
 
 test('studyfield get all', async t => {
     t.plan(2);
-    const app = makeApp();
+    const app = makeApp(1);
     const res = await request(app)
         .get('/studyfields');
     t.is(res.status, 200);

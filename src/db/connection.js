@@ -6,16 +6,12 @@ if (process.env.NODE_ENV === 'test') {
 console.log("ENVIRONMENT IS", env);
 const knex = require('knex')(config[env]);
 
-knex.migrate.latest(config[env]).then((msg) => {
-    if (env !== "test") {
+if (env !== "test") {
+    knex.migrate.latest().then((msg) => {
         console.log("KNEX MIGRATE SUCCESS", msg);
-    } else {
-        knex.seed.run(config[env])
-    }
-}).catch((err) => {
-    if (env !== "test") {
+    }).catch((err) => {
         console.log("KNEX MIGRATE FAILURE", err);
-    }
-});
+    });
+}
 
 module.exports = knex;

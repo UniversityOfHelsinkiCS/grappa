@@ -3,7 +3,7 @@ const request = require('supertest');
 const express = require('express');
 const index = require('../../src/routes/index');
 const shibboleth = require('../../src/routes/shibboleth');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 const auth = require('../../src/middleware/auth');
 
 const makeApp = () => {
@@ -29,10 +29,8 @@ const makeApp = () => {
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 test('new shibboleth login passes register', async t => {

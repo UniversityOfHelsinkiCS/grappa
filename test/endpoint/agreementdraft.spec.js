@@ -2,23 +2,21 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreementdrafts = require('../../src/routes/agreementDrafts');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/agreement-drafts', (req, res, next) => {
+    app.use('/persons', (req, res, next) => {
         req.session = {};
-        req.session.user_id = 1;
+        req.session.user_id = userId;
         next();
-    }, agreementdrafts)
+    }, persons)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 
@@ -72,7 +70,7 @@ const agreementDraftPersons = [{
 
 test('agreementDraft post & creates id', async t => {
     t.plan(2);
-    const res = await request(makeApp())
+    const res = await request(makeApp(1))
         .post('/agreement-drafts')
         .send(agreementDraftWithoutId);
     t.is(res.status, 200);
@@ -85,7 +83,7 @@ test('get agreementDraft by ID', async t => {
     t.plan(2);
     const draft = agreementDraftWithId;
     const draftPersons = [];
-    const res = await request(makeApp())
+    const res = await request(makeApp(1))
         .get('/agreement-drafts/' + draft.agreementDraftId);
     t.is(res.status, 200);
     const body = res.body;

@@ -2,22 +2,21 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/agreements', (req, res, next) => {
+    app.use('/persons', (req, res, next) => {
         req.session = {};
-        req.session.user_id = 1;
+        req.session.user_id = userId;
         next();
-    }, agreement)
+    }, persons)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 const agreementForm = {
@@ -74,5 +73,5 @@ test.skip('agreement post & correct response', async t => {
     const thesis = res.body.thesis;
     const author = res.body.author;
     const agreement = res.body.agreement;
-    
+
 })

@@ -2,23 +2,21 @@ import test from 'ava';
 const request = require('supertest');
 const express = require('express');
 const councilmeetings = require('../../src/routes/councilmeeting');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/councilmeetings', (req, res, next) => {
+    app.use('/persons', (req, res, next) => {
         req.session = {};
-        req.session.user_id = 1;
+        req.session.user_id = userId;
         next();
-    }, councilmeetings)
+    }, persons)
     return app;
 }
 
 test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    //console.log(waitString);
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 const councilmeetingWithoutId = {
@@ -36,7 +34,7 @@ const councilmeetingWithId = {
 
 test('councilmeeting post & creates id', async t => {
     t.plan(2);
-    const res = await request(makeApp())
+    const res = await request(makeApp(1))
         .post('/councilmeetings')
         .send(councilmeetingWithoutId);
     t.is(res.status, 200);
@@ -47,7 +45,7 @@ test('councilmeeting post & creates id', async t => {
 
 test('councilmeeting get all', async t => {
     t.plan(2);
-    const app = makeApp();
+    const app = makeApp(1);
     const res = await request(app)
         .get('/councilmeetings');
     t.is(res.status, 200);
