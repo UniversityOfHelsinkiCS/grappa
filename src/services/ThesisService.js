@@ -8,7 +8,6 @@ const thesisSchema = [
     "urkund",
     "grade",
     "graderEval",
-    "thesis.userId",
     "printDone"
 ]
 

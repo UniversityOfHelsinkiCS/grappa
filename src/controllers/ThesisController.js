@@ -11,18 +11,20 @@ export async function getTheses(req, res) {
         let theses = []
         let newTheses = []
 
-        // Get theses in studyfield where user is ...
         const rolesInStudyfields = await getUsersRoles(user);
+        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+            // As an admin, get all theses
+            const allTheses = await thesisService.getAllTheses();
+            res.status(200).json(allTheses).end();
+            return;
+        }
+
+        // Get theses in studyfield where user is ...
         rolesInStudyfields.forEach(async item => {
             if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
                 // ... As resp_professor, manager or print-person theses in studyfield
                 newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
                 theses = [...new Set([...theses, ...newTheses])];
-            } else if (item.role.name === 'admin') {
-                // ... But if anywhere as an admin, get all theses
-                const allTheses = await thesisService.getAllTheses();
-                res.status(200).json(allTheses).end();
-                return;
             }
         })
 
@@ -36,7 +38,6 @@ export async function getTheses(req, res) {
 
         res.status(200).json(theses).end();
     } catch (error) {
-        console.log(error);
         res.status(500).json(error).end();
     }
 }
@@ -61,7 +62,7 @@ export async function saveThesisForm(req, res) {
             lastname: thesis.authorLastname
         }
         const savedPerson = await personService.savePerson(person)
-        thesis.userId = savedPerson.personId;
+        agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname
         delete thesis.authorLastname
         delete thesis.authorEmail
@@ -77,7 +78,6 @@ export async function saveThesisForm(req, res) {
             })*/
             delete thesis.graders
         }
-
         //TODO: Email system
         delete thesis.thesisEmails
 

@@ -6,11 +6,11 @@ const knex = require('../../src/db/connection');
 
 const makeApp = (userId) => {
     const app = express();
-    app.use('/persons', (req, res, next) => {
+    app.use('/agreement-drafts', (req, res, next) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, persons)
+    }, agreementdrafts)
     return app;
 }
 

@@ -3,27 +3,21 @@ const request = require('supertest');
 const express = require('express');
 const supervisors = require('../../src/routes/supervisors');
 const roleService = require('../../src/services/RoleService');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
     app.use('/supervisors', (req, res, next) => {
         req.session = {};
-        req.session.user_id = 1;
+        req.session.user_id = userId;
         next();
     }, supervisors)
     return app;
 }
 
 test.before(async t => {
-    const knex = require('knex')(config['test']);
-    await knex.migrate.rollback().then(() => {
-        //console.log("Rollback happened")
-        return;
-    }).catch(err => {
-        //console.log(err);
-    })
-    roleService.saveRole("supervisor");
+    await knex.migrate.latest();
+    await knex.seed.run();
 })
 
 const supervisorWithoutId = {
