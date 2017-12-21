@@ -50,7 +50,7 @@ test('new shibboleth login creates user', async t => {
     t.is(res.status, 200);
     // t.true(res.body.personId !== undefined);
     // or at the moment:
-    t.is(res.body.personId, 1);
+    t.is(res.body.personId, 13);
     t.is(res.body.shibbolethId, 'oopiskelija');
 });
 
