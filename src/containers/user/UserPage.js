@@ -51,7 +51,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.persons);
     return {
         user: state.user,
         persons: state.persons
