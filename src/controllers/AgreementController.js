@@ -4,6 +4,7 @@ const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
 const studyfieldService = require('../services/StudyfieldService');
+const notificationService = require('../services/NotificationService');
 
 const AttachmentController = require('./AttachmentController');
 
@@ -162,6 +163,7 @@ export async function saveAgreement(req, res) {
         try {
             console.log("Before await");
             let newAgreement = await agreementService.saveAgreement(data);
+            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS');
             return res.status(200).json(newAgreement);
         } catch (err) {
             return res.status(500).json(err);
@@ -187,6 +189,7 @@ export async function saveAgreementForm(req, res) {
         agreementData.agreementId = agreementSaveResponse.agreementId;
         let personData = await personService.getPersonById(data.personId);
         //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS');
         res.status(200).json(agreementData);
     }
     catch (error) {
@@ -199,6 +202,7 @@ const updatePerson = async function (personData) {
 }
 
 const saveThesis = async function (thesisData) {
+    notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS');
     return await thesisService.saveThesis(thesisData);
 }
 
@@ -250,6 +254,7 @@ export async function updateAgreement(req, res) {
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
             emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
+            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS');
             res.status(200).json({ text: "agreement update successfull(/SQL error)", agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
@@ -274,6 +279,7 @@ export async function savePrevious(req, res) {
     const data = req.body;
     try {
         const daoResponse = await agreementService.savePrevious(data);
+        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS');
         res.status(200).json({ text: "agreement linked to previous agreement successfully", agreementId: daoResponse });
     } catch (err) {
         res.status(500).json({ text: "error occurred", error: err });

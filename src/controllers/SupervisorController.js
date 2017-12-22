@@ -2,6 +2,7 @@ require('babel-polyfill');
 const supervisorService = require('../services/SupervisorService');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
+const notificationService = require('../services/NotificationService');
 const express = require('express');
 const app = express();
 
@@ -53,6 +54,9 @@ export async function saveSupervisor(req, res) {
             };
             const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
             personData.personId = personId;
+
+            notificationService.createNotification('ROLE_SAVE_ONE_SUCCESS', req);
+
             res.status(200).json(personData);
         } catch (err) {
             res.status(500).json({ text: "error occurred", error: err });
@@ -79,6 +83,9 @@ export async function reviewSupervisor(req, res) {
             console.log("data.approved controller", data.approved);
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
             res.status(200).json(data);
+
+            notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
+
         } catch (err) {
             res.status(500).json({ text: "error occured", error: err });
         }

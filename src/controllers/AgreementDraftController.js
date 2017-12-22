@@ -1,6 +1,7 @@
 require('babel-polyfill');
 const draftService = require('../services/DraftService');
 const supervisorService = require('../services/SupervisorService');
+const notificationService = require('../services/NotificationService');
 const express = require('express');
 const app = express();
 
@@ -31,10 +32,12 @@ export async function saveAgreementDraft(req, res) {
             let agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
             // TODO: why is agreementResponse always 1 here??
             savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse)
+            notificationService.createNotification('AGREEMENT_DRAFT_UPDATE_ONE_SUCCESS', req);
         } else {
             let agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
             savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse);
             agreementDraftId = agreementResponse;
+            notificationService.createNotification('AGREEMENT_DRAFT_SAVE_ONE_SUCCESS', req);
         }
         if (data.emails) {
             let supervisors = await getSupervisorsByEmails(data.emails);

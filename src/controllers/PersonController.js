@@ -1,6 +1,7 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const studyfieldService = require('../services/StudyfieldService');
+const notificationService = require('../services/NotificationService');
 
 export async function addPerson(req, res) {
     const personData = getPersonData(req.body);
@@ -19,6 +20,7 @@ export async function updatePerson(req, res) {
     if (personData.personId != null || personData.personId != '') {
         const updateData = removeEmptyKeys(personData);
         let personId = await personService.updatePerson(updateData).then((response) => {
+            notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
             res.status(200).json("person updated succesfully " + response);
         }
         ).catch(err => {
