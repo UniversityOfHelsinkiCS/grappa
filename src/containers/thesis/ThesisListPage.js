@@ -23,17 +23,14 @@ class ThesisListPage extends Component {
         const persons = this.props.persons;
         if (!theses || !persons) return;
         const formatted = theses.map(thesis => {
-            const person = persons.find(person => person.personId === thesis.userId)
-            let formattedThesis = thesis
-            if (!person) {
-                formattedThesis.email = "No user"
-                formattedThesis.authorFirstname = "Keplo"
-                formattedThesis.authorLastname = "Leutokalma"
-            } else {
-                formattedThesis.email = person.email
-                formattedThesis.authorFirstname = person.firstname
-                formattedThesis.authorLastname = person.lastname
-            }
+            const agreement = this.props.agreements.find(agreement => agreement.thesisId === thesis.thesisId);
+            const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
+            const formattedThesis = Object.assign({}, thesis);
+
+            formattedThesis.email = person.email || "No user";
+            formattedThesis.authorFirstname = person.firstname || "Keplo";
+            formattedThesis.authorLastname = person.lastname || "Leutokalma";
+
             return formattedThesis
         })
         return formatted;
@@ -77,13 +74,12 @@ class ThesisListPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        persons: state.persons,
-        user: state.user,
-        theses: state.theses,
-    };
-};
+const mapStateToProps = state => ({
+    persons: state.persons,
+    user: state.user,
+    theses: state.theses,
+    agreements: state.agreements,
+});
 
 const mapDispatchToProps = (dispatch) => ({
 });
