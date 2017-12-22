@@ -10,7 +10,7 @@ import ThesisInformation from "../../components/thesis/ThesisInformation";
 import AttachmentAdder from "../../components/attachment/AttachmentAdder";
 import PersonSelecter from "../../components/person/PersonSelecter";
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
-import ThesisEmails from "../../components/thesis/ThesisEmails"
+import ThesisEmails from "../../components/thesis/ThesisEmails";
 
 export class ThesisManagePage extends Component {
     /**
@@ -60,8 +60,10 @@ export class ThesisManagePage extends Component {
     }
 
     findAndFormatThesis = (theses, persons, thesisId) => {
-        let thesis = theses.find(thesis => thesis.thesisId == thesisId)
-        const author = persons.find(person => person.personId == thesis.userId)
+        const thesis = theses.find(thesis => thesis.thesisId == thesisId);
+        const agreement = this.props.agreements.find(agreement => agreement.thesisId === thesis.thesisId);
+        const author = persons.find(person => person.personId === agreement.authorId);
+
         thesis.authorFirstname = author.firstname;
         thesis.authorLastname = author.lastname;
         thesis.authorEmail = author.email;
@@ -200,14 +202,13 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        councilmeetings: state.councilmeetings,
-        studyfields: state.studyfields,
-        theses: state.theses,
-        persons: state.persons,
-    };
-};
+const mapStateToProps = (state) => ({
+    user: state.user,
+    councilmeetings: state.councilmeetings,
+    studyfields: state.studyfields,
+    theses: state.theses,
+    persons: state.persons,
+    agreements: state.agreements
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisManagePage);
