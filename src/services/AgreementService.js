@@ -3,11 +3,11 @@ const bookshelf = require('../db/bookshelf');
 const Agreement = require('../db/models/agreement');
 
 const agreementSchema = [
-    "agreementId",
+    "agreement.agreementId",
     "authorId",
-    "thesisId",
+    "agreement.thesisId",
     "responsibleSupervisorId",
-    "studyfieldId",
+    "agreement.studyfieldId",
     "fake",
     "startDate",
     "completionEta",
@@ -32,6 +32,18 @@ export const getAgreementById = (agreementId) => {
         });
 }
 
+export const getAgreementsInStudyfield = (studyfieldId) => {
+    return knex.select(agreementSchema).from('agreement')
+        .where('studyfieldId', studyfieldId)
+}
+
+export const getAgreementsByAgreementPerson = (personId) => {
+    return knex.select(agreementSchema).distinct('agreement.agreementId').from('agreement')
+        .innerJoin('agreementPerson', 'agreement.agreementId', '=', 'agreementPerson.agreementId')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .where('personWithRole.personId', personId);
+}
+
 export const getPreviousAgreementById = (id) => {
     return knex.select().from('previousagreements')
         .join('agreement', 'previousagreements.previousAgreementId', '=', 'agreement.agreementId')
@@ -42,29 +54,18 @@ export const getPreviousAgreementById = (id) => {
 }
 
 export const getAllAgreements = () => {
-    return knex.select().from('agreement')
-        .then(agreements => {
-            return agreements;
-        });
+    return knex.select(agreementSchema).from('agreement')
 }
 
 export const getAgreementsByAuthor = (personId) => {
-    return knex.select('agreement.*', 
-                        'thesis.title as thesisTitle', 
-                        'studyfield.name as studyfieldName')
-        .from('agreement')
-        .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+    return knex.select(agreementSchema).from('agreement')
         .where('authorId', personId)
-        .then(agreements => {
-            return agreements;
-        });
 }
 
 export const saveAgreement = async (agreement) => {
     const agreementIds = await knex('agreement')
-    .returning('agreementId')
-    .insert(agreement)
+        .returning('agreementId')
+        .insert(agreement)
     const agreementId = agreementIds[0]
     return knex.select(agreementSchema).from('agreement').where('agreementId', agreementId).first()
 }
