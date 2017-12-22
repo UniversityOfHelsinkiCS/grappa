@@ -63,14 +63,13 @@ function removeEmptyKeys(personData) {
 export async function getPersons(req, res) {
     //TODO test & refactor
     try {
-        let user = undefined;
         let persons = []
         let newPersons = []
-        try {
-            user = await personService.getLoggedPerson(req);
-        } catch (error) {
+        const user = await personService.getLoggedPerson(req);
+
+        if (!user) {
             if (process.env.NODE_ENV !== "dev") {
-                throw error;
+                throw new Error("No user found");
             }
             console.log("It indeed is a developer.")
             persons = await personService.getAllPersons();
@@ -80,8 +79,10 @@ export async function getPersons(req, res) {
                 persons
             }
             res.status(200).json(responseObject).end();
+            return;
         }
         const rolesInStudyfields = await getUsersRoles(user);
+
         //If user is an admin, get everything
         if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
             persons = await personService.getAllPersons();

@@ -34,8 +34,7 @@ export async function logout(req, res) {
 export async function showUser(req, res) {
     if (req.session.user_id) {
         try {
-            const persons = await personService.getPersonById(req.session.user_id);
-            let user = persons[0]
+            let user = await personService.getPersonById(req.session.user_id);
 
             user = await buildPerson(user);
 
@@ -53,8 +52,7 @@ export async function fakeLogin(req, res) {
     const shibbolethId = req.params.id;
     console.log("Faking login with " + shibbolethId);
     try {
-        const persons = await personService.getPersonByShibbolethId(shibbolethId);
-        let user = persons[0]
+        let user = await personService.getPersonByShibbolethId(shibbolethId);
 
         req.session.user_id = user.personId;
 

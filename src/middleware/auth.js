@@ -16,15 +16,14 @@ module.exports.checkAuth = async (req, res, next) => {
         req.session.shib_session_id = req.headers['shib-session-id'];
         const shibUid = req.headers['uid'];
         try {
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
+            const user = await personService.getPersonByShibbolethId(shibUid);
+            if (user) {
+                req.session.user_id = user.personId;
+            }
+            next();
         } catch (err) {
             res.status(404).end();
         }
-        let user = userdata[0];
-        if (user) {
-            req.session.user_id = user.personId;
-        }
-        next();
     } else {
         next();
     }

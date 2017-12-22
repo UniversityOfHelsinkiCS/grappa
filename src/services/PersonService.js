@@ -34,28 +34,22 @@ export async function getPersonsWithRoleInStudyfield(roleId, studyfieldId) {
 }
 
 export async function getLoggedPerson(req) {
-    let user;
     if (req.session.user_id) {
         const userId = req.session.user_id;
-        user = await getPersonById(userId);
+        return getPersonById(userId);
     } else if (req.headers['uid']) {
         const shibbolethId = req.headers['uid'];
-        user = await getPersonByShibbolethId(shibbolethId);
+        return getPersonByShibbolethId(shibbolethId);
     }
-    return user[0];
 }
 
 
 export const getPersonById = (id) => {
-    return knex.select().from('person').where('personId', id)
-        .then(person => person)
-        .catch(error => {
-            throw error
-        });
+    return knex.select().from('person').where('personId', id).first();
 }
 
 export const getPersonByShibbolethId = (shibbolethId) => {
-    return knex.select().from('person').where('shibbolethId', shibbolethId);
+    return knex.select().from('person').where('shibbolethId', shibbolethId).first();
 }
 
 export async function savePerson(personData) {
