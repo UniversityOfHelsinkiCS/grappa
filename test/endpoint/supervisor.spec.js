@@ -21,12 +21,12 @@ test.before(async t => {
 })
 
 const supervisorWithoutId = {
-    firstname: "Testi",
-    lastname: "Testinen",
-    email: "",
-    address: "",
-    title: "",
-    shibbolethId: "",
+    firstname: 'Testi',
+    lastname: 'Testinen',
+    email: '',
+    address: '',
+    title: '',
+    shibbolethId: '',
 }
 
 test('supervisor post & creates id', async t => {

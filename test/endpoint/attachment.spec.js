@@ -28,5 +28,5 @@ test('attachment post & creates id', async t => {
     t.is(res.status, 200);
     const attachments = res.body;
     t.is(attachments.length, 1)
-    t.is(attachments[0].agreementId, agreementId, "Attachment linked to given agreementId")
+    t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 })

@@ -3,12 +3,12 @@ const bookshelf = require('../db/bookshelf')
 const Thesis = require('../db/models/thesis');
 
 const thesisSchema = [
-    "thesis.thesisId",
-    "thesis.title",
-    "urkund",
-    "grade",
-    "graderEval",
-    "printDone"
+    'thesis.thesisId',
+    'thesis.title',
+    'urkund',
+    'grade',
+    'graderEval',
+    'printDone'
 ]
 
 //In case we need all theses

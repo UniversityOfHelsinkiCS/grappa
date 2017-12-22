@@ -13,10 +13,10 @@ export async function getAgreementDraftById(req, res) {
             let draftPersons = await draftService.getAgreementDraftPersonsByAgreementDraftId(agreementDraftId);
             res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPersons: draftPersons });
         } catch (error) {
-            res.status(500).json({ text: "error occured", error: error });
+            res.status(500).json({ text: 'error occured', error: error });
         }
     } else {
-        res.status(500).json({ text: "invalid agreementDraftId" });
+        res.status(500).json({ text: 'invalid agreementDraftId' });
     }
 }
 
@@ -46,7 +46,7 @@ export async function saveAgreementDraft(req, res) {
         }
         res.status(200).json(savedAgreementDraft);
     } catch (error) {
-        res.status(500).json({ text: "error occured", error: error });
+        res.status(500).json({ text: 'error occured', error: error });
     }
 }
 

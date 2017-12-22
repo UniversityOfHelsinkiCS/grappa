@@ -4,7 +4,7 @@ const roleService = require('./RoleService');
 
 //people whose role is supervisor
 export async function getAllSupervisors() {
-    const supervisorRoleId = await roleService.getRoleId("supervisor");
+    const supervisorRoleId = await roleService.getRoleId('supervisor');
     const supervisors = await knex.table('person')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId);
@@ -13,7 +13,7 @@ export async function getAllSupervisors() {
 
 //people whose role is supervisor in a studyfield
 export async function getAllSupervisorsByStudyfield(studyfieldId) {
-    const supervisorRoleId = await roleService.getRoleId("supervisor");
+    const supervisorRoleId = await roleService.getRoleId('supervisor');
     const supervisors = await knex.table('person')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId)
@@ -24,10 +24,10 @@ export async function getAllSupervisorsByStudyfield(studyfieldId) {
 //people who are supervising theses at the moment
 export async function getAllAgreementPersons() {
     return knex.table('agreementPerson')
-        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
-        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
-        .innerJoin('agreement', "agreementPerson.agreementId", "=", 'agreement.agreementId')
-        .innerJoin('thesis', 'agreement.thesisId', "=", "thesis.thesisId")
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .then(persons => {
             return persons;
         });
@@ -36,10 +36,10 @@ export async function getAllAgreementPersons() {
 //people who are supervising theses at the moment in a studyfield
 export async function getAllAgreementPersonsByStudyfield(studyfieldId) {
     return knex.table('agreementPerson')
-        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
-        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
-        .innerJoin('agreement', "agreementPerson.agreementId", "=", 'agreement.agreementId')
-        .innerJoin('thesis', 'agreement.thesisId', "=", "thesis.thesisId")
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .where('studyfieldId', studyfieldId)
         .then(persons => {
             return persons;
@@ -48,8 +48,8 @@ export async function getAllAgreementPersonsByStudyfield(studyfieldId) {
 
 export async function getAgreementPersonsNeedingApproval() {
     return knex.table('agreementPerson')
-        .innerJoin('personWithRole', 'agreementPerson.personRoleId', "=", "personWithRole.personRoleId")
-        .innerJoin('person', 'personWithRole.personId', "=", "person.personId")
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
         .where('approved', false)
         .andWhereNot('agreementId', null)
         .then(persons => {
@@ -79,7 +79,7 @@ export async function saveAgreementPerson(agreementPersonData) {
 }
 
 export async function updateAgreementPerson(agreementPersonData) {
-    console.log("agreementperson datasta approved, service", agreementPersonData.approved)
+    console.log('agreementperson datasta approved, service', agreementPersonData.approved)
     return await knex('agreementPerson')
         .returning('personRoleId')
         .where('personRoleId', '=', agreementPersonData.personRoleId)

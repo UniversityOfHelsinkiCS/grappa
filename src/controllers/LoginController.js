@@ -50,7 +50,7 @@ export async function showUser(req, res) {
 //Used without shibboleth
 export async function fakeLogin(req, res) {
     const shibbolethId = req.params.id;
-    console.log("Faking login with " + shibbolethId);
+    console.log('Faking login with ' + shibbolethId);
     try {
         let user = await personService.getPersonByShibbolethId(shibbolethId);
 

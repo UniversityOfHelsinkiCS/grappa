@@ -21,14 +21,14 @@ export async function updatePerson(req, res) {
         const updateData = removeEmptyKeys(personData);
         let personId = await personService.updatePerson(updateData).then((response) => {
             notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
-            res.status(200).json("person updated succesfully " + response);
+            res.status(200).json('person updated succesfully ' + response);
         }
         ).catch(err => {
             res.status(500).json(err);
         });
     }
     else {
-        res.status(500).json({ text: "person does not exist" });
+        res.status(500).json({ text: 'person does not exist' });
     }
 }
 
@@ -70,10 +70,10 @@ export async function getPersons(req, res) {
         const user = await personService.getLoggedPerson(req);
 
         if (!user) {
-            if (process.env.NODE_ENV !== "dev") {
-                throw new Error("No user found");
+            if (process.env.NODE_ENV !== 'dev') {
+                throw new Error('No user found');
             }
-            console.log("It indeed is a developer.")
+            console.log('It indeed is a developer.')
             persons = await personService.getAllPersons();
             const roles = await roleService.getRolesForAllPersons()
             const responseObject = {
@@ -105,11 +105,11 @@ export async function getPersons(req, res) {
             }
         })
         //Persons who are supervisors / supervising for new thesis / agreement supervisor list 
-        const supervisorId = await roleService.getRoleId("supervisor")
+        const supervisorId = await roleService.getRoleId('supervisor')
         newPersons = await personService.getPersonsWithRole(supervisorId);
         persons = [...new Set([...persons, ...newPersons])];
         //or grading / graders for new thesis / agreement graders list.
-        const graderId = await roleService.getRoleId("grader")
+        const graderId = await roleService.getRoleId('grader')
         newPersons = await personService.getPersonsWithRole(graderId)
         persons = [...new Set([...persons, ...newPersons])];
 

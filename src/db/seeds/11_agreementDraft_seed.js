@@ -19,11 +19,11 @@ exports.seed = function (knex, Promise) {
                     thesisCompletionEta: '1.2.2006',
                     thesisPerformancePlace: 'paikka',
                     studentGradeGoal: 5,
-                    studentTime: "1h viikossa",
-                    supervisorTime: "1h kuussa",
-                    intermediateGoal: "hmm",
-                    meetingAgreement: "meeting on sovittu",
-                    other: "uuu"
+                    studentTime: '1h viikossa',
+                    supervisorTime: '1h kuussa',
+                    intermediateGoal: 'hmm',
+                    meetingAgreement: 'meeting on sovittu',
+                    other: 'uuu'
                 },
                 {
                     agreementDraftId: 2,
@@ -40,11 +40,11 @@ exports.seed = function (knex, Promise) {
                     thesisCompletionEta: '1.2.2006',
                     thesisPerformancePlace: 'paikka',
                     studentGradeGoal: 5,
-                    studentTime: "1h viikossa",
-                    supervisorTime: "1h kuussa",
-                    intermediateGoal: "hmm",
-                    meetingAgreement: "agreement on meeting",
-                    other: "muuta?"
+                    studentTime: '1h viikossa',
+                    supervisorTime: '1h kuussa',
+                    intermediateGoal: 'hmm',
+                    meetingAgreement: 'agreement on meeting',
+                    other: 'muuta?'
                 }
             ]);
         });

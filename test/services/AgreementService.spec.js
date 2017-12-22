@@ -53,7 +53,7 @@ test.serial('saveAgreement call returns agreementId = 4', async t => {
         thesisId: 1,
         responsibleSupervisorId: 1,
         studyfieldId: 1,
-        studentWorkTime: "5h / week",
+        studentWorkTime: '5h / week',
         fake: 0
     };
 

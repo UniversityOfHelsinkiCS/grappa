@@ -28,7 +28,7 @@ export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
     if (supervisorData.personId == null || supervisorData.personId == '') { //save new
         try {
-            const supervisorRoleId = await roleService.getRoleId("supervisor");
+            const supervisorRoleId = await roleService.getRoleId('supervisor');
             const personData = {
                 firstname: supervisorData.firstname,
                 lastname: supervisorData.lastname,
@@ -59,17 +59,17 @@ export async function saveSupervisor(req, res) {
 
             res.status(200).json(personData);
         } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
+            res.status(500).json({ text: 'error occurred', error: err });
         }
     }
     else {
-        res.status(500).json({ text: "person already has id"});
+        res.status(500).json({ text: 'person already has id'});
     }
 }
 
 export async function reviewSupervisor(req, res) {
     let data = req.body;
-    console.log("controller")
+    console.log('controller')
     if (data.personRoleId != null && data.agreementId != null) {
         try {
             let agreementPersonData = {
@@ -80,17 +80,17 @@ export async function reviewSupervisor(req, res) {
                 approverId: data.approverId,
                 approvalDate: new Date().toJSON()
             };
-            console.log("data.approved controller", data.approved);
+            console.log('data.approved controller', data.approved);
             const response = await supervisorService.updateAgreementPerson(agreementPersonData);
             res.status(200).json(data);
 
             notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
 
         } catch (err) {
-            res.status(500).json({ text: "error occured", error: err });
+            res.status(500).json({ text: 'error occured', error: err });
         }
     } else {
-        res.status(500).json({ text: "agreementId and personRoleId are required" });
+        res.status(500).json({ text: 'agreementId and personRoleId are required' });
     }
 
 }

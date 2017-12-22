@@ -4,7 +4,7 @@ const roleService = require('../services/RoleService');
 export async function getGraders(req, res) {
     try {
         // TODO: Filter them
-        const roleId = await roleService.getRoleId("grader");
+        const roleId = await roleService.getRoleId('grader');
         const persons = await personService.getPersonsWithRole(roleId);
         //const persons = await personService.getPersonsWithRoleInStudyfield(roleId, studyfieldId);
         res.status(200).json(persons).end();

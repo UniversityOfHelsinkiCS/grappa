@@ -4,7 +4,7 @@ const Attachment = require('../db/models/attachment');
 const multer = require('multer');
 
 const storage = () => {
-    if (process.env.NODE_ENV === "test") {
+    if (process.env.NODE_ENV === 'test') {
         return multer.memoryStorage();
     }
     return multer.diskStorage({
@@ -17,15 +17,15 @@ const storage = () => {
 const upload = multer({ storage: storage() }).array('attachment')
 
 const attachmentSchema = [
-    "attachmentId",
-    "agreementId",
-    "filename",
-    "type",
-    "savedOnDisk"
+    'attachmentId',
+    'agreementId',
+    'filename',
+    'type',
+    'savedOnDisk'
 ]
 
 export async function saveAttachments(req, res, agreementId) {
-    console.log("Saving to disk");
+    console.log('Saving to disk');
     //TODO: Transaction
 
     try {

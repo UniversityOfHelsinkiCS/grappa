@@ -1,17 +1,17 @@
 const knex = require('../db/connection');
 
 const personSchema = [
-    "person.personId",
-    "shibbolethId",
-    "email",
-    "firstname",
-    "lastname",
-    "person.title",
-    "isRetired",
-    "studentNumber",
-    "address",
-    "phone",
-    "major",
+    'person.personId',
+    'shibbolethId',
+    'email',
+    'firstname',
+    'lastname',
+    'person.title',
+    'isRetired',
+    'studentNumber',
+    'address',
+    'phone',
+    'major',
 ]
 
 export async function getAllPersons() {

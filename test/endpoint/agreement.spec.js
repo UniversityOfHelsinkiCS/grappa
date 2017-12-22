@@ -20,32 +20,32 @@ test.before(async t => {
 })
 
 const agreementForm = {
-    thesisTitle: "my Thesis",
-    thesisStartDate: "9.9.2017",
-    thesisCompletionEta: "9.9.2018",
-    thesisPerformancePlace: "helsinki",
+    thesisTitle: 'my Thesis',
+    thesisStartDate: '9.9.2017',
+    thesisCompletionEta: '9.9.2018',
+    thesisPerformancePlace: 'helsinki',
 
-    thesisSupervisorMain: "matti luukkainen",
-    thesisSupervisorSecond: "sauli niinnistö",
-    thesisSupervisorOther: "",
+    thesisSupervisorMain: 'matti luukkainen',
+    thesisSupervisorSecond: 'sauli niinnistö',
+    thesisSupervisorOther: '',
 
-    thesisWorkStudentTime: "1h viikossa",
-    thesisWorkSupervisorTime: "2h viikossa",
-    thesisWorkIntermediateGoal: "vain taivas on rajana",
-    thesisWorkMeetingAgreement: "joka toinen viikko",
-    thesisWorkOther: "",
+    thesisWorkStudentTime: '1h viikossa',
+    thesisWorkSupervisorTime: '2h viikossa',
+    thesisWorkIntermediateGoal: 'vain taivas on rajana',
+    thesisWorkMeetingAgreement: 'joka toinen viikko',
+    thesisWorkOther: '',
 
-    studentGradeGoal: "5",
+    studentGradeGoal: '5',
 
     studyfieldId: 1,
     fake: false,
     studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "2h viikossa",
-    intermediateGoal: "20 sivua ensi perjantaina",
-    meetingAgreement: "Jepsis",
-    other: "eihän tässä muuta",
-    whoNext: "supervisor",
+    studentWorkTime: '1h viikossa',
+    supervisorWorkTime: '2h viikossa',
+    intermediateGoal: '20 sivua ensi perjantaina',
+    meetingAgreement: 'Jepsis',
+    other: 'eihän tässä muuta',
+    whoNext: 'supervisor',
 }
 
 const agreementWithId = {
@@ -56,11 +56,11 @@ const agreementWithId = {
     studyfieldId: 1,
     fake: 0,
     studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "tsiigaillaan",
-    intermediateGoal: "oispa valmistunut",
-    meetingAgreement: "just just",
-    other: "eihän tässä muuta"
+    studentWorkTime: '1h viikossa',
+    supervisorWorkTime: 'tsiigaillaan',
+    intermediateGoal: 'oispa valmistunut',
+    meetingAgreement: 'just just',
+    other: 'eihän tässä muuta'
 }
 
 //TODO: Test something like thesis: thesisForm post & creates id without attachment
