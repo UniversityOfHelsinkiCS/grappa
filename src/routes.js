@@ -7,7 +7,8 @@ const persons = require('./routes/persons');
 const attachments = require('./routes/attachments');
 const agreementDrafts = require('./routes/agreementDrafts');
 const shibboleth = require('./routes/shibboleth');
-const councilmeeting = require('./routes/councilmeeting')
+const councilmeeting = require('./routes/councilmeeting');
+const notifications = require('./routes/notifications');
 
 const auth = require('./middleware/auth');
 
@@ -24,5 +25,6 @@ module.exports = (app) => {
     app.use('/studyfields', studyfields);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
-    app.use('/councilmeetings', councilmeeting)
+    app.use('/councilmeetings', councilmeeting);
+    app.use('/notifications', notifications);
 };
