@@ -4,6 +4,7 @@ const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const studyfieldService = require('../services/StudyfieldService');
+const notificationService = require('../services/NotificationService');
 
 export async function getTheses(req, res) {
     try {
@@ -92,6 +93,8 @@ export async function saveThesisForm(req, res) {
             agreement: savedAgreement,
             attachments: attachments,
         }
+
+        notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req);
         res.status(200).json(response);
     } catch (error) {
         res.status(500).json(error);
