@@ -153,7 +153,8 @@ export class ThesisManagePage extends Component {
     }
 
     renderGraderSelecter() {
-        const studyfieldGraders = this.props.graders
+        //TODO: Filter persons for listing
+        const studyfieldGraders = this.props.persons
         return <PersonSelecter
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
