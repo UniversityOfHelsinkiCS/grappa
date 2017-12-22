@@ -24,41 +24,59 @@ export async function getAllAgreements(req, res) {
         const user = await personService.getLoggedPerson(req);
         const personId = user.personId;
         let agreements = [];
+        let newAgreements = [];
 
-        const roleToId = await roleService.getRoles();
-        const studyfieldToId = await studyfieldService.getAllStudyfields();
-        const personRoles = await roleService.getPersonRoles(personId);
-        const readableRoles = personRoles.map(role => {
-            return {
-                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
-                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
+        const rolesInStudyfields = await getUsersRoles(user);
+
+        //If user is an admin, get everything
+        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+            agreements = await agreementService.getAllAgreements();
+            res.status(200).json(agreements).end();
+            return;
+        }
+
+        rolesInStudyfields.forEach(async item => {
+            // As resp_prof, print-person and manager persons who are writing theses in studyfield
+            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+                newAgreements = await agreementService.getAgreementsInStudyfield(item.studyfield.studyfieldId);
+                agreements = [...new Set([...agreements, ...newAgreements])];
             }
         })
 
-        //Get all if admin
-        if (readableRoles.find(readable => readable.role === 'admin')) {
-            agreements = await agreementService.getAllAgreements();
-        } else {
-            //First get all user is the "student" of.
-            agreements = await agreementService.getAgreementsByAuthor(personId);
-            //Get all where agreementPerson
-            const newAgreements = await Promise.all(personRoles.map(async role => {
-                const personRoleId = role.personRoleId;
-                const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
-                const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
-                    const agreementId = agreementPerson.agreementId;
-                    const agreement = await agreementService.getAgreementById(agreementId);
-                    return agreement;
-                }))
-                return agreements[0];
-            }))
-            agreements = [...new Set([...agreements, ...newAgreements])];
-        }
-        res.status(200).json(agreements);
-    } catch (err) {
-        res.status(500).json(err);
+        //Get all where agreementPerson
+        newAgreements = await agreementService.getAgreementsByAgreementPerson(personId);
+        agreements = [...new Set([...agreements, ...newAgreements])];
+
+        //Get all where user is the author.
+        newAgreements = await agreementService.getAgreementsByAuthor(personId);
+        agreements = [...new Set([...agreements, ...newAgreements])];
+
+        //Remove duplicates
+        let response = [];
+        agreements.forEach(agreement => {
+            if (!response.find(item => item.agreementId === agreement.agreementId)) {
+                response.push(agreement);
+            }
+        })
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error);
     }
 }
+
+const getUsersRoles = async (user) => {
+    const roleToId = await roleService.getRoles();
+    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const personRoles = await roleService.getPersonRoles(user.personId);
+    return personRoles.map(role => {
+        return {
+            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+        }
+    })
+}
+
 
 export async function getAgreementsByLoggedAuthor(req, res) {
     //return agreements where user is set as author.

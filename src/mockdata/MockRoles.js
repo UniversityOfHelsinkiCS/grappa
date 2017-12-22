@@ -32,5 +32,10 @@ module.exports = [
         roleId: 6,
         name: 'supervisor'
         // Supervisor is working to assist and supervise the student
+    },
+    {
+        roleId: 7,
+        name: 'visitor'
+        // Visitor is a person who is part of a studyfield
     }
 ]
