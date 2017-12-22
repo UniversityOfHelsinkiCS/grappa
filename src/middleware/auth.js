@@ -50,8 +50,8 @@ module.exports.shibRegister = async (req, res, next) => {
             const shibUid = req.headers['uid'];
             const studentNumberRegex = /.*:([0-9]*)$/
             const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
-            let user = userdata[0];
+            let user = await personService.getPersonByShibbolethId(shibUid);
+            
             if (user) {
                 // console.log('existing user ', user);
                 req.session.user_id = user.personId;
