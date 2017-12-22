@@ -21,9 +21,10 @@ export async function getPreviousAgreementById(req, res) {
 export async function getAllAgreements(req, res) {
     //All = return agreements that a user might be interested in.
     try {
+        const user = await personService.getLoggedPerson(req);
+        const personId = user.personId;
         let agreements = [];
-        const loggedPerson = await personService.getLoggedPerson(req);
-        const personId = loggedPerson.personId;
+
         const roleToId = await roleService.getRoles();
         const studyfieldToId = await studyfieldService.getAllStudyfields();
         const personRoles = await roleService.getPersonRoles(personId);
@@ -33,15 +34,15 @@ export async function getAllAgreements(req, res) {
                 role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
             }
         })
-        //First get all user is the "student" of.
-        agreements = await agreementService.getAgreementsByAuthor(personId);
+
         //Get all if admin
         if (readableRoles.find(readable => readable.role === 'admin')) {
-            const allAgreements = await agreementService.getAllAgreements();
-            agreements.concat(allAgreements);
+            agreements = await agreementService.getAllAgreements();
         } else {
+            //First get all user is the "student" of.
+            agreements = await agreementService.getAgreementsByAuthor(personId);
             //Get all where agreementPerson
-            const agreementsWhereAgreementPerson = await Promise.all(personRoles.map(async role => {
+            const newAgreements = await Promise.all(personRoles.map(async role => {
                 const personRoleId = role.personRoleId;
                 const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
                 const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
@@ -51,7 +52,7 @@ export async function getAllAgreements(req, res) {
                 }))
                 return agreements[0];
             }))
-            agreements.concat(agreementsWhereAgreementPerson);
+            agreements = [...new Set([...agreements, ...newAgreements])];
         }
         res.status(200).json(agreements);
     } catch (err) {
