@@ -168,7 +168,10 @@ export class ThesisManagePage extends Component {
                 <ThesisConfirmModal sendSaveThesis={this.handleSaveThesis} closeModal={this.toggleModal} showModal={this.state.showModal} />
                 <div className="ui form">
                     {this.state.editMode ? this.renderControlButtons() : undefined}
-                    <ThesisInformation sendChange={this.handleChange} thesis={this.state.thesis} studyfields={this.props.studyfields} allowEdit={this.state.allowEdit} />
+                    <ThesisInformation sendChange={this.handleChange}
+                        thesis={this.state.thesis}
+                        studyfields={this.props.studyfields}
+                        allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
                     <br />
