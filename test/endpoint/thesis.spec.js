@@ -21,26 +21,26 @@ test.before(async t => {
 
 const thesisForm = {
     id: undefined,
-    authorFirstname: "Etunimi",
-    authorLastname: "Sukunimi",
-    authorEmail: "Email",
-    title: "Annin Grady",
-    urkund: "https://",
-    grade: "4",
+    authorFirstname: 'Etunimi',
+    authorLastname: 'Sukunimi',
+    authorEmail: 'Email',
+    title: 'Annin Grady',
+    urkund: 'https://',
+    grade: '4',
     graders: [{
-        address: "Intiankatu",
-        email: "thomas@tarkastaja.com",
-        firstname: "Thomas",
+        address: 'Intiankatu',
+        email: 'thomas@tarkastaja.com',
+        firstname: 'Thomas',
         isRetired: 0,
-        lastname: "CS-Tarkastaja",
-        major: "mathematics",
+        lastname: 'CS-Tarkastaja',
+        major: 'mathematics',
         personId: 5,
-        phone: "050 1234567",
-        shibbolethId: "thomastarkastajashibboId",
-        studentNumber: "876548321",
-        title: "",
+        phone: '050 1234567',
+        shibbolethId: 'thomastarkastajashibboId',
+        studentNumber: '876548321',
+        title: '',
     }],
-    graderEval: "Tarkastajien esittely",
+    graderEval: 'Tarkastajien esittely',
     studyfieldId: 2,
     councilmeetingId: 1,
     printDone: false,
@@ -53,18 +53,18 @@ const thesisForm = {
 const graders = thesisForm.graders
 
 const thesisWithId = {
-    title: "Annin Grady",
-    urkund: "https://",
-    grade: "4",
-    graderEval: "Tarkastajien esittely",
+    title: 'Annin Grady',
+    urkund: 'https://',
+    grade: '4',
+    graderEval: 'Tarkastajien esittely',
     printDone: 0
 }
 
 const person = {
     shibbolethId: null,
-    firstname: "Etunimi",
-    lastname: "Sukunimi",
-    email: "Email",
+    firstname: 'Etunimi',
+    lastname: 'Sukunimi',
+    email: 'Email',
     title: null,
     isRetired: null,
     studentNumber: null,
@@ -107,9 +107,9 @@ test('thesisForm post & creates id without attachment', async t => {
     delete agreement.thesisId;
     delete agreement.authorId;
     //Check the contents are right
-    t.deepEqual(thesis, thesisWithId, "Thesis is correct");
-    t.deepEqual(author, person, "Author person is correct");
-    t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
+    t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
+    t.deepEqual(author, person, 'Author person is correct');
+    t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
 })
 
 test('thesis get all', async t => {
@@ -152,8 +152,8 @@ test('thesisForm post & creates id with attachment', async t => {
     delete agreement.authorId;
     delete attachments[0].agreementId;
     //Check the contents are right
-    t.deepEqual(thesis, thesisWithId, "Thesis is correct");
-    t.deepEqual(author, person, "Author person is correct");
-    t.deepEqual(agreement, fakeAgreement, "Agreement is correct");
-    t.deepEqual(attachments[0], attachment, "Attachments are correct");
+    t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
+    t.deepEqual(author, person, 'Author person is correct');
+    t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
+    t.deepEqual(attachments[0], attachment, 'Attachments are correct');
 })

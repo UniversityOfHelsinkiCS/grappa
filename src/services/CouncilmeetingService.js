@@ -1,10 +1,10 @@
 const knex = require('../db/connection');
 
 const councilmeetinSchema = [
-    "councilmeetingId",
-    "date",
-    "instructorDeadline",
-    "studentDeadline",
+    'councilmeetingId',
+    'date',
+    'instructorDeadline',
+    'studentDeadline',
 ]
 
 export async function getAllCouncilmeetings() {

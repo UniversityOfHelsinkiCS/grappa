@@ -34,11 +34,11 @@ const testAgreementDraft = {
     thesisCompletionEta: '1.2.2006',
     thesisPerformancePlace: 'paikka',
     studentGradeGoal: 5,
-    studentTime: "1h viikossa",
-    supervisorTime: "1h kuussa",
-    intermediateGoal: "hmm",
-    meetingAgreement: "juu",
-    other: "uuu"
+    studentTime: '1h viikossa',
+    supervisorTime: '1h kuussa',
+    intermediateGoal: 'hmm',
+    meetingAgreement: 'juu',
+    other: 'uuu'
 };
 
 const agreementDraftPersons = [{
@@ -72,7 +72,7 @@ test('get agreementDraft by ID', async t => {
     const agreementDraftPersons = res.body.agreementDraftPersons;
 
     delete agreementDraft.agreementDraftId;
-    t.deepEqual(agreementDraft, draft, "Drafts equal");
-    t.deepEqual(agreementDraftPersons, draftPersons, "Persons equal");
+    t.deepEqual(agreementDraft, draft, 'Drafts equal');
+    t.deepEqual(agreementDraftPersons, draftPersons, 'Persons equal');
 })
 

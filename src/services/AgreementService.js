@@ -3,22 +3,22 @@ const bookshelf = require('../db/bookshelf');
 const Agreement = require('../db/models/agreement');
 
 const agreementSchema = [
-    "agreement.agreementId",
-    "authorId",
-    "agreement.thesisId",
-    "responsibleSupervisorId",
-    "agreement.studyfieldId",
-    "fake",
-    "startDate",
-    "completionEta",
-    "performancePlace",
-    "studentGradeGoal",
-    "studentWorkTime",
-    "supervisorWorkTime",
-    "intermediateGoal",
-    "meetingAgreement",
-    "other",
-    "whoNext"
+    'agreement.agreementId',
+    'authorId',
+    'agreement.thesisId',
+    'responsibleSupervisorId',
+    'agreement.studyfieldId',
+    'fake',
+    'startDate',
+    'completionEta',
+    'performancePlace',
+    'studentGradeGoal',
+    'studentWorkTime',
+    'supervisorWorkTime',
+    'intermediateGoal',
+    'meetingAgreement',
+    'other',
+    'whoNext'
 ]
 
 export const getAgreementById = (agreementId) => {
@@ -158,15 +158,15 @@ in the agreement approval process we are at.
 */
 //REDO THIS LATER
 export const getAgreementReceiver = (id) => {
-    console.log("getAgreementReceiver", id);
+    console.log('getAgreementReceiver', id);
     return knex.select('whoNext').from('agreement')
         .where('agreementId', id)
         .then(agreement => {
-            console.log("whoNext", agreement[0].whoNext)
-            if (agreement[0].whoNext === "supervisor") {
-                return "student";
+            console.log('whoNext', agreement[0].whoNext)
+            if (agreement[0].whoNext === 'supervisor') {
+                return 'student';
             } else {
-                return "supervisor";
+                return 'supervisor';
             }
         });
 }

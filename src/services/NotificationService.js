@@ -15,7 +15,9 @@ export function getAllNotifications() {
 
 export async function createNotification(type, req) {
     const person = await personService.getLoggedPerson(req);
-    return saveNotification(type, person.personId);
+    const personId = person ? person.personId : null;
+
+    return saveNotification(type, personId);
 }
 
 export function saveNotification(type, user) {

@@ -14,7 +14,7 @@
     "db:reset": "rm ./src/db/grappa2db.sqlite && knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest && knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
-    "lint": "eslint ./**/*.js || true"
+    "lint": "eslint --ext .js . || true"
   },
   "repository": {
     "type": "git",
@@ -56,7 +56,12 @@
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.26.0",
     "coveralls": "^2.13.1",
-    "eslint": "^4.7.1",
+    "eslint": "^4.13.1",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "nodemon": "~1.12.0",
     "nyc": "^11.2.1",
     "reqres": "^2.0.0",
@@ -80,10 +85,5 @@
       "babel-register"
     ],
     "babel": "inherit"
-  },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 6
-    }
   }
 }

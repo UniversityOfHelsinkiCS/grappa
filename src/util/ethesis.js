@@ -137,7 +137,7 @@ function generateMetaXML(meta){
 
 async function eThesisAPI(meta, pdfAddr){
     const fs = require('fs');
-    const JSZip = require("jszip");
+    const JSZip = require('jszip');
     
     const pdf = await fs.readFileSync(pdfAddr);
     
@@ -157,7 +157,7 @@ async function eThesisAPI(meta, pdfAddr){
     .on('finish', function () {
         // JSZip generates a readable stream with a "end" event,
         // but is piped here in a writable stream which emits a "finish" event.
-        console.log("out.zip written.");
+        console.log('out.zip written.');
     });
     //*/
 

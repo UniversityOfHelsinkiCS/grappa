@@ -1,6 +1,7 @@
 require('babel-polyfill');
 const draftService = require('../services/DraftService');
 const supervisorService = require('../services/SupervisorService');
+const notificationService = require('../services/NotificationService');
 const express = require('express');
 const app = express();
 
@@ -12,10 +13,10 @@ export async function getAgreementDraftById(req, res) {
             let draftPersons = await draftService.getAgreementDraftPersonsByAgreementDraftId(agreementDraftId);
             res.status(200).json({ agreementDraft: agreementDraft, agreementDraftPersons: draftPersons });
         } catch (error) {
-            res.status(500).json({ text: "error occured", error: error });
+            res.status(500).json({ text: 'error occured', error: error });
         }
     } else {
-        res.status(500).json({ text: "invalid agreementDraftId" });
+        res.status(500).json({ text: 'invalid agreementDraftId' });
     }
 }
 
@@ -31,10 +32,12 @@ export async function saveAgreementDraft(req, res) {
             let agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
             // TODO: why is agreementResponse always 1 here??
             savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse)
+            notificationService.createNotification('AGREEMENT_DRAFT_UPDATE_ONE_SUCCESS', req);
         } else {
             let agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
             savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse);
             agreementDraftId = agreementResponse;
+            notificationService.createNotification('AGREEMENT_DRAFT_SAVE_ONE_SUCCESS', req);
         }
         if (data.emails) {
             let supervisors = await getSupervisorsByEmails(data.emails);
@@ -43,7 +46,7 @@ export async function saveAgreementDraft(req, res) {
         }
         res.status(200).json(savedAgreementDraft);
     } catch (error) {
-        res.status(500).json({ text: "error occured", error: error });
+        res.status(500).json({ text: 'error occured', error: error });
     }
 }
 

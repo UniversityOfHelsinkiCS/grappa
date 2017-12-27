@@ -14,7 +14,7 @@ test('get > hello world -greeting', async t => {
 	t.is(res.status, 200);
 	t.is(
 		JSON.stringify(res.body), 
-		JSON.stringify({ text: "Hello World!" })
+		JSON.stringify({ text: 'Hello World!' })
 	);
 });
 
@@ -28,7 +28,7 @@ test('get > /hellouser -greeting when name NOT provided', async t => {
 	t.is(res.status, 200);
 	t.is(
 		JSON.stringify(res.body), 
-		JSON.stringify({ text: "Hello World!" })
+		JSON.stringify({ text: 'Hello World!' })
 	);
 });
 
