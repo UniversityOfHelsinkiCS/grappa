@@ -39,8 +39,8 @@ export default class ThesisInformation extends Component {
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}>
                     <option key="0" value="">Select {label}</option>
-                    {fieldArray.map((field, index) =>
-                        <option key={index} value={field.id}>
+                    {fieldArray.map(field =>
+                        <option key={field.id} value={field.id}>
                             {field.name}
                         </option>
                     )}
@@ -76,10 +76,12 @@ export default class ThesisInformation extends Component {
             { id: "4", name: "4" },
             { id: "5", name: "5" }
         ]
+        const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } })
+
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField("Studyfield", this.props.studyfields, "studyfieldId", !this.props.allowEdit)}
+                    {this.renderDropdownField("Studyfield", studyfields, "studyfieldId", !this.props.allowEdit)}
                     {this.renderTextField("Title", "title", "Title", !this.props.allowEdit)}
                     {this.renderTextField("Urkund-link", "urkund", "Link to Urkund", !this.props.allowEdit)}
 
