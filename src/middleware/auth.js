@@ -1,4 +1,5 @@
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
 
 /**
  * Authentication middleware that is called before any requests.
@@ -29,7 +30,20 @@ module.exports.checkAuth = async (req, res, next) => {
     }
 };
 
+module.exports.checkAdmin = async (req, res, next) => {
+    const user = await personService.getLoggedPerson(req);
+    try {
+        const roles = await roleService.getRoles(user.personId);
 
+        if (roles.filter(role => role.name === 'admin').length > 0) {
+            next();
+        } else {
+            res.status(404).end();
+        }
+    } catch (err) {
+        res.status(404).end();
+    }
+};
 
 module.exports.shibRegister = async (req, res, next) => {
     // fake shibboleth headers for testing
