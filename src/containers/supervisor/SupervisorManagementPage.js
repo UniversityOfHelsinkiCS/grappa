@@ -15,7 +15,6 @@ export class SupervisorManagementPage extends Component {
     }
 
     componentDidMount() {
-        this.props.getAgreementPersons();
         document.title = "Supervisor Management";
     }
 
