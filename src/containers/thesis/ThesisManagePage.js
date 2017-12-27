@@ -67,7 +67,13 @@ export class ThesisManagePage extends Component {
         thesis.authorFirstname = author.firstname;
         thesis.authorLastname = author.lastname;
         thesis.authorEmail = author.email;
-        thesis.graders = [];
+        thesis.graders = this.props.persons.filter(person =>
+            this.props.roles.find(role =>
+                role.personId === person.personId &&
+                role.agreementId === agreement.agreementId
+            )
+        );
+        console.log(thesis.graders);
         thesis.thesisEmails = {
             graderEvalReminder: undefined,
             printReminder: undefined,
@@ -153,7 +159,6 @@ export class ThesisManagePage extends Component {
     }
 
     renderGraderSelecter() {
-        //TODO: Filter persons for listing
         const studyfieldGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name == 'grader' || role.name == 'supervisor')
