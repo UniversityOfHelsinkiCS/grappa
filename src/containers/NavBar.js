@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { connect } from "react-redux";
-import { getPermissions } from "../util/rolePermissions";
-import { login, logout } from "../containers/user/userActions";
+import { connect } from 'react-redux';
+import { getPermissions } from '../util/rolePermissions';
+import { login, logout } from '../containers/user/userActions';
 
 //TODO: redux persistent storage & fetch in middleware
-import { getStudyfields } from "../containers/studyfield/studyfieldActions"
-import { getAgreements } from "../containers/agreement/agreementActions"
-import { getCouncilmeetings } from "../containers/councilmeeting/councilmeetingActions"
-import { getTheses } from "../containers/thesis/thesisActions"
-import { getPersons } from "../containers/person/personActions"
+import { getStudyfields } from '../containers/studyfield/studyfieldActions';
+import { getAgreements } from '../containers/agreement/agreementActions';
+import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingActions';
+import { getTheses } from '../containers/thesis/thesisActions';
+import { getPersons } from '../containers/person/personActions';
+import { getNotifications } from './notifications/notificationsAction';
 
 export class NavBar extends Component {
     constructor() {
@@ -35,6 +36,7 @@ export class NavBar extends Component {
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
+            this.props.getNotifications();
             this.setState({ loaded: true })
         }
     }
@@ -103,6 +105,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getPersons() {
         dispatch(getPersons());
+    },
+    getNotifications() {
+        dispatch(getNotifications());
     }
 });
 
