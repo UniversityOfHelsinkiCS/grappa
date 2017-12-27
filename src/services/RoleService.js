@@ -13,6 +13,29 @@ export async function getRoleId(roleName) {
     return role.roleId;
 }
 
+export async function savePersonRole(personWithRole) {
+    return knex('personWithRole').returning('personRoleId')
+        .insert(personWithRole).then(personRoleIds =>
+            knex.select().from('personWithRole').where('personRoleId', personRoleIds[0]).first()
+        );
+}
+
+export async function saveAgreementPerson(agreementPerson) {
+    return knex('agreementPerson').returning('agreementPersonId')
+        .insert(agreementPerson).then(agreementPersonIds =>
+            knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
+        );
+}
+
+export async function getPersonRole(personId, studyfieldId, roleName) {
+    return knex.select().from('personWithRole')
+        .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
+        .where('role.name', roleName)
+        .where('personWithRole.studyfieldId', studyfieldId)
+        .where('personWithRole.personId', personId)
+        .first();
+}
+
 const roleSchema = [
     'personWithRole.personRoleId',
     'personWithRole.personId',

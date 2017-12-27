@@ -37,7 +37,15 @@ export async function getTheses(req, res) {
         newTheses = await thesisService.getThesesByPersonId(user.personId)
         theses = [...new Set([...theses, ...newTheses])];
 
-        res.status(200).json(theses).end();
+        // Remove duplicates
+        let response = [];
+        theses.forEach(thesis => {
+            if (!response.find(item => item.thesisId === thesis.thesisId)) {
+                response.push(thesis);
+            }
+        })
+
+        res.status(200).json(response).end();
     } catch (error) {
         res.status(500).json(error).end();
     }
@@ -57,6 +65,7 @@ export async function saveThesisForm(req, res) {
         const attachmentObject = await attachmentService.saveAttachments(req, res, agreement.agreementId);
         const attachments = attachmentObject.attachments;
         let thesis = attachmentObject.json;
+
         let person = {
             email: thesis.authorEmail,
             firstname: thesis.authorFirstname,
@@ -72,11 +81,33 @@ export async function saveThesisForm(req, res) {
         delete thesis.studyfieldId;
         let savedGraders = []
         if (thesis.graders) {
-            //TODO: Handle creating new links between persons and agreement
-            /*
-            savedGraders = thesis.graders.map(grader => {
-                //return personroleservice.linkGraders
-            })*/
+            thesis.graders.forEach(async grader => {
+                const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader')
+                if (personRole) {
+                    //If person exists as a grader, link them
+                    const agreementPerson = {
+                        agreementId: agreement.agreementId,
+                        personRoleId: personRole.personRoleId,
+                    }
+
+                    roleService.saveAgreementPerson(agreementPerson)
+                } else {
+                    //Else make the person a grader.
+                    const roleId = await roleService.getRoleId('grader');
+
+                    let personWithRole = {
+                        personId: grader.personId,
+                        studyfieldId: agreement.studyfieldId,
+                        roleId
+                    }
+                    personWithRole = await roleService.savePersonRole(personWithRole);
+                    const agreementPerson = {
+                        agreementId: agreement.agreementId,
+                        personRoleId: personWithRole.personRoleId,
+                    }
+                    roleService.saveAgreementPerson(agreementPerson)
+                }
+            })
             delete thesis.graders
         }
         //TODO: Email system
@@ -97,6 +128,7 @@ export async function saveThesisForm(req, res) {
         notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.studyfieldId);
         res.status(200).json(response);
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 }

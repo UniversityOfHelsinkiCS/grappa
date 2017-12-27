@@ -11,6 +11,10 @@ export const getAllStudyfields = () => {
         .then(studyfield => studyfield);
 }
 
+export const getStudyfieldId = (name) => {
+    return knex.select(studyfieldSchema).from('studyfield').where('name', name).first();
+}
+
 export const getStudyfield = (studyfieldId) => {
     return knex.select(studyfieldSchema).from('studyfield').where('studyfieldId', studyfieldId).first();
 }
