@@ -39,8 +39,8 @@ export default class ThesisInformation extends Component {
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}>
                     <option key="0" value="">Select {label}</option>
-                    {fieldArray.map((field, index) =>
-                        <option key={index} value={field.id}>
+                    {fieldArray.map(field =>
+                        <option key={field.id} value={field.id}>
                             {field.name}
                         </option>
                     )}
