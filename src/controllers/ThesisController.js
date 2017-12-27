@@ -37,7 +37,15 @@ export async function getTheses(req, res) {
         newTheses = await thesisService.getThesesByPersonId(user.personId)
         theses = [...new Set([...theses, ...newTheses])];
 
-        res.status(200).json(theses).end();
+        // Remove duplicates
+        let response = [];
+        theses.forEach(thesis => {
+            if (!response.find(item => item.thesisId === thesis.thesisId)) {
+                response.push(thesis);
+            }
+        })
+
+        res.status(200).json(response).end();
     } catch (error) {
         res.status(500).json(error).end();
     }
@@ -81,12 +89,12 @@ export async function saveThesisForm(req, res) {
                         agreementId: agreement.agreementId,
                         personRoleId: personRole.personRoleId,
                     }
-                    
+
                     roleService.saveAgreementPerson(agreementPerson)
                 } else {
                     //Else make the person a grader.
                     const roleId = await roleService.getRoleId('grader');
-                    
+
                     let personWithRole = {
                         personId: grader.personId,
                         studyfieldId: agreement.studyfieldId,
@@ -96,7 +104,7 @@ export async function saveThesisForm(req, res) {
                     const agreementPerson = {
                         agreementId: agreement.agreementId,
                         personRoleId: personWithRole.personRoleId,
-                    }                    
+                    }
                     roleService.saveAgreementPerson(agreementPerson)
                 }
             })

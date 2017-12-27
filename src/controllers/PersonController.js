@@ -118,11 +118,19 @@ export async function getPersons(req, res) {
         newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
         persons = [...new Set([...persons, ...newPersons])];
 
+        // Remove duplicates
+        let responsePersons = [];
+        persons.forEach(person => {
+            if (!responsePersons.find(item => item.personId === person.personId)) {
+                responsePersons.push(person);
+            }
+        })
+
         //All required persons found, now role objects for front
         const roles = await roleService.getRolesForAllPersons()
         const responseObject = {
             roles,
-            persons
+            persons: responsePersons,
         }
         res.status(200).json(responseObject);
     } catch (error) {
