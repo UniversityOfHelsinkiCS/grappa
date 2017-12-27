@@ -154,12 +154,13 @@ export class ThesisManagePage extends Component {
 
     renderGraderSelecter() {
         //TODO: Filter persons for listing
-        const studyfieldGraders = this.props.persons.filter(person => {
+        const studyfieldGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
-                (role.name == 'grader' || role.name == 'supervisor') && role.personId == person.personId &&
-                role.studyfieldId == this.state.thesis.studyfieldId
+                (role.name == 'grader' || role.name == 'supervisor')
+                && role.personId == person.personId
+                && role.studyfieldId == this.state.thesis.studyfieldId
             )
-        })
+        )
         return <PersonSelecter
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
