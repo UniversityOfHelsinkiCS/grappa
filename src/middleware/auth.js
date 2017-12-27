@@ -62,10 +62,10 @@ module.exports.shibRegister = async (req, res, next) => {
             // console.log('unknown shib session');
             req.session.shib_session_id = req.headers['shib-session-id'];
             const shibUid = req.headers['uid'];
-            const studentNumberRegex = /.*:([0-9]*)$/
+            const studentNumberRegex = /.*:([0-9]*)$/;
             const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
             let user = await personService.getPersonByShibbolethId(shibUid);
-            
+
             if (user) {
                 // console.log('existing user ', user);
                 req.session.user_id = user.personId;
@@ -78,19 +78,32 @@ module.exports.shibRegister = async (req, res, next) => {
                 await personService.updatePerson(user);
             } else {
                 // console.log('new user logged in');
-                user = {
-                    firstname: req.headers['givenname'],
-                    lastname: req.headers['sn'],
-                    studentNumber,
-                    shibbolethId: req.headers['uid'],
-                    email: req.headers['mail'],
-                    // updated_at: Date.now()
-                };
-                await personService.savePerson(user);
+                const person = await personService.getPersonByDetails(req.headers['givenname'], req.headers['sn'], req.headers['mail']);
+
+                if (person) {
+                    // Person is already added to db, only need to update shibboleth id
+                    person.shibbolethId = req.headers['uid'];
+                    await personService.updatePerson(person);
+                } else {
+                    user = {
+                        firstname: req.headers['givenname'],
+                        lastname: req.headers['sn'],
+                        studentNumber,
+                        shibbolethId: req.headers['uid'],
+                        email: req.headers['mail']
+                        // updated_at: Date.now()
+                    };
+
+                    try {
+                        await personService.savePerson(user);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
             }
         }
     } else {
         // console.log('userid ', req.session.user_id);
     }
     next();
-}
+};

@@ -56,6 +56,16 @@ test.serial('updatePerson', async t => {
     t.deepEqual(returnValue, 1);
 });
 
+test.serial('getPersonByDetails', async t => {
+    const person = await personService.getPersonByDetails('Amanda', 'Admin', 'amanda@admin.com');
+    t.truthy(person);
+});
+
+test.serial('getPersonByDetails not found', async t => {
+    const person = await personService.getPersonByDetails('Amanda', 'NonAdmin', 'amanda@admin.com');
+    t.falsy(person);
+});
+
 // test.serial('getPersonById returns right person', async t => {
 //     let id = '1';
 //     let person = await personService.getPersonById(id);
