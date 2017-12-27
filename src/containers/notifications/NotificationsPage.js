@@ -14,6 +14,7 @@ const NotificationsPage = ({ notifications, persons }) => {
                 <thead>
                     <tr>
                         <th>Tapahtuma</th>
+                        <th></th>
                         <th>Aika</th>
                         <th>Käyttäjä</th>
                     </tr>
@@ -22,6 +23,7 @@ const NotificationsPage = ({ notifications, persons }) => {
                     {notifications.map(notification => (
                         <tr key={notification.notificationId}>
                             <td>{notification.type}</td>
+                            <td>{notification.studyfieldId}</td>
                             <td>{notification.timestamp}</td>
                             <td>{getPersonNameForId(notification.userId)}</td>
                         </tr>

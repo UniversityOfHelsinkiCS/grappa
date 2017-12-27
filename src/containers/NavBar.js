@@ -36,7 +36,11 @@ export class NavBar extends Component {
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
-            this.props.getNotifications();
+
+            if (newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
+                this.props.getNotifications();
+            }
+            
             this.setState({ loaded: true })
         }
     }
