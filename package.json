@@ -78,7 +78,7 @@
     "test:win": "ava",
     "report": "nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "eslint ./**/*.js || true"
+    "lint": "eslint --ext .js src || true"
   },
   "ava": {
     "files": [

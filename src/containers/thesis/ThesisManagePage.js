@@ -1,16 +1,15 @@
-import React, { Component } from "react";
-import { Link } from "react-router"
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { saveThesis, updateThesis, deleteThesis } from './thesisActions';
 import { sendReminder } from '../email/emailActions';
 
-import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
-import ThesisInformation from "../../components/thesis/ThesisInformation";
-import AttachmentAdder from "../../components/attachment/AttachmentAdder";
-import PersonSelecter from "../../components/person/PersonSelecter";
-import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
-import ThesisEmails from "../../components/thesis/ThesisEmails";
+import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
+import ThesisInformation from '../../components/thesis/ThesisInformation';
+import AttachmentAdder from '../../components/attachment/AttachmentAdder';
+import PersonSelecter from '../../components/person/PersonSelecter';
+import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
+import ThesisEmails from '../../components/thesis/ThesisEmails';
 
 export class ThesisManagePage extends Component {
     /**
@@ -23,16 +22,16 @@ export class ThesisManagePage extends Component {
         this.state = {
             thesis: {
                 id: undefined,
-                authorFirstname: "",
-                authorLastname: "",
-                authorEmail: "",
-                title: "",
-                urkund: "",
-                grade: "",
+                authorFirstname: '',
+                authorLastname: '',
+                authorEmail: '',
+                title: '',
+                urkund: '',
+                grade: '',
                 graders: [],
-                graderEval: "",
-                studyfieldId: "",
-                councilmeetingId: "",
+                graderEval: '',
+                studyfieldId: '',
+                councilmeetingId: '',
                 printDone: undefined,
                 thesisEmails: {
                     graderEvalReminder: undefined,
@@ -86,9 +85,9 @@ export class ThesisManagePage extends Component {
         const thesisIsNew = !this.state.thesis.id;
         const form = new FormData();
         this.state.attachments.forEach(attachment => {
-            form.append("attachment", attachment);
+            form.append('attachment', attachment);
         })
-        form.append("json", JSON.stringify(this.state.thesis));
+        form.append('json', JSON.stringify(this.state.thesis));
         if (thesisIsNew) {
             this.props.saveThesis(form);
         } else {
@@ -113,7 +112,7 @@ export class ThesisManagePage extends Component {
     }
 
     handleChange = (fieldName, fieldValue) => {
-        console.log("thesis." + fieldName + " = " + fieldValue);
+        console.log('thesis.' + fieldName + ' = ' + fieldValue);
         const thesis = this.state.thesis;
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
@@ -169,7 +168,7 @@ export class ThesisManagePage extends Component {
         return <PersonSelecter
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
-            changeList={(list) => this.handleChange("graders", list)}
+            changeList={(list) => this.handleChange('graders', list)}
         />
     }
 

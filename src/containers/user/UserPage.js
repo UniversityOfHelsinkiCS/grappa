@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { login } from "./userActions";
+import { connect } from 'react-redux';
+import { login } from './userActions';
 import UserStudyfieldSelector from './UserStudyfieldSelector';
 
 export class UserPage extends Component {
@@ -9,13 +9,13 @@ export class UserPage extends Component {
         super();
         this.state = {
             personId: 1,
-            name: "Unnamed",
-            role: "student"
+            name: 'Unnamed',
+            role: 'student'
         }
     }
 
     componentDidMount() {
-        document.title = "Grappa: Main page";
+        document.title = 'Grappa: Main page';
     }
 
     handleRoleChange = (event) => {
