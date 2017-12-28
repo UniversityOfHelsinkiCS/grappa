@@ -37,7 +37,7 @@ test('study field can be set to visitor role', async t => {
         name: 'visitor'
     };
 
-    const res = await request(makeApp(1))
+    const res = await request(makeApp(personId))
         .post('/roles')
         .send(visitorRoleForm);
 
