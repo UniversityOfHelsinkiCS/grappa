@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login } from "./userActions";
+import UserStudyfieldSelector from './UserStudyfieldSelector';
 
 export class UserPage extends Component {
 
@@ -27,6 +28,24 @@ export class UserPage extends Component {
         return (
             <div>
                 <div className="ui segment">
+                    <h2>{this.props.user.firstname} {this.props.user.lastname}</h2>
+                    <div className="ui list">
+                        <div className="item">
+                            <span className="header">Student number</span> {this.props.user.studentNumber}
+                        </div>
+                        <div className="item">
+                            <span className="header">Email</span> {this.props.user.email}
+                        </div>
+                        <div className="item">
+                            <span className="header">Address</span> {this.props.user.address}
+                        </div>
+                        <div className="item">
+                            <span className="header">Phone</span> {this.props.user.phone}
+                        </div>
+                    </div>
+                    <UserStudyfieldSelector />
+                </div>
+                <div className="ui segment">
                     <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
                         <option value="">Choose a role</option>
                         {this.props.persons.map((person, index) =>
@@ -35,9 +54,9 @@ export class UserPage extends Component {
                     </select>
                     <p>Your roles are: {this.props.user.roles ?
                         this.props.user.roles.map(roleObject => {
-                            return roleObject.studyfield + ": " + roleObject.role;
+                            return roleObject.studyfield + ': ' + roleObject.role;
                         })
-                        : "No user in redux"} </p>
+                        : 'No user in redux'} </p>
                 </div>
             </div>
         );

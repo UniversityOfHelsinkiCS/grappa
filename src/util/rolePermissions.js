@@ -75,3 +75,6 @@ const permissions = {
         }
     },
 }
+
+// Student & visitor are now same role
+permissions.visitor = permissions.student;

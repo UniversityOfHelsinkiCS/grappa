@@ -13,7 +13,7 @@ export default class Section extends Component {
             });
 
         return (
-            <div key={"section" + this.props.sectionKey}><br />
+            <div key={`section${this.props.sectionKey}`}><br />
                 <h1 className="ui dividing header">{this.props.header}</h1>
                 {fieldList}
             </div>
