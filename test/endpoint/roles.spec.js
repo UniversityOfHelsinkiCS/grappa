@@ -73,11 +73,10 @@ test('visitor role studyfield can be updated', async t => {
 
     const visitorRoleForm = {
         studyfieldId: 2,
-        personId: personId,
         name: 'visitor'
     };
 
-    const res = await request(makeApp(1))
+    const res = await request(makeApp(personId))
         .put('/roles')
         .send(visitorRoleForm);
 
