@@ -18,7 +18,7 @@ export default class ThesisList extends Component {
                 <tbody>
                     {this.props.theses.map(thesis =>
                         <tr key={thesis.thesisId}>
-                            <td>{thesis.authorLastname + ", " + thesis.authorFirstname}</td>
+                            <td>{thesis.authorLastname + ', ' + thesis.authorFirstname}</td>
                             <td>{thesis.email}</td>
                             <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                             <td>{thesis.grade}</td>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class ThesisInformation extends Component {
 
@@ -20,7 +20,7 @@ export default class ThesisInformation extends Component {
                 <label>{label}</label>
                 <input
                     type="text"
-                    disabled={disabled ? "true" : ""}
+                    disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
                     placeholder={placeholder}
@@ -35,7 +35,7 @@ export default class ThesisInformation extends Component {
                 <label>{label}</label>
                 <select
                     className="ui fluid search dropdown"
-                    disabled={disabled ? "true" : ""}
+                    disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}>
                     <option key="0" value="">Select {label}</option>
@@ -52,50 +52,50 @@ export default class ThesisInformation extends Component {
     renderThesisAuthor(disabled) {
         return (
             <div className="three fields">
-                {this.renderTextField("First name", "authorFirstname", "First Name", disabled)}
-                {this.renderTextField("Last name", "authorLastname", "Last Name", disabled)}
-                {this.renderTextField("Email", "authorEmail", "Email Address", disabled)}
+                {this.renderTextField('First name', 'authorFirstname', 'First Name', disabled)}
+                {this.renderTextField('Last name', 'authorLastname', 'Last Name', disabled)}
+                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled)}
             </div>
         );
     }
 
     renderThesisInformation() {
         const oldGradeFields = [
-            { id: "Approbatur", name: "Approbatur" },
-            { id: "Lubenter Approbatur", name: "Lubenter Approbatur" },
-            { id: "Non Sine Laude Approbatur", name: "Non Sine Laude Approbatur" },
-            { id: "Cum Laude Approbatur", name: "Cum Laude Approbatur" },
-            { id: "Magna Cum Laude Approbatur", name: "Magna Cum Laude Approbatur" },
-            { id: "Eximia Cum Laude Approbatur", name: "Eximia Cum Laude Approbatur" },
-            { id: "Laudatur", name: "Laudatur" },
+            { id: 'Approbatur', name: 'Approbatur' },
+            { id: 'Lubenter Approbatur', name: 'Lubenter Approbatur' },
+            { id: 'Non Sine Laude Approbatur', name: 'Non Sine Laude Approbatur' },
+            { id: 'Cum Laude Approbatur', name: 'Cum Laude Approbatur' },
+            { id: 'Magna Cum Laude Approbatur', name: 'Magna Cum Laude Approbatur' },
+            { id: 'Eximia Cum Laude Approbatur', name: 'Eximia Cum Laude Approbatur' },
+            { id: 'Laudatur', name: 'Laudatur' },
         ]
         const gradeFields = [
-            { id: "1", name: "1" },
-            { id: "2", name: "2" },
-            { id: "3", name: "3" },
-            { id: "4", name: "4" },
-            { id: "5", name: "5" }
+            { id: '1', name: '1' },
+            { id: '2', name: '2' },
+            { id: '3', name: '3' },
+            { id: '4', name: '4' },
+            { id: '5', name: '5' }
         ]
         const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } })
 
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField("Studyfield", studyfields, "studyfieldId", !this.props.allowEdit)}
-                    {this.renderTextField("Title", "title", "Title", !this.props.allowEdit)}
-                    {this.renderTextField("Urkund-link", "urkund", "Link to Urkund", !this.props.allowEdit)}
+                    {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
+                    {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
+                    {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
 
                 </div>
                 <div className="three fields">
                     {this.state.oldGrading ?
-                        this.renderDropdownField("Grade", oldGradeFields, "grade", !this.props.allowEdit) :
-                        this.renderDropdownField("Grade", gradeFields, "grade", !this.props.allowEdit)
+                        this.renderDropdownField('Grade', oldGradeFields, 'grade', !this.props.allowEdit) :
+                        this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)
                     }
                     <div className="field">
                         <label>&nbsp;   </label>
                         <button className="ui button" onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}>
                             {this.state.oldGrading ?
-                                "Enable new grading" : "Enable old grading"}
+                                'Enable new grading' : 'Enable old grading'}
                         </button>
                     </div>
                 </div>

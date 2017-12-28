@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import AgreementEditModalField from './AgreementEditModalField';
-import { connect } from "react-redux";
-import { getPermissions } from "../../util/rolePermissions";
+import { connect } from 'react-redux';
+import { getPermissions } from '../../util/rolePermissions';
 
 export class AgreementEditModal extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ export class AgreementEditModal extends Component {
         let hasEmptyField = Object.keys(this.state.editedFormData)
             .filter((key) => this.state.editableFields.indexOf(key) !== -1)
             .map((key) => this.state.editedFormData[key])
-            .some((field) => (field === ""));
+            .some((field) => (field === ''));
         this.setState({ mandatoryDataFilled: !hasEmptyField });
     }
 

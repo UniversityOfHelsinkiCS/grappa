@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import ThesisStatisticsTable from "./ThesisStatisticsTable";
+import ThesisStatisticsTable from './ThesisStatisticsTable';
 
 /**
  * StatisticsYearElement contains tables for new and old system.
@@ -33,9 +33,9 @@ export default class ThesisStatisticsYearElement extends Component {
 
     filterThesesByGradingSystem(theses) {
         let filteredTheses = [[], []];
-        let oldGrades = ["Laudatur",
-            "Eximia Cum Laude Approbatur", "Magna Cum Laude Approbatur",
-            "Cum Laude Approbatur", "Non Sine Laude Approbatur", "Lubenter Approbatur", "Approbatur",]
+        let oldGrades = ['Laudatur',
+            'Eximia Cum Laude Approbatur', 'Magna Cum Laude Approbatur',
+            'Cum Laude Approbatur', 'Non Sine Laude Approbatur', 'Lubenter Approbatur', 'Approbatur',]
         if (theses) {
             theses.forEach(thesis => {
                 if (oldGrades.includes(thesis.grade)) {
@@ -49,7 +49,7 @@ export default class ThesisStatisticsYearElement extends Component {
     }
 
     render() {
-        console.log("YR element")
+        console.log('YR element')
         return (
             <div>
                 <h2>{this.state.year}</h2>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 /**
  * StatisticsTable splits group of theses into tables and displays them.
@@ -113,9 +113,9 @@ export default class ThesisStatisticsTable extends Component {
     }
 
     oldGradingSort(a, b) {
-        let oldGrades = ["Laudatur",
-            "Eximia Cum Laude Approbatur", "Magna Cum Laude Approbatur",
-            "Cum Laude Approbatur", "Non Sine Laude Approbatur", "Lubenter Approbatur", "Approbatur",]
+        let oldGrades = ['Laudatur',
+            'Eximia Cum Laude Approbatur', 'Magna Cum Laude Approbatur',
+            'Cum Laude Approbatur', 'Non Sine Laude Approbatur', 'Lubenter Approbatur', 'Approbatur',]
         if (oldGrades.indexOf(a) === -1 || oldGrades.indexOf(b) === -1) {
             return a - b;
         }

@@ -1,25 +1,25 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import moment from "moment";
+import moment from 'moment';
 
 export default class ThesisCouncilmeetingPicker extends Component {
     constructor() {
         super();
         this.state = {
-            filteredMeetings: [{ id: "", content: "Select Date" }],
+            filteredMeetings: [{ id: '', content: 'Select Date' }],
         }
     }
 
     componentDidMount() {
         if (this.props.councilmeetings) {
-            this.setState({ filteredMeetings: [{ id: "", content: "Select Date" }, ...this.formatMeetings(this.props.councilmeetings)] });
+            this.setState({ filteredMeetings: [{ id: '', content: 'Select Date' }, ...this.formatMeetings(this.props.councilmeetings)] });
         }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.councilmeetings) {
             const formatted = this.formatMeetings(newProps.councilmeetings);
-            this.setState({ filteredMeetings: [{ id: "", content: "Select Date" }, ...formatted] });
+            this.setState({ filteredMeetings: [{ id: '', content: 'Select Date' }, ...formatted] });
         }
     }
 
@@ -31,7 +31,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
         }).map(meeting => {
             return {
                 id: meeting.id,
-                content: `${moment(meeting.date).format("DD/MM/YYYY")} Deadline: ${moment(meeting.instructorDeadline).format("HH:mm DD/MM/YYYY")}`,
+                content: `${moment(meeting.date).format('DD/MM/YYYY')} Deadline: ${moment(meeting.instructorDeadline).format('HH:mm DD/MM/YYYY')}`,
             };
         });
     }
@@ -39,7 +39,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
     chooseMeeting = (event) => {
         const chosenMeetingId = event.target.value;
         if (chosenMeetingId) {
-            this.props.sendChange("councilmeetingId", chosenMeetingId);
+            this.props.sendChange('councilmeetingId', chosenMeetingId);
         }
     }
 

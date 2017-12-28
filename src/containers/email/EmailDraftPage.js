@@ -1,16 +1,16 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import EmailDraft from "../../components/email/EmailDraft"
+import EmailDraft from '../../components/email/EmailDraft'
 
-import { connect } from "react-redux";
-import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from "./emailActions";
+import { connect } from 'react-redux';
+import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
 
 export class EmailDraftPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            newDraftName: "",
+            newDraftName: '',
         };
     }
 
@@ -46,12 +46,12 @@ export class EmailDraftPage extends Component {
     handleAddDraft = () => {
         if (this.state.newDraftName) {
             const draft = {
-                body: "",
-                title: "",
+                body: '',
+                title: '',
                 type: this.state.newDraftName,
             };
             this.props.saveEmailDraft(draft);
-            this.setState({ newDraftName: "" });
+            this.setState({ newDraftName: '' });
         }
     }
 

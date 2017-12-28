@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class EmailDraft extends Component {
     constructor(props) {
@@ -52,7 +52,7 @@ export default class EmailDraft extends Component {
                     <button className="ui button blue" onClick={this.saveEdit}>Save</button>
                     <button className="ui button orange" onClick={this.cancelEdit}>Stop editing</button>
                     <button className="ui inverted right floated red button" onClick={this.delete}>
-                        {this.state.deleteConfirmation ? "Click again to confirm" : "Delete this draft"}
+                        {this.state.deleteConfirmation ? 'Click again to confirm' : 'Delete this draft'}
                     </button>
                 </div>
             );
@@ -72,7 +72,7 @@ export default class EmailDraft extends Component {
         }
         return (
             <div className="m-bot">
-                <h3 className="ui dividing header">{editing ? "Editing draft: " : ""}{this.props.draft.title}</h3>
+                <h3 className="ui dividing header">{editing ? 'Editing draft: ' : ''}{this.props.draft.title}</h3>
                 <div className="field">
                     <label>Title</label>
                     <input

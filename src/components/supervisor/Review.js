@@ -47,9 +47,9 @@ export default class Review extends Component {
 
     renderIfApproved() {
         if (this.state.person.approved === 1) {
-            return "yes";
+            return 'yes';
         }
-        return "no"
+        return 'no'
     }
 
     //TODO person title not showing because thesis title has the same name atm

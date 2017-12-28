@@ -1,26 +1,26 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class PersonSelecter extends Component {
 
     constructor() {
         super();
         this.state = {
-            searchValue: "",
+            searchValue: '',
             menuActive: false,
             filtered: [],
         };
     }
 
     componentDidMount() {
-        window.addEventListener("mousedown", this.unfocusMenu);
+        window.addEventListener('mousedown', this.unfocusMenu);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("mousedown", this.unfocusMenu);
+        window.removeEventListener('mousedown', this.unfocusMenu);
     }
 
     personToText = (person) => {
-        return person.firstname + " " + person.lastname + " " + person.email
+        return person.firstname + ' ' + person.lastname + ' ' + person.email
     }
 
     removePerson = (person) => () => {
@@ -93,7 +93,7 @@ export default class PersonSelecter extends Component {
             className="search"
             autoComplete="off"
             tabIndex="0"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}

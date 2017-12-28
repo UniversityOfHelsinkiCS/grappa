@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import moment from "moment";
+import React, { Component } from 'react';
+import moment from 'moment';
 
-import { connect } from "react-redux";
-import { updateThesis, getTheses, downloadTheses, moveTheses } from "../thesis/thesisActions";
-import { getCouncilmeetings } from "./councilmeetingActions";
-import { sendReminder } from "../email/emailActions";
+import { connect } from 'react-redux';
+import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
+import { getCouncilmeetings } from './councilmeetingActions';
+import { sendReminder } from '../email/emailActions';
 
-import ThesisList from "../../components/thesis/ThesisList"
+import ThesisList from '../../components/thesis/ThesisList'
 
 export class CouncilmeetingViewPage extends Component {
     constructor() {
         super();
         this.state = {
-            index: "",
+            index: '',
             previousMeeting: undefined,
             currentMeeting: undefined,
             nextMeeting: undefined,
@@ -79,7 +79,7 @@ export class CouncilmeetingViewPage extends Component {
 
     findIndexFromProps(props) {
         let foundIndex;
-        if (props.match.params && props.match.params.id !== "next") {
+        if (props.match.params && props.match.params.id !== 'next') {
             let cmID;
             try {
                 cmID = parseInt(props.match.params.id, 10);
@@ -106,11 +106,11 @@ export class CouncilmeetingViewPage extends Component {
     //TODO: Fix switch case
     changeMeeting = (where) => () => {
         switch (where) {
-            case "previous":
+            case 'previous':
                 this.props.history.push('/councilmeeting/' + this.state.previousMeeting.councilmeetingId)
                 this.incrementIndex(false);
                 return;
-            case "next":
+            case 'next':
                 this.props.history.push('/councilmeeting/' + this.state.nextMeeting.councilmeetingId)
                 this.incrementIndex(true);
                 return;
@@ -140,21 +140,21 @@ export class CouncilmeetingViewPage extends Component {
             <div>
                 <div>
                     {this.state.previousMeeting !== undefined ?
-                        <button className="ui button blue" onClick={this.changeMeeting("previous")}>Previous</button>
+                        <button className="ui button blue" onClick={this.changeMeeting('previous')}>Previous</button>
                         :
                         <span></span>
                     }
                     {this.state.nextMeeting !== undefined ?
-                        <button className="ui button blue" onClick={this.changeMeeting("next")}>Next</button>
+                        <button className="ui button blue" onClick={this.changeMeeting('next')}>Next</button>
                         :
                         <span></span>
                     }
-                    <h2 className="ui dividing header" style={{ "marginTop": "10px" }}>
+                    <h2 className="ui dividing header" style={{ 'marginTop': '10px' }}>
                         <span>
                             {this.state.currentMeeting !== undefined ?
-                                "Councilmeeting of " + moment(this.state.currentMeeting.date).format("DD/MM/YYYY")
+                                'Councilmeeting of ' + moment(this.state.currentMeeting.date).format('DD/MM/YYYY')
                                 :
-                                "No Councilmeeting found"
+                                'No Councilmeeting found'
                             }
                         </span>
                     </h2>

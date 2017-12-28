@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Dropzone from "react-dropzone";
+import Dropzone from 'react-dropzone';
 
 export default class AttachmentAdder extends Component {
 
@@ -46,9 +46,9 @@ export default class AttachmentAdder extends Component {
     getFileNumberLabel = () => {
         return (
             <h3>
-                {!this.props.attachments ? "No attachments uploaded" :
-                    (this.props.attachments.length === 1) ? "One attachment uploaded:" :
-                        this.props.attachments.length + " attachments uploaded:"}
+                {!this.props.attachments ? 'No attachments uploaded' :
+                    (this.props.attachments.length === 1) ? 'One attachment uploaded:' :
+                        this.props.attachments.length + ' attachments uploaded:'}
             </h3>
         )
 

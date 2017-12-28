@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export const StudyfieldList = props => {
 
@@ -18,7 +18,7 @@ export const StudyfieldList = props => {
             <tbody>
                 {props.studyfields.sort((a, b) => a.name > b.name).map((studyfield, index) =>
                     <tr key={index} onClick={handleClick(studyfield)}>
-                        <td>{studyfield.isActive ? "true" : "false"}</td>
+                        <td>{studyfield.isActive ? 'true' : 'false'}</td>
                         <td>{studyfield.name}</td>
                         <td>{studyfield.professor}</td>
                     </tr>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class StudyfieldEdit extends Component {
 
@@ -14,7 +14,7 @@ export default class StudyfieldEdit extends Component {
     }
 
     delete = () => {
-        this.state.deleteConfirmation ? this.props.sendDelete() : "";
+        this.state.deleteConfirmation ? this.props.sendDelete() : '';
         this.setState({ deleteConfirmation: !this.state.deleteConfirmation });
     }
 
@@ -45,10 +45,10 @@ export default class StudyfieldEdit extends Component {
                             <div className="ui toggle checkbox">
                                 <input
                                     type="checkbox"
-                                    checked={this.props.studyfield.isActive ? "true" : ""}
+                                    checked={this.props.studyfield.isActive ? 'true' : ''}
                                     onChange={this.toggleActive}
                                 />
-                                <label>{this.props.studyfield.isActive ? "Active" : "Not active"}</label>
+                                <label>{this.props.studyfield.isActive ? 'Active' : 'Not active'}</label>
                             </div>
                         </div>
                         <div className="field">
@@ -56,7 +56,7 @@ export default class StudyfieldEdit extends Component {
                         </div>
                         <div className="field">
                             <button className="ui right floated inverted red button" onClick={this.delete}>
-                                {this.state.deleteConfirmation ? "Click again to confirm" : "Delete"}
+                                {this.state.deleteConfirmation ? 'Click again to confirm' : 'Delete'}
                             </button>
                         </div>
                     </div>

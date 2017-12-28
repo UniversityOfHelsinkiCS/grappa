@@ -38,7 +38,7 @@ export default class FormCreator extends Component {
             });
 
         return (
-            <form className={"ui form "} onSubmit={this.props.onSubmitFunc} >
+            <form className={'ui form '} onSubmit={this.props.onSubmitFunc} >
                 {sectionList}
                 <br />
                 {this.getButton(this.props.buttonOnClickFunc)}

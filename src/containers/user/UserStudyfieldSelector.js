@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { saveRole, updateRole } from '../role/roleActions';
 
+const findVisitorRole = roles => roles.find(role => role.role === 'visitor');
+
 class UserStudyfieldSelector extends Component {
     
     constructor(props) {
@@ -17,7 +19,7 @@ class UserStudyfieldSelector extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        const visitorRole = newProps.user.roles.find(role => role.role === 'visitor');
+        const visitorRole = findVisitorRole(newProps.user.roles);
 
         if (visitorRole && newProps.studyfields.length > 0) {
             const studyfield = newProps.studyfields.find(studyfield => studyfield.name === visitorRole.studyfield);
@@ -26,7 +28,7 @@ class UserStudyfieldSelector extends Component {
     }
 
     saveStudyfieldSelection() {
-        const visitorRole = this.props.user.roles.find(role => role.role === 'visitor');
+        const visitorRole = findVisitorRole(this.props.user.roles);
 
         if (visitorRole) {
             visitorRole.studyfieldId = this.state.selectedStudyfieldId;
