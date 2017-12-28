@@ -19,7 +19,14 @@ export async function saveRole(req, res) {
 }
 
 export async function updateRole(req, res) {
-    res.status(500).end();
+    const data = req.body;
+
+    try {
+        await roleService.updateVisitorRoleStudyfield(data.personId, data.studyfieldId);
+        res.status(200).end();
+    } catch (e) {
+        res.status(500).end();
+    }
 }
 
 export async function deleteRole(req, res) {

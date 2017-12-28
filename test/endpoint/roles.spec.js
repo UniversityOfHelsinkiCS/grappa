@@ -23,9 +23,17 @@ test.before(async t => {
 test('study field can be set to visitor role', async t => {
     t.plan(2);
 
+    const insert = await knex('person')
+        .returning('personId')
+        .insert({
+            email: '',
+            firstname: 'Olli O',
+            lastname: 'Opiskelija'
+        });
+    const personId = insert[0];
     const visitorRoleForm = {
         studyfieldId: 1,
-        personId: 1,
+        personId,
         name: 'visitor'
     };
 
@@ -37,10 +45,49 @@ test('study field can be set to visitor role', async t => {
 
     const roles = await knex.select()
         .from('personWithRole')
-        .where('personId', 1)
+        .where('personId', personId)
         .where('roleId', 7)
         .first();
 
-    console.log(roles);
     t.truthy(roles);
+});
+
+test('visitor role studyfield can be updated', async t => {
+    t.plan(2);
+
+    const insert = await knex('person')
+        .returning('personId')
+        .insert({
+            email: '',
+            firstname: 'Olli O',
+            lastname: 'Opiskelija'
+        });
+    const personId = insert[0];
+
+    await knex('personWithRole')
+        .insert({
+            studyfieldId: 1,
+            personId: personId,
+            roleId: 7
+        });
+
+    const visitorRoleForm = {
+        studyfieldId: 2,
+        personId: personId,
+        name: 'visitor'
+    };
+
+    const res = await request(makeApp(1))
+        .put('/roles')
+        .send(visitorRoleForm);
+
+    t.is(res.status, 200);
+
+    const role = await knex.select()
+        .from('personWithRole')
+        .where('personId', personId)
+        .where('roleId', 7)
+        .first();
+
+    t.is(role.studyfieldId, 2);
 });

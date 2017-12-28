@@ -36,6 +36,15 @@ export async function getPersonRole(personId, studyfieldId, roleName) {
         .first();
 }
 
+export async function updateVisitorRoleStudyfield(personId, studyfieldId) {
+    const visitorRoleId = 7;
+
+    return knex('personWithRole').returning('personRoleId')
+        .where('personId', personId)
+        .where('roleId', visitorRoleId)
+        .update({ studyfieldId });
+}
+
 const roleSchema = [
     'personWithRole.personRoleId',
     'personWithRole.personId',
