@@ -42,8 +42,8 @@ const roleSchema = [
     'personWithRole.studyfieldId',
     'role.name',
     'agreementPerson.agreementId',
-    'agreementPerson.statement',
-]
+    'agreementPerson.statement'
+];
 
 export async function getRolesForAllPersons() {
     return knex.select(roleSchema).from('personWithRole')
