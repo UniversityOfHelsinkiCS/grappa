@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
+import { personType, studyfieldType, roleType } from '../../util/types';
 
 //redux
 import { connect } from 'react-redux';
@@ -41,7 +43,7 @@ export class AgreementPage extends Component {
     }
 
     parseResponseData = (data) => {
-        var parsedData = data.agreement;
+        const parsedData = data.agreement;
         //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
             if (data.persons[i].personRoleId === data.agreement.responsibleSupervisorId) {
@@ -57,7 +59,7 @@ export class AgreementPage extends Component {
 
     //TODO strange warnings when closing a modal
     toggleEditModal = (agreement) => {
-        var editable = !this.state.editMode;
+        const editable = !this.state.editMode;
         this.setState({ editMode: editable, editableAgreement: agreement });
     }
 
@@ -88,11 +90,10 @@ export class AgreementPage extends Component {
         if (a === undefined || b === undefined)
             return false;
         // Create arrays of property names
-        var aProps = Object.getOwnPropertyNames(a);
-        var bProps = Object.getOwnPropertyNames(b);
+        const aProps = Object.getOwnPropertyNames(a);
 
-        for (var i = 0; i < aProps.length; i++) {
-            var propName = aProps[i];
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
             if (a[propName] !== b[propName])
                 return false;
         }
@@ -119,14 +120,25 @@ export class AgreementPage extends Component {
             );
         } else {
             //check if form data has changed
-            let disableSubmit = this.checkForChanges(this.state.agreement, this.state.originalAgreement);
+            const disableSubmit = this.checkForChanges(this.state.agreement, this.state.originalAgreement);
             return (
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.editableAgreement} originalAgreement={this.state.editableAgreement} updateFormData={this.updateFormData} />
+                    <AgreementEditModal
+                        showModal={this.state.editMode}
+                        closeModal={this.toggleEditModal}
+                        formData={this.state.editableAgreement}
+                        originalAgreement={this.state.editableAgreement}
+                        updateFormData={this.updateFormData}
+                    />
                     
-                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} handleEditAgreement={this.toggleEditModal} editableAgreement={this.state.editableAgreement}/>: undefined}
+                    {this.state.agreement ?
+                        <AgreementView
+                            agreementData={this.state.agreement}
+                            handleEditAgreement={this.toggleEditModal}
+                            editableAgreement={this.state.editableAgreement}
+                        /> : undefined}
                       
                     <div className="ui segment">
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
@@ -152,13 +164,35 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-const mapStateToProps = (state) => {
-    return {
-        agreements: state.agreements,
-        persons: state.persons,
-        studyfields: state.studyfields,
-        user: state.user,
-    };
-}
+const getSupervisorRoles = roles => roles.filter(role => role.name === 'supervisor');
+const getSupervisors = (roles, persons) => {
+    return getSupervisorRoles(roles).map((role) =>
+        ({
+            person: persons.find(person => person.personId === role.personId),
+            personRoleId: role.personRoleId,
+            studyfieldId: role.studyfieldId,
+        }));
+};
+
+const mapStateToProps = (state) => ({
+    agreements: state.agreements,
+    persons: state.persons,
+    studyfields: state.studyfields,
+    user: state.user,
+    roles: state.roles,
+    supervisors: getSupervisors(state.roles, state.persons)
+});
+
+const { func, arrayOf, array } = PropTypes;
+AgreementPage.propTypes = {
+    user: personType.isRequired,
+    updateAgreement: func.isRequired,
+    saveAgreement: func.isRequired,
+    saveAgreementDraft: func.isRequired,
+    saveAttachment: func.isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
+    roles: arrayOf(roleType).isRequired,
+    supervisors: array.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgreementPage);
