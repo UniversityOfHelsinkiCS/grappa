@@ -111,8 +111,7 @@ const getAgreementPersonsByAgreementId = async function(agreementId) {
 const getThesisData = (data) => {
     return ({
         thesisId: data.thesisId,
-        title: data.thesisTitle,
-        userId: data.personId
+        title: data.thesisTitle
     });
 };
 
@@ -188,8 +187,8 @@ export async function saveAgreementForm(req, res) {
         // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
         notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.studyfieldId);
         res.status(200).json(agreementData);
-    }
-    catch (error) {
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ text: 'Error occured', error });
     }
 }
