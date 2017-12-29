@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getPermissions } from '../util/rolePermissions';
 import { login, logout } from '../containers/user/userActions';
+import { personType } from '../util/types';
 
 //TODO: redux persistent storage & fetch in middleware
 import { getStudyfields } from '../containers/studyfield/studyfieldActions';
@@ -69,13 +71,13 @@ export class NavBar extends Component {
                     <h1><Link to="/">Grappa</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
-                    {this.state.links ? this.state.links.map((elem, index) => {
+                    {this.state.links ? this.state.links.map((elem) => {
                         //Handle special cases:
                         switch (elem.path) {
                             case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
-                                return <NavLink key={index} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>
+                                return <NavLink key={elem.path} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>
                             default:
-                                return <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>
+                                return <NavLink key={elem.path} to={elem.path} exact className="item">{elem.navText}</NavLink>
                         }
                     }) : undefined}
                     <div className="right menu">
@@ -120,5 +122,18 @@ const mapStateToProps = (state) => {
         user: state.user
     };
 }
+
+const { func } = PropTypes;
+NavBar.propTypes = {
+    login: func.isRequired,
+    logout: func.isRequired,
+    getPersons: func.isRequired,
+    getStudyfields: func.isRequired,
+    getAgreements: func.isRequired,
+    getCouncilmeetings: func.isRequired,
+    getTheses: func.isRequired,
+    getNotifications: func.isRequired,
+    user: personType.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
