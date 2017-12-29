@@ -13,6 +13,7 @@ import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingA
 import { getTheses } from '../containers/thesis/thesisActions';
 import { getPersons } from '../containers/person/personActions';
 import { getNotifications } from './notifications/notificationsAction';
+import { getEmailDrafts } from './email/emailActions';
 
 export class NavBar extends Component {
     constructor() {
@@ -38,6 +39,7 @@ export class NavBar extends Component {
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
+            this.props.getEmailDrafts();
 
             if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
                 this.props.getNotifications();
@@ -114,6 +116,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getNotifications() {
         dispatch(getNotifications());
+    },
+    getEmailDrafts() {
+        dispatch(getEmailDrafts());
     }
 });
 
@@ -133,6 +138,7 @@ NavBar.propTypes = {
     getCouncilmeetings: func.isRequired,
     getTheses: func.isRequired,
     getNotifications: func.isRequired,
+    getEmailDrafts: func.isRequired,
     user: personType.isRequired
 };
 

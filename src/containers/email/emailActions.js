@@ -2,8 +2,8 @@ import { callController } from '../../util/apiConnection';
 
 export const getEmailDrafts = () => {
     const prefix = 'GET_ALL_';
-    const method = 'get';
-    return callApi(prefix, method);
+    const route = '/emailDrafts';
+    return callController(route, prefix);
 }
 
 export const saveEmailDraft = (emailDraft) => {
