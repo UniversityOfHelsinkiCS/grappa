@@ -15,10 +15,10 @@ export class AgreementPage extends Component {
         super(props);
         this.state = {
             newAgreement: false,
-            originalAgreement: {},
+            originalAgreements: {},
             editableAgreement: undefined,
             editMode: false,
-            agreement: undefined, //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            agreements: undefined,
             requiredFields: getRequiredFields(this.props.user.roles)
         }
     }
@@ -30,12 +30,12 @@ export class AgreementPage extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreements) {
             //const agreement = newProps.agreements.find(agreement => agreement.authorId === this.props.user.personId);
-            const agreement = newProps.agreements;
-            if (agreement) {
+            const agreements = newProps.agreements;
+            if (agreements) {
                 this.setState(
                     {
-                        agreement: agreement,
-                        originalAgreement: Object.assign({}, agreement)
+                        agreements,
+                        originalAgreement: Object.assign({}, agreements)
                     }
                 );
             }
@@ -68,7 +68,7 @@ export class AgreementPage extends Component {
     }
 
     sendForm = () => {
-        this.props.updateAgreement(this.state.agreement);
+        this.props.updateAgreement(this.state.agreements);
     }
 
     startNewAgreement = () => {
@@ -108,7 +108,7 @@ export class AgreementPage extends Component {
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
                     <Agreement
-                        agreement={this.state.agreement}
+                        agreement={this.state.agreements}
                         supervisors={this.props.supervisors}
                         studyfields={this.props.studyfields}
                         user={this.props.user}
@@ -120,7 +120,7 @@ export class AgreementPage extends Component {
             );
         } else {
             //check if form data has changed
-            const disableSubmit = this.checkForChanges(this.state.agreement, this.state.originalAgreement);
+            const disableSubmit = this.checkForChanges(this.state.agreements, this.state.originalAgreements);
             return (
                 <div>
                     <br />
@@ -133,9 +133,9 @@ export class AgreementPage extends Component {
                         updateFormData={this.updateFormData}
                     />
                     
-                    {this.state.agreement ?
+                    {this.state.agreements ?
                         <AgreementView
-                            agreementData={this.state.agreement}
+                            agreementData={this.state.agreements}
                             handleEditAgreement={this.toggleEditModal}
                             editableAgreement={this.state.editableAgreement}
                         /> : undefined}

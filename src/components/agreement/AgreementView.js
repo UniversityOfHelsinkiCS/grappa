@@ -11,7 +11,7 @@ class AgreementView extends Component {
     }
 
     renderOne(agreement) {
-        let index = this.props.agreementData.findIndex(x => x.agreementId === agreement.agreementId);
+        const index = this.props.agreementData.findIndex(x => x.agreementId === agreement.agreementId);
         return (
             <div>
                 {this.state.showAgreements[index] ?
