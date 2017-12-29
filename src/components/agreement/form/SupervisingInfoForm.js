@@ -92,7 +92,7 @@ export default class SupervisingInfoForm extends Component {
         if (this.state.chosenStudyfield === -1)
             return [];
         return this.props.supervisors.filter((supervisor) => supervisor.studyfieldId == this.state.chosenStudyfield).map((supervisor) => {
-            return { id: supervisor.personRoleId, text: supervisor.title + " " + supervisor.firstname + " " + supervisor.lastname + " - " + supervisor.email }
+            return { id: supervisor.personRoleId, text: supervisor.title + ' ' + supervisor.firstname + ' ' + supervisor.lastname + ' - ' + supervisor.email }
         });
     }
 
@@ -105,12 +105,12 @@ export default class SupervisingInfoForm extends Component {
                     return { id: field.studyfieldId, text: field.name }
                 }))}
                 <br />
-                {this.supervisorSelecter("Vastuuohjaaja", "Valitse ohjaaja", "thesisSupervisorMain",
+                {this.supervisorSelecter('Vastuuohjaaja', 'Valitse ohjaaja', 'thesisSupervisorMain',
                 supervisors.filter((s) => s.id != this.state.selectedSupervisors.thesisSupervisorSecond ))}
                 <br />
-                {this.supervisorSelecter("Toinen ohjaaja", "Valitse ohjaaja", "thesisSupervisorSecond",
+                {this.supervisorSelecter('Toinen ohjaaja', 'Valitse ohjaaja', 'thesisSupervisorSecond',
                 supervisors.filter((s) => s.id != this.state.selectedSupervisors.thesisSupervisorMain ))}
-                {this.field("Muu ohjaaja", "thesisSupervisorOther")}
+                {this.field('Muu ohjaaja', 'thesisSupervisorOther')}
             </div>
         )
     }

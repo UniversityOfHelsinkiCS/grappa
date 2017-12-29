@@ -5,8 +5,8 @@ import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
 
 //redux
-import { connect } from "react-redux";
-import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from "./agreementActions";
+import { connect } from 'react-redux';
+import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from './agreementActions';
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export class AgreementPage extends Component {
     }
 
     componentDidMount() {
-        document.title = "Agreement Page";
+        document.title = 'Agreement Page';
     }
 
     componentWillReceiveProps(newProps) {
@@ -45,11 +45,11 @@ export class AgreementPage extends Component {
         //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
             if (data.persons[i].personRoleId === data.agreement.responsibleSupervisorId) {
-                parsedData.thesisSupervisorMain = data.persons[i].firstname + " " + data.persons[i].lastname
+                parsedData.thesisSupervisorMain = data.persons[i].firstname + ' ' + data.persons[i].lastname
             } else if (parsedData.thesisSupervisorSecond === undefined) {
-                parsedData.thesisSupervisorSecond = data.persons[i].firstname + " " + data.persons[i].lastname
+                parsedData.thesisSupervisorSecond = data.persons[i].firstname + ' ' + data.persons[i].lastname
             } else {
-                parsedData.thesisSupervisorOther = data.persons[i].firstname + " " + data.persons[i].lastname
+                parsedData.thesisSupervisorOther = data.persons[i].firstname + ' ' + data.persons[i].lastname
             }
         }
         return parsedData;

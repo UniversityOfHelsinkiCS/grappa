@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import ThesisStatisticsYearElement from "../../components/thesis/ThesisStatisticsYearElement";
+import ThesisStatisticsYearElement from '../../components/thesis/ThesisStatisticsYearElement';
 
 
 /**
@@ -32,8 +32,8 @@ export default class StatisticsPage extends Component {
         for (var year = 10; year < 15; year++) {
             for (var index = 0; index < 10; index++) {
                 theses.push({
-                    CouncilMeeting: { date: "20" + year },
-                    StudyField: { name: "Linja " + Math.ceil(Math.random() * 3) },
+                    CouncilMeeting: { date: '20' + year },
+                    StudyField: { name: 'Linja ' + Math.ceil(Math.random() * 3) },
                     grade: Math.ceil(Math.random() * 5),
                 });
             }

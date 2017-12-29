@@ -29,21 +29,21 @@ export default class GoalInfoForm extends Component {
         if (old) {
             return [
                 { value: -1, text: 'Choose a grade' },
-                { value: "L", text: 'Laudatur' },
-                { value: "E", text: 'Eximia cum laude approbatur' },
-                { value: "M", text: 'Magna cum laude approbatur' },
-                { value: "C", text: 'Cum laude approbatur' },
-                { value: "B", text: 'Lubenter approbatur' },
-                { value: "A", text: 'Approbatur' }
+                { value: 'L', text: 'Laudatur' },
+                { value: 'E', text: 'Eximia cum laude approbatur' },
+                { value: 'M', text: 'Magna cum laude approbatur' },
+                { value: 'C', text: 'Cum laude approbatur' },
+                { value: 'B', text: 'Lubenter approbatur' },
+                { value: 'A', text: 'Approbatur' }
             ]
         }
         return [
             { value: -1, text: 'Choose a grade' },
-            { value: "5", text: '5 (Excellent)' },
-            { value: "4", text: '4 (Very Good)' },
-            { value: "3", text: '3 (Good)' },
-            { value: "2", text: '2 (Satisfactory)' },
-            { value: "1", text: '1 (Passable)' }
+            { value: '5', text: '5 (Excellent)' },
+            { value: '4', text: '4 (Very Good)' },
+            { value: '3', text: '3 (Good)' },
+            { value: '2', text: '2 (Satisfactory)' },
+            { value: '1', text: '1 (Passable)' }
         ]
     }
 
@@ -51,11 +51,11 @@ export default class GoalInfoForm extends Component {
         return (
             <div>
                 <h1>Työskentelyn tavoitteet ja ajankäyttö</h1>
-                {this.field("Opiskelijan arvioima opinnäytetyöhön käytettävä työaika", "thesisWorkStudentTime")}
-                {this.field("Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)", "thesisWorkSupervisorTime")}
-                {this.field("Välitavoitteet (deadlinet työn eri vaiheille)", "thesisWorkIntermediateGoal")}
-                {this.field("Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta", "thesisWorkMeetingAgreement")}
-                {this.field("Muuta", "thesisWorkOther")}
+                {this.field('Opiskelijan arvioima opinnäytetyöhön käytettävä työaika', 'thesisWorkStudentTime')}
+                {this.field('Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)', 'thesisWorkSupervisorTime')}
+                {this.field('Välitavoitteet (deadlinet työn eri vaiheille)', 'thesisWorkIntermediateGoal')}
+                {this.field('Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta', 'thesisWorkMeetingAgreement')}
+                {this.field('Muuta', 'thesisWorkOther')}
 
                 <h1>Tavoitearvosana</h1>
                 <br />

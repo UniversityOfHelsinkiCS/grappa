@@ -8,12 +8,12 @@ class AssesmentOfTheses extends Component {
     constructor() {
         super();
         this.state = {
-            language: "en"
+            language: 'en'
         };
     }
 
     componentDidMount() {
-        document.title = "Assesment of Theses";
+        document.title = 'Assesment of Theses';
     }
 
     changeLanguage = (lang, e) => {
@@ -22,9 +22,9 @@ class AssesmentOfTheses extends Component {
 
     renderAssesment() {
         let assesment = AssesmentInFinnish;
-        if (this.state.language === "en") {
+        if (this.state.language === 'en') {
             assesment = AssesmentInEnglish;
-        } else if (this.state.language === "swe") {
+        } else if (this.state.language === 'swe') {
             assesment = AssesmentInSwedish;
         }
         return assesment.map((all, index) => (
@@ -42,7 +42,7 @@ class AssesmentOfTheses extends Component {
     }
 
     renderTitles() {
-        if (this.state.language === "en") {
+        if (this.state.language === 'en') {
             return <div>
                 <b>
                     UNIVERSITY OF HELSINKI<br />
@@ -51,7 +51,7 @@ class AssesmentOfTheses extends Component {
                     <h1>Assessment of Master’s theses included in second-cycle degrees</h1>
                 </b>
             </div>
-        } else if (this.state.language === "swe") {
+        } else if (this.state.language === 'swe') {
             return <div>
                 <b>
                     HELSINGFORS UNIVERSITET<br />
@@ -75,9 +75,9 @@ class AssesmentOfTheses extends Component {
         return (
             <div className="App">
                 <div className="ui left aligned segment">
-                    <button id="fin" className="ui button" onClick={(e) => this.changeLanguage("fin", e)}>suomeksi</button>
-                    <button id="en" className="ui button" onClick={(e) => this.changeLanguage("en", e)}>in English</button>
-                    <button id="swe" className="ui button" onClick={(e) => this.changeLanguage("swe", e)}>på svenska</button>
+                    <button id="fin" className="ui button" onClick={(e) => this.changeLanguage('fin', e)}>suomeksi</button>
+                    <button id="en" className="ui button" onClick={(e) => this.changeLanguage('en', e)}>in English</button>
+                    <button id="swe" className="ui button" onClick={(e) => this.changeLanguage('swe', e)}>på svenska</button>
                     <p></p>
                     {this.renderTitles()}
                     {this.renderAssesment()}

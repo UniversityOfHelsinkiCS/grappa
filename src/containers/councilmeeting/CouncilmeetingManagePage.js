@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import DatePicker from "react-datepicker";
-import moment from "moment";
+import React, { Component } from 'react';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
  getCouncilmeetings,
  saveCouncilmeeting,
  updateCouncilmeeting,
  deleteCouncilmeeting
-} from "./councilmeetingActions";
+} from './councilmeetingActions';
 
 export class CouncilmeetingManagePage extends Component {
   constructor() {
@@ -117,7 +117,7 @@ export class CouncilmeetingManagePage extends Component {
             <DatePicker
               dateFormat="DD/MM/YYYY"
               selected={newCouncilmeeting.date}
-              onChange={this.handleDateChange("newCouncilmeeting", "date")}
+              onChange={this.handleDateChange('newCouncilmeeting', 'date')}
             />
           </div>
           <div className="field">
@@ -125,7 +125,7 @@ export class CouncilmeetingManagePage extends Component {
             <input
               type="text"
               value={newCouncilmeeting.instructorDeadlineDays}
-              onChange={this.handleChange("newCouncilmeeting", "instructorDeadlineDays")}
+              onChange={this.handleChange('newCouncilmeeting', 'instructorDeadlineDays')}
               placeholder="Days"
             />
           </div>
@@ -134,7 +134,7 @@ export class CouncilmeetingManagePage extends Component {
             <input
               type="text"
               value={newCouncilmeeting.studentDeadlineDays}
-              onChange={this.handleChange("newCouncilmeeting", "studentDeadlineDays")}
+              onChange={this.handleChange('newCouncilmeeting', 'studentDeadlineDays')}
               placeholder="Days"
             />
           </div>
@@ -154,7 +154,7 @@ export class CouncilmeetingManagePage extends Component {
       <div className="field">
         <h2 className="ui dividing header">
           Change meetings date {updateCouncilmeeting.date
-            ? moment(updateCouncilmeeting.date).format("DD/MM/YYYY") : ""}
+            ? moment(updateCouncilmeeting.date).format('DD/MM/YYYY') : ''}
         </h2>
         <p>
           Changing the deadline changes it for every thesis connected to the meeting.
@@ -166,7 +166,7 @@ export class CouncilmeetingManagePage extends Component {
             <DatePicker
               dateFormat="DD/MM/YYYY"
               selected={moment(updateCouncilmeeting.date)}
-              onChange={this.handleDateChange("updateCouncilmeeting", "date")}
+              onChange={this.handleDateChange('updateCouncilmeeting', 'date')}
             />
           </div>
           <div className="field">
@@ -174,7 +174,7 @@ export class CouncilmeetingManagePage extends Component {
             <DatePicker
               dateFormat="DD/MM/YYYY"
               selected={moment(updateCouncilmeeting.instructorDeadline)}
-              onChange={this.handleDateChange("updateCouncilmeeting", "instructorDeadline")}
+              onChange={this.handleDateChange('updateCouncilmeeting', 'instructorDeadline')}
             />
           </div>
           <div className="field">
@@ -182,7 +182,7 @@ export class CouncilmeetingManagePage extends Component {
             <DatePicker
               dateFormat="DD/MM/YYYY"
               selected={moment(updateCouncilmeeting.studentDeadline)}
-              onChange={this.handleDateChange("updateCouncilmeeting", "studentDeadline")}
+              onChange={this.handleDateChange('updateCouncilmeeting', 'studentDeadline')}
             />
           </div>
           <div className="field">
@@ -212,13 +212,13 @@ export class CouncilmeetingManagePage extends Component {
           {shownDates.map((councilmeeting, index) =>
             <tr key={index} onClick={this.selectMeeting(councilmeeting)}>
               <td>
-                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.date).format("DD/MM/YYYY")}</Link>
+                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.date).format('DD/MM/YYYY')}</Link>
               </td>
               <td>
-                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.instructorDeadline).format("DD/MM/YYYY")}</Link>
+                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.instructorDeadline).format('DD/MM/YYYY')}</Link>
               </td>
               <td>
-                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.studentDeadline).format("DD/MM/YYYY")}</Link>
+                <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.studentDeadline).format('DD/MM/YYYY')}</Link>
               </td>
               <td>
                 <i className="write icon green"
@@ -302,7 +302,7 @@ export class CouncilmeetingManagePage extends Component {
             <div className="ui checkbox">
               <input
                 type="checkbox"
-                checked={this.state.showOld ? "true" : ""}
+                checked={this.state.showOld ? 'true' : ''}
                 onChange={this.handleCheckboxChange}
               />
               <label>Show also past dates</label>

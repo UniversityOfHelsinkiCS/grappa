@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import Review from "../../components/supervisor/Review.js";
-import SupervisorEditor from "../../components/supervisor/SupervisorEditor.js"
+import Review from '../../components/supervisor/Review.js';
+import SupervisorEditor from '../../components/supervisor/SupervisorEditor.js'
 
 export class SupervisorManagementPage extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ export class SupervisorManagementPage extends Component {
     }
 
     componentDidMount() {
-        document.title = "Supervisor Management";
+        document.title = 'Supervisor Management';
     }
 
     handleSaveSupervisor = (supervisor) => {
@@ -47,11 +47,11 @@ export class SupervisorManagementPage extends Component {
     }
     
     renderReviewButton(person) {
-        let text = "Review supervisor";
-        let buttonClass = "ui green button";
+        let text = 'Review supervisor';
+        let buttonClass = 'ui green button';
         if (person.approved) {
-            text = "Supervisor approved";
-            buttonClass = "ui button";
+            text = 'Supervisor approved';
+            buttonClass = 'ui button';
         }
         return (
             <button key={person.personId} className={buttonClass} onClick={(e) => this.toggleEditModal(e, person)} >

@@ -13,6 +13,7 @@ import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
 import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
 import EmailDraftPage from '../containers/email/EmailDraftPage';
+import NotificationsPage from '../containers/notifications/NotificationsPage';
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
@@ -25,7 +26,8 @@ export const paths = {
     councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting' },
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings' },
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
-    statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' }
+    statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
+    notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' }
 }
 
 export default () => {

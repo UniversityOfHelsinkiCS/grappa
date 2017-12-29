@@ -8,7 +8,7 @@ import NavBar from './containers/NavBar';
 
 //util
 import registerServiceWorker from './util/registerServiceWorker';
-import store from "./util/store";
+import store from './util/store';
 
 //media
 import './media/index.css';

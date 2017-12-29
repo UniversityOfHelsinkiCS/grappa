@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import AttachmentAdder from "../attachment/AttachmentAdder.js"
+import AttachmentAdder from '../attachment/AttachmentAdder.js'
 
 export default class Field extends Component {
     defineFieldClasses = (extraClassNames, fieldType, required) => {
-        return ("field small" +
+        return ('field small' +
             (extraClassNames === undefined ? '' : ' ' + extraClassNames) +
             (fieldType === undefined ? '' : ' ' + fieldType) +
             (required === true ? ' required' : '')
@@ -14,8 +14,8 @@ export default class Field extends Component {
         let forReturn = [];
 
         switch (this.props.fieldData.inputType) {
-            case "input":
-                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+            case 'input':
+                forReturn = [<label key={this.props.fieldKey + 'label'} >{this.props.fieldData.label}</label>,
                 <input
                     key={this.props.fieldKey}
                     name={this.props.fieldData.name}
@@ -23,8 +23,8 @@ export default class Field extends Component {
                     onChange={this.props.fieldOnChangeFunc} />
                 ];
                 break;
-            case "textarea":
-                forReturn = [<label key={this.props.fieldKey + "label"}>{this.props.fieldData.label}</label>,
+            case 'textarea':
+                forReturn = [<label key={this.props.fieldKey + 'label'}>{this.props.fieldData.label}</label>,
                 <textarea
                     key={this.props.fieldKey}
                     name={this.props.fieldData.name}
@@ -33,16 +33,16 @@ export default class Field extends Component {
                     onChange={this.props.fieldOnChangeFunc} ></textarea>
                 ];
                 break;
-            case "bareText":
-                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+            case 'bareText':
+                forReturn = [<label key={this.props.fieldKey + 'label'} >{this.props.fieldData.label}</label>,
                 <p
                     key={this.props.fieldKey}
                     id={this.props.fieldData.name}
                     type="text" placeholder={this.props.fieldData.placeholder} />
                 ];
                 break;
-            case "dropdown":
-                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+            case 'dropdown':
+                forReturn = [<label key={this.props.fieldKey + 'label'} >{this.props.fieldData.label}</label>,
                 <select className="ui dropdown" onChange={this.props.fieldOnChangeFunc} name={this.props.fieldData.name} >
                     {this.props.fieldData.responses.map(
                         (response) => {
@@ -51,17 +51,17 @@ export default class Field extends Component {
                 </select>
                 ];
                 break;
-            case "attachment":
-                forReturn = [<label key={this.props.fieldKey + "label"} >{this.props.fieldData.label}</label>,
+            case 'attachment':
+                forReturn = [<label key={this.props.fieldKey + 'label'} >{this.props.fieldData.label}</label>,
                     <AttachmentAdder sendChange={this.props.fieldOnChangeFunc}/>
                 ];
                 break;
             default:
-                console.error("FormField error (" + this.props.fieldData.name + "): inputType not defined!");
+                console.error('FormField error (' + this.props.fieldData.name + '): inputType not defined!');
         }
 
         return (
-            <div key={this.props.fieldKey + "fieldDiv"} className={this.defineFieldClasses(this.props.fieldData.extraClassNames, this.props.fieldData.inputType, this.props.fieldData.required)}>
+            <div key={this.props.fieldKey + 'fieldDiv'} className={this.defineFieldClasses(this.props.fieldData.extraClassNames, this.props.fieldData.inputType, this.props.fieldData.required)}>
                 {forReturn}
             </div>
         );

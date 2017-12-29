@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-import { updateThesis, getTheses, downloadTheses, moveTheses } from "../thesis/thesisActions";
+import { connect } from 'react-redux';
+import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
 
 import ThesisList from '../../components/thesis/ThesisList';
 
@@ -16,7 +16,7 @@ class ThesisListPage extends Component {
     }
 
     componentDidMount() {
-        document.title = "Thesis List";
+        document.title = 'Thesis List';
     }
 
     formatTheses(theses) {
@@ -27,9 +27,9 @@ class ThesisListPage extends Component {
             const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
             const formattedThesis = Object.assign({}, thesis);
 
-            formattedThesis.email = person.email || "No user";
-            formattedThesis.authorFirstname = person.firstname || "Keplo";
-            formattedThesis.authorLastname = person.lastname || "Leutokalma";
+            formattedThesis.email = person.email || 'No user';
+            formattedThesis.authorFirstname = person.firstname || 'Keplo';
+            formattedThesis.authorLastname = person.lastname || 'Leutokalma';
 
             return formattedThesis
         })

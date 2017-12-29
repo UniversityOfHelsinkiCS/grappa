@@ -12,7 +12,8 @@ const permissions = {
     'admin': {
         'nav-bar': {
             show: [
-                nav.home, nav.agreement, nav.theses, nav.supervisorManagement, nav.thesis, nav.assesment, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
+                nav.home, nav.agreement, nav.theses, nav.supervisorManagement, nav.thesis, nav.assesment,
+                nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics, nav.notifications
             ]
         },
         'agreement': {
@@ -74,3 +75,6 @@ const permissions = {
         }
     },
 }
+
+// Student & visitor are now same role
+permissions.visitor = permissions.student;

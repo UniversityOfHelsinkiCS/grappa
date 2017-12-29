@@ -14,22 +14,22 @@ export default class Agreement extends Component {
         super(props);
         this.state = {
             form: {
-                thesisTitle: "",
-                thesisStartDate: "",
-                thesisCompletionEta: "",
-                thesisPerformancePlace: "",
+                thesisTitle: '',
+                thesisStartDate: '',
+                thesisCompletionEta: '',
+                thesisPerformancePlace: '',
 
-                thesisSupervisorMain: "",
-                thesisSupervisorSecond: "",
-                thesisSupervisorOther: "",
+                thesisSupervisorMain: '',
+                thesisSupervisorSecond: '',
+                thesisSupervisorOther: '',
 
-                thesisWorkStudentTime: "",
-                thesisWorkSupervisorTime: "",
-                thesisWorkIntermediateGoal: "",
-                thesisWorkMeetingAgreement: "",
-                thesisWorkOther: "",
+                thesisWorkStudentTime: '',
+                thesisWorkSupervisorTime: '',
+                thesisWorkIntermediateGoal: '',
+                thesisWorkMeetingAgreement: '',
+                thesisWorkOther: '',
 
-                studentGradeGoal: "",
+                studentGradeGoal: '',
                 studyfieldId: -1
             },
             attachments: [],
