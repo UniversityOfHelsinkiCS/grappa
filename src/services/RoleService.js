@@ -43,6 +43,15 @@ export async function getPersonRole(personId, studyfieldId, roleName) {
         .first();
 }
 
+export async function updateVisitorRoleStudyfield(personId, studyfieldId) {
+    const visitorRoleId = 7;
+
+    return knex('personWithRole').returning('personRoleId')
+        .where('personId', personId)
+        .where('roleId', visitorRoleId)
+        .update({ studyfieldId });
+}
+
 //AgreementPerson
 
 export async function saveAgreementPerson(agreementPerson) {
@@ -67,8 +76,8 @@ const roleSchema = [
     'personWithRole.studyfieldId',
     'role.name',
     'agreementPerson.agreementId',
-    'agreementPerson.statement',
-]
+    'agreementPerson.statement'
+];
 
 export async function getRolesForAllPersons() {
     return knex.select(roleSchema).from('personWithRole')

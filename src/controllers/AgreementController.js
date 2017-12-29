@@ -111,8 +111,7 @@ const getAgreementPersonsByAgreementId = async function(agreementId) {
 const getThesisData = (data) => {
     return ({
         thesisId: data.thesisId,
-        title: data.thesisTitle,
-        userId: data.personId
+        title: data.thesisTitle
     });
 };
 
@@ -160,7 +159,7 @@ export async function saveAgreement(req, res) {
         try {
             console.log('Before await');
             let newAgreement = await agreementService.saveAgreement(data);
-            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS');
+            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.studyfieldId);
             return res.status(200).json(newAgreement);
         } catch (err) {
             return res.status(500).json(err);
@@ -180,33 +179,19 @@ export async function saveAgreementForm(req, res) {
     try {
         data.personId = personId;
         const thesisData = getThesisData(data);
-        const thesisSaveResponse = await thesisService.saveThesis(thesisData);
+        const thesisSaveResponse = await thesisService.saveThesis(thesisData, req);
         const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
         const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
         agreementData.agreementId = agreementSaveResponse.agreementId;
-        let personData = await personService.getPersonById(data.personId);
+        // let personData = await personService.getPersonById(data.personId);
         // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
-        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS');
+        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.studyfieldId);
         res.status(200).json(agreementData);
-    }
-    catch (error) {
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ text: 'Error occured', error });
     }
 }
-
-const updatePerson = async function(personData) {
-    return await personService.updatePerson(personData);
-};
-
-const saveThesis = async function(thesisData) {
-    notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS');
-    return await thesisService.saveThesis(thesisData);
-};
-
-const saveAgreementToService = async function(agreementData) {
-    const agreement = await agreementService.saveAgreement(agreementData);
-    return agreement.agreementId;
-};
 
 export async function updateAgreement(req, res) {
     const data = req.body;
@@ -251,7 +236,7 @@ export async function updateAgreement(req, res) {
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
             emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
-            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS');
+            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.studyfieldId);
             res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: 'error occurred', error: err });
@@ -276,7 +261,7 @@ export async function savePrevious(req, res) {
     const data = req.body;
     try {
         const daoResponse = await agreementService.savePrevious(data);
-        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS');
+        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.studyfieldId);
         res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
     } catch (err) {
         res.status(500).json({ text: 'error occurred', error: err });

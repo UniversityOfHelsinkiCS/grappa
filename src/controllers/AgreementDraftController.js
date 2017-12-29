@@ -23,15 +23,14 @@ export async function getAgreementDraftById(req, res) {
 export async function saveAgreementDraft(req, res) {
     const data = req.body;
     const agreementDraftData = getAgreementDraftData(data);
-    let textResponse;
     let savedAgreementDraft;
     let agreementDraftId = data.agreementDraftId;
-    
+
     try {
         if (agreementDraftId > 0) {
             let agreementResponse = await draftService.updateAgreementDraft(agreementDraftData);
             // TODO: why is agreementResponse always 1 here??
-            savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse)
+            savedAgreementDraft = await draftService.getAgreementDraftById(agreementResponse);
             notificationService.createNotification('AGREEMENT_DRAFT_UPDATE_ONE_SUCCESS', req);
         } else {
             let agreementResponse = await draftService.saveNewAgreementDraft(agreementDraftData);
@@ -58,10 +57,10 @@ async function saveAgreementDraftPersons(draftPersons, agreementDraftId) {
         };
         try {
             let response = await draftService.saveAgreementDraftPerson(draftPerson);
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
-    })
+    });
 }
 
 async function removeAgreementDraftPersons(agreementDraftId) {

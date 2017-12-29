@@ -76,3 +76,5 @@ src/util/ethesis_credentials.js
 
 #package-lock before launch
 package-lock.json
+
+.DS_Store

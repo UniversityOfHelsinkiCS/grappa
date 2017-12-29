@@ -99,7 +99,7 @@ export async function saveThesisForm(req, res) {
             attachments: attachments,
         }
 
-        notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req);
+        notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.studyfieldId);
         res.status(200).json(response);
     } catch (error) {
         console.log(error);

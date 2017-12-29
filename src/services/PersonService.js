@@ -43,28 +43,27 @@ export async function getLoggedPerson(req) {
     }
 }
 
-
 export const getPersonById = (id) => {
     return knex.select().from('person').where('personId', id).first();
-}
+};
 
 export const getPersonByShibbolethId = (shibbolethId) => {
     return knex.select().from('person').where('shibbolethId', shibbolethId).first();
-}
+};
 
 export async function savePerson(personData) {
-    //If already exists then return that person
+    // If already exists then return that person
     let person = await knex.select(personSchema).from('person').where({
         email: personData.email,
         firstname: personData.firstname,
-        lastname: personData.lastname,
+        lastname: personData.lastname
     }).first();
     if (!person) {
         const personIds = await knex('person')
             .returning('personId')
-            .insert(personData)
-        const personId = personIds[0]
-        person = knex.select(personSchema).from('person').where('personId', personId).first()
+            .insert(personData);
+        const personId = personIds[0];
+        person = knex.select(personSchema).from('person').where('personId', personId).first();
     }
     return person;
 }
@@ -96,7 +95,7 @@ export const getPersonsWithAgreementPerson = (agreementpersonId) => {
         .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
         .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .where('personWithRole.personId', agreementpersonId)
-}
+};
 
 export const getPersonsWithAgreementInStudyfield = (studyfieldId) => {
     return knex.select(personSchema).from('person')
@@ -104,13 +103,13 @@ export const getPersonsWithAgreementInStudyfield = (studyfieldId) => {
         .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
         .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .where('personWithRole.studyfieldId', studyfieldId)
-}
+};
 
 export const getPersonsAsAgreementPersonInStudyfield = (studyfieldId) => {
     return knex.select(personSchema).from('person')
         .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
         .where('personWithRole.studyfieldId', studyfieldId)
-}
+};
 
 export const getPersonByPersonRoleId = (personRoleId) => {
     return knex.select().from('person')
@@ -123,7 +122,7 @@ export const getPersonByPersonRoleId = (personRoleId) => {
             console.log(error);
             throw error;
         });
-}
+};
 
 export const getAgreementPersonsByPersonRoleId = (personRoleId) => {
     return knex.select().from('agreementPerson')
@@ -131,4 +130,12 @@ export const getAgreementPersonsByPersonRoleId = (personRoleId) => {
         .then(persons => {
             return persons;
         });
+};
+
+export function getPersonByDetails(firstname, lastname, email) {
+    return knex.select().from('person')
+        .where('firstname', firstname)
+        .where('lastname', lastname)
+        .where('email', email)
+        .first();
 }

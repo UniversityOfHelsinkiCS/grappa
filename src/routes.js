@@ -12,7 +12,6 @@ const notifications = require('./routes/notifications');
 
 const auth = require('./middleware/auth');
 
-
 module.exports = (app) => {
     app.use(auth.shibRegister);
     app.use('/', index);
@@ -21,10 +20,11 @@ module.exports = (app) => {
     app.use(auth.checkAuth);
     app.use('/agreements', agreements);
     app.use('/theses', theses);
-    app.use('/roles', roles)
+    app.use('/roles', roles);
     app.use('/studyfields', studyfields);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
     app.use('/councilmeetings', councilmeeting);
+    app.use(auth.checkAdmin);
     app.use('/notifications', notifications);
 };
