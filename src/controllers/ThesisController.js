@@ -81,33 +81,7 @@ export async function saveThesisForm(req, res) {
         delete thesis.studyfieldId;
         let savedGraders = []
         if (thesis.graders) {
-            thesis.graders.forEach(async grader => {
-                const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader')
-                if (personRole) {
-                    //If person exists as a grader, link them
-                    const agreementPerson = {
-                        agreementId: agreement.agreementId,
-                        personRoleId: personRole.personRoleId,
-                    }
-
-                    roleService.saveAgreementPerson(agreementPerson)
-                } else {
-                    //Else make the person a grader.
-                    const roleId = await roleService.getRoleId('grader');
-
-                    let personWithRole = {
-                        personId: grader.personId,
-                        studyfieldId: agreement.studyfieldId,
-                        roleId
-                    }
-                    personWithRole = await roleService.savePersonRole(personWithRole);
-                    const agreementPerson = {
-                        agreementId: agreement.agreementId,
-                        personRoleId: personWithRole.personRoleId,
-                    }
-                    roleService.saveAgreementPerson(agreementPerson)
-                }
-            })
+            this.updateGraders(thesis.graders, agreement);
             delete thesis.graders
         }
         //TODO: Email system
@@ -141,6 +115,50 @@ const getUsersRoles = async (user) => {
         return {
             studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+        }
+    })
+}
+
+export async function updateThesis(req, res) {
+    try {
+        let updatedFields = req.body;
+        let thesis = await thesisService.getThesisById(updatedFields.thesisId);
+        
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+const updateGraders = (graders, agreement) => {
+    //To unlink person and agreement
+    //const agreementPersons = roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
+
+    //To link person and agreement
+    graders.forEach(async grader => {
+        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader')
+        if (personRole) {
+            //If person exists as a grader, link them
+            const agreementPerson = {
+                agreementId: agreement.agreementId,
+                personRoleId: personRole.personRoleId,
+            }
+
+            roleService.saveAgreementPerson(agreementPerson)
+        } else {
+            //Else make the person a grader.
+            const roleId = await roleService.getRoleId('grader');
+
+            let personWithRole = {
+                personId: grader.personId,
+                studyfieldId: agreement.studyfieldId,
+                roleId
+            }
+            personWithRole = await roleService.savePersonRole(personWithRole);
+            const agreementPerson = {
+                agreementId: agreement.agreementId,
+                personRoleId: personWithRole.personRoleId,
+            }
+            roleService.saveAgreementPerson(agreementPerson)
         }
     })
 }

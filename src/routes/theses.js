@@ -12,6 +12,10 @@ router.get('/:id', (req, res) => {
     thesisController.getThesisById(req, res);
 });
 
+router.put('/', (req, res) => {
+    thesisController.updateThesis(req, res);
+})
+
 router.post('/', (req, res) => {
     thesisController.saveThesisForm(req, res);
 });

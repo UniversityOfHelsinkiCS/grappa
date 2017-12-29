@@ -90,17 +90,6 @@ export async function updatePerson(personData) {
         });
 }
 
-export const getAgreementPersonsByAgreementId = (agreementId) => {
-    //TODO: figure out why this returns duplicates without distinct
-    return knex.distinct('person.firstname', 'person.lastname', 'personWithRole.personRoleId').select().from('agreementPerson')
-        .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
-        .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
-        .where('agreementId', agreementId)
-        .then(persons => {
-            return persons;
-        });
-}
-
 export const getPersonsWithAgreementPerson = (agreementpersonId) => {
     return knex.select(personSchema).from('person')
         .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')

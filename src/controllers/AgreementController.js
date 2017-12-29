@@ -105,7 +105,7 @@ const getAgreementRelatedData = async function(data) {
 };
 
 const getAgreementPersonsByAgreementId = async function(agreementId) {
-    return await personService.getAgreementPersonsByAgreementId(agreementId);
+    return await roleService.getAgreementPersonsByAgreementId(agreementId);
 };
 
 const getThesisData = (data) => {

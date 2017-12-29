@@ -1,11 +1,9 @@
 const knex = require('../db/connection');
 
+//Role
+
 export async function getRoles() {
     return knex.select().from('role');
-}
-
-export async function getPersonRoles(personId) {
-    return knex.select().from('personWithRole').where('personId', personId);
 }
 
 export async function getRoleId(roleName) {
@@ -13,17 +11,26 @@ export async function getRoleId(roleName) {
     return role.roleId;
 }
 
+export async function saveRole(roleName) {
+    return await knex('role')
+        .returning('roleId')
+        .insert({ name: roleName })
+        .then(roleId => roleId[0])
+        .catch(error => {
+            throw error
+        });
+}
+
+//PersonWithRole
+
+export async function getPersonRoles(personId) {
+    return knex.select().from('personWithRole').where('personId', personId);
+}
+
 export async function savePersonRole(personWithRole) {
     return knex('personWithRole').returning('personRoleId')
         .insert(personWithRole).then(personRoleIds =>
             knex.select().from('personWithRole').where('personRoleId', personRoleIds[0]).first()
-        );
-}
-
-export async function saveAgreementPerson(agreementPerson) {
-    return knex('agreementPerson').returning('agreementPersonId')
-        .insert(agreementPerson).then(agreementPersonIds =>
-            knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
         );
 }
 
@@ -35,6 +42,24 @@ export async function getPersonRole(personId, studyfieldId, roleName) {
         .where('personWithRole.personId', personId)
         .first();
 }
+
+//AgreementPerson
+
+export async function saveAgreementPerson(agreementPerson) {
+    return knex('agreementPerson').returning('agreementPersonId')
+        .insert(agreementPerson).then(agreementPersonIds =>
+            knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
+        );
+}
+
+export const getAgreementPersonsByAgreementId = (agreementId) => {
+    return knex.distinct('agreementPerson.personRoleId').select().from('agreementPerson')
+        .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
+        .where('agreementId', agreementId)
+}
+
+//Straight to frontend
 
 const roleSchema = [
     'personWithRole.personRoleId',
@@ -49,14 +74,4 @@ export async function getRolesForAllPersons() {
     return knex.select(roleSchema).from('personWithRole')
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-}
-
-export async function saveRole(roleName) {
-    return await knex('role')
-        .returning('roleId')
-        .insert({ name: roleName })
-        .then(roleId => roleId[0])
-        .catch(error => {
-            throw error
-        });
 }
