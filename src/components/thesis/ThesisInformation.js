@@ -107,7 +107,7 @@ export default class ThesisInformation extends Component {
         return (
             <div>
                 <h3 className="ui dividing header">Thesis Author</h3>
-                {this.renderThesisAuthor(this.props.thesis.id)}
+                {this.renderThesisAuthor(this.props.thesis.thesisId)}
                 <h3 className="ui dividing header">Thesis Information</h3>
                 {this.renderThesisInformation()}
             </div>

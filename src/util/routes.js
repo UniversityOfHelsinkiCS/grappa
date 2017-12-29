@@ -7,7 +7,8 @@ import AgreementPage from '../containers/agreement/AgreementPage';
 import SupervisorManagement from '../containers/supervisor/SupervisorManagementPage';
 import ThesisListPage from '../containers/thesis/ThesisListPage';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
-import ThesisManage from '../containers/thesis/ThesisManagePage';
+import ThesisCreate from '../containers/thesis/ThesisCreatePage';
+import ThesisEdit from '../containers/thesis/ThesisEditPage';
 import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
 import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
@@ -18,8 +19,8 @@ export const paths = {
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
     supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management' },
-    thesisView: { path: '/thesis/:id', component: ThesisManage },
-    thesis: { path: '/thesis', component: ThesisManage, navText: 'New thesis' },
+    thesisView: { path: '/thesis/:id', component: ThesisEdit },
+    thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
     councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting' },
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings' },
