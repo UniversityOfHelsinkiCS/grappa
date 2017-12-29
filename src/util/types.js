@@ -28,3 +28,31 @@ export const roleType = shape({
     agreementId: number,
     statement: string
 });
+
+export const agreementType = shape({
+    agreementId: number,
+    authorId: number,
+    thesisId: number,
+    responsibleSupervisorId: number,
+    studyfieldId: number,
+    fake: number,
+    startDate: string,
+    completionEta: string,
+    performancePlace: string,
+    // studentGradeGoal: object,
+    studentWorkTime: string,
+    supervisorWorkTime: string,
+    intermediateGoal: string,
+    meetingAgreement: string,
+    other: string,
+    whoNext: string
+});
+
+export const thesisType = shape({
+    thesisId: number,
+    title: string,
+    urkund: string,
+    grade: string,
+    graderEval: string,
+    printDone: number
+});

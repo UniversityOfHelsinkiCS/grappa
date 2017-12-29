@@ -4,7 +4,7 @@ import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
-import { personType, studyfieldType, roleType } from '../../util/types';
+import { personType, studyfieldType, roleType, agreementType, thesisType } from '../../util/types';
 
 //redux
 import { connect } from 'react-redux';
@@ -25,6 +25,10 @@ export class AgreementPage extends Component {
 
     componentDidMount() {
         document.title = 'Agreement Page';
+    }
+
+    componentWillMount() {
+        this.setState({ agreements: this.props.agreements });
     }
 
     componentWillReceiveProps(newProps) {
@@ -135,9 +139,11 @@ export class AgreementPage extends Component {
                     
                     {this.state.agreements ?
                         <AgreementView
-                            agreementData={this.state.agreements}
+                            agreements={this.state.agreements}
                             handleEditAgreement={this.toggleEditModal}
                             editableAgreement={this.state.editableAgreement}
+                            persons={this.props.persons}
+                            theses={this.props.theses}
                         /> : undefined}
                       
                     <div className="ui segment">
@@ -180,7 +186,8 @@ const mapStateToProps = (state) => ({
     studyfields: state.studyfields,
     user: state.user,
     roles: state.roles,
-    supervisors: getSupervisors(state.roles, state.persons)
+    supervisors: getSupervisors(state.roles, state.persons),
+    theses: state.theses
 });
 
 const { func, arrayOf, array } = PropTypes;
@@ -192,7 +199,10 @@ AgreementPage.propTypes = {
     saveAttachment: func.isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
-    supervisors: array.isRequired
+    supervisors: array.isRequired,
+    persons: arrayOf(personType).isRequired,
+    agreements: arrayOf(agreementType).isRequired,
+    theses: arrayOf(thesisType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgreementPage);
