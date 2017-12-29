@@ -1,5 +1,6 @@
 const emailDraftService = require('../services/EmailDraftService');
 
 export async function getEmailDrafts(req, res) {
-    return emailDraftService.saveEmailDraft();
+    const emailDrafts = await emailDraftService.getEmailDrafts();
+    res.status(200).json(emailDrafts).end();
 }
