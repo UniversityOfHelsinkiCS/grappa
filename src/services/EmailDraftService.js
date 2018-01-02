@@ -7,3 +7,10 @@ export async function getEmailDrafts() {
 export async function saveEmailDraft() {
     throw new Error('not implemented');
 }
+
+export async function updateEmailDraft(emailDraftId, emailDraft) {
+    return knex('emailDraft').update({
+        title: emailDraft.title,
+        body: emailDraft.body
+    }).where('emailDraftId', emailDraftId);
+}

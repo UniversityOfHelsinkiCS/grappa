@@ -11,4 +11,8 @@ router.post('/', jsonParser, (req, res) => {
     emailDraftController.getEmailDraft(req, res);
 });
 
+router.post('/:id', jsonParser, (req, res) => {
+    emailDraftController.updateEmailDraft(req, res);
+});
+
 module.exports = router;
