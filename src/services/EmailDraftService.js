@@ -4,6 +4,10 @@ export async function getEmailDrafts() {
     return knex.select().table('emailDraft');
 }
 
+export async function getEmailDraft(emailDraftId) {
+    return knex('emailDraft').select().where('emailDraftId', emailDraftId).first();
+}
+
 export async function saveEmailDraft(emailDraft) {
     return knex('emailDraft').insert({
         title: emailDraft.title,
