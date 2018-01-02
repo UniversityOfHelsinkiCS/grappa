@@ -1,7 +1,8 @@
 const reducer = (state = [], action) => {
     switch (action.type) {
         case 'AGREEMENT_GET_ALL_SUCCESS':
-            return action.response;
+            //Response contains agreements and attachments.
+            return action.response.agreements;
         case 'AGREEMENT_GET_ONE_SUCCESS':
             return [...state, action.response];
         case 'AGREEMENT_UPDATE_ONE_SUCCESS':
