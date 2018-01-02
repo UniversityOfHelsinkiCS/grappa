@@ -1,4 +1,5 @@
 const agreementService = require('../services/AgreementService');
+const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
@@ -27,10 +28,15 @@ export async function getAllAgreements(req, res) {
 
         const rolesInStudyfields = await getUsersRoles(user);
 
-        // f user is an admin, get everything
+        // If user is an admin, get everything
         if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
             agreements = await agreementService.getAllAgreements();
-            res.status(200).json(agreements).end();
+            const attachments = await attachmentService.getAllAttachments();
+            const responseObject = {
+                agreements,
+                attachments,
+            }
+            res.status(200).json(responseObject).end();
             return;
         }
 
@@ -51,13 +57,19 @@ export async function getAllAgreements(req, res) {
         agreements = [...new Set([...agreements, ...newAgreements])];
 
         // Remove duplicates
-        let response = [];
+        let responseAgreements = [];
         agreements.forEach(agreement => {
-            if (!response.find(item => item.agreementId === agreement.agreementId)) {
-                response.push(agreement);
+            if (!responseAgreements.find(item => item.agreementId === agreement.agreementId)) {
+                responseAgreements.push(agreement);
             }
         })
-        res.status(200).json(response);
+
+        const attachments = await attachmentService.getAttachmentsForAgreements(responseAgreements);
+        const responseObject = {
+            agreements: responseAgreements,
+            attachments,
+        }
+        res.status(200).json(responseObject);
     } catch (error) {
         console.log(error)
         res.status(500).json(error);

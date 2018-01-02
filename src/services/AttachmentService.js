@@ -64,6 +64,16 @@ export async function saveAttachments(req, res, agreementId) {
     }
 }
 
+export async function getAllAttachments() {
+    return knex.select(attachmentSchema).from('attachment');
+}
+
+export async function getAttachmentsForAgreements(agreements) {
+    const ids = agreements.map(agreement => agreement.agreementId);
+    return knex.select(attachmentSchema).from('attachment')
+        .whereIn('agreementId', ids);
+}
+
 export async function getAttachmentsForAgreement(agreementId) {
     return knex.select(attachmentSchema)
         .from('attachment')

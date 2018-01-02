@@ -75,3 +75,14 @@ test.skip('agreement post & correct response', async t => {
     const agreement = res.body.agreement;
 
 })
+
+test('agreements get should also return attachments', async t => {
+    t.plan(3);
+    const res = await request(makeApp(10))
+        .get('/agreements')
+    t.is(res.status, 200);
+    const agreements = res.body.agreements;
+    const attachments = res.body.attachments;
+    t.is(agreements.length, 1);
+    t.is(attachments.length, 1);
+})

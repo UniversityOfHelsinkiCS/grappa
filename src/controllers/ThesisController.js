@@ -81,7 +81,7 @@ export async function saveThesisForm(req, res) {
         delete thesis.studyfieldId;
         let savedGraders = []
         if (thesis.graders) {
-            this.updateGraders(thesis.graders, agreement);
+            updateGraders(thesis.graders, agreement);
             delete thesis.graders
         }
         //TODO: Email system
