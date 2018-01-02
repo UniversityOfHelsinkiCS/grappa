@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { saveThesis, updateThesis, deleteThesis } from './thesisActions';
-import { createAttachment, deleteAttachment } from '../attachment/attachmentActions';
+import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
@@ -135,6 +135,9 @@ export class ThesisEditPage extends Component {
         this.props.deleteAttachment(attachment.attachmentId);
     }
 
+    downloadAttachment = (attachmentId) => {
+        this.props.downloadAttachments([attachmentId])
+    }
 
     handleEmail = (reminderType) => {
         this.props.sendReminder(this.state.thesis.id, reminderType);
@@ -195,8 +198,14 @@ export class ThesisEditPage extends Component {
                         studyfields={this.props.studyfields}
                         allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
-                    <AttachmentList attachments={this.props.attachments} downloadAttachment={this.downloadAttachment} deleteAttachment={this.props.deleteAttachment} />
-                    <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
+                    <AttachmentList
+                        attachments={this.props.attachments}
+                        downloadAttachment={this.downloadAttachment}
+                        deleteAttachment={this.props.deleteAttachment} />
+                    <AttachmentAdder
+                        attachments={this.state.attachments}
+                        addAttachment={this.addAttachment}
+                        removeAttachment={this.removeAttachment} />
                     <br />
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
@@ -222,6 +231,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteAttachment(attachmentId) {
         dispatch(deleteAttachment(attachmentId));
+    },
+    downloadAttachments(attachmentIds) {
+        dispatch(downloadAttachments(attachmentIds));
     },
     sendReminder(thesisId, type) {
         dispatch(sendReminder(thesisId, type));
