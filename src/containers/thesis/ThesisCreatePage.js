@@ -100,7 +100,7 @@ export class ThesisCreatePage extends Component {
                     <ThesisInformation sendChange={this.handleChange}
                         thesis={this.state.thesis}
                         studyfields={this.props.studyfields}
-                        allowEdit={this.state.allowEdit} />
+                        allowEdit={true} />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
                     <br />

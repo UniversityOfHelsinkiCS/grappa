@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { saveThesis, updateThesis, deleteThesis } from './thesisActions';
+import { createAttachment, deleteAttachment } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
@@ -54,7 +55,6 @@ export class ThesisEditPage extends Component {
     init(props) {
         if (props.match.params && props.match.params.id) {
             const thesisId = props.match.params.id;
-            //if there is such thing as "params.id" given as a prop we should be viewing thesis with that id
             const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, thesisId)
             if (thesis) {
                 this.setState({ thesis, editMode: true })
@@ -125,12 +125,15 @@ export class ThesisEditPage extends Component {
 
     addAttachment = (attachment) => {
         this.setState({ attachments: [...this.state.attachments, attachment] });
+        this.props.createAttachment(attachment)
     }
 
     removeAttachment = (attachment) => {
         const attachments = this.state.attachments.filter(inList => inList !== attachment)
         this.setState({ attachments });
+        this.props.deleteAttachment(attachment.attachmentId);
     }
+
 
     handleEmail = (reminderType) => {
         this.props.sendReminder(this.state.thesis.id, reminderType);
@@ -138,7 +141,7 @@ export class ThesisEditPage extends Component {
 
     renderControlButtons() {
         //Admin controls
-        if (this.props.user.roles.find(studyfieldRole => studyfieldRole.role === 'admin')) {
+        if (this.props.user.roles && this.props.user.roles.find(studyfieldRole => studyfieldRole.role === 'admin')) {
             return (
                 <div className="field">
                     {this.state.allowEdit ?
@@ -211,6 +214,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteThesis(thesisId) {
         dispatch(deleteThesis(thesisId));
+    },
+    createAttachment(attachment) {
+        dispatch(createAttachment(attachment));
+    },
+    deleteAttachment(attachmentId) {
+        dispatch(deleteAttachment(attachmentId));
     },
     sendReminder(thesisId, type) {
         dispatch(sendReminder(thesisId, type));
