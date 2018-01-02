@@ -4,8 +4,13 @@ export async function getEmailDrafts() {
     return knex.select().table('emailDraft');
 }
 
-export async function saveEmailDraft() {
-    throw new Error('not implemented');
+export async function saveEmailDraft(emailDraft) {
+    return knex('emailDraft').insert({
+        title: emailDraft.title,
+        body: emailDraft.body
+    })
+        .returning('emailDraftId')
+        .then(emailDraftId => emailDraftId[0]);
 }
 
 export async function updateEmailDraft(emailDraftId, emailDraft) {
@@ -13,4 +18,8 @@ export async function updateEmailDraft(emailDraftId, emailDraft) {
         title: emailDraft.title,
         body: emailDraft.body
     }).where('emailDraftId', emailDraftId);
+}
+
+export async function deleteEmailDraft(draftId) {
+    return knex('emailDraft').delete().where('emailDraftId', draftId);
 }

@@ -8,11 +8,15 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', jsonParser, (req, res) => {
-    emailDraftController.getEmailDraft(req, res);
+    emailDraftController.saveEmailDraft(req, res);
 });
 
 router.post('/:id', jsonParser, (req, res) => {
     emailDraftController.updateEmailDraft(req, res);
+});
+
+router.delete('/:id', (req, res) => {
+    emailDraftController.deleteEmailDraft(req, res);
 });
 
 module.exports = router;

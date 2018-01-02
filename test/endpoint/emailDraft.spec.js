@@ -39,3 +39,23 @@ test('emailDraft update', async t => {
 
     t.is(res.status, 200);
 });
+
+test('emailDraft save', async t => {
+    const res = await request(makeApp(1))
+        .post(`/emailDrafts`)
+        .send({ title: 'test title', body: 'test body' });
+
+    t.is(res.status, 200);
+    t.truthy(res.body.emailDraftId);
+});
+
+test('emailDraft delete', async t => {
+    const emailDraft = await knex.insert({ title: 'foo', body: 'bar' })
+        .into('emailDraft')
+        .returning('emailDraftId');
+    const draftId = emailDraft[0];
+    const res = await request(makeApp(1))
+        .delete(`/emailDrafts/${draftId}`);
+
+    t.is(res.status, 200);
+});
