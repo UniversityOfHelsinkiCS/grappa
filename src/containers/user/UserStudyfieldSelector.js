@@ -19,6 +19,10 @@ class UserStudyfieldSelector extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        if (!newProps.user || !newProps.user.roles) {
+            return;
+        }
+
         const visitorRole = findVisitorRole(newProps.user.roles);
 
         if (visitorRole && newProps.studyfields.length > 0) {

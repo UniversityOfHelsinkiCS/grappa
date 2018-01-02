@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import EmailDraft from '../../components/email/EmailDraft'
 
@@ -15,14 +16,14 @@ export class EmailDraftPage extends Component {
     }
 
     componentDidMount() {
-        if (this.props.EmailDrafts) {
-            this.setState({ draftList: this.sortDraftList(this.props.EmailDrafts) });
+        if (this.props.emailDrafts) {
+            this.setState({ draftList: this.sortDraftList(this.props.emailDrafts) });
         }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.EmailDrafts) {
-            this.setState({ draftList: this.sortDraftList(newProps.EmailDrafts) });
+            this.setState({ draftList: this.sortDraftList(newProps.emailDrafts) });
         }
     }
 
@@ -56,7 +57,7 @@ export class EmailDraftPage extends Component {
     }
 
     render() {
-        const drafts = this.props.EmailDrafts;
+        const drafts = this.props.emailDrafts;
         return (
             <div className="ui form">
                 <h2 className="ui dividing header">Email drafts</h2>
@@ -80,7 +81,7 @@ export class EmailDraftPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        EmailDrafts: state.emailDrafts,
+        emailDrafts: state.emailDrafts,
     };
 };
 
@@ -95,5 +96,12 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(deleteEmailDraft(draft));
     },
 });
+
+const { func } = PropTypes;
+EmailDraftPage.propTypes = {
+    updateEmailDraft: func.isRequired,
+    deleteEmailDraft: func.isRequired,
+    saveEmailDraft: func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);

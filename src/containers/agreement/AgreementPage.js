@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
+import { personType, studyfieldType, roleType, agreementType, thesisType } from '../../util/types';
 
 //redux
 import { connect } from 'react-redux';
@@ -13,10 +15,10 @@ export class AgreementPage extends Component {
         super(props);
         this.state = {
             newAgreement: false,
-            originalAgreement: {},
+            originalAgreements: {},
             editableAgreement: undefined,
             editMode: false,
-            agreement: undefined, //TODO rename as agreementS, I didn't have time to do it because I got weird bugs when trying
+            agreements: undefined,
             requiredFields: getRequiredFields(this.props.user.roles)
         }
     }
@@ -25,15 +27,19 @@ export class AgreementPage extends Component {
         document.title = 'Agreement Page';
     }
 
+    componentWillMount() {
+        this.setState({ agreements: this.props.agreements });
+    }
+
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreements) {
             //const agreement = newProps.agreements.find(agreement => agreement.authorId === this.props.user.personId);
-            const agreement = newProps.agreements;
-            if (agreement) {
+            const agreements = newProps.agreements;
+            if (agreements) {
                 this.setState(
                     {
-                        agreement: agreement,
-                        originalAgreement: Object.assign({}, agreement)
+                        agreements,
+                        originalAgreement: Object.assign({}, agreements)
                     }
                 );
             }
@@ -41,7 +47,7 @@ export class AgreementPage extends Component {
     }
 
     parseResponseData = (data) => {
-        var parsedData = data.agreement;
+        const parsedData = data.agreement;
         //TODO: refactor this when we can distinguish between secondary and other supervisor
         for (let i = 0; i < data.persons.length; i++) {
             if (data.persons[i].personRoleId === data.agreement.responsibleSupervisorId) {
@@ -57,7 +63,7 @@ export class AgreementPage extends Component {
 
     //TODO strange warnings when closing a modal
     toggleEditModal = (agreement) => {
-        var editable = !this.state.editMode;
+        const editable = !this.state.editMode;
         this.setState({ editMode: editable, editableAgreement: agreement });
     }
 
@@ -66,7 +72,7 @@ export class AgreementPage extends Component {
     }
 
     sendForm = () => {
-        this.props.updateAgreement(this.state.agreement);
+        this.props.updateAgreement(this.state.agreements);
     }
 
     startNewAgreement = () => {
@@ -88,11 +94,10 @@ export class AgreementPage extends Component {
         if (a === undefined || b === undefined)
             return false;
         // Create arrays of property names
-        var aProps = Object.getOwnPropertyNames(a);
-        var bProps = Object.getOwnPropertyNames(b);
+        const aProps = Object.getOwnPropertyNames(a);
 
-        for (var i = 0; i < aProps.length; i++) {
-            var propName = aProps[i];
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
             if (a[propName] !== b[propName])
                 return false;
         }
@@ -107,7 +112,7 @@ export class AgreementPage extends Component {
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> Back </button>
                     <Agreement
-                        agreement={this.state.agreement}
+                        agreement={this.state.agreements}
                         supervisors={this.props.supervisors}
                         studyfields={this.props.studyfields}
                         user={this.props.user}
@@ -119,14 +124,27 @@ export class AgreementPage extends Component {
             );
         } else {
             //check if form data has changed
-            let disableSubmit = this.checkForChanges(this.state.agreement, this.state.originalAgreement);
+            const disableSubmit = this.checkForChanges(this.state.agreements, this.state.originalAgreements);
             return (
                 <div>
                     <br />
                     <button className="ui black button" onClick={this.startNewAgreement}> New Agreement </button>
-                    <AgreementEditModal showModal={this.state.editMode} closeModal={this.toggleEditModal} formData={this.state.editableAgreement} originalAgreement={this.state.editableAgreement} updateFormData={this.updateFormData} />
+                    <AgreementEditModal
+                        showModal={this.state.editMode}
+                        closeModal={this.toggleEditModal}
+                        formData={this.state.editableAgreement}
+                        originalAgreement={this.state.editableAgreement}
+                        updateFormData={this.updateFormData}
+                    />
                     
-                    {this.state.agreement ? <AgreementView agreementData={this.state.agreement} handleEditAgreement={this.toggleEditModal} editableAgreement={this.state.editableAgreement}/>: undefined}
+                    {this.state.agreements ?
+                        <AgreementView
+                            agreements={this.state.agreements}
+                            handleEditAgreement={this.toggleEditModal}
+                            editableAgreement={this.state.editableAgreement}
+                            persons={this.props.persons}
+                            theses={this.props.theses}
+                        /> : undefined}
                       
                     <div className="ui segment">
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
@@ -152,13 +170,39 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-const mapStateToProps = (state) => {
-    return {
-        agreements: state.agreements,
-        persons: state.persons,
-        studyfields: state.studyfields,
-        user: state.user,
-    };
-}
+const getSupervisorRoles = roles => roles.filter(role => role.name === 'supervisor');
+const getSupervisors = (roles, persons) => {
+    return getSupervisorRoles(roles).map((role) =>
+        ({
+            person: persons.find(person => person.personId === role.personId),
+            personRoleId: role.personRoleId,
+            studyfieldId: role.studyfieldId,
+        }));
+};
+
+const mapStateToProps = (state) => ({
+    agreements: state.agreements,
+    persons: state.persons,
+    studyfields: state.studyfields,
+    user: state.user,
+    roles: state.roles,
+    supervisors: getSupervisors(state.roles, state.persons),
+    theses: state.theses
+});
+
+const { func, arrayOf, array } = PropTypes;
+AgreementPage.propTypes = {
+    user: personType.isRequired,
+    updateAgreement: func.isRequired,
+    saveAgreement: func.isRequired,
+    saveAgreementDraft: func.isRequired,
+    saveAttachment: func.isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
+    roles: arrayOf(roleType).isRequired,
+    supervisors: array.isRequired,
+    persons: arrayOf(personType).isRequired,
+    agreements: arrayOf(agreementType).isRequired,
+    theses: arrayOf(thesisType).isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgreementPage);

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getPermissions } from '../util/rolePermissions';
 import { login, logout } from '../containers/user/userActions';
+import { personType } from '../util/types';
 
 //TODO: redux persistent storage & fetch in middleware
 import { getStudyfields } from '../containers/studyfield/studyfieldActions';
@@ -11,6 +13,7 @@ import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingA
 import { getTheses } from '../containers/thesis/thesisActions';
 import { getPersons } from '../containers/person/personActions';
 import { getNotifications } from './notifications/notificationsAction';
+import { getEmailDrafts } from './email/emailActions';
 
 export class NavBar extends Component {
     constructor() {
@@ -36,8 +39,9 @@ export class NavBar extends Component {
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
+            this.props.getEmailDrafts();
 
-            if (newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
+            if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
                 this.props.getNotifications();
             }
             
@@ -69,13 +73,13 @@ export class NavBar extends Component {
                     <h1><Link to="/">Grappa</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
-                    {this.state.links ? this.state.links.map((elem, index) => {
+                    {this.state.links ? this.state.links.map((elem) => {
                         //Handle special cases:
                         switch (elem.path) {
                             case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
-                                return <NavLink key={index} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>
+                                return <NavLink key={elem.path} to={'/councilmeeting/next'} exact className="item">{elem.navText}</NavLink>
                             default:
-                                return <NavLink key={index} to={elem.path} exact className="item">{elem.navText}</NavLink>
+                                return <NavLink key={elem.path} to={elem.path} exact className="item">{elem.navText}</NavLink>
                         }
                     }) : undefined}
                     <div className="right menu">
@@ -112,6 +116,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     getNotifications() {
         dispatch(getNotifications());
+    },
+    getEmailDrafts() {
+        dispatch(getEmailDrafts());
     }
 });
 
@@ -120,5 +127,19 @@ const mapStateToProps = (state) => {
         user: state.user
     };
 }
+
+const { func } = PropTypes;
+NavBar.propTypes = {
+    login: func.isRequired,
+    logout: func.isRequired,
+    getPersons: func.isRequired,
+    getStudyfields: func.isRequired,
+    getAgreements: func.isRequired,
+    getCouncilmeetings: func.isRequired,
+    getTheses: func.isRequired,
+    getNotifications: func.isRequired,
+    getEmailDrafts: func.isRequired,
+    user: personType.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

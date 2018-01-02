@@ -68,7 +68,7 @@ export default class EmailDraft extends Component {
     render() {
         const editing = this.state.editing;
         if (!this.state.draft) {
-            return <div></div>;
+            return <div />;
         }
         return (
             <div className="m-bot">
