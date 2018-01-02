@@ -8,6 +8,7 @@ import { sendReminder } from '../email/emailActions';
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
+import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelecter from '../../components/person/PersonSelecter';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
 import ThesisEmails from '../../components/thesis/ThesisEmails';
@@ -194,6 +195,7 @@ export class ThesisEditPage extends Component {
                         studyfields={this.props.studyfields}
                         allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
+                    <AttachmentList attachments={this.props.attachments} downloadAttachment={this.downloadAttachment} deleteAttachment={this.props.deleteAttachment} />
                     <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
                     <br />
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} /> : undefined}
@@ -227,13 +229,14 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-    user: state.user,
+    agreements: state.agreements,
+    attachments: state.attachments,
     councilmeetings: state.councilmeetings,
-    studyfields: state.studyfields,
-    roles: state.roles,
-    theses: state.theses,
     persons: state.persons,
-    agreements: state.agreements
+    roles: state.roles,
+    studyfields: state.studyfields,
+    theses: state.theses,
+    user: state.user,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage);
