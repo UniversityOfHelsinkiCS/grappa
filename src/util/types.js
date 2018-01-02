@@ -56,3 +56,8 @@ export const thesisType = shape({
     graderEval: string,
     printDone: number
 });
+
+export const emailType = shape({
+    title: string,
+    body: string
+});

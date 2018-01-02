@@ -5,6 +5,7 @@ import EmailDraft from '../../components/email/EmailDraft'
 
 import { connect } from 'react-redux';
 import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
+import { emailType } from '../../util/types';
 
 export class EmailDraftPage extends Component {
 
@@ -16,8 +17,8 @@ export class EmailDraftPage extends Component {
     }
 
     componentDidMount() {
-        if (this.props.emailDrafts) {
-            this.setState({ draftList: this.sortDraftList(this.props.emailDrafts) });
+        if (this.props.emails) {
+            this.setState({ draftList: this.sortDraftList(this.props.emails) });
         }
     }
 
@@ -57,7 +58,7 @@ export class EmailDraftPage extends Component {
     }
 
     render() {
-        const drafts = this.props.emailDrafts;
+        const drafts = this.props.emails;
         return (
             <div className="ui form">
                 <h2 className="ui dividing header">Email drafts</h2>
@@ -66,7 +67,12 @@ export class EmailDraftPage extends Component {
                     Different variables are indicated with double dollars eg. $LINK$ which differ from draft to draft.
                 </p>
                 {drafts ? drafts.map((draft, index) =>
-                    <EmailDraft draft={draft} key={index} updateDraft={this.handleUpdateDraft} sendDeleteRequest={this.handleDeleteDraft} />
+                    <EmailDraft
+                        draft={draft}
+                        key={draft.emailDraftId}
+                        updateDraft={this.handleUpdateDraft}
+                        sendDeleteRequest={this.handleDeleteDraft}
+                    />
                 ) : undefined}
 
                 <div className="ui input focus">
@@ -81,7 +87,7 @@ export class EmailDraftPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        emailDrafts: state.emailDrafts,
+        emails: state.emails,
     };
 };
 
@@ -97,11 +103,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-const { func } = PropTypes;
+const { func, arrayOf } = PropTypes;
 EmailDraftPage.propTypes = {
     updateEmailDraft: func.isRequired,
     deleteEmailDraft: func.isRequired,
-    saveEmailDraft: func.isRequired
+    saveEmailDraft: func.isRequired,
+    emails: arrayOf(emailType.isRequired).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);
