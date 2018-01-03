@@ -1,14 +1,16 @@
 const knex = require('../db/connection');
 const bookshelf = require('../db/bookshelf')
 const Attachment = require('../db/models/attachment');
+const pdfManipulator = require('../util/pdfManipulator');
 const multer = require('multer');
+const pathToFolder = './uploads/';
 
 const storage = () => {
     if (process.env.NODE_ENV === 'test') {
         return multer.memoryStorage();
     }
     return multer.diskStorage({
-        destination: './uploads/',
+        destination: pathToFolder,
         filename: (req, file, cb) => {
             cb(null, Date.now() + '-' + file.originalname)
         }
@@ -68,6 +70,11 @@ export async function getAllAttachments() {
     return knex.select(attachmentSchema).from('attachment');
 }
 
+export async function getAttachments(attachmentIds) {
+    return knex.select(attachmentSchema).from('attachment')
+        .whereIn('attachmentId', attachmentIds)
+}
+
 export async function getAttachmentsForAgreements(agreements) {
     const ids = agreements.map(agreement => agreement.agreementId);
     return knex.select(attachmentSchema).from('attachment')
@@ -89,4 +96,14 @@ export async function updateAttachment(attachment) {
         .catch(error => {
             throw error
         });
+}
+
+export async function mergeAttachments(attachments, resultFileName) {
+    const files = attachments.map(attachment => attachment.filename)
+    try {
+        return pdfManipulator.joinPdfs(pathToFolder, files, resultFileName);
+        return pathToFolder + resultFileName
+    } catch (error) {
+        throw error;
+    }
 }
