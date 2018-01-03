@@ -11,6 +11,11 @@ class AgreementView extends Component {
         }
     }
 
+    getAuthorName(agreement) {
+        const author = this.props.persons.find(person => person.personId === agreement.authorId);
+        return author ? `${author.firstname} ${author.lastname}` : '';
+    }
+
     renderOne(agreement) {
         const index = this.props.agreements.findIndex(x => x.agreementId === agreement.agreementId);
         return (
@@ -103,7 +108,7 @@ class AgreementView extends Component {
             <div>
                 {data.map((agreement, index) =>
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">Opinnäytetyön otsikko (työnimi): {this.getThesis(agreement).title}</h2>
+                        <h2 className="ui header">{this.getAuthorName(agreement)}: {this.getThesis(agreement).title}</h2>
                         <b>Ohjausvastuut: </b> <br />
                         Vastuuohjaaja: {agreement.title} {this.getSupervisor(agreement)}<br />
                         Muuohjaaja: to be shown here<br />
