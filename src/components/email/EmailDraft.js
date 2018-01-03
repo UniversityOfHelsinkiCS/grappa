@@ -72,7 +72,7 @@ export default class EmailDraft extends Component {
         }
         return (
             <div className="m-bot">
-                <h3 className="ui dividing header">{editing ? 'Editing draft: ' : ''}{this.props.draft.title}</h3>
+                <h3 className="ui dividing header">{editing ? 'Editing draft: ' : ''}{this.props.draft.type}</h3>
                 <div className="field">
                     <label>Title</label>
                     <input

@@ -18,11 +18,10 @@ export const updateEmailDraft = (emailDraft) => {
     return callController(route, prefix, emailDraft, 'post');
 }
 
-export const deleteEmailDraft = (emailDraftId) => {
-    const prefix = 'DELETE_ONE_';
-    const method = 'delete';
-    const route = '/emaildrafts/' + emailDraftId;
-    return callApi(prefix, method, emailDraftId, route);
+export const deleteEmailDraft = (emailDraft) => {
+    const prefix = 'EMAILDRAFT_DELETE_ONE_';
+    const route = '/emaildrafts/' + emailDraft.emailDraftId;
+    return callController(route, prefix, {}, 'delete');
 }
 
 export const sendReminder = (thesisId, emailType) => {

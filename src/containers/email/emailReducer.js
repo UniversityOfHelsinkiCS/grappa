@@ -7,7 +7,7 @@ const reducer = (state = [], action) => {
         case 'EMAILDRAFT_UPDATE_ONE_SUCCESS':
             return [...state.filter(draft => draft.emailDraftId !== action.response.emailDraftId), action.response];
         case 'EMAILDRAFT_DELETE_ONE_SUCCESS':
-            return state.filter(draft => draft.emailDraftId !== action.response);
+            return state.filter(draft => draft.emailDraftId !== Number(action.response));
         default:
             return state;
     }
