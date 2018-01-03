@@ -5,7 +5,8 @@ exports.seed = function(knex, Promise) {
             // Inserts seed entries
             return knex('emailDraft').insert({
                 title: 'Test email',
-                body: 'Email body'
+                body: 'Email body',
+                type: 'testEmail'
             });
         });
 };

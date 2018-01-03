@@ -11,7 +11,8 @@ export async function getEmailDraft(emailDraftId) {
 export async function saveEmailDraft(emailDraft) {
     return knex('emailDraft').insert({
         title: emailDraft.title,
-        body: emailDraft.body
+        body: emailDraft.body,
+        type: emailDraft.type
     })
         .returning('emailDraftId')
         .then(emailDraftId => emailDraftId[0]);

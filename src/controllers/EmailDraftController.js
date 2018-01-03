@@ -34,7 +34,7 @@ export async function deleteEmailDraft(req, res) {
     try {
         await emailDraftService.deleteEmailDraft(req.params.id);
         await notificationService.createNotification('EMAILDRAFT_DELETE_ONE', req);
-        res.status(200).end();
+        res.status(200).json(req.params.id).end();
     } catch (error) {
         console.log(error);
         res.status(500).end();

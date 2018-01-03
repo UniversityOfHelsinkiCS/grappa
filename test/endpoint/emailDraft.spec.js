@@ -20,15 +20,16 @@ test.before(async t => {
 });
 
 test('emailDrafts get all', async t => {
-    t.plan(2);
+    t.plan(3);
     const res = await request(makeApp(1)).get('/emailDrafts');
     t.is(res.status, 200);
     const emailDrafts = res.body;
     t.truthy(emailDrafts.length > 0);
+    t.truthy(emailDrafts[0].type);
 });
 
 test('emailDraft update', async t => {
-    const emailDraft = await knex.insert({ title: 'foo', body: 'bar' })
+    const emailDraft = await knex.insert({ type: 'endpointTestUpdate', title: 'foo', body: 'bar' })
         .into('emailDraft')
         .returning('emailDraftId');
     const draftId = emailDraft[0];
@@ -43,14 +44,14 @@ test('emailDraft update', async t => {
 test('emailDraft save', async t => {
     const res = await request(makeApp(1))
         .post(`/emailDrafts`)
-        .send({ title: 'test title', body: 'test body' });
+        .send({ type: 'endpointTest', title: 'test title', body: 'test body' });
 
     t.is(res.status, 200);
     t.truthy(res.body.emailDraftId);
 });
 
 test('emailDraft delete', async t => {
-    const emailDraft = await knex.insert({ title: 'foo', body: 'bar' })
+    const emailDraft = await knex.insert({ type: 'endpointTestDelete', title: 'foo', body: 'bar' })
         .into('emailDraft')
         .returning('emailDraftId');
     const draftId = emailDraft[0];

@@ -12,14 +12,14 @@ test.beforeEach(async t => {
 });
 
 test('can get email drafts', async t => {
-    await knex.insert({ title: 'foo', body: 'bar' }).into('emailDraft');
+    await knex.insert({ type: 'getAllTest', title: 'foo', body: 'bar' }).into('emailDraft');
     const drafts = await emailDraftService.getEmailDrafts();
 
     t.true(drafts.length > 0);
 });
 
 test('can update email draft', async t => {
-    const emailDraft = await knex.insert({ title: 'foo', body: 'bar' })
+    const emailDraft = await knex.insert({ type: 'updateTest', title: 'foo', body: 'bar' })
         .into('emailDraft')
         .returning('emailDraftId');
     const draftId = emailDraft[0];
@@ -35,7 +35,7 @@ test('can update email draft', async t => {
 });
 
 test('can save new email draft', async t => {
-    const emailDraft = { title: 'new mail', body: 'new mail' };
+    const emailDraft = { type: 'newTest', title: 'new mail', body: 'new mail' };
     const draftId = await emailDraftService.saveEmailDraft(emailDraft);
     const draft = await knex.select().from('emailDraft').where('emailDraftId', draftId).first();
     t.is(draft.title, emailDraft.title);
@@ -43,7 +43,7 @@ test('can save new email draft', async t => {
 });
 
 test('can delete email draft', async t => {
-    const emailDraft = await knex.insert({ title: 'foo', body: 'bar' })
+    const emailDraft = await knex.insert({ type: 'deleteTest', title: 'foo', body: 'bar' })
         .into('emailDraft')
         .returning('emailDraftId');
     const draftId = emailDraft[0];
