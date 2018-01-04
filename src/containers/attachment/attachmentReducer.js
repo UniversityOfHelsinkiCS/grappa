@@ -10,6 +10,22 @@ const reducer = (state = [], action) => {
         case 'AGREEMENT_SAVE_ONE_SUCCESS':
             //TODO update attachments when agreement is saved
             return state
+        case 'ATTACHMENT_DOWNLOAD_SUCCESS':
+            const blob = new Blob([action.response], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const show = true
+            if (show) { //Display
+                window.location.href = url;
+            } else { //Download
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `theses.pdf`;
+                a.target = "_blank";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+            return state
         case 'ATTACHMENT_SAVE_ONE_SUCCESS':
             //TODO check for updates
             return [...state, action.response];
