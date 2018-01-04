@@ -6,7 +6,7 @@ const pdftk = require('node-pdftk');
  * @param {Array<String>} fileNames - Array of files to be joined.
  * @return {Promise<String>} Promise of the absolute path to the created file.
  */
-export async function joinPdfs(pathToFolder, fileNames, resultFileName) {
+export async function joinPdfs(pathToFolder, fileNames) {
     //Does not support past 26.
     let pdfs = fileNames.reduce((accumulated, current, index) => {
         accumulated += " " + String.fromCharCode(65 + index);

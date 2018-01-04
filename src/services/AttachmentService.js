@@ -98,11 +98,10 @@ export async function updateAttachment(attachment) {
         });
 }
 
-export async function mergeAttachments(attachments, resultFileName) {
+export async function mergeAttachments(attachments) {
     const files = attachments.map(attachment => attachment.filename)
     try {
-        return pdfManipulator.joinPdfs(pathToFolder, files, resultFileName);
-        return pathToFolder + resultFileName
+        return pdfManipulator.joinPdfs(pathToFolder, files);
     } catch (error) {
         throw error;
     }

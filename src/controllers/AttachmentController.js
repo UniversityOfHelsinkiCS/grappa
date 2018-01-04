@@ -16,10 +16,10 @@ export async function downloadAttachments(req, res) {
     try {
         const attachmentIds = req.params.ids.split('&');
         const attachments = await attachmentService.getAttachments(attachmentIds);
-        const pathToFile = await attachmentService.mergeAttachments(attachments, "merged.pdf");
+        const fileStream = await attachmentService.mergeAttachments(attachments);
         
         res.type('pdf');
-        res.end(pathToFile, 'binary');
+        res.end(fileStream, 'binary');
     } catch (error) {
         console.log("error", error);
         res.status(501).send({ text: 'NOT YET IMPLEMENTED' }).end();
