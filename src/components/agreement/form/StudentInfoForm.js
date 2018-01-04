@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { personType } from '../../../util/types';
 
 export default class StudentInfoForm extends Component {
 
@@ -35,3 +36,7 @@ export default class StudentInfoForm extends Component {
         )
     }
 }
+
+StudentInfoForm.propTypes = {
+    user: personType.isRequired
+};

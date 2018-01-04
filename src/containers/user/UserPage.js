@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { login } from './userActions';
 import UserStudyfieldSelector from './UserStudyfieldSelector';
+import { personType } from '../../util/types';
 
 export class UserPage extends Component {
 
@@ -75,5 +77,12 @@ const mapStateToProps = (state) => {
         persons: state.persons
     };
 }
+
+const { arrayOf, func } = PropTypes;
+UserPage.propTypes = {
+    user: personType.isRequired,
+    persons: arrayOf(personType).isRequired,
+    login: func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
