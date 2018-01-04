@@ -106,3 +106,13 @@ export async function mergeAttachments(attachments) {
         throw error;
     }
 }
+
+export async function deleteAttachment(attachmentId) {
+    //Do not delete the file for now.
+    //TODO: Add timed file removal (after indexing has ended, 30 days?)
+    return knex('attachment')
+        .where('attachmentId', '=', attachmentId)
+        .del()
+        .then(() => attachmentId)
+        .catch(err => err);
+}
