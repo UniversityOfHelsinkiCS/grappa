@@ -1,6 +1,6 @@
 const reducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'ROLE_UPDATE_ONE_SUCCESS':
+    switch (true) {
+        case action.type === 'ROLE_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
                 roleUpdated: {
                     active: true,
@@ -8,7 +8,23 @@ const reducer = (state = {}, action) => {
                     text: 'Tietojen päivitys onnistui'
                 }
             });
-        case 'EVENT_MESSAGE_CLEAR':
+        case action.type === 'USER_LOGOUT_SUCCESS':
+            return Object.assign({}, state, {
+                logout: {
+                    active: true,
+                    type: 'success',
+                    text: 'Uloskirjautuminen onnistui'
+                }
+            });
+        case action.type.includes('_FAILURE'):
+            const message = {};
+            message[action.type] = {
+                active: true,
+                type: 'error',
+                text: action.type
+            }
+            return Object.assign({}, state, message)
+        case action.type === 'EVENT_MESSAGE_CLEAR':
             return {};
         default:
             return state;
