@@ -92,25 +92,11 @@ export class ThesisEditPage extends Component {
 
 
     handleSaveThesis = () => {
-        const thesisIsNew = !this.state.thesis.id;
-        const form = new FormData();
-        this.state.attachments.forEach(attachment => {
-            form.append('attachment', attachment);
-        })
-        form.append('json', JSON.stringify(this.state.thesis));
-        if (thesisIsNew) {
-            this.props.saveThesis(form);
-        } else {
-            this.props.updateThesis(form);
-        }
+        this.props.updateThesis(this.state.thesis);
     }
 
     deleteThesis = () => {
         this.props.deleteThesis(this.state.thesis.id);
-    }
-
-    toggleModal = () => {
-        this.setState({ showModal: !this.state.showModal });
     }
 
     toggleEditing = () => {
@@ -126,7 +112,12 @@ export class ThesisEditPage extends Component {
 
     addAttachment = (attachment) => {
         this.setState({ attachments: [...this.state.attachments, attachment] });
-        this.props.createAttachment(attachment)
+        const form = new FormData();
+        //agreementId needed to link the attachment to.
+        const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
+        form.append("json", JSON.stringify(agreement));
+        form.append('attachment', attachment);
+        this.props.createAttachment(form)
     }
 
     removeAttachment = (attachment) => {
@@ -190,7 +181,6 @@ export class ThesisEditPage extends Component {
         return (
             <div>
                 <br />
-                <ThesisConfirmModal sendSaveThesis={this.handleSaveThesis} closeModal={this.toggleModal} showModal={this.state.showModal} />
                 <div className="ui form">
                     {this.renderControlButtons()}
                     <ThesisInformation sendChange={this.handleChange}
@@ -211,7 +201,7 @@ export class ThesisEditPage extends Component {
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
-                <button className="ui positive button" onClick={this.toggleModal}>
+                <button className="ui positive button" onClick={this.handleSaveThesis}>
                     Submit
                 </button>
             </div>
