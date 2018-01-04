@@ -27,10 +27,8 @@ const reducer = (state = [], action) => {
             }
             return state
         case 'ATTACHMENT_SAVE_ONE_SUCCESS':
-            //TODO check for updates
-            return [...state, action.response];
+            return [...state, ...action.response];
         case 'ATTACHMENT_DELETE_ONE_SUCCESS':
-            //TODO
             return state.filter(attachment => attachment.attachmentId !== action.response)
         default:
             return state;
