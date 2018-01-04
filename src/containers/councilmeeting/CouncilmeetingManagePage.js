@@ -115,27 +115,27 @@ export class CouncilmeetingManagePage extends Component {
           <div className="field">
             <label>Date</label>
             <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={newCouncilmeeting.date}
-              onChange={this.handleDateChange('newCouncilmeeting', 'date')}
+                dateFormat="DD/MM/YYYY"
+                selected={newCouncilmeeting.date}
+                onChange={this.handleDateChange('newCouncilmeeting', 'date')}
             />
           </div>
           <div className="field">
             <label>Instructor deadline days</label>
             <input
-              type="text"
-              value={newCouncilmeeting.instructorDeadlineDays}
-              onChange={this.handleChange('newCouncilmeeting', 'instructorDeadlineDays')}
-              placeholder="Days"
+                type="text"
+                value={newCouncilmeeting.instructorDeadlineDays}
+                onChange={this.handleChange('newCouncilmeeting', 'instructorDeadlineDays')}
+                placeholder="Days"
             />
           </div>
           <div className="field">
             <label>Student deadline days</label>
             <input
-              type="text"
-              value={newCouncilmeeting.studentDeadlineDays}
-              onChange={this.handleChange('newCouncilmeeting', 'studentDeadlineDays')}
-              placeholder="Days"
+                type="text"
+                value={newCouncilmeeting.studentDeadlineDays}
+                onChange={this.handleChange('newCouncilmeeting', 'studentDeadlineDays')}
+                placeholder="Days"
             />
           </div>
           <div className="field">
@@ -164,25 +164,25 @@ export class CouncilmeetingManagePage extends Component {
           <div className="field">
             <label>Date</label>
             <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={moment(updateCouncilmeeting.date)}
-              onChange={this.handleDateChange('updateCouncilmeeting', 'date')}
+                dateFormat="DD/MM/YYYY"
+                selected={moment(updateCouncilmeeting.date)}
+                onChange={this.handleDateChange('updateCouncilmeeting', 'date')}
             />
           </div>
           <div className="field">
             <label>Instructor deadline</label>
             <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={moment(updateCouncilmeeting.instructorDeadline)}
-              onChange={this.handleDateChange('updateCouncilmeeting', 'instructorDeadline')}
+                dateFormat="DD/MM/YYYY"
+                selected={moment(updateCouncilmeeting.instructorDeadline)}
+                onChange={this.handleDateChange('updateCouncilmeeting', 'instructorDeadline')}
             />
           </div>
           <div className="field">
             <label>Student deadline</label>
             <DatePicker
-              dateFormat="DD/MM/YYYY"
-              selected={moment(updateCouncilmeeting.studentDeadline)}
-              onChange={this.handleDateChange('updateCouncilmeeting', 'studentDeadline')}
+                dateFormat="DD/MM/YYYY"
+                selected={moment(updateCouncilmeeting.studentDeadline)}
+                onChange={this.handleDateChange('updateCouncilmeeting', 'studentDeadline')}
             />
           </div>
           <div className="field">
@@ -221,14 +221,10 @@ export class CouncilmeetingManagePage extends Component {
                 <Link to={`/councilmeeting/${councilmeeting.id}`}>{moment(councilmeeting.studentDeadline).format('DD/MM/YYYY')}</Link>
               </td>
               <td>
-                <i className="write icon green"
-                  onClick={this.selectMeeting(councilmeeting)}
-                ></i>
+                <i className="write icon green" onClick={this.selectMeeting(councilmeeting)} />
               </td>
               <td>
-                <i className="remove icon red"
-                  onClick={this.deleteMeeting(councilmeeting)}
-                ></i>
+                <i className="remove icon red" onClick={this.deleteMeeting(councilmeeting)} />
               </td>
             </tr>
           )}
@@ -301,9 +297,9 @@ export class CouncilmeetingManagePage extends Component {
             </p>
             <div className="ui checkbox">
               <input
-                type="checkbox"
-                checked={this.state.showOld ? 'true' : ''}
-                onChange={this.handleCheckboxChange}
+                  type="checkbox"
+                  checked={this.state.showOld ? 'true' : ''}
+                  onChange={this.handleCheckboxChange}
               />
               <label>Show also past dates</label>
             </div>

@@ -1,28 +1,27 @@
 import { callController } from '../../util/apiConnection';
 
 export const getEmailDrafts = () => {
-    const prefix = 'GET_ALL_';
+    const prefix = 'EMAILDRAFT_GET_ALL_';
     const route = '/emailDrafts';
     return callController(route, prefix);
 }
 
 export const saveEmailDraft = (emailDraft) => {
-    const prefix = 'SAVE_ONE_';
-    const method = 'post';
-    return callApi(prefix, method, emailDraft);
+    const prefix = 'EMAILDRAFT_SAVE_ONE_';
+    const route = '/emailDrafts';
+    return callController(route, prefix, emailDraft, 'post');
 }
 
 export const updateEmailDraft = (emailDraft) => {
-    const prefix = 'UPDATE_ONE_';
-    const method = 'put';
-    return callApi(prefix, method, emailDraft);
+    const prefix = 'EMAILDRAFT_UPDATE_ONE_';
+    const route = `/emailDrafts/${emailDraft.emailDraftId}`;
+    return callController(route, prefix, emailDraft, 'post');
 }
 
-export const deleteEmailDraft = (emailDraftId) => {
-    const prefix = 'DELETE_ONE_';
-    const method = 'delete';
-    const route = '/emaildrafts/' + emailDraftId;
-    return callApi(prefix, method, emailDraftId, route);
+export const deleteEmailDraft = (emailDraft) => {
+    const prefix = 'EMAILDRAFT_DELETE_ONE_';
+    const route = '/emaildrafts/' + emailDraft.emailDraftId;
+    return callController(route, prefix, {}, 'delete');
 }
 
 export const sendReminder = (thesisId, emailType) => {

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { emailType } from '../../util/types';
 
 export default class EmailDraft extends Component {
     constructor(props) {
@@ -32,16 +34,14 @@ export default class EmailDraft extends Component {
     }
 
     changeTitle = (event) => {
-        const value = event.target.value;
-        let draft = this.state.draft;
-        draft.title = value;
+        const draft = Object.assign({}, this.state.draft);
+        draft.title = event.target.value;
         this.setState({ draft })
     }
 
     changeBody = (event) => {
-        const value = event.target.value;
-        let draft = this.state.draft;
-        draft.body = value;
+        const draft = Object.assign({}, this.state.draft);
+        draft.body = event.target.value;
         this.setState({ draft })
     }
 
@@ -72,7 +72,7 @@ export default class EmailDraft extends Component {
         }
         return (
             <div className="m-bot">
-                <h3 className="ui dividing header">{editing ? 'Editing draft: ' : ''}{this.props.draft.title}</h3>
+                <h3 className="ui dividing header">{editing ? 'Editing draft: ' : ''}{this.props.draft.type}</h3>
                 <div className="field">
                     <label>Title</label>
                     <input
@@ -97,3 +97,10 @@ export default class EmailDraft extends Component {
         );
     }
 }
+
+const { func } = PropTypes;
+EmailDraft.propTypes = {
+    draft: emailType.isRequired,
+    updateDraft: func.isRequired,
+    sendDeleteRequest: func.isRequired
+};
