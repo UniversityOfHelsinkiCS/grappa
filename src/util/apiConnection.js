@@ -11,7 +11,10 @@ const getAxios = () => {
     }
 }
 
-function callApi(url, method = 'get', data) {
+function callApi(url, method = 'get', data, prefix) {
+    if (prefix.includes("DOWNLOAD")) {
+        return getAxios().get(url, { responseType: "arraybuffer" });
+    }
     switch (method) {
         case 'get':
             return getAxios().get(url);
@@ -41,7 +44,7 @@ export const handleRequest = store => next => action => {
     next(action);
     const payload = action.payload;
     if (payload) {
-        callApi(payload.route, payload.method, payload.data)
+        callApi(payload.route, payload.method, payload.data, payload.prefix)
             .then(res => store.dispatch({ type: payload.prefix + 'SUCCESS', response: res.data }))
             .catch(err => store.dispatch({ type: payload.prefix + 'FAILURE', response: err }));
     }

@@ -15,8 +15,14 @@ export const deleteAttachment = (attachmentId) => {
 }
 
 export const downloadAttachments = (attachmentIds) => {
-    const route = '/attachments/download';
+    const idString = attachmentIds.reduce((accumulated, current) => {
+        if (accumulated) {
+            accumulated += '&';
+        }
+        accumulated += current
+        return accumulated;
+    })
+    const route = '/attachments/' + idString;
     const prefix = 'ATTACHMENT_DOWNLOAD_';
-    const method = 'post';
-    return callController(route, prefix, attachmentIds, method);
+    return callController(route, prefix);
 }
