@@ -13,7 +13,7 @@ export default class AttachmentAdder extends Component {
         this.props.removeAttachment(attachment);
     }
 
-    getFileList = () => { 
+    getFileList = () => {
         return (
             <div className="ui form">
                 {this.getFileNumberLabel()}
@@ -46,9 +46,9 @@ export default class AttachmentAdder extends Component {
     getFileNumberLabel = () => {
         return (
             <h3>
-                {!this.props.attachments ? 'No attachments uploaded' :
-                    (this.props.attachments.length === 1) ? 'One attachment uploaded:' :
-                        this.props.attachments.length + ' attachments uploaded:'}
+                {!this.props.attachments ? 'No attachments to be uploaded' :
+                    (this.props.attachments.length === 1) ? 'One attachment to be uploaded:' :
+                        this.props.attachments.length + ' attachments to be uploaded:'}
             </h3>
         )
 
@@ -87,7 +87,7 @@ export default class AttachmentAdder extends Component {
             <div>
                 {this.getHeader()}
                 {this.renderDropzone()}
-                {this.getFileList()}
+                {this.props.attachments ? this.getFileList() : undefined}
             </div>
 
         );

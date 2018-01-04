@@ -9,7 +9,7 @@ import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
-import PersonSelecter from '../../components/person/PersonSelecter';
+import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
 import ThesisEmails from '../../components/thesis/ThesisEmails';
 
@@ -58,7 +58,11 @@ export class ThesisEditPage extends Component {
             const thesisId = props.match.params.id;
             const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, thesisId)
             if (thesis) {
-                this.setState({ thesis, editMode: true })
+                const attachments = props.attachments.filter(attachment => {
+                    const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId);
+                    return agreement && agreement.agreementId === attachment.agreementId
+                })
+                this.setState({ thesis, attachments, editMode: true })
             }
         }
     }
@@ -111,7 +115,6 @@ export class ThesisEditPage extends Component {
     }
 
     addAttachment = (attachment) => {
-        this.setState({ attachments: [...this.state.attachments, attachment] });
         const form = new FormData();
         //agreementId needed to link the attachment to.
         const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
@@ -121,8 +124,6 @@ export class ThesisEditPage extends Component {
     }
 
     removeAttachment = (attachment) => {
-        const attachments = this.state.attachments.filter(inList => inList !== attachment)
-        this.setState({ attachments });
         this.props.deleteAttachment(attachment.attachmentId);
     }
 
@@ -170,7 +171,7 @@ export class ThesisEditPage extends Component {
                 && role.studyfieldId == this.state.thesis.studyfieldId
             )
         )
-        return <PersonSelecter
+        return <PersonSelector
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
             changeList={(list) => this.handleChange('graders', list)}
@@ -188,14 +189,13 @@ export class ThesisEditPage extends Component {
                         studyfields={this.props.studyfields}
                         allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
-                    <AttachmentList
-                        attachments={this.props.attachments}
-                        downloadAttachment={this.downloadAttachment}
-                        deleteAttachment={this.props.deleteAttachment} />
                     <AttachmentAdder
-                        attachments={this.state.attachments}
                         addAttachment={this.addAttachment}
                         removeAttachment={this.removeAttachment} />
+                    <AttachmentList
+                        attachments={this.state.attachments}
+                        downloadAttachment={this.downloadAttachment}
+                        deleteAttachment={this.props.deleteAttachment} />
                     <br />
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}

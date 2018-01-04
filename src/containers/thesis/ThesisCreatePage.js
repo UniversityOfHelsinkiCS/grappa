@@ -8,7 +8,7 @@ import { sendReminder } from '../email/emailActions';
 import ThesisConfirmModal from "../../components/thesis/ThesisConfirmModal";
 import ThesisInformation from "../../components/thesis/ThesisInformation";
 import AttachmentAdder from "../../components/attachment/AttachmentAdder";
-import PersonSelecter from "../../components/person/PersonSelecter";
+import PersonSelector from "../../components/person/PersonSelector";
 import ThesisCouncilmeetingPicker from "../../components/thesis/ThesisCouncilmeetingPicker";
 import ThesisEmails from "../../components/thesis/ThesisEmails";
 
@@ -84,7 +84,7 @@ export class ThesisCreatePage extends Component {
                 && role.studyfieldId == this.state.thesis.studyfieldId
             )
         )
-        return <PersonSelecter
+        return <PersonSelector
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
             changeList={(list) => this.handleChange("graders", list)}

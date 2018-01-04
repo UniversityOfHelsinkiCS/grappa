@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class PersonSelecter extends Component {
+export default class PersonSelector extends Component {
 
     constructor() {
         super();
