@@ -5,6 +5,7 @@ const Thesis = require('../db/models/thesis');
 const thesisSchema = [
     'thesis.thesisId',
     'thesis.title',
+    'thesis.councilmeetingId',
     'urkund',
     'grade',
     'graderEval',

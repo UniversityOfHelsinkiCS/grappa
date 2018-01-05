@@ -141,7 +141,6 @@ export async function updateThesis(req, res) {
             thesis,
             roles,
         }
-        console.log(responseObject)
         res.status(200).json(responseObject).end();
     } catch (error) {
         console.log(error);
