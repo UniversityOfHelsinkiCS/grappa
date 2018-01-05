@@ -92,11 +92,14 @@ export async function saveThesisForm(req, res) {
         agreement.thesisId = savedThesis.thesisId;
         const savedAgreement = await agreementService.updateAgreement(agreement)
 
+        const roles = await roleService.getRolesForAllPersons();
+
         const response = {
             thesis: savedThesis,
             author: savedPerson,
             agreement: savedAgreement,
             attachments: attachments,
+            roles
         }
 
         notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.studyfieldId);
@@ -121,31 +124,53 @@ const getUsersRoles = async (user) => {
 
 export async function updateThesis(req, res) {
     try {
-        let updatedFields = req.body;
+        const updatedFields = req.body;
         let thesis = await thesisService.getThesisById(updatedFields.thesisId);
-        
+        Object.keys(thesis).forEach(key => {
+            thesis[key] = updatedFields[key];
+        })
+        thesis = await thesisService.updateThesis(thesis);
+
+        const graders = updatedFields.graders;
+        const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId);
+        //TODO: support multiple agreements on one thesis
+        await updateGraders(graders, agreements[0]);
+
+        const roles = await roleService.getRolesForAllPersons();
+        const responseObject = {
+            thesis,
+            roles,
+        }
+        console.log(responseObject)
+        res.status(200).json(responseObject).end();
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 }
 
-const updateGraders = (graders, agreement) => {
-    //To unlink person and agreement
-    //const agreementPersons = roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
+const updateGraders = async (graders, agreement) => {
+    //To unlink person and 
+    const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
 
-    //To link person and agreement
-    graders.forEach(async grader => {
+    await Promise.all(agreementPersons.map(async agreementPerson => {
+        const personRole = await roleService.getPersonRoleWithId(agreementPerson.personRoleId);
+        if (!graders.find(grader => grader.personId == personRole.personId)) {
+            await roleService.unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId);
+        }
+    }))
+
+    //If grader not in agreementperson, link them.
+    await Promise.all(graders.map(async grader => {
         const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader')
         if (personRole) {
-            //If person exists as a grader, link them
-            const agreementPerson = {
-                agreementId: agreement.agreementId,
-                personRoleId: personRole.personRoleId,
+            //If person exists as a grader and not already linked, link them
+            if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
+                roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
+                console.log(3.2)
             }
-
-            roleService.saveAgreementPerson(agreementPerson)
         } else {
-            //Else make the person a grader.
+            //If person has no grader role, make the person a grader and link them.
             const roleId = await roleService.getRoleId('grader');
 
             let personWithRole = {
@@ -154,11 +179,7 @@ const updateGraders = (graders, agreement) => {
                 roleId
             }
             personWithRole = await roleService.savePersonRole(personWithRole);
-            const agreementPerson = {
-                agreementId: agreement.agreementId,
-                personRoleId: personWithRole.personRoleId,
-            }
-            roleService.saveAgreementPerson(agreementPerson)
+            roleService.linkAgreementAndPersonRole(agreement.agreementId, personWithRole.personRoleId)
         }
-    })
+    }))
 }

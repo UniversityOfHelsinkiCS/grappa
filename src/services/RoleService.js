@@ -27,6 +27,10 @@ export async function getPersonRoles(personId) {
     return knex.select().from('personWithRole').where('personId', personId);
 }
 
+export async function getPersonRoleWithId(personRoleId) {
+    return knex.select().from('personWithRole').where('personRoleId', personRoleId).first();
+}
+
 export async function savePersonRole(personWithRole) {
     return knex('personWithRole').returning('personRoleId')
         .insert(personWithRole).then(personRoleIds =>
@@ -54,15 +58,26 @@ export async function updateVisitorRoleStudyfield(personId, studyfieldId) {
 
 //AgreementPerson
 
-export async function saveAgreementPerson(agreementPerson) {
+export async function linkAgreementAndPersonRole(agreementId, personRoleId) {
+    const agreementPerson = {
+        agreementId,
+        personRoleId,
+    }
     return knex('agreementPerson').returning('agreementPersonId')
         .insert(agreementPerson).then(agreementPersonIds =>
             knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
         );
 }
 
+export async function unlinkAgreementAndPersonRole(agreementId, personRoleId) {
+    return knex('agreementPerson')
+        .where('agreementId', '=', agreementId)
+        .where('personRoleId', '=', personRoleId)
+        .del()
+}
+
 export const getAgreementPersonsByAgreementId = (agreementId) => {
-    return knex.distinct('agreementPerson.personRoleId').select().from('agreementPerson')
+    return knex.select().from('agreementPerson')
         .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
         .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
         .where('agreementId', agreementId)

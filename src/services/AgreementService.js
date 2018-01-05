@@ -62,6 +62,11 @@ export const getAgreementsByAuthor = (personId) => {
         .where('authorId', personId)
 }
 
+export const getAgreementsByThesisId = (thesisId) => {
+    return knex.select(agreementSchema).from('agreement')
+        .where('thesisId', thesisId)
+}
+
 export const saveAgreement = async (agreement) => {
     const agreementIds = await knex('agreement')
         .returning('agreementId')
