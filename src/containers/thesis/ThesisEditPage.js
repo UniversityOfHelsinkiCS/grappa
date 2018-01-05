@@ -57,7 +57,7 @@ export class ThesisEditPage extends Component {
     init(props) {
         if (props.match.params && props.match.params.id) {
             const thesisId = props.match.params.id;
-            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, thesisId)
+            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId)
             if (thesis) {
                 const attachments = props.attachments.filter(attachment => {
                     const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
@@ -69,7 +69,7 @@ export class ThesisEditPage extends Component {
         }
     }
 
-    findAndFormatThesis = (theses, persons, agreements, thesisId) => {
+    findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
         try {
             const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId == thesisId));
             const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
@@ -80,8 +80,9 @@ export class ThesisEditPage extends Component {
             thesis.authorEmail = author.email;
 
             thesis.studyfieldId = agreement.studyfieldId;
+            console.log("Here here")
             thesis.graders = persons.filter(person =>
-                this.props.roles.find(role =>
+                roles.find(role =>
                     role.personId === person.personId &&
                     role.agreementId === agreement.agreementId
                 )
