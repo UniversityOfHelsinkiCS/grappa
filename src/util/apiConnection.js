@@ -12,8 +12,8 @@ const getAxios = () => {
 }
 
 function callApi(url, method = 'get', data, prefix) {
-    if (prefix.includes("DOWNLOAD")) {
-        return getAxios().get(url, { responseType: "arraybuffer" });
+    if (prefix.includes('DOWNLOAD')) {
+        return getAxios().get(url, { responseType: 'arraybuffer' });
     }
     switch (method) {
         case 'get':

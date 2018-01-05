@@ -26,3 +26,6 @@ coverage
 
 # ignore packa-lock.json for now
 package-lock.json
+
+*.iml
+.idea

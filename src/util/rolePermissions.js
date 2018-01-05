@@ -4,7 +4,7 @@ export const getPermissions = (role, context, method) => {
     if (!(role && context && method))
         return undefined;
     return permissions[role][context][method];
-}
+};
 
 export const userRoles = ['admin', 'manager', 'print_person', 'resp_professor', 'grader', 'supervisor', 'student']
 
@@ -35,7 +35,7 @@ const permissions = {
     'print_person': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav['assesment']
+                nav.home, nav.agreement, nav.theses, nav.agreement
             ]
         },
         'agreement': {
@@ -45,28 +45,28 @@ const permissions = {
     'resp_professor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav['supervisorManagement'], nav['assesment']
+                nav.home, nav.agreement, nav.theses, nav.supervisorManagement, nav.assesment
             ]
         }
     },
     'grader': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav.thesis, nav['assesment']
+                nav.home, nav.agreement, nav.theses, nav.thesis, nav.assesment
             ]
         }
     },
     'supervisor': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['theses'], nav.thesis, nav['assesment']
+                nav.home, nav.agreement, nav.theses, nav.thesis, nav.assesment
             ]
         }
     },
     'student': {
         'nav-bar': {
             show: [
-                nav['home'], nav['agreement'], nav['assesment']
+                nav.home, nav.agreement, nav.assesment
             ]
         },
         'agreement': {
@@ -74,7 +74,7 @@ const permissions = {
             'edit': ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorPrimary', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
         }
     },
-}
+};
 
 // Student & visitor are now same role
 permissions.visitor = permissions.student;

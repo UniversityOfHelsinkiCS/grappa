@@ -28,9 +28,9 @@ export default class StatisticsPage extends Component {
 
     //Generator function for in-browser testing.
     generateTheses() {
-        let theses = [];
-        for (var year = 10; year < 15; year++) {
-            for (var index = 0; index < 10; index++) {
+        const theses = [];
+        for (let year = 10; year < 15; year++) {
+            for (let index = 0; index < 10; index++) {
                 theses.push({
                     CouncilMeeting: { date: '20' + year },
                     StudyField: { name: 'Linja ' + Math.ceil(Math.random() * 3) },
@@ -42,11 +42,11 @@ export default class StatisticsPage extends Component {
     }
 
     filterThesesByYear(theses) {
-        var filteredTheses = [];
+        const filteredTheses = [];
         if (theses) {
             theses.forEach(thesis => {
                 let found = false;
-                let year = thesis.CouncilMeeting.date.slice(0, 4);
+                const year = thesis.CouncilMeeting.date.slice(0, 4);
                 filteredTheses.forEach(yearlyArray => {
                     if (yearlyArray[0].CouncilMeeting.date.startsWith(year)) {
                         found = true;
@@ -64,8 +64,8 @@ export default class StatisticsPage extends Component {
     }
 
     sortByCouncilMeetingYear(a, b) {
-        let aYear = parseInt(a[0].CouncilMeeting.date.slice(0, 4), 10);
-        let bYear = parseInt(b[0].CouncilMeeting.date.slice(0, 4), 10);
+        const aYear = parseInt(a[0].CouncilMeeting.date.slice(0, 4), 10);
+        const bYear = parseInt(b[0].CouncilMeeting.date.slice(0, 4), 10);
         //The order is "reversed" because the newest will be highest.
         if (aYear > bYear) {
             return -1;

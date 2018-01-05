@@ -33,7 +33,7 @@ export const paths = {
 export default () => {
     return (
         <Switch>
-            {Object.keys(paths).map((key, index) => <Route key={index} exact path={paths[key].path} component={paths[key].component} />)}
+            {Object.keys(paths).map((key) => <Route key={key} exact path={paths[key].path} component={paths[key].component} />)}
         </Switch>
     )
 }

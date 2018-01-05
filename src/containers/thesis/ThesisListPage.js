@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-
+import { arrayOf } from 'prop-types'
 import { connect } from 'react-redux';
-import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
+
+import { agreementType, personType, thesisType } from '../../util/types';
 
 import ThesisList from '../../components/thesis/ThesisList';
 
@@ -22,7 +23,7 @@ class ThesisListPage extends Component {
     formatTheses(theses) {
         const persons = this.props.persons;
         if (!theses || !persons) return;
-        const formatted = theses.map(thesis => {
+        return theses.map(thesis => {
             const agreement = this.props.agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
             const formattedThesis = Object.assign({}, thesis);
@@ -32,8 +33,7 @@ class ThesisListPage extends Component {
             formattedThesis.authorLastname = person.lastname || 'Leutokalma';
 
             return formattedThesis
-        })
-        return formatted;
+        });
     }
 
     search = (event) => {
@@ -62,7 +62,7 @@ class ThesisListPage extends Component {
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" type="text" placeholder="Filter theses" onChange={this.search} />
-                        <i className="search icon"></i>
+                        <i className="search icon" />
                     </div>
                 </div>
                 <ThesisList
@@ -83,5 +83,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
 });
+
+ThesisListPage.propTypes = {
+    persons: arrayOf(personType).isRequired,
+    user: personType.isRequired,
+    theses: arrayOf(thesisType).isRequired,
+    agreements: arrayOf(agreementType).isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);
