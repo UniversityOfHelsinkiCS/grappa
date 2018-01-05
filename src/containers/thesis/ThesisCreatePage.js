@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
-import { sendReminder } from '../email/emailActions';
 import { personType, roleType, studyfieldType } from '../../util/types';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
@@ -11,7 +10,6 @@ import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import ThesisEmails from '../../components/thesis/ThesisEmails';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -81,8 +79,8 @@ export class ThesisCreatePage extends Component {
         const studyfieldGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name === 'grader' || role.name === 'supervisor')
-                && role.personId == person.personId
-                && role.studyfieldId == this.state.thesis.studyfieldId
+                && role.personId === person.personId
+                && role.studyfieldId === parseInt(this.state.thesis.studyfieldId, 10)
             )
         );
         return <PersonSelector

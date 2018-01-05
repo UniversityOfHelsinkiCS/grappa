@@ -69,7 +69,7 @@ export default class Agreement extends Component {
     validateData = (fieldName, value) => {
         if (this.state.filledRequiredFields[fieldName] !== undefined) {
             const fieldsCopy = Object.assign({}, this.state.filledRequiredFields);
-            fieldsCopy[fieldName] = !(value === '' || value == -1);
+            fieldsCopy[fieldName] = !(value === '' || value === -1);
             this.setState({ filledRequiredFields: fieldsCopy });
         }
     }

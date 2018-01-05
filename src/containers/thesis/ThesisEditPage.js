@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { arrayOf, array } from 'prop-types';
 import { connect } from 'react-redux';
-import { saveThesis, updateThesis, deleteThesis } from './thesisActions';
+import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
 import { agreementType, personType, roleType, studyfieldType, thesisType } from '../../util/types';
 
-import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import ThesisEmails from '../../components/thesis/ThesisEmails';
+import ThesisEmails from '../../components/thesis/ThesisEmails'; //TODO: Should be used
 
 export class ThesisEditPage extends Component {
     /**
@@ -56,7 +55,7 @@ export class ThesisEditPage extends Component {
 
     init(props) {
         if (props.match.params && props.match.params.id) {
-            const thesisId = props.match.params.id;
+            const thesisId = parseInt(props.match.params.id, 10);
             const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId)
             if (thesis) {
                 const attachments = props.attachments.filter(attachment => {
@@ -71,7 +70,7 @@ export class ThesisEditPage extends Component {
 
     findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
         try {
-            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId == thesisId));
+            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
             const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const author = persons.find(person => person.personId === agreement.authorId);
 
@@ -80,7 +79,6 @@ export class ThesisEditPage extends Component {
             thesis.authorEmail = author.email;
 
             thesis.studyfieldId = agreement.studyfieldId;
-            console.log("Here here")
             thesis.graders = persons.filter(person =>
                 roles.find(role =>
                     role.personId === person.personId &&
@@ -121,7 +119,7 @@ export class ThesisEditPage extends Component {
         const form = new FormData();
         //agreementId needed to link the attachment to.
         const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
-        form.append("json", JSON.stringify(agreement));
+        form.append('json', JSON.stringify(agreement));
         form.append('attachment', attachment);
         this.props.createAttachment(form)
     }
@@ -157,7 +155,7 @@ export class ThesisEditPage extends Component {
     }
 
     renderEmails() {
-        const thesisEmails = this.state.thesis.thesisEmails;
+        //const thesisEmails = this.state.thesis.thesisEmails;
         return undefined;
         /*return <ThesisEmails
             thesisEmails={thesisEmails}
@@ -169,9 +167,9 @@ export class ThesisEditPage extends Component {
     renderGraderSelecter() {
         const studyfieldGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
-                (role.name == 'grader' || role.name == 'supervisor')
-                && role.personId == person.personId
-                && role.studyfieldId == this.state.thesis.studyfieldId
+                (role.name === 'grader' || role.name === 'supervisor')
+                && role.personId === person.personId
+                && role.studyfieldId === this.state.thesis.studyfieldId
             )
         )
         return <PersonSelector

@@ -35,7 +35,7 @@ const permissions = {
     'print_person': {
         'nav-bar': {
             show: [
-                nav.home, nav.agreement, nav.theses, nav.agreement
+                nav.home, nav.agreement, nav.theses
             ]
         },
         'agreement': {
@@ -66,7 +66,7 @@ const permissions = {
     'student': {
         'nav-bar': {
             show: [
-                nav.home, nav.agreement, nav.assesment
+                nav.home, nav.agreement
             ]
         },
         'agreement': {

@@ -5,11 +5,10 @@ export const getRequiredFields = (roles) => {
     if (!onlyRoles.includes('supervisor') && onlyRoles[0] !== undefined) //TODO: remove when only student & supervisor can edit
         return [];
     if (onlyRoles[0] === undefined) {
-        var role = 'student'; //if no role is defined then the user is a student
+        return requiredField['student']; //if no role is defined then the user is a student
     } else {
-        var role = 'supervisor';
+        return requiredField['supervisor'];
     }
-    return requiredField[role];
 }
 
 const requiredField = {
