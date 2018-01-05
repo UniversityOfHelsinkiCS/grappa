@@ -59,7 +59,8 @@ export class ThesisEditPage extends Component {
             const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, thesisId)
             if (thesis) {
                 const attachments = props.attachments.filter(attachment => {
-                    const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId);
+                    const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
+                        && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
                 })
                 this.setState({ thesis, attachments, editMode: true })
