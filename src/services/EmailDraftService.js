@@ -12,7 +12,8 @@ export async function saveEmailDraft(emailDraft) {
     return knex('emailDraft').insert({
         title: emailDraft.title,
         body: emailDraft.body,
-        type: emailDraft.type
+        type: emailDraft.type,
+        studyfield: emailDraft.studyfield
     })
         .returning('emailDraftId')
         .then(emailDraftId => emailDraftId[0]);
@@ -21,7 +22,8 @@ export async function saveEmailDraft(emailDraft) {
 export async function updateEmailDraft(emailDraftId, emailDraft) {
     return knex('emailDraft').update({
         title: emailDraft.title,
-        body: emailDraft.body
+        body: emailDraft.body,
+        studyfield: emailDraft.studyfield
     }).where('emailDraftId', emailDraftId);
 }
 
