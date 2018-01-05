@@ -30,7 +30,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
             return mdate >= today;
         }).map(meeting => {
             return {
-                id: meeting.id,
+                id: meeting.councilmeetingId,
                 content: `${moment(meeting.date).format('DD/MM/YYYY')} Deadline: ${moment(meeting.instructorDeadline).format('HH:mm DD/MM/YYYY')}`,
             };
         });
@@ -55,8 +55,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
                     className="ui fluid search dropdown"
                     onChange={this.chooseMeeting}
                     value={this.props.chosenMeetingId}>
-                    {this.state.filteredMeetings.map((meeting, index) =>
-                        <option key={index} value={meeting.id} >
+                    {this.state.filteredMeetings.map(meeting =>
+                        <option key={meeting.id} value={meeting.id} >
                             {meeting.content}
                         </option>
                     )}
