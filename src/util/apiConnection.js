@@ -45,7 +45,9 @@ export const handleRequest = store => next => action => {
     const payload = action.payload;
     if (payload) {
         callApi(payload.route, payload.method, payload.data, payload.prefix)
-            .then(res => store.dispatch({ type: payload.prefix + 'SUCCESS', response: res.data }))
+            .then(res => {
+                store.dispatch({ type: payload.prefix + 'SUCCESS', response: res.data })
+            })
             .catch(err => store.dispatch({ type: payload.prefix + 'FAILURE', response: err }));
     }
 }

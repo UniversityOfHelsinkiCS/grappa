@@ -1,14 +1,9 @@
-const role = {
-    personWithRoleId: 1,
-    personId: 1,
-    studyfield: 6,
-    roleName: 'supervisor',
-    agreementId: 5,
-    statement: 'Very good supervisor for this thesis',
-}
-
 const reducer = (state = [], action) => {
     switch (action.type) {
+        case 'THESIS_SAVE_ONE_SUCCESS':
+            return action.response.roles;
+        case 'THESIS_UPDATE_ONE_SUCCESS':
+            return action.response.roles;
         case 'PERSON_GET_ALL_SUCCESS':
             return action.response.roles;
         case 'ROLE_SAVE_ONE_SUCCESS':

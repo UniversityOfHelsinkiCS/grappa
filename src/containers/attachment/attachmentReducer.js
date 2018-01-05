@@ -11,6 +11,7 @@ const reducer = (state = [], action) => {
             //TODO update attachments when agreement is saved
             return state
         case 'ATTACHMENT_DOWNLOAD_SUCCESS':
+            //TODO: refactor
             const blob = new Blob([action.response], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
             const show = true
