@@ -69,7 +69,7 @@ export class ThesisEditPage extends Component {
 
     findAndFormatThesis = (theses, persons, agreements, thesisId) => {
         try {
-            const thesis = theses.find(thesis => thesis.thesisId == thesisId);
+            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId == thesisId));
             const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const author = persons.find(person => person.personId === agreement.authorId);
 
