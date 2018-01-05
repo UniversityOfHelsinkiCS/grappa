@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Review from '../../components/supervisor/Review.js';
 import SupervisorEditor from '../../components/supervisor/SupervisorEditor.js'
@@ -128,5 +129,12 @@ const mapStateToProps = (state) => {
         personToBeReviewed: state.persons
     };
 }
+
+const { func } = PropTypes;
+SupervisorManagementPage.propTypes = {
+    updateSupervisor: func.isRequired,
+    deleteSupervisor: func.isRequired,
+    saveAddedSupervisor: func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SupervisorManagementPage);

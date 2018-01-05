@@ -50,8 +50,8 @@ export class UserPage extends Component {
                 <div className="ui segment">
                     <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
                         <option value="">Choose a role</option>
-                        {this.props.persons.map((person, index) =>
-                            <option key={index} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
+                        {this.props.persons.map((person) =>
+                            <option key={person.personId} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
                         )}
                     </select>
                     <p>Your roles are: {this.props.user.roles ?

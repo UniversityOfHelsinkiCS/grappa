@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func } from 'prop-types';
 
 export default class GoalInfoForm extends Component {
 
@@ -66,11 +67,11 @@ export default class GoalInfoForm extends Component {
                 </p>
                 <div>
                     <select className="ui dropdown" onChange={this.props.handleChange} name="studentGradeGoal" >
-                        {this.grades(this.state.old).map((grade, index) => {
-                            return <option key={index} value={grade.value}>{grade.text}</option>;
+                        {this.grades(this.state.old).map(grade => {
+                            return <option key={grade.value} value={grade.value}>{grade.text}</option>;
                         })}
                     </select>
-                    {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields['studentGradeGoal']) ?
+                    {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields.studentGradeGoal) ?
                     (<div className="ui left pointing red basic label">
                       Valitse tavoitearvosana
                     </div>) : ''}
@@ -83,3 +84,7 @@ export default class GoalInfoForm extends Component {
         )
     }
 }
+
+GoalInfoForm.propTypes = {
+    handleChange: func.isRequired
+};

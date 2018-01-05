@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { personType } from '../../util/types';
 import { saveRole, updateRole } from '../role/roleActions';
 
 const findVisitorRole = roles => roles.find(role => role.role === 'visitor');
@@ -84,7 +85,9 @@ class UserStudyfieldSelector extends Component {
 
 UserStudyfieldSelector.propTypes = {
     studyfields: PropTypes.array.isRequired,
-    saveStudyfieldSelection: PropTypes.func.isRequired
+    saveStudyfieldSelection: PropTypes.func.isRequired,
+    updateStudyfieldSelection: PropTypes.func.isRequired,
+    user: personType.isRequired
 };
 
 const mapStateToProps = ({ studyfields, user }) => ({

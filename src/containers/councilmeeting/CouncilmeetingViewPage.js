@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { func } from 'prop-types';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
 import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
 import { getCouncilmeetings } from './councilmeetingActions';
 import { sendReminder } from '../email/emailActions';
+import { personType } from '../../util/types';
 
 import ThesisList from '../../components/thesis/ThesisList'
 
@@ -195,5 +197,13 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(moveTheses(data));
     },
 });
+
+CouncilmeetingViewPage.propTypes = {
+    getCouncilmeetings: func.isRequired,
+    updateThesis: func.isRequired,
+    getTheses: func.isRequired,
+    moveTheses: func.isRequired,
+    user: personType.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);
