@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { number, func } from 'prop-types';
 import moment from 'moment';
 
 export default class ThesisCouncilmeetingPicker extends Component {
@@ -65,3 +65,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
         );
     }
 }
+
+ThesisCouncilmeetingPicker.propTypes = {
+    chosenMeetingId: number.isRequired,
+    sendChange: func.isRequired
+};

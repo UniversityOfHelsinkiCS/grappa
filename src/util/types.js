@@ -59,5 +59,6 @@ export const thesisType = shape({
 
 export const emailType = shape({
     title: string,
-    body: string
+    body: string,
+    studyfield: string
 });

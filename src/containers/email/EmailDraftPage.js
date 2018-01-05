@@ -84,7 +84,6 @@ export class EmailDraftPage extends Component {
     }
 }
 
-
 const mapStateToProps = (state) => {
     return {
         emails: state.emails,
