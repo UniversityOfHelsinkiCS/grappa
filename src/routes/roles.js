@@ -16,7 +16,7 @@ router.put('/', jsonParser, (req, res) => {
 
 router.put('/visitor', jsonParser, (req, res) => {
     // Currently used only for updating visitor role studyfield
-    roleController.updateRole(req, res);
+    roleController.updateVisitorRoles(req, res);
 });
 
 router.delete('/:id', jsonParser, (req, res) => {

@@ -21,14 +21,7 @@ export async function saveRole(req, res) {
 }
 
 export async function updateRole(req, res) {
-    const data = req.body;
-    const person = await personService.getLoggedPerson(req);
-
-    try {
-        res.status(500).end();
-    } catch (e) {
-        res.status(500).end();
-    }
+    res.status(500).end();
 }
 
 export async function updateVisitorRoles(req, res) {
@@ -38,7 +31,8 @@ export async function updateVisitorRoles(req, res) {
     try {
         await roleService.updateVisitorRoleStudyfields(person.personId, studyfieldIds);
         res.status(200).end();
-    } catch (e) {
+    } catch (error) {
+        console.error(error);
         res.status(500).end();
     }
 }
