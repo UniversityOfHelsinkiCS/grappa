@@ -47,13 +47,30 @@ export async function getPersonRole(personId, studyfieldId, roleName) {
         .first();
 }
 
-export async function updateVisitorRoleStudyfield(personId, studyfieldId) {
+export async function updateVisitorRoleStudyfields(personId, studyfieldIds) {
     const visitorRoleId = 7;
 
-    return knex('personWithRole').returning('personRoleId')
+    const visitorRoles = await knex('personWithRole')
+        .select()
         .where('personId', personId)
-        .where('roleId', visitorRoleId)
-        .update({ studyfieldId });
+        .where('roleId', visitorRoleId);
+
+    const rolesToDelete = visitorRoles
+        .filter(role => !studyfieldIds.includes(role.studyfieldId))
+        .map(role => role.studyfieldId)
+        .map(studyfieldId =>
+            knex('personWithRole')
+                .delete()
+                .where('personId', personId)
+                .where('studyfieldId', studyfieldId)
+        );
+    const rolesToAdd = studyfieldIds
+        .filter(role => !studyfieldIds.includes(role.studyfieldId))
+        .map(studyfieldId =>
+            knex('personWithRole').insert({ personId, studyfieldId, roleId: visitorRoleId })
+        );
+
+    return Promise.all([...rolesToDelete, ...rolesToAdd]);
 }
 
 //AgreementPerson

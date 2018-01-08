@@ -25,7 +25,18 @@ export async function updateRole(req, res) {
     const person = await personService.getLoggedPerson(req);
 
     try {
-        await roleService.updateVisitorRoleStudyfield(person.personId, data.studyfieldId);
+        res.status(500).end();
+    } catch (e) {
+        res.status(500).end();
+    }
+}
+
+export async function updateVisitorRoles(req, res) {
+    const studyfieldIds = req.body;
+    const person = await personService.getLoggedPerson(req);
+
+    try {
+        await roleService.updateVisitorRoleStudyfields(person.personId, studyfieldIds);
         res.status(200).end();
     } catch (e) {
         res.status(500).end();
