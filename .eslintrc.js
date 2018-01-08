@@ -48,6 +48,7 @@ module.exports = {
         'react/prop-types': ['warn', { ignore: [], customValidators: [], skipUndeclared: false }],
         'react/require-default-props': 'warn',
         'react/no-unused-prop-types': 'warn',
+        'react/no-unused-state': 'warn',
         'react/react-in-jsx-scope': 'warn',
         'react/require-render-return': 'warn',
         'react/self-closing-comp': 'warn',
