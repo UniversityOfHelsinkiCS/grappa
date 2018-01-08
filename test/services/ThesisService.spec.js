@@ -39,6 +39,7 @@ test.serial('getAllTheses returns list of right length ', async t => {
 
 test.serial('updateThesis', async t => {
     let updatedThesisData = {
+        councilmeetingId: 1,
         thesisId: 2,
         title: 'Updated title',
         urkund: 'http://',

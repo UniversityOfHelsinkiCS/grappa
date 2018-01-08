@@ -53,6 +53,7 @@ const thesisForm = {
 const graders = thesisForm.graders
 
 const thesisWithId = {
+    councilmeetingId: 1,
     title: 'Annin Grady',
     urkund: 'https://',
     grade: '4',
