@@ -25,7 +25,7 @@ export async function updateRole(req, res) {
 }
 
 export async function updateVisitorRoles(req, res) {
-    const studyfieldIds = req.body;
+    const studyfieldIds = req.body.studyfieldIds;
     const person = await personService.getLoggedPerson(req);
 
     try {
