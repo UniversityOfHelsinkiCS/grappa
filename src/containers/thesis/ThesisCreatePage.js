@@ -132,7 +132,8 @@ ThesisCreatePage.propTypes = {
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
-    saveThesis: func.isRequired
+    saveThesis: func.isRequired,
+    deleteThesis: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage);

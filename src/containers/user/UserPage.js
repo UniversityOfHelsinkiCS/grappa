@@ -6,16 +6,7 @@ import UserStudyfieldSelector from './UserStudyfieldSelector';
 import { personType } from '../../util/types';
 
 export class UserPage extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            personId: 1,
-            name: 'Unnamed',
-            role: 'student'
-        }
-    }
-
+    
     componentDidMount() {
         document.title = 'Grappa: Main page';
     }
