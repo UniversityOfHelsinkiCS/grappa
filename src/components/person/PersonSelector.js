@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 import { personType } from '../../util/types';
 
 export default class PersonSelector extends Component {
@@ -80,7 +80,7 @@ export default class PersonSelector extends Component {
     renderSelected() {
         return this.props.selected.map((person, index) => {
             return (
-                <a key={index} className="ui label transition visible" onFocus={this.focusMenu}>
+                <a key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
                     {this.personToText(person)}
                     <i className="delete icon"
                         onClick={this.removePerson(person)}
@@ -109,7 +109,7 @@ export default class PersonSelector extends Component {
                     if ((!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person)) {
                         return (
                             <div
-                                key={index}
+                                key={person.personId}
                                 className="item"
                                 onClick={this.addPerson(person)}
                             >
@@ -118,7 +118,7 @@ export default class PersonSelector extends Component {
                         );
                     } else {
                         return (
-                            <div key={index} className="item filtered">{this.personToText(person)}</div>
+                            <div key={person.personId} className="item filtered">{this.personToText(person)}</div>
                         );
                     }
                 })
@@ -145,5 +145,7 @@ export default class PersonSelector extends Component {
 }
 
 PersonSelector.propTypes = {
-    persons: arrayOf(personType).isRequired
+    persons: arrayOf(personType).isRequired,
+    selected: arrayOf(personType).isRequired,
+    changeList: func.isRequired
 };
