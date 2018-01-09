@@ -1,6 +1,6 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService')
+const studyfieldService = require('../services/StudyfieldService');
 
 //Used with Shibboleth
 // export async function login(req, res) {
@@ -69,11 +69,13 @@ async function buildPerson(user) {
     const studyfieldToId = await studyfieldService.getAllStudyfields();
     const personRoles = await roleService.getPersonRoles(user.personId);
     const readableRoles = personRoles.map(role => {
+        const studyfield = studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId);
         return {
-            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+            studyfield: studyfield.name,
+            studyfieldId: studyfield.studyfieldId,
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-        }
-    })
+        };
+    });
     user.roles = readableRoles;
 
     return user;

@@ -31,14 +31,10 @@ test('study field can be set to visitor role', async t => {
             lastname: 'Opiskelija'
         });
     const personId = insert[0];
-    const visitorRoleForm = {
-        studyfieldId: 1,
-        personId,
-        name: 'visitor'
-    };
+    const visitorRoleForm = { studyfieldIds: [1] };
 
     const res = await request(makeApp(personId))
-        .post('/roles')
+        .put('/roles/visitor')
         .send(visitorRoleForm);
 
     t.is(res.status, 200);
@@ -71,13 +67,9 @@ test('visitor role studyfield can be updated', async t => {
             roleId: 7
         });
 
-    const visitorRoleForm = {
-        studyfieldId: 2,
-        name: 'visitor'
-    };
-
+    const visitorRoleForm = { studyfieldIds: [2] };
     const res = await request(makeApp(personId))
-        .put('/roles')
+        .put('/roles/visitor')
         .send(visitorRoleForm);
 
     t.is(res.status, 200);
