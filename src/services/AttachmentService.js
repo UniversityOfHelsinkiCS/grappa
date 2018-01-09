@@ -29,7 +29,7 @@ const attachmentSchema = [
     'filename',
     'originalname',
     'mimetype',
-    'type',
+    'label',
     'savedOnDisk'
 ]
 
@@ -74,6 +74,7 @@ const saveFileArray = async (agreementId, fileArray) => {
             mimetype: file.mimetype,
             label: file.fieldname,
         };
+        console.log(file);
         const attachmentIds = await knex('attachment')
             .returning('attachmentId')
             .insert(attachment)
