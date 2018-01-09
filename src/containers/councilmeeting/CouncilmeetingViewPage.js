@@ -4,8 +4,6 @@ import moment from 'moment';
 
 import { connect } from 'react-redux';
 import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
-import { getCouncilmeetings } from './councilmeetingActions';
-import { sendReminder } from '../email/emailActions';
 import { personType } from '../../util/types';
 
 import ThesisList from '../../components/thesis/ThesisList'
@@ -23,7 +21,6 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     componentDidMount() {
-        this.props.getCouncilmeetings();
         this.initState(this.props);
     }
 
@@ -47,7 +44,7 @@ export class CouncilmeetingViewPage extends Component {
         const previousMeeting = foundIndex > 0 ? props.councilmeetings[foundIndex - 1] : undefined;
         const currentMeeting = props.councilmeetings[foundIndex];
         const nextMeeting = foundIndex === props.councilmeetings.length - 1 ? undefined : props.councilmeetings[foundIndex + 1];
-        const theses = currentMeeting & props.theses ? this.filterThesesByMeeting(props.theses, currentMeeting) : [];
+        const theses = currentMeeting && props.theses ? this.filterThesesByMeeting(props.theses, currentMeeting) : [];
         this.setState({
             index: foundIndex,
             previousMeeting,
@@ -63,7 +60,7 @@ export class CouncilmeetingViewPage extends Component {
         const previousMeeting = index > 0 ? this.props.councilmeetings[index - 1] : undefined;
         const currentMeeting = this.props.councilmeetings[index];
         const nextMeeting = index === this.props.councilmeetings.length - 1 ? undefined : this.props.councilmeetings[index + 1];
-        const theses = currentMeeting & this.props.theses ? this.filterThesesByMeeting(this.props.theses, currentMeeting) : [];
+        const theses = currentMeeting && this.props.theses ? this.filterThesesByMeeting(this.props.theses, currentMeeting) : [];
         this.setState({
             index,
             previousMeeting,
@@ -181,9 +178,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getCouncilmeetings() {
-        dispatch(getCouncilmeetings());
-    },
     updateThesis(id, thesis) {
         dispatch(updateThesis(id, thesis));
     },
@@ -199,7 +193,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 CouncilmeetingViewPage.propTypes = {
-    getCouncilmeetings: func.isRequired,
     updateThesis: func.isRequired,
     getTheses: func.isRequired,
     moveTheses: func.isRequired,
