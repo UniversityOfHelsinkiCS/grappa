@@ -85,7 +85,7 @@ export default class EmailDraft extends Component {
 
     getStudyfieldName(draft) {
         if (draft.studyfield) {
-            return `${this.props.studyfields.filter(field => draft.studyfield === field.studyfieldId)[0].name}: `;
+            return `${this.props.studyfields.filter(field => draft.studyfield === field.studyfieldId)[0].name}:`;
         }
         return '';
     }
