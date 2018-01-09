@@ -5,6 +5,8 @@ exports.up = function (knex, Promise) {
             table.integer('agreementId').unsigned(); //author
             table.foreign('agreementId').references('agreement.agreementId');
             table.string('filename');
+            table.string('originalname');
+            table.string('mimetype');
             table.string('type');
             table.boolean('savedOnDisk');
         })

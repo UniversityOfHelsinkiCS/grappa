@@ -22,6 +22,8 @@ const attachmentSchema = [
     'attachmentId',
     'agreementId',
     'filename',
+    'originalname',
+    'mimetype',
     'type',
     'savedOnDisk'
 ]
@@ -52,7 +54,8 @@ export async function saveAttachments(req, res, agreementId) {
                 agreementId: id,
                 savedOnDisk: true,
                 filename: file.filename,
-                type: file.mimetype
+                originalname: file.originalname,
+                mimetype: file.mimetype
             };
             const attachmentIds = await knex('attachment')
                 .returning('attachmentId')
