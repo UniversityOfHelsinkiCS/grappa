@@ -3,20 +3,25 @@ const bookshelf = require('../db/bookshelf')
 const Attachment = require('../db/models/attachment');
 const pdfManipulator = require('../util/pdfManipulator');
 const multer = require('multer');
-const pathToFolder = './uploads/';
+
+const PATH_TO_FOLDER = './uploads/';
 
 const storage = () => {
     if (process.env.NODE_ENV === 'test') {
         return multer.memoryStorage();
     }
     return multer.diskStorage({
-        destination: pathToFolder,
+        destination: PATH_TO_FOLDER,
         filename: (req, file, cb) => {
             cb(null, Date.now() + '-' + file.originalname)
         }
     })
 }
-const upload = multer({ storage: storage() }).array('attachment')
+const upload = multer({ storage: storage() }).fields([
+    { name: 'otherFile' },
+    { name: 'reviewFile', maxCount: 1 },
+    { name: 'thesisFile', maxCount: 1 },
+])
 
 const attachmentSchema = [
     'attachmentId',
@@ -49,24 +54,32 @@ export async function saveAttachments(req, res, agreementId) {
         if (!id) {
             id = JSON.parse(request.body.json).agreementId;
         }
-        const attachments = await Promise.all(request.files.map(async file => {
-            const attachment = {
-                agreementId: id,
-                savedOnDisk: true,
-                filename: file.filename,
-                originalname: file.originalname,
-                mimetype: file.mimetype
-            };
-            const attachmentIds = await knex('attachment')
-                .returning('attachmentId')
-                .insert(attachment)
-            const attachmentId = attachmentIds[0]
-            return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first()
-        }))
+
+        const attachments = [].concat.apply([], await Promise.all(Object.keys(request.files).map(key => saveFileArray(id, request.files[key]))))
+
         return { attachments: attachments, json: JSON.parse(request.body.json) }
     } catch (error) {
+        console.log("Error during attachment save ", error);
         return Promise.reject(error);
     }
+}
+
+const saveFileArray = async (agreementId, fileArray) => {
+    return Promise.all(fileArray.map(async file => {
+        const attachment = {
+            agreementId: agreementId,
+            savedOnDisk: true,
+            filename: file.filename,
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            type: file.fieldname,
+        };
+        const attachmentIds = await knex('attachment')
+            .returning('attachmentId')
+            .insert(attachment)
+        const attachmentId = attachmentIds[0]
+        return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first()
+    }))
 }
 
 export async function getAllAttachments() {
@@ -104,7 +117,7 @@ export async function updateAttachment(attachment) {
 export async function mergeAttachments(attachments) {
     const files = attachments.map(attachment => attachment.filename)
     try {
-        return pdfManipulator.joinPdfs(pathToFolder, files);
+        return pdfManipulator.joinPdfs(PATH_TO_FOLDER, files);
     } catch (error) {
         throw error;
     }
