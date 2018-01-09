@@ -7,7 +7,7 @@ exports.up = function (knex, Promise) {
             table.string('filename');
             table.string('originalname');
             table.string('mimetype');
-            table.string('type');
+            table.string('label');
             table.boolean('savedOnDisk');
         })
     ]);

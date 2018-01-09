@@ -72,7 +72,7 @@ const saveFileArray = async (agreementId, fileArray) => {
             filename: file.filename,
             originalname: file.originalname,
             mimetype: file.mimetype,
-            type: file.fieldname,
+            label: file.fieldname,
         };
         const attachmentIds = await knex('attachment')
             .returning('attachmentId')
