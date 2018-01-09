@@ -28,7 +28,7 @@ test('if no maximum size, header tells it', t => {
 
 test('header informs no files uploaded when started', t=> {
     const wrapper = shallow(defaultAttachmentAdder);
-    const noElementsHeader = "0 attachments uploaded:";
+    const noElementsHeader = "0 attachments to be uploaded:";
     t.truthy(wrapper.contains(noElementsHeader));
 })
 
@@ -36,7 +36,7 @@ test('headers changes when attachment is added', t=> {
     const files = getFileList();
     const adder = <AttachmentAdder attachments={files} removeAttachment={(file) => {files.splice(file , 1)}} addAttachment={(file) => {files.push(file)}} />
     const wrapper = shallow(adder);
-    const oneElementAddedHeader = "One attachment uploaded:";
+    const oneElementAddedHeader = "One attachment to be uploaded:";
     t.truthy(wrapper.contains(oneElementAddedHeader));
 })
 
