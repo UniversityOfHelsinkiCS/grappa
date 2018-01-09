@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { arrayOf } from 'prop-types';
+import { personType } from '../../util/types';
 
 export default class PersonSelector extends Component {
 
@@ -65,7 +67,7 @@ export default class PersonSelector extends Component {
         this.setState({ menuActive: true });
     }
 
-    unfocusMenu = (event) => {
+    unfocusMenu = () => {
         if (this.state.menuActive) {
             this.setState({ menuActive: false });
         }
@@ -82,7 +84,7 @@ export default class PersonSelector extends Component {
                     {this.personToText(person)}
                     <i className="delete icon"
                         onClick={this.removePerson(person)}
-                    ></i>
+                    />
                 </a>
             );
         })
@@ -97,7 +99,7 @@ export default class PersonSelector extends Component {
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
-        ></input>
+        />
     }
 
     renderDropdown() {
@@ -124,7 +126,7 @@ export default class PersonSelector extends Component {
                 }
             </div>
             :
-            <div className="menu transition hidden" tabIndex="-1"></div>
+            <div className="menu transition hidden" tabIndex="-1" />
         )
     }
 
@@ -141,3 +143,7 @@ export default class PersonSelector extends Component {
         );
     }
 }
+
+PersonSelector.propTypes = {
+    persons: arrayOf(personType).isRequired
+};

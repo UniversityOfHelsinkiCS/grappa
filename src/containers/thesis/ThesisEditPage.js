@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, array } from 'prop-types';
+import { arrayOf, array, func } from 'prop-types';
 import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
@@ -249,7 +249,13 @@ ThesisEditPage.propTypes = {
     roles: arrayOf(roleType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     theses: arrayOf(thesisType).isRequired,
-    user: personType.isRequired
+    user: personType.isRequired,
+    updateThesis: func.isRequired,
+    deleteThesis: func.isRequired,
+    createAttachment: func.isRequired,
+    deleteAttachment: func.isRequired,
+    downloadAttachments: func.isRequired,
+    sendReminder: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage);

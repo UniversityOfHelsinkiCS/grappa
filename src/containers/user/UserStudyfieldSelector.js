@@ -3,50 +3,48 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { personType } from '../../util/types';
-import { saveRole, updateRole } from '../role/roleActions';
+import { updateVisitorRoles } from '../role/roleActions';
 
-const findVisitorRole = roles => roles.find(role => role.role === 'visitor');
+const findVisitorRoles = roles => roles.filter(role => role.role === 'visitor');
 
 class UserStudyfieldSelector extends Component {
     
     constructor(props) {
         super(props);
 
-        this.state = {
-            selectedStudyfieldId: ''
-        };
+        const selectedStudyfields = props.user.roles ? findVisitorRoles(props.user.roles).map(role => role.studyfieldId) : [];
+
+        this.state = { selectedStudyfields };
 
         this.saveStudyfieldSelection = this.saveStudyfieldSelection.bind(this);
+        this.selectionUpdated = this.selectionUpdated.bind(this);
+        this.isStudyfieldChecked = this.isStudyfieldChecked.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
         if (!newProps.user || !newProps.user.roles) {
             return;
         }
+        const selectedStudyfields = findVisitorRoles(newProps.user.roles).map(role => role.studyfieldId);
 
-        const visitorRole = findVisitorRole(newProps.user.roles);
+        this.setState({ selectedStudyfields });
+    }
 
-        if (visitorRole && newProps.studyfields.length > 0) {
-            const studyfield = newProps.studyfields.find(studyfield => studyfield.name === visitorRole.studyfield);
-            this.setState({ selectedStudyfieldId: studyfield.studyfieldId });
-        }
+    isStudyfieldChecked(studyfieldId) {
+        return this.state.selectedStudyfields.includes(studyfieldId);
+    }
+
+    selectionUpdated(event) {
+        const value = Number(event.target.value);
+        const studyfields = new Set(this.state.selectedStudyfields);
+        const nextState = event.target.checked ? studyfields.add(value) : studyfields.delete(value);
+        this.setState({ selectedStudyfields: Array.from(nextState) });
     }
 
     saveStudyfieldSelection() {
-        const visitorRole = findVisitorRole(this.props.user.roles);
-
-        if (visitorRole) {
-            visitorRole.studyfieldId = this.state.selectedStudyfieldId;
-            this.props.updateStudyfieldSelection(visitorRole);
-        } else {
-            const newRole = {
-                studyfieldId: this.state.selectedStudyfieldId,
-                personId: this.props.user.personId,
-                name: 'visitor'
-            };
-
-            this.props.saveStudyfieldSelection(newRole);
-        }
+        this.props.saveStudyfieldSelection({
+            studyfieldIds: this.state.selectedStudyfields
+        });
     }
     
     render() {
@@ -55,21 +53,21 @@ class UserStudyfieldSelector extends Component {
                 <div className="ui form">
                     <div className="field inline">
                         <label>Studyfield</label>
-                        <select
-                            className="ui dropdown"
-                            onChange={(e) => this.setState({ selectedStudyfieldId: e.target.value })}
-                            value={this.state.selectedStudyfieldId}
-                        >
-                            <option />
-                            {this.props.studyfields.map(studyfield => 
-                                <option
-                                    key={studyfield.studyfieldId}
-                                    value={studyfield.studyfieldId}
-                                >
-                                    {studyfield.name}
-                                </option>
-                            )}
-                        </select>
+
+                        {this.props.studyfields.map(studyfield => (
+                            <div key={studyfield.studyfieldId} className="ui filed">
+                                <div className="ui checkbox">
+                                    <input
+                                        type="checkbox"
+                                        value={studyfield.studyfieldId}
+                                        id={`studyfield-${studyfield.studyfieldId}`}
+                                        onChange={this.selectionUpdated}
+                                        defaultChecked={this.isStudyfieldChecked(studyfield.studyfieldId)}
+                                    />
+                                    <label htmlFor={`studyfield-${studyfield.studyfieldId}`}> {studyfield.name}</label>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                     <button
                         className="ui primary button"
@@ -86,7 +84,6 @@ class UserStudyfieldSelector extends Component {
 UserStudyfieldSelector.propTypes = {
     studyfields: PropTypes.array.isRequired,
     saveStudyfieldSelection: PropTypes.func.isRequired,
-    updateStudyfieldSelection: PropTypes.func.isRequired,
     user: personType.isRequired
 };
 
@@ -96,8 +93,7 @@ const mapStateToProps = ({ studyfields, user }) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    saveStudyfieldSelection: data => dispatch(saveRole(data)),
-    updateStudyfieldSelection: data => dispatch(updateRole(data))
+    saveStudyfieldSelection: data => dispatch(updateVisitorRoles(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserStudyfieldSelector);

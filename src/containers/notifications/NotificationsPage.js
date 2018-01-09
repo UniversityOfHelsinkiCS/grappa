@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { arrayOf } from 'prop-types';
+
+import { personType } from '../../util/types';
 
 const NotificationsPage = ({ notifications, persons }) => {
  
@@ -38,5 +41,9 @@ const mapStateToProps = ({ notifications, persons }) => ({
     notifications,
     persons
 });
+
+NotificationsPage.propTypes = {
+    persons: arrayOf(personType).isRequired
+};
 
 export default connect(mapStateToProps)(NotificationsPage);
