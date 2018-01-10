@@ -40,7 +40,7 @@ export class ThesisEditPage extends Component {
                 },
             },
             attachments: [],
-            showModal: false,
+            newAttachments: [],
             allowEdit: true,
         }
     }
@@ -63,7 +63,7 @@ export class ThesisEditPage extends Component {
                         && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
                 })
-                this.setState({ thesis, attachments, editMode: true })
+                this.setState({ thesis, attachments })
             }
         }
     }
@@ -115,17 +115,22 @@ export class ThesisEditPage extends Component {
         this.setState({ thesis });
     }
 
-    addAttachment = (attachment) => {
+    editAttachmentList = (attachments) => {
+        this.setState({ newAttachments: attachments });
+    };
+
+    uploadAttachments = () => {
         const form = new FormData();
         //agreementId needed to link the attachment to.
         const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
         form.append('json', JSON.stringify(agreement));
-        form.append('attachment', attachment);
+        this.state.newAttachments.forEach(attachment => {
+            if (!attachment.label) {
+                attachment.label = 'otherFile';
+            }
+            form.append(attachment.label, attachment);
+        });
         this.props.createAttachment(form)
-    }
-
-    removeAttachment = (attachment) => {
-        this.props.deleteAttachment(attachment.attachmentId);
     }
 
     downloadAttachment = (attachmentId) => {
@@ -191,8 +196,9 @@ export class ThesisEditPage extends Component {
                         allowEdit={this.state.allowEdit} />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder
-                        addAttachment={this.addAttachment}
-                        removeAttachment={this.removeAttachment} />
+                        attachments={this.state.newAttachments}
+                        changeList={this.editAttachmentList}
+                        uploadAttachments={this.uploadAttachments} />
                     <AttachmentList
                         attachments={this.state.attachments}
                         downloadAttachment={this.downloadAttachment}

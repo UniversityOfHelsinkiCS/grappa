@@ -40,8 +40,12 @@ export class ThesisCreatePage extends Component {
 
     handleSaveThesis = () => {
         const form = new FormData();
+        //TODO: If no review & thesis, then don't save
         this.state.attachments.forEach(attachment => {
-            form.append('attachment', attachment);
+            if (!attachment.label) {
+                attachment.label = 'otherFile';
+            }
+            form.append(attachment.label, attachment);
         });
         form.append('json', JSON.stringify(this.state.thesis));
         this.props.saveThesis(form);
@@ -66,12 +70,7 @@ export class ThesisCreatePage extends Component {
         this.setState({ thesis });
     };
 
-    addAttachment = (attachment) => {
-        this.setState({ attachments: [...this.state.attachments, attachment] });
-    };
-
-    removeAttachment = (attachment) => {
-        const attachments = this.state.attachments.filter(inList => inList !== attachment)
+    editAttachmentList = (attachments) => {
         this.setState({ attachments });
     };
 
@@ -101,7 +100,7 @@ export class ThesisCreatePage extends Component {
                         studyfields={this.props.studyfields}
                         allowEdit />
                     {this.renderGraderSelecter()}
-                    <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment} />
+                    <AttachmentAdder attachments={this.state.attachments} changeList={this.editAttachmentList} />
                     <br />
                     <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} />
                 </div>
