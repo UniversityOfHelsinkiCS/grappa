@@ -38,6 +38,14 @@ export async function savePersonRole(personWithRole) {
         );
 }
 
+export async function deletePersonRole(personRoleId) {
+    return knex('personWithRole')
+        .where('personRoleId', '=', personRoleId)
+        .del()
+        .then(() => personRoleId)
+        .catch(err => Promise.reject(err));
+}
+
 export async function getPersonRole(personId, studyfieldId, roleName) {
     return knex.select().from('personWithRole')
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
