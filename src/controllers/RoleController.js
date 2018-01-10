@@ -1,6 +1,18 @@
 const roleService = require('../services/RoleService');
 const personService = require('../services/PersonService');
 
+export async function getAvailableRoles(req, res) {
+    try {
+        const person = await personService.getLoggedPerson(req);
+        const roles = await roleService.getRoles();
+        console.log("ROLES", roles)
+        res.status(200).json(roles);
+    } catch (error) {
+        console.log(error);
+        res.status(500).end();
+    }
+}
+
 export async function saveRole(req, res) {
     const data = req.body;
     const person = await personService.getLoggedPerson(req);
