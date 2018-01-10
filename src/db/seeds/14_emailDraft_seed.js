@@ -49,6 +49,14 @@ This is an automatic reminder from Grappa, https://grappa.cs.helsinki.fi, a web 
 
 Due to rules of the process, your evaluation of the instructors is needed for the process to continue. Please submit your evaluation in the provided link.
 $LINK$`
+                },
+                {
+                    type: 'ThesisAuthorNotification',
+                    title: 'Thesis added to Grappa',
+                    body:
+                    `Hi
+Your thesis has been added to Grappa, https://grappa.cs.helsinki.fi
+                    `
                 }
             ]);
         });

@@ -4,7 +4,7 @@ export async function getEmailDrafts() {
     return knex.select().table('emailDraft');
 }
 
-export async function getEmailDraft(emailDraftId) {
+export async function getEmailDraftById(emailDraftId) {
     return knex('emailDraft').select().where('emailDraftId', emailDraftId).first();
 }
 
@@ -29,4 +29,18 @@ export async function updateEmailDraft(emailDraftId, emailDraft) {
 
 export async function deleteEmailDraft(draftId) {
     return knex('emailDraft').delete().where('emailDraftId', draftId);
+}
+
+export async function getEmailDraft(type, studyfield) {
+    return knex('emailDraft')
+        .select()
+        .where('type', type)
+        .where(function() {
+            if (studyfield) {
+                this.where('studyfield', studyfield);
+            } else {
+                this.whereNull('studyfield');
+            }
+        })
+        .first();
 }
