@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { handleRequest } from './apiConnection';
 
+import availableRolesReducer from '../containers/role/availableRolesReducer';
 import userReducer from '../containers/user/userReducer';
 import agreementReducer from '../containers/agreement/agreementReducer';
 import attachmentReducer from '../containers/attachment/attachmentReducer';
@@ -23,6 +24,7 @@ import eventMessageReducer from '../containers/eventMessage/eventMessageReducer'
 const combinedReducers = combineReducers({
     agreements: agreementReducer,
     attachments: attachmentReducer,
+    availableRoles: availableRolesReducer,
     user: userReducer,
     councilmeetings: councilmeetingReducer,
     roles: roleReducer,

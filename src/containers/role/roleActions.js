@@ -1,5 +1,11 @@
 import { callController } from '../../util/apiConnection';
 
+export const getAvailableRoles = () => {
+    const route = '/roles/available';
+    const prefix = 'AVAILABLEROLES_GET_ALL_';
+    return callController(route, prefix);
+}
+
 export const saveRole = role => {
     const route = '/roles';
     const prefix = 'ROLE_SAVE_ONE_';
