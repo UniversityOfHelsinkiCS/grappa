@@ -116,3 +116,11 @@ export async function getRolesForAllPersons() {
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
 }
+
+export async function getRoleForPersonWithRole(personRoleId) {
+    return knex.select(roleSchema).from('personWithRole')
+        .where('personWithRole.personRoleId', personRoleId)
+        .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
+        .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .first()
+}

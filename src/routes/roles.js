@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const roleController = require('../controllers/RoleController');
 
-// Currently only own roles can be edited.
+router.get('/available', (req, res) => {
+    roleController.getAvailableRoles(req, res);
+})
 
 router.post('/', jsonParser, (req, res) => {
     roleController.saveRole(req, res);
