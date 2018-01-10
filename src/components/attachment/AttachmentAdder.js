@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
 import Dropzone from 'react-dropzone';
+import { arrayOf, func, number } from 'prop-types';
+import { attachmentType } from '../../util/types';
+
 
 export default class AttachmentAdder extends Component {
 
@@ -112,4 +114,16 @@ export default class AttachmentAdder extends Component {
             </div>
         );
     }
+}
+
+AttachmentAdder.propTypes = {
+    attachments: arrayOf(attachmentType).isRequired,
+    changeList: func.isRequired,
+    uploadAttachments: func,
+    limit: number
+};
+
+AttachmentAdder.defaultProps = {
+    uploadAttachments: undefined,
+    limit: undefined
 }

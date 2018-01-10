@@ -48,6 +48,16 @@ export const agreementType = shape({
     whoNext: string
 });
 
+export const attachmentType = shape({
+    attachmentId: number,
+    agreementId: number,
+    filename: string,
+    originalname: string,
+    mimetype: string,
+    label: string,
+    savedOnDisk: number,
+});
+
 export const thesisType = shape({
     thesisId: number,
     title: string,
