@@ -19,14 +19,12 @@ export class PersonRoleManagePage extends Component {
 
     componentWillReceiveProps(newProps) {
         if (this.state.person) {
-            console.log("WTF");
             const person = this.state.person
             const roles = newProps.roles.filter(role => role.personId === person.personId)
                 .map(role => {
                     role.studyfield = newProps.studyfields.find(field => field.studyfieldId === role.studyfieldId).name
                     return role;
                 })
-            console.log(roles);
             this.setState({ roles });
         }
     }
@@ -45,7 +43,9 @@ export class PersonRoleManagePage extends Component {
 
     handleAddRole = role => {
         role.personId = this.state.person.personId;
-        this.props.saveRole(role)
+        if (role.personId && role.roleId && role.studyfieldId) {
+            this.props.saveRole(role)
+        }
     }
 
     handleRemoveRole = role => {
@@ -86,8 +86,8 @@ const mapDispatchToProps = (dispatch) => ({
     saveRole(role) {
         dispatch(saveRole(role))
     },
-    deleteRole() {
-        dispatch(deleteRole())
+    deleteRole(role) {
+        dispatch(deleteRole(role))
     },
 });
 

@@ -14,7 +14,7 @@ export const saveRole = role => {
 }
 
 export const deleteRole = role => {
-    const route = '/roles';
+    const route = '/roles/' + role.personRoleId;
     const prefix = 'ROLE_DELETE_ONE_';
     const method = 'delete';
     return callController(route, prefix, role, method);
