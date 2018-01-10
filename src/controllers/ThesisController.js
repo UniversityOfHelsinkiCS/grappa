@@ -6,6 +6,7 @@ const roleService = require('../services/RoleService');
 const studyfieldService = require('../services/StudyfieldService');
 const notificationService = require('../services/NotificationService');
 const emailService = require('../services/EmailService');
+const emailInviteService = require('../services/EmailInviteService');
 
 export async function getTheses(req, res) {
     try {
@@ -73,6 +74,8 @@ export async function saveThesisForm(req, res) {
         };
         const savedPerson = await personService.savePerson(person);
         const studyfield = thesis.studyfieldId;
+        const authorEmail = thesis.authorEmail;
+        const agreementId = agreement.agreementId;
 
         agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname;
@@ -86,8 +89,10 @@ export async function saveThesisForm(req, res) {
             delete thesis.graders;
         }
 
-        emailService.newThesisAddedNotifyAuthor(thesis.authorEmail, studyfield);
+        emailService.newThesisAddedNotifyAuthor(authorEmail, studyfield);
         emailService.newThesisAddedNotifyRespProf(studyfield);
+
+        emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId);
 
         // TODO: Add email to new email send table
         delete thesis.thesisEmails;
