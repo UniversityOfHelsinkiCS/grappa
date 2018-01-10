@@ -90,7 +90,7 @@ const fakeAgreement = {
     whoNext: null
 };
 
-test.skip('thesisForm post & creates id without attachment', async t => {
+test('thesisForm post & creates id without attachment', async t => {
     t.plan(6);
     const res = await request(makeApp(1))
         .post('/theses')
@@ -113,7 +113,7 @@ test.skip('thesisForm post & creates id without attachment', async t => {
     t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
 });
 
-test.skip('thesis get all', async t => {
+test('thesis get all', async t => {
     t.plan(2);
     const app = makeApp(1);
     const res = await request(app)
@@ -129,7 +129,7 @@ const attachment = {
     savedOnDisk: 1
 };
 
-test.skip('thesisForm post & creates id with attachment', async t => {
+test('thesisForm post & creates id with attachment', async t => {
     t.plan(8);
     const res = await request(makeApp(1))
         .post('/theses')
