@@ -5,9 +5,6 @@ const emailDraftService = require('../../src/services/EmailDraftService');
 
 test.before(async t => {
     await knex.migrate.latest();
-});
-
-test.beforeEach(async t => {
     await knex('emailDraft').del();
 });
 
@@ -52,4 +49,24 @@ test('can delete email draft', async t => {
     const drafts = await emailDraftService.getEmailDrafts();
 
     t.true(drafts.filter(draft => draft.emailDraftId === draftId).length === 0);
+});
+
+test('get email draft for type and studyfield', async t => {
+    const email1 = { type: 'studyfieldTest1', title: 'foo', body: 'bar', studyfield: 1 };
+    const email2 = { type: 'studyfieldTest1', title: 'studyfield2', body: 'bar', studyfield: 2 };
+    await knex('emailDraft').insert(email1);
+    await knex('emailDraft').insert(email2);
+
+    const draft = await emailDraftService.getEmailDraft('studyfieldTest1', 2);
+    t.is(draft.title, 'studyfield2');
+});
+
+test('get default email draft if studyfield mail is not specified', async t => {
+    const email1 = { type: 'studyfieldTest2', title: 'foo', body: 'bar', studyfield: 1 };
+    const email2 = { type: 'studyfieldTest2', title: 'default mail', body: 'bar' };
+    await knex('emailDraft').insert(email1);
+    await knex('emailDraft').insert(email2);
+
+    const draft = await emailDraftService.getEmailDraft('studyfieldTest2', 2);
+    t.is(draft.title, 'default mail');
 });
