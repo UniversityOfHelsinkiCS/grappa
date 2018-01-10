@@ -20,9 +20,7 @@ test.before(async t => {
     await knex.seed.run();
 });
 
-test('study field can be set to visitor role', async t => {
-    t.plan(2);
-
+async function createPerson() {
     const insert = await knex('person')
         .returning('personId')
         .insert({
@@ -30,7 +28,14 @@ test('study field can be set to visitor role', async t => {
             firstname: 'Olli O',
             lastname: 'Opiskelija'
         });
-    const personId = insert[0];
+
+    return insert[0];
+}
+
+test('study field can be set to visitor role', async t => {
+    t.plan(2);
+
+    const personId = await createPerson();
     const visitorRoleForm = { studyfieldIds: [1] };
 
     const res = await request(makeApp(personId))
@@ -51,14 +56,7 @@ test('study field can be set to visitor role', async t => {
 test('visitor role studyfield can be updated', async t => {
     t.plan(2);
 
-    const insert = await knex('person')
-        .returning('personId')
-        .insert({
-            email: '',
-            firstname: 'Olli O',
-            lastname: 'Opiskelija'
-        });
-    const personId = insert[0];
+    const personId = await createPerson();
 
     await knex('personWithRole')
         .insert({
@@ -81,4 +79,37 @@ test('visitor role studyfield can be updated', async t => {
         .first();
 
     t.is(role.studyfieldId, 2);
+});
+
+test('delete role', async t => {
+    const personId = await createPerson();
+    const idToDelete = await knex('personWithRole')
+        .insert({
+            studyfieldId: 1,
+            personId: personId,
+            roleId: 1
+        }).returning('personRoleId');
+
+    const res = await request(makeApp(personId))
+        .del(`/roles/${idToDelete[0]}`);
+
+    t.is(res.status, 200);
+
+    const roles = await knex('personWithRole').select().where('personRoleId', idToDelete[0]);
+    t.is(roles.length, 0);
+});
+
+test('get available roles', async t => {
+    const res = await request(makeApp()).get('/roles/available');
+    t.is(res.status, 200);
+    t.is(res.body.length, 7);
+});
+
+test('save role test', async t => {
+    const personId = await createPerson();
+    const res = await request(makeApp(personId))
+        .post('/roles')
+        .send({ roleId: 1, personId, studyfieldId: 1 });
+
+    t.is(res.status, 200);
 });

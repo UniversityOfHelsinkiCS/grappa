@@ -5,7 +5,7 @@ const roleController = require('../controllers/RoleController');
 
 router.get('/available', (req, res) => {
     roleController.getAvailableRoles(req, res);
-})
+});
 
 router.post('/', jsonParser, (req, res) => {
     roleController.saveRole(req, res);
