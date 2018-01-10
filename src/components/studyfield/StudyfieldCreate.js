@@ -1,4 +1,5 @@
 import React from 'react';
+import { func } from 'prop-types';
 
 export const StudyfieldCreate = props => {
 
@@ -28,5 +29,10 @@ export const StudyfieldCreate = props => {
         </div>
     );
 }
+
+StudyfieldCreate.propTypes = {
+    sendChange: func.isRequired,
+    sendSave: func.isRequired
+};
 
 export default StudyfieldCreate;

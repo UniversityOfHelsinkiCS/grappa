@@ -17,7 +17,7 @@ const NotificationsPage = ({ notifications, persons }) => {
                 <thead>
                     <tr>
                         <th>Tapahtuma</th>
-                        <th></th>
+                        <th />
                         <th>Aika</th>
                         <th>Käyttäjä</th>
                     </tr>

@@ -1,4 +1,6 @@
 import React from 'react';
+import { arrayOf } from 'prop-types';
+import { studyfieldType } from '../../util/types';
 
 export const StudyfieldList = props => {
 
@@ -17,7 +19,7 @@ export const StudyfieldList = props => {
             </thead>
             <tbody>
                 {props.studyfields.sort((a, b) => a.name > b.name).map((studyfield, index) =>
-                    <tr key={index} onClick={handleClick(studyfield)}>
+                    <tr key={studyfield.studyfieldId} onClick={handleClick(studyfield)}>
                         <td>{studyfield.isActive ? 'true' : 'false'}</td>
                         <td>{studyfield.name}</td>
                         <td>{studyfield.professor}</td>
@@ -27,5 +29,9 @@ export const StudyfieldList = props => {
         </table>
     );
 }
+
+StudyfieldList.propTypes = {
+    studyfields: arrayOf(studyfieldType).isRequired
+};
 
 export default StudyfieldList;
