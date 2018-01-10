@@ -166,7 +166,6 @@ const updateGraders = async (graders, agreement) => {
             //If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
                 roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
-                console.log(3.2)
             }
         } else {
             //If person has no grader role, make the person a grader and link them.

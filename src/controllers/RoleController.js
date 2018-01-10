@@ -5,7 +5,6 @@ export async function getAvailableRoles(req, res) {
     try {
         const person = await personService.getLoggedPerson(req);
         const roles = await roleService.getRoles();
-        console.log("ROLES", roles)
         res.status(200).json(roles);
     } catch (error) {
         console.log(error);
@@ -14,18 +13,17 @@ export async function getAvailableRoles(req, res) {
 }
 
 export async function saveRole(req, res) {
-    const data = req.body;
-    const person = await personService.getLoggedPerson(req);
-
     try {
-        const roleId = await roleService.getRoleId(data.name);
-        const personWithRole = {
-            roleId,
-            personId: person.personId,
-            studyfieldId: data.studyfieldId
+        const person = await personService.getLoggedPerson(req);
+
+        let personWithRole = {
+            roleId: req.body.roleId,
+            personId: req.body.personId,
+            studyfieldId: req.body.studyfieldId
         };
-        await roleService.savePersonRole(personWithRole);
-        res.status(200).end();
+        personWithRole = await roleService.savePersonRole(personWithRole);
+        const role = await roleService.getRoleForPersonWithRole(personWithRole.personRoleId)
+        res.status(200).json(role).end();
     } catch (e) {
         console.log(e);
         res.status(500).end();
