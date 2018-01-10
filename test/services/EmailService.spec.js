@@ -18,5 +18,5 @@ test('Thesis author get notification when thesis is added to grappa', async t =>
         t.is(email, 'amanda@admin.com');
     });
 
-    await emailService.newThesisAddedNotifyAuthor(1, undefined);
+    await emailService.newThesisAddedNotifyAuthor('amanda@admin.com');
 });

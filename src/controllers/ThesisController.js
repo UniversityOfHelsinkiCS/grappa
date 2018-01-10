@@ -5,6 +5,7 @@ const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const studyfieldService = require('../services/StudyfieldService');
 const notificationService = require('../services/NotificationService');
+const emailService = require('../services/EmailService');
 
 export async function getTheses(req, res) {
     try {
@@ -57,7 +58,6 @@ export async function getThesisById(req, res) {
 }
 
 export async function saveThesisForm(req, res) {
-    const data = req.body;
     try {
         // Order so that agreementId is available to save attachments.
         // Attachmentservice gives back the parsed multipart formdata
@@ -70,27 +70,32 @@ export async function saveThesisForm(req, res) {
             email: thesis.authorEmail,
             firstname: thesis.authorFirstname,
             lastname: thesis.authorLastname
-        }
-        const savedPerson = await personService.savePerson(person)
+        };
+        const savedPerson = await personService.savePerson(person);
         agreement.authorId = savedPerson.personId;
-        delete thesis.authorFirstname
-        delete thesis.authorLastname
-        delete thesis.authorEmail
+        delete thesis.authorFirstname;
+        delete thesis.authorLastname;
 
         agreement.studyfieldId = thesis.studyfieldId;
         delete thesis.studyfieldId;
-        let savedGraders = []
+
         if (thesis.graders) {
             updateGraders(thesis.graders, agreement);
-            delete thesis.graders
+            delete thesis.graders;
         }
-        //TODO: Email system
-        delete thesis.thesisEmails
+
+        emailService.newThesisAddedNotifyAuthor(thesis.authorEmail, agreement.studyfieldId);
+        // emailService.newThesisAddedNotifyRespProf();
+
+        // TODO: Add email to new email send table
+        delete thesis.thesisEmails;
+        delete thesis.authorEmail;
 
         const savedThesis = await thesisService.saveThesis(thesis);
+
         // Agreement was missing the thesisId completing linking.
         agreement.thesisId = savedThesis.thesisId;
-        const savedAgreement = await agreementService.updateAgreement(agreement)
+        const savedAgreement = await agreementService.updateAgreement(agreement);
 
         const roles = await roleService.getRolesForAllPersons();
 
@@ -100,7 +105,7 @@ export async function saveThesisForm(req, res) {
             agreement: savedAgreement,
             attachments: attachments,
             roles
-        }
+        };
 
         notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.studyfieldId);
         res.status(200).json(response);
