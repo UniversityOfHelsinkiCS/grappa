@@ -37,7 +37,10 @@ export async function getEmailDraft(type, studyfield) {
         .where('type', type)
         .where(function() {
             if (studyfield) {
-                this.where('studyfield', studyfield);
+                this
+                    .where('studyfield', studyfield)
+                    .orWhereNull('studyfield')
+                    .orderBy('studyfield');
             } else {
                 this.whereNull('studyfield');
             }

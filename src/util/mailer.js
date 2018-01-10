@@ -47,8 +47,8 @@ export async function sendEmail(to, subject, body, attachments) {
             }
         });
     }).catch(err => {
-            console.error('EmailSender sendEmail ERRORED:');
-            console.error(err);
+        console.error('EmailSender sendEmail ERRORED:');
+        console.error(err);
     });
 }
 
@@ -61,4 +61,4 @@ const logMail = (to, subject, body, attachments) => {
     console.log(attachments);
     console.log('----------------');
     return Promise.resolve();
-}
+};
