@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 //components
 import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
-import SupervisorManagement from '../containers/supervisor/SupervisorManagementPage';
+import PersonRoleManagement from '../containers/person/PersonRoleManagePage';
 import ThesisListPage from '../containers/thesis/ThesisListPage';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisCreate from '../containers/thesis/ThesisCreatePage';
@@ -19,7 +19,7 @@ export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
-    supervisorManagement: { path: '/supervisorManagement', component: SupervisorManagement, navText: 'Supervisor management' },
+    personRoleManagement: { path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management' },
     thesisView: { path: '/thesis/:id', component: ThesisEdit },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
