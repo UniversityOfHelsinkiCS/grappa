@@ -24,14 +24,25 @@ export async function saveRole(req, res) {
         personWithRole = await roleService.savePersonRole(personWithRole);
         const role = await roleService.getRoleForPersonWithRole(personWithRole.personRoleId)
         res.status(200).json(role).end();
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
+        res.status(500).end();
+    }
+}
+
+export async function deleteRole(req, res) {
+    try {
+        const person = await personService.getLoggedPerson(req);
+        let personRoleId = req.params.id;
+        personRoleId = await roleService.deletePersonRole(personRoleId);
+        res.status(200).json(personRoleId).end();
+    } catch (error) {
         res.status(500).end();
     }
 }
 
 export async function updateRole(req, res) {
-    res.status(500).end();
+    res.status(501).end();
 }
 
 export async function updateVisitorRoles(req, res) {
@@ -45,8 +56,4 @@ export async function updateVisitorRoles(req, res) {
         console.error(error);
         res.status(500).end();
     }
-}
-
-export async function deleteRole(req, res) {
-    res.status(500).end();
 }
