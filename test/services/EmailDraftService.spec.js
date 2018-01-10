@@ -67,6 +67,6 @@ test('get default email draft if studyfield mail is not specified', async t => {
     await knex('emailDraft').insert(email1);
     await knex('emailDraft').insert(email2);
 
-    const draft = await emailDraftService.getEmailDraft('studyfieldTest2', 2);
+    const draft = await emailDraftService.getEmailDraft('studyfieldTest2');
     t.is(draft.title, 'default mail');
 });
