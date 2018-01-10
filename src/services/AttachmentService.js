@@ -1,6 +1,4 @@
 const knex = require('../db/connection');
-const bookshelf = require('../db/bookshelf')
-const Attachment = require('../db/models/attachment');
 const pdfManipulator = require('../util/pdfManipulator');
 const multer = require('multer');
 
@@ -13,15 +11,15 @@ const storage = () => {
     return multer.diskStorage({
         destination: PATH_TO_FOLDER,
         filename: (req, file, cb) => {
-            cb(null, Date.now() + '-' + file.originalname)
+            cb(null, Date.now() + '-' + file.originalname);
         }
-    })
-}
+    });
+};
 const upload = multer({ storage: storage() }).fields([
     { name: 'otherFile' },
     { name: 'reviewFile', maxCount: 1 },
-    { name: 'thesisFile', maxCount: 1 },
-])
+    { name: 'thesisFile', maxCount: 1 }
+]);
 
 const attachmentSchema = [
     'attachmentId',
@@ -31,11 +29,11 @@ const attachmentSchema = [
     'mimetype',
     'label',
     'savedOnDisk'
-]
+];
 
 export async function saveAttachments(req, res, agreementId) {
     console.log('Saving to disk');
-    //TODO: Transaction
+    // TODO: Transaction
 
     try {
         const uploaded = new Promise((resolve, reject) => {
@@ -45,21 +43,21 @@ export async function saveAttachments(req, res, agreementId) {
                 }
                 console.log('Attachments saved to disk');
                 resolve(req);
-            })
-        })
-        const request = await uploaded
-        // agreementId is not null when saving a thesis, 
+            });
+        });
+        const request = await uploaded;
+        // agreementId is not null when saving a thesis,
         // and in that case it's not in request.body.json
         let id = agreementId;
         if (!id) {
             id = JSON.parse(request.body.json).agreementId;
         }
 
-        const attachments = [].concat.apply([], await Promise.all(Object.keys(request.files).map(key => saveFileArray(id, request.files[key]))))
+        const attachments = [].concat.apply([], await Promise.all(Object.keys(request.files).map(key => saveFileArray(id, request.files[key]))));
 
-        return { attachments: attachments, json: JSON.parse(request.body.json) }
+        return { attachments: attachments, json: JSON.parse(request.body.json) };
     } catch (error) {
-        console.log("Error during attachment save ", error);
+        console.log('Error during attachment save ', error);
         return Promise.reject(error);
     }
 }
@@ -72,16 +70,16 @@ const saveFileArray = async (agreementId, fileArray) => {
             filename: file.filename,
             originalname: file.originalname,
             mimetype: file.mimetype,
-            label: file.fieldname,
+            label: file.fieldname
         };
         console.log(file);
         const attachmentIds = await knex('attachment')
             .returning('attachmentId')
-            .insert(attachment)
-        const attachmentId = attachmentIds[0]
-        return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first()
-    }))
-}
+            .insert(attachment);
+        const attachmentId = attachmentIds[0];
+        return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first();
+    }));
+};
 
 export async function getAllAttachments() {
     return knex.select(attachmentSchema).from('attachment');
@@ -89,7 +87,7 @@ export async function getAllAttachments() {
 
 export async function getAttachments(attachmentIds) {
     return knex.select(attachmentSchema).from('attachment')
-        .whereIn('attachmentId', attachmentIds)
+        .whereIn('attachmentId', attachmentIds);
 }
 
 export async function getAttachmentsForAgreements(agreements) {
@@ -116,7 +114,7 @@ export async function updateAttachment(attachment) {
 }
 
 export async function mergeAttachments(attachments) {
-    const files = attachments.map(attachment => attachment.filename)
+    const files = attachments.map(attachment => attachment.filename);
     try {
         return pdfManipulator.joinPdfs(PATH_TO_FOLDER, files);
     } catch (error) {
@@ -125,11 +123,11 @@ export async function mergeAttachments(attachments) {
 }
 
 export async function deleteAttachment(attachmentId) {
-    //Do not delete the file for now.
-    //TODO: Add timed file removal (after indexing has ended, 30 days?)
+    // Do not delete the file for now.
+    // TODO: Add timed file removal (after indexing has ended, 30 days?)
     return knex('attachment')
         .where('attachmentId', '=', attachmentId)
         .del()
         .then(() => attachmentId)
         .catch(err => err);
-}
+};

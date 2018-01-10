@@ -125,8 +125,10 @@ test('thesis get all', async t => {
 
 const attachment = {
     filename: null, // Saving to memory has no filename
-    type: 'application/octet-stream',
-    savedOnDisk: 1
+    mimetype: 'application/octet-stream',
+    savedOnDisk: 1,
+    label: 'otherFile',
+    originalname: 'LICENSE'
 };
 
 test('thesisForm post & creates id with attachment', async t => {
@@ -134,7 +136,7 @@ test('thesisForm post & creates id with attachment', async t => {
     const res = await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(thesisForm))
-        .attach('attachment', './LICENSE');
+        .attach('otherFile', './LICENSE');
     t.is(res.status, 200);
     let thesis = res.body.thesis;
     let author = res.body.author;
