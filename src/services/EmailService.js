@@ -7,9 +7,11 @@ export async function newThesisAddedNotifyAuthor(email, studyfieldId) {
     await sendMail('ThesisAuthorNotification', email, studyfieldId);
 }
 
-export async function newThesisAddedNotifyRespProf(personId, studyfieldId) {
-    const person = await personService.getPersonById(personId);
-    await sendMail('SupervisingProfessorNotification', person.email, studyfieldId);
+export async function newThesisAddedNotifyRespProf(studyfieldId) {
+    const respProfs = await personService.getPersonsWithRoleInStudyfield(4, studyfieldId);
+    const mails = respProfs.map(prof => sendMail('SupervisingProfessorNotification', prof.email, studyfieldId));
+
+    return Promise.all(mails);
 }
 
 async function sendMail(type, email, studyfieldId) {

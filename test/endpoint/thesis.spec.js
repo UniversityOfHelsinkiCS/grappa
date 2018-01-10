@@ -165,10 +165,13 @@ test('thesisForm post sends emails', async t => {
     const form = Object.assign({}, thesisForm);
 
     form.authorEmail = 'emailTest@example.com';
+    form.studyfieldId = 1;
 
     await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(form));
 
     t.true(mailSpy.calledWith(form.authorEmail));
+    t.true(mailSpy.calledWith('victoria@vastuuproffa.com'));
+    t.true(mailSpy.calledWith('erkki@erikoistapaus.com'));
 });

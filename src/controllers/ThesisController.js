@@ -10,8 +10,8 @@ const emailService = require('../services/EmailService');
 export async function getTheses(req, res) {
     try {
         const user = await personService.getLoggedPerson(req);
-        let theses = []
-        let newTheses = []
+        let theses = [];
+        let newTheses = [];
 
         const rolesInStudyfields = await getUsersRoles(user);
         if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
@@ -28,14 +28,14 @@ export async function getTheses(req, res) {
                 newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
                 theses = [...new Set([...theses, ...newTheses])];
             }
-        })
+        });
 
         // Get theses where user is agreementperson
-        newTheses = await thesisService.getThesesByAgreementPerson(user.personId)
+        newTheses = await thesisService.getThesesByAgreementPerson(user.personId);
         theses = [...new Set([...theses, ...newTheses])];
 
         // Get theses where user is author
-        newTheses = await thesisService.getThesesByPersonId(user.personId)
+        newTheses = await thesisService.getThesesByPersonId(user.personId);
         theses = [...new Set([...theses, ...newTheses])];
 
         // Remove duplicates
@@ -44,7 +44,7 @@ export async function getTheses(req, res) {
             if (!response.find(item => item.thesisId === thesis.thesisId)) {
                 response.push(thesis);
             }
-        })
+        });
 
         res.status(200).json(response).end();
     } catch (error) {
@@ -72,6 +72,8 @@ export async function saveThesisForm(req, res) {
             lastname: thesis.authorLastname
         };
         const savedPerson = await personService.savePerson(person);
+        const studyfield = thesis.studyfieldId;
+
         agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname;
         delete thesis.authorLastname;
@@ -84,8 +86,8 @@ export async function saveThesisForm(req, res) {
             delete thesis.graders;
         }
 
-        emailService.newThesisAddedNotifyAuthor(thesis.authorEmail, agreement.studyfieldId);
-        // emailService.newThesisAddedNotifyRespProf();
+        emailService.newThesisAddedNotifyAuthor(thesis.authorEmail, studyfield);
+        emailService.newThesisAddedNotifyRespProf(studyfield);
 
         // TODO: Add email to new email send table
         delete thesis.thesisEmails;
@@ -123,9 +125,9 @@ const getUsersRoles = async (user) => {
         return {
             studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
-        }
-    })
-}
+        };
+    });
+};
 
 export async function updateThesis(req, res) {
     try {
@@ -133,19 +135,16 @@ export async function updateThesis(req, res) {
         let thesis = await thesisService.getThesisById(updatedFields.thesisId);
         Object.keys(thesis).forEach(key => {
             thesis[key] = updatedFields[key];
-        })
+        });
         thesis = await thesisService.updateThesis(thesis);
 
         const graders = updatedFields.graders;
         const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId);
-        //TODO: support multiple agreements on one thesis
+        // TODO: support multiple agreements on one thesis
         await updateGraders(graders, agreements[0]);
 
         const roles = await roleService.getRolesForAllPersons();
-        const responseObject = {
-            thesis,
-            roles,
-        }
+        const responseObject = { thesis, roles };
         res.status(200).json(responseObject).end();
     } catch (error) {
         console.log(error);
@@ -154,35 +153,35 @@ export async function updateThesis(req, res) {
 }
 
 const updateGraders = async (graders, agreement) => {
-    //To unlink person and 
-    const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
+    // To unlink person and
+    const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId);
 
     await Promise.all(agreementPersons.map(async agreementPerson => {
         const personRole = await roleService.getPersonRoleWithId(agreementPerson.personRoleId);
         if (!graders.find(grader => grader.personId == personRole.personId)) {
             await roleService.unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId);
         }
-    }))
+    }));
 
-    //If grader not in agreementperson, link them.
+    // If grader not in agreementperson, link them.
     await Promise.all(graders.map(async grader => {
-        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader')
+        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader');
         if (personRole) {
-            //If person exists as a grader and not already linked, link them
+            // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
-                roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
+                roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId);
             }
         } else {
-            //If person has no grader role, make the person a grader and link them.
+            // If person has no grader role, make the person a grader and link them.
             const roleId = await roleService.getRoleId('grader');
 
             let personWithRole = {
                 personId: grader.personId,
                 studyfieldId: agreement.studyfieldId,
                 roleId
-            }
+            };
             personWithRole = await roleService.savePersonRole(personWithRole);
-            roleService.linkAgreementAndPersonRole(agreement.agreementId, personWithRole.personRoleId)
+            roleService.linkAgreementAndPersonRole(agreement.agreementId, personWithRole.personRoleId);
         }
-    }))
-}
+    }));
+};
