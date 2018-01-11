@@ -8,15 +8,14 @@ const pdftk = require('node-pdftk');
  */
 export async function joinPdfs(pathToFolder, fileNames) {
     //Does not support past 26.
-    let pdfs = fileNames.reduce((accumulated, current, index) => {
-        accumulated += " " + String.fromCharCode(65 + index);
-        return accumulated;
-    }, "")
+    // Bug in node-pdftk or pdftk: trailing and leading spaces are A: ' B ' = 'A B A'
+    const pdfs = fileNames.map((file, index) => String.fromCharCode(65 + index)).join(' ')
 
     const input = {};
     fileNames.forEach((name, index) => {
         input[String.fromCharCode(65 + index)] = pathToFolder + name;
     })
+    
     return pdftk
         .input(input)
         .cat(pdfs)
