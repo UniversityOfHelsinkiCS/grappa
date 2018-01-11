@@ -14,6 +14,7 @@ import personReducer from '../containers/person/personReducer';
 import roleReducer from '../containers/role/roleReducer';
 import notificationsReducer from '../containers/notifications/notificationsReducer';
 import eventMessageReducer from '../containers/eventMessage/eventMessageReducer';
+import inviteReducer from '../containers/invite/inviteReducer';
 
 //TODO: Comments in english
 //kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
@@ -33,7 +34,8 @@ const combinedReducers = combineReducers({
     emails: emailReducer,
     persons: personReducer,
     notifications: notificationsReducer,
-    eventMessage: eventMessageReducer
+    eventMessage: eventMessageReducer,
+    invite: inviteReducer
 });
 
 let store;

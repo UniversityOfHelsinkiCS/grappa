@@ -16,6 +16,14 @@ const reducer = (state = {}, action) => {
                     text: 'Uloskirjautuminen onnistui'
                 }
             });
+        case action.type === 'INVITE_ACCEPT_THESIS_SUCCESS':
+        return Object.assign({}, state, {
+            logout: {
+                active: true,
+                type: 'success',
+                text: 'Thesis linked to user'
+            }
+        });
         case action.type.includes('_FAILURE'):
             const message = {};
             message[action.type] = {

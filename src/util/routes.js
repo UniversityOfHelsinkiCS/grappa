@@ -14,6 +14,7 @@ import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingMan
 import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
 import EmailDraftPage from '../containers/email/EmailDraftPage';
 import NotificationsPage from '../containers/notifications/NotificationsPage';
+import InvitePage from '../containers/invite/InvitePage';
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
@@ -27,7 +28,8 @@ export const paths = {
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings' },
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
-    notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' }
+    notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' },
+    invite: { path: '/invite/:type/:token', component: InvitePage }
 }
 
 export default () => {
