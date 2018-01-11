@@ -1,8 +1,8 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
     return Promise.all([
-        knex.schema.createTable('agreement', function (table) {
+        knex.schema.createTable('agreement', function(table) {
             table.increments('agreementId').primary();
-            table.integer('authorId').unsigned(); //author
+            table.integer('authorId').unsigned(); // author
             table.foreign('authorId').references('person.personId');
             table.integer('thesisId').unsigned();
             table.foreign('thesisId').references('thesis.thesisId');
@@ -20,12 +20,12 @@ exports.up = function (knex, Promise) {
             table.string('intermediateGoal');
             table.string('meetingAgreement');
             table.string('other');
-            table.string('whoNext').defaultTo('supervisor'); //student creates agreement
+            table.string('whoNext').defaultTo('supervisor'); // student creates agreement
             table.timestamps();
         })
     ]);
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
     knex.schema.dropTable('agreement');
 };

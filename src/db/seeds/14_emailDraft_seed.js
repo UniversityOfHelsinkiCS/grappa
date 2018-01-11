@@ -57,6 +57,15 @@ $LINK$`
                     `Hi
 Your thesis has been added to Grappa, https://grappa.cs.helsinki.fi
                     `
+                },
+                {
+                    type: 'InviteAuthorToLogin',
+                    title: 'Thesis added to Grappa',
+                    body:
+                    `Hi
+
+Your thesis has been added to Grappa, $LOGIN_URL$
+                    `
                 }
             ]);
         });

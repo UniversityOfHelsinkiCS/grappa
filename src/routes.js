@@ -10,6 +10,7 @@ const shibboleth = require('./routes/shibboleth');
 const councilmeeting = require('./routes/councilmeeting');
 const notifications = require('./routes/notifications');
 const emailDrafts = require('./routes/emailDrafts');
+const invite = require('./routes/invite');
 
 const auth = require('./middleware/auth');
 
@@ -19,6 +20,7 @@ module.exports = (app) => {
     app.use('/user', shibboleth);
     app.use('/persons', persons);
     app.use(auth.checkAuth);
+    app.use('/invite', invite);
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/roles', roles);

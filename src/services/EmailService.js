@@ -23,3 +23,14 @@ async function sendMail(type, email, studyfieldId) {
         console.error('Email send error', error);
     }
 }
+
+export async function sendInvite(emailInvite) {
+    const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin');
+    const body = draft.body.replace('$LOGIN_URL$', `http://localhost:3000/v2/invite/${emailInvite.token}`);
+
+    try {
+        await mailer.sendEmail(emailInvite.email, draft.title, body);
+    } catch (error) {
+        console.error('Email send error', error);
+    }
+}
