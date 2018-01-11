@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { number, func } from 'prop-types';
+import { number, func, arrayOf } from 'prop-types';
+import { councilmeetingType } from '../../util/types';
 import moment from 'moment';
 
 export default class ThesisCouncilmeetingPicker extends Component {
@@ -67,6 +68,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
 }
 
 ThesisCouncilmeetingPicker.propTypes = {
+    councilmeetings: arrayOf(councilmeetingType).isRequired,
     chosenMeetingId: number.isRequired,
     sendChange: func.isRequired
 };

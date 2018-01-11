@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
-import { agreementType, personType, roleType, studyfieldType, thesisType } from '../../util/types';
+import { agreementType, personType, roleType, studyfieldType, thesisType, councilmeetingType } from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
@@ -204,7 +204,10 @@ export class ThesisEditPage extends Component {
                         downloadAttachment={this.downloadAttachment}
                         deleteAttachment={this.props.deleteAttachment} />
                     <br />
-                    {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} /> : undefined}
+                    {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker
+                        sendChange={this.handleChange}
+                        chosenMeetingId={this.state.thesis.councilmeetingId}
+                        councilmeetings={this.props.councilmeetings} /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
@@ -251,6 +254,7 @@ const mapStateToProps = (state) => ({
 ThesisEditPage.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
     attachments: array.isRequired,
+    councilmeetings: arrayOf(councilmeetingType).isRequired,
     persons: arrayOf(personType).isRequired,
     roles: arrayOf(roleType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,

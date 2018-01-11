@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { arrayOf, func } from 'prop-types';
+import { personType, roleType, studyfieldType, availableRoleType } from '../../util/types';
 
 import PersonSelector from '../../components/person/PersonSelector';
 import PersonInviter from '../../components/person/PersonInviter';
@@ -99,5 +101,15 @@ const mapStateToProps = (state) => {
         availableRoles: state.availableRoles,
     };
 }
+
+PersonRoleManagePage.propTypes = {
+    studyfields: arrayOf(studyfieldType).isRequired,
+    persons: arrayOf(personType).isRequired,
+    roles: arrayOf(roleType).isRequired,
+    availableRoles: arrayOf(availableRoleType).isRequired,
+    getAvailableRoles: func.isRequired,
+    saveRole: func.isRequired,
+    deleteRole: func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
-import { personType, roleType, studyfieldType } from '../../util/types';
+import { personType, roleType, studyfieldType, councilmeetingType } from '../../util/types';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
@@ -102,7 +102,10 @@ export class ThesisCreatePage extends Component {
                     {this.renderGraderSelecter()}
                     <AttachmentAdder attachments={this.state.attachments} changeList={this.editAttachmentList} />
                     <br />
-                    <ThesisCouncilmeetingPicker sendChange={this.handleChange} councilmeetings={this.props.councilmeetings} />
+                    <ThesisCouncilmeetingPicker
+                        sendChange={this.handleChange}
+                        chosenMeetingId={this.state.thesis.councilmeetingId}
+                        councilmeetings={this.props.councilmeetings} />
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.toggleModal}>
@@ -128,6 +131,7 @@ const mapStateToProps = (state) => ({
 
 const { arrayOf, func } = PropTypes;
 ThesisCreatePage.propTypes = {
+    councilmeetings: arrayOf(councilmeetingType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,

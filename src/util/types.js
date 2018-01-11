@@ -15,10 +15,22 @@ export const personType = shape({
     major: string
 });
 
+export const councilmeetingType = shape({
+    councilmeetingId: number,
+    date: string,
+    instructorDeadline: string,
+    studentDeadline: string
+})
+
 export const studyfieldType = shape({
     studyfieldId: number,
     name: text
 });
+
+export const availableRoleType = shape({
+    roleId: number,
+    name: text
+})
 
 export const roleType = shape({
     personRoleId: number,
