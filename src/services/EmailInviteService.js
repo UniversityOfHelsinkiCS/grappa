@@ -3,11 +3,11 @@ const knex = require('../db/connection');
 
 const emailService = require('./EmailService');
 
-export async function createEmailInviteForThesisAuthor(email, agreementId) {
+export async function createEmailInviteForThesisAuthor(email, agreementId, studyfieldId) {
     const token = crypto.randomBytes(16).toString('hex');
     const invite = { email, agreement: agreementId, token, type: 'thesis_author' };
     await knex('emailInvite').insert(invite);
-    await emailService.sendInvite(invite);
+    await emailService.sendInvite(invite, studyfieldId);
 }
 
 export function getEmailInviteDataForToken(token) {

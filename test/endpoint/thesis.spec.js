@@ -92,7 +92,7 @@ const fakeAgreement = {
 };
 
 test('thesisForm post & creates id without attachment', async t => {
-    t.plan(6);
+    t.plan(5);
     const res = await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(thesisForm));
@@ -102,15 +102,13 @@ test('thesisForm post & creates id without attachment', async t => {
     let agreement = res.body.agreement;
     // Check the linking is right
     t.is(thesis.thesisId, agreement.thesisId);
-    t.is(agreement.authorId, author.personId);
     delete thesis.thesisId;
-    delete author.personId;
     delete agreement.agreementId;
     delete agreement.thesisId;
     delete agreement.authorId;
     // Check the contents are right
     t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
-    t.deepEqual(author, person, 'Author person is correct');
+    t.deepEqual(author, undefined, 'Author person is correct');
     t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
 });
 
@@ -133,7 +131,7 @@ const attachment = {
 };
 
 test('thesisForm post & creates id with attachment', async t => {
-    t.plan(8);
+    t.plan(7);
     const res = await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(thesisForm))
@@ -145,10 +143,8 @@ test('thesisForm post & creates id with attachment', async t => {
     let attachments = res.body.attachments;
     // Check the linking is right
     t.is(thesis.thesisId, agreement.thesisId);
-    t.is(agreement.authorId, author.personId);
     t.is(attachments[0].agreementId, agreement.agreementId);
     delete thesis.thesisId;
-    delete author.personId;
     delete attachments[0].attachmentId;
     delete agreement.agreementId;
 
@@ -157,7 +153,7 @@ test('thesisForm post & creates id with attachment', async t => {
     delete attachments[0].agreementId;
     // Check the contents are right
     t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
-    t.deepEqual(author, person, 'Author person is correct');
+    t.deepEqual(author, undefined, 'Author person is correct');
     t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
     t.deepEqual(attachments[0], attachment, 'Attachments are correct');
 });

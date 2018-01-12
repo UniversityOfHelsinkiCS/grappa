@@ -22,10 +22,8 @@ async function sendMail(type, email, studyfieldId) {
     }
 }
 
-export async function sendInvite(emailInvite) {
-    console.log(emailInvite);
-    const agreement = await getAgreementById(emailInvite.agreement);
-    const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin', agreement.studyfieldId);
+export async function sendInvite(emailInvite, studyfieldId) {
+    const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin', studyfieldId);
     const body = draft.body.replace('$LOGIN_URL$', `http://localhost:3000/v2/invite/${emailInvite.token}`);
 
     try {

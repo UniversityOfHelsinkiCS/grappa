@@ -66,17 +66,10 @@ export async function saveThesisForm(req, res) {
         const attachments = attachmentObject.attachments;
         let thesis = attachmentObject.json;
 
-        let person = {
-            email: thesis.authorEmail,
-            firstname: thesis.authorFirstname,
-            lastname: thesis.authorLastname
-        };
-        const savedPerson = await personService.savePerson(person);
         const studyfield = thesis.studyfieldId;
         const authorEmail = thesis.authorEmail;
         const agreementId = agreement.agreementId;
 
-        agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname;
         delete thesis.authorLastname;
 
@@ -101,11 +94,10 @@ export async function saveThesisForm(req, res) {
         const roles = await roleService.getRolesForAllPersons();
 
         await emailService.newThesisAddedNotifyRespProf(studyfield);
-        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId);
+        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, studyfield);
 
         const response = {
             thesis: savedThesis,
-            author: savedPerson,
             agreement: savedAgreement,
             attachments: attachments,
             roles
