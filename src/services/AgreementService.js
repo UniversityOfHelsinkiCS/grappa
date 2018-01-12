@@ -176,4 +176,26 @@ export const getAgreementReceiver = (id) => {
                 return 'supervisor';
             }
         });
-};
+}
+
+
+export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
+    const informationSchema = [
+        'thesis.title',
+        'thesis.grade',
+        'grader.firstName',
+        'grader.lastName',
+        'author.firstName as authorFirstname',
+        'author.lastName as authorLastname',
+    ]
+
+    return knex.select(informationSchema).from('agreement')
+        .whereIn('agreement.agreementId', agreementIds)
+        .innerJoin('agreementPerson', 'agreement.agreementId', '=', 'agreementPerson.agreementId')
+        .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
+        .where('role.name', 'grader')
+        .innerJoin('person as grader', 'personWithRole.personId', '=', 'grader.personId')
+        .innerJoin('person as author', 'agreement.authorId', '=', 'author.personId')
+        .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+}

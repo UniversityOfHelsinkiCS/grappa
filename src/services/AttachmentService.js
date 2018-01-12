@@ -126,6 +126,10 @@ export async function mergeAttachments(attachments) {
     }
 }
 
+export async function addCover(fileStream, infoObjects, councilmeeting) {
+    return pdfManipulator.addCover(fileStream, infoObjects, councilmeeting);
+}
+
 export async function deleteAttachment(attachmentId) {
     // Do not delete the file for now.
     // TODO: Add timed file removal (after indexing has ended, 30 days?)

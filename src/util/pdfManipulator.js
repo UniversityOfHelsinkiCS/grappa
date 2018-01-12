@@ -15,9 +15,60 @@ export async function joinPdfs(pathToFolder, fileNames) {
     fileNames.forEach((name, index) => {
         input[String.fromCharCode(65 + index)] = pathToFolder + name;
     })
-    
+
+    return pdftk.input(input).cat(pdfs).output()
+}
+
+export async function addCover(contentBuffer, infoObjects, councilmeeting) {
+    const content = await contentBuffer;
+    const cover = await generateThesesCover(infoObjects, councilmeeting)
+    //TODO: Make sure cat can be done with buffers like this.
+    return pdftk.input([cover, content]).output();
+}
+
+/**
+ * Creates a cover for the councilmeeting's documents as required by Pirjo.
+ *
+ * Consists of a list of the thesis processed in the meeting with author's name,
+ * instructor's name and thesis' grade.
+ * @param {Array<Object>} theses - Array of thesis objects.
+ * @param {Object} councilmeeting - Councilmeeting object.
+ * @return {Promise<Array>} Array of something??? TODO
+ */
+async function generateThesesCover(thesisInformationArray, councilmeeting) {
+    const template = './data/coverTemplate.pdf'
+    const dateInformation = councilmeeting ?
+        createDateString(new Date(councilmeeting.date))
+        : ''
+    const thesisInformation = createThesisString(thesisInformationArray);
+    const formData = {
+        dateInformation,
+        thesisInformation,
+    }
+
     return pdftk
-        .input(input)
-        .cat(pdfs)
+        .input(template)
+        .fillForm(formData)
+        .flatten()
         .output()
+}
+
+function createDateString(date) {
+    const string = ('0' + date.getDate()).slice(-2) + '/'
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '/'
+        + date.getFullYear();
+    return string;
+}
+
+function createThesisString(thesisInfoArray) {
+    const string = thesisInfoArray.map(thesis => {
+        const thesisString = thesis.authorLastname + ', ' + thesis.authorFirstname + ': ' + thesis.title + '\n';
+        const graderString = 'Graders: ' +
+            thesis.graders.map(grader => {
+                return grader.firstname + ' ' + grader.lastname;
+            }).join(', ') + '\n';
+        const gradeString = 'Proposed grade: ' + thesis.grade;
+        return thesisString + graderString + gradeString
+    }).join('\n\n')
+    return string;
 }
