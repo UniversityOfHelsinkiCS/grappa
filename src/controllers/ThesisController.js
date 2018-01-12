@@ -90,11 +90,6 @@ export async function saveThesisForm(req, res) {
             delete thesis.graders;
         }
 
-        emailService.newThesisAddedNotifyAuthor(authorEmail, studyfield);
-        emailService.newThesisAddedNotifyRespProf(studyfield);
-
-        emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId);
-
         // TODO: Add email to new email send table
         delete thesis.thesisEmails;
         delete thesis.authorEmail;
@@ -106,6 +101,9 @@ export async function saveThesisForm(req, res) {
         const savedAgreement = await agreementService.updateAgreement(agreement);
 
         const roles = await roleService.getRolesForAllPersons();
+
+        await emailService.newThesisAddedNotifyRespProf(studyfield);
+        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId);
 
         const response = {
             thesis: savedThesis,
