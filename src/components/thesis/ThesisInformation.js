@@ -13,13 +13,13 @@ export default class ThesisInformation extends Component {
         this.props.sendChange(fieldName, event.target.value);
     }
 
-    renderTextField(label, fieldName, placeholder, disabled) {
+    renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
 
         return (
             <div className="field">
                 <label>{label}</label>
                 <input
-                    type="text"
+                    type={type}
                     disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
@@ -52,9 +52,7 @@ export default class ThesisInformation extends Component {
     renderThesisAuthor(disabled) {
         return (
             <div className="three fields">
-                {this.renderTextField('First name', 'authorFirstname', 'First Name', disabled)}
-                {this.renderTextField('Last name', 'authorLastname', 'Last Name', disabled)}
-                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled)}
+                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled, 'email')}
             </div>
         );
     }
