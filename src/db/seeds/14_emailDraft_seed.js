@@ -51,11 +51,12 @@ Due to rules of the process, your evaluation of the instructors is needed for th
 $LINK$`
                 },
                 {
-                    type: 'ThesisAuthorNotification',
+                    type: 'InviteAuthorToLogin',
                     title: 'Thesis added to Grappa',
                     body:
                     `Hi
-Your thesis has been added to Grappa, https://grappa.cs.helsinki.fi
+
+Your thesis has been added to Grappa, $LOGIN_URL$
                     `
                 }
             ]);

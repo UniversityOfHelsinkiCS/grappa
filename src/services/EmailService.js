@@ -1,11 +1,9 @@
+import { getAgreementById } from './AgreementService';
+
 const mailer = require('../util/mailer');
 
 const emailDraftService = require('../services/EmailDraftService');
 const personService = require('../services/PersonService');
-
-export async function newThesisAddedNotifyAuthor(email, studyfieldId) {
-    await sendMail('ThesisAuthorNotification', email, studyfieldId);
-}
 
 export async function newThesisAddedNotifyRespProf(studyfieldId) {
     const respProfs = await personService.getPersonsWithRoleInStudyfield(4, studyfieldId);
@@ -19,6 +17,17 @@ async function sendMail(type, email, studyfieldId) {
 
     try {
         await mailer.sendEmail(email, emailDraft.title, emailDraft.body);
+    } catch (error) {
+        console.error('Email send error', error);
+    }
+}
+
+export async function sendInvite(emailInvite, studyfieldId) {
+    const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin', studyfieldId);
+    const body = draft.body.replace('$LOGIN_URL$', `http://localhost:3000/v2/invite/${emailInvite.token}`);
+
+    try {
+        await mailer.sendEmail(emailInvite.email, draft.title, body);
     } catch (error) {
         console.error('Email send error', error);
     }

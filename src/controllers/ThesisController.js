@@ -9,6 +9,8 @@ const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
 
 export async function getTheses(req, res) {
+    const studyfieldRoles = ['resp_professor', 'print-person', 'manager'];
+
     try {
         const user = await personService.getLoggedPerson(req);
         let theses = [];
@@ -22,22 +24,18 @@ export async function getTheses(req, res) {
             return;
         }
 
-        // Get theses in studyfield where user is ...
         rolesInStudyfields.forEach(async item => {
-            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+            if (studyfieldRoles.includes(item.role.name)) {
                 // ... As resp_professor, manager or print-person theses in studyfield
                 newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
                 theses = [...new Set([...theses, ...newTheses])];
             }
         });
 
-        // Get theses where user is agreementperson
-        newTheses = await thesisService.getThesesByAgreementPerson(user.personId);
-        theses = [...new Set([...theses, ...newTheses])];
+        const thesesAsAgreementPerson = await thesisService.getThesesByAgreementPerson(user.personId);
+        const thesesAsAuthor = await thesisService.getThesesByPersonId(user.personId);
 
-        // Get theses where user is author
-        newTheses = await thesisService.getThesesByPersonId(user.personId);
-        theses = [...new Set([...theses, ...newTheses])];
+        theses = [...theses, ...thesesAsAgreementPerson, ...thesesAsAuthor];
 
         // Remove duplicates
         let response = [];
@@ -49,6 +47,7 @@ export async function getTheses(req, res) {
 
         res.status(200).json(response).end();
     } catch (error) {
+        console.error(error);
         res.status(500).json(error).end();
     }
 }
@@ -67,17 +66,10 @@ export async function saveThesisForm(req, res) {
         const attachments = attachmentObject.attachments;
         let thesis = attachmentObject.json;
 
-        let person = {
-            email: thesis.authorEmail,
-            firstname: thesis.authorFirstname,
-            lastname: thesis.authorLastname
-        };
-        const savedPerson = await personService.savePerson(person);
         const studyfield = thesis.studyfieldId;
         const authorEmail = thesis.authorEmail;
         const agreementId = agreement.agreementId;
 
-        agreement.authorId = savedPerson.personId;
         delete thesis.authorFirstname;
         delete thesis.authorLastname;
 
@@ -88,11 +80,6 @@ export async function saveThesisForm(req, res) {
             updateGraders(thesis.graders, agreement);
             delete thesis.graders;
         }
-
-        emailService.newThesisAddedNotifyAuthor(authorEmail, studyfield);
-        emailService.newThesisAddedNotifyRespProf(studyfield);
-
-        emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId);
 
         // TODO: Add email to new email send table
         delete thesis.thesisEmails;
@@ -106,9 +93,11 @@ export async function saveThesisForm(req, res) {
 
         const roles = await roleService.getRolesForAllPersons();
 
+        await emailService.newThesisAddedNotifyRespProf(studyfield);
+        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, studyfield);
+
         const response = {
             thesis: savedThesis,
-            author: savedPerson,
             agreement: savedAgreement,
             attachments: attachments,
             roles

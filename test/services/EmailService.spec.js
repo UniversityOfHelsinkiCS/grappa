@@ -10,13 +10,13 @@ test.before(async t => {
     await knex.seed.run();
 });
 
-test('Thesis author get notification when thesis is added to grappa', async t => {
+test('Resp prof get notification when thesis is added to grappa', async t => {
     t.plan(2);
 
     sinon.stub(mailer, 'sendEmail').callsFake((email, title) => {
         t.is(title, 'Thesis added to Grappa');
-        t.is(email, 'amanda@admin.com');
+        t.is(email, 'venla@vastuuproffa.com');
     });
 
-    await emailService.newThesisAddedNotifyAuthor('amanda@admin.com');
+    await emailService.newThesisAddedNotifyRespProf(2);
 });
