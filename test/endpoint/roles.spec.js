@@ -1,4 +1,6 @@
 import test from 'ava';
+import { createPerson } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const roles = require('../../src/routes/roles');
@@ -19,18 +21,6 @@ test.before(async t => {
     await knex.migrate.latest();
     await knex.seed.run();
 });
-
-async function createPerson() {
-    const insert = await knex('person')
-        .returning('personId')
-        .insert({
-            email: '',
-            firstname: 'Olli O',
-            lastname: 'Opiskelija'
-        });
-
-    return insert[0];
-}
 
 test('study field can be set to visitor role', async t => {
     t.plan(2);

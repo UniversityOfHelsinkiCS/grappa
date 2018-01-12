@@ -1,4 +1,5 @@
 import test from 'ava';
+import { createPerson } from '../utils';
 
 const request = require('supertest');
 const express = require('express');
@@ -14,18 +15,6 @@ const makeApp = (userId) => {
     }, invite);
     return app;
 };
-
-async function createPerson(email) {
-    const insert = await knex('person')
-        .returning('personId')
-        .insert({
-            email,
-            firstname: 'Olli O',
-            lastname: 'Opiskelija'
-        });
-
-    return insert[0];
-}
 
 test.before(async t => {
     await knex.migrate.latest();

@@ -49,6 +49,7 @@ export async function getTheses(req, res) {
 
         res.status(200).json(response).end();
     } catch (error) {
+        console.error(error);
         res.status(500).json(error).end();
     }
 }
