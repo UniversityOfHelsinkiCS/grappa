@@ -205,3 +205,17 @@ test('grader can see thesis', async t => {
     t.is(res.body.length, 1);
     t.is(res.body[0].title, title);
 });
+
+test('resp prof can see studyfield thesis', async t => {
+    const title = 'Studyfield thesis';
+    const personId = await createPerson();
+    const studyfield = await knex('studyfield').insert({ name: 'test studyfield' }).returning('studyfieldId');
+    const thesis = await knex('thesis').insert({ title }).returning('theisId');
+    await knex('personWithRole').insert({ personId, roleId: 4, studyfieldId: studyfield[0] }).returning('personRoleId');
+    await knex('agreement').insert({ thesisId: thesis[0], studyfieldId: studyfield[0] }).returning('agreementId');
+
+    const res = await request(makeApp(personId)).get('/theses');
+
+    t.is(res.body.length, 1);
+    t.is(res.body[0].title, title);
+});

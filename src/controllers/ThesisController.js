@@ -9,6 +9,8 @@ const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
 
 export async function getTheses(req, res) {
+    const studyfieldRoles = ['resp_professor', 'print-person', 'manager'];
+
     try {
         const user = await personService.getLoggedPerson(req);
         let theses = [];
@@ -22,9 +24,8 @@ export async function getTheses(req, res) {
             return;
         }
 
-        // Get theses in studyfield where user is ...
         rolesInStudyfields.forEach(async item => {
-            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+            if (studyfieldRoles.includes(item.role.name)) {
                 // ... As resp_professor, manager or print-person theses in studyfield
                 newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
                 theses = [...new Set([...theses, ...newTheses])];
