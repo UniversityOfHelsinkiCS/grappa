@@ -32,13 +32,10 @@ export async function getTheses(req, res) {
             }
         });
 
-        // Get theses where user is agreementperson
-        newTheses = await thesisService.getThesesByAgreementPerson(user.personId);
-        theses = [...new Set([...theses, ...newTheses])];
+        const thesesAsAgreementPerson = await thesisService.getThesesByAgreementPerson(user.personId);
+        const thesesAsAuthor = await thesisService.getThesesByPersonId(user.personId);
 
-        // Get theses where user is author
-        newTheses = await thesisService.getThesesByPersonId(user.personId);
-        theses = [...new Set([...theses, ...newTheses])];
+        theses = [...theses, ...thesesAsAgreementPerson, ...thesesAsAuthor];
 
         // Remove duplicates
         let response = [];
