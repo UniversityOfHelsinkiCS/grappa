@@ -1,3 +1,5 @@
+import Checkit from 'checkit';
+
 const thesisService = require('../services/ThesisService');
 const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
@@ -7,6 +9,14 @@ const studyfieldService = require('../services/StudyfieldService');
 const notificationService = require('../services/NotificationService');
 const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
+
+const checkit = new Checkit({
+    authorEmail: ['required', 'email'],
+    title: 'required',
+    urkund: ['required', 'url'],
+    grade: 'required',
+    studyfieldId: 'required'
+});
 
 export async function getTheses(req, res) {
     const studyfieldRoles = ['resp_professor', 'print-person', 'manager'];
@@ -59,31 +69,31 @@ export async function getThesisById(req, res) {
 
 export async function saveThesisForm(req, res) {
     try {
+        const thesis = JSON.parse(req.body.json);
+
+        await checkit.run(thesis);
+
         // Order so that agreementId is available to save attachments.
-        // Attachmentservice gives back the parsed multipart formdata
-        let agreement = await agreementService.createFakeAgreement();
-        const attachmentObject = await attachmentService.saveAttachments(req, res, agreement.agreementId);
-        const attachments = attachmentObject.attachments;
-        let thesis = attachmentObject.json;
+        const agreement = await agreementService.createFakeAgreement();
+        const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
 
         const studyfield = thesis.studyfieldId;
         const authorEmail = thesis.authorEmail;
         const agreementId = agreement.agreementId;
 
+        agreement.studyfieldId = thesis.studyfieldId;
+
         delete thesis.authorFirstname;
         delete thesis.authorLastname;
-
-        agreement.studyfieldId = thesis.studyfieldId;
         delete thesis.studyfieldId;
+        // TODO: Add email to new email send table
+        delete thesis.thesisEmails;
+        delete thesis.authorEmail;
 
         if (thesis.graders) {
             updateGraders(thesis.graders, agreement);
             delete thesis.graders;
         }
-
-        // TODO: Add email to new email send table
-        delete thesis.thesisEmails;
-        delete thesis.authorEmail;
 
         const savedThesis = await thesisService.saveThesis(thesis);
 

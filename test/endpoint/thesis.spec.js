@@ -24,11 +24,9 @@ test.before(async t => {
 
 const thesisForm = {
     id: undefined,
-    authorFirstname: 'Etunimi',
-    authorLastname: 'Sukunimi',
-    authorEmail: 'Email',
+    authorEmail: 'author@example.com',
     title: 'Annin Grady',
-    urkund: 'https://',
+    urkund: 'https://example.com',
     grade: '4',
     graders: [{
         address: 'Intiankatu',
@@ -56,7 +54,7 @@ const thesisForm = {
 const thesisWithId = {
     councilmeetingId: 1,
     title: 'Annin Grady',
-    urkund: 'https://',
+    urkund: 'https://example.com',
     grade: '4',
     graderEval: 'Tarkastajien esittely',
     printDone: 0
@@ -142,6 +140,7 @@ test('thesisForm post & creates id with attachment', async t => {
     let agreement = res.body.agreement;
     let attachments = res.body.attachments;
     // Check the linking is right
+    console.log(res.body);
     t.is(thesis.thesisId, agreement.thesisId);
     t.is(attachments[0].agreementId, agreement.agreementId);
     delete thesis.thesisId;

@@ -62,6 +62,10 @@ export async function saveAttachments(req, res, agreementId) {
     }
 }
 
+export async function saveAttachmentFiles(files, agreementId) {
+    return [].concat.apply([], await Promise.all(Object.keys(files).map(key => saveFileArray(agreementId, files[key]))));
+}
+
 const saveFileArray = async (agreementId, fileArray) => {
     return Promise.all(fileArray.map(async file => {
         const attachment = {
