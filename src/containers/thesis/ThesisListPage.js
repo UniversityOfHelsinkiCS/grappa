@@ -10,7 +10,7 @@ import ThesisList from '../../components/thesis/ThesisList';
 class ThesisListPage extends Component {
     constructor(props) {
         super(props);
-        const theses = this.formatTheses(this.props.theses);
+        const theses = this.formatTheses(props);
         this.state = {
             formattedTheses: theses,
             filteredTheses: theses,
@@ -21,11 +21,20 @@ class ThesisListPage extends Component {
         document.title = 'Thesis List';
     }
 
-    formatTheses(theses) {
-        const persons = this.props.persons;
-        if (!theses || !persons) return;
+    componentWillReceiveProps(newProps) {
+        if (newProps.theses.length > 0 && newProps.persons.length > 0 && newProps.agreements.length > 0) {
+            const theses = this.formatTheses(newProps);
+            this.setState({ formattedTheses: theses, filteredTheses: theses })
+        }
+    }
+
+    formatTheses = (props) => {
+        const theses = props.theses;
+        const persons = props.persons;
+        const agreements = props.agreements;
+        if (!theses || !persons || !agreements || theses.length < 1 && persons.length < 1 && agreements.length < 1) return [];
         return theses.map(thesis => {
-            const agreement = this.props.agreements.find(agreement => agreement.thesisId === thesis.thesisId);
+            const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
             const formattedThesis = Object.assign({}, thesis);
 

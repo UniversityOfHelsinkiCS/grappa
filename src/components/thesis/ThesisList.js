@@ -20,7 +20,9 @@ export default class ThesisList extends Component {
     }
 
     sendDownloadSelected = () => {
-        this.props.downloadSelected(this.state.selectedThesesIds, this.state.cover);
+        if (this.state.selectedThesesIds.length > 0) {
+            this.props.downloadSelected(this.state.selectedThesesIds, this.state.cover);
+        }
     }
 
     toggleAll = () => {
@@ -75,10 +77,13 @@ export default class ThesisList extends Component {
                         {this.props.theses.map(thesis =>
                             <tr key={thesis.thesisId}>
                                 <td>
-                                    <input type="checkbox"
-                                        checked={this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''}
-                                        onChange={this.toggleThesis(thesis)}
-                                    />
+                                    <div className="ui fitted checkbox">
+                                        <input type="checkbox"
+                                            checked={this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''}
+                                            onChange={this.toggleThesis(thesis)}
+                                        />
+                                        <label />
+                                    </div>
                                 </td>
                                 <td>{thesis.authorLastname + ', ' + thesis.authorFirstname}</td>
                                 <td>{thesis.email}</td>
