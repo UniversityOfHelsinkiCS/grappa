@@ -5,7 +5,6 @@ const jsonParser = bodyParser.json();
 const attachment = require('../middleware/attachments');
 
 router.get('/', thesisController.getTheses);
-router.get('/:id', thesisController.getThesisById);
 router.put('/', jsonParser, thesisController.updateThesis);
 router.post('/', attachment, thesisController.saveThesisForm);
 

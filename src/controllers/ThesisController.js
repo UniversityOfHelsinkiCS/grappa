@@ -62,11 +62,6 @@ export async function getTheses(req, res) {
     }
 }
 
-export async function getThesisById(req, res) {
-    const thesis = await thesisService.getThesisById(req.params.id);
-    res.status(200).json(thesis);
-}
-
 export async function saveThesisForm(req, res) {
     try {
         const thesis = JSON.parse(req.body.json);
