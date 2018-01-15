@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { arrayOf, bool, func } from 'prop-types';
+
+import { oldGradeFields, gradeFields } from '../../util/theses';
+import { thesisType, studyfieldType } from '../../util/types';
 
 export default class ThesisInformation extends Component {
 
@@ -52,28 +56,12 @@ export default class ThesisInformation extends Component {
     renderThesisAuthor(disabled) {
         return (
             <div className="three fields">
-                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled, 'email')}
+                {this.renderTextField('Email', 'email', 'Email Address', disabled, 'email')}
             </div>
         );
     }
 
     renderThesisInformation() {
-        const oldGradeFields = [
-            { id: 'Approbatur', name: 'Approbatur' },
-            { id: 'Lubenter Approbatur', name: 'Lubenter Approbatur' },
-            { id: 'Non Sine Laude Approbatur', name: 'Non Sine Laude Approbatur' },
-            { id: 'Cum Laude Approbatur', name: 'Cum Laude Approbatur' },
-            { id: 'Magna Cum Laude Approbatur', name: 'Magna Cum Laude Approbatur' },
-            { id: 'Eximia Cum Laude Approbatur', name: 'Eximia Cum Laude Approbatur' },
-            { id: 'Laudatur', name: 'Laudatur' },
-        ]
-        const gradeFields = [
-            { id: '1', name: '1' },
-            { id: '2', name: '2' },
-            { id: '3', name: '3' },
-            { id: '4', name: '4' },
-            { id: '5', name: '5' }
-        ]
         const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } })
 
         return (
@@ -112,3 +100,10 @@ export default class ThesisInformation extends Component {
         );
     }
 }
+
+ThesisInformation.propTypes = {
+    sendChange: func.isRequired,
+    thesis: thesisType.isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
+    allowEdit: bool.isRequired
+};

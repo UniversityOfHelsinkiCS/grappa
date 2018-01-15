@@ -12,6 +12,7 @@ import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
 import ThesisEmails from '../../components/thesis/ThesisEmails'; //TODO: Should be used
+import { formatThesis } from '../../util/theses';
 
 export class ThesisEditPage extends Component {
     /**
@@ -25,7 +26,7 @@ export class ThesisEditPage extends Component {
                 id: undefined,
                 authorFirstname: '',
                 authorLastname: '',
-                authorEmail: '',
+                email: '',
                 title: '',
                 urkund: '',
                 grade: '',
@@ -71,27 +72,7 @@ export class ThesisEditPage extends Component {
     findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
         try {
             const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
-            const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
-            const author = persons.find(person => person.personId === agreement.authorId);
-
-            if (author) {
-                thesis.authorFirstname = author.firstname;
-                thesis.authorLastname = author.lastname;
-                thesis.authorEmail = author.email;
-            }
-
-            thesis.studyfieldId = agreement.studyfieldId;
-            thesis.graders = persons.filter(person =>
-                roles.find(role =>
-                    role.personId === person.personId &&
-                    role.agreementId === agreement.agreementId
-                )
-            );
-            thesis.thesisEmails = {
-                graderEvalReminder: undefined,
-                printReminder: undefined,
-            }
-            return thesis;
+            return formatThesis(thesis, agreements, persons, roles);
         } catch (error) {
             console.log(error);
             return undefined
