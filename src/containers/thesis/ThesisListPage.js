@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf } from 'prop-types'
+import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux';
 
 import { agreementType, personType, thesisType } from '../../util/types';
@@ -32,16 +32,21 @@ class ThesisListPage extends Component {
         const theses = props.theses;
         const persons = props.persons;
         const agreements = props.agreements;
-        if (!theses || !persons || !agreements || theses.length < 1 && persons.length < 1 && agreements.length < 1) return [];
+
+        if (!theses || !persons || !agreements)
+            return [];
+        
         return theses.map(thesis => {
             const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
             const formattedThesis = Object.assign({}, thesis);
 
             if (person) {
-                formattedThesis.email = person.email || 'No user';
-                formattedThesis.authorFirstname = person.firstname || 'Keplo';
-                formattedThesis.authorLastname = person.lastname || 'Leutokalma';
+                formattedThesis.email = person.email;
+                formattedThesis.authorFirstname = person.firstname;
+                formattedThesis.authorLastname = person.lastname;
+            } else { // Thesis not linked to person yet, use invite link email
+                formattedThesis.email = agreement.email;
             }
 
             return formattedThesis
@@ -131,7 +136,8 @@ ThesisListPage.propTypes = {
     persons: arrayOf(personType).isRequired,
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
-    agreements: arrayOf(agreementType).isRequired
+    agreements: arrayOf(agreementType).isRequired,
+    downloadAttachments: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);
