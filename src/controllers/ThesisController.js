@@ -71,7 +71,11 @@ export async function saveThesisForm(req, res) {
     try {
         const thesis = JSON.parse(req.body.json);
 
-        await checkit.run(thesis);
+        try {
+            await checkit.run(thesis);
+        } catch (error) {
+            throw new Error('Posted thesis data is not valid');
+        }
 
         // Order so that agreementId is available to save attachments.
         const agreement = await agreementService.createFakeAgreement();

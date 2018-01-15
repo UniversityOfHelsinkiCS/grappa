@@ -214,3 +214,31 @@ test('resp prof can see studyfield thesis', async t => {
     t.is(res.body.length, 1);
     t.is(res.body[0].title, title);
 });
+
+test('admin can see all theses', async t => {
+    const theses = await knex('thesis');
+    const res = await request(makeApp(1)).get('/theses');
+
+    t.is(res.body.length, theses.length);
+});
+
+test('invalid thesis is not accepted', async t => {
+    const theses = await knex('thesis');
+    const agreements = await knex('agreement');
+
+    const data = {
+        grade: '4'
+    };
+
+    const res = await request(makeApp(1))
+        .post('/theses')
+        .field('json', JSON.stringify(data));
+
+    t.is(res.status, 500);
+
+    const thesesAfter = await knex('thesis');
+    const agreementsAfter = await knex('agreement');
+
+    t.is(theses.length, thesesAfter.length);
+    t.is(agreements.length, agreementsAfter.length);
+});
