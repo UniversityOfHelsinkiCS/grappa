@@ -6,11 +6,12 @@ import { agreementType, personType, thesisType } from '../../util/types';
 import { downloadAttachments } from '../attachment/attachmentActions'
 
 import ThesisList from '../../components/thesis/ThesisList';
+import { formatTheses } from '../../util/theses';
 
 class ThesisListPage extends Component {
     constructor(props) {
         super(props);
-        const theses = this.formatTheses(props);
+        const theses = formatTheses(props.theses, props.agreements, props.persons);
         this.state = {
             formattedTheses: theses,
             filteredTheses: theses,
@@ -23,34 +24,9 @@ class ThesisListPage extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.theses.length > 0 && newProps.persons.length > 0 && newProps.agreements.length > 0) {
-            const theses = this.formatTheses(newProps);
+            const theses = formatTheses(newProps.theses, newProps.agreements, newProps.persons);;
             this.setState({ formattedTheses: theses, filteredTheses: theses })
         }
-    }
-
-    formatTheses = (props) => {
-        const theses = props.theses;
-        const persons = props.persons;
-        const agreements = props.agreements;
-
-        if (!theses || !persons || !agreements)
-            return [];
-        
-        return theses.map(thesis => {
-            const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
-            const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
-            const formattedThesis = Object.assign({}, thesis);
-
-            if (person) {
-                formattedThesis.email = person.email;
-                formattedThesis.authorFirstname = person.firstname;
-                formattedThesis.authorLastname = person.lastname;
-            } else { // Thesis not linked to person yet, use invite link email
-                formattedThesis.email = agreement.email;
-            }
-
-            return formattedThesis
-        });
     }
 
     search = (event) => {
