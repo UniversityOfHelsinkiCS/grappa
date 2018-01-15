@@ -34,8 +34,8 @@ export async function getAllAgreements(req, res) {
             const attachments = await attachmentService.getAllAttachments();
             const responseObject = {
                 agreements,
-                attachments,
-            }
+                attachments
+            };
             res.status(200).json(responseObject).end();
             return;
         }
@@ -62,16 +62,16 @@ export async function getAllAgreements(req, res) {
             if (!responseAgreements.find(item => item.agreementId === agreement.agreementId)) {
                 responseAgreements.push(agreement);
             }
-        })
+        });
 
         const attachments = await attachmentService.getAttachmentsForAgreements(responseAgreements);
         const responseObject = {
             agreements: responseAgreements,
-            attachments,
-        }
+            attachments
+        };
         res.status(200).json(responseObject);
     } catch (error) {
-        console.log(error)
+        console.log(error.stack);
         res.status(500).json(error);
     }
 }

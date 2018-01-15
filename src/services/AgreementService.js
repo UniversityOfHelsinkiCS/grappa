@@ -31,7 +31,9 @@ export const getAgreementById = (agreementId) => {
 };
 
 export const getAgreementsInStudyfield = (studyfieldId) => {
-    return knex.select(agreementSchema).from('agreement')
+    return knex.select()
+        .from('agreement')
+        .join('emailInvite', 'agreement.agreementId', 'emailInvite.agreement')
         .where('studyfieldId', studyfieldId);
 };
 
@@ -52,7 +54,9 @@ export const getPreviousAgreementById = (id) => {
 };
 
 export const getAllAgreements = () => {
-    return knex.select(agreementSchema).from('agreement');
+    return knex.select(agreementSchema)
+        .from('agreement')
+        .join('emailInvite', 'agreement.agreementId', 'emailInvite.agreement');
 };
 
 export const getAgreementsByAuthor = (personId) => {
