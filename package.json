@@ -75,7 +75,7 @@
     "start:dev": "REACT_APP_DEVTOOLS=1 API_URL=http://localhost:3100 node scripts/start.js",
     "start:win": "set API_URL=http://localhost:3100&&node scripts/start.js",
     "build": "API_URL=../v2api/ PUBLIC_URL=/v2/ node scripts/build.js",
-    "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava",
+    "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava -t",
     "test:win": "ava",
     "report": "nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -92,7 +92,7 @@
     "concurrency": 5,
     "failFast": true,
     "failWithoutAssertions": false,
-    "tap": true,
+    "tap": false,
     "powerAssert": false,
     "require": [
       "babel-register",

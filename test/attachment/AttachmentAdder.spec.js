@@ -48,12 +48,20 @@ test('added attachment has button so u can remove it', t => {
 })
 
 test('when button is clicked, it removes file from the list', t => {
-    const files = getFileList();
-    const adder = <AttachmentAdder attachments={files} removeAttachment={(file) => {files.splice(files.indexOf(file) , 1)}} addAttachment={(file) => {files.push(file)}} />
+    let files = getFileList();
+    const adder = <AttachmentAdder
+        attachments={files}
+        removeAttachment={(file) => {files.splice(files.indexOf(file) , 1)}}
+        addAttachment={(file) => {files.push(file)}}
+        changeList={(attachments) => files = attachments}
+    />
     const wrapper = shallow(adder);
+    console.log(files);
     wrapper.find('button').simulate('click');
+    console.log(files);
+    wrapper.update();
 
-    const noElementsHeader = <h2>No attachments uploaded</h2>;
+    // const noElementsHeader = <h2>No attachments uploaded</h2>;
     t.truthy(files.length === 0);
     //t.truthy(wrapper.contains(noElementsHeader));
 })
