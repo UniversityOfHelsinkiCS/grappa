@@ -3,6 +3,7 @@ import { arrayOf } from 'prop-types'
 import { connect } from 'react-redux';
 
 import { agreementType, personType, thesisType } from '../../util/types';
+import { downloadAttachments } from '../attachment/attachmentActions'
 
 import ThesisList from '../../components/thesis/ThesisList';
 
@@ -29,8 +30,8 @@ class ThesisListPage extends Component {
             const formattedThesis = Object.assign({}, thesis);
 
             formattedThesis.email = person.email || 'No user';
-            formattedThesis.authorFirstname = person.firstname || 'Keplo';
-            formattedThesis.authorLastname = person.lastname || 'Leutokalma';
+            formattedThesis.authorFirstname = person.firstname || 'Keplo';
+            formattedThesis.authorLastname = person.lastname || 'Leutokalma';
 
             return formattedThesis
         });
@@ -44,15 +45,40 @@ class ThesisListPage extends Component {
         const searchValue = event.target.value.toLowerCase();
         //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
         const filteredTheses = this.state.formattedTheses.filter(thesis => {
-            const values = [
-                thesis.authorLastname.toLowerCase(),
-                thesis.authorFirstname.toLowerCase(),
-                thesis.thesisTitle.toLowerCase(),
-                thesis.grade.toString().toLowerCase(),
-            ]
-            return values.find(value => value.includes(searchValue))
+            return Object.keys(thesis).find(key => {
+                return typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)
+            })
         });
         this.setState({ filteredTheses });
+    }
+
+    downloadTheses = (thesisIds, cover) => {
+        //TODO: Move to backend
+        const attachmentIds = this.props.agreements.map(agreement => {
+            if (thesisIds.find(id => id === agreement.thesisId)) {
+                return this.props.attachments.filter(attachment => {
+                    if (attachment.agreementId === agreement.agreementId) {
+                        //Pick correct files;
+                        if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                    .sort((a, b) => {
+                        if (a.label === 'thesisFile') { // Thesis comes before review.
+                            return -1
+                        }
+                        return 1
+                    })
+
+            }
+        }).reduce((acc, cur) => { // Flatten thesis, review pairs.
+            return acc.concat(cur.map(attachment => attachment.attachmentId)); //Take only ids
+        },
+            cover ? ['cover'] : [] // Add cover if it's chosen.
+            );
+        this.props.downloadAttachments(attachmentIds);
     }
 
     render() {
@@ -65,7 +91,9 @@ class ThesisListPage extends Component {
                         <i className="search icon" />
                     </div>
                 </div>
+                <br />
                 <ThesisList
+                    downloadSelected={this.downloadTheses}
                     theses={this.state.filteredTheses}
                     userRoles={this.props.user.roles}
                 />
@@ -79,9 +107,13 @@ const mapStateToProps = state => ({
     user: state.user,
     theses: state.theses,
     agreements: state.agreements,
+    attachments: state.attachments,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    downloadAttachments(attachmentIds) {
+        dispatch(downloadAttachments(attachmentIds));
+    }
 });
 
 ThesisListPage.propTypes = {
