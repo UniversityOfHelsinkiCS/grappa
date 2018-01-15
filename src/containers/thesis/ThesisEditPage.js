@@ -74,9 +74,11 @@ export class ThesisEditPage extends Component {
             const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
             const author = persons.find(person => person.personId === agreement.authorId);
 
-            thesis.authorFirstname = author.firstname;
-            thesis.authorLastname = author.lastname;
-            thesis.authorEmail = author.email;
+            if (author) {
+                thesis.authorFirstname = author.firstname;
+                thesis.authorLastname = author.lastname;
+                thesis.authorEmail = author.email;
+            }
 
             thesis.studyfieldId = agreement.studyfieldId;
             thesis.graders = persons.filter(person =>
@@ -91,6 +93,7 @@ export class ThesisEditPage extends Component {
             }
             return thesis;
         } catch (error) {
+            console.log(error);
             return undefined
         }
     }
