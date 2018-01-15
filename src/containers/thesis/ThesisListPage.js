@@ -28,9 +28,11 @@ class ThesisListPage extends Component {
             const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
             const formattedThesis = Object.assign({}, thesis);
 
-            formattedThesis.email = person.email || 'No user';
-            formattedThesis.authorFirstname = person.firstname || 'Keplo';
-            formattedThesis.authorLastname = person.lastname || 'Leutokalma';
+            if (person) {
+                formattedThesis.email = person.email || 'No user';
+                formattedThesis.authorFirstname = person.firstname || 'Keplo';
+                formattedThesis.authorLastname = person.lastname || 'Leutokalma';
+            }
 
             return formattedThesis
         });
