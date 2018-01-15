@@ -140,7 +140,7 @@ test('thesisForm post & creates id with attachment', async t => {
     let agreement = res.body.agreement;
     let attachments = res.body.attachments;
     // Check the linking is right
-    console.log(res.body);
+
     t.is(thesis.thesisId, agreement.thesisId);
     t.is(attachments[0].agreementId, agreement.agreementId);
     delete thesis.thesisId;
