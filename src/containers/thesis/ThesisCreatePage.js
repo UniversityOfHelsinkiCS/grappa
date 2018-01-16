@@ -10,6 +10,7 @@ import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
+import {thesisValidation} from '../../util/theses';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -21,7 +22,7 @@ export class ThesisCreatePage extends Component {
                 authorLastname: '',
                 authorEmail: '',
                 title: '',
-                urkund: '',
+                urkund: 'http://',
                 grade: '',
                 graders: [],
                 graderEval: '',
@@ -35,6 +36,7 @@ export class ThesisCreatePage extends Component {
             },
             attachments: [],
             showModal: false,
+            validationErrors: {}
         }
     }
 
@@ -52,18 +54,19 @@ export class ThesisCreatePage extends Component {
     };
 
     toggleModal = () => {
-        this.setState({ showModal: !this.state.showModal });
-    };
-
-    toggleEditing = () => {
-        this.setState({ allowEdit: !this.state.allowEdit });
+        this.validateThesis()
+            .then(() => this.setState({ showModal: !this.state.showModal }))
+            .catch(res => this.setState({ validationErrors: res.errors }));
     };
 
     handleChange = (fieldName, fieldValue) => {
-        console.log(`thesis.${fieldName} = ${fieldValue}`);
-        const thesis = this.state.thesis;
-        thesis[fieldName] = fieldValue;
-        this.setState({ thesis });
+        const newState = {};
+        newState[fieldName] = fieldValue;
+        const thesis = Object.assign({}, this.state.thesis, newState);
+
+        this.validateThesis(thesis)
+            .then(() => this.setState({ thesis, validationErrors: {} }))
+            .catch(res => this.setState({ thesis, validationErrors: res.errors }));
     };
 
     editAttachmentList = (attachments) => {
@@ -85,23 +88,38 @@ export class ThesisCreatePage extends Component {
         />
     }
 
+    validateThesis(thesis = this.state.thesis) {
+        return thesisValidation.run(thesis);
+    }
+
     render() {
         return (
             <div>
                 <br />
-                <ThesisConfirmModal sendSaveThesis={this.handleSaveThesis} closeModal={this.toggleModal} showModal={this.state.showModal} />
+                <ThesisConfirmModal
+                    sendSaveThesis={this.handleSaveThesis}
+                    closeModal={this.toggleModal}
+                    showModal={this.state.showModal}
+                />
                 <div className="ui form">
-                    <ThesisInformation sendChange={this.handleChange}
-                        thesis={this.state.thesis}
+                    <ThesisInformation
+                        sendChange={this.handleChange}
+                        allowEdit
                         studyfields={this.props.studyfields}
-                        allowEdit />
+                        thesis={this.state.thesis}
+                        validationErrors={this.state.validationErrors}
+                    />
                     {this.renderGraderSelecter()}
-                    <AttachmentAdder attachments={this.state.attachments} changeList={this.editAttachmentList} />
+                    <AttachmentAdder
+                        attachments={this.state.attachments}
+                        changeList={this.editAttachmentList}
+                    />
                     <br />
                     <ThesisCouncilmeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
-                        councilmeetings={this.props.councilmeetings} />
+                        councilmeetings={this.props.councilmeetings}
+                    />
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.toggleModal}>

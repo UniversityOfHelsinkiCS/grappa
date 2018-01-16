@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, bool, func } from 'prop-types';
+import { arrayOf, bool, func, object } from 'prop-types';
 
 import { oldGradeFields, gradeFields } from '../../util/theses';
 import { thesisType, studyfieldType } from '../../util/types';
@@ -15,12 +15,13 @@ export default class ThesisInformation extends Component {
 
     changeField = (fieldName) => (event) => {
         this.props.sendChange(fieldName, event.target.value);
-    }
+    };
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
 
         return (
-            <div className="field">
+            <div className={className}>
                 <label>{label}</label>
                 <input
                     type={type}
@@ -34,8 +35,10 @@ export default class ThesisInformation extends Component {
     }
 
     renderDropdownField(label, fieldArray, fieldName, disabled) {
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
+
         return (
-            <div className="field">
+            <div className={className}>
                 <label>{label}</label>
                 <select
                     className="ui fluid search dropdown"
@@ -62,7 +65,7 @@ export default class ThesisInformation extends Component {
     }
 
     renderThesisInformation() {
-        const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } })
+        const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } });
 
         return (
             <div className="m-bot">
@@ -105,5 +108,6 @@ ThesisInformation.propTypes = {
     sendChange: func.isRequired,
     thesis: thesisType.isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
-    allowEdit: bool.isRequired
+    allowEdit: bool.isRequired,
+    validationErrors: object.isRequired
 };

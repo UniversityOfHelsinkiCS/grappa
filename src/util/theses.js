@@ -1,3 +1,5 @@
+import Checkit from 'checkit';
+
 export const formatTheses = (theses, agreements, persons, roles) => {
     if (!theses || !persons || !agreements)
         return [];
@@ -50,3 +52,13 @@ export const gradeFields = [
     { id: '4', name: '4' },
     { id: '5', name: '5' }
 ];
+
+export const thesisValidationRules = {
+    title: 'required',
+    authorEmail: ['required', 'email'],
+    urkund: ['required', 'url'],
+    grade: 'required',
+    studyfieldId: 'required'
+};
+
+export const thesisValidation = new Checkit(thesisValidationRules);
