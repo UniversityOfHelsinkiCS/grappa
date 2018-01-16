@@ -86,7 +86,7 @@ export default class ThesisList extends Component {
                                     </div>
                                 </td>
                                 <td>{thesis.authorLastname ? thesis.authorLastname + ', ' + thesis.authorFirstname : ''}</td>
-                                <td>{thesis.email}</td>
+                                <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>
                                 <td>{thesis.printDone}</td>

@@ -56,7 +56,7 @@ export default class ThesisInformation extends Component {
     renderThesisAuthor(disabled) {
         return (
             <div className="three fields">
-                {this.renderTextField('Email', 'email', 'Email Address', disabled, 'email')}
+                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled, 'email')}
             </div>
         );
     }

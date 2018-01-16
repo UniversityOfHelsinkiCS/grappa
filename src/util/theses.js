@@ -1,7 +1,7 @@
 export const formatTheses = (theses, agreements, persons, roles) => {
     if (!theses || !persons || !agreements)
         return [];
-        
+
     return theses.map(thesis => formatThesis(thesis, agreements, persons, roles));
 };
 
@@ -22,11 +22,11 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     }
 
     if (person) {
-        formattedThesis.email = person.email;
+        formattedThesis.authorEmail = person.email;
         formattedThesis.authorFirstname = person.firstname;
         formattedThesis.authorLastname = person.lastname;
     } else { // Thesis not linked to person yet, use invite link email
-        formattedThesis.email = agreement.email;
+        formattedThesis.authorEmail = agreement.email;
     }
 
     return formattedThesis;
