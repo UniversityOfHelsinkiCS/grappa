@@ -8,7 +8,7 @@ let timeout;
 const EventMessage = ({ type, message, clearMessages }) => {
     clearTimeout(timeout);
     timeout = setTimeout(clearMessages, EVENT_MESSAGE_CLEAR_TIMEOUT);
-    
+
     const closeMessage = () => {
         clearTimeout(timeout);
         clearMessages();

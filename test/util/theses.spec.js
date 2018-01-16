@@ -20,5 +20,5 @@ test('Thesis formatter finds email to thesis without person', t => {
 
     const formattedTheses = formatTheses(theses, agreements, persons);
 
-    t.is(formattedTheses[0].email, 'test@example.com');
+    t.is(formattedTheses[0].authorEmail, 'test@example.com');
 });

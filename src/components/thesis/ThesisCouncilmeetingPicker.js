@@ -55,7 +55,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
                 <select
                     className="ui fluid search dropdown"
                     onChange={this.chooseMeeting}
-                    value={this.props.chosenMeetingId}>
+                    value={this.props.chosenMeetingId}
+                >
                     {this.state.filteredMeetings.map(meeting =>
                         <option key={meeting.id} value={meeting.id} >
                             {meeting.content}

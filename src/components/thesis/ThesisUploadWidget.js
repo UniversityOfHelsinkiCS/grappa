@@ -6,12 +6,7 @@ export default class ThesisUploadWidget extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            attachments: [],
-        }
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (newProps.currentFile) {
+            attachments: []
         }
     }
 

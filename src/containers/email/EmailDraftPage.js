@@ -5,7 +5,7 @@ import EmailDraft from '../../components/email/EmailDraft'
 
 import { connect } from 'react-redux';
 import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
-import { emailType, studyfieldType } from '../../util/types';
+import { emailType, programmeType } from '../../util/types';
 
 export class EmailDraftPage extends Component {
 
@@ -63,16 +63,16 @@ export class EmailDraftPage extends Component {
             <div className="ui form">
                 <h2 className="ui dividing header">Email drafts</h2>
                 <p>
-                    Drafts for the emails that are being sent by Grappa. Title is the email's title and body the text.
+                    Drafts for the emails that are being sent by Grappa. Title is the email&lsquo;s title and body the text.
                     Different variables are indicated with double dollars eg. $LINK$ which differ from draft to draft.
                 </p>
-                {drafts ? drafts.map((draft, index) =>
+                {drafts ? drafts.map((draft) =>
                     <EmailDraft
                         draft={draft}
                         key={draft.emailDraftId}
                         updateDraft={this.handleUpdateDraft}
                         sendDeleteRequest={this.handleDeleteDraft}
-                        studyfields={this.props.studyfields}
+                        programmes={this.props.programmes}
                     />
                 ) : undefined}
 
@@ -88,7 +88,7 @@ export class EmailDraftPage extends Component {
 const mapStateToProps = (state) => {
     return {
         emails: state.emails,
-        studyfields: state.studyfields
+        programmes: state.programmes
     };
 };
 
@@ -110,7 +110,7 @@ EmailDraftPage.propTypes = {
     deleteEmailDraft: func.isRequired,
     saveEmailDraft: func.isRequired,
     emails: arrayOf(emailType.isRequired).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired
+    programmes: arrayOf(programmeType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);

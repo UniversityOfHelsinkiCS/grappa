@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
-import { personType, roleType, studyfieldType, councilmeetingType } from '../../util/types';
+import { personType, roleType, programmeType, councilmeetingType } from '../../util/types';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
+import {thesisValidation} from '../../util/theses';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -21,11 +22,11 @@ export class ThesisCreatePage extends Component {
                 authorLastname: '',
                 authorEmail: '',
                 title: '',
-                urkund: '',
+                urkund: 'http://',
                 grade: '',
                 graders: [],
                 graderEval: '',
-                studyfieldId: '',
+                programmeId: '',
                 councilmeetingId: '',
                 printDone: undefined,
                 thesisEmails: {
@@ -35,6 +36,7 @@ export class ThesisCreatePage extends Component {
             },
             attachments: [],
             showModal: false,
+            validationErrors: {}
         }
     }
 
@@ -52,56 +54,74 @@ export class ThesisCreatePage extends Component {
     };
 
     toggleModal = () => {
-        this.setState({ showModal: !this.state.showModal });
-    };
-
-    toggleEditing = () => {
-        this.setState({ allowEdit: !this.state.allowEdit });
+        this.validateThesis()
+            .then(() => this.setState({ showModal: !this.state.showModal }))
+            .catch(res => this.setState({ validationErrors: res.errors }));
     };
 
     handleChange = (fieldName, fieldValue) => {
-        console.log(`thesis.${fieldName} = ${fieldValue}`);
-        const thesis = this.state.thesis;
-        thesis[fieldName] = fieldValue;
-        this.setState({ thesis });
+        const newState = {};
+        newState[fieldName] = fieldValue;
+        const thesis = Object.assign({}, this.state.thesis, newState);
+
+        this.validateThesis(thesis)
+            .then(() => this.setState({ thesis, validationErrors: {} }))
+            .catch(res => this.setState({ thesis, validationErrors: res.errors }));
     };
 
     editAttachmentList = (attachments) => {
         this.setState({ attachments });
     };
 
+    validateThesis(thesis = this.state.thesis) {
+        return thesisValidation.run(thesis);
+    }
+
     renderGraderSelecter() {
-        const studyfieldGraders = this.props.persons.filter(person =>
+        const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name === 'grader' || role.name === 'supervisor')
                 && role.personId === person.personId
-                && role.studyfieldId === parseInt(this.state.thesis.studyfieldId, 10)
+                && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
         );
-        return <PersonSelector
-            persons={studyfieldGraders}
-            selected={this.state.thesis.graders}
-            changeList={(list) => this.handleChange('graders', list)}
-        />
+        return (
+            <PersonSelector
+                persons={programmeGraders}
+                selected={this.state.thesis.graders}
+                changeList={(list) => this.handleChange('graders', list)}
+            />
+        );
     }
 
     render() {
         return (
             <div>
                 <br />
-                <ThesisConfirmModal sendSaveThesis={this.handleSaveThesis} closeModal={this.toggleModal} showModal={this.state.showModal} />
+                <ThesisConfirmModal
+                    sendSaveThesis={this.handleSaveThesis}
+                    closeModal={this.toggleModal}
+                    showModal={this.state.showModal}
+                />
                 <div className="ui form">
-                    <ThesisInformation sendChange={this.handleChange}
+                    <ThesisInformation
+                        sendChange={this.handleChange}
+                        allowEdit
+                        programmes={this.props.programmes}
                         thesis={this.state.thesis}
-                        studyfields={this.props.studyfields}
-                        allowEdit />
+                        validationErrors={this.state.validationErrors}
+                    />
                     {this.renderGraderSelecter()}
-                    <AttachmentAdder attachments={this.state.attachments} changeList={this.editAttachmentList} />
+                    <AttachmentAdder
+                        attachments={this.state.attachments}
+                        changeList={this.editAttachmentList}
+                    />
                     <br />
                     <ThesisCouncilmeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
-                        councilmeetings={this.props.councilmeetings} />
+                        councilmeetings={this.props.councilmeetings}
+                    />
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.toggleModal}>
@@ -120,7 +140,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     councilmeetings: state.councilmeetings,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     roles: state.roles,
     persons: state.persons,
 });
@@ -128,7 +148,7 @@ const mapStateToProps = (state) => ({
 const { arrayOf, func } = PropTypes;
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
     saveThesis: func.isRequired

@@ -27,7 +27,7 @@ export const saveAgreementDraft = (agreementDraft) => {
     return callController(route, prefix, agreementDraft, method);
 }
 
-export const saveAttachment = (attachment, agreement) => {
+export const saveAttachment = (attachment) => {
     const prefix = 'ATTACHMENT_SAVE_ONE_';
     const method = 'post';
     const route = '/attachments' //+ attachment[0];

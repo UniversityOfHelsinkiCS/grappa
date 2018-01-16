@@ -78,11 +78,12 @@ export default class PersonSelector extends Component {
     }
 
     renderSelected() {
-        return this.props.selected.map((person, index) => {
+        return this.props.selected.map((person) => {
             return (
                 <a key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
                     {this.personToText(person)}
-                    <i className="delete icon"
+                    <i
+                        className="delete icon"
                         onClick={this.removePerson(person)}
                     />
                 </a>
@@ -105,7 +106,7 @@ export default class PersonSelector extends Component {
     renderDropdown() {
         return (this.state.menuActive ?
             <div className="menu transition visible" tabIndex="-1">
-                {this.props.persons ? this.props.persons.map((person, index) => {
+                {this.props.persons ? this.props.persons.map((person) => {
                     if ((!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person)) {
                         return (
                             <div
@@ -133,8 +134,10 @@ export default class PersonSelector extends Component {
     render() {
         return (
             <div>
-                <div className="ui fluid multiple search selection dropdown empty visible"
-                    onMouseDown={this.focusMenu}>
+                <div
+                    className="ui fluid multiple search selection dropdown empty visible"
+                    onMouseDown={this.focusMenu}
+                >
                     {this.props.selected ? this.renderSelected() : undefined}
                     {this.renderSearch()}
                     {this.renderDropdown()}

@@ -4,9 +4,9 @@ import test from 'ava';
 import { mountWithStore, mockStore } from '../testUtils';
 import UserStudyfieldSelector from '../../src/containers/user/UserStudyfieldSelector.js';
 
-const studyfields = [
-    { studyfieldId: 1, name: 'test' },
-    { studyfieldId: 2, name: 'another' }
+const programmes = [
+    { programmeId: 1, name: 'test' },
+    { programmeId: 2, name: 'another' }
 ];
 const user = {
     personId: 1,
@@ -14,16 +14,16 @@ const user = {
 };
 
 test('checkboxes are rendered', t => {
-    const testState = { studyfields, user };
+    const testState = { programmes, user };
     const store = mockStore(testState);
     const component = mountWithStore(<UserStudyfieldSelector />, store);
 
-    t.is(component.find('input').length, studyfields.length);
+    t.is(component.find('input').length, programmes.length);
 });
 
-test('studyfield can be set', t => {
-    const testState = { studyfields, user };
-    const store = mockStore(testState);    
+test('programme can be set', t => {
+    const testState = { programmes, user };
+    const store = mockStore(testState);
     const component = mountWithStore(<UserStudyfieldSelector />, store);
 
     component.find('input').at(0).simulate('change', { target: { checked: true, value: 1 }});
@@ -31,18 +31,18 @@ test('studyfield can be set', t => {
     component.find('.button').simulate('click');
 
     t.is(store.getActions()[0].type, 'ROLE_VISITOR_UPDATE_ATTEMPT');
-    t.is(store.getActions()[0].payload.data.studyfieldIds.length, 2);
-    t.is(store.getActions()[0].payload.data.studyfieldIds[0], 1);
-    t.is(store.getActions()[0].payload.data.studyfieldIds[1], 2);
+    t.is(store.getActions()[0].payload.data.programmeIds.length, 2);
+    t.is(store.getActions()[0].payload.data.programmeIds[0], 1);
+    t.is(store.getActions()[0].payload.data.programmeIds[1], 2);
 });
 
-test('selected studyfield is checked and can be changed', t => {
+test('selected programme is checked and can be changed', t => {
     const user = {
         personId: 1,
-        roles: [ { role: 'visitor', studyfieldId: 2 } ]
+        roles: [ { role: 'visitor', programmeId: 2 } ]
     };
-    const testState = { studyfields, user };
-    const store = mockStore(testState);    
+    const testState = { programmes, user };
+    const store = mockStore(testState);
     const component = mountWithStore(<UserStudyfieldSelector />, store);
 
     t.is(component.find('input').at(1).props().defaultChecked, true, 'Checkbox is not checked');
@@ -50,5 +50,5 @@ test('selected studyfield is checked and can be changed', t => {
     component.find('.button').simulate('click');
 
     t.is(store.getActions()[0].type, 'ROLE_VISITOR_UPDATE_ATTEMPT', 'Action is not fired');
-    t.is(store.getActions()[0].payload.data.studyfieldIds.length, 0);
+    t.is(store.getActions()[0].payload.data.programmeIds.length, 0);
 });

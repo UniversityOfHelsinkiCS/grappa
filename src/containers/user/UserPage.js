@@ -6,7 +6,7 @@ import UserStudyfieldSelector from './UserStudyfieldSelector';
 import { personType } from '../../util/types';
 
 export class UserPage extends Component {
-    
+
     componentDidMount() {
         document.title = 'Grappa: Main page';
     }
@@ -47,7 +47,7 @@ export class UserPage extends Component {
                     </select>
                     <p>Your roles are: {this.props.user.roles ?
                         this.props.user.roles.map(roleObject => {
-                            return roleObject.studyfield + ': ' + roleObject.role;
+                            return roleObject.programme + ': ' + roleObject.role;
                         })
                         : 'No user in redux'} </p>
                 </div>

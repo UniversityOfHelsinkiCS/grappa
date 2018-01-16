@@ -14,8 +14,8 @@ class ThesisListPage extends Component {
         const theses = formatTheses(props.theses, props.agreements, props.persons);
         this.state = {
             formattedTheses: theses,
-            filteredTheses: theses,
-        }
+            filteredTheses: theses
+        };
     }
 
     componentDidMount() {
@@ -24,49 +24,49 @@ class ThesisListPage extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.theses.length > 0 && newProps.persons.length > 0 && newProps.agreements.length > 0) {
-            const theses = formatTheses(newProps.theses, newProps.agreements, newProps.persons);;
+            const theses = formatTheses(newProps.theses, newProps.agreements, newProps.persons);
             this.setState({ formattedTheses: theses, filteredTheses: theses })
         }
     }
 
     search = (event) => {
         if (!event.target.value) {
-            this.setState({ filteredTheses: this.state.formattedTheses })
+            this.setState({ filteredTheses: this.state.formattedTheses });
             return;
         }
         const searchValue = event.target.value.toLowerCase();
-        //if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
-        const filteredTheses = this.state.formattedTheses.filter(thesis => {
+        // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
+        const filteredTheses = this.state.formattedTheses.filter((thesis) => {
             return Object.keys(thesis).find(key => {
                 return typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)
-            })
+            });
         });
         this.setState({ filteredTheses });
-    }
+    };
 
     downloadTheses = (thesisIds, cover) => {
-        //TODO: Move to backend
-        const attachmentIds = this.props.agreements.map(agreement => {
+        // TODO: Move to backend
+        const attachmentIds = this.props.agreements.map((agreement) => {
             if (thesisIds.find(id => id === agreement.thesisId)) {
                 return this.props.attachments.filter(attachment => {
                     if (attachment.agreementId === agreement.agreementId) {
-                        //Pick correct files;
+                        // Pick correct files;
                         if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
                             return true;
                         }
                     }
                     return false;
                 })
-                    .sort((a, b) => {
+                    .sort((a) => {
                         if (a.label === 'thesisFile') { // Thesis comes before review.
-                            return -1
+                            return -1;
                         }
-                        return 1
-                    })
+                        return 1;
+                    });
 
             }
         }).reduce((acc, cur) => { // Flatten thesis, review pairs.
-            return acc.concat(cur.map(attachment => attachment.attachmentId)); //Take only ids
+            return acc.concat(cur.map(attachment => attachment.attachmentId)); // Take only ids
         },
             cover ? ['cover'] : [] // Add cover if it's chosen.
             );

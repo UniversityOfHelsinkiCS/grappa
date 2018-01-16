@@ -26,11 +26,12 @@ export default class AttachmentAdder extends Component {
         return (
             <div className="ui form">
                 {this.getFileNumberLabel()}
-                {this.props.attachments ? this.props.attachments.map((attachment, index) =>
+                {this.props.attachments ? this.props.attachments.map((attachment, index) => (
                     <div className="ui two fields" key={index}>
                         <select
                             className="ui field dropdown"
-                            onChange={this.setLabel(attachment)}>
+                            onChange={this.setLabel(attachment)}
+                        >
                             <option value="">Choose file label</option>
                             <option value="thesisFile">Thesis</option>
                             <option value="reviewFile">Review</option>
@@ -39,14 +40,15 @@ export default class AttachmentAdder extends Component {
                         <div className="field">
                             <button
                                 className="negative ui icon button"
-                                onClick={this.removeAttachment(attachment)}>
+                                onClick={this.removeAttachment(attachment)}
+                            >
                                 <i className="remove icon" />
                             </button>
                             &nbsp;
-                        {attachment.name}
+                            {attachment.name}
                         </div>
                         <hr />
-                    </div>
+                    </div>)
                 ) : undefined}
             </div>
         );
@@ -59,8 +61,6 @@ export default class AttachmentAdder extends Component {
         }
         return <h2>Upload maximum {this.props.limit} attachments</h2>
     }
-
-
 
     getFileNumberLabel = () => {
         return (

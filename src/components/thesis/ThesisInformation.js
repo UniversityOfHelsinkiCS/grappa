@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { arrayOf, bool, func } from 'prop-types';
+import { arrayOf, bool, func, object } from 'prop-types';
 
 import { oldGradeFields, gradeFields } from '../../util/theses';
-import { thesisType, studyfieldType } from '../../util/types';
+import { thesisType, programmeType } from '../../util/types';
 
 export default class ThesisInformation extends Component {
 
@@ -15,15 +15,17 @@ export default class ThesisInformation extends Component {
 
     changeField = (fieldName) => (event) => {
         this.props.sendChange(fieldName, event.target.value);
-    }
+    };
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
 
         return (
-            <div className="field">
+            <div className={className}>
                 <label>{label}</label>
                 <input
                     type={type}
+                    name={fieldName}
                     disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
@@ -34,14 +36,17 @@ export default class ThesisInformation extends Component {
     }
 
     renderDropdownField(label, fieldArray, fieldName, disabled) {
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
+
         return (
-            <div className="field">
+            <div className={className}>
                 <label>{label}</label>
                 <select
                     className="ui fluid search dropdown"
                     disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
-                    onChange={this.changeField(fieldName)}>
+                    onChange={this.changeField(fieldName)}
+                >
                     <option key="0" value="">Select {label}</option>
                     {fieldArray.map(field =>
                         <option key={field.id} value={field.id}>
@@ -53,21 +58,31 @@ export default class ThesisInformation extends Component {
         );
     }
 
-    renderThesisAuthor(disabled) {
+    renderThesisAuthor() {
+        if (!this.props.thesis.authorFirstname) {
+            return (
+                <div className="three fields">
+                    {this.renderTextField('Email', 'authorEmail', 'Email Address', false, 'email')}
+                </div>
+            );
+        }
+
         return (
             <div className="three fields">
-                {this.renderTextField('Email', 'email', 'Email Address', disabled, 'email')}
+                {this.renderTextField('Email', 'authorEmail', 'Email Address', true, 'email')}
+                {this.renderTextField('First name', 'authorFirstname', 'Email Address', true, 'email')}
+                {this.renderTextField('Last name', 'authorLastname', 'Email Address', true, 'email')}
             </div>
         );
     }
 
     renderThesisInformation() {
-        const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } })
+        const programmes = this.props.programmes.map(programme => { return { id: programme.programmeId, name: programme.name } });
 
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
+                    {this.renderDropdownField('Studyfield', programmes, 'programmeId', !this.props.allowEdit)}
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
 
@@ -93,7 +108,7 @@ export default class ThesisInformation extends Component {
         return (
             <div>
                 <h3 className="ui dividing header">Thesis Author</h3>
-                {this.renderThesisAuthor(this.props.thesis.thesisId)}
+                {this.renderThesisAuthor()}
                 <h3 className="ui dividing header">Thesis Information</h3>
                 {this.renderThesisInformation()}
             </div>
@@ -104,6 +119,7 @@ export default class ThesisInformation extends Component {
 ThesisInformation.propTypes = {
     sendChange: func.isRequired,
     thesis: thesisType.isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
-    allowEdit: bool.isRequired
+    programmes: arrayOf(programmeType).isRequired,
+    allowEdit: bool.isRequired,
+    validationErrors: object.isRequired
 };

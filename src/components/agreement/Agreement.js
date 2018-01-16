@@ -6,7 +6,7 @@ import ThesisInfoForm from './form/ThesisInfoForm';
 import SupervisingInfoForm from './form/SupervisingInfoForm';
 import GoalInfoForm from './form/GoalInfoForm';
 import AttachmentAdder from '../attachment/AttachmentAdder';
-import { personType, studyfieldType } from '../../util/types';
+import { personType, programmeType } from '../../util/types';
 
 export default class Agreement extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ export default class Agreement extends Component {
                 thesisWorkOther: '',
 
                 studentGradeGoal: '',
-                studyfieldId: -1
+                programmeId: -1
             },
             attachments: [],
             filledRequiredFields: {}
@@ -117,7 +117,7 @@ export default class Agreement extends Component {
                 <br />
                 <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
                 <br />
-                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} studyfields={this.props.studyfields} requiredFields={this.state.filledRequiredFields}/>
+                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} programmes={this.props.programmes} requiredFields={this.state.filledRequiredFields}/>
                 <br />
                 <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
                 <br />
@@ -186,5 +186,5 @@ Agreement.propTypes = {
     requiredFields: array.isRequired,
     saveAgreement: func.isRequired,
     saveAgreementDraft: func.isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired
+    programmes: arrayOf(programmeType).isRequired
 };

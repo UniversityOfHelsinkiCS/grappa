@@ -11,10 +11,10 @@ export default class ThesisList extends Component {
         }
     }
 
-    toggleThesis = thesis => (event) => {
+    toggleThesis = thesis => () => {
         const selectedThesesIds = this.state.selectedThesesIds.includes(thesis.thesisId) ?
             this.state.selectedThesesIds.filter(id => id !== thesis.thesisId) :
-            [...this.state.selectedThesesIds, thesis.thesisId]
+            [...this.state.selectedThesesIds, thesis.thesisId];
 
         this.setState({ selectedThesesIds });
     }
@@ -27,14 +27,14 @@ export default class ThesisList extends Component {
 
     toggleAll = () => {
         if (this.state.selectedThesesIds.length > 0) {
-            this.setState({ selectedThesesIds: [] })
+            this.setState({ selectedThesesIds: [] });
         } else {
-            this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) })
+            this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) });
         }
     }
 
     toggleCover = () => {
-        this.setState({ cover: !this.state.cover })
+        this.setState({ cover: !this.state.cover });
     }
 
     renderButtons() {
@@ -45,7 +45,8 @@ export default class ThesisList extends Component {
                         <button className="ui orange button" onClick={this.sendDownloadSelected}>Download</button>
                         &nbsp;
                         <div className="ui toggle checkbox">
-                            <input type="checkbox"
+                            <input
+                                type="checkbox"
                                 checked={this.state.cover ? 'true' : ''}
                                 onChange={this.toggleCover}
                             />
@@ -78,7 +79,8 @@ export default class ThesisList extends Component {
                             <tr key={thesis.thesisId}>
                                 <td>
                                     <div className="ui fitted checkbox">
-                                        <input type="checkbox"
+                                        <input
+                                            type="checkbox"
                                             checked={this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''}
                                             onChange={this.toggleThesis(thesis)}
                                         />
@@ -86,7 +88,7 @@ export default class ThesisList extends Component {
                                     </div>
                                 </td>
                                 <td>{thesis.authorLastname ? thesis.authorLastname + ', ' + thesis.authorFirstname : ''}</td>
-                                <td>{thesis.email}</td>
+                                <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>
                                 <td>{thesis.printDone}</td>

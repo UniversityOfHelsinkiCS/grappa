@@ -9,8 +9,8 @@ const reducer = (state = [], action) => {
             return [...state, action.response.attachments];
         case 'AGREEMENT_SAVE_ONE_SUCCESS':
             //TODO update attachments when agreement is saved
-            return state
-        case 'ATTACHMENT_DOWNLOAD_SUCCESS':
+            return state;
+        case 'ATTACHMENT_DOWNLOAD_SUCCESS': {
             //TODO: refactor
             const blob = new Blob([action.response], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
@@ -26,7 +26,8 @@ const reducer = (state = [], action) => {
                 a.click();
                 document.body.removeChild(a);
             }
-            return state
+            return state;
+        }
         case 'ATTACHMENT_SAVE_ONE_SUCCESS':
             return [...state, ...action.response];
         case 'ATTACHMENT_DELETE_ONE_SUCCESS':

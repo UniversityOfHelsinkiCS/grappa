@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AttachmentAdder from '../attachment/AttachmentAdder.js'
+import AttachmentAdder from '../attachment/AttachmentAdder';
 
 export default class Field extends Component {
     defineFieldClasses = (extraClassNames, fieldType, required) => {
@@ -19,8 +19,10 @@ export default class Field extends Component {
                 <input
                     key={this.props.fieldKey}
                     name={this.props.fieldData.name}
-                    type="text" placeholder={this.props.fieldData.placeholder}
-                    onChange={this.props.fieldOnChangeFunc} />
+                    type="text"
+                    placeholder={this.props.fieldData.placeholder}
+                    onChange={this.props.fieldOnChangeFunc}
+                />
                 ];
                 break;
             case 'textarea':
@@ -30,7 +32,8 @@ export default class Field extends Component {
                     name={this.props.fieldData.name}
                     rows={this.props.fieldData.rows}
                     placeholder={this.props.fieldData.placeholder}
-                    onChange={this.props.fieldOnChangeFunc} ></textarea>
+                    onChange={this.props.fieldOnChangeFunc}
+                />
                 ];
                 break;
             case 'bareText':
@@ -38,7 +41,9 @@ export default class Field extends Component {
                 <p
                     key={this.props.fieldKey}
                     id={this.props.fieldData.name}
-                    type="text" placeholder={this.props.fieldData.placeholder} />
+                    type="text"
+                    placeholder={this.props.fieldData.placeholder}
+                />
                 ];
                 break;
             case 'dropdown':

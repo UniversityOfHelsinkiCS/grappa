@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Review from '../../components/supervisor/Review.js';
-import SupervisorEditor from '../../components/supervisor/SupervisorEditor.js'
+import Review from '../../components/supervisor/Review';
+import SupervisorEditor from '../../components/supervisor/SupervisorEditor';
 
 export class SupervisorManagementPage extends Component {
     constructor(props) {
@@ -46,7 +46,7 @@ export class SupervisorManagementPage extends Component {
             }
         );
     }
-    
+
     renderReviewButton(person) {
         let text = 'Review supervisor';
         let buttonClass = 'ui green button';
@@ -72,13 +72,13 @@ export class SupervisorManagementPage extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.supervisors.map((person, index) => //change index -> some id
+                    {this.props.supervisors.map((person, index) => (//change index -> some id
                         <tr key={index}>
-                            <td>{person.firstname} {person.lastname} studyfield: {person.studyfieldId}</td>
+                            <td>{person.firstname} {person.lastname} programme: {person.programmeId}</td>
                             <td>{person.thesisTitle}</td>
                             <td>{this.renderReviewButton(person)}</td>
                         </tr>
-                    )}
+                    ))}
                 </tbody>
             </table>
         )
@@ -91,7 +91,7 @@ export class SupervisorManagementPage extends Component {
         }
         return (
             <div className="ui segment">
-                Add and edit supervisor list here or review thesis projects. This page will be displayed to studyfields' professors and admins only.
+                Add and edit supervisor list here or review thesis projects. This page will be displayed to programmes&lsquo; professors and admins only.
                 <h2>List of thesis supervisors </h2>
                 {this.renderList()}
                 <Review showModal={this.state.showReview} closeModal={this.toggleEditModal} person={this.state.personToBeReviewed} reviewSupervisor={this.props.reviewSupervisor} />
@@ -102,7 +102,7 @@ export class SupervisorManagementPage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = () => ({
     /*saveAddedSupervisor(data) {
         dispatch(saveAddedSupervisor(data));
     },

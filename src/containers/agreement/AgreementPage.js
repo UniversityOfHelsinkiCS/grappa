@@ -4,7 +4,7 @@ import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
 import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
-import { personType, studyfieldType, roleType, agreementType, thesisType } from '../../util/types';
+import { personType, programmeType, roleType, agreementType, thesisType } from '../../util/types';
 
 //redux
 import { connect } from 'react-redux';
@@ -62,7 +62,7 @@ export class AgreementPage extends Component {
     }
 
     //TODO strange warnings when closing a modal
-    toggleEditModal = (agreement) => {
+    toggleEditModal = () => {
         const editable = !this.state.editMode;
         this.setState({ editMode: editable });
     }
@@ -105,7 +105,7 @@ export class AgreementPage extends Component {
     }
 
     render() {
-        
+
         if (this.state.newAgreement) {
             return (
                 <div>
@@ -114,7 +114,7 @@ export class AgreementPage extends Component {
                     <Agreement
                         agreement={this.state.agreements}
                         supervisors={this.props.supervisors}
-                        studyfields={this.props.studyfields}
+                        programmes={this.props.programmes}
                         user={this.props.user}
                         saveAgreement={this.handleSaveAgreement}
                         saveAgreementDraft={this.handleSaveAgreementDraft}
@@ -136,7 +136,7 @@ export class AgreementPage extends Component {
                         originalAgreement={this.state.editableAgreement}
                         updateFormData={this.updateFormData}
                     />
-                    
+
                     {this.state.agreements ?
                         <AgreementView
                             agreements={this.state.agreements}
@@ -145,7 +145,7 @@ export class AgreementPage extends Component {
                             persons={this.props.persons}
                             theses={this.props.theses}
                         /> : undefined}
-                      
+
                     <div className="ui segment">
                         <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
                     </div>
@@ -176,14 +176,14 @@ const getSupervisors = (roles, persons) => {
         ({
             person: persons.find(person => person.personId === role.personId),
             personRoleId: role.personRoleId,
-            studyfieldId: role.studyfieldId,
+            programmeId: role.programmeId,
         }));
 };
 
 const mapStateToProps = (state) => ({
     agreements: state.agreements,
     persons: state.persons,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     user: state.user,
     roles: state.roles,
     supervisors: getSupervisors(state.roles, state.persons),
@@ -197,7 +197,7 @@ AgreementPage.propTypes = {
     saveAgreement: func.isRequired,
     saveAgreementDraft: func.isRequired,
     saveAttachment: func.isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     roles: arrayOf(roleType).isRequired,
     supervisors: array.isRequired,
     persons: arrayOf(personType).isRequired,

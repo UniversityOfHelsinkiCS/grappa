@@ -6,13 +6,13 @@ export default class PersonRoleChoose extends Component {
         super();
         this.state = {
             roleId: undefined,
-            studyfieldId: undefined,
+            programmeId: undefined,
         };
     }
 
     changeStudyfield = (event) => {
-        const studyfieldId = event.target.value;
-        this.setState({ studyfieldId });
+        const programmeId = event.target.value;
+        this.setState({ programmeId });
     }
 
     changeRole = (event) => {
@@ -20,14 +20,15 @@ export default class PersonRoleChoose extends Component {
         this.setState({ roleId })
     }
 
-    studyfieldDropdown = () => {
+    programmeDropdown = () => {
         return (
             <select
                 className="ui dropdown"
-                onChange={this.changeStudyfield}>
+                onChange={this.changeStudyfield}
+            >
                 <option key="0" value="">Select</option>
-                {this.props.studyfields.map(field =>
-                    <option key={field.studyfieldId} value={field.studyfieldId}>
+                {this.props.programmes.map(field =>
+                    <option key={field.programmeId} value={field.programmeId}>
                         {field.name}
                     </option>
                 )}
@@ -39,7 +40,8 @@ export default class PersonRoleChoose extends Component {
         return (
             <select
                 className="ui dropdown"
-                onChange={this.changeRole}>
+                onChange={this.changeRole}
+            >
                 <option key="0" value="">Select</option>
                 {this.props.availableRoles.map(role =>
                     <option key={role.roleId} value={role.roleId}>
@@ -53,7 +55,7 @@ export default class PersonRoleChoose extends Component {
     addRole = () => {
         const role = {
             roleId: this.state.roleId,
-            studyfieldId: this.state.studyfieldId
+            programmeId: this.state.programmeId
         }
         this.props.addRole(role)
     }
@@ -85,10 +87,12 @@ export default class PersonRoleChoose extends Component {
                         {roles.map(role =>
                             <tr key={role.personRoleId}>
                                 <td>{role.name}</td>
-                                <td>{role.studyfield}</td>
+                                <td>{role.programme}</td>
                                 <td>
-                                    {!role.agreementId ? <button className="ui red icon button"
-                                        onClick={this.removeRole(role)}>
+                                    {!role.agreementId ? <button
+                                        className="ui red icon button"
+                                        onClick={this.removeRole(role)}
+                                    >
                                         Remove <i className="remove icon" />
                                     </button> : 'Linked to agreement'}
                                 </td>
@@ -96,10 +100,12 @@ export default class PersonRoleChoose extends Component {
                         }
                         <tr>
                             <td>{this.roleDropdown()}</td>
-                            <td>{this.studyfieldDropdown()}</td>
+                            <td>{this.programmeDropdown()}</td>
                             <td>
-                                <button className="ui green icon button"
-                                    onClick={this.addRole}>
+                                <button
+                                    className="ui green icon button"
+                                    onClick={this.addRole}
+                                >
                                     Add <i className="plus icon" />
                                 </button>
                             </td>

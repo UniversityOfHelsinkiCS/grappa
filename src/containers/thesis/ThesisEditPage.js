@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
-import { agreementType, personType, roleType, studyfieldType, thesisType, councilmeetingType } from '../../util/types';
+import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType } from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import ThesisEmails from '../../components/thesis/ThesisEmails'; //TODO: Should be used
 import { formatThesis } from '../../util/theses';
 
 export class ThesisEditPage extends Component {
@@ -32,7 +31,7 @@ export class ThesisEditPage extends Component {
                 grade: '',
                 graders: [],
                 graderEval: '',
-                studyfieldId: '',
+                programmeId: '',
                 councilmeetingId: '',
                 printDone: undefined,
                 thesisEmails: {
@@ -43,6 +42,7 @@ export class ThesisEditPage extends Component {
             attachments: [],
             newAttachments: [],
             allowEdit: true,
+            validationErrors: {}
         }
     }
 
@@ -57,13 +57,14 @@ export class ThesisEditPage extends Component {
     init(props) {
         if (props.match.params && props.match.params.id) {
             const thesisId = parseInt(props.match.params.id, 10);
-            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId)
+            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId);
             if (thesis) {
                 const attachments = props.attachments.filter(attachment => {
                     const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
                         && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
-                })
+                });
+
                 this.setState({ thesis, attachments })
             }
         }
@@ -77,27 +78,27 @@ export class ThesisEditPage extends Component {
             console.log(error);
             return undefined
         }
-    }
+    };
 
 
     handleSaveThesis = () => {
         this.props.updateThesis(this.state.thesis);
-    }
+    };
 
     deleteThesis = () => {
         this.props.deleteThesis(this.state.thesis.id);
-    }
+    };
 
     toggleEditing = () => {
         this.setState({ allowEdit: !this.state.allowEdit });
-    }
+    };
 
     handleChange = (fieldName, fieldValue) => {
         console.log('thesis.' + fieldName + ' = ' + fieldValue);
         const thesis = this.state.thesis;
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
-    }
+    };
 
     editAttachmentList = (attachments) => {
         this.setState({ newAttachments: attachments });
@@ -115,19 +116,19 @@ export class ThesisEditPage extends Component {
             form.append(attachment.label, attachment);
         });
         this.props.createAttachment(form)
-    }
+    };
 
     downloadAttachment = (attachmentId) => {
         this.props.downloadAttachments([attachmentId])
-    }
+    };
 
     handleEmail = (reminderType) => {
         this.props.sendReminder(this.state.thesis.id, reminderType);
-    }
+    };
 
     renderControlButtons() {
         //Admin controls
-        if (this.props.user.roles && this.props.user.roles.find(studyfieldRole => studyfieldRole.role === 'admin')) {
+        if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
             return (
                 <div className="field">
                     {this.state.allowEdit ?
@@ -154,18 +155,20 @@ export class ThesisEditPage extends Component {
     }
 
     renderGraderSelecter() {
-        const studyfieldGraders = this.props.persons.filter(person =>
+        const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name === 'grader' || role.name === 'supervisor')
                 && role.personId === person.personId
-                && role.studyfieldId === this.state.thesis.studyfieldId
+                && role.programmeId === this.state.thesis.programmeId
             )
-        )
-        return <PersonSelector
-            persons={studyfieldGraders}
-            selected={this.state.thesis.graders}
-            changeList={(list) => this.handleChange('graders', list)}
-        />
+        );
+        return (
+            <PersonSelector
+                persons={programmeGraders}
+                selected={this.state.thesis.graders}
+                changeList={(list) => this.handleChange('graders', list)}
+            />
+        );
     }
 
     render() {
@@ -174,24 +177,30 @@ export class ThesisEditPage extends Component {
                 <br />
                 <div className="ui form">
                     {this.renderControlButtons()}
-                    <ThesisInformation sendChange={this.handleChange}
+                    <ThesisInformation
+                        sendChange={this.handleChange}
                         thesis={this.state.thesis}
-                        studyfields={this.props.studyfields}
-                        allowEdit={this.state.allowEdit} />
+                        programmes={this.props.programmes}
+                        allowEdit={this.state.allowEdit}
+                        validationErrors={this.state.validationErrors}
+                    />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder
                         attachments={this.state.newAttachments}
                         changeList={this.editAttachmentList}
-                        uploadAttachments={this.uploadAttachments} />
+                        uploadAttachments={this.uploadAttachments}
+                    />
                     <AttachmentList
                         attachments={this.state.attachments}
                         downloadAttachment={this.downloadAttachment}
-                        deleteAttachment={this.props.deleteAttachment} />
+                        deleteAttachment={this.props.deleteAttachment}
+                    />
                     <br />
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
-                        councilmeetings={this.props.councilmeetings} /> : undefined}
+                        councilmeetings={this.props.councilmeetings}
+                    /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
@@ -199,7 +208,7 @@ export class ThesisEditPage extends Component {
                     Submit
                 </button>
             </div>
-        )
+        );
     }
 }
 
@@ -230,7 +239,7 @@ const mapStateToProps = (state) => ({
     councilmeetings: state.councilmeetings,
     persons: state.persons,
     roles: state.roles,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     theses: state.theses,
     user: state.user,
 });
@@ -241,7 +250,7 @@ ThesisEditPage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     persons: arrayOf(personType).isRequired,
     roles: arrayOf(roleType).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     theses: arrayOf(thesisType).isRequired,
     user: personType.isRequired,
     updateThesis: func.isRequired,
