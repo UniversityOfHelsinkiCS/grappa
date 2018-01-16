@@ -4,7 +4,7 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService');
+const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
 
 export async function getAgreementById(req, res) {
@@ -41,9 +41,9 @@ export async function getAllAgreements(req, res) {
         }
 
         rolesInStudyfields.forEach(async item => {
-            // As resp_prof, print-person and manager persons who are writing theses in studyfield
+            // As resp_prof, print-person and manager persons who are writing theses in programme
             if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
-                newAgreements = await agreementService.getAgreementsInStudyfield(item.studyfield.studyfieldId);
+                newAgreements = await agreementService.getAgreementsInStudyfield(item.programme.programmeId);
                 agreements = [...new Set([...agreements, ...newAgreements])];
             }
         });
@@ -78,11 +78,11 @@ export async function getAllAgreements(req, res) {
 
 const getUsersRoles = async(user) => {
     const roleToId = await roleService.getRoles();
-    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
     return personRoles.map(role => {
         return {
-            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
         };
     });
@@ -133,7 +133,7 @@ const getAgreementData = (data, thesisId) => {
         authorId: data.personId,
         thesisId: thesisId,
         responsibleSupervisorId: data.thesisSupervisorMain,
-        studyfieldId: data.studyfieldId,
+        programmeId: data.programmeId,
         startDate: data.thesisStartDate,
         completionEta: data.thesisCompletionEta,
         performancePlace: data.thesisPerformancePlace,
@@ -171,7 +171,7 @@ export async function saveAgreement(req, res) {
         try {
             console.log('Before await');
             let newAgreement = await agreementService.saveAgreement(data);
-            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.studyfieldId);
+            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
             return res.status(200).json(newAgreement);
         } catch (err) {
             return res.status(500).json(err);
@@ -197,7 +197,7 @@ export async function saveAgreementForm(req, res) {
         agreementData.agreementId = agreementSaveResponse.agreementId;
         // let personData = await personService.getPersonById(data.personId);
         // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
-        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.studyfieldId);
+        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.programmeId);
         res.status(200).json(agreementData);
     } catch (error) {
         console.log(error);
@@ -236,7 +236,7 @@ export async function updateAgreement(req, res) {
                 authorId: data.personId,
                 thesisId: data.thesisId,
                 responsibleSupervisorId: data.responsibleSupervisorId,
-                studyfieldId: data.studyfieldId,
+                programmeId: data.programmeId,
                 studentGradeGoal: data.studentGradeGoal,
                 studentWorkTime: data.thesisWorkStudentTime,
                 supervisorWorkTime: data.thesisWorkSupervisorTime,
@@ -248,7 +248,7 @@ export async function updateAgreement(req, res) {
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
             emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
-            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.studyfieldId);
+            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
             res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId: agreementId });
         } catch (err) {
             res.status(500).json({ text: 'error occurred', error: err });
@@ -273,7 +273,7 @@ export async function savePrevious(req, res) {
     const data = req.body;
     try {
         const daoResponse = await agreementService.savePrevious(data);
-        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.studyfieldId);
+        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.programmeId);
         res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
     } catch (err) {
         res.status(500).json({ text: 'error occurred', error: err });

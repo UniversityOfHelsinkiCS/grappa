@@ -11,13 +11,13 @@ export async function getAllSupervisors() {
     return supervisors;
 }
 
-//people whose role is supervisor in a studyfield
-export async function getAllSupervisorsByStudyfield(studyfieldId) {
+//people whose role is supervisor in a programme
+export async function getAllSupervisorsByStudyfield(programmeId) {
     const supervisorRoleId = await roleService.getRoleId('supervisor');
     const supervisors = await knex.table('person')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', supervisorRoleId)
-        .andWhere('studyfieldId', studyfieldId);
+        .andWhere('programmeId', programmeId);
     return supervisors;
 }
 
@@ -33,14 +33,14 @@ export async function getAllAgreementPersons() {
         });
 }
 
-//people who are supervising theses at the moment in a studyfield
-export async function getAllAgreementPersonsByStudyfield(studyfieldId) {
+//people who are supervising theses at the moment in a programme
+export async function getAllAgreementPersonsByStudyfield(programmeId) {
     return knex.table('agreementPerson')
         .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
         .innerJoin('person', 'personWithRole.personId', '=', 'person.personId')
         .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
         .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-        .where('studyfieldId', studyfieldId)
+        .where('programmeId', programmeId)
         .then(persons => {
             return persons;
         });
@@ -67,7 +67,7 @@ export async function getSupervisorByEmail(email) {
         })
         .catch(error => {
             throw error;
-        }) 
+        })
 }
 
 export async function saveAgreementPerson(agreementPersonData) {

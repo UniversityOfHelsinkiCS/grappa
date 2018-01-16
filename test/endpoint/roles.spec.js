@@ -26,7 +26,7 @@ test('study field can be set to visitor role', async t => {
     t.plan(2);
 
     const personId = await createPerson();
-    const visitorRoleForm = { studyfieldIds: [1] };
+    const visitorRoleForm = { programmeIds: [1] };
 
     const res = await request(makeApp(personId))
         .put('/roles/visitor')
@@ -43,19 +43,19 @@ test('study field can be set to visitor role', async t => {
     t.truthy(roles);
 });
 
-test('visitor role studyfield can be updated', async t => {
+test('visitor role programme can be updated', async t => {
     t.plan(2);
 
     const personId = await createPerson();
 
     await knex('personWithRole')
         .insert({
-            studyfieldId: 1,
+            programmeId: 1,
             personId: personId,
             roleId: 7
         });
 
-    const visitorRoleForm = { studyfieldIds: [2] };
+    const visitorRoleForm = { programmeIds: [2] };
     const res = await request(makeApp(personId))
         .put('/roles/visitor')
         .send(visitorRoleForm);
@@ -68,14 +68,14 @@ test('visitor role studyfield can be updated', async t => {
         .where('roleId', 7)
         .first();
 
-    t.is(role.studyfieldId, 2);
+    t.is(role.programmeId, 2);
 });
 
 test('delete role', async t => {
     const personId = await createPerson();
     const idToDelete = await knex('personWithRole')
         .insert({
-            studyfieldId: 1,
+            programmeId: 1,
             personId: personId,
             roleId: 1
         }).returning('personRoleId');
@@ -99,7 +99,7 @@ test('save role test', async t => {
     const personId = await createPerson();
     const res = await request(makeApp(personId))
         .post('/roles')
-        .send({ roleId: 1, personId, studyfieldId: 1 });
+        .send({ roleId: 1, personId, programmeId: 1 });
 
     t.is(res.status, 200);
 });

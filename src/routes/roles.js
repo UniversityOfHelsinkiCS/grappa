@@ -12,12 +12,12 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 router.put('/', jsonParser, (req, res) => {
-    // Currently used only for updating visitor role studyfield
+    // Currently used only for updating visitor role programme
     roleController.updateRole(req, res);
 });
 
 router.put('/visitor', jsonParser, (req, res) => {
-    // Currently used only for updating visitor role studyfield
+    // Currently used only for updating visitor role programme
     roleController.updateVisitorRoles(req, res);
 });
 

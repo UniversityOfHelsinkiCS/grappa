@@ -13,7 +13,7 @@ export async function saveEmailDraft(emailDraft) {
         title: emailDraft.title,
         body: emailDraft.body,
         type: emailDraft.type,
-        studyfield: emailDraft.studyfield
+        programme: emailDraft.programme
     })
         .returning('emailDraftId')
         .then(emailDraftId => emailDraftId[0]);
@@ -23,7 +23,7 @@ export async function updateEmailDraft(emailDraftId, emailDraft) {
     return knex('emailDraft').update({
         title: emailDraft.title,
         body: emailDraft.body,
-        studyfield: emailDraft.studyfield
+        programme: emailDraft.programme
     }).where('emailDraftId', emailDraftId);
 }
 
@@ -31,18 +31,18 @@ export async function deleteEmailDraft(draftId) {
     return knex('emailDraft').delete().where('emailDraftId', draftId);
 }
 
-export async function getEmailDraft(type, studyfield) {
+export async function getEmailDraft(type, programme) {
     return knex('emailDraft')
         .select()
         .where('type', type)
         .where(function() {
-            if (studyfield) {
+            if (programme) {
                 this
-                    .where('studyfield', studyfield)
-                    .orWhereNull('studyfield')
-                    .orderBy('studyfield');
+                    .where('programme', programme)
+                    .orWhereNull('programme')
+                    .orderBy('programme');
             } else {
-                this.whereNull('studyfield');
+                this.whereNull('programme');
             }
         })
         .first();

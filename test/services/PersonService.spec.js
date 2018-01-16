@@ -36,7 +36,7 @@ test.serial('savePersonRole return new personRoleId', async t => {
     let newPersonRole = {
         personId: 1,
         roleId: 1,
-        studyfieldId: 1,
+        programmeId: 1,
     }
     let returnValue = await personService.savePersonRole(newPersonRole);
     t.deepEqual(returnValue, mockPersonRoles[mockPersonRoles.length - 1].personRoleId + 1);

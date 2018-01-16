@@ -1,36 +1,36 @@
 module.exports = [
     {
-        studyfieldId: 1,
+        programmeId: 1,
         facultyId: 1,
         name: 'Tietojenkäsittelytiede'
     },
     {
-        studyfieldId: 2,
+        programmeId: 2,
         facultyId: 1,
         name: 'Matematiikka'
     },
     {
-        studyfieldId: 3,
+        programmeId: 3,
         facultyId: 1,
         name: 'Fysiikka'
     },
     {
-        studyfieldId: 4,
+        programmeId: 4,
         facultyId: 1,
         name: 'Geologia'
     },
     {
-        studyfieldId: 5,
+        programmeId: 5,
         facultyId: 2,
         name: 'Oikeustiede'
     },
     {
-        studyfieldId: 6,
+        programmeId: 6,
         facultyId: 3,
         name: 'Sosiologia'
     },
     {
-        studyfieldId: 7,
+        programmeId: 7,
         facultyId: 3,
         name: 'Taloustiede'
     }

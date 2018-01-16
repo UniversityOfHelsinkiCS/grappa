@@ -61,14 +61,14 @@ test('emailDraft delete', async t => {
     t.is(res.status, 200);
 });
 
-test('studyfield is saved', async t => {
+test('programme is saved', async t => {
     const res = await request(makeApp(1))
         .post(`/emailDrafts`)
-        .send({ type: 'endpointTest', title: 'test title', body: 'test body', studyfield: 1 });
+        .send({ type: 'endpointTest', title: 'test title', body: 'test body', programme: 1 });
 
     t.is(res.status, 200);
     const emailDraftId = res.body.emailDraftId;
 
     const draft = await knex('emailDraft').select().where('emailDraftId', emailDraftId).first();
-    t.is(draft.studyfield, 1);
+    t.is(draft.programme, 1);
 });

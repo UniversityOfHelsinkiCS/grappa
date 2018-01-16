@@ -8,7 +8,7 @@ module.exports = [
     {
         roleId: 2,
         name: 'manager'
-        // Manager is person(s) resposible for a studyfield management
+        // Manager is person(s) resposible for a programme management
         // Such as opintoesimies. Schedules councilmeetings etc.
     },
     {
@@ -20,7 +20,7 @@ module.exports = [
     {
         roleId: 4,
         name: 'resp_professor'
-        // Responsible professor is in charge of a studyfield.
+        // Responsible professor is in charge of a programme.
         // They decide who is approved as a supervisor and/or grader
     },
     {
@@ -36,6 +36,6 @@ module.exports = [
     {
         roleId: 7,
         name: 'visitor'
-        // Visitor is a person who is part of a studyfield
+        // Visitor is a person who is part of a programme
     }
 ];

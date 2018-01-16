@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
             table.integer('userId');
             table.foreign('userId').references('person.personId');
             table.timestamp('timestamp').defaultTo(knex.fn.now());
-            table.integer('studyfieldId');
-            table.foreign('studyfieldId').references('studyfield.studyfieldId');
+            table.integer('programmeId');
+            table.foreign('programmeId').references('programme.programmeId');
         })
     ]);
 };

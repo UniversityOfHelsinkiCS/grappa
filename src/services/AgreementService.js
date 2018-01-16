@@ -5,7 +5,7 @@ const agreementSchema = [
     'authorId',
     'agreement.thesisId',
     'responsibleSupervisorId',
-    'agreement.studyfieldId',
+    'agreement.programmeId',
     'fake',
     'startDate',
     'completionEta',
@@ -23,18 +23,18 @@ export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
         .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .join('person', 'agreement.authorId', '=', 'person.personId')
-        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .join('programme', 'agreement.programmeId', '=', 'programme.programmeId')
         .where('agreementId', agreementId)
         .then(agreement => {
             return parseAgreementData(agreement[0]);
         });
 };
 
-export const getAgreementsInStudyfield = (studyfieldId) => {
+export const getAgreementsInStudyfield = (programmeId) => {
     return knex.select()
         .from('agreement')
         .leftJoin('emailInvite', 'agreement.agreementId', 'emailInvite.agreement')
-        .where('studyfieldId', studyfieldId);
+        .where('programmeId', programmeId);
 };
 
 export const getAgreementsByAgreementPerson = (personId) => {
@@ -82,7 +82,7 @@ export const createFakeAgreement = () => {
         authorId: null,
         thesisId: null,
         responsibleSupervisorId: null,
-        studyfieldId: null,
+        programmeId: null,
         fake: true,
         startDate: null,
         completionEta: null,
@@ -149,7 +149,7 @@ const parseAgreementData = (data) => {
         authorId: data.personId,
         thesisId: data.thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
-        studyfieldId: data.studyfieldId,
+        programmeId: data.programmeId,
         studentGradeGoal: data.studentGradeGoal,
         thesisWorkStudentTime: data.studentWorkTime,
         thesisWorkSupervisorTime: data.supervisorWorkTime,

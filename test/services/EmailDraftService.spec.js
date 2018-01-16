@@ -51,30 +51,30 @@ test('can delete email draft', async t => {
     t.true(drafts.filter(draft => draft.emailDraftId === draftId).length === 0);
 });
 
-test('get email draft for type and studyfield', async t => {
-    const email1 = { type: 'studyfieldTest1', title: 'foo', body: 'bar', studyfield: 1 };
-    const email2 = { type: 'studyfieldTest1', title: 'studyfield2', body: 'bar', studyfield: 2 };
+test('get email draft for type and programme', async t => {
+    const email1 = { type: 'programmeTest1', title: 'foo', body: 'bar', programme: 1 };
+    const email2 = { type: 'programmeTest1', title: 'programme2', body: 'bar', programme: 2 };
     await knex('emailDraft').insert(email1);
     await knex('emailDraft').insert(email2);
 
-    const draft = await emailDraftService.getEmailDraft('studyfieldTest1', 2);
-    t.is(draft.title, 'studyfield2');
+    const draft = await emailDraftService.getEmailDraft('programmeTest1', 2);
+    t.is(draft.title, 'programme2');
 });
 
-test('get default email draft if studyfield mail is not specified', async t => {
-    const email1 = { type: 'studyfieldTest2', title: 'foo', body: 'bar', studyfield: 1 };
-    const email2 = { type: 'studyfieldTest2', title: 'default mail', body: 'bar' };
+test('get default email draft if programme mail is not specified', async t => {
+    const email1 = { type: 'programmeTest2', title: 'foo', body: 'bar', programme: 1 };
+    const email2 = { type: 'programmeTest2', title: 'default mail', body: 'bar' };
     await knex('emailDraft').insert(email1);
     await knex('emailDraft').insert(email2);
 
-    const draft = await emailDraftService.getEmailDraft('studyfieldTest2');
+    const draft = await emailDraftService.getEmailDraft('programmeTest2');
     t.is(draft.title, 'default mail');
 });
 
-test('get default email draft if not found for studyfield', async t => {
-    const email = { type: 'studyfieldTest3', title: 'correct title', body: 'bar' };
+test('get default email draft if not found for programme', async t => {
+    const email = { type: 'programmeTest3', title: 'correct title', body: 'bar' };
     await knex('emailDraft').insert(email);
 
-    const draft = await emailDraftService.getEmailDraft('studyfieldTest3', 1);
+    const draft = await emailDraftService.getEmailDraft('programmeTest3', 1);
     t.is(draft.title, 'correct title');
 });

@@ -19,7 +19,7 @@ export async function saveRole(req, res) {
         let personWithRole = {
             roleId: req.body.roleId,
             personId: req.body.personId,
-            studyfieldId: req.body.studyfieldId
+            programmeId: req.body.programmeId
         };
         personWithRole = await roleService.savePersonRole(personWithRole);
         const role = await roleService.getRoleForPersonWithRole(personWithRole.personRoleId)
@@ -46,11 +46,11 @@ export async function updateRole(req, res) {
 }
 
 export async function updateVisitorRoles(req, res) {
-    const studyfieldIds = req.body.studyfieldIds;
+    const programmeIds = req.body.programmeIds;
     const person = await personService.getLoggedPerson(req);
 
     try {
-        await roleService.updateVisitorRoleStudyfields(person.personId, studyfieldIds);
+        await roleService.updateVisitorRoleStudyfields(person.personId, programmeIds);
         res.status(200).end();
     } catch (error) {
         console.error(error);

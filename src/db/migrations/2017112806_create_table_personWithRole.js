@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
             table.foreign('personId').references('person.personId');
             table.integer('roleId').unsigned().notNullable();
             table.foreign('roleId').references('role.roleId');
-            table.integer('studyfieldId').unsigned();
-            table.foreign('studyfieldId').references('studyfield.studyfieldId');
+            table.integer('programmeId').unsigned();
+            table.foreign('programmeId').references('programme.programmeId');
         })
     ]);
 };

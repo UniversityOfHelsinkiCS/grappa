@@ -6,7 +6,7 @@ const knex = require('../../src/db/connection');
 const supervisorService = require('../../src/services/SupervisorService');
 const mockPersons = require('../../src/mockdata/MockPersons');
 const mockRoles = require('../../src/mockdata/MockRoles');
-const mockStudyfields = require('../../src/mockdata/MockStudyfields');
+const mockStudyfields = require('../../src/mockdata/MockProgrammes');
 const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 const mockAgreementPersons = require('../../src/mockdata/MockAgreementPersons');
 
@@ -25,8 +25,8 @@ test.beforeEach(async t => {
     //knex.schema.dropTableIfExists('agreement');
     await knex('person').del();
     await knex('person').insert(mockPersons);
-    await knex('studyfield').del();
-    await knex('studyfield').insert(mockStudyfields);
+    await knex('programme').del();
+    await knex('programme').insert(mockStudyfields);
     await knex('role').del();
     await knex('role').insert(mockRoles);
     await knex('personWithRole').del();

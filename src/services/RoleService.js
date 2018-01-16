@@ -46,16 +46,16 @@ export async function deletePersonRole(personRoleId) {
         .catch(err => Promise.reject(err));
 }
 
-export async function getPersonRole(personId, studyfieldId, roleName) {
+export async function getPersonRole(personId, programmeId, roleName) {
     return knex.select().from('personWithRole')
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .where('role.name', roleName)
-        .where('personWithRole.studyfieldId', studyfieldId)
+        .where('personWithRole.programmeId', programmeId)
         .where('personWithRole.personId', personId)
         .first();
 }
 
-export async function updateVisitorRoleStudyfields(personId, studyfieldIds) {
+export async function updateVisitorRoleStudyfields(personId, programmeIds) {
     const visitorRoleId = 7;
 
     const visitorRoles = await knex('personWithRole')
@@ -64,18 +64,18 @@ export async function updateVisitorRoleStudyfields(personId, studyfieldIds) {
         .where('roleId', visitorRoleId);
 
     const rolesToDelete = visitorRoles
-        .filter(role => !studyfieldIds.includes(role.studyfieldId))
-        .map(role => role.studyfieldId)
-        .map(studyfieldId =>
+        .filter(role => !programmeIds.includes(role.programmeId))
+        .map(role => role.programmeId)
+        .map(programmeId =>
             knex('personWithRole')
                 .delete()
                 .where('personId', personId)
-                .where('studyfieldId', studyfieldId)
+                .where('programmeId', programmeId)
         );
-    const rolesToAdd = studyfieldIds
-        .filter(role => !studyfieldIds.includes(role.studyfieldId))
-        .map(studyfieldId =>
-            knex('personWithRole').insert({ personId, studyfieldId, roleId: visitorRoleId })
+    const rolesToAdd = programmeIds
+        .filter(role => !programmeIds.includes(role.programmeId))
+        .map(programmeId =>
+            knex('personWithRole').insert({ personId, programmeId, roleId: visitorRoleId })
         );
 
     return Promise.all([...rolesToDelete, ...rolesToAdd]);
@@ -113,7 +113,7 @@ export const getAgreementPersonsByAgreementId = (agreementId) => {
 const roleSchema = [
     'personWithRole.personRoleId',
     'personWithRole.personId',
-    'personWithRole.studyfieldId',
+    'personWithRole.programmeId',
     'role.name',
     'agreementPerson.agreementId',
     'agreementPerson.statement'

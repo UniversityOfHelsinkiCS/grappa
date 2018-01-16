@@ -37,7 +37,7 @@ const agreementForm = {
 
     studentGradeGoal: '5',
 
-    studyfieldId: 1,
+    programmeId: 1,
     fake: false,
     studentGradeGoal: 5,
     studentWorkTime: '1h viikossa',
@@ -53,7 +53,7 @@ const agreementWithId = {
     authorId: 1,
     thesisId: 1,
     responsibleSupervisorId: 1,
-    studyfieldId: 1,
+    programmeId: 1,
     fake: 0,
     studentGradeGoal: 5,
     studentWorkTime: '1h viikossa',

@@ -42,7 +42,7 @@ const thesisForm = {
         title: ''
     }],
     graderEval: 'Tarkastajien esittely',
-    studyfieldId: 2,
+    programmeId: 2,
     councilmeetingId: 1,
     printDone: false,
     thesisEmails: {
@@ -75,7 +75,7 @@ const person = {
 
 const fakeAgreement = {
     responsibleSupervisorId: null,
-    studyfieldId: thesisForm.studyfieldId,
+    programmeId: thesisForm.programmeId,
     fake: 1,
     startDate: null,
     completionEta: null,
@@ -163,7 +163,7 @@ test('thesisForm post sends emails', async t => {
     const form = Object.assign({}, thesisForm);
 
     form.authorEmail = 'emailTest@example.com';
-    form.studyfieldId = 1;
+    form.programmeId = 1;
 
     await request(makeApp(1))
         .post('/theses')
@@ -201,13 +201,13 @@ test('grader can see thesis', async t => {
     t.is(res.body[0].title, title);
 });
 
-test('resp prof can see studyfield thesis', async t => {
+test('resp prof can see programme thesis', async t => {
     const title = 'Studyfield thesis';
     const personId = await createPerson();
-    const studyfield = await knex('studyfield').insert({ name: 'test studyfield' }).returning('studyfieldId');
+    const programme = await knex('programme').insert({ name: 'test programme' }).returning('programmeId');
     const thesis = await knex('thesis').insert({ title }).returning('theisId');
-    await knex('personWithRole').insert({ personId, roleId: 4, studyfieldId: studyfield[0] }).returning('personRoleId');
-    await knex('agreement').insert({ thesisId: thesis[0], studyfieldId: studyfield[0] }).returning('agreementId');
+    await knex('personWithRole').insert({ personId, roleId: 4, programmeId: programme[0] }).returning('personRoleId');
+    await knex('agreement').insert({ thesisId: thesis[0], programmeId: programme[0] }).returning('agreementId');
 
     const res = await request(makeApp(personId)).get('/theses');
 

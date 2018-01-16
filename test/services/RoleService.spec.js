@@ -15,7 +15,7 @@ test.beforeEach(async t => {
 });
 
 test('visitor roles can be updated', async t => {
-    await knex('personWithRole').insert({ personId: 1, roleId: 7, studyfieldId: 1 });
+    await knex('personWithRole').insert({ personId: 1, roleId: 7, programmeId: 1 });
     await roleServie.updateVisitorRoleStudyfields(1, [2, 3]);
     const roles = await knex('personWithRole')
         .select()
@@ -23,5 +23,5 @@ test('visitor roles can be updated', async t => {
         .where('roleId', 7);
 
     t.is(roles.length, 2);
-    t.deepEqual(roles.map(role => role.studyfieldId), [2, 3]);
+    t.deepEqual(roles.map(role => role.programmeId), [2, 3]);
 });

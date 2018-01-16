@@ -2,7 +2,7 @@ const agreements = require('./routes/agreements');
 const theses = require('./routes/theses');
 const index = require('./routes/index');
 const roles = require('./routes/roles');
-const studyfields = require('./routes/studyfields');
+const programmes = require('./routes/programmes');
 const persons = require('./routes/persons');
 const attachments = require('./routes/attachments');
 const agreementDrafts = require('./routes/agreementDrafts');
@@ -24,7 +24,7 @@ module.exports = (app) => {
     app.use('/agreements', agreements);
     app.use('/theses', theses);
     app.use('/roles', roles);
-    app.use('/studyfields', studyfields);
+    app.use('/programmes', programmes);
     app.use('/attachments', attachments);
     app.use('/agreement-drafts', agreementDrafts);
     app.use('/councilmeetings', councilmeeting);

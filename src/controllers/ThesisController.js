@@ -5,7 +5,7 @@ const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService');
+const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
 const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
@@ -15,11 +15,11 @@ const checkit = new Checkit({
     title: 'required',
     urkund: ['required', 'url'],
     grade: 'required',
-    studyfieldId: 'required'
+    programmeId: 'required'
 });
 
 export async function getTheses(req, res) {
-    const studyfieldRoles = ['resp_professor', 'print-person', 'manager'];
+    const programmeRoles = ['resp_professor', 'print-person', 'manager'];
 
     try {
         const user = await personService.getLoggedPerson(req);
@@ -35,9 +35,9 @@ export async function getTheses(req, res) {
         }
 
         rolesInStudyfields.forEach(async item => {
-            if (studyfieldRoles.includes(item.role.name)) {
-                // ... As resp_professor, manager or print-person theses in studyfield
-                newTheses = await thesisService.getThesesByStudyfield(item.studyfield.studyfieldId);
+            if (programmeRoles.includes(item.role.name)) {
+                // ... As resp_professor, manager or print-person theses in programme
+                newTheses = await thesisService.getThesesByStudyfield(item.programme.programmeId);
                 theses = [...new Set([...theses, ...newTheses])];
             }
         });
@@ -76,15 +76,15 @@ export async function saveThesisForm(req, res) {
         const agreement = await agreementService.createFakeAgreement();
         const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
 
-        const studyfield = thesis.studyfieldId;
+        const programme = thesis.programmeId;
         const authorEmail = thesis.authorEmail;
         const agreementId = agreement.agreementId;
 
-        agreement.studyfieldId = thesis.studyfieldId;
+        agreement.programmeId = thesis.programmeId;
 
         delete thesis.authorFirstname;
         delete thesis.authorLastname;
-        delete thesis.studyfieldId;
+        delete thesis.programmeId;
         // TODO: Add email to new email send table
         delete thesis.thesisEmails;
         delete thesis.authorEmail;
@@ -102,8 +102,8 @@ export async function saveThesisForm(req, res) {
 
         const roles = await roleService.getRolesForAllPersons();
 
-        await emailService.newThesisAddedNotifyRespProf(studyfield);
-        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, studyfield);
+        await emailService.newThesisAddedNotifyRespProf(programme);
+        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme);
 
         const response = {
             thesis: savedThesis,
@@ -112,7 +112,7 @@ export async function saveThesisForm(req, res) {
             roles
         };
 
-        notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.studyfieldId);
+        notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId);
         res.status(200).json(response);
     } catch (error) {
         console.log(error);
@@ -122,11 +122,11 @@ export async function saveThesisForm(req, res) {
 
 const getUsersRoles = async (user) => {
     const roleToId = await roleService.getRoles();
-    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
     return personRoles.map(role => {
         return {
-            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
         };
     });
@@ -168,7 +168,7 @@ const updateGraders = async (graders, agreement) => {
 
     // If grader not in agreementperson, link them.
     await Promise.all(graders.map(async grader => {
-        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader');
+        const personRole = await roleService.getPersonRole(grader.personId, agreement.programmeId, 'grader');
         if (personRole) {
             // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
@@ -180,7 +180,7 @@ const updateGraders = async (graders, agreement) => {
 
             let personWithRole = {
                 personId: grader.personId,
-                studyfieldId: agreement.studyfieldId,
+                programmeId: agreement.programmeId,
                 roleId
             };
             personWithRole = await roleService.savePersonRole(personWithRole);

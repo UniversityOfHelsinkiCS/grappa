@@ -24,11 +24,11 @@ export function getThesesByPersonId(personId) {
         .where('agreement.authorId', personId);
 }
 
-// In cases we need theses for a studyfield (resp_prof)
-export function getThesesByStudyfield(studyfieldId) {
+// In cases we need theses for a programme (resp_prof)
+export function getThesesByStudyfield(programmeId) {
     return knex.select(thesisSchema).from('thesis')
         .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
-        .where('agreement.studyfieldId', studyfieldId);
+        .where('agreement.programmeId', programmeId);
 }
 
 // In cases we need theses for a supervisor/grader

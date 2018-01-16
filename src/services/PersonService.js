@@ -25,11 +25,11 @@ export async function getPersonsWithRole(roleId) {
         .select(personSchema);
 }
 
-export async function getPersonsWithRoleInStudyfield(roleId, studyfieldId) {
+export async function getPersonsWithRoleInStudyfield(roleId, programmeId) {
     return knex.table('person').distinct('person.personId')
         .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
-        .where('personWithRole.studyfieldId', studyfieldId)
+        .where('personWithRole.programmeId', programmeId)
         .select(personSchema);
 }
 
@@ -97,18 +97,18 @@ export const getPersonsWithAgreementPerson = (agreementpersonId) => {
         .where('personWithRole.personId', agreementpersonId)
 };
 
-export const getPersonsWithAgreementInStudyfield = (studyfieldId) => {
+export const getPersonsWithAgreementInStudyfield = (programmeId) => {
     return knex.select(personSchema).from('person')
         .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
         .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
         .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-        .where('personWithRole.studyfieldId', studyfieldId)
+        .where('personWithRole.programmeId', programmeId)
 };
 
-export const getPersonsAsAgreementPersonInStudyfield = (studyfieldId) => {
+export const getPersonsAsAgreementPersonInStudyfield = (programmeId) => {
     return knex.select(personSchema).from('person')
         .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
-        .where('personWithRole.studyfieldId', studyfieldId)
+        .where('personWithRole.programmeId', programmeId)
 };
 
 export const getPersonByPersonRoleId = (personRoleId) => {

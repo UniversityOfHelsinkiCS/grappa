@@ -36,7 +36,7 @@ test.serial('updateAgreement', async t => {
         agreementId: 1,
         authorId: 1,
         thesisId: 1,
-        studyfieldId: 1,
+        programmeId: 1,
         other: 'this agreement is updated'
     };
     const response = await agreementService.updateAgreement(updatedAgreement);
@@ -52,7 +52,7 @@ test.serial('saveAgreement call returns agreementId = 4', async t => {
         authorId: 1,
         thesisId: 1,
         responsibleSupervisorId: 1,
-        studyfieldId: 1,
+        programmeId: 1,
         studentWorkTime: '5h / week',
         fake: 0
     };

@@ -6,7 +6,7 @@ export async function getGraders(req, res) {
         // TODO: Filter them
         const roleId = await roleService.getRoleId('grader');
         const persons = await personService.getPersonsWithRole(roleId);
-        //const persons = await personService.getPersonsWithRoleInStudyfield(roleId, studyfieldId);
+        //const persons = await personService.getPersonsWithRoleInStudyfield(roleId, programmeId);
         res.status(200).json(persons).end();
     } catch (err) {
         res.status(500).json(err).end();

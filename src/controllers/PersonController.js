@@ -1,6 +1,6 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService');
+const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
 
 export async function addPerson(req, res) {
@@ -98,13 +98,13 @@ export async function getPersons(req, res) {
         }
 
         rolesInStudyfields.forEach(async item => {
-            // As resp_prof persons who are writing theses in studyfield
+            // As resp_prof persons who are writing theses in programme
             if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
-                newPersons = await personService.getPersonsWithAgreementInStudyfield(item.studyfield.studyfieldId);
+                newPersons = await personService.getPersonsWithAgreementInStudyfield(item.programme.programmeId);
                 persons = [...new Set([...persons, ...newPersons])];
             }
         })
-        //Persons who are supervisors / supervising for new thesis / agreement supervisor list 
+        //Persons who are supervisors / supervising for new thesis / agreement supervisor list
         const supervisorId = await roleService.getRoleId('supervisor')
         newPersons = await personService.getPersonsWithRole(supervisorId);
         persons = [...new Set([...persons, ...newPersons])];
@@ -113,7 +113,7 @@ export async function getPersons(req, res) {
         newPersons = await personService.getPersonsWithRole(graderId)
         persons = [...new Set([...persons, ...newPersons])];
 
-        //Persons (students) who are writing theses user has access to as 
+        //Persons (students) who are writing theses user has access to as
         //a agreementperson (supervisor, grader etc)
         newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
         persons = [...new Set([...persons, ...newPersons])];
@@ -141,11 +141,11 @@ export async function getPersons(req, res) {
 
 const getUsersRoles = async (user) => {
     const roleToId = await roleService.getRoles();
-    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
     return personRoles.map(role => {
         return {
-            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId),
+            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
         }
     })

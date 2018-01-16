@@ -1,7 +1,7 @@
 exports.up = function(knex, Promise) {
     return Promise.all([
-        knex.schema.createTable('studyfield', function (table) {
-            table.increments('studyfieldId').primary();
+        knex.schema.createTable('programme', function (table) {
+            table.increments('programmeId').primary();
             table.integer('facultyId').unsigned();
             table.foreign('facultyId').references('faculty.facultyId');
             table.string('name');
@@ -11,5 +11,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-    knex.schema.dropTable('studyfield');
+    knex.schema.dropTable('programme');
 };
