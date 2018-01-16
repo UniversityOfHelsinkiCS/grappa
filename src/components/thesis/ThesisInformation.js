@@ -57,10 +57,20 @@ export default class ThesisInformation extends Component {
         );
     }
 
-    renderThesisAuthor(disabled) {
+    renderThesisAuthor() {
+        if (!this.props.thesis.authorFirstname) {
+            return (
+                <div className="three fields">
+                    {this.renderTextField('Email', 'authorEmail', 'Email Address', false, 'email')}
+                </div>
+            );
+        }
+
         return (
             <div className="three fields">
-                {this.renderTextField('Email', 'authorEmail', 'Email Address', disabled, 'email')}
+                {this.renderTextField('Email', 'authorEmail', 'Email Address', true, 'email')}
+                {this.renderTextField('First name', 'authorFirstname', 'Email Address', true, 'email')}
+                {this.renderTextField('Last name', 'authorLastname', 'Email Address', true, 'email')}
             </div>
         );
     }
@@ -97,7 +107,7 @@ export default class ThesisInformation extends Component {
         return (
             <div>
                 <h3 className="ui dividing header">Thesis Author</h3>
-                {this.renderThesisAuthor(this.props.thesis.thesisId)}
+                {this.renderThesisAuthor()}
                 <h3 className="ui dividing header">Thesis Information</h3>
                 {this.renderThesisInformation()}
             </div>

@@ -43,6 +43,7 @@ export class ThesisEditPage extends Component {
             attachments: [],
             newAttachments: [],
             allowEdit: true,
+            validationErrors: {}
         }
     }
 
@@ -57,13 +58,14 @@ export class ThesisEditPage extends Component {
     init(props) {
         if (props.match.params && props.match.params.id) {
             const thesisId = parseInt(props.match.params.id, 10);
-            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId)
+            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId);
             if (thesis) {
                 const attachments = props.attachments.filter(attachment => {
                     const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
                         && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
-                })
+                });
+
                 this.setState({ thesis, attachments })
             }
         }
@@ -77,27 +79,27 @@ export class ThesisEditPage extends Component {
             console.log(error);
             return undefined
         }
-    }
+    };
 
 
     handleSaveThesis = () => {
         this.props.updateThesis(this.state.thesis);
-    }
+    };
 
     deleteThesis = () => {
         this.props.deleteThesis(this.state.thesis.id);
-    }
+    };
 
     toggleEditing = () => {
         this.setState({ allowEdit: !this.state.allowEdit });
-    }
+    };
 
     handleChange = (fieldName, fieldValue) => {
         console.log('thesis.' + fieldName + ' = ' + fieldValue);
         const thesis = this.state.thesis;
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
-    }
+    };
 
     editAttachmentList = (attachments) => {
         this.setState({ newAttachments: attachments });
@@ -115,15 +117,15 @@ export class ThesisEditPage extends Component {
             form.append(attachment.label, attachment);
         });
         this.props.createAttachment(form)
-    }
+    };
 
     downloadAttachment = (attachmentId) => {
         this.props.downloadAttachments([attachmentId])
-    }
+    };
 
     handleEmail = (reminderType) => {
         this.props.sendReminder(this.state.thesis.id, reminderType);
-    }
+    };
 
     renderControlButtons() {
         //Admin controls
@@ -160,7 +162,7 @@ export class ThesisEditPage extends Component {
                 && role.personId === person.personId
                 && role.studyfieldId === this.state.thesis.studyfieldId
             )
-        )
+        );
         return <PersonSelector
             persons={studyfieldGraders}
             selected={this.state.thesis.graders}
@@ -174,19 +176,24 @@ export class ThesisEditPage extends Component {
                 <br />
                 <div className="ui form">
                     {this.renderControlButtons()}
-                    <ThesisInformation sendChange={this.handleChange}
+                    <ThesisInformation
+                        sendChange={this.handleChange}
                         thesis={this.state.thesis}
                         studyfields={this.props.studyfields}
-                        allowEdit={this.state.allowEdit} />
+                        allowEdit={this.state.allowEdit}
+                        validationErrors={this.state.validationErrors}
+                    />
                     {this.renderGraderSelecter()}
                     <AttachmentAdder
                         attachments={this.state.newAttachments}
                         changeList={this.editAttachmentList}
-                        uploadAttachments={this.uploadAttachments} />
+                        uploadAttachments={this.uploadAttachments}
+                    />
                     <AttachmentList
                         attachments={this.state.attachments}
                         downloadAttachment={this.downloadAttachment}
-                        deleteAttachment={this.props.deleteAttachment} />
+                        deleteAttachment={this.props.deleteAttachment}
+                    />
                     <br />
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker
                         sendChange={this.handleChange}
