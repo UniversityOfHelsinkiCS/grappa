@@ -25,6 +25,7 @@ export default class ThesisInformation extends Component {
                 <label>{label}</label>
                 <input
                     type={type}
+                    name={fieldName}
                     disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
                     onChange={this.changeField(fieldName)}
