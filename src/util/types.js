@@ -20,7 +20,7 @@ export const councilmeetingType = shape({
     date: string,
     instructorDeadline: string,
     studentDeadline: string
-})
+});
 
 export const programmeType = shape({
     programmeId: number,
@@ -30,7 +30,7 @@ export const programmeType = shape({
 export const availableRoleType = shape({
     roleId: number,
     name: text
-})
+});
 
 export const roleType = shape({
     personRoleId: number,
@@ -67,7 +67,7 @@ export const attachmentType = shape({
     originalname: string,
     mimetype: string,
     label: string,
-    savedOnDisk: number,
+    savedOnDisk: number
 });
 
 export const thesisType = shape({

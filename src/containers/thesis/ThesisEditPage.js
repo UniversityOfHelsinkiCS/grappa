@@ -11,7 +11,6 @@ import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import ThesisEmails from '../../components/thesis/ThesisEmails'; //TODO: Should be used
 import { formatThesis } from '../../util/theses';
 
 export class ThesisEditPage extends Component {
@@ -163,11 +162,13 @@ export class ThesisEditPage extends Component {
                 && role.programmeId === this.state.thesis.programmeId
             )
         );
-        return <PersonSelector
-            persons={programmeGraders}
-            selected={this.state.thesis.graders}
-            changeList={(list) => this.handleChange('graders', list)}
-        />
+        return (
+            <PersonSelector
+                persons={programmeGraders}
+                selected={this.state.thesis.graders}
+                changeList={(list) => this.handleChange('graders', list)}
+            />
+        );
     }
 
     render() {
@@ -198,7 +199,8 @@ export class ThesisEditPage extends Component {
                     {(this.state.allowEdit) ? <ThesisCouncilmeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
-                        councilmeetings={this.props.councilmeetings} /> : undefined}
+                        councilmeetings={this.props.councilmeetings}
+                    /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
@@ -206,7 +208,7 @@ export class ThesisEditPage extends Component {
                     Submit
                 </button>
             </div>
-        )
+        );
     }
 }
 

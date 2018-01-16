@@ -23,6 +23,6 @@ export const updateCouncilmeeting = (councilmeeting) => {
 export const deleteCouncilmeeting = (councilmeetingId) => {
     const prefix = 'COUNCILMEETING_DELETE_ONE_';
     const method = 'delete';
-    const route = '/councilmeetings/' + councilmeetingId;    
+    const route = '/councilmeetings/' + councilmeetingId;
     return callController(route, prefix, councilmeetingId, method);
 }

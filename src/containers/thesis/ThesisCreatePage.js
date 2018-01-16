@@ -73,6 +73,10 @@ export class ThesisCreatePage extends Component {
         this.setState({ attachments });
     };
 
+    validateThesis(thesis = this.state.thesis) {
+        return thesisValidation.run(thesis);
+    }
+
     renderGraderSelecter() {
         const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
@@ -81,15 +85,13 @@ export class ThesisCreatePage extends Component {
                 && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
         );
-        return <PersonSelector
-            persons={programmeGraders}
-            selected={this.state.thesis.graders}
-            changeList={(list) => this.handleChange('graders', list)}
-        />
-    }
-
-    validateThesis(thesis = this.state.thesis) {
-        return thesisValidation.run(thesis);
+        return (
+            <PersonSelector
+                persons={programmeGraders}
+                selected={this.state.thesis.graders}
+                changeList={(list) => this.handleChange('graders', list)}
+            />
+        );
     }
 
     render() {

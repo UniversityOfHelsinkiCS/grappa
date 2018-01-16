@@ -16,6 +16,56 @@ class AgreementView extends Component {
         return author ? `${author.firstname} ${author.lastname}` : '';
     }
 
+    getSupervisor(agreement) {
+        const supervisor = this.props.persons.find(person => person.personId === agreement.responsibleSupervisorId);
+        if (supervisor)
+            return `${supervisor.firstname} ${supervisor.lastname}`;
+
+        return '';
+    }
+
+    getThesis(agreement) {
+        return this.props.theses.find(thesis => thesis.thesisId === agreement.thesisId) || {};
+    }
+
+    handleEdit= (e, agreement) => {
+        this.props.handleEditAgreement(agreement);
+
+    }
+
+    changeShowing(e, agreement) {
+        const index = this.props.agreements.findIndex((x => x.agreementId === agreement.agreementId));
+        const newState = Object.assign({}, this.state);
+        if (newState.showAgreements[index]) { //can't use x = !x since x is at first undefined
+            newState.showAgreements[index] = false; //if is visible, hide
+        } else {
+            newState.showAgreements[index] = true;
+        }
+        this.setState({
+            showAgreements: newState.showAgreements
+        });
+    }
+
+    renderList() {
+        const data = this.props.agreements;
+        return (
+            <div>
+                {data.map((agreement) => (
+                    <div className="ui padded segment" key={agreement.agreementId}>
+                        <h2 className="ui header">{this.getAuthorName(agreement)}: {this.getThesis(agreement).title}</h2>
+                        <b>Ohjausvastuut: </b> <br />
+                        Vastuuohjaaja: {agreement.title} {this.getSupervisor(agreement)}<br />
+                        Muuohjaaja: to be shown here<br />
+                        2. ohjaaja: to be shown here<br />
+                        <button key={agreement.agreementId} className="ui primary button" onClick={(e) => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
+                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>
+                        {this.renderOne(agreement)}
+                     </div>
+                ))}
+            </div>
+        );
+    }
+
     renderOne(agreement) {
         const index = this.props.agreements.findIndex(x => x.agreementId === agreement.agreementId);
         return (
@@ -66,58 +116,8 @@ class AgreementView extends Component {
                         <p>
                             Muuta: {agreement.other}
                         </p>
-                       </div>
+                    </div>
                     : undefined}
-            </div>
-        );
-    }
-
-    changeShowing(e, agreement) {
-        const index = this.props.agreements.findIndex((x => x.agreementId === agreement.agreementId));
-        const newState = Object.assign({}, this.state);
-        if (newState.showAgreements[index]) { //can't use x = !x since x is at first undefined
-            newState.showAgreements[index] = false; //if is visible, hide
-        } else {
-            newState.showAgreements[index] = true;
-        }
-        this.setState({
-            showAgreements: newState.showAgreements
-        });
-    }
-
-    handleEdit= (e, agreement) => {
-        this.props.handleEditAgreement(agreement);
-
-    }
-
-    getSupervisor(agreement) {
-        const supervisor = this.props.persons.find(person => person.personId === agreement.responsibleSupervisorId);
-        if (supervisor)
-            return `${supervisor.firstname} ${supervisor.lastname}`;
-
-        return '';
-    }
-
-    getThesis(agreement) {
-        return this.props.theses.find(thesis => thesis.thesisId === agreement.thesisId) || {};
-    }
-
-    renderList() {
-        const data = this.props.agreements;
-        return (
-            <div>
-                {data.map((agreement, index) =>
-                    <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">{this.getAuthorName(agreement)}: {this.getThesis(agreement).title}</h2>
-                        <b>Ohjausvastuut: </b> <br />
-                        Vastuuohjaaja: {agreement.title} {this.getSupervisor(agreement)}<br />
-                        Muuohjaaja: to be shown here<br />
-                        2. ohjaaja: to be shown here<br />
-                        <button key={agreement.agreementId} className="ui primary button" onClick={(e) => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
-                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>
-                        {this.renderOne(agreement)}
-                     </div>
-                )}
             </div>
         );
     }

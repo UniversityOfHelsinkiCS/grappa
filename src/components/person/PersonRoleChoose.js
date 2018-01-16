@@ -24,7 +24,8 @@ export default class PersonRoleChoose extends Component {
         return (
             <select
                 className="ui dropdown"
-                onChange={this.changeStudyfield}>
+                onChange={this.changeStudyfield}
+            >
                 <option key="0" value="">Select</option>
                 {this.props.programmes.map(field =>
                     <option key={field.programmeId} value={field.programmeId}>
@@ -39,7 +40,8 @@ export default class PersonRoleChoose extends Component {
         return (
             <select
                 className="ui dropdown"
-                onChange={this.changeRole}>
+                onChange={this.changeRole}
+            >
                 <option key="0" value="">Select</option>
                 {this.props.availableRoles.map(role =>
                     <option key={role.roleId} value={role.roleId}>
@@ -87,8 +89,10 @@ export default class PersonRoleChoose extends Component {
                                 <td>{role.name}</td>
                                 <td>{role.programme}</td>
                                 <td>
-                                    {!role.agreementId ? <button className="ui red icon button"
-                                        onClick={this.removeRole(role)}>
+                                    {!role.agreementId ? <button
+                                        className="ui red icon button"
+                                        onClick={this.removeRole(role)}
+                                    >
                                         Remove <i className="remove icon" />
                                     </button> : 'Linked to agreement'}
                                 </td>
@@ -98,8 +102,10 @@ export default class PersonRoleChoose extends Component {
                             <td>{this.roleDropdown()}</td>
                             <td>{this.programmeDropdown()}</td>
                             <td>
-                                <button className="ui green icon button"
-                                    onClick={this.addRole}>
+                                <button
+                                    className="ui green icon button"
+                                    onClick={this.addRole}
+                                >
                                     Add <i className="plus icon" />
                                 </button>
                             </td>

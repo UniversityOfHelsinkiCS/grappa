@@ -18,10 +18,10 @@ export default class StatisticsPage extends Component {
 
     componentDidMount() {
         //this.props.getGrades();
-        this.filterThesesByYear(this.generateTheses());        
+        this.filterThesesByYear(this.generateTheses());
     }
-    
-    componentWillReceiveProps(nextProps) {
+
+    componentWillReceiveProps() {
         //this.filterThesesByYear(nextProps.theses);
         this.filterThesesByYear(this.generateTheses());
     }

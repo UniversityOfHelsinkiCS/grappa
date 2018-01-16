@@ -16,9 +16,9 @@ class AssesmentOfTheses extends Component {
         document.title = 'Assesment of Theses';
     }
 
-    changeLanguage = (lang, e) => {
+    changeLanguage = (lang) => {
         this.setState({ language: lang });
-    }
+    };
 
     renderAssesment() {
         let assesment = AssesmentInFinnish;
@@ -43,32 +43,38 @@ class AssesmentOfTheses extends Component {
 
     renderTitles() {
         if (this.state.language === 'en') {
-            return <div>
-                <b>
-                    UNIVERSITY OF HELSINKI<br />
-                    2.8.2017<br />
-                    Academic Affairs Council<br />
-                    <h1>Assessment of Master’s theses included in second-cycle degrees</h1>
-                </b>
-            </div>
+            return (
+                <div>
+                    <b>
+                        UNIVERSITY OF HELSINKI<br />
+                        2.8.2017<br />
+                        Academic Affairs Council<br />
+                        <h1>Assessment of Master’s theses included in second-cycle degrees</h1>
+                    </b>
+                </div>
+            );
         } else if (this.state.language === 'swe') {
-            return <div>
+            return (
+                <div>
+                    <b>
+                        HELSINGFORS UNIVERSITET<br />
+                        2.8.2017<br />
+                        Utbildningsrådet<br />
+                        <h1>Bedömningen av pro gradu-avhandlingen som hör till högre högskoleexamen</h1>
+                    </b>
+                </div>
+            );
+        }
+        return (
+            <div>
                 <b>
-                    HELSINGFORS UNIVERSITET<br />
+                    HELSINGIN YLIOPISTO<br />
                     2.8.2017<br />
-                    Utbildningsrådet<br />
-                    <h1>Bedömningen av pro gradu-avhandlingen som hör till högre högskoleexamen</h1>
+                    Opintoasiainneuvosto<br />
+                    <h1>Ylempään korkeakoulututkintoon sisältyvän pro gradu -tutkielman arviointi</h1>
                 </b>
             </div>
-        }
-        return <div>
-            <b>
-                HELSINGIN YLIOPISTO<br />
-                2.8.2017<br />
-                Opintoasiainneuvosto<br />
-                <h1>Ylempään korkeakoulututkintoon sisältyvän pro gradu -tutkielman arviointi</h1>
-            </b>
-        </div>
+        );
     }
 
     render() {

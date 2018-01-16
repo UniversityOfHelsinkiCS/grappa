@@ -7,7 +7,7 @@ export default class StudentInfoForm extends Component {
         return (
             <div>
                 <br/>
-                <b>{label}</b>  
+                <b>{label}</b>
                 <div className="ui fluid input">
                     <input type="text" value={text} disabled/>
                 </div>

@@ -56,9 +56,9 @@ export default class SupervisingInfoForm extends Component {
             <div>
                 <b>Valitse ensin gradun aine</b>
                 <div>
-                    <select className="ui dropdown"  name= "programmeId" onChange={this.programmeChange}>
+                    <select className="ui dropdown" name="programmeId" onChange={this.programmeChange}>
                         <option value={-1}>Valitse ensin gradun tieteenala</option>
-                        {list.map((obj, index) => {
+                        {list.map((obj) => {
                             return <option key={obj.id} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
@@ -78,7 +78,7 @@ export default class SupervisingInfoForm extends Component {
                 <div>
                     <select className="ui dropdown" value={this.state.selectedSupervisors[formName]} disabled={list[0] === undefined} onChange={this.sendDropDownChange} name={formName}>
                         <option value={-1}>{placeholder}</option>
-                        {list.map((obj, index) => {
+                        {list.map((obj) => {
                             return <option key={obj.id} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
@@ -112,10 +112,10 @@ export default class SupervisingInfoForm extends Component {
                 }))}
                 <br />
                 {this.supervisorSelecter('Vastuuohjaaja', 'Valitse ohjaaja', 'thesisSupervisorMain',
-                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorSecond ))}
+                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorSecond))}
                 <br />
                 {this.supervisorSelecter('Toinen ohjaaja', 'Valitse ohjaaja', 'thesisSupervisorSecond',
-                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorMain ))}
+                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorMain))}
                 {this.field('Muu ohjaaja', 'thesisSupervisorOther')}
             </div>
         )

@@ -14,7 +14,9 @@ export default class StudyfieldEdit extends Component {
     }
 
     delete = () => {
-        this.state.deleteConfirmation ? this.props.sendDelete() : '';
+        if (this.state.deleteConfirmation)
+            this.props.sendDelete();
+
         this.setState({ deleteConfirmation: !this.state.deleteConfirmation });
     }
 

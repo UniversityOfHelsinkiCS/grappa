@@ -45,7 +45,8 @@ export default class ThesisInformation extends Component {
                     className="ui fluid search dropdown"
                     disabled={disabled ? 'true' : ''}
                     value={this.props.thesis[fieldName]}
-                    onChange={this.changeField(fieldName)}>
+                    onChange={this.changeField(fieldName)}
+                >
                     <option key="0" value="">Select {label}</option>
                     {fieldArray.map(field =>
                         <option key={field.id} value={field.id}>

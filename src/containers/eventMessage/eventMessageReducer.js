@@ -24,7 +24,7 @@ const reducer = (state = {}, action) => {
                 text: 'Thesis linked to user'
             }
         });
-        case action.type.includes('_FAILURE'):
+        case action.type.includes('_FAILURE'): {
             const message = {};
             message[action.type] = {
                 active: true,
@@ -32,6 +32,7 @@ const reducer = (state = {}, action) => {
                 text: action.type
             }
             return Object.assign({}, state, message)
+        }
         case action.type === 'EVENT_MESSAGE_CLEAR':
             return {};
         default:

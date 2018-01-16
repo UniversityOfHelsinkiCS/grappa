@@ -15,7 +15,7 @@ export default class Review extends Component {
         let person = Object.assign({}, props.person);
         this.setState(
             {
-                person: person,
+                person,
                 isApproved: person.approved,
                 statement: person.statement
             }

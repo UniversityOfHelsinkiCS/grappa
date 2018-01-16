@@ -18,7 +18,7 @@ export const StudyfieldList = props => {
                 </tr>
             </thead>
             <tbody>
-                {props.programmes.sort((a, b) => a.name > b.name).map((programme, index) =>
+                {props.programmes.sort((a, b) => a.name > b.name).map((programme) =>
                     <tr key={programme.programmeId} onClick={handleClick(programme)}>
                         <td>{programme.isActive ? 'true' : 'false'}</td>
                         <td>{programme.name}</td>

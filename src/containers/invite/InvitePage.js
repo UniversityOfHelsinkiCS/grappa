@@ -17,7 +17,7 @@ const InvitePage = ({ acceptThesis, match, status }) => {
         return <Redirect to="/" />;
     }
 
-    return(
+    return (
         <div />
     );
 };

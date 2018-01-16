@@ -62,7 +62,7 @@ export class AgreementPage extends Component {
     }
 
     //TODO strange warnings when closing a modal
-    toggleEditModal = (agreement) => {
+    toggleEditModal = () => {
         const editable = !this.state.editMode;
         this.setState({ editMode: editable });
     }

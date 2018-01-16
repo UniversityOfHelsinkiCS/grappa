@@ -58,13 +58,14 @@ export class PersonRoleManagePage extends Component {
         if (!this.state.person) {
             return <PersonInviter />
         }
-        return <PersonRoleChoose
+        return (<PersonRoleChoose
             person={this.state.person}
             roles={this.state.roles}
             programmes={this.props.programmes}
             availableRoles={this.props.availableRoles}
             addRole={this.handleAddRole}
-            removeRole={this.handleRemoveRole} />
+            removeRole={this.handleRemoveRole}
+        />);
     }
 
     render() {
@@ -74,7 +75,8 @@ export class PersonRoleManagePage extends Component {
                 <PersonSelector
                     persons={this.props.persons}
                     selected={selected}
-                    changeList={this.selectPerson} />
+                    changeList={this.selectPerson}
+                />
                 {this.renderManagement()}
             </div>
         )

@@ -102,21 +102,15 @@ export class CouncilmeetingViewPage extends Component {
         });
     }
 
-    //TODO: Fix switch case
     changeMeeting = (where) => () => {
-        switch (where) {
-            case 'previous':
-                this.props.history.push('/councilmeeting/' + this.state.previousMeeting.councilmeetingId)
-                this.incrementIndex(false);
-                return;
-            case 'next':
-                this.props.history.push('/councilmeeting/' + this.state.nextMeeting.councilmeetingId)
-                this.incrementIndex(true);
-                return;
-            default:
-                return;
+        if (where === 'previous') {
+            this.props.history.push(`/councilmeeting/${this.state.previousMeeting.councilmeetingId}`);
+            this.incrementIndex(false);
+        } else if (where === 'next') {
+            this.props.history.push(`/councilmeeting/${this.state.nextMeeting.councilmeetingId}`);
+            this.incrementIndex(true);
         }
-    }
+    };
 
     moveToPreviousMeeting = (thesisIds) => {
         const meeting = this.state.previousMeeting;

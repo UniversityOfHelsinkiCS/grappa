@@ -72,8 +72,8 @@ export default class ThesisStatisticsTable extends Component {
         });
         if (!foundGrade) {
             programmeObject.grades.push({
-                gradeName: gradeName,
-                sum: 1,
+                gradeName,
+                sum: 1
             });
             if (this.state.grades.indexOf(gradeName) === -1) {
                 this.state.grades.push(gradeName);

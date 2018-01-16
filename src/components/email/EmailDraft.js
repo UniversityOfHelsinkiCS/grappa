@@ -58,16 +58,21 @@ export default class EmailDraft extends Component {
                     <button className="ui button blue" onClick={this.saveEdit}>Save</button>
                     <button className="ui button orange" onClick={this.cancelEdit}>Stop editing</button>
                     <div style={{ width: '10em', display: 'inline-block' }}>
-                    <select className="ui dropdown" onChange={this.changeStudyfield} value={this.state.draft.programme}>
-                        <option value="null">No programme</option>
-                        {this.props.programmes.map(programme => (
-                            <option
-                                key={programme.programmeId}
-                                value={programme.programmeId}>
+                        <select
+                            className="ui dropdown"
+                            onChange={this.changeStudyfield}
+                            value={this.state.draft.programme}
+                        >
+                            <option value="null">No programme</option>
+                            {this.props.programmes.map(programme => (
+                                <option
+                                    key={programme.programmeId}
+                                    value={programme.programmeId}
+                                >
                                     {programme.name}
                                 </option>
-                        ))}
-                    </select>
+                            ))}
+                        </select>
                     </div>
                     <button className="ui inverted right floated red button" onClick={this.delete}>
                         {this.state.deleteConfirmation ? 'Click again to confirm' : 'Delete this draft'}

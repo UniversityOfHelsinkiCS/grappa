@@ -65,7 +65,7 @@ export default class GraderSelecter extends Component {
         this.setState({ menuActive: true });
     }
 
-    unfocusMenu = (event) => {
+    unfocusMenu = () => {
         if (this.state.menuActive) {
             this.setState({ menuActive: false });
         }
@@ -80,9 +80,10 @@ export default class GraderSelecter extends Component {
             return (
                 <a key={index} className="ui label transition visible" onFocus={this.focusMenu}>
                     {grader.title + ' ' + grader.name}
-                    <i className="delete icon"
+                    <i
+                        className="delete icon"
                         onClick={this.removeGrader(grader)}
-                    ></i>
+                    />
                 </a>
             );
         })
@@ -97,7 +98,7 @@ export default class GraderSelecter extends Component {
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
-        ></input>
+        />
     }
 
     renderDropdown() {

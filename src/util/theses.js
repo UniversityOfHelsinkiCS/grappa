@@ -12,10 +12,10 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
     const formattedThesis = Object.assign({}, thesis);
 
-    thesis.programmeId = agreement.programmeId;
+    formattedThesis.programmeId = agreement.programmeId;
 
     if (roles) {
-        thesis.graders = persons.filter(person =>
+        formattedThesis.graders = persons.filter(person =>
             roles.find(role =>
                 role.personId === person.personId &&
                 role.agreementId === agreement.agreementId
@@ -42,7 +42,7 @@ export const oldGradeFields = [
     { id: 'Cum Laude Approbatur', name: 'Cum Laude Approbatur' },
     { id: 'Magna Cum Laude Approbatur', name: 'Magna Cum Laude Approbatur' },
     { id: 'Eximia Cum Laude Approbatur', name: 'Eximia Cum Laude Approbatur' },
-    { id: 'Laudatur', name: 'Laudatur' },
+    { id: 'Laudatur', name: 'Laudatur' }
 ];
 
 export const gradeFields = [
