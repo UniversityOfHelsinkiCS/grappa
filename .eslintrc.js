@@ -10,7 +10,7 @@ module.exports = {
     'rules': {
         'quotes': ['warn', 'single'],
         'indent': ['warn', 4],
-        'semi': ['warn', 'always'],
+        'semi': 'off',
         'comma-dangle': ['warn', 'never'],
         'max-len': ['warn', 120],
         'function-paren-newline': 'off',
