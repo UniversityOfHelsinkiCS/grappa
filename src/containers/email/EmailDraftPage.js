@@ -5,7 +5,7 @@ import EmailDraft from '../../components/email/EmailDraft'
 
 import { connect } from 'react-redux';
 import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
-import { emailType, studyfieldType } from '../../util/types';
+import { emailType, programmeType } from '../../util/types';
 
 export class EmailDraftPage extends Component {
 
@@ -72,7 +72,7 @@ export class EmailDraftPage extends Component {
                         key={draft.emailDraftId}
                         updateDraft={this.handleUpdateDraft}
                         sendDeleteRequest={this.handleDeleteDraft}
-                        studyfields={this.props.studyfields}
+                        programmes={this.props.programmes}
                     />
                 ) : undefined}
 
@@ -88,7 +88,7 @@ export class EmailDraftPage extends Component {
 const mapStateToProps = (state) => {
     return {
         emails: state.emails,
-        studyfields: state.studyfields
+        programmes: state.programmes
     };
 };
 
@@ -110,7 +110,7 @@ EmailDraftPage.propTypes = {
     deleteEmailDraft: func.isRequired,
     saveEmailDraft: func.isRequired,
     emails: arrayOf(emailType.isRequired).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired
+    programmes: arrayOf(programmeType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);

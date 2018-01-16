@@ -8,11 +8,11 @@ import { updateVisitorRoles } from '../role/roleActions';
 const findVisitorRoles = roles => roles.filter(role => role.role === 'visitor');
 
 class UserStudyfieldSelector extends Component {
-    
+
     constructor(props) {
         super(props);
 
-        const selectedStudyfields = props.user.roles ? findVisitorRoles(props.user.roles).map(role => role.studyfieldId) : [];
+        const selectedStudyfields = props.user.roles ? findVisitorRoles(props.user.roles).map(role => role.programmeId) : [];
 
         this.state = { selectedStudyfields };
 
@@ -25,46 +25,46 @@ class UserStudyfieldSelector extends Component {
         if (!newProps.user || !newProps.user.roles) {
             return;
         }
-        const selectedStudyfields = findVisitorRoles(newProps.user.roles).map(role => role.studyfieldId);
+        const selectedStudyfields = findVisitorRoles(newProps.user.roles).map(role => role.programmeId);
 
         this.setState({ selectedStudyfields });
     }
 
-    isStudyfieldChecked(studyfieldId) {
-        return this.state.selectedStudyfields.includes(studyfieldId);
+    isStudyfieldChecked(programmeId) {
+        return this.state.selectedStudyfields.includes(programmeId);
     }
 
     selectionUpdated(event) {
         const value = Number(event.target.value);
-        const studyfields = new Set(this.state.selectedStudyfields);
-        const nextState = event.target.checked ? studyfields.add(value) : studyfields.delete(value);
+        const programmes = new Set(this.state.selectedStudyfields);
+        const nextState = event.target.checked ? programmes.add(value) : programmes.delete(value);
         this.setState({ selectedStudyfields: Array.from(nextState) });
     }
 
     saveStudyfieldSelection() {
         this.props.saveStudyfieldSelection({
-            studyfieldIds: this.state.selectedStudyfields
+            programmeIds: this.state.selectedStudyfields
         });
     }
-    
+
     render() {
-        return (    
+        return (
             <div className="">
                 <div className="ui form">
                     <div className="field inline">
                         <label>Studyfield</label>
 
-                        {this.props.studyfields.map(studyfield => (
-                            <div key={studyfield.studyfieldId} className="ui filed">
+                        {this.props.programmes.map(programme => (
+                            <div key={programme.programmeId} className="ui filed">
                                 <div className="ui checkbox">
                                     <input
                                         type="checkbox"
-                                        value={studyfield.studyfieldId}
-                                        id={`studyfield-${studyfield.studyfieldId}`}
+                                        value={programme.programmeId}
+                                        id={`programme-${programme.programmeId}`}
                                         onChange={this.selectionUpdated}
-                                        defaultChecked={this.isStudyfieldChecked(studyfield.studyfieldId)}
+                                        defaultChecked={this.isStudyfieldChecked(programme.programmeId)}
                                     />
-                                    <label htmlFor={`studyfield-${studyfield.studyfieldId}`}> {studyfield.name}</label>
+                                    <label htmlFor={`programme-${programme.programmeId}`}> {programme.name}</label>
                                 </div>
                             </div>
                         ))}
@@ -73,7 +73,7 @@ class UserStudyfieldSelector extends Component {
                         className="ui primary button"
                         onClick={this.saveStudyfieldSelection}
                     >
-                        Save studyfield
+                        Save programme
                     </button>
                 </div>
             </div>
@@ -82,13 +82,13 @@ class UserStudyfieldSelector extends Component {
 }
 
 UserStudyfieldSelector.propTypes = {
-    studyfields: PropTypes.array.isRequired,
+    programmes: PropTypes.array.isRequired,
     saveStudyfieldSelection: PropTypes.func.isRequired,
     user: personType.isRequired
 };
 
-const mapStateToProps = ({ studyfields, user }) => ({
-    studyfields,
+const mapStateToProps = ({ programmes, user }) => ({
+    programmes,
     user
 });
 

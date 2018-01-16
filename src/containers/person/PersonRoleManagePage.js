@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
-import { personType, roleType, studyfieldType, availableRoleType } from '../../util/types';
+import { personType, roleType, programmeType, availableRoleType } from '../../util/types';
 
 import PersonSelector from '../../components/person/PersonSelector';
 import PersonInviter from '../../components/person/PersonInviter';
@@ -24,7 +24,7 @@ export class PersonRoleManagePage extends Component {
             const person = this.state.person
             const roles = newProps.roles.filter(role => role.personId === person.personId)
                 .map(role => {
-                    role.studyfield = newProps.studyfields.find(field => field.studyfieldId === role.studyfieldId).name
+                    role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name
                     return role;
                 })
             this.setState({ roles });
@@ -36,7 +36,7 @@ export class PersonRoleManagePage extends Component {
         const roles = person ?
             this.props.roles.filter(role => role.personId === person.personId)
                 .map(role => {
-                    role.studyfield = this.props.studyfields.find(field => field.studyfieldId === role.studyfieldId).name
+                    role.programme = this.props.programmes.find(field => field.programmeId === role.programmeId).name
                     return role;
                 })
             : undefined
@@ -45,7 +45,7 @@ export class PersonRoleManagePage extends Component {
 
     handleAddRole = role => {
         role.personId = this.state.person.personId;
-        if (role.personId && role.roleId && role.studyfieldId) {
+        if (role.personId && role.roleId && role.programmeId) {
             this.props.saveRole(role)
         }
     }
@@ -61,7 +61,7 @@ export class PersonRoleManagePage extends Component {
         return <PersonRoleChoose
             person={this.state.person}
             roles={this.state.roles}
-            studyfields={this.props.studyfields}
+            programmes={this.props.programmes}
             availableRoles={this.props.availableRoles}
             addRole={this.handleAddRole}
             removeRole={this.handleRemoveRole} />
@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
     return {
-        studyfields: state.studyfields,
+        programmes: state.programmes,
         persons: state.persons,
         roles: state.roles,
         availableRoles: state.availableRoles,
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => {
 }
 
 PersonRoleManagePage.propTypes = {
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     persons: arrayOf(personType).isRequired,
     roles: arrayOf(roleType).isRequired,
     availableRoles: arrayOf(availableRoleType).isRequired,

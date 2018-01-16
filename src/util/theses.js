@@ -12,7 +12,7 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
     const formattedThesis = Object.assign({}, thesis);
 
-    thesis.studyfieldId = agreement.studyfieldId;
+    thesis.programmeId = agreement.programmeId;
 
     if (roles) {
         thesis.graders = persons.filter(person =>
@@ -58,7 +58,7 @@ export const thesisValidationRules = {
     authorEmail: ['required', 'email'],
     urkund: ['required', 'url'],
     grade: 'required',
-    studyfieldId: 'required'
+    programmeId: 'required'
 };
 
 export const thesisValidation = new Checkit(thesisValidationRules);

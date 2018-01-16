@@ -13,7 +13,7 @@ export const StudyfieldCreate = props => {
 
     return (
         <div>
-            <h2 className="ui dividing header">Create a studyfield</h2>
+            <h2 className="ui dividing header">Create a programme</h2>
             <div className="two fields">
                 <div className="field">
                     <input

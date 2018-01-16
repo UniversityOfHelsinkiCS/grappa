@@ -8,14 +8,14 @@ export default class SupervisorEditor extends Component {
                 firstname: '',
                 lastname: '',
                 title: '',
-                studyfieldId: ''
+                programmeId: ''
             },
             updateSupervisor: {
                 id: undefined,
                 firstname: '',
                 lastname: '',
                 title: '',
-                studyfieldId: ''
+                programmeId: ''
             }
         };
     }
@@ -97,15 +97,15 @@ export default class SupervisorEditor extends Component {
 
     renderStudyfieldList(whichOne) {
         return (
-            <div id={'studyfields' + whichOne} className="ui field">
+            <div id={'programmes' + whichOne} className="ui field">
                 <label>Studyfield</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state[whichOne].studyfieldId}
-                    onChange={this.handleChange('studyfieldId', whichOne)}
+                    value={this.state[whichOne].programmeId}
+                    onChange={this.handleChange('programmeId', whichOne)}
                 >
-                    <option value="">Select studyfield</option>
-                    {this.getStudyfields().map((studyfield, index) => <option key={index} value={studyfield}>{studyfield}</option>)}
+                    <option value="">Select programme</option>
+                    {this.getStudyfields().map((programme, index) => <option key={index} value={programme}>{programme}</option>)}
                 </select>
             </div>
         )
@@ -142,7 +142,7 @@ export default class SupervisorEditor extends Component {
                             <option value="">Select supervisor</option>
                             {this.props.supervisors.map((supervisor, index) =>
                                 <option key={index} className="item" value={supervisor.personId}>
-                                    {supervisor.title} {supervisor.firstname} {supervisor.lastname} Studyfield: {supervisor.studyfieldId}
+                                    {supervisor.title} {supervisor.firstname} {supervisor.lastname} Studyfield: {supervisor.programmeId}
                                 </option>
                             )}
                         </select>

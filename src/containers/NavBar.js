@@ -7,7 +7,7 @@ import { login, logout } from '../containers/user/userActions';
 import { personType } from '../util/types';
 
 //TODO: redux persistent storage & fetch in middleware
-import { getStudyfields } from '../containers/studyfield/studyfieldActions';
+import { getProgrammes } from './programme/programmeActions';
 import { getAgreements } from '../containers/agreement/agreementActions';
 import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingActions';
 import { getTheses } from '../containers/thesis/thesisActions';
@@ -44,7 +44,7 @@ export class NavBar extends Component {
             if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
                 this.props.getNotifications();
             }
-            
+
             this.setState({ loaded: true })
         }
     }
@@ -100,7 +100,7 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(logout());
     },
     getStudyfields() {
-        dispatch(getStudyfields());
+        dispatch(getProgrammes());
     },
     getAgreements() {
         dispatch(getAgreements());

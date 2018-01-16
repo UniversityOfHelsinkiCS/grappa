@@ -29,7 +29,7 @@ class AgreementView extends Component {
                         <div>
                             <div className="two fields">
                                 Gradun tekijän nimi: {agreement.firstname + " " + agreement.lastname + "\t"}|
-                                Gradun ala: {agreement.studyfieldName}
+                                Gradun ala: {agreement.programmeName}
                             </div>
                             <div className="two fields">
                                 Opiskelijanumero: {agreement.studentNumber + "\t"}|
@@ -114,7 +114,7 @@ class AgreementView extends Component {
                         Muuohjaaja: to be shown here<br />
                         2. ohjaaja: to be shown here<br />
                         <button key={agreement.agreementId} className="ui primary button" onClick={(e) => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
-                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>                    
+                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>
                         {this.renderOne(agreement)}
                      </div>
                 )}

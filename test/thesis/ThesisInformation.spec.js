@@ -12,7 +12,7 @@ test('invalid fields are highlighted', t => {
     const form = shallow(<ThesisInformation
         sendChange={function () {}}
         thesis={thesis}
-        studyfields={[{ studyfieldId: 1, name: 'test' }]}
+        programmes={[{ programmeId: 1, name: 'test' }]}
         allowEdit
         validationErrors={validationErrors}
     />);

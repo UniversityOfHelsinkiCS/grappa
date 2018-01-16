@@ -30,12 +30,12 @@ export default class StudyfieldEdit extends Component {
         return (
             <div>
                 <div className="field">
-                    <h2 className="ui dividing header">Update studyfield {this.props.studyfield.name}</h2>
+                    <h2 className="ui dividing header">Update programme {this.props.programme.name}</h2>
                     <div>
                         <input
                             type="text"
                             placeholder="Name"
-                            value={this.props.studyfield.name}
+                            value={this.props.programme.name}
                             onChange={this.handleChange}
                         />
                     </div>
@@ -45,10 +45,10 @@ export default class StudyfieldEdit extends Component {
                             <div className="ui toggle checkbox">
                                 <input
                                     type="checkbox"
-                                    checked={this.props.studyfield.isActive ? 'true' : ''}
+                                    checked={this.props.programme.isActive ? 'true' : ''}
                                     onChange={this.toggleActive}
                                 />
-                                <label>{this.props.studyfield.isActive ? 'Active' : 'Not active'}</label>
+                                <label>{this.props.programme.isActive ? 'Active' : 'Not active'}</label>
                             </div>
                         </div>
                         <div className="field">

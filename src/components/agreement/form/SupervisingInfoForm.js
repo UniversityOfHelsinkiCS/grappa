@@ -38,7 +38,7 @@ export default class SupervisingInfoForm extends Component {
         }
     }
 
-    studyfieldChange = (event) => {
+    programmeChange = (event) => {
         if (event.target.value) {
             this.setState(
                 {
@@ -51,18 +51,18 @@ export default class SupervisingInfoForm extends Component {
         }
     }
 
-    studyfieldSelecter = (list) => {
+    programmeSelecter = (list) => {
         return (
             <div>
                 <b>Valitse ensin gradun aine</b>
                 <div>
-                    <select className="ui dropdown"  name= "studyfieldId" onChange={this.studyfieldChange}>
+                    <select className="ui dropdown"  name= "programmeId" onChange={this.programmeChange}>
                         <option value={-1}>Valitse ensin gradun tieteenala</option>
                         {list.map((obj, index) => {
                             return <option key={obj.id} value={obj.id}>{obj.text}</option>;
                         })}
                     </select>
-                    {(Object.keys(this.props.requiredFields).includes('studyfieldId') && !this.props.requiredFields.studyfieldId) ?
+                    {(Object.keys(this.props.requiredFields).includes('programmeId') && !this.props.requiredFields.programmeId) ?
                     (<div className="ui left pointing red basic label">
                       Valitse oppiaine
                     </div>) : ''}
@@ -94,7 +94,7 @@ export default class SupervisingInfoForm extends Component {
     getSupervisorData = () => {
         if (this.state.chosenStudyfield === -1)
             return [];
-        return this.props.supervisors.filter((supervisor) => supervisor.studyfieldId === this.state.chosenStudyfield).map((supervisor) => {
+        return this.props.supervisors.filter((supervisor) => supervisor.programmeId === this.state.chosenStudyfield).map((supervisor) => {
             return {
                 id: supervisor.personRoleId,
                 text: `${supervisor.person.title} ${supervisor.person.firstname} ${supervisor.person.lastname} ${supervisor.person.email}`
@@ -107,8 +107,8 @@ export default class SupervisingInfoForm extends Component {
         return (
             <div>
                 <h1>Ohjausvastuut</h1>
-                {this.studyfieldSelecter(this.props.studyfields.map((field) => {
-                    return { id: field.studyfieldId, text: field.name }
+                {this.programmeSelecter(this.props.programmes.map((field) => {
+                    return { id: field.programmeId, text: field.name }
                 }))}
                 <br />
                 {this.supervisorSelecter('Vastuuohjaaja', 'Valitse ohjaaja', 'thesisSupervisorMain',
@@ -126,12 +126,12 @@ const { func, shape, number, string, arrayOf } = PropTypes;
 SupervisingInfoForm.propTypes = {
     resetSupervisors: func.isRequired,
     handleChange: func.isRequired,
-    studyfields: arrayOf(shape({
-        studyfieldId: number,
+    programmes: arrayOf(shape({
+        programmeId: number,
         name: string
     })).isRequired,
     supervisors: arrayOf(shape({
-        studyfieldId: number,
+        programmeId: number,
         person: personType
     })).isRequired
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { arrayOf, bool, func, object } from 'prop-types';
 
 import { oldGradeFields, gradeFields } from '../../util/theses';
-import { thesisType, studyfieldType } from '../../util/types';
+import { thesisType, programmeType } from '../../util/types';
 
 export default class ThesisInformation extends Component {
 
@@ -76,12 +76,12 @@ export default class ThesisInformation extends Component {
     }
 
     renderThesisInformation() {
-        const studyfields = this.props.studyfields.map(studyfield => { return { id: studyfield.studyfieldId, name: studyfield.name } });
+        const programmes = this.props.programmes.map(programme => { return { id: programme.programmeId, name: programme.name } });
 
         return (
             <div className="m-bot">
                 <div className="three fields">
-                    {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
+                    {this.renderDropdownField('Studyfield', programmes, 'programmeId', !this.props.allowEdit)}
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
 
@@ -118,7 +118,7 @@ export default class ThesisInformation extends Component {
 ThesisInformation.propTypes = {
     sendChange: func.isRequired,
     thesis: thesisType.isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     allowEdit: bool.isRequired,
     validationErrors: object.isRequired
 };

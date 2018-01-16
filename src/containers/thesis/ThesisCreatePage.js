@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
-import { personType, roleType, studyfieldType, councilmeetingType } from '../../util/types';
+import { personType, roleType, programmeType, councilmeetingType } from '../../util/types';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
@@ -26,7 +26,7 @@ export class ThesisCreatePage extends Component {
                 grade: '',
                 graders: [],
                 graderEval: '',
-                studyfieldId: '',
+                programmeId: '',
                 councilmeetingId: '',
                 printDone: undefined,
                 thesisEmails: {
@@ -74,15 +74,15 @@ export class ThesisCreatePage extends Component {
     };
 
     renderGraderSelecter() {
-        const studyfieldGraders = this.props.persons.filter(person =>
+        const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name === 'grader' || role.name === 'supervisor')
                 && role.personId === person.personId
-                && role.studyfieldId === parseInt(this.state.thesis.studyfieldId, 10)
+                && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
         );
         return <PersonSelector
-            persons={studyfieldGraders}
+            persons={programmeGraders}
             selected={this.state.thesis.graders}
             changeList={(list) => this.handleChange('graders', list)}
         />
@@ -105,7 +105,7 @@ export class ThesisCreatePage extends Component {
                     <ThesisInformation
                         sendChange={this.handleChange}
                         allowEdit
-                        studyfields={this.props.studyfields}
+                        programmes={this.props.programmes}
                         thesis={this.state.thesis}
                         validationErrors={this.state.validationErrors}
                     />
@@ -138,7 +138,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     councilmeetings: state.councilmeetings,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     roles: state.roles,
     persons: state.persons,
 });
@@ -146,7 +146,7 @@ const mapStateToProps = (state) => ({
 const { arrayOf, func } = PropTypes;
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
     saveThesis: func.isRequired

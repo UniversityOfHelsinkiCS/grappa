@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
-import { agreementType, personType, roleType, studyfieldType, thesisType, councilmeetingType } from '../../util/types';
+import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType } from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
@@ -32,7 +32,7 @@ export class ThesisEditPage extends Component {
                 grade: '',
                 graders: [],
                 graderEval: '',
-                studyfieldId: '',
+                programmeId: '',
                 councilmeetingId: '',
                 printDone: undefined,
                 thesisEmails: {
@@ -129,7 +129,7 @@ export class ThesisEditPage extends Component {
 
     renderControlButtons() {
         //Admin controls
-        if (this.props.user.roles && this.props.user.roles.find(studyfieldRole => studyfieldRole.role === 'admin')) {
+        if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
             return (
                 <div className="field">
                     {this.state.allowEdit ?
@@ -156,15 +156,15 @@ export class ThesisEditPage extends Component {
     }
 
     renderGraderSelecter() {
-        const studyfieldGraders = this.props.persons.filter(person =>
+        const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 (role.name === 'grader' || role.name === 'supervisor')
                 && role.personId === person.personId
-                && role.studyfieldId === this.state.thesis.studyfieldId
+                && role.programmeId === this.state.thesis.programmeId
             )
         );
         return <PersonSelector
-            persons={studyfieldGraders}
+            persons={programmeGraders}
             selected={this.state.thesis.graders}
             changeList={(list) => this.handleChange('graders', list)}
         />
@@ -179,7 +179,7 @@ export class ThesisEditPage extends Component {
                     <ThesisInformation
                         sendChange={this.handleChange}
                         thesis={this.state.thesis}
-                        studyfields={this.props.studyfields}
+                        programmes={this.props.programmes}
                         allowEdit={this.state.allowEdit}
                         validationErrors={this.state.validationErrors}
                     />
@@ -237,7 +237,7 @@ const mapStateToProps = (state) => ({
     councilmeetings: state.councilmeetings,
     persons: state.persons,
     roles: state.roles,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     theses: state.theses,
     user: state.user,
 });
@@ -248,7 +248,7 @@ ThesisEditPage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     persons: arrayOf(personType).isRequired,
     roles: arrayOf(roleType).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     theses: arrayOf(thesisType).isRequired,
     user: personType.isRequired,
     updateThesis: func.isRequired,

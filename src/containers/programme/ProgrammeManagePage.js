@@ -1,37 +1,37 @@
 import React, { Component } from "react";
 
-import StudyfieldList from "../../components/studyfield/StudyfieldList";
-import StudyfieldCreate from "../../components/studyfield/StudyfieldCreate";
-import StudyfieldEdit from "../../components/studyfield/StudyfieldEdit";
+import StudyfieldList from "../../components/programme/ProgrammeList";
+import StudyfieldCreate from "../../components/programme/ProgrammeCreate";
+import StudyfieldEdit from "../../components/programme/ProgrammeEdit";
 
 export default class StudyfieldManagePage extends Component {
 
   constructor() {
     super();
     this.state = {
-      studyfields: [],
+      programmes: [],
       newStudyfield: { name: "" },
-      updateStudyfield: undefined, 
+      updateStudyfield: undefined,
     };
   }
 
   componentDidMount() {
-    const studyfields = []//this.setUsersForStudyfields(this.props.studfields, this.props.users);
-    this.setState({ studyfields });
+    const programmes = []//this.setUsersForStudyfields(this.props.studfields, this.props.users);
+    this.setState({ programmes });
   }
 
 
   componentWillReceiveProps(newProps) {
     if (this.props.studfields !== newProps.studfields || this.props.users !== newProps.users) {
-      const studyfields = []//this.setUsersForStudyfields(newProps.studfields, newProps.users);
-      this.setState({ studyfields });
+      const programmes = []//this.setUsersForStudyfields(newProps.studfields, newProps.users);
+      this.setState({ programmes });
     }
   }
 
-  setUsersForStudyfields(studyfields, users) {
-    return studyfields.map(field => {
-      field.users = users.filter(user => user.studyfieldId && parseInt(user.studyfieldId) === field.id);
-      field.professor = users.find(user => user.studyfieldId && parseInt(user.studyfieldId) === field.id && user.role === "professor");
+  setUsersForStudyfields(programmes, users) {
+    return programmes.map(field => {
+      field.users = users.filter(user => user.programmeId && parseInt(user.programmeId) === field.id);
+      field.professor = users.find(user => user.programmeId && parseInt(user.programmeId) === field.id && user.role === "professor");
       field.professor = field.professor ? "" : `${field.professor.firstname} ${field.professor.lastname}`;
       return field;
     });
@@ -44,28 +44,28 @@ export default class StudyfieldManagePage extends Component {
   }
 
   changeStudyfieldName = (formname) => (name) => {
-    const studyfield = this.state[formname];
-    studyfield.name = name;
-    this.setState({ [formname]: studyfield });
+    const programme = this.state[formname];
+    programme.name = name;
+    this.setState({ [formname]: programme });
   }
 
   saveStudyfield = () => {
     console.log("Save");
-      //this.props.saveStudyfield(this.state.newStudyfield);
+      //this.props.saveProgramme(this.state.newStudyfield);
   }
 
   updateStudyfield = () => {
     console.log("Update");
-      //this.props.updateStudyfield(this.state.updateStudyfield);
+      //this.props.updateProgramme(this.state.updateProgramme);
   }
 
   deleteStudyfield = () => {
-    console.log("Delete")  
-    //this.props.deleteStudyfield(this.state.updateStudyfield.id);
+    console.log("Delete")
+    //this.props.deleteProgramme(this.state.updateProgramme.id);
   }
 
-  selectStudyfield = (studyfield) => {
-      this.setState({ updateStudyfield: studyfield });
+  selectStudyfield = (programme) => {
+      this.setState({ updateStudyfield: programme });
   }
 
   render() {
@@ -83,19 +83,19 @@ export default class StudyfieldManagePage extends Component {
                 sendDelete={this.deleteStudyfield}
                 sendUpdate={this.updateStudyfield}
                 sendChange={this.changeStudyfieldName("updateStudyfield")}
-                studyfield={this.state.updateStudyfield}
+                programme={this.state.updateStudyfield}
               /> : ''}
           </div>
           <div className="field">
             <h2 className="ui dividing header">Studyfields</h2>
             <p>
-              All old and current studyfields. Press a studyfield to start editing it. Note that changing studyfield's
+              All old and current programmes. Press a programme to start editing it. Note that changing programme's
               name changes it for every thesis connected to that field. If a field is no longer valid set it inactive
               and create a new one rather than change old one's name.
             </p>
             <StudyfieldList
               selectField={this.selectStudyfield}
-              studyfields={this.props.studfields}
+              programmes={this.props.studfields}
             />
           </div>
         </div>
@@ -104,12 +104,12 @@ export default class StudyfieldManagePage extends Component {
   }
 }
 import { connect } from "react-redux";
-import { saveStudyfield, updateStudyfield, deleteStudyfield } from "./studyfield.actions";
+import { saveStudyfield, updateStudyfield, deleteStudyfield } from "./programme.actions";
 
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    studyfields: state.studyfields,
+    programmes: state.programmes,
     users: state.users,
   };
 };

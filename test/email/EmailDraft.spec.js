@@ -4,18 +4,18 @@ import { shallow } from 'enzyme';
 
 import EmailDraft from '../../src/components/email/EmailDraft';
 
-const studyfields = [
-    { studyfieldId: 1, name: 'Tietojenkäsittelytiede' },
-    { studyfieldId: 2, name: 'Fysiikka' }
+const programmes = [
+    { programmeId: 1, name: 'Tietojenkäsittelytiede' },
+    { programmeId: 2, name: 'Fysiikka' }
 ];
 
 test('Render email draft', t => {
-    const draftData = { type: 'foo', title: 'Test email', body: 'body', studyfield: 1 };
+    const draftData = { type: 'foo', title: 'Test email', body: 'body', programme: 1 };
     const draft = shallow(<EmailDraft
         draft={draftData}
         updateDraft={() => {}}
         sendDeleteRequest={() => {}}
-        studyfields={studyfields}
+        programmes={programmes}
 
     />);
 
@@ -24,17 +24,17 @@ test('Render email draft', t => {
 
 test('Email draft editing', t => {
     t.plan(5);
-    const draftData = { type: 'foo', title: 'Test email', body: 'body', studyfield: 1 };
+    const draftData = { type: 'foo', title: 'Test email', body: 'body', programme: 1 };
     const save = draft => {
         t.is(draft.title, 'new title');
         t.is(draft.body, 'new body');
-        t.is(draft.studyfield, 2);
+        t.is(draft.programme, 2);
     };
     const draft = shallow(<EmailDraft
         draft={draftData}
         updateDraft={save}
         sendDeleteRequest={() => {}}
-        studyfields={studyfields}
+        programmes={programmes}
 
     />);
 
@@ -51,13 +51,13 @@ test('Email draft editing', t => {
 
 test('Email draft delete', t => {
     t.plan(1);
-    const draftData = { type: 'foo', title: 'Test email', body: 'body', studyfield: 1 };
+    const draftData = { type: 'foo', title: 'Test email', body: 'body', programme: 1 };
     const deleteDraft = () => t.true(true);
     const draft = shallow(<EmailDraft
         draft={draftData}
         updateDraft={() => {}}
         sendDeleteRequest={deleteDraft}
-        studyfields={studyfields}
+        programmes={programmes}
 
     />);
 
