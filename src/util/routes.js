@@ -20,6 +20,7 @@ export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
+    agreementPersonManagement: { path: '/agreementPersonManagement', component: UserPage, navText: 'Grader accepting' },
     personRoleManagement: { path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management' },
     thesisView: { path: '/thesis/:id', component: ThesisEdit },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
