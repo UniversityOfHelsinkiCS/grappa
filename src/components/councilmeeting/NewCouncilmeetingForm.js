@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment/moment';
 
 const dateFormat = 'DD.MM.YYYY';
-const outputFormat = 'YYYY-MM-DD';
 
 class NewCouncilmeetingForm extends Component {
     constructor(props) {
@@ -39,11 +38,7 @@ class NewCouncilmeetingForm extends Component {
         const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
         const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
 
-        this.props.saveMeeting({
-            date: date.format(outputFormat),
-            instructorDeadline: instructorDeadline.format(outputFormat),
-            studentDeadline: studentDeadline.format(outputFormat)
-        })
+        this.props.saveMeeting({ date, instructorDeadline, studentDeadline });
     }
 
     render() {
