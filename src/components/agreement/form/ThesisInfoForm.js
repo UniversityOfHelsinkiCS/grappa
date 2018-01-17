@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 
 export default class ThesisInfoForm extends Component {
-
-    field = (label, formName) => {
-        return (
-            <div>
-                <br/>
-                <b>{label}</b>
-                <div className="ui fluid input">
-                    <input type="text" name={formName} onChange={this.props.handleChange}/>
-                    {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
+    field = (label, formName) => (
+        <div>
+            <br />
+            <b>{label}</b>
+            <div className="ui fluid input">
+                <input type="text" name={formName} onChange={this.props.handleChange} />
+                {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
                     (<div className="ui left pointing red basic label">
                       Täytä tiedot
-                    </div>) : ''}
-                </div>
+                     </div>) : ''}
             </div>
-        )
-    }
+        </div>
+    )
     render() {
         return (
             <div>

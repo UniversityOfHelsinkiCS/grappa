@@ -36,8 +36,8 @@ export class ThesisEditPage extends Component {
                 printDone: undefined,
                 thesisEmails: {
                     graderEvalReminder: undefined,
-                    printReminder: undefined,
-                },
+                    printReminder: undefined
+                }
             },
             attachments: [],
             newAttachments: [],
@@ -59,7 +59,7 @@ export class ThesisEditPage extends Component {
             const thesisId = parseInt(props.match.params.id, 10);
             const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId);
             if (thesis) {
-                const attachments = props.attachments.filter(attachment => {
+                const attachments = props.attachments.filter((attachment) => {
                     const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
                         && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
@@ -94,7 +94,7 @@ export class ThesisEditPage extends Component {
     };
 
     handleChange = (fieldName, fieldValue) => {
-        console.log('thesis.' + fieldName + ' = ' + fieldValue);
+        console.log(`thesis.${fieldName} = ${fieldValue}`);
         const thesis = this.state.thesis;
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
@@ -106,10 +106,10 @@ export class ThesisEditPage extends Component {
 
     uploadAttachments = () => {
         const form = new FormData();
-        //agreementId needed to link the attachment to.
+        // agreementId needed to link the attachment to.
         const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
         form.append('json', JSON.stringify(agreement));
-        this.state.newAttachments.forEach(attachment => {
+        this.state.newAttachments.forEach((attachment) => {
             if (!attachment.label) {
                 attachment.label = 'otherFile';
             }
@@ -127,7 +127,7 @@ export class ThesisEditPage extends Component {
     };
 
     renderControlButtons() {
-        //Admin controls
+        // Admin controls
         if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
             return (
                 <div className="field">
@@ -145,9 +145,9 @@ export class ThesisEditPage extends Component {
     }
 
     renderEmails() {
-        //const thesisEmails = this.state.thesis.thesisEmails;
+        // const thesisEmails = this.state.thesis.thesisEmails;
         return undefined;
-        /*return <ThesisEmails
+        /* return <ThesisEmails
             thesisEmails={thesisEmails}
             sendEmail={this.handleEmail}
             sendDone={this.setReminderDone} />
@@ -166,7 +166,7 @@ export class ThesisEditPage extends Component {
             <PersonSelector
                 persons={programmeGraders}
                 selected={this.state.thesis.graders}
-                changeList={(list) => this.handleChange('graders', list)}
+                changeList={list => this.handleChange('graders', list)}
             />
         );
     }
@@ -212,7 +212,7 @@ export class ThesisEditPage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     updateThesis(thesis) {
         dispatch(updateThesis(thesis));
     },
@@ -230,10 +230,10 @@ const mapDispatchToProps = (dispatch) => ({
     },
     sendReminder(thesisId, type) {
         dispatch(sendReminder(thesisId, type));
-    },
+    }
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     agreements: state.agreements,
     attachments: state.attachments,
     councilmeetings: state.councilmeetings,
@@ -241,7 +241,7 @@ const mapStateToProps = (state) => ({
     roles: state.roles,
     programmes: state.programmes,
     theses: state.theses,
-    user: state.user,
+    user: state.user
 });
 
 ThesisEditPage.propTypes = {

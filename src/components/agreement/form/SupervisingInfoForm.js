@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { personType } from '../../../util/types';
 
 export default class SupervisingInfoForm extends Component {
-
     constructor() {
         super();
         this.state = {
@@ -13,21 +12,19 @@ export default class SupervisingInfoForm extends Component {
         }
     }
 
-    field = (label, formName) => {
-        return (
-            <div>
-                <br />
-                <b>{label}</b>
-                <div className="ui fluid input">
-                    <input type="text" name={formName} onChange={this.props.handleChange} />
-                    {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
+    field = (label, formName) => (
+        <div>
+            <br />
+            <b>{label}</b>
+            <div className="ui fluid input">
+                <input type="text" name={formName} onChange={this.props.handleChange} />
+                {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
                     (<div className="ui left pointing red basic label">
                       Täytä ohjaajan tiedot
-                    </div>) : ''}
-                </div>
+                     </div>) : ''}
             </div>
-        )
-    }
+        </div>
+    )
 
     sendDropDownChange = (event) => {
         if (event.target.value) {
@@ -44,62 +41,52 @@ export default class SupervisingInfoForm extends Component {
                 {
                     chosenStudyfield: Number(event.target.value),
                     selectedSupervisors: { thesisSupervisorMain: -1, thesisSupervisorSecond: -1 }
-                 }
+                }
             );
             this.props.resetSupervisors();
             this.props.handleChange(event);
         }
     }
 
-    programmeSelecter = (list) => {
-        return (
+    programmeSelecter = list => (
+        <div>
+            <b>Valitse ensin gradun aine</b>
             <div>
-                <b>Valitse ensin gradun aine</b>
-                <div>
-                    <select className="ui dropdown" name="programmeId" onChange={this.programmeChange}>
-                        <option value={-1}>Valitse ensin gradun tieteenala</option>
-                        {list.map((obj) => {
-                            return <option key={obj.id} value={obj.id}>{obj.text}</option>;
-                        })}
-                    </select>
-                    {(Object.keys(this.props.requiredFields).includes('programmeId') && !this.props.requiredFields.programmeId) ?
+                <select className="ui dropdown" name="programmeId" onChange={this.programmeChange}>
+                    <option value={-1}>Valitse ensin gradun tieteenala</option>
+                    {list.map(obj => <option key={obj.id} value={obj.id}>{obj.text}</option>)}
+                </select>
+                {(Object.keys(this.props.requiredFields).includes('programmeId') && !this.props.requiredFields.programmeId) ?
                     (<div className="ui left pointing red basic label">
                       Valitse oppiaine
-                    </div>) : ''}
-                </div>
+                     </div>) : ''}
             </div>
-        );
-    }
+        </div>
+    )
 
-    supervisorSelecter = (label, placeholder, formName, list) => {
-        return (
+    supervisorSelecter = (label, placeholder, formName, list) => (
+        <div>
+            <b>{label}</b>
             <div>
-                <b>{label}</b>
-                <div>
-                    <select className="ui dropdown" value={this.state.selectedSupervisors[formName]} disabled={list[0] === undefined} onChange={this.sendDropDownChange} name={formName}>
-                        <option value={-1}>{placeholder}</option>
-                        {list.map((obj) => {
-                            return <option key={obj.id} value={obj.id}>{obj.text}</option>;
-                        })}
-                    </select>
-                    {(Object.keys(this.props.requiredFields).includes(formName)) && !this.props.requiredFields[formName] ?
+                <select className="ui dropdown" value={this.state.selectedSupervisors[formName]} disabled={list[0] === undefined} onChange={this.sendDropDownChange} name={formName}>
+                    <option value={-1}>{placeholder}</option>
+                    {list.map(obj => <option key={obj.id} value={obj.id}>{obj.text}</option>)}
+                </select>
+                {(Object.keys(this.props.requiredFields).includes(formName)) && !this.props.requiredFields[formName] ?
                     (<div className="ui left pointing red basic label">
                       Valitse ohjaaja
-                    </div>) : ''}
-                </div>
+                     </div>) : ''}
             </div>
-        );
-    }
+        </div>
+    )
 
     getSupervisorData = () => {
         if (this.state.chosenStudyfield === -1)
             return [];
-        return this.props.supervisors.filter((supervisor) => supervisor.programmeId === this.state.chosenStudyfield).map((supervisor) => {
-            return {
-                id: supervisor.personRoleId,
-                text: `${supervisor.person.title} ${supervisor.person.firstname} ${supervisor.person.lastname} ${supervisor.person.email}`
-            };
-        });
+        return this.props.supervisors.filter(supervisor => supervisor.programmeId === this.state.chosenStudyfield).map(supervisor => ({
+            id: supervisor.personRoleId,
+            text: `${supervisor.person.title} ${supervisor.person.firstname} ${supervisor.person.lastname} ${supervisor.person.email}`
+        }));
     }
 
     render() {
@@ -107,15 +94,13 @@ export default class SupervisingInfoForm extends Component {
         return (
             <div>
                 <h1>Ohjausvastuut</h1>
-                {this.programmeSelecter(this.props.programmes.map((field) => {
-                    return { id: field.programmeId, text: field.name }
-                }))}
+                {this.programmeSelecter(this.props.programmes.map(field => ({ id: field.programmeId, text: field.name })))}
                 <br />
                 {this.supervisorSelecter('Vastuuohjaaja', 'Valitse ohjaaja', 'thesisSupervisorMain',
-                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorSecond))}
+                    supervisors.filter(s => s.id !== this.state.selectedSupervisors.thesisSupervisorSecond))}
                 <br />
                 {this.supervisorSelecter('Toinen ohjaaja', 'Valitse ohjaaja', 'thesisSupervisorSecond',
-                supervisors.filter((s) => s.id !== this.state.selectedSupervisors.thesisSupervisorMain))}
+                    supervisors.filter(s => s.id !== this.state.selectedSupervisors.thesisSupervisorMain))}
                 {this.field('Muu ohjaaja', 'thesisSupervisorOther')}
             </div>
         )

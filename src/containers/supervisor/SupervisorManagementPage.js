@@ -31,14 +31,14 @@ export class SupervisorManagementPage extends Component {
         this.props.deleteSupervisor(supervisor);
     }
 
-    /*removeSupervisor = (supervisor) => (e) => {
+    /* removeSupervisor = (supervisor) => (e) => {
         console.log("removed", supervisor);
         this.props.removeSupervisor(supervisor);
     }
     */
 
     toggleEditModal = (e, person) => {
-        let newValue = !this.state.showReview;
+        const newValue = !this.state.showReview;
         this.setState(
             {
                 showReview: newValue,
@@ -55,7 +55,7 @@ export class SupervisorManagementPage extends Component {
             buttonClass = 'ui button';
         }
         return (
-            <button key={person.personId} className={buttonClass} onClick={(e) => this.toggleEditModal(e, person)} >
+            <button key={person.personId} className={buttonClass} onClick={e => this.toggleEditModal(e, person)} >
                 {text}
             </button>
         )
@@ -72,7 +72,7 @@ export class SupervisorManagementPage extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.supervisors.map((person, index) => (//change index -> some id
+                    {this.props.supervisors.map((person, index) => (// change index -> some id
                         <tr key={index}>
                             <td>{person.firstname} {person.lastname} programme: {person.programmeId}</td>
                             <td>{person.thesisTitle}</td>
@@ -83,7 +83,7 @@ export class SupervisorManagementPage extends Component {
             </table>
         )
     }
-    //TODO Known bugs: when reviewing/updating, one 'new supervisor' shows up in the list but it goes away when page refreshed...
+    // TODO Known bugs: when reviewing/updating, one 'new supervisor' shows up in the list but it goes away when page refreshed...
     // should fix this by filtering redux state?
     render() {
         if (!this.props.supervisors) {
@@ -103,7 +103,7 @@ export class SupervisorManagementPage extends Component {
 }
 
 const mapDispatchToProps = () => ({
-    /*saveAddedSupervisor(data) {
+    /* saveAddedSupervisor(data) {
         dispatch(saveAddedSupervisor(data));
     },
     getSupervisors(data) {
@@ -120,15 +120,13 @@ const mapDispatchToProps = () => ({
     },
     reviewSupervisor(data) {
         dispatch(reviewSupervisor(data));
-    }*/
+    } */
 });
 
-const mapStateToProps = (state) => {
-    return {
-        roles: state.roles,
-        personToBeReviewed: state.persons
-    };
-}
+const mapStateToProps = state => ({
+    roles: state.roles,
+    personToBeReviewed: state.persons
+})
 
 const { func } = PropTypes;
 SupervisorManagementPage.propTypes = {

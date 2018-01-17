@@ -23,7 +23,7 @@ export class PersonRoleManagePage extends Component {
         if (this.state.person) {
             const person = this.state.person
             const roles = newProps.roles.filter(role => role.personId === person.personId)
-                .map(role => {
+                .map((role) => {
                     role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name
                     return role;
                 })
@@ -31,11 +31,11 @@ export class PersonRoleManagePage extends Component {
         }
     }
 
-    selectPerson = persons => {
+    selectPerson = (persons) => {
         const person = persons.find(item => !this.state.person || item.personId !== this.state.person.personId)
         const roles = person ?
             this.props.roles.filter(role => role.personId === person.personId)
-                .map(role => {
+                .map((role) => {
                     role.programme = this.props.programmes.find(field => field.programmeId === role.programmeId).name
                     return role;
                 })
@@ -43,14 +43,14 @@ export class PersonRoleManagePage extends Component {
         this.setState({ person, roles });
     }
 
-    handleAddRole = role => {
+    handleAddRole = (role) => {
         role.personId = this.state.person.personId;
         if (role.personId && role.roleId && role.programmeId) {
             this.props.saveRole(role)
         }
     }
 
-    handleRemoveRole = role => {
+    handleRemoveRole = (role) => {
         this.props.deleteRole(role)
     }
 
@@ -83,7 +83,7 @@ export class PersonRoleManagePage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     getAvailableRoles() {
         dispatch(getAvailableRoles());
     },
@@ -92,17 +92,15 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteRole(role) {
         dispatch(deleteRole(role))
-    },
+    }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        programmes: state.programmes,
-        persons: state.persons,
-        roles: state.roles,
-        availableRoles: state.availableRoles,
-    };
-}
+const mapStateToProps = state => ({
+    programmes: state.programmes,
+    persons: state.persons,
+    roles: state.roles,
+    availableRoles: state.availableRoles
+})
 
 PersonRoleManagePage.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
@@ -111,7 +109,7 @@ PersonRoleManagePage.propTypes = {
     availableRoles: arrayOf(availableRoleType).isRequired,
     getAvailableRoles: func.isRequired,
     saveRole: func.isRequired,
-    deleteRole: func.isRequired,
+    deleteRole: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage);

@@ -8,33 +8,32 @@ import ThesisStatisticsYearElement from '../../components/thesis/ThesisStatistic
  * The page shows tables for each year, defined by the studyfields/programmes and grades.
  */
 export default class StatisticsPage extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            filteredTheses: [],
+            filteredTheses: []
         };
     }
 
     componentDidMount() {
-        //this.props.getGrades();
+        // this.props.getGrades();
         this.filterThesesByYear(this.generateTheses());
     }
 
     componentWillReceiveProps() {
-        //this.filterThesesByYear(nextProps.theses);
+        // this.filterThesesByYear(nextProps.theses);
         this.filterThesesByYear(this.generateTheses());
     }
 
-    //Generator function for in-browser testing.
+    // Generator function for in-browser testing.
     generateTheses() {
         const theses = [];
         for (let year = 10; year < 15; year++) {
             for (let index = 0; index < 10; index++) {
                 theses.push({
-                    CouncilMeeting: { date: '20' + year },
-                    StudyField: { name: 'Linja ' + Math.ceil(Math.random() * 3) },
-                    grade: Math.ceil(Math.random() * 5),
+                    CouncilMeeting: { date: `20${year}` },
+                    StudyField: { name: `Linja ${Math.ceil(Math.random() * 3)}` },
+                    grade: Math.ceil(Math.random() * 5)
                 });
             }
         }
@@ -44,10 +43,10 @@ export default class StatisticsPage extends Component {
     filterThesesByYear(theses) {
         const filteredTheses = [];
         if (theses) {
-            theses.forEach(thesis => {
+            theses.forEach((thesis) => {
                 let found = false;
                 const year = thesis.CouncilMeeting.date.slice(0, 4);
-                filteredTheses.forEach(yearlyArray => {
+                filteredTheses.forEach((yearlyArray) => {
                     if (yearlyArray[0].CouncilMeeting.date.startsWith(year)) {
                         found = true;
                         yearlyArray.push(thesis);
@@ -58,7 +57,7 @@ export default class StatisticsPage extends Component {
                 }
             });
         }
-        filteredTheses.sort((a, b) => this.sortByCouncilMeetingYear(a,b));
+        filteredTheses.sort((a, b) => this.sortByCouncilMeetingYear(a, b));
 
         this.setState({ filteredTheses });
     }
@@ -66,14 +65,13 @@ export default class StatisticsPage extends Component {
     sortByCouncilMeetingYear(a, b) {
         const aYear = parseInt(a[0].CouncilMeeting.date.slice(0, 4), 10);
         const bYear = parseInt(b[0].CouncilMeeting.date.slice(0, 4), 10);
-        //The order is "reversed" because the newest will be highest.
+        // The order is "reversed" because the newest will be highest.
         if (aYear > bYear) {
             return -1;
         } else if (aYear < bYear) {
             return 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     render() {

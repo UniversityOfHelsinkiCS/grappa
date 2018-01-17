@@ -6,7 +6,6 @@ import UserStudyfieldSelector from './UserStudyfieldSelector';
 import { personType } from '../../util/types';
 
 export class UserPage extends Component {
-
     componentDidMount() {
         document.title = 'Grappa: Main page';
     }
@@ -41,33 +40,30 @@ export class UserPage extends Component {
                 <div className="ui segment">
                     <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
                         <option value="">Choose a role</option>
-                        {this.props.persons.map((person) =>
+                        {this.props.persons.map(person =>
                             <option key={person.personId} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
                         )}
                     </select>
                     <p>Your roles are: {this.props.user.roles ?
-                        this.props.user.roles.map(roleObject => {
-                            return roleObject.programme + ': ' + roleObject.role;
-                        })
-                        : 'No user in redux'} </p>
+                        this.props.user.roles.map(roleObject => `${roleObject.programme}: ${roleObject.role}`)
+                        : 'No user in redux'}
+                    </p>
                 </div>
             </div>
         );
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data));
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        persons: state.persons
-    };
-}
+const mapStateToProps = state => ({
+    user: state.user,
+    persons: state.persons
+})
 
 const { arrayOf, func } = PropTypes;
 UserPage.propTypes = {

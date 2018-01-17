@@ -81,10 +81,10 @@ class AssesmentOfTheses extends Component {
         return (
             <div className="App">
                 <div className="ui left aligned segment">
-                    <button id="fin" className="ui button" onClick={(e) => this.changeLanguage('fin', e)}>suomeksi</button>
-                    <button id="en" className="ui button" onClick={(e) => this.changeLanguage('en', e)}>in English</button>
-                    <button id="swe" className="ui button" onClick={(e) => this.changeLanguage('swe', e)}>på svenska</button>
-                    <p></p>
+                    <button id="fin" className="ui button" onClick={e => this.changeLanguage('fin', e)}>suomeksi</button>
+                    <button id="en" className="ui button" onClick={e => this.changeLanguage('en', e)}>in English</button>
+                    <button id="swe" className="ui button" onClick={e => this.changeLanguage('swe', e)}>på svenska</button>
+                    <p />
                     {this.renderTitles()}
                     {this.renderAssesment()}
                 </div>

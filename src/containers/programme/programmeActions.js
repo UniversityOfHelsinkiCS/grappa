@@ -21,7 +21,7 @@ export const updateProgramme = (programme) => {
 };
 
 export const deleteProgramme = (programmeId) => {
-    const route = '/programmes/' + programmeId;
+    const route = `/programmes/${programmeId}`;
     const prefix = 'PROGRAMME_DELETE_ONE_';
     const method = 'delete';
     return callController(route, prefix, programmeId, method);

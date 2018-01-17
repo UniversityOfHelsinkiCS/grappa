@@ -37,17 +37,17 @@ export default class Agreement extends Component {
     }
 
     componentDidMount() {
-        const fields = this.props.requiredFields.reduce((obj, value) => (Object.assign(obj, {[value]: false})), {});
+        const fields = this.props.requiredFields.reduce((obj, value) => (Object.assign(obj, { [value]: false })), {});
         this.setState({ filledRequiredFields: fields });
     }
 
     handleFormChange = (event) => {
         const newForm = Object.assign({}, this.state.form);
-        if (event.target) {  //input field
+        if (event.target) { // input field
             newForm[event.target.name] = event.target.value;
-        } //else { //a file
-            //newForm.attachments.push(event);
-        //}
+        } // else { //a file
+        // newForm.attachments.push(event);
+        // }
         this.setState({ form: newForm });
         this.validateData(event.target.name, event.target.value);
     }
@@ -89,17 +89,17 @@ export default class Agreement extends Component {
 
     sendForm = (event) => {
         event.preventDefault();
-        this.props.saveAgreement({...this.state.form, attachments: this.state.attachments});
-        //this.props.saveAttachment(this.state.attachments, this.state.form);
+        this.props.saveAgreement({ ...this.state.form, attachments: this.state.attachments });
+        // this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
     sendFormDraft = (event) => {
         event.preventDefault();
-        this.props.saveAgreementDraft({...this.state.form});
+        this.props.saveAgreementDraft({ ...this.state.form });
     }
 
     render() {
-        //--TO DO--!: display users agreementDraft data here if user has created a draft!
+        // --TO DO--!: display users agreementDraft data here if user has created a draft!
         if (!this.props.user.firstname) {
             return (<div>Login to add agreement</div>);
         }
@@ -107,21 +107,31 @@ export default class Agreement extends Component {
         if (Object.keys(this.state.filledRequiredFields).length === 0) {
             buttonDisabled = false;
         } else {
-            buttonDisabled = Object.values(this.state.filledRequiredFields).some((field) => field === false);
+            buttonDisabled = Object.values(this.state.filledRequiredFields).some(field => field === false);
         }
         return (
             <div>
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
-                <StudentInfoForm user={this.props.user}/>
+                <StudentInfoForm user={this.props.user} />
                 <br />
-                <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
+                <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
                 <br />
-                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} programmes={this.props.programmes} requiredFields={this.state.filledRequiredFields}/>
+                <SupervisingInfoForm
+                    handleChange={this.handleFormChange}
+                    resetSupervisors={this.resetSupervisors}
+                    supervisors={this.props.supervisors}
+                    programmes={this.props.programmes}
+                    requiredFields={this.state.filledRequiredFields}
+                />
                 <br />
-                <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
+                <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
                 <br />
-                <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment}/>
+                <AttachmentAdder
+                    attachments={this.state.attachments}
+                    addAttachment={this.addAttachment}
+                    removeAttachment={this.removeAttachment}
+                />
                 <br />
                 <button className="green massive ui button" disabled={buttonDisabled} onClick={this.sendForm}>
                     {(buttonDisabled) ? 'Kaikkia pakollisia tietoja ei ole täytetty' : 'Save agreement'}

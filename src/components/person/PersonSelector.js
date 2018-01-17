@@ -3,13 +3,12 @@ import { arrayOf, func } from 'prop-types';
 import { personType } from '../../util/types';
 
 export default class PersonSelector extends Component {
-
     constructor() {
         super();
         this.state = {
             searchValue: '',
             menuActive: false,
-            filtered: [],
+            filtered: []
         };
     }
 
@@ -21,16 +20,14 @@ export default class PersonSelector extends Component {
         window.removeEventListener('mousedown', this.unfocusMenu);
     }
 
-    personToText = (person) => {
-        return person.firstname + ' ' + person.lastname + ' ' + person.email
-    }
+    personToText = person => `${person.firstname} ${person.lastname} ${person.email}`
 
-    removePerson = (person) => () => {
+    removePerson = person => () => {
         const removed = this.props.selected.filter(prsn => prsn !== person);
         this.props.changeList(removed)
     }
 
-    addPerson = (person) => () => {
+    addPerson = person => () => {
         const selected = [...this.props.selected, person];
         this.props.changeList(selected)
     }
@@ -42,12 +39,10 @@ export default class PersonSelector extends Component {
     search = (event) => {
         const searchValue = event.target.value.toLowerCase();
         if (this.props.persons) {
-            const filtered = this.props.persons.filter(person => {
-                return this.personToText(person).toLowerCase().includes(searchValue)
-            });
+            const filtered = this.props.persons.filter(person => this.personToText(person).toLowerCase().includes(searchValue));
             this.setState({
                 searchValue,
-                filtered,
+                filtered
             });
         }
     }
@@ -78,21 +73,19 @@ export default class PersonSelector extends Component {
     }
 
     renderSelected() {
-        return this.props.selected.map((person) => {
-            return (
-                <a key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
-                    {this.personToText(person)}
-                    <i
-                        className="delete icon"
-                        onClick={this.removePerson(person)}
-                    />
-                </a>
-            );
-        })
+        return this.props.selected.map(person => (
+            <a key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
+                {this.personToText(person)}
+                <i
+                    className="delete icon"
+                    onClick={this.removePerson(person)}
+                />
+            </a>
+        ))
     }
 
     renderSearch() {
-        return <input
+        return (<input
             className="search"
             autoComplete="off"
             tabIndex="0"
@@ -100,7 +93,7 @@ export default class PersonSelector extends Component {
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
-        />
+        />)
     }
 
     renderDropdown() {
@@ -117,11 +110,10 @@ export default class PersonSelector extends Component {
                                 {this.personToText(person)}
                             </div>
                         );
-                    } else {
-                        return (
-                            <div key={person.personId} className="item filtered">{this.personToText(person)}</div>
-                        );
                     }
+                    return (
+                        <div key={person.personId} className="item filtered">{this.personToText(person)}</div>
+                    );
                 })
                     : undefined
                 }

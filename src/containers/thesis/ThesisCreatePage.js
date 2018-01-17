@@ -10,7 +10,7 @@ import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import {thesisValidation} from '../../util/theses';
+import { thesisValidation } from '../../util/theses';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -31,8 +31,8 @@ export class ThesisCreatePage extends Component {
                 printDone: undefined,
                 thesisEmails: {
                     graderEvalReminder: undefined,
-                    printReminder: undefined,
-                },
+                    printReminder: undefined
+                }
             },
             attachments: [],
             showModal: false,
@@ -42,8 +42,8 @@ export class ThesisCreatePage extends Component {
 
     handleSaveThesis = () => {
         const form = new FormData();
-        //TODO: If no review & thesis, then don't save
-        this.state.attachments.forEach(attachment => {
+        // TODO: If no review & thesis, then don't save
+        this.state.attachments.forEach((attachment) => {
             if (!attachment.label) {
                 attachment.label = 'otherFile';
             }
@@ -89,7 +89,7 @@ export class ThesisCreatePage extends Component {
             <PersonSelector
                 persons={programmeGraders}
                 selected={this.state.thesis.graders}
-                changeList={(list) => this.handleChange('graders', list)}
+                changeList={list => this.handleChange('graders', list)}
             />
         );
     }
@@ -132,17 +132,17 @@ export class ThesisCreatePage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     saveThesis(thesis) {
         dispatch(saveThesis(thesis));
-    },
+    }
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     programmes: state.programmes,
     roles: state.roles,
-    persons: state.persons,
+    persons: state.persons
 });
 
 const { arrayOf, func } = PropTypes;

@@ -7,7 +7,7 @@ export const getTheses = () => {
 }
 
 export const getThesis = (thesisId) => {
-    const route = '/theses' + thesisId;
+    const route = `/theses${thesisId}`;
     const prefix = 'THESIS_GET_ONE_';
     return callController(route, prefix);
 }

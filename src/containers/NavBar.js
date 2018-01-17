@@ -6,7 +6,7 @@ import { getPermissions } from '../util/rolePermissions';
 import { login, logout } from '../containers/user/userActions';
 import { personType } from '../util/types';
 
-//TODO: redux persistent storage & fetch in middleware
+// TODO: redux persistent storage & fetch in middleware
 import { getProgrammes } from './programme/programmeActions';
 import { getAgreements } from '../containers/agreement/agreementActions';
 import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingActions';
@@ -20,12 +20,12 @@ export class NavBar extends Component {
         super();
         this.state = {
             links: [],
-            loaded: false,
+            loaded: false
         }
     }
 
     componentDidMount() {
-        //This login will allow shibboleth to check on page reload
+        // This login will allow shibboleth to check on page reload
         this.props.login();
         this.props.getPersons();
         this.refreshLinks(this.props)
@@ -33,7 +33,7 @@ export class NavBar extends Component {
 
     componentWillReceiveProps(newProps) {
         this.refreshLinks(newProps);
-        //TODO: redux persistent storage & fetch in middleware
+        // TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
             this.props.getStudyfields();
             this.props.getAgreements();
@@ -51,19 +51,18 @@ export class NavBar extends Component {
 
     refreshLinks = (props) => {
         let links = [];
-        //Get all links that the user could require in their work.
+        // Get all links that the user could require in their work.
         if (props.user && props.user.roles) {
-            props.user.roles.forEach(roleObject => {
+            props.user.roles.forEach((roleObject) => {
                 const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show');
                 links = links.concat(linkPermissions.filter(link => !links.includes(link)));
             })
         }
-        //Everyone who can access Grappa is a student
+        // Everyone who can access Grappa is a student
         const linkPermissions = getPermissions('student', 'nav-bar', 'show');
         links = links.concat(linkPermissions.filter(link => !links.includes(link)));
 
         this.setState({ links });
-
     }
 
     render() {
@@ -74,9 +73,9 @@ export class NavBar extends Component {
                 </div>
                 <div className="ui stackable secondary pointing menu">
                     {this.state.links ? this.state.links.map((elem) => {
-                        //Handle special cases:
+                        // Handle special cases:
                         switch (elem.path) {
-                            case '/councilmeeting/:id': //Using navbar we want to display the NEXT councilmeeting, logic in component.
+                            case '/councilmeeting/:id': // Using navbar we want to display the NEXT councilmeeting, logic in component.
                                 return <NavLink key={elem.path} to="/councilmeeting/next" exact className="item">{elem.navText}</NavLink>
                             default:
                                 return <NavLink key={elem.path} to={elem.path} exact className="item">{elem.navText}</NavLink>
@@ -92,7 +91,7 @@ export class NavBar extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data));
     },
@@ -122,11 +121,9 @@ const mapDispatchToProps = (dispatch) => ({
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user
-    };
-}
+const mapStateToProps = state => ({
+    user: state.user
+})
 
 const { func } = PropTypes;
 NavBar.propTypes = {

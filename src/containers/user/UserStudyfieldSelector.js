@@ -8,7 +8,6 @@ import { updateVisitorRoles } from '../role/roleActions';
 const findVisitorRoles = roles => roles.filter(role => role.role === 'visitor');
 
 class UserStudyfieldSelector extends Component {
-
     constructor(props) {
         super(props);
 
@@ -92,7 +91,7 @@ const mapStateToProps = ({ programmes, user }) => ({
     user
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     saveStudyfieldSelection: data => dispatch(updateVisitorRoles(data))
 });
 

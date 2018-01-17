@@ -2,7 +2,7 @@ import { callController } from '../../util/apiConnection';
 
 export const login = (shibbolethId) => {
     const prefix = 'USER_LOGIN_';
-    const route = shibbolethId ? '/user/' + shibbolethId : '/user/login';
+    const route = shibbolethId ? `/user/${shibbolethId}` : '/user/login';
     return callController(route, prefix);
 }
 

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { agreementType, personType, thesisType } from '../../util/types';
 
 class AgreementView extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            showAgreements: [],
+            showAgreements: []
         }
     }
 
@@ -30,14 +29,13 @@ class AgreementView extends Component {
 
     handleEdit= (e, agreement) => {
         this.props.handleEditAgreement(agreement);
-
     }
 
     changeShowing(e, agreement) {
         const index = this.props.agreements.findIndex((x => x.agreementId === agreement.agreementId));
         const newState = Object.assign({}, this.state);
-        if (newState.showAgreements[index]) { //can't use x = !x since x is at first undefined
-            newState.showAgreements[index] = false; //if is visible, hide
+        if (newState.showAgreements[index]) { // can't use x = !x since x is at first undefined
+            newState.showAgreements[index] = false; // if is visible, hide
         } else {
             newState.showAgreements[index] = true;
         }
@@ -50,17 +48,17 @@ class AgreementView extends Component {
         const data = this.props.agreements;
         return (
             <div>
-                {data.map((agreement) => (
+                {data.map(agreement => (
                     <div className="ui padded segment" key={agreement.agreementId}>
                         <h2 className="ui header">{this.getAuthorName(agreement)}: {this.getThesis(agreement).title}</h2>
                         <b>Ohjausvastuut: </b> <br />
                         Vastuuohjaaja: {agreement.title} {this.getSupervisor(agreement)}<br />
                         Muuohjaaja: to be shown here<br />
                         2. ohjaaja: to be shown here<br />
-                        <button key={agreement.agreementId} className="ui primary button" onClick={(e) => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
-                        <button className="ui primary button" onClick={(e) => this.handleEdit(e, agreement)}>Edit agreement</button>
+                        <button key={agreement.agreementId} className="ui primary button" onClick={e => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
+                        <button className="ui primary button" onClick={e => this.handleEdit(e, agreement)}>Edit agreement</button>
                         {this.renderOne(agreement)}
-                     </div>
+                    </div>
                 ))}
             </div>
         );
@@ -89,7 +87,7 @@ class AgreementView extends Component {
                                 Sähköpostiosoite: {agreement.email + "\t"}|
                         Puhelinnumero: {agreement.phone}
                             </div>
-                        </div>*/}
+                        </div> */}
 
                         <h4>Opinnäytetyön tiedot</h4>
                         <p>

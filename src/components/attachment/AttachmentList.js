@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
 export default class AttachmentList extends Component {
-
-    download = (attachmentId) => () => {
+    download = attachmentId => () => {
         this.props.downloadAttachment(attachmentId);
     }
 
-    delete = (attachmentId) => () => {
+    delete = attachmentId => () => {
         this.props.deleteAttachment(attachmentId);
     }
 
@@ -36,12 +35,12 @@ export default class AttachmentList extends Component {
                 </thead>
                 <tbody>
                     {this.props.attachments.map(attachment =>
-                        <tr key={attachment.attachmentId}>
+                        (<tr key={attachment.attachmentId}>
                             <td>{attachment.filename}</td>
                             <td>{this.labelToText(attachment.label)}</td>
                             <td><button className="ui primary button" onClick={this.download(attachment.attachmentId)}>Download</button></td>
                             <td><button className="ui primary button" onClick={this.delete(attachment.attachmentId)}>Delete</button></td>
-                        </tr>
+                         </tr>)
                     )}
                 </tbody>
             </table>

@@ -36,11 +36,7 @@ class ThesisListPage extends Component {
         }
         const searchValue = event.target.value.toLowerCase();
         // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
-        const filteredTheses = this.state.formattedTheses.filter((thesis) => {
-            return Object.keys(thesis).find(key => {
-                return typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)
-            });
-        });
+        const filteredTheses = this.state.formattedTheses.filter(thesis => Object.keys(thesis).find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)));
         this.setState({ filteredTheses });
     };
 
@@ -48,7 +44,7 @@ class ThesisListPage extends Component {
         // TODO: Move to backend
         const attachmentIds = this.props.agreements.map((agreement) => {
             if (thesisIds.find(id => id === agreement.thesisId)) {
-                return this.props.attachments.filter(attachment => {
+                return this.props.attachments.filter((attachment) => {
                     if (attachment.agreementId === agreement.agreementId) {
                         // Pick correct files;
                         if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
@@ -63,13 +59,12 @@ class ThesisListPage extends Component {
                         }
                         return 1;
                     });
-
             }
-        }).reduce((acc, cur) => { // Flatten thesis, review pairs.
-            return acc.concat(cur.map(attachment => attachment.attachmentId)); // Take only ids
-        },
-            cover ? ['cover'] : [] // Add cover if it's chosen.
-            );
+        }).reduce((acc, cur) => // Flatten thesis, review pairs.
+            acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
+            ,
+        cover ? ['cover'] : [] // Add cover if it's chosen.
+        );
         this.props.downloadAttachments(attachmentIds);
     }
 
@@ -99,10 +94,10 @@ const mapStateToProps = state => ({
     user: state.user,
     theses: state.theses,
     agreements: state.agreements,
-    attachments: state.attachments,
+    attachments: state.attachments
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     downloadAttachments(attachmentIds) {
         dispatch(downloadAttachments(attachmentIds));
     }

@@ -2,29 +2,26 @@ import React, { Component } from 'react';
 import { func } from 'prop-types';
 
 export default class GoalInfoForm extends Component {
-
     constructor() {
         super();
         this.state = {
-            old: false,
+            old: false
         }
     }
 
-    field = (label, formName) => {
-        return (
-            <div>
-                <br />
-                <b>{label}</b>
-                <div className="ui fluid input">
-                    <input type="text" name={formName} onChange={this.props.handleChange} />
-                    {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
+    field = (label, formName) => (
+        <div>
+            <br />
+            <b>{label}</b>
+            <div className="ui fluid input">
+                <input type="text" name={formName} onChange={this.props.handleChange} />
+                {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
                     (<div className="ui left pointing red basic label">
                       Täytä tiedot
-                    </div>) : ''}
-                </div>
+                     </div>) : ''}
             </div>
-        )
-    }
+        </div>
+    )
 
     grades = (old) => {
         if (old) {
@@ -67,14 +64,12 @@ export default class GoalInfoForm extends Component {
                 </p>
                 <div>
                     <select className="ui dropdown" onChange={this.props.handleChange} name="studentGradeGoal" >
-                        {this.grades(this.state.old).map(grade => {
-                            return <option key={grade.value} value={grade.value}>{grade.text}</option>;
-                        })}
+                        {this.grades(this.state.old).map(grade => <option key={grade.value} value={grade.value}>{grade.text}</option>)}
                     </select>
                     {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields.studentGradeGoal) ?
-                    (<div className="ui left pointing red basic label">
+                        (<div className="ui left pointing red basic label">
                       Valitse tavoitearvosana
-                    </div>) : ''}
+                         </div>) : ''}
                     <button className="ui button" onClick={() => this.setState({ old: !this.state.old })} style={{ marginLeft: '1em' }}>
                         Vaihda arvosana-asteikko
                     </button>
