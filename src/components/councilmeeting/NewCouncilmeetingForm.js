@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 import DatePicker from 'react-datepicker';
 import moment from 'moment/moment';
+import { programmeType } from '../../util/types';
+import ProgrammeSelect from '../programme/ProgrammeSelect';
 
 const dateFormat = 'DD.MM.YYYY';
 
@@ -19,6 +21,7 @@ class NewCouncilmeetingForm extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.saveMeeting = this.saveMeeting.bind(this);
+        this.handleProgrammeChange = this.handleProgrammeChange.bind(this);
     }
 
     handleChange(field, event) {
@@ -32,13 +35,19 @@ class NewCouncilmeetingForm extends Component {
         this.setState({ meeting });
     }
 
+    handleProgrammeChange(event) {
+        const programmeId = Number(event.target.value);
+        const meeting = Object.assign({}, this.state.meeting, { programmeId });
+        this.setState({ meeting });
+    }
+
     saveMeeting() {
         // Since users only think about the difference but we want to save the date.
-        const { date, instructorDeadlineDays, studentDeadlineDays } = this.state.meeting;
+        const { date, instructorDeadlineDays, studentDeadlineDays, programmeId } = this.state.meeting;
         const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
         const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
 
-        this.props.saveMeeting({ date, instructorDeadline, studentDeadline });
+        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmeId });
     }
 
     render() {
@@ -81,6 +90,15 @@ class NewCouncilmeetingForm extends Component {
                                 placeholder="Days"
                             />
                         </div>
+                        <div className="field">
+                            <label htmlFor="newMeetingProgramme">Programme</label>
+                            <ProgrammeSelect
+                                id="newMeetingProgramme"
+                                onChange={this.handleProgrammeChange}
+                                programmes={this.props.programmes}
+                                value={this.state.meeting.programmeId}
+                            />
+                        </div>
                     </div>
                     <button className="ui primary button" onClick={this.saveMeeting}>
                         Submit
@@ -92,7 +110,8 @@ class NewCouncilmeetingForm extends Component {
 }
 
 NewCouncilmeetingForm.propTypes = {
-    saveMeeting: func.isRequired
+    saveMeeting: func.isRequired,
+    programmes: arrayOf(programmeType).isRequired
 };
 
 export default NewCouncilmeetingForm;

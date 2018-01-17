@@ -43,7 +43,7 @@ test('Email draft editing', t => {
 
     draft.find('input').at(0).simulate('change', { target: { value: 'new title' } });
     draft.find('textarea').at(0).simulate('change', { target: { value: 'new body' } });
-    draft.find('select').simulate('change', { target: { value: 2 } });
+    draft.find('ProgrammeSelect').simulate('change', { target: { value: 2 } });
     draft.find('button[children="Save"]').simulate('click');
     draft.find('button[children="Stop editing"]').simulate('click');
     t.false(draft.find('h3').contains('Editing draft: '));

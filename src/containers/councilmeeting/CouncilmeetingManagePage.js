@@ -12,7 +12,7 @@ import {
 import NewCouncilmeetingForm from '../../components/councilmeeting/NewCouncilmeetingForm';
 import UpdateCouncilmeetingForm from '../../components/councilmeeting/UpdateCouncilmeetingForm';
 import CouncilmeetingList from '../../components/councilmeeting/CouncilmeetingList';
-import { councilmeetingType } from '../../util/types';
+import { councilmeetingType, programmeType } from '../../util/types';
 
 export class CouncilmeetingManagePage extends Component {
     constructor() {
@@ -68,7 +68,7 @@ export class CouncilmeetingManagePage extends Component {
            <div className="ui form">
                <div className="ui two fields">
                    <div className="field">
-                       <NewCouncilmeetingForm saveMeeting={this.saveMeeting} />
+                       <NewCouncilmeetingForm saveMeeting={this.saveMeeting} programmes={this.props.programmes} />
                        <UpdateCouncilmeetingForm
                            meeting={this.state.updateCouncilmeeting}
                            updateMeeting={this.updateMeeting}
@@ -106,7 +106,8 @@ export class CouncilmeetingManagePage extends Component {
 }
 
 const mapStateToProps = state => ({
-    councilmeetings: state.councilmeetings
+    councilmeetings: state.councilmeetings,
+    programmes: state.programmes
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -129,7 +130,8 @@ CouncilmeetingManagePage.propTypes = {
     getCouncilmeetings: func.isRequired,
     saveCouncilmeeting: func.isRequired,
     updateCouncilmeeting: func.isRequired,
-    deleteCouncilmeeting: func.isRequired
+    deleteCouncilmeeting: func.isRequired,
+    programmes: arrayOf(programmeType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingManagePage);
