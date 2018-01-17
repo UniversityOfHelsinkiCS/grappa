@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json()
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+const jsonParser = bodyParser.json();
 const personController = require('../controllers/PersonController');
 
 router.post('/', jsonParser, (req, res) => {
@@ -18,7 +17,7 @@ router.get('/:id', (req, res) => {
 
 router.get('/', (req, res) => {
     personController.getPersons(req, res);
-})
+});
 
 
 module.exports = router;

@@ -33,7 +33,7 @@ const personWithoutId = {
     major: 'Käpistely'
 }
 
-test('person post & creates id', async t => {    
+test('person post & creates id', async t => {
     t.plan(3);
     const res = await request(makeApp(1))
         .post('/persons')
@@ -45,24 +45,30 @@ test('person post & creates id', async t => {
     t.deepEqual(person, personWithoutId);
 });
 
-test('person get all for admin', async t => {    
+test('person get all for admin', async t => {
     t.plan(3);
+
+    const allPersons = await knex('person').select();
+
     const res = await request(makeApp(1))
         .get('/persons');
     t.is(res.status, 200);
     const persons = res.body.persons;
     const roles = res.body.roles;
     t.truthy(roles.length > 10);
-    t.is(persons.length, 13);
+    t.is(persons.length, allPersons.length);
 });
 
 test('person get all for student', async t => {
     t.plan(3);
-    const res = await request(makeApp(7))
-        .get('/persons');
+
+    const person = await knex('person').insert({ email: 'ei@ole.com' }).returning('peronsonId');
+    const peronId = person[0];
+    const res = await request(makeApp(peronId)).get('/persons');
+
     t.is(res.status, 200);
-    const persons = res.body.persons;
-    const roles = res.body.roles;
+    const { persons, roles } = res.body;
+
     t.truthy(roles.length > 10);
-    t.is(persons.length, 4);
+    t.is(persons.length, 5);
 });

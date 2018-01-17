@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
             table.string('email');
             table.string('firstname');
             table.string('lastname');
-            table.string('title')
+            table.string('title');
             table.boolean('isRetired');
             table.string('studentNumber').unique();
             table.string('address');

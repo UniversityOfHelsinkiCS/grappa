@@ -7,7 +7,7 @@ export async function addPerson(req, res) {
     const personData = getPersonData(req.body);
     const saveData = removeEmptyKeys(personData);
     try {
-        let savedPerson = await personService.savePerson(saveData);
+        const savedPerson = await personService.savePerson(saveData);
         res.status(200).json(savedPerson).end();
     } catch (error) {
         res.status(500).send(error).end();
@@ -63,80 +63,91 @@ function removeEmptyKeys(personData) {
  * Get persons that are of interest to the person doing query
  */
 export async function getPersons(req, res) {
-    //TODO test & refactor
+    // TODO test & refactor
+    const programmeRoles = ['resp_professor', 'print-person', 'manager'];
+
     try {
-        let persons = []
-        let newPersons = []
+        let persons = [];
+        let newPersons = [];
         const user = await personService.getLoggedPerson(req);
 
         if (!user) {
-            if (process.env.NODE_ENV !== 'dev') {
-                throw new Error('No user found');
-            }
-            console.log('It indeed is a developer.')
-            persons = await personService.getAllPersons();
-            const roles = await roleService.getRolesForAllPersons()
-            const responseObject = {
-                roles,
-                persons
-            }
-            res.status(200).json(responseObject).end();
-            return;
+            return userNotFound(res);
         }
-        const rolesInStudyfields = await getUsersRoles(user);
+        const rolesInProgrammes = await getUsersRoles(user);
 
-        //If user is an admin, get everything
-        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
-            persons = await personService.getAllPersons();
-            const roles = await roleService.getRolesForAllPersons()
-            const responseObject = {
-                roles,
-                persons,
-            }
-            res.status(200).json(responseObject).end();
-            return;
+        // Add user to person list
+        persons.push(user);
+
+        // If user is an admin, get everything
+        if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
+            return getAllPersons(res);
         }
 
-        rolesInStudyfields.forEach(async item => {
+        rolesInProgrammes.forEach(async item => {
             // As resp_prof persons who are writing theses in programme
-            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+            if (programmeRoles.includes(item.role.name)) {
                 newPersons = await personService.getPersonsWithAgreementInStudyfield(item.programme.programmeId);
                 persons = [...new Set([...persons, ...newPersons])];
             }
-        })
-        //Persons who are supervisors / supervising for new thesis / agreement supervisor list
-        const supervisorId = await roleService.getRoleId('supervisor')
+        });
+        // Persons who are supervisors / supervising for new thesis / agreement supervisor list
+        const supervisorId = await roleService.getRoleId('supervisor');
         newPersons = await personService.getPersonsWithRole(supervisorId);
         persons = [...new Set([...persons, ...newPersons])];
-        //or grading / graders for new thesis / agreement graders list.
-        const graderId = await roleService.getRoleId('grader')
-        newPersons = await personService.getPersonsWithRole(graderId)
+        // or grading / graders for new thesis / agreement graders list.
+        const graderId = await roleService.getRoleId('grader');
+        newPersons = await personService.getPersonsWithRole(graderId);
         persons = [...new Set([...persons, ...newPersons])];
 
-        //Persons (students) who are writing theses user has access to as
-        //a agreementperson (supervisor, grader etc)
-        newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
+        // Persons (students) who are writing theses user has access to as
+        // a agreementperson (supervisor, grader etc)
+        newPersons = await personService.getPersonsWithAgreementPerson(user.personId);
         persons = [...new Set([...persons, ...newPersons])];
 
         // Remove duplicates
-        let responsePersons = [];
-        persons.forEach(person => {
+        const responsePersons = [];
+        persons.forEach((person) => {
             if (!responsePersons.find(item => item.personId === person.personId)) {
                 responsePersons.push(person);
             }
-        })
+        });
 
-        //All required persons found, now role objects for front
-        const roles = await roleService.getRolesForAllPersons()
+        // All required persons found, now role objects for front
+        const roles = await roleService.getRolesForAllPersons();
         const responseObject = {
             roles,
-            persons: responsePersons,
-        }
-        res.status(200).json(responseObject);
+            persons: responsePersons
+        };
+        return res.status(200).json(responseObject);
     } catch (error) {
         console.log(error);
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
+}
+
+async function userNotFound(res) {
+    if (process.env.NODE_ENV !== 'dev') {
+        throw new Error('No user found');
+    }
+    console.log('It indeed is a developer.');
+    const persons = await personService.getAllPersons();
+    const roles = await roleService.getRolesForAllPersons();
+    const responseObject = {
+        roles,
+        persons
+    };
+    return res.status(200).json(responseObject).end();
+}
+
+async function getAllPersons(res) {
+    const persons = await personService.getAllPersons();
+    const roles = await roleService.getRolesForAllPersons();
+    const responseObject = {
+        roles,
+        persons
+    };
+    return res.status(200).json(responseObject).end();
 }
 
 const getUsersRoles = async (user) => {
