@@ -19,9 +19,10 @@ test('New councilmeeting can be created', (t) => {
     t.true(saveMeeting.called);
 
     const data = saveMeeting.args[0][0];
+    const format = 'YYYY-MM-DD';
 
-    t.is(data.date.format(), '2018-01-10T00:00:00+02:00');
-    t.is(data.instructorDeadline.format(), '2018-01-05T00:00:00+02:00');
-    t.is(data.studentDeadline.format(), '2018-01-04T00:00:00+02:00');
+    t.is(data.date.format(format), '2018-01-10');
+    t.is(data.instructorDeadline.format(format), '2018-01-05');
+    t.is(data.studentDeadline.format(format), '2018-01-04');
     t.is(data.programmeId, 2);
 });
