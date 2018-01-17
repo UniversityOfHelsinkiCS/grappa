@@ -11,7 +11,7 @@ export async function saveCouncilmeeting(req, res) {
     if (councilmeeting) {
         const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
         const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
-        notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req);
+        notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, councilmeeting.programmeId);
         res.status(200).json(savedMeeting);
     }
 }
@@ -20,9 +20,9 @@ export async function updateCouncilmeeting(req, res) {
     const councilmeetingId = req.params.id;
     const councilmeeting = req.body;
     if (councilmeetingId && councilmeeting) {
-        const updatedMeetingId = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId)
+        const updatedMeetingId = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId);
         const updatedMeeting = await councilmeetingService.getCouncilmeeting(updatedMeetingId);
-        notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req);
+        notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req, councilmeeting.programmeId);
         res.status(200).json(updatedMeeting);
     }
 }

@@ -1,23 +1,23 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json()
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const councilmeetingController = require('../controllers/CouncilmeetingController');
 
-router.get('/', (req, res) => {
-    councilmeetingController.getAllCouncilmeetings(req, res);
+const jsonParser = bodyParser.json();
+
+router.get('/', (req, res, next) => {
+    councilmeetingController.getAllCouncilmeetings(req, res).catch(next);
 });
 
-router.post('/', jsonParser, (req, res) => {
-    councilmeetingController.saveCouncilmeeting(req, res);
+router.post('/', jsonParser, (req, res, next) => {
+    councilmeetingController.saveCouncilmeeting(req, res).catch(next);
 });
 
-router.put('/:id', jsonParser, (req, res) => {
-    councilmeetingController.updateCouncilmeeting(req, res);
+router.put('/:id', jsonParser, (req, res, next) => {
+    councilmeetingController.updateCouncilmeeting(req, res).catch(next);
 });
 
-router.delete('/:id', jsonParser, (req, res) => {
-    councilmeetingController.deleteCouncilmeeting(req, res);
+router.delete('/:id', jsonParser, (req, res, next) => {
+    councilmeetingController.deleteCouncilmeeting(req, res).catch(next);
 });
 
 
