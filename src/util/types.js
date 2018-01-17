@@ -19,7 +19,8 @@ export const councilmeetingType = shape({
     councilmeetingId: number,
     date: string,
     instructorDeadline: string,
-    studentDeadline: string
+    studentDeadline: string,
+    programmeId: number
 });
 
 export const programmeType = shape({
