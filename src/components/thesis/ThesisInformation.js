@@ -9,7 +9,7 @@ export default class ThesisInformation extends Component {
     constructor() {
         super();
         this.state = {
-            oldGrading: false,
+            oldGrading: false
         }
     }
 
@@ -77,7 +77,10 @@ export default class ThesisInformation extends Component {
     }
 
     renderThesisInformation() {
-        const programmes = this.props.programmes.map(programme => { return { id: programme.programmeId, name: programme.name } });
+        const programmes = this.props.programmes.map(programme => ({
+            id: programme.programmeId,
+            name: programme.name
+        }));
 
         return (
             <div className="m-bot">

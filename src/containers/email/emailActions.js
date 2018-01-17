@@ -20,7 +20,7 @@ export const updateEmailDraft = (emailDraft) => {
 
 export const deleteEmailDraft = (emailDraft) => {
     const prefix = 'EMAILDRAFT_DELETE_ONE_';
-    const route = '/emaildrafts/' + emailDraft.emailDraftId;
+    const route = `/emaildrafts/${emailDraft.emailDraftId}`;
     return callController(route, prefix, {}, 'delete');
 }
 
@@ -31,15 +31,13 @@ export const sendReminder = (thesisId, emailType) => {
     return callApi(prefix, method, { thesisId, emailType }, route)
 }
 
-const action = (suffix, response) => {
-    return {
-        type: 'EMAILDRAFT_' + suffix,
-        response,
-    }
-}
+const action = (suffix, response) => ({
+    type: `EMAILDRAFT_${suffix}`,
+    response
+})
 
 const callApi = (prefix, method, data, route = '/emaildrafts') => (dispatch) => {
-    dispatch(action(prefix + 'ATTEMPT'));
+    dispatch(action(`${prefix}ATTEMPT`));
     callController(route, method, data)
     //    .then(res => dispatch(action(prefix + 'SUCCESS', res)))
     //    .catch(err => dispatch(action(prefix + 'FAILURE', err.response)));

@@ -9,7 +9,7 @@ module.exports = {
     },
     'rules': {
         'quotes': ['warn', 'single'],
-        'indent': ['warn', 4],
+        'indent': ['warn', 4, { SwitchCase: 1 }],
         'semi': 'off',
         'comma-dangle': ['warn', 'never'],
         'max-len': ['warn', 120],
@@ -81,7 +81,7 @@ module.exports = {
         'react/jsx-filename-extension': 'off',
         'quote-props': 'warn',
 
-        'no-use-before-define': 'warn',
+        'no-use-before-define': 'off',
         'no-shadow': 'warn',
 
         'no-multi-spaces': 'warn',

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { arrayOf, func } from 'prop-types';
 import { Link } from 'react-router-dom';
+import { thesisType } from '../../util/types';
 
 export default class ThesisList extends Component {
 
@@ -7,7 +9,7 @@ export default class ThesisList extends Component {
         super();
         this.state = {
             selectedThesesIds: [],
-            cover: true,
+            cover: true
         }
     }
 
@@ -87,7 +89,7 @@ export default class ThesisList extends Component {
                                         <label />
                                     </div>
                                 </td>
-                                <td>{thesis.authorLastname ? thesis.authorLastname + ', ' + thesis.authorFirstname : ''}</td>
+                                <td>{thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}</td>
                                 <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>
@@ -100,3 +102,8 @@ export default class ThesisList extends Component {
         )
     }
 }
+
+ThesisList.propTypes = {
+    theses: arrayOf(thesisType).isRequired,
+    downloadSelected: func.isRequired
+};

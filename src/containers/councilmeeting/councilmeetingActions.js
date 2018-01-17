@@ -16,13 +16,13 @@ export const saveCouncilmeeting = (councilmeeting) => {
 export const updateCouncilmeeting = (councilmeeting) => {
     const prefix = 'COUNCILMEETING_UPDATE_ONE_';
     const method = 'put';
-    const route = '/councilmeetings/' + councilmeeting.councilmeetingId;
+    const route = `/councilmeetings/${councilmeeting.councilmeetingId}`;
     return callController(route, prefix, councilmeeting, method);
 }
 
 export const deleteCouncilmeeting = (councilmeetingId) => {
     const prefix = 'COUNCILMEETING_DELETE_ONE_';
     const method = 'delete';
-    const route = '/councilmeetings/' + councilmeetingId;
+    const route = `/councilmeetings/${councilmeetingId}`;
     return callController(route, prefix, councilmeetingId, method);
 }

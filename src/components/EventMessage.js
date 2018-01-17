@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { setTimeout } from 'timers';
 
 const EVENT_MESSAGE_CLEAR_TIMEOUT = 10000;
 let timeout;
@@ -12,10 +11,10 @@ const EventMessage = ({ type, message, clearMessages }) => {
     const closeMessage = () => {
         clearTimeout(timeout);
         clearMessages();
-    }
+    };
 
     return (
-        <div className={'ui ' + type + ' message'}>
+        <div className={`ui ${type} message`}>
             <i className="close icon" onClick={() => closeMessage()} />
             <div className="header">{message}</div>
         </div>

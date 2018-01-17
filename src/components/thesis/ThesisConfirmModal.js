@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func } from 'prop-types';
 
 export default class ThesisConfirmModal extends Component {
     render() {
@@ -9,7 +10,7 @@ export default class ThesisConfirmModal extends Component {
             <div>
                 <div className="ui dimmer modals page transition visible active" onClick={this.props.closeModal}/>
                 <div className="ui active modal" style={{ border: '2px solid black', borderRadius: '7px' }}>
-                    <i className="close icon" onClick={this.props.closeModal}></i>
+                    <i className="close icon" onClick={this.props.closeModal} />
                     <div className="header">
                         Reminder
                     </div>
@@ -27,4 +28,9 @@ export default class ThesisConfirmModal extends Component {
             </div>
         )
     }
+};
+
+ThesisConfirmModal.propTypes = {
+    closeModal: func.isRequired,
+    sendSaveThesis: func.isRequired
 };

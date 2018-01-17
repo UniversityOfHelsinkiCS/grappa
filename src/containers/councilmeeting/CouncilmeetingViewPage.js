@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
 import { updateThesis, getTheses, downloadTheses, moveTheses } from '../thesis/thesisActions';
-import { personType } from '../../util/types';
+import { personType, thesisType } from '../../util/types';
 
 import ThesisList from '../../components/thesis/ThesisList'
 
@@ -16,7 +16,7 @@ export class CouncilmeetingViewPage extends Component {
             previousMeeting: undefined,
             currentMeeting: undefined,
             nextMeeting: undefined,
-            theses: [],
+            theses: []
         };
     }
 
@@ -37,7 +37,7 @@ export class CouncilmeetingViewPage extends Component {
         this.initState(newProps);
     }
 
-    //TODO: Remove copypaste
+    // TODO: Remove copypaste
     initState(props) {
         if (!props.councilmeetings) return;
         const foundIndex = this.findIndexFromProps(props);
@@ -190,7 +190,8 @@ CouncilmeetingViewPage.propTypes = {
     updateThesis: func.isRequired,
     getTheses: func.isRequired,
     moveTheses: func.isRequired,
-    user: personType.isRequired
+    user: personType.isRequired,
+    theses: arrayOf(thesisType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);
