@@ -14,7 +14,8 @@
     "db:reset": "rm ./src/db/grappa2db.sqlite && knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest && knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
-    "lint": "eslint --ext .js . || true"
+    "lint": "eslint --ext .js . || true",
+    "ava": "NODE_ENV=test ava -s"
   },
   "repository": {
     "type": "git",
