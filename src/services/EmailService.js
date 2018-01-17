@@ -1,9 +1,10 @@
-import { getAgreementById } from './AgreementService';
-
 const mailer = require('../util/mailer');
 
 const emailDraftService = require('../services/EmailDraftService');
 const personService = require('../services/PersonService');
+
+// TODO: Fix for all envs.
+const SERVER_ADDRESS = 'http://localhost:3000/v2';
 
 export async function newThesisAddedNotifyRespProf(programmeId) {
     const respProfs = await personService.getPersonsWithRoleInStudyfield(4, programmeId);
@@ -22,9 +23,9 @@ async function sendMail(type, email, programmeId) {
     }
 }
 
-export async function sendInvite(emailInvite, programmeId) {
+export async function sendInvite(emailInvite, type, programmeId) {
     const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin', programmeId);
-    const body = draft.body.replace('$LOGIN_URL$', `http://localhost:3000/v2/invite/${emailInvite.token}`);
+    const body = draft.body.replace('$LOGIN_URL$', `${SERVER_ADDRESS}/invite/${type}/${emailInvite.token}`);
 
     try {
         await mailer.sendEmail(emailInvite.email, draft.title, body);

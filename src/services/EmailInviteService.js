@@ -7,7 +7,7 @@ export async function createEmailInviteForThesisAuthor(email, agreementId, progr
     const token = crypto.randomBytes(16).toString('hex');
     const invite = { email, agreement: agreementId, token, type: 'thesis_author' };
     await knex('emailInvite').insert(invite);
-    await emailService.sendInvite(invite, programmeId);
+    await emailService.sendInvite(invite, 'thesis', programmeId);
 }
 
 export function getEmailInviteDataForToken(token) {
