@@ -4,8 +4,8 @@ const thesisController = require('../controllers/ThesisController');
 const jsonParser = bodyParser.json();
 const attachment = require('../middleware/attachments');
 
-router.get('/', thesisController.getTheses);
-router.put('/', jsonParser, thesisController.updateThesis);
-router.post('/', attachment, thesisController.saveThesisForm);
+router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(next));
+router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(req, res).catch(next));
+router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next));
 
 module.exports = router;
