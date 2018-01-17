@@ -8,27 +8,27 @@ export const formatTheses = (theses, agreements, persons, roles) => {
 };
 
 export const formatThesis = (thesis, agreements, persons, roles) => {
-    const agreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
-    const person = agreement ? persons.find(person => person.personId === agreement.authorId) : {};
+    const thesisAgreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
+    const author = thesisAgreement ? persons.find(person => person.personId === thesisAgreement.authorId) : {};
     const formattedThesis = Object.assign({}, thesis);
 
-    formattedThesis.programmeId = agreement.programmeId;
+    formattedThesis.programmeId = thesisAgreement.programmeId;
 
     if (roles) {
         formattedThesis.graders = persons.filter(person =>
             roles.find(role =>
                 role.personId === person.personId &&
-                role.agreementId === agreement.agreementId
+                role.agreementId === thesisAgreement.agreementId
             )
         );
     }
 
-    if (person) {
-        formattedThesis.authorEmail = person.email;
-        formattedThesis.authorFirstname = person.firstname;
-        formattedThesis.authorLastname = person.lastname;
+    if (author) {
+        formattedThesis.authorEmail = author.email;
+        formattedThesis.authorFirstname = author.firstname;
+        formattedThesis.authorLastname = author.lastname;
     } else { // Thesis not linked to person yet, use invite link email
-        formattedThesis.authorEmail = agreement.email;
+        formattedThesis.authorEmail = thesisAgreement.email;
     }
 
     return formattedThesis;
