@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import DatePicker from 'react-datepicker';
 import { councilmeetingType } from '../../util/types';
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'DD.MM.YYYY';
 
 const UpdateCouncilmeetingForm = (props) => {
     const {

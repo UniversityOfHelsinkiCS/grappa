@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment/moment';
 import { councilmeetingType } from '../../util/types';
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'DD.MM.YYYY';
 
 function filterMeetings(meetings, showOld) {
     if (!showOld) {

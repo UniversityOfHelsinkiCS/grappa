@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { arrayOf, func } from 'prop-types';
-import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { connect } from 'react-redux';
@@ -48,13 +47,7 @@ export class CouncilmeetingManagePage extends Component {
        });
    };
 
-   saveMeeting = () => {
-       // Since users only think about the difference but we want to save the date.
-       const { date, instructorDeadlineDays, studentDeadlineDays } = this.state.newCouncilmeeting;
-       const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
-       const studentDeadline = moment(instructorDeadline).subtract(studentDeadlineDays, 'days');
-       const councilmeeting = { date, instructorDeadline, studentDeadline };
-
+   saveMeeting = (councilmeeting) => {
        this.props.saveCouncilmeeting(councilmeeting);
    };
 
@@ -75,13 +68,7 @@ export class CouncilmeetingManagePage extends Component {
            <div className="ui form">
                <div className="ui two fields">
                    <div className="field">
-                       <NewCouncilmeetingForm
-                           newCouncilmeeting={this.state.newCouncilmeeting}
-                           handleDateChange={this.handleDateChange('newCouncilmeeting', 'date')}
-                           handleInstructorChange={this.handleChange('newCouncilmeeting', 'instructorDeadlineDays')}
-                           handleStudentChange={this.handleChange('newCouncilmeeting', 'studentDeadlineDays')}
-                           saveMeeting={this.saveMeeting}
-                       />
+                       <NewCouncilmeetingForm saveMeeting={this.saveMeeting} />
                        <UpdateCouncilmeetingForm
                            meeting={this.state.updateCouncilmeeting}
                            updateMeeting={this.updateMeeting}
