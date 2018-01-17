@@ -45,7 +45,7 @@ export default class EmailDraft extends Component {
         this.setState({ draft })
     }
 
-    changeStudyfield = (event) => {
+    changeProgramme = (event) => {
         const draft = Object.assign({}, this.state.draft);
         draft.programme = Number(event.target.value);
         this.setState({ draft })
@@ -60,7 +60,7 @@ export default class EmailDraft extends Component {
                     <div style={{ width: '10em', display: 'inline-block' }}>
                         <select
                             className="ui dropdown"
-                            onChange={this.changeStudyfield}
+                            onChange={this.changeProgramme}
                             value={this.state.draft.programme}
                         >
                             <option value="null">No programme</option>
@@ -88,7 +88,7 @@ export default class EmailDraft extends Component {
         }
     }
 
-    getStudyfieldName(draft) {
+    getProgrammeName(draft) {
         if (draft.programme) {
             return `${this.props.programmes.filter(field => draft.programme === field.programmeId)[0].name}:`;
         }
@@ -103,7 +103,7 @@ export default class EmailDraft extends Component {
         return (
             <div className="m-bot">
                 <h3 className="ui dividing header">
-                    {editing ? 'Editing draft: ' : ''}{`${this.getStudyfieldName(this.props.draft)} ${this.props.draft.type}`}
+                    {editing ? 'Editing draft: ' : ''}{`${this.getProgrammeName(this.props.draft)} ${this.props.draft.type}`}
                 </h3>
                 <div className="field">
                     <label>Title</label>
