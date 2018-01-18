@@ -118,12 +118,7 @@ export async function updateAttachment(attachment) {
 }
 
 export async function mergeAttachments(attachments) {
-    const files = attachments.map(attachment => attachment.filename);
-    try {
-        return pdfManipulator.joinPdfs(PATH_TO_FOLDER, files);
-    } catch (error) {
-        throw error;
-    }
+    return pdfManipulator.joinPdfs(PATH_TO_FOLDER, attachments);
 }
 
 export async function addCover(fileStream, infoObjects, councilmeeting) {

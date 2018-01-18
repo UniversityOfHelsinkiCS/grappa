@@ -33,14 +33,13 @@ export async function downloadAttachments(req, res) {
             return true
         });
         const attachments = await attachmentService.getAttachments(attachmentIds);
-
+        
         //To keep the order that was used to call (eq, 3&1&2)
         let order = {};
         attachmentIds.forEach((a, i) => { order[a] = i; });
         attachments.sort((a, b) => order[a.attachmentId] - order[b.attachmentId]);
 
         let fileStream = await attachmentService.mergeAttachments(attachments);
-
         if (cover) {
             const councilmeeting = councilmeetingId ?
                 await councilmeetingService.getCouncilmeeting(councilmeetingId)
