@@ -1,33 +1,20 @@
 const knex = require('../db/connection');
+const Councilmeeting = require('../db/models/councilmeeting');
 
-export async function getAllCouncilmeetings() {
-    return knex.select().from('councilmeeting').then(councilmeeting => councilmeeting);
-}
+export const getAllCouncilmeetings = () => Councilmeeting.fetchAll();
 
-export async function saveCouncilmeeting(councilmeeting) {
-    return knex('councilmeeting')
-        .returning('councilmeetingId')
-        .insert(councilmeeting)
-        .then(councilmeetings => councilmeetings[0]);
-}
+export const saveCouncilmeeting = councilmeeting =>
+    new Councilmeeting(councilmeeting).save().then(m => m.get('councilmeetingId'));
 
-export async function updateCouncilmeeting(councilmeeting, councilmeetingId) {
-    return knex('councilmeeting')
-        .returning('councilmeetingId')
-        .where('councilmeetingId', '=', councilmeetingId)
-        .update(councilmeeting)
-        .then(councilmeetings => councilmeetings[0]);
-}
+export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => knex('councilmeeting')
+    .returning('councilmeetingId')
+    .where('councilmeetingId', '=', councilmeetingId)
+    .update(councilmeeting)
+    .then(councilmeetings => councilmeetings[0]);
 
-export async function deleteCouncilmeeting(councilmeetingId) {
-    return knex('councilmeeting')
-        .where('councilmeetingId', '=', councilmeetingId)
-        .del()
-        .then(() => councilmeetingId);
-}
+export const deleteCouncilmeeting = councilmeetingId =>
+    Councilmeeting.where('councilmeetingId', councilmeetingId).destroy();
 
-export async function getCouncilmeeting(councilmeetingId) {
-    return knex.select('*').from('councilmeeting')
-        .where('councilmeetingId', '=', councilmeetingId)
-        .then(councilmeetings => councilmeetings[0]);
-}
+export const getCouncilmeeting = councilmeetingId =>
+    Councilmeeting.where('councilmeetingId', councilmeetingId).fetch();
+

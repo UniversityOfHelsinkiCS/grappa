@@ -20,8 +20,8 @@ export async function updateCouncilmeeting(req, res) {
     const councilmeetingId = req.params.id;
     const councilmeeting = req.body;
     if (councilmeetingId && councilmeeting) {
-        const updatedMeetingId = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId);
-        const updatedMeeting = await councilmeetingService.getCouncilmeeting(updatedMeetingId);
+        await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId);
+        const updatedMeeting = await councilmeetingService.getCouncilmeeting(councilmeetingId);
         notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req, councilmeeting.programmeId);
         res.status(200).json(updatedMeeting);
     }
