@@ -15,12 +15,13 @@ import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewP
 import EmailDraftPage from '../containers/email/EmailDraftPage';
 import NotificationsPage from '../containers/notifications/NotificationsPage';
 import InvitePage from '../containers/invite/InvitePage';
+import PersonRoleReviewPage from '../containers/person/PersonRoleReviewPage';
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
-    agreementPersonManagement: { path: '/agreementPersonManagement', component: UserPage, navText: 'Grader accepting' },
+    agreementPersonManagement: { path: '/agreementPersonManagement', component: PersonRoleReviewPage, navText: 'Grader accepting' },
     personRoleManagement: { path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management' },
     thesisView: { path: '/thesis/:id', component: ThesisEdit },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
