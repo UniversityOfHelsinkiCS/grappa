@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-//components
+// components
 import UserPage from '../containers/user/UserPage';
 import AgreementPage from '../containers/agreement/AgreementPage';
 import PersonRoleManagement from '../containers/person/PersonRoleManagePage';
@@ -21,7 +21,9 @@ export const paths = {
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
     agreementPersonManagement: { path: '/agreementPersonManagement', component: UserPage, navText: 'Grader accepting' },
-    personRoleManagement: { path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management' },
+    personRoleManagement: {
+        path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management'
+    },
     thesisView: { path: '/thesis/:id', component: ThesisEdit },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
@@ -33,10 +35,14 @@ export const paths = {
     invite: { path: '/invite/:type/:token', component: InvitePage }
 }
 
-export default () => {
-    return (
-        <Switch>
-            {Object.keys(paths).map((key) => <Route key={key} exact path={paths[key].path} component={paths[key].component} />)}
-        </Switch>
-    )
-}
+export default () => (
+    <Switch>
+        {Object.keys(paths).map(key =>
+            <Route
+                key={key}
+                exact
+                path={paths[key].path}
+                component={paths[key].component}
+            />)}
+    </Switch>
+)
