@@ -45,7 +45,7 @@ const permissions = {
     resp_professor: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.agreementPersonManagement,
+                nav.home, nav.theses, nav.agreementPersonManagement
             ]
         }
     },

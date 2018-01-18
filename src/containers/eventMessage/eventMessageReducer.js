@@ -24,13 +24,21 @@ const reducer = (state = {}, action) => {
                     text: 'Thesis linked to user'
                 }
             });
+        case action.type === 'COUNCILMEETING_UPDATE_ONE_SUCCESS':
+            return Object.assign({}, state, {
+                logout: {
+                    active: true,
+                    type: 'success',
+                    text: 'Councilmeeting updated.'
+                }
+            });
         case action.type.includes('_FAILURE'): {
             const message = {};
             message[action.type] = {
                 active: true,
                 type: 'error',
                 text: action.type
-            }
+            };
             return Object.assign({}, state, message)
         }
         case action.type === 'EVENT_MESSAGE_CLEAR':

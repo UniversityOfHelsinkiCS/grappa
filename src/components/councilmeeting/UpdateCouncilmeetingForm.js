@@ -11,23 +11,38 @@ class UpdateCouncilmeetingForm extends Component {
         super(props);
 
         this.state = {
-            meeting: {}
-        }
+            meeting: props.meeting || {}
+        };
+
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.updateMeeting = this.updateMeeting.bind(this);
+    }
+
+    componentWillReceiveProps(props) {
+        this.setState({ meeting: props.meeting });
+    }
+
+    handleDateChange(date, field) {
+        const meeting = Object.assign({}, this.state.meeting);
+        meeting[field] = date;
+        this.setState({ meeting });
+    }
+
+    updateMeeting() {
+        this.props.updateMeeting(this.state.meeting);
     }
 
     render() {
-        const {
-            meeting,
-            updateMeeting,
-            updateDate,
-            updateInstructorDeadline,
-            updateStudentDeadline
-        } = this.props;
+        const meetingDate = this.state.meeting.date;
+
+        if (!this.state.meeting.councilmeetingId) {
+            return <div />;
+        }
 
         return (
             <div className="field">
                 <h2 className="ui dividing header">
-                    Change meetings date {meeting.date ? moment(meeting.date).format(dateFormat) : ''}
+                    Change meetings date {meetingDate ? moment(meetingDate).format(dateFormat) : ''}
                 </h2>
                 <p>
                     Changing the deadline changes it for every thesis connected to the meeting.
@@ -40,8 +55,8 @@ class UpdateCouncilmeetingForm extends Component {
                             <DatePicker
                                 id="updateMeetingDate"
                                 dateFormat={dateFormat}
-                                selected={moment(this.state.meeting.date)}
-                                onChange={updateDate}
+                                selected={moment(meetingDate)}
+                                onChange={date => this.handleDateChange(date, 'date')}
                                 utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
@@ -50,8 +65,9 @@ class UpdateCouncilmeetingForm extends Component {
                             <DatePicker
                                 id="updateMeetingInstructorDeadline"
                                 dateFormat={dateFormat}
-                                selected={moment(meeting.instructorDeadline)}
-                                onChange={updateInstructorDeadline}
+                                selected={moment(this.state.meeting.instructorDeadline)}
+                                onChange={date => this.handleDateChange(date, 'instructorDeadline')}
+                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                         <div className="field">
@@ -59,12 +75,13 @@ class UpdateCouncilmeetingForm extends Component {
                             <DatePicker
                                 id="updateMeetingStudentDeadline"
                                 dateFormat={dateFormat}
-                                selected={moment(meeting.studentDeadline)}
-                                onChange={updateStudentDeadline}
+                                selected={moment(this.state.meeting.studentDeadline)}
+                                onChange={date => this.handleDateChange(date, 'studentDeadline')}
+                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                     </div>
-                    <button className="ui green button" onClick={updateMeeting}>
+                    <button className="ui green button" onClick={this.updateMeeting}>
                         Update
                     </button>
                 </div>
@@ -75,10 +92,7 @@ class UpdateCouncilmeetingForm extends Component {
 
 UpdateCouncilmeetingForm.propTypes = {
     meeting: councilmeetingType.isRequired,
-    updateMeeting: func.isRequired,
-    updateDate: func.isRequired,
-    updateInstructorDeadline: func.isRequired,
-    updateStudentDeadline: func.isRequired
+    updateMeeting: func.isRequired
 };
 
 export default UpdateCouncilmeetingForm;

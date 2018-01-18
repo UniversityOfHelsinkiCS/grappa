@@ -16,10 +16,10 @@ import notificationsReducer from '../containers/notifications/notificationsReduc
 import eventMessageReducer from '../containers/eventMessage/eventMessageReducer';
 import inviteReducer from '../containers/invite/inviteReducer';
 
-//TODO: Comments in english
-//kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
-//malli myöhempää käyttöä varten grappa1.0:sta: https://github.com/UniversityOfHelsinkiCS/grappa-frontend/blob/master/src/store.js
-//tutorial: https://github.com/happypoulp/redux-tutorial
+// TODO: Comments in english
+// kaikki reducerit importataan jokaisen componentin omista kansioista, tässä kaksi esimerkkiä, miltä ne voivat näyttää
+// malli myöhempää käyttöä varten grappa1.0:sta: https://github.com/UniversityOfHelsinkiCS/grappa-frontend/blob/master/src/store.js
+// tutorial: https://github.com/happypoulp/redux-tutorial
 
 
 const combinedReducers = combineReducers({

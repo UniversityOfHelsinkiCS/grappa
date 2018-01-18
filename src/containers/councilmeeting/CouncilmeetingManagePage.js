@@ -47,34 +47,23 @@ export class CouncilmeetingManagePage extends Component {
        });
    };
 
-   saveMeeting = (councilmeeting) => {
-       this.props.saveCouncilmeeting(councilmeeting);
-   };
-
-   updateMeeting = () => {
-       this.props.updateCouncilmeeting(this.state.updateCouncilmeeting);
-   };
-
-   selectMeeting = (meeting) => {
-       this.setState({ updateCouncilmeeting: meeting });
-   };
-
-   deleteMeeting = (meeting) => {
-       this.props.deleteCouncilmeeting(meeting.councilmeetingId);
-   };
+   saveMeeting = meeting => this.props.saveCouncilmeeting(meeting);
+   updateMeeting = meeting => this.props.updateCouncilmeeting(meeting);
+   selectMeeting = meeting => this.setState({ updateCouncilmeeting: meeting });
+   deleteMeeting = meeting => this.props.deleteCouncilmeeting(meeting.councilmeetingId);
 
    render() {
        return (
            <div className="ui form">
                <div className="ui two fields">
                    <div className="field">
-                       <NewCouncilmeetingForm saveMeeting={this.saveMeeting} programmes={this.props.programmes} />
+                       <NewCouncilmeetingForm
+                           saveMeeting={this.saveMeeting}
+                           programmes={this.props.programmes}
+                       />
                        <UpdateCouncilmeetingForm
                            meeting={this.state.updateCouncilmeeting}
                            updateMeeting={this.updateMeeting}
-                           updateDate={this.handleDateChange('updateCouncilmeeting', 'date')}
-                           updateInstructorDeadline={this.handleDateChange('updateCouncilmeeting', 'instructorDeadline')}
-                           updateStudentDeadline={this.handleDateChange('updateCouncilmeeting', 'studentDeadline')}
                        />
                    </div>
                    <div className="field">
@@ -97,6 +86,7 @@ export class CouncilmeetingManagePage extends Component {
                            selectMeeting={this.selectMeeting}
                            deleteMeeting={this.deleteMeeting}
                            showOld={this.state.showOld}
+                           programmes={this.props.programmes}
                        />
                    </div>
                </div>

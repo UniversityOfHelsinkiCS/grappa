@@ -2,7 +2,7 @@ import React from 'react';
 import { arrayOf, func, bool } from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment/moment';
-import { councilmeetingType } from '../../util/types';
+import { councilmeetingType, programmeType } from '../../util/types';
 
 const dateFormat = 'DD.MM.YYYY';
 
@@ -15,52 +15,61 @@ function filterMeetings(meetings, showOld) {
     return meetings;
 }
 
-const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld }) => (
-    <table className="ui celled table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Instructor deadline</th>
-                <th>Student deadline</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {filterMeetings(meetings, showOld).map(councilmeeting => (
-                <tr key={councilmeeting.councilmeetingId} onClick={() => selectMeeting(councilmeeting)}>
-                    <td>
-                        <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
-                            {moment(councilmeeting.date).format(dateFormat)}
-                        </Link>
-                    </td>
-                    <td>
-                        <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
-                            {moment(councilmeeting.instructorDeadline).format(dateFormat)}
-                        </Link>
-                    </td>
-                    <td>
-                        <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
-                            {moment(councilmeeting.studentDeadline).format(dateFormat)}
-                        </Link>
-                    </td>
-                    <td>
-                        <i className="write icon green" onClick={() => selectMeeting(councilmeeting)} />
-                    </td>
-                    <td>
-                        <i className="remove icon red" onClick={() => deleteMeeting(councilmeeting)} />
-                    </td>
-                </tr>)
-            )}
-        </tbody>
-    </table>
-);
+const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, programmes }) => {
+    const programmeName = programmeId => programmes.find(programme => programmeId === programme.programmeId).name;
+
+    return (
+        <table className="ui celled table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Instructor deadline</th>
+                    <th>Student deadline</th>
+                    <th>Programme</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {filterMeetings(meetings, showOld).map(councilmeeting => (
+                    <tr key={councilmeeting.councilmeetingId} onClick={() => selectMeeting(councilmeeting)}>
+                        <td>
+                            <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
+                                {moment(councilmeeting.date).format(dateFormat)}
+                            </Link>
+                        </td>
+                        <td>
+                            <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
+                                {moment(councilmeeting.instructorDeadline).format(dateFormat)}
+                            </Link>
+                        </td>
+                        <td>
+                            <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
+                                {moment(councilmeeting.studentDeadline).format(dateFormat)}
+                            </Link>
+                        </td>
+                        <td>
+                            {programmeName(councilmeeting.programmeId)}
+                        </td>
+                        <td>
+                            <i className="write icon green" onClick={() => selectMeeting(councilmeeting)} />
+                        </td>
+                        <td>
+                            <i className="remove icon red" onClick={() => deleteMeeting(councilmeeting)} />
+                        </td>
+                    </tr>)
+                )}
+            </tbody>
+        </table>
+    );
+};
 
 CouncilmeetingList.propTypes = {
     meetings: arrayOf(councilmeetingType).isRequired,
     selectMeeting: func.isRequired,
     deleteMeeting: func.isRequired,
-    showOld: bool.isRequired
+    showOld: bool.isRequired,
+    programmes: arrayOf(programmeType).isRequired
 };
 
 export default CouncilmeetingList;

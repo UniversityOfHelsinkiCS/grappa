@@ -9,32 +9,27 @@ export default class FormCreator extends Component {
     }
 
     getButton(clickFunc) {
-        //next line doesn't work, why? (TODO)
-        //const lastAction = this.getLastAction();
+        // next line doesn't work, why? (TODO)
+        // const lastAction = this.getLastAction();
         const lastAction = undefined;
         const workableButton = <button className="ui primary button" type="submit" onClick={clickFunc}>Save</button>;
         const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={clickFunc}>Save</button>;
 
         if (lastAction === undefined) return workableButton;
-        else {
-            return (lastAction.id === 'AGREEMENT_SAVE_ATTEMPT') ? disabledLoadingButton : workableButton;
-        }
+
+        return (lastAction.id === 'AGREEMENT_SAVE_ATTEMPT') ? disabledLoadingButton : workableButton;
     }
 
     createForm = () => {
         const formFieldProperties = this.props.formFieldInfo;
 
         const sectionList = formFieldProperties.sections.map(
-            (sectionData, sectionKey) => {
-
-                return (<FormSection
-                    sectionKey={sectionKey}
-                    header={sectionData.header}
-                    elements={sectionData.fields}
-                    fieldOnChangeFunc={this.props.fieldOnChangeFunc}
-                />);
-
-            });
+            (sectionData, sectionKey) => (<FormSection
+                sectionKey={sectionKey}
+                header={sectionData.header}
+                elements={sectionData.fields}
+                fieldOnChangeFunc={this.props.fieldOnChangeFunc}
+            />));
 
         return (
             <form className="ui form" onSubmit={this.props.onSubmitFunc} >
