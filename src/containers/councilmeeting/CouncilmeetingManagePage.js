@@ -86,6 +86,7 @@ export class CouncilmeetingManagePage extends Component {
                            selectMeeting={this.selectMeeting}
                            deleteMeeting={this.deleteMeeting}
                            showOld={this.state.showOld}
+                           programmes={this.props.programmes}
                        />
                    </div>
                </div>

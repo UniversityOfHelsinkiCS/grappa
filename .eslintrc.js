@@ -109,7 +109,11 @@ module.exports = {
         'no-plusplus': 'warn',
         'array-callback-return': 'warn',
         'guard-for-in': 'warn',
-        'jsx-a11y/anchor-is-valid': 'warn',
+        'jsx-a11y/anchor-is-valid': ['warn', {
+            "components": [ "Link" ],
+            "specialLink": [ "to", "hrefLeft", "hrefRight" ],
+            "aspects": [ "noHref", "invalidHref", "preferButton" ]
+        }],
         'import/prefer-default-export': 'warn',
         'react/sort-comp': 'warn',
         'no-nested-ternary': 'warn',
