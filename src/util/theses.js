@@ -11,7 +11,9 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     const thesisAgreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
     const author = thesisAgreement ? persons.find(person => person.personId === thesisAgreement.authorId) : {};
     const formattedThesis = Object.assign({}, thesis);
-
+    if (!thesisAgreement) {
+        return formattedThesis;
+    }
     formattedThesis.programmeId = thesisAgreement.programmeId;
 
     if (roles) {

@@ -60,10 +60,12 @@ class ThesisListPage extends Component {
                         return 1;
                     });
             }
-        }).reduce((acc, cur) => // Flatten thesis, review pairs.
-            acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
-            ,
-        cover ? ['cover'] : [] // Add cover if it's chosen.
+        }).reduce((acc, cur) => { // Flatten thesis, review pairs.
+            if (cur) {
+                return acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
+            }
+            return acc;
+        }, cover ? ['cover'] : [] // Add cover if it's chosen.
         );
         this.props.downloadAttachments(attachmentIds);
     }
