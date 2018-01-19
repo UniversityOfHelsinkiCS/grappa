@@ -108,6 +108,13 @@ export const getAgreementPersonsByAgreementId = (agreementId) => {
         .where('agreementId', agreementId)
 }
 
+export const updateAgreementPerson = (agreementId, personRoleId, agreementPerson) => {
+    return knex('agreementPerson')
+        .where('agreementId', agreementId)
+        .where('personRoleId', personRoleId)
+        .update(agreementPerson)
+}
+
 //Straight to frontend
 
 const roleSchema = [
@@ -116,7 +123,10 @@ const roleSchema = [
     'personWithRole.programmeId',
     'role.name',
     'agreementPerson.agreementId',
-    'agreementPerson.statement'
+    'agreementPerson.statement',
+    'agreementPerson.approved',
+    'agreementPerson.approverId',
+    'agreementPerson.approvalDate'
 ];
 
 export async function getRolesForAllPersons() {
@@ -125,10 +135,20 @@ export async function getRolesForAllPersons() {
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
 }
 
-export async function getRoleForPersonWithRole(personRoleId) {
+// May return multiple, since one personRole can have multiple agreementPersons via agreementIds
+export async function getRolesForPersonWithRole(personRoleId) {
     return knex.select(roleSchema).from('personWithRole')
         .where('personWithRole.personRoleId', personRoleId)
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-        .first()
+}
+
+// Will return single
+export async function getRoleWithAgreementIdAndPersonRole(agreementId, personRoleId) {
+    return knex.select(roleSchema).from('personWithRole')
+        .where('personWithRole.personRoleId', personRoleId)
+        .where('agreementPerson.agreementId', agreementId)
+        .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
+        .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .first();
 }

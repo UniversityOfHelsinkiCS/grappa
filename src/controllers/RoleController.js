@@ -22,7 +22,8 @@ export async function saveRole(req, res) {
             programmeId: req.body.programmeId
         };
         personWithRole = await roleService.savePersonRole(personWithRole);
-        const role = await roleService.getRoleForPersonWithRole(personWithRole.personRoleId)
+        const roles = await roleService.getRolesForPersonWithRole(personWithRole.personRoleId)
+        const role = roles[0]
         res.status(200).json(role).end();
     } catch (error) {
         console.log(error);
@@ -41,8 +42,22 @@ export async function deleteRole(req, res) {
     }
 }
 
-export async function updateRole(req, res) {
-    res.status(501).end();
+export async function updateStatement(req, res) {
+    try {
+        const person = await personService.getLoggedPerson(req);
+        const agreementPerson = {
+            statement: req.body.statement,
+            approved: req.body.approved,
+            approverId: person.personId,
+            approvalDate: new Date(),
+        }
+        await roleService.updateAgreementPerson(req.body.agreementId, req.body.personRoleId, agreementPerson);
+        const updatedRole = await roleService.getRoleWithAgreementIdAndPersonRole(req.body.agreementId, req.body.personRoleId);
+        res.status(200).json(updatedRole).end();
+    } catch (error) {
+        console.log(error);
+        res.status(500).end();
+    }
 }
 
 export async function updateVisitorRoles(req, res) {
