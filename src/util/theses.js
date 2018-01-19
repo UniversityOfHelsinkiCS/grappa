@@ -62,3 +62,22 @@ export const thesisValidationRules = {
 };
 
 export const thesisValidation = new Checkit(thesisValidationRules);
+
+export const emptyThesisData = {
+    id: undefined,
+    authorFirstname: '',
+    authorLastname: '',
+    email: '',
+    title: '',
+    urkund: '',
+    grade: '',
+    graders: [],
+    graderEval: '',
+    programmeId: '',
+    councilmeetingId: undefined,
+    printDone: undefined,
+    thesisEmails: {
+        graderEvalReminder: undefined,
+        printReminder: undefined
+    }
+};

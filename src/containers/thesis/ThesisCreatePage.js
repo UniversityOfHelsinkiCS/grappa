@@ -10,30 +10,13 @@ import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import { thesisValidation } from '../../util/theses';
+import { emptyThesisData, thesisValidation } from '../../util/theses';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            thesis: {
-                id: undefined,
-                authorFirstname: '',
-                authorLastname: '',
-                authorEmail: '',
-                title: '',
-                urkund: 'http://',
-                grade: '',
-                graders: [],
-                graderEval: '',
-                programmeId: '',
-                councilmeetingId: undefined,
-                printDone: undefined,
-                thesisEmails: {
-                    graderEvalReminder: undefined,
-                    printReminder: undefined
-                }
-            },
+            thesis: emptyThesisData,
             attachments: [],
             showModal: false,
             validationErrors: {}

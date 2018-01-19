@@ -11,7 +11,7 @@ import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import { formatThesis } from '../../util/theses';
+import { emptyThesisData, formatThesis } from '../../util/theses';
 
 export class ThesisEditPage extends Component {
     /**
@@ -21,24 +21,7 @@ export class ThesisEditPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            thesis: {
-                id: undefined,
-                authorFirstname: '',
-                authorLastname: '',
-                email: '',
-                title: '',
-                urkund: '',
-                grade: '',
-                graders: [],
-                graderEval: '',
-                programmeId: '',
-                councilmeetingId: undefined,
-                printDone: undefined,
-                thesisEmails: {
-                    graderEvalReminder: undefined,
-                    printReminder: undefined
-                }
-            },
+            thesis: emptyThesisData,
             attachments: [],
             newAttachments: [],
             allowEdit: true,
@@ -71,8 +54,13 @@ export class ThesisEditPage extends Component {
     }
 
     findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
-        const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
-        return formatThesis(thesis, agreements, persons, roles);
+        try {
+            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
+            return formatThesis(thesis, agreements, persons, roles);
+        } catch (error) {
+            console.log(error);
+            return undefined
+        }
     };
 
 
@@ -185,7 +173,6 @@ export class ThesisEditPage extends Component {
                         councilmeetings={this.props.councilmeetings}
                         programmeId={this.state.thesis.programmeId}
                     /> : undefined}
-                    {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.handleSaveThesis}>
