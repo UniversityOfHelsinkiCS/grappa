@@ -107,22 +107,30 @@ export async function getAttachmentsForAgreement(agreementId) {
 }
 
 export async function updateAttachment(attachment) {
-    return await knex('attachment')
+    return knex('attachment')
         .returning('attachmentId')
         .where('attachmentId', '=', attachment.attachmentId)
         .update(attachment)
         .then(attachmentId => attachmentId[0])
-        .catch(error => {
+        .catch((error) => {
             throw error
         });
 }
 
-export async function mergeAttachments(attachments) {
-    return pdfManipulator.joinPdfs(PATH_TO_FOLDER, attachments);
+export async function getPdf(attachment, trim) {
+    return pdfManipulator.getPdf(PATH_TO_FOLDER, attachment, trim);
 }
 
-export async function addCover(fileStream, infoObjects, councilmeeting) {
-    return pdfManipulator.addCover(fileStream, infoObjects, councilmeeting);
+export async function mergePdfs(...buffers) {
+    return pdfManipulator.combinePdf(...buffers);
+}
+
+export async function createCover(infoObjects, councilmeeting) {
+    return pdfManipulator.generateThesesCover(infoObjects, councilmeeting);
+}
+
+export async function createReviewPage(reviewObjects) {
+    return pdfManipulator.generateReviewPage(reviewObjects);
 }
 
 export async function deleteAttachment(attachmentId) {

@@ -1,5 +1,3 @@
-import { addCover } from '../util/pdfManipulator';
-
 const attachmentService = require('../services/AttachmentService');
 const agreementService = require('../services/AgreementService');
 const councilmeetingService = require('../services/CouncilmeetingService');
@@ -8,7 +6,7 @@ const notificationService = require('../services/NotificationService');
 export async function saveAttachments(req, res) {
     try {
         const attachmentObject = await attachmentService.saveAttachments(req, res);
-        const attachments = attachmentObject.attachments;
+        const { attachments } = attachmentObject;
         notificationService.createNotification('ATTACHMENT_SAVE_ONE_SUCCESS', req);
         res.status(200).send(attachments).end();
     } catch (error) {
@@ -19,8 +17,8 @@ export async function saveAttachments(req, res) {
 export async function downloadAttachments(req, res) {
     try {
         let cover = false;
-        let councilmeetingId = undefined;
-        const attachmentIds = req.params.ids.split('&').filter(id => {
+        let councilmeetingId;
+        const attachmentIds = req.params.ids.split('&').filter((id) => {
             // Avoid creating other routes
             // TODO: Create other routes
             if (id === 'cover') {
@@ -33,13 +31,26 @@ export async function downloadAttachments(req, res) {
             return true
         });
         const attachments = await attachmentService.getAttachments(attachmentIds);
-        
-        //To keep the order that was used to call (eq, 3&1&2)
-        let order = {};
+
+        // To keep the order that was used to call (eq, 3&1&2)
+        const order = {};
         attachmentIds.forEach((a, i) => { order[a] = i; });
         attachments.sort((a, b) => order[a.attachmentId] - order[b.attachmentId]);
+        
+        const promiseList = await Promise.all(attachments.map(async (attachment) => {
+            if (attachment.label === 'thesisFile' && attachments.length > 1) {
+                return attachmentService.getPdf(attachment, true);
+            } else if (attachment.label === 'reviewFile') {
+                // After every review pdf, create page with review of the graders.
+                const reviewPage = await attachmentService.createReviewPage();
+                const attachmentStream = await attachmentService.getPdf(attachment);
+                return attachmentService.mergePdfs(attachmentStream, reviewPage);
+            }
+            return attachmentService.getPdf(attachment);
+        }))
 
-        let fileStream = await attachmentService.mergeAttachments(attachments);
+        let fileStream = await attachmentService.mergePdfs(...promiseList)
+
         if (cover) {
             const councilmeeting = councilmeetingId ?
                 await councilmeetingService.getCouncilmeeting(councilmeetingId)
@@ -48,7 +59,7 @@ export async function downloadAttachments(req, res) {
             const agreementIds = attachments.map(attachment => attachment.agreementId);
 
             const agreementObjects = await agreementService.getThesesGradersAuthorsForAgreements(agreementIds);
-            /* agreementObjects are form 
+            /* agreementObjects are form
             'thesis.title',
             'thesis.grade',
             'grader.firstname',
@@ -59,7 +70,7 @@ export async function downloadAttachments(req, res) {
                 const idx = acc.findIndex(obj => obj.title === cur.title)
                 const grader = {
                     firstname: cur.firstname,
-                    lastname: cur.lastname,
+                    lastname: cur.lastname
                 }
                 if (idx !== -1) {
                     acc[idx].graders.push(grader);
@@ -75,13 +86,14 @@ export async function downloadAttachments(req, res) {
                 }
                 return acc;
             }, [])
-            fileStream = await addCover(fileStream, thesisObjects, councilmeeting)
+            const coverStream = await attachmentService.createCover(thesisObjects, councilmeeting)
+            fileStream = await attachmentService.mergePdfs(coverStream, fileStream)
         }
 
         res.type('pdf');
         res.end(fileStream, 'binary');
     } catch (error) {
-        console.log("error", error);
+        console.log('Virhe ', error);
         res.status(501).send({ text: 'NOT YET IMPLEMENTED' }).end();
     }
 }
