@@ -27,7 +27,7 @@ export class ThesisCreatePage extends Component {
                 graders: [],
                 graderEval: '',
                 programmeId: '',
-                councilmeetingId: '',
+                councilmeetingId: undefined,
                 printDone: undefined,
                 thesisEmails: {
                     graderEvalReminder: undefined,
@@ -121,6 +121,7 @@ export class ThesisCreatePage extends Component {
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
+                        programmeId={this.state.thesis.programmeId}
                     />
                 </div>
                 <br />
