@@ -19,7 +19,12 @@ export class PersonRoleReviewPage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.agreements.length > 0 && newProps.roles.length > 0 && newProps.persons.length > 0 && newProps.theses.length > 0) {
+        if (newProps.programmes.length > 0
+            && newProps.agreements.length > 0
+            && newProps.roles.length > 0
+            && newProps.persons.length > 0
+            && newProps.theses.length > 0) {
+
             this.setState({
                 agreementPersons: this.filterAndFormatPersons(newProps),
                 personToBeReviewed: undefined,
@@ -38,6 +43,7 @@ export class PersonRoleReviewPage extends Component {
                 return {
                     personId: person.personId,
                     personRoleId: role.personRoleId,
+                    agreementId: role.agreementId,
                     name: `${person.firstname} ${person.lastname}`,
                     role: role.name,
                     statement: role.statement,
@@ -55,11 +61,12 @@ export class PersonRoleReviewPage extends Component {
 
     reviewAgreementPerson = (statement, approved, personRole) => {
         if (statement && personRole) {
-            const agreementPersonRole = this.props.roles.find(role => role.personRoleId === personRole.personRoleId);
+            const agreementPersonRole = this.props.roles.find(role =>
+                role.personRoleId === personRole.personRoleId && role.agreementId === personRole.agreementId);
             agreementPersonRole.statement = statement;
             agreementPersonRole.approved = approved;
             this.props.updateRole(agreementPersonRole);
-            this.setState({ showReviewModal: false })
+            this.setState({ personRoleInReview: undefined })
         }
     }
 
@@ -86,7 +93,7 @@ export class PersonRoleReviewPage extends Component {
                         <th>Programme</th>
                         <th>Role</th>
                         <th>Thesis</th>
-                        <th>Action, if needed</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,8 +120,6 @@ export class PersonRoleReviewPage extends Component {
                     sendReview={this.reviewAgreementPerson}
                 />
                 Review and approve graders here.
-                BUG: Only latest review stays for a person.
-                TODO: Show every review / agreementPerson
                 <h2>List of thesis supervisors </h2>
                 {this.renderList()}
             </div>
