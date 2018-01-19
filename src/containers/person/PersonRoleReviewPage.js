@@ -47,7 +47,7 @@ export class PersonRoleReviewPage extends Component {
                     name: `${person.firstname} ${person.lastname}`,
                     role: role.name,
                     statement: role.statement,
-                    approval: role.approval,
+                    approved: role.approved,
                     programme: props.programmes.find(programme => programme.programmeId === role.programmeId).name,
                     thesis: props.theses.find((thesis) => {
                         return props.agreements.find(agreement =>
@@ -55,6 +55,11 @@ export class PersonRoleReviewPage extends Component {
                         )
                     })
                 }
+            }).sort((a, b) => {
+                if (!a.statement === !b.statement) {
+                    return a.name.toLowerCase() > b.name.toLowerCase()
+                }
+                return !a.statement ? -1 : 1
             })
         return agreementPersons
     }
@@ -75,8 +80,19 @@ export class PersonRoleReviewPage extends Component {
     }
 
     renderReviewButton(rolePerson) {
-        const text = rolePerson.approved ? 'Approved' : 'Review';
-        const buttonClass = `ui green button ${rolePerson.approved ? 'disabled' : ''}`;
+        let text = 'Review'
+        let buttonClass = 'ui button'
+        if (rolePerson.statement) {
+            if (rolePerson.approved) {
+                text = 'Approved'
+                buttonClass += ' green'
+            } else {
+                text = 'Rejected'
+                buttonClass += ' red'
+            }
+        } else {
+            buttonClass += ' blue'
+        }
         return (
             <button className={buttonClass} onClick={this.toggleEditModal(rolePerson)} >
                 {text}
