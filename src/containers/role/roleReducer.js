@@ -11,7 +11,9 @@ const reducer = (state = [], action) => {
         case 'ROLE_DELETE_ONE_SUCCESS':
             return state.filter(personRole => personRole.personRoleId !== Number.parseInt(action.response, 10));
         case 'ROLE_UPDATE_ONE_SUCCESS':
-            return [...state.filter(role => role.id === action.response.id), action.response];
+            console.log(action.response);
+            return [...state.filter(personRole => !(personRole.personRoleId === parseInt(action.response.personRoleId, 10)
+                && personRole.agreementId === parseInt(action.response.agreementId, 10))), action.response];
         default:
             return state;
     }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PersonRoleReviewModal from '../../components/person/PersonRoleReviewModal';
+import { updateRole } from '../role/roleActions';
 
 export class PersonRoleReviewPage extends Component {
     constructor(props) {
@@ -52,12 +53,12 @@ export class PersonRoleReviewPage extends Component {
         return agreementPersons
     }
 
-    reviewAgreementPerson = (statement, approval, personRole) => {
+    reviewAgreementPerson = (statement, approved, personRole) => {
         if (statement && personRole) {
             const agreementPersonRole = this.props.roles.find(role => role.personRoleId === personRole.personRoleId);
             agreementPersonRole.statement = statement;
-            agreementPersonRole.approval = approval;
-            this.props.reviewAgreementPerson(agreementPersonRole);
+            agreementPersonRole.approved = approved;
+            this.props.updateRole(agreementPersonRole);
             this.setState({ showReviewModal: false })
         }
     }
@@ -111,7 +112,9 @@ export class PersonRoleReviewPage extends Component {
                     personRole={this.state.personRoleInReview}
                     sendReview={this.reviewAgreementPerson}
                 />
-                Add and edit supervisor list here or review thesis projects. This page will be displayed to programmes&lsquo; professors and admins only.
+                Review and approve graders here.
+                BUG: Only latest review stays for a person.
+                TODO: Show every review / agreementPerson
                 <h2>List of thesis supervisors </h2>
                 {this.renderList()}
             </div>
@@ -120,8 +123,8 @@ export class PersonRoleReviewPage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    reviewAgreementPerson(data) {
-        dispatch(data) // reviewAgreementPerson(data));
+    updateRole(data) {
+        dispatch(updateRole(data))
     }
 });
 
@@ -136,7 +139,7 @@ const mapStateToProps = state => ({
 
 const { func } = PropTypes;
 PersonRoleReviewPage.propTypes = {
-    reviewAgreementPerson: func.isRequired
+    updateRole: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleReviewPage);

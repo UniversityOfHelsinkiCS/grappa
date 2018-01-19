@@ -9,9 +9,14 @@ export default class PersonRoleReviewModal extends Component {
         }
     }
 
-    saveReview = approval => () => {
-        console.log("Handling save")
-        this.props.sendReview(this.state.statement, approval, this.props.personRole);
+    componentWillReceiveProps(newProps) {
+        if (newProps.personRole) {
+            this.setState({ statement: newProps.personRole.statement })
+        }
+    }
+
+    saveReview = approved => () => {
+        this.props.sendReview(this.state.statement, approved, this.props.personRole);
     }
 
     handleReviewChange = (event) => {
