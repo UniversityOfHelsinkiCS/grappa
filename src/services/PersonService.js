@@ -11,21 +11,21 @@ const personSchema = [
     'studentNumber',
     'address',
     'phone',
-    'major',
-]
+    'major'
+];
 
-export async function getAllPersons() {
+export function getAllPersons() {
     return knex.select(personSchema).from('person');
 }
 
-export async function getPersonsWithRole(roleId) {
+export function getPersonsWithRole(roleId) {
     return knex.table('person').distinct('person.personId')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
         .select(personSchema);
 }
 
-export async function getPersonsWithRoleInStudyfield(roleId, programmeId) {
+export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
     return knex.table('person').distinct('person.personId')
         .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
@@ -37,19 +37,15 @@ export async function getLoggedPerson(req) {
     if (req.session.user_id) {
         const userId = req.session.user_id;
         return getPersonById(userId);
-    } else if (req.headers['uid']) {
-        const shibbolethId = req.headers['uid'];
+    } else if (req.headers.uid) {
+        const shibbolethId = req.headers.uid;
         return getPersonByShibbolethId(shibbolethId);
     }
 }
 
-export const getPersonById = (id) => {
-    return knex.select().from('person').where('personId', id).first();
-};
+export const getPersonById = id => knex.select().from('person').where('personId', id).first();
 
-export const getPersonByShibbolethId = (shibbolethId) => {
-    return knex.select().from('person').where('shibbolethId', shibbolethId).first();
-};
+export const getPersonByShibbolethId = shibbolethId => knex.select().from('person').where('shibbolethId', shibbolethId).first();
 
 export async function savePerson(personData) {
     // If already exists then return that person
@@ -68,69 +64,55 @@ export async function savePerson(personData) {
     return person;
 }
 
-export async function savePersonRole(personRoleData) {
-    return await knex('personWithRole')
+export function savePersonRole(personRoleData) {
+    return knex('personWithRole')
         .returning('personRoleId')
         .insert(personRoleData)
         .then(personRoleId => personRoleId[0])
-        .catch(error => {
+        .catch((error) => {
             throw error
         });
 }
 
-export async function updatePerson(personData) {
-    return await knex('person')
+export function updatePerson(personData) {
+    return knex('person')
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
         .then(personId => personId)
-        .catch(error => {
+        .catch((error) => {
             throw error
         });
 }
 
-export const getPersonsWithAgreementPerson = (agreementpersonId) => {
-    return knex.select(personSchema).from('person')
-        .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
-        .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
-        .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-        .where('personWithRole.personId', agreementpersonId)
-};
+export const getPersonsWithAgreementPerson = agreementpersonId => knex.select(personSchema).from('person')
+    .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
+    .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+    .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+    .where('personWithRole.personId', agreementpersonId);
 
-export const getPersonsWithAgreementInStudyfield = (programmeId) => {
-    return knex.select(personSchema).from('person')
-        .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
-        .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
-        .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-        .where('personWithRole.programmeId', programmeId)
-};
+export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(personSchema).from('person')
+    .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
+    .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+    .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+    .where('personWithRole.programmeId', programmeId);
 
-export const getPersonsAsAgreementPersonInStudyfield = (programmeId) => {
-    return knex.select(personSchema).from('person')
-        .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
-        .where('personWithRole.programmeId', programmeId)
-};
+export const getPersonsAsAgreementPersonInStudyfield = programmeId => knex.select(personSchema).from('person')
+    .innerJoin('personWithRole', 'personWithRole.personId', '=', 'person.personId')
+    .where('personWithRole.programmeId', programmeId);
 
-export const getPersonByPersonRoleId = (personRoleId) => {
-    return knex.select().from('person')
-        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
-        .where('personRoleId', personRoleId)
-        .then(persons => {
-            return persons[0];
-        })
-        .catch(error => {
-            console.log(error);
-            throw error;
-        });
-};
+export const getPersonByPersonRoleId = personRoleId => knex.select().from('person')
+    .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+    .where('personRoleId', personRoleId)
+    .then(persons => persons[0])
+    .catch((error) => {
+        console.log(error);
+        throw error;
+    });
 
-export const getAgreementPersonsByPersonRoleId = (personRoleId) => {
-    return knex.select().from('agreementPerson')
-        .where('personRoleId', personRoleId)
-        .then(persons => {
-            return persons;
-        });
-};
+export const getAgreementPersonsByPersonRoleId = personRoleId => knex.select().from('agreementPerson')
+    .where('personRoleId', personRoleId)
+    .then(persons => persons);
 
 export function getPersonByDetails(firstname, lastname, email) {
     return knex.select().from('person')
