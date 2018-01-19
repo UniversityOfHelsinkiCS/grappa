@@ -32,7 +32,7 @@ export class ThesisEditPage extends Component {
                 graders: [],
                 graderEval: '',
                 programmeId: '',
-                councilmeetingId: '',
+                councilmeetingId: undefined,
                 printDone: undefined,
                 thesisEmails: {
                     graderEvalReminder: undefined,
@@ -71,13 +71,8 @@ export class ThesisEditPage extends Component {
     }
 
     findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
-        try {
-            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
-            return formatThesis(thesis, agreements, persons, roles);
-        } catch (error) {
-            console.log(error);
-            return undefined
-        }
+        const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
+        return formatThesis(thesis, agreements, persons, roles);
     };
 
 
@@ -95,7 +90,7 @@ export class ThesisEditPage extends Component {
 
     handleChange = (fieldName, fieldValue) => {
         console.log(`thesis.${fieldName} = ${fieldValue}`);
-        const thesis = this.state.thesis;
+        const thesis = Object.assign({}, this.state.thesis);
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
     };
@@ -122,10 +117,6 @@ export class ThesisEditPage extends Component {
         this.props.downloadAttachments([attachmentId])
     };
 
-    handleEmail = (reminderType) => {
-        this.props.sendReminder(this.state.thesis.id, reminderType);
-    };
-
     renderControlButtons() {
         // Admin controls
         if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
@@ -142,16 +133,8 @@ export class ThesisEditPage extends Component {
                 </div>
             );
         }
-    }
 
-    renderEmails() {
-        // const thesisEmails = this.state.thesis.thesisEmails;
-        return undefined;
-        /* return <ThesisEmails
-            thesisEmails={thesisEmails}
-            sendEmail={this.handleEmail}
-            sendDone={this.setReminderDone} />
-            */
+        return <div />;
     }
 
     renderGraderSelecter() {
@@ -200,6 +183,7 @@ export class ThesisEditPage extends Component {
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
+                        programmeId={this.state.thesis.programmeId}
                     /> : undefined}
                     {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>

@@ -4,46 +4,26 @@ import moment from 'moment';
 import { councilmeetingType } from '../../util/types';
 
 export default class ThesisCouncilmeetingPicker extends Component {
-    constructor() {
-        super();
-        this.state = {
-            filteredMeetings: [{ id: '', content: 'Select Date' }]
-        }
-    }
 
-    componentDidMount() {
-        if (this.props.councilmeetings) {
-            this.setState({
-                filteredMeetings: [
-                    { id: '', content: 'Select Date' },
-                    ...this.formatMeetings(this.props.councilmeetings)
-                ]
-            });
-        }
-    }
+    formatMeetings = () => {
+        const { programmeId, councilmeetings } = this.props;
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.councilmeetings) {
-            const formatted = this.formatMeetings(newProps.councilmeetings);
-            this.setState({ filteredMeetings: [{ id: '', content: 'Select Date' }, ...formatted] });
-        }
-    }
+        if (!councilmeetings)
+            return [];
 
-    formatMeetings = (councilmeetings) => {
-        const today = new Date();
-        return councilmeetings.filter((meeting) => {
-            const mdate = new Date(meeting.instructorDeadline);
-            return mdate >= today;
-        }).map((meeting) => ({
+        const meetings = councilmeetings.filter((meeting) => {
+            return moment(meeting.instructorDeadline).isAfter(moment()) && meeting.programmeId === programmeId;
+        }).map(meeting => ({
             id: meeting.councilmeetingId,
-            content: `${moment(meeting.date).format('DD/MM/YYYY')} Deadline: ${moment(meeting.instructorDeadline).format('HH:mm DD/MM/YYYY')}`
+            content: `${moment(meeting.date).format('DD.MM.YYYY')} Deadline: ${moment(meeting.instructorDeadline).format('HH:mm DD.MM.YYYY')}`
         }));
+
+        return [{ id: '', content: 'Select Date' }, ...meetings];
     };
 
     chooseMeeting = (event) => {
-        const chosenMeetingId = event.target.value;
-        if (chosenMeetingId) {
-            this.props.sendChange('councilmeetingId', chosenMeetingId);
+        if (event.target.value) {
+            this.props.sendChange('councilmeetingId', event.target.value);
         }
     };
 
@@ -60,7 +40,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
                     onChange={this.chooseMeeting}
                     value={this.props.chosenMeetingId}
                 >
-                    {this.state.filteredMeetings.map(meeting => (
+                    {this.formatMeetings().map(meeting => (
                         <option key={meeting.id} value={meeting.id} >
                             {meeting.content}
                         </option>
@@ -73,6 +53,12 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
 ThesisCouncilmeetingPicker.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
-    chosenMeetingId: number.isRequired,
-    sendChange: func.isRequired
+    chosenMeetingId: number,
+    sendChange: func.isRequired,
+    programmeId: number
+};
+
+ThesisCouncilmeetingPicker.defaultProps = {
+    programmeId: undefined,
+    chosenMeetingId: undefined
 };
