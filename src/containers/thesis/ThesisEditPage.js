@@ -185,7 +185,6 @@ export class ThesisEditPage extends Component {
                         councilmeetings={this.props.councilmeetings}
                         programmeId={this.state.thesis.programmeId}
                     /> : undefined}
-                    {(this.state.allowEdit) ? this.renderEmails() : undefined}
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.handleSaveThesis}>

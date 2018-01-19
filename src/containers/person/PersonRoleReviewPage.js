@@ -93,6 +93,7 @@ export class PersonRoleReviewPage extends Component {
         } else {
             buttonClass += ' blue'
         }
+        // Approved, Rejected and not yet reviewed look different.
         return (
             <button className={buttonClass} onClick={this.toggleEditModal(rolePerson)} >
                 {text}
