@@ -78,3 +78,20 @@ test('councilmeeting update', async (t) => {
     updatedData.councilmeetingId = meeting[0];
     t.deepEqual(meetingsAfter[0], updatedData);
 });
+
+test('councilmeeting with invalid dates cannot be created', async (t) => {
+    t.plan(1);
+
+    const data = {
+        date: '2019-11-19T22:00:00.000Z',
+        instructorDeadline: '2019-11-20T22:00:00.000Z',
+        studentDeadline: '2019-11-10T22:00:00.000Z',
+        programmeId: 1
+    };
+
+    const res = await request(makeApp(1))
+        .post('/councilmeetings')
+        .send(data);
+
+    t.is(res.status, 500);
+});
