@@ -14,7 +14,6 @@ export async function getPdf(pathToFolder, attachment, trim) {
     const input = {
         A: pathToFolder + attachment.filename
     };
-    
     return pdftk.input(input).cat(pdf).output()
 }
 
@@ -67,13 +66,16 @@ function createThesisString(thesisInfoArray) {
 }
 
 export async function generateReviewPage(reviewInformationArray) {
+    const thesisInformation = reviewInformationArray.map((agreementObject) => {
+        const identifyString = `${agreementObject.authorLastname} ${agreementObject.authorFirstname}: ${agreementObject.grade}\n${agreementObject.title}`
+        const graderString = agreementObject.graders.map((grader) => {
+            return `${grader.lastname} ${grader.firstname}.\nReviewed by ${grader.reviewerName}:\n${grader.statement}`
+        }).join('\n\n');
+        return `${identifyString}\n\n${graderString}`;
+    }).join('\n\n')
     const template = './data/coverTemplate.pdf'
     const formData = {
-        thesisInformation: 'Diibadaaba',
-    }
-    const zero = false
-    if (reviewInformationArray && zero) {
-        return true;
+        thesisInformation
     }
     return pdftk
         .input(template)

@@ -129,8 +129,8 @@ export async function createCover(infoObjects, councilmeeting) {
     return pdfManipulator.generateThesesCover(infoObjects, councilmeeting);
 }
 
-export async function createReviewPage(reviewObjects) {
-    return pdfManipulator.generateReviewPage(reviewObjects);
+export async function createReviewPage(reviewObject) {
+    return pdfManipulator.generateReviewPage(reviewObject);
 }
 
 export async function deleteAttachment(attachmentId) {

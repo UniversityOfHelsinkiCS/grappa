@@ -185,10 +185,14 @@ export const getAgreementReceiver = (id) => {
 
 export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
     const informationSchema = [
+        'agreement.agreementId',
         'thesis.title',
         'thesis.grade',
         'grader.firstName',
         'grader.lastName',
+        'agreementPerson.statement as graderStatement',
+        'graderReviewer.firstname as reviewerFirstname',
+        'graderReviewer.lastname as reviewerLastname',
         'author.firstName as authorFirstname',
         'author.lastName as authorLastname',
     ]
@@ -202,4 +206,6 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         .innerJoin('person as grader', 'personWithRole.personId', '=', 'grader.personId')
         .innerJoin('person as author', 'agreement.authorId', '=', 'author.personId')
         .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+        .innerJoin('personWithRole as graderReviewerRole', 'agreementPerson.approverId', '=', 'graderReviewerRole.personRoleId')
+        .innerJoin('person as graderReviewer', 'graderReviewerRole.personId', '=', 'graderReviewer.personId')
 }
