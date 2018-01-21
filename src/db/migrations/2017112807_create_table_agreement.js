@@ -8,8 +8,8 @@ exports.up = function(knex, Promise) {
             table.foreign('thesisId').references('thesis.thesisId');
             table.integer('responsibleSupervisorId').unsigned();
             table.foreign('responsibleSupervisorId').references('personWithRole.personRoleId');
-            table.integer('programmeId').unsigned();
-            table.foreign('programmeId').references('programme.programmeId');
+            table.integer('studyfieldId').unsigned();
+            table.foreign('studyfieldId').references('studyfield.studyfieldId');
             table.boolean('fake');
             table.date('startDate');
             table.date('completionEta');

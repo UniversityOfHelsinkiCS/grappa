@@ -2,36 +2,41 @@ module.exports = [
     {
         programmeId: 1,
         facultyId: 1,
-        name: 'Tietojenkäsittelytiede'
+        name: 'Computer Science Masters programme'
     },
     {
         programmeId: 2,
         facultyId: 1,
-        name: 'Matematiikka'
+        name: 'Data Science Masters programme'
     },
     {
         programmeId: 3,
         facultyId: 1,
-        name: 'Fysiikka'
+        name: 'Mathematics'
     },
     {
         programmeId: 4,
         facultyId: 1,
-        name: 'Geologia'
+        name: 'Physics'
     },
     {
         programmeId: 5,
-        facultyId: 2,
-        name: 'Oikeustiede'
+        facultyId: 1,
+        name: 'Geology'
     },
     {
         programmeId: 6,
-        facultyId: 3,
-        name: 'Sosiologia'
+        facultyId: 2,
+        name: 'Law & Order'
     },
     {
         programmeId: 7,
         facultyId: 3,
-        name: 'Taloustiede'
+        name: 'Sociology'
+    },
+    {
+        programmeId: 8,
+        facultyId: 3,
+        name: 'Economy'
     }
 ];

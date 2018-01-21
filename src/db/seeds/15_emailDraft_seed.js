@@ -1,7 +1,7 @@
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
     // Deletes ALL existing entries
     return knex('emailDraft').del()
-        .then(function() {
+        .then(function () {
             // Inserts seed entries
             return knex('emailDraft').insert([
                 {
@@ -54,7 +54,7 @@ $LINK$`
                     type: 'InviteAuthorToLogin',
                     title: 'Thesis added to Grappa',
                     body:
-                    `Hi
+                        `Hi
 
 Your thesis has been added to Grappa, $LOGIN_URL$
                     `
