@@ -54,9 +54,19 @@ export class PersonRoleManagePage extends Component {
         this.props.deleteRole(role)
     }
 
+    handleSendInvite = (programme, role, email) => {
+        console.log(programme, role, email);
+    }
+
     renderManagement = () => {
         if (!this.state.person) {
-            return <PersonInviter />
+            return (
+                <PersonInviter
+                    roles={this.props.availableRoles}
+                    programmes={this.props.programmes}
+                    handleSendInvite={this.handleSendInvite}
+                />
+            )
         }
         return (<PersonRoleChoose
             person={this.state.person}
