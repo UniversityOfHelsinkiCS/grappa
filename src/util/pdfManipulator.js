@@ -18,7 +18,7 @@ export async function getPdf(pathToFolder, attachment, trim) {
 }
 
 export async function combinePdf(...buffers) {
-    // TODO: Make sure cat can be done with buffers like this.
+    // TODO: Make sure catenation can be done with buffers like this.
     return pdftk.input(buffers).output();
 }
 
@@ -50,29 +50,21 @@ export async function generateThesesCover(thesisInformationArray, councilmeeting
 }
 
 function createDateString(date) {
-    const string = `0${(date.getDate()).slice(-2)}/0${(date.getMonth() + 1).slice(-2)}/${date.getFullYear()}`
-    return string;
+    return `0${(date.getDate()).slice(-2)}/0${(date.getMonth() + 1).slice(-2)}/${date.getFullYear()}`
 }
 
 function createThesisString(thesisInfoArray) {
-    const string = thesisInfoArray.map((thesis) => {
+    return thesisInfoArray.map((thesis) => {
         const thesisString = `${thesis.authorLastname}, ${thesis.authorFirstname}: ${thesis.title}\n`
         const graderString =
             `Graders: ${thesis.graders.map(grader => `${grader.firstname} ${grader.lastname}`).join(', ')}\n`;
         const gradeString = `Proposed grade: ${thesis.grade}`;
         return thesisString + graderString + gradeString
     }).join('\n\n')
-    return string;
 }
 
 export async function generateReviewPage(reviewInformationArray) {
-    const thesisInformation = reviewInformationArray.map((agreementObject) => {
-        const identifyString = `${agreementObject.authorLastname} ${agreementObject.authorFirstname}: ${agreementObject.grade}\n${agreementObject.title}`
-        const graderString = agreementObject.graders.map((grader) => {
-            return `${grader.lastname} ${grader.firstname}.\nReviewed by ${grader.reviewerName}:\n${grader.statement}`
-        }).join('\n\n');
-        return `${identifyString}\n\n${graderString}`;
-    }).join('\n\n')
+    const thesisInformation = createReviewString(reviewInformationArray);
     const template = './data/coverTemplate.pdf'
     const formData = {
         thesisInformation
@@ -82,4 +74,14 @@ export async function generateReviewPage(reviewInformationArray) {
         .fillForm(formData)
         .flatten()
         .output();
+}
+
+function createReviewString(reviewInfoArray) {
+    return reviewInfoArray.map((agreementObject) => {
+        const identifyString = `${agreementObject.authorLastname} ${agreementObject.authorFirstname}: ${agreementObject.grade}\n${agreementObject.title}`
+        const graderString = agreementObject.graders.map((grader) => {
+            return `${grader.lastname} ${grader.firstname}.\nReviewed by ${grader.reviewerName}:\n${grader.statement}`
+        }).join('\n\n');
+        return `${identifyString}\n\n${graderString}`;
+    }).join('\n\n')
 }
