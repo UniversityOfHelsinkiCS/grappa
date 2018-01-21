@@ -26,10 +26,10 @@ export async function getAllAgreements(req, res) {
         let agreements = [];
         let newAgreements = [];
 
-        const rolesInStudyfields = await getUsersRoles(user);
+        const rolesInProgrammes = await getUsersRoles(user);
 
         // If user is an admin, get everything
-        if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+        if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
             agreements = await agreementService.getAllAgreements();
             const attachments = await attachmentService.getAllAttachments();
             const responseObject = {
@@ -40,10 +40,10 @@ export async function getAllAgreements(req, res) {
             return;
         }
 
-        rolesInStudyfields.forEach(async item => {
+        rolesInProgrammes.forEach(async (item) => {
             // As resp_prof, print-person and manager persons who are writing theses in programme
             if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
-                newAgreements = await agreementService.getAgreementsInStudyfield(item.programme.programmeId);
+                newAgreements = await agreementService.getAgreementsInProgramme(item.programme.programmeId);
                 agreements = [...new Set([...agreements, ...newAgreements])];
             }
         });
@@ -57,8 +57,8 @@ export async function getAllAgreements(req, res) {
         agreements = [...new Set([...agreements, ...newAgreements])];
 
         // Remove duplicates
-        let responseAgreements = [];
-        agreements.forEach(agreement => {
+        const responseAgreements = [];
+        agreements.forEach((agreement) => {
             if (!responseAgreements.find(item => item.agreementId === agreement.agreementId)) {
                 responseAgreements.push(agreement);
             }

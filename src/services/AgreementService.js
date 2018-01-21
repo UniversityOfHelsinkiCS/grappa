@@ -5,7 +5,7 @@ const agreementSchema = [
     'authorId',
     'agreement.thesisId',
     'responsibleSupervisorId',
-    'agreement.programmeId',
+    'agreement.studyfieldId',
     'fake',
     'startDate',
     'completionEta',
@@ -23,18 +23,27 @@ export const getAgreementById = (agreementId) => {
     return knex.select().from('agreement')
         .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .join('person', 'agreement.authorId', '=', 'person.personId')
-        .join('programme', 'agreement.programmeId', '=', 'programme.programmeId')
+        .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .join('programme', 'studyfield.programmeId', '=', 'programme.programmeId')
         .where('agreementId', agreementId)
         .then(agreement => {
             return parseAgreementData(agreement[0]);
         });
 };
 
-export const getAgreementsInStudyfield = (programmeId) => {
+export const getAgreementsInStudyfield = (studyfieldId) => {
     return knex.select()
         .from('agreement')
         .leftJoin('emailInvite', 'agreement.agreementId', 'emailInvite.agreement')
-        .where('programmeId', programmeId);
+        .where('studyfieldId', studyfieldId);
+};
+
+export const getAgreementsInProgramme = (programmeId) => {
+    return knex.select()
+        .from('agreement')
+        .leftJoin('emailInvite', 'agreement.agreementId', 'emailInvite.agreement')
+        .innerJoin('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .where('studyfield.programmeId', programmeId);
 };
 
 export const getAgreementsByAgreementPerson = (personId) => {
@@ -82,7 +91,7 @@ export const createFakeAgreement = () => {
         authorId: null,
         thesisId: null,
         responsibleSupervisorId: null,
-        programmeId: null,
+        studyfieldId: null,
         fake: true,
         startDate: null,
         completionEta: null,
@@ -149,7 +158,7 @@ const parseAgreementData = (data) => {
         authorId: data.personId,
         thesisId: data.thesisId,
         responsibleSupervisorId: data.responsibleSupervisorId,
-        programmeId: data.programmeId,
+        studyfieldId: data.studyfieldId,
         studentGradeGoal: data.studentGradeGoal,
         thesisWorkStudentTime: data.studentWorkTime,
         thesisWorkSupervisorTime: data.supervisorWorkTime,

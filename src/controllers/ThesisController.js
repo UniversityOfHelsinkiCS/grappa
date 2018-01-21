@@ -6,6 +6,7 @@ const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const programmeService = require('../services/ProgrammeService');
+const studyfieldService = require('../services/StudyfieldService');
 const notificationService = require('../services/NotificationService');
 const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
@@ -15,7 +16,7 @@ const checkit = new Checkit({
     title: 'required',
     urkund: ['required', 'url'],
     grade: 'required',
-    programmeId: 'required'
+    studyfieldId: 'required'
 });
 
 export async function getTheses(req, res) {
@@ -25,18 +26,18 @@ export async function getTheses(req, res) {
     let theses = [];
     let newTheses = [];
 
-    const rolesInStudyfields = await getUsersRoles(user);
-    if (rolesInStudyfields.find(item => item.role.name === 'admin')) {
+    const rolesInProgrammes = await getUsersRoles(user);
+    if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
         // As an admin, get all theses
         const allTheses = await thesisService.getAllTheses();
         res.status(200).json(allTheses).end();
         return;
     }
 
-    rolesInStudyfields.forEach(async (item) => {
+    rolesInProgrammes.forEach(async (item) => {
         if (programmeRoles.includes(item.role.name)) {
             // ... As resp_professor, manager or print-person theses in programme
-            newTheses = await thesisService.getThesesByStudyfield(item.programme.programmeId);
+            newTheses = await thesisService.getThesesInProgramme(item.programme.programmeId);
             theses = [...new Set([...theses, ...newTheses])];
         }
     });
@@ -60,6 +61,7 @@ export async function getTheses(req, res) {
 export async function saveThesisForm(req, res) {
     const thesis = JSON.parse(req.body.json);
 
+    console.log("11")
     try {
         await checkit.run(thesis);
     } catch (error) {
@@ -69,16 +71,16 @@ export async function saveThesisForm(req, res) {
     // Order so that agreementId is available to save attachments.
     const agreement = await agreementService.createFakeAgreement();
     const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
-
-    const programme = thesis.programmeId;
+    console.log("22")
+    const studyfieldId = thesis.studyfieldId;
     const authorEmail = thesis.authorEmail;
     const agreementId = agreement.agreementId;
 
-    agreement.programmeId = thesis.programmeId;
+    agreement.studyfieldId = thesis.studyfieldId;
 
     delete thesis.authorFirstname;
     delete thesis.authorLastname;
-    delete thesis.programmeId;
+    delete thesis.studyfieldId;
     // TODO: Add email to new email send table
     delete thesis.thesisEmails;
     delete thesis.authorEmail;
@@ -87,18 +89,22 @@ export async function saveThesisForm(req, res) {
         updateGraders(thesis.graders, agreement);
         delete thesis.graders;
     }
-
+    console.log("33")
     const savedThesis = await thesisService.saveThesis(thesis);
 
     // Agreement was missing the thesisId completing linking.
     agreement.thesisId = savedThesis.thesisId;
     const savedAgreement = await agreementService.updateAgreement(agreement);
-
+    console.log('3333')
     const roles = await roleService.getRolesForAllPersons();
+    console.log("44", studyfieldId)
+    const programme = await programmeService.getStudyfieldsProgramme(studyfieldId);
+    console.log("5555555555555555555", programme)
+    await emailService.newThesisAddedNotifyRespProf(programme.programmeId);
+    console.log("55")
+    await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme.programmeId);
 
-    await emailService.newThesisAddedNotifyRespProf(programme);
-    await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme);
-
+    console.log("66")
     const response = {
         thesis: savedThesis,
         agreement: savedAgreement,
@@ -138,20 +144,19 @@ export async function updateThesis(req, res) {
     res.status(200).json(responseObject).end();
 }
 
+
 const updateGraders = async (graders, agreement) => {
     // To unlink person and
     const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId);
-
     await Promise.all(agreementPersons.map(async (agreementPerson) => {
         const personRole = await roleService.getPersonRoleWithId(agreementPerson.personRoleId);
         if (!graders.find(grader => grader.personId == personRole.personId)) {
             await roleService.unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId);
         }
     }));
-
     // If grader not in agreementperson, link them.
     await Promise.all(graders.map(async (grader) => {
-        const personRole = await roleService.getPersonRole(grader.personId, agreement.programmeId, 'grader');
+        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader');
         if (personRole) {
             // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
@@ -160,10 +165,10 @@ const updateGraders = async (graders, agreement) => {
         } else {
             // If person has no grader role, make the person a grader and link them.
             const roleId = await roleService.getRoleId('grader');
-
+            const studyfield = await studyfieldService.getStudyfield(agreement.studyfieldId);
             let personWithRole = {
                 personId: grader.personId,
-                programmeId: agreement.programmeId,
+                programmeId: studyfield.programmeId,
                 roleId
             };
             personWithRole = await roleService.savePersonRole(personWithRole);

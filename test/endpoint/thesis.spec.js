@@ -17,7 +17,7 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async t => {
+test.before(async () => {
     await knex.migrate.latest();
     await knex.seed.run();
 });
@@ -42,7 +42,7 @@ const thesisForm = {
         title: ''
     }],
     graderEval: 'Tarkastajien esittely',
-    programmeId: 2,
+    studyfieldId: 2,
     councilmeetingId: 1,
     printDone: false,
     thesisEmails: {
@@ -75,7 +75,7 @@ const person = {
 
 const fakeAgreement = {
     responsibleSupervisorId: null,
-    programmeId: thesisForm.programmeId,
+    studyfieldId: thesisForm.studyfieldId,
     fake: 1,
     startDate: null,
     completionEta: null,
@@ -89,7 +89,7 @@ const fakeAgreement = {
     whoNext: null
 };
 
-test('thesisForm post & creates id without attachment', async t => {
+test('thesisForm post & creates id without attachment', async (t) => {
     t.plan(5);
     const res = await request(makeApp(1))
         .post('/theses')
@@ -110,7 +110,7 @@ test('thesisForm post & creates id without attachment', async t => {
     t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
 });
 
-test.skip('thesis get all', async t => {
+test.skip('thesis get all', async (t) => {
     t.plan(2);
     const app = makeApp(1);
     const res = await request(app)
@@ -128,7 +128,7 @@ const attachment = {
     originalname: 'LICENSE'
 };
 
-test('thesisForm post & creates id with attachment', async t => {
+test('thesisForm post & creates id with attachment', async (t) => {
     t.plan(7);
     const res = await request(makeApp(1))
         .post('/theses')
@@ -157,21 +157,21 @@ test('thesisForm post & creates id with attachment', async t => {
     t.deepEqual(attachments[0], attachment, 'Attachments are correct');
 });
 
-test('thesisForm post sends emails', async t => {
+test('thesisForm post sends emails', async (t) => {
     const mailer = require('../../src/util/mailer');
     const mailSpy = sinon.spy(mailer, 'sendEmail');
     const form = Object.assign({}, thesisForm);
 
     form.authorEmail = 'emailTest@example.com';
-    form.programmeId = 1;
+    form.studyfieldId = 1;
 
     await request(makeApp(1))
         .post('/theses')
         .field('json', JSON.stringify(form));
 
-    t.true(mailSpy.calledWith(form.authorEmail));
-    t.true(mailSpy.calledWith('victoria@vastuuproffa.com'));
-    t.true(mailSpy.calledWith('erkki@erikoistapaus.com'));
+    t.true(mailSpy.calledWith(form.authorEmail), 'Email 1 ok');
+    t.true(mailSpy.calledWith('victoria@vastuuproffa.com'), 'Email 2 ok');
+    t.true(mailSpy.calledWith('erkki@erikoistapaus.com'), 'Email 3 ok');
 });
 
 test('author can see own thesis', async t => {
@@ -201,13 +201,14 @@ test('grader can see thesis', async t => {
     t.is(res.body[0].title, title);
 });
 
-test('resp prof can see programme thesis', async t => {
+test('resp prof can see programme thesis', async (t) => {
     const title = 'Studyfield thesis';
     const personId = await createPerson();
     const programme = await knex('programme').insert({ name: 'test programme' }).returning('programmeId');
+    const studyfield = await knex('studyfield').insert({ name: 'test studyfield', programmeId: programme[0] }).returning('studyfieldId')
     const thesis = await knex('thesis').insert({ title }).returning('theisId');
     await knex('personWithRole').insert({ personId, roleId: 4, programmeId: programme[0] }).returning('personRoleId');
-    await knex('agreement').insert({ thesisId: thesis[0], programmeId: programme[0] }).returning('agreementId');
+    await knex('agreement').insert({ thesisId: thesis[0], studyfieldId: studyfield[0] }).returning('agreementId');
 
     const res = await request(makeApp(personId)).get('/theses');
 

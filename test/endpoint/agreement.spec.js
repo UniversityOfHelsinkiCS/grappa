@@ -14,7 +14,7 @@ const makeApp = (userId) => {
     return app;
 }
 
-test.before(async t => {
+test.before(async () => {
     await knex.migrate.latest();
     await knex.seed.run();
 })
@@ -37,9 +37,8 @@ const agreementForm = {
 
     studentGradeGoal: '5',
 
-    programmeId: 1,
+    studyfieldId: 1,
     fake: false,
-    studentGradeGoal: 5,
     studentWorkTime: '1h viikossa',
     supervisorWorkTime: '2h viikossa',
     intermediateGoal: '20 sivua ensi perjantaina',
@@ -53,7 +52,7 @@ const agreementWithId = {
     authorId: 1,
     thesisId: 1,
     responsibleSupervisorId: 1,
-    programmeId: 1,
+    studyfieldId: 1,
     fake: 0,
     studentGradeGoal: 5,
     studentWorkTime: '1h viikossa',
@@ -64,7 +63,7 @@ const agreementWithId = {
 }
 
 //TODO: Test something like thesis: thesisForm post & creates id without attachment
-test.skip('agreement post & correct response', async t => {
+test.skip('agreement post & correct response', async (t) => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/agreements')
@@ -76,7 +75,7 @@ test.skip('agreement post & correct response', async t => {
 
 })
 
-test('agreements get should also return attachments', async t => {
+test('agreements get should also return attachments', async (t) => {
     t.plan(3);
     const res = await request(makeApp(10))
         .get('/agreements')

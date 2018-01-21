@@ -1,9 +1,9 @@
 const knex = require('../db/connection');
 
 const programmeSchema = [
-    'programmeId',
-    'name',
-    'facultyId'
+    'programme.programmeId',
+    'programme.name',
+    'programme.facultyId'
 ];
 
 export const getAllProgrammes = () =>
@@ -14,3 +14,9 @@ export const getProgrammeId = name =>
 
 export const getProgramme = programmeId =>
     knex.select(programmeSchema).from('programme').where('programmeId', programmeId).first();
+
+export const getStudyfieldsProgramme = studyfieldId =>
+    knex.select(programmeSchema).from('programme')
+        .innerJoin('studyfield', 'programme.programmeId', '=', 'studyfield.programmeId')
+        .where('studyfield.studyfieldId', studyfieldId)
+        .first()

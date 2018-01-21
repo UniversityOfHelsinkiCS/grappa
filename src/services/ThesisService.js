@@ -24,11 +24,18 @@ export function getThesesByPersonId(personId) {
         .where('agreement.authorId', personId);
 }
 
-// In cases we need theses for a programme (resp_prof)
-export function getThesesByStudyfield(programmeId) {
+export function getThesesInStudyfield(studyfieldId) {
     return knex.select(thesisSchema).from('thesis')
         .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
-        .where('agreement.programmeId', programmeId);
+        .where('agreement.studyfieldId', studyfieldId);
+}
+
+// In cases we need theses for a programme (resp_prof)
+export function getThesesInProgramme(programmeId) {
+    return knex.select(thesisSchema).from('thesis')
+        .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
+        .innerJoin('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+        .where('studyfield.programmeId', programmeId);
 }
 
 // In cases we need theses for a supervisor/grader
