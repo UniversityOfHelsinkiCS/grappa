@@ -8,6 +8,7 @@ import { personType } from '../util/types';
 
 // TODO: redux persistent storage & fetch in middleware
 import { getProgrammes } from './programme/programmeActions';
+import { getStudyfields } from './studyfield/studyfieldActions';
 import { getAgreements } from '../containers/agreement/agreementActions';
 import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingActions';
 import { getTheses } from '../containers/thesis/thesisActions';
@@ -36,6 +37,7 @@ export class NavBar extends Component {
         // TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
             this.props.getStudyfields();
+            this.props.getProgrammes();
             this.props.getAgreements();
             this.props.getCouncilmeetings();
             this.props.getTheses();
@@ -98,8 +100,11 @@ const mapDispatchToProps = dispatch => ({
     logout() {
         dispatch(logout());
     },
-    getStudyfields() {
+    getProgrammes() {
         dispatch(getProgrammes());
+    },
+    getStudyfields() {
+        dispatch(getStudyfields());
     },
     getAgreements() {
         dispatch(getAgreements());
@@ -130,6 +135,7 @@ NavBar.propTypes = {
     login: func.isRequired,
     logout: func.isRequired,
     getPersons: func.isRequired,
+    getProgrammes: func.isRequired,
     getStudyfields: func.isRequired,
     getAgreements: func.isRequired,
     getCouncilmeetings: func.isRequired,
