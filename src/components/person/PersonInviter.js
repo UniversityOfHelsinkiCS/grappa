@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
+import { arrayOf, func } from 'prop-types';
+import { programmeType, roleType } from '../../util/types';
 
 export default class PersonInviter extends Component {
-
     constructor() {
         super();
         this.state = {
             email: undefined,
             role: undefined,
-            programme: undefined,
+            programme: undefined
         };
     }
 
     changeValue = type => (event) => {
         const { value } = event.target;
         this.setState({ [type]: value })
-    }
+    };
 
     sendEmail = () => {
-        const { programme, role, email } = this.state
+        const { programme, role, email } = this.state;
         if (programme && role && email) {
             this.props.handleSendInvite(programme, role, email)
         }
-    }
+    };
 
     roleDropdown = () => {
         if (!this.props.roles) {
@@ -35,7 +36,7 @@ export default class PersonInviter extends Component {
                 )}
             </select>
         )
-    }
+    };
 
     programmeDropdown = () => {
         if (!this.props.programmes) {
@@ -49,7 +50,7 @@ export default class PersonInviter extends Component {
                 )}
             </select>
         )
-    }
+    };
 
     render() {
         return (
@@ -80,3 +81,9 @@ export default class PersonInviter extends Component {
         )
     }
 }
+
+PersonInviter.propTypes = {
+    handleSendInvite: func.isRequired,
+    roles: arrayOf(roleType).isRequired,
+    programmes: arrayOf(programmeType).isRequired
+};
