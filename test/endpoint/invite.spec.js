@@ -24,12 +24,12 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async (t) => {
+test.before(async () => {
     await knex.migrate.latest();
     await knex.seed.run();
 });
 
-test('thesis is linked to author when invite is accepted', async t => {
+test('thesis is linked to author when invite is accepted', async (t) => {
     const email = 'test1@opiskelija.example.com';
     const personId = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
@@ -44,7 +44,7 @@ test('thesis is linked to author when invite is accepted', async t => {
     t.is(agreement.authorId, personId);
 });
 
-test('invalid token is handled', async t => {
+test('invalid token is handled', async (t) => {
     const email = 'test1@opiskelija.example.com';
     const personId = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
@@ -81,4 +81,18 @@ test('role can be invited', async (t) => {
 
     const rows = await knex.select().from('emailInvite').where('email', email);
     t.is(rows.length, 1);
+});
+
+test('role is linked to user when invite is accepted', async (t) => {
+    const email = 'test1@opiskelija.example.com';
+    const personId = await createPerson(email);
+    const token = 'fsdwe234gfd3';
+    await knex('emailInvite').insert({ email, token, programme: 1, role: 1, type: 'role' });
+
+    const res = await request(makeApp(personId)).get(`/invite/role/${token}`);
+
+    t.is(res.status, 200);
+
+    const personWithRole = await knex('personWithRole').select().where('personId', personId).first();
+    t.is(personWithRole.roleId, 1);
 });

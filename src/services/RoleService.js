@@ -1,6 +1,6 @@
 const knex = require('../db/connection');
 
-//Role
+// Role
 
 export async function getRoles() {
     return knex.select().from('role');
@@ -16,12 +16,12 @@ export async function saveRole(roleName) {
         .returning('roleId')
         .insert({ name: roleName })
         .then(roleId => roleId[0])
-        .catch(error => {
+        .catch((error) => {
             throw error
         });
 }
 
-//PersonWithRole
+// PersonWithRole
 
 export async function getPersonRoles(personId) {
     return knex.select().from('personWithRole').where('personId', personId);
@@ -81,13 +81,13 @@ export async function updateVisitorRoleStudyfields(personId, programmeIds) {
     return Promise.all([...rolesToDelete, ...rolesToAdd]);
 }
 
-//AgreementPerson
+// AgreementPerson
 
 export async function linkAgreementAndPersonRole(agreementId, personRoleId) {
     const agreementPerson = {
         agreementId,
-        personRoleId,
-    }
+        personRoleId
+    };
     return knex('agreementPerson').returning('agreementPersonId')
         .insert(agreementPerson).then(agreementPersonIds =>
             knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
@@ -101,21 +101,17 @@ export async function unlinkAgreementAndPersonRole(agreementId, personRoleId) {
         .del()
 }
 
-export const getAgreementPersonsByAgreementId = (agreementId) => {
-    return knex.select().from('agreementPerson')
-        .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
-        .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
-        .where('agreementId', agreementId)
-}
+export const getAgreementPersonsByAgreementId = agreementId => knex.select().from('agreementPerson')
+    .leftJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+    .leftJoin('person', 'personWithRole.personId', '=', 'person.personId')
+    .where('agreementId', agreementId);
 
-export const updateAgreementPerson = (agreementId, personRoleId, agreementPerson) => {
-    return knex('agreementPerson')
-        .where('agreementId', agreementId)
-        .where('personRoleId', personRoleId)
-        .update(agreementPerson)
-}
+export const updateAgreementPerson = (agreementId, personRoleId, agreementPerson) => knex('agreementPerson')
+    .where('agreementId', agreementId)
+    .where('personRoleId', personRoleId)
+    .update(agreementPerson);
 
-//Straight to frontend
+// Straight to frontend
 
 const roleSchema = [
     'personWithRole.personRoleId',
