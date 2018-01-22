@@ -9,10 +9,7 @@ const storage = () => {
         return multer.memoryStorage();
     }
     return multer.diskStorage({
-        destination: PATH_TO_FOLDER,
-        filename: (req, file, cb) => {
-            cb(null, Date.now() + '-' + file.originalname);
-        }
+        destination: PATH_TO_FOLDER
     });
 };
 const upload = multer({ storage: storage() }).fields([
@@ -67,9 +64,9 @@ export async function saveAttachmentFiles(files, agreementId) {
 }
 
 const saveFileArray = async (agreementId, fileArray) => {
-    return Promise.all(fileArray.map(async file => {
+    return Promise.all(fileArray.map(async (file) => {
         const attachment = {
-            agreementId: agreementId,
+            agreementId,
             savedOnDisk: true,
             filename: file.filename,
             originalname: file.originalname,
