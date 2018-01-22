@@ -3,8 +3,10 @@ const mailer = require('../util/mailer');
 const emailDraftService = require('../services/EmailDraftService');
 const personService = require('../services/PersonService');
 
-// TODO: Fix for all envs.
-const SERVER_ADDRESS = 'http://localhost:3000/v2';
+const PROD_ADDRESS = 'https://grappa.cs.helsinki.fi/v2/';
+const DEV_ADDRESS = 'http://localhost:3000/v2';
+
+const SERVER_ADDRESS = process.env.NODE_ENV === 'production' ? PROD_ADDRESS : DEV_ADDRESS;
 
 export async function newThesisAddedNotifyRespProf(programmeId) {
     const respProfs = await personService.getPersonsWithRoleInStudyfield(4, programmeId);
@@ -24,7 +26,9 @@ async function sendMail(type, email, programmeId) {
 }
 
 export async function sendInvite(emailInvite, type, programmeId) {
-    const draft = await emailDraftService.getEmailDraft('InviteAuthorToLogin', programmeId);
+    const draftName = type === 'role' ? 'InviteRoleToLogin' : 'InviteAuthorToLogin';
+
+    const draft = await emailDraftService.getEmailDraft(draftName, programmeId);
     const body = draft.body.replace('$LOGIN_URL$', `${SERVER_ADDRESS}/invite/${type}/${emailInvite.token}`);
 
     try {

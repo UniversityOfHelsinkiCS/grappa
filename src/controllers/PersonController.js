@@ -2,6 +2,7 @@ const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
+const emailInviteService = require('../services/EmailInviteService');
 
 export async function addPerson(req, res) {
     const personData = getPersonData(req.body);
@@ -17,23 +18,20 @@ export async function addPerson(req, res) {
 export async function updatePerson(req, res) {
     const data = req.body;
     const personData = getPersonData(data);
-    if (personData.personId != null || personData.personId != '') {
+    if (personData.personId) {
         const updateData = removeEmptyKeys(personData);
-        let personId = await personService.updatePerson(updateData).then((response) => {
+        await personService.updatePerson(updateData).then((response) => {
             notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
-            res.status(200).json('person updated succesfully ' + response);
+            res.status(200).json(`person updated succesfully ${response}`);
         }
-        ).catch(err => {
-            res.status(500).json(err);
-        });
-    }
-    else {
+        ).catch(err => res.status(500).json(err));
+    } else {
         res.status(500).json({ text: 'person does not exist' });
     }
 }
 
 function getPersonData(data) {
-    const personData = {
+    return {
         personId: data.personId,
         firstname: data.firstname,
         lastname: data.lastname,
@@ -46,12 +44,11 @@ function getPersonData(data) {
         phone: data.phone,
         major: data.major
     };
-    return personData;
 }
 
 function removeEmptyKeys(personData) {
-    let parsedData = {};
-    Object.keys(personData).map(key => {
+    const parsedData = {};
+    Object.keys(personData).forEach((key) => {
         if (personData[key] != null) {
             parsedData[key] = personData[key];
         }
@@ -84,7 +81,7 @@ export async function getPersons(req, res) {
             return getAllPersons(res);
         }
 
-        rolesInProgrammes.forEach(async item => {
+        rolesInProgrammes.forEach(async (item) => {
             // As resp_prof persons who are writing theses in programme
             if (programmeRoles.includes(item.role.name)) {
                 newPersons = await personService.getPersonsWithAgreementInStudyfield(item.programme.programmeId);
@@ -154,15 +151,18 @@ const getUsersRoles = async (user) => {
     const roleToId = await roleService.getRoles();
     const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
-    return personRoles.map(role => {
-        return {
-            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
-            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
-        }
-    })
-}
+    return personRoles.map(role => ({
+        programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
+        role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+    }))
+};
 
 export async function getPersonById(req, res) {
     const person = await personService.getPersonById(req.params.id);
     res.status(200).json(person);
+}
+
+export async function invitePerson(req, res) {
+    await emailInviteService.createEmailInviteForRole(req.body);
+    res.status(200).end();
 }

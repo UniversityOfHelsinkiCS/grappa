@@ -56,8 +56,17 @@ $LINK$`
                     body:
                         `Hi
 
-Your thesis has been added to Grappa, $LOGIN_URL$
-                    `
+Your thesis has been added to Grappa, a web application created to help in managing the final stages of approving student's master's degree.
+$LOGIN_URL$`
+                },
+                {
+                    type: 'InviteRoleToLogin',
+                    title: 'Invite to Grappa',
+                    body:
+                        `Hi
+
+You have been invited to Grappa, a web application created to help in managing the final stages of approving student's master's degree.
+$LOGIN_URL$`
                 }
             ]);
         });
