@@ -8,6 +8,7 @@ import agreementReducer from '../containers/agreement/agreementReducer';
 import attachmentReducer from '../containers/attachment/attachmentReducer';
 import councilmeetingReducer from '../containers/councilmeeting/councilmeetingReducer';
 import thesisReducer from '../containers/thesis/thesisReducer';
+import studyfieldReducer from '../containers/studyfield/studyfieldReducer';
 import programmeReducer from '../containers/programme/programmeReducer';
 import emailReducer from '../containers/email/emailReducer';
 import personReducer from '../containers/person/personReducer';
@@ -30,6 +31,7 @@ const combinedReducers = combineReducers({
     councilmeetings: councilmeetingReducer,
     roles: roleReducer,
     theses: thesisReducer,
+    studyfields: studyfieldReducer,
     programmes: programmeReducer,
     emails: emailReducer,
     persons: personReducer,
