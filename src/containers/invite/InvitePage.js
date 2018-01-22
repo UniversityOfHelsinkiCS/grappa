@@ -3,13 +3,17 @@ import { string, shape, bool, func } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
-import { acceptThesis } from './inviteAction';
+import { acceptThesis, acceptRole } from './inviteAction';
 
-const InvitePage = ({ acceptThesisAction, match, status }) => {
-    const token = match.params.token;
+const InvitePage = ({ acceptThesisAction, acceptRoleAction, match, status }) => {
+    const { type, token } = match.params;
 
-    if (!status && match.params.type === 'thesis') {
+    if (!status && type === 'thesis') {
         acceptThesisAction(token);
+    }
+
+    if (!status && type === 'role') {
+        acceptRoleAction(token);
     }
 
     if (status) {
@@ -26,7 +30,8 @@ const mapStateToProps = ({ invite }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    acceptThesisAction: token => dispatch(acceptThesis(token))
+    acceptThesisAction: token => dispatch(acceptThesis(token)),
+    acceptRoleAction: token => dispatch(acceptRole(token))
 });
 
 InvitePage.propTypes = {
@@ -37,7 +42,8 @@ InvitePage.propTypes = {
         }).isRequired
     }).isRequired,
     status: bool.isRequired,
-    acceptThesisAction: func.isRequired
+    acceptThesisAction: func.isRequired,
+    acceptRoleAction: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvitePage);

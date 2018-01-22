@@ -32,6 +32,14 @@ const reducer = (state = {}, action) => {
                     text: 'Councilmeeting updated.'
                 }
             });
+        case action.type === 'PERSON_INVITE_ONE_SUCCESS':
+            return Object.assign({}, state, {
+                logout: {
+                    active: true,
+                    type: 'success',
+                    text: 'Invite sent.'
+                }
+            });
         case action.type.includes('_FAILURE'): {
             const message = {};
             message[action.type] = {

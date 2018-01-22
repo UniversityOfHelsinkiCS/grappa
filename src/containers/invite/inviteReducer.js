@@ -4,6 +4,8 @@ const reducer = (state = false, action) => {
             return false;
         case 'INVITE_ACCEPT_THESIS_SUCCESS':
             return true;
+        case 'INVITE_ACCEPT_ROLE_SUCCESS':
+            return true;
         default:
             return state;
     }
