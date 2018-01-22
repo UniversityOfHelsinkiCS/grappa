@@ -1,9 +1,12 @@
 module.exports = {
     extends: 'airbnb-base',
+    env: {
+        node: true
+    },
     rules: {
-        'quotes': ['warn', 'single'],
-        'indent': ['warn', 4, { SwitchCase: 1 }],
-        'semi': 'off',
+        quotes: ['warn', 'single'],
+        indent: ['warn', 4, { SwitchCase: 1 }],
+        semi: 'off',
         'comma-dangle': ['warn', 'never'],
         'max-len': ['warn', 120],
         'function-paren-newline': 'off',
@@ -17,7 +20,7 @@ module.exports = {
 
         'object-curly-spacing': 'warn',
         'object-curly-newline': 'off',
-        'curly': 'off',
+        curly: 'off',
         'arrow-body-style': 'warn',
         'arrow-parens': 'warn',
         'import/no-mutable-exports': 'warn',
@@ -31,7 +34,7 @@ module.exports = {
         'no-multi-spaces': 'warn',
         'no-irregular-whitespace': 'warn',
         'import/first': 'warn',
-        'no-restricted-syntax':'warn',
+        'no-restricted-syntax': 'warn',
         'vars-on-top': 'warn',
         'no-prototype-builtins': 'warn',
         'no-extra-semi': 'warn',
@@ -50,13 +53,13 @@ module.exports = {
         'import/prefer-default-export': 'warn',
         'no-nested-ternary': 'warn',
         'block-scoped-var': 'warn',
-        'complexity': ['off', 11],
+        complexity: ['off', 11],
         'dot-notation': ['warn', { allowKeywords: true }],
-        'radix': 'warn',
+        radix: 'warn',
         'no-const-assign': 'warn',
         'prefer-const': ['warn', {
             destructuring: 'any',
-            ignoreReadBeforeAssign: true,
+            ignoreReadBeforeAssign: true
         }],
         'no-var': 'warn'
     }
