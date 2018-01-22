@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { arrayOf, bool, func, object } from 'prop-types';
 
 import { oldGradeFields, gradeFields } from '../../util/theses';
-import { thesisType, programmeType } from '../../util/types';
+import { thesisType, programmeType, studyfieldType } from '../../util/types';
 
 export default class ThesisInformation extends Component {
 
     constructor() {
         super();
         this.state = {
+            programmeId: undefined,
             oldGrading: false
         }
     }
 
-    changeField = (fieldName) => (event) => {
+    changeField = fieldName => (event) => {
         this.props.sendChange(fieldName, event.target.value);
     };
 
@@ -48,11 +49,11 @@ export default class ThesisInformation extends Component {
                     onChange={this.changeField(fieldName)}
                 >
                     <option key="0" value="">Select {label}</option>
-                    {fieldArray.map(field =>
+                    {fieldArray.map(field => (
                         <option key={field.id} value={field.id}>
                             {field.name}
                         </option>
-                    )}
+                    ))}
                 </select>
             </div>
         );
@@ -82,15 +83,25 @@ export default class ThesisInformation extends Component {
             name: programme.name
         }));
 
+        const studyfields = this.props.studyfields
+            .filter(studyfield => studyfield.programmeId === parseInt(this.props.thesis.programmeId, 10))
+            .map(studyfield => ({
+                id: studyfield.studyfieldId,
+                name: studyfield.name
+            }))
+
         return (
-            <div className="m-bot">
+            <div className="ui form">
                 <div className="three fields">
-                    {this.renderDropdownField('Studyfield', programmes, 'programmeId', !this.props.allowEdit)}
+                    {this.renderDropdownField('Programme', programmes, 'programmeId', !this.props.allowEdit)}
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
 
                 </div>
                 <div className="three fields">
+                    <div className="field">
+                        {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
+                    </div>
                     {this.state.oldGrading ?
                         this.renderDropdownField('Grade', oldGradeFields, 'grade', !this.props.allowEdit) :
                         this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)
@@ -123,6 +134,7 @@ ThesisInformation.propTypes = {
     sendChange: func.isRequired,
     thesis: thesisType.isRequired,
     programmes: arrayOf(programmeType).isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
     allowEdit: bool.isRequired,
     validationErrors: object.isRequired
 };

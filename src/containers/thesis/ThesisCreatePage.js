@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
-import { personType, roleType, programmeType, councilmeetingType } from '../../util/types';
+import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types';
 
 import ThesisConfirmModal from '../../components/thesis/ThesisConfirmModal';
 import ThesisInformation from '../../components/thesis/ThesisInformation';
@@ -90,6 +90,7 @@ export class ThesisCreatePage extends Component {
                     <ThesisInformation
                         sendChange={this.handleChange}
                         allowEdit
+                        studyfields={this.props.studyfields}
                         programmes={this.props.programmes}
                         thesis={this.state.thesis}
                         validationErrors={this.state.validationErrors}
@@ -125,6 +126,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     programmes: state.programmes,
+    studyfields: state.studyfields,
     roles: state.roles,
     persons: state.persons
 });
@@ -133,6 +135,7 @@ const { arrayOf, func } = PropTypes;
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
     saveThesis: func.isRequired

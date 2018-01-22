@@ -23,6 +23,12 @@ export const councilmeetingType = shape({
     programmeId: number
 });
 
+export const studyfieldType = shape({
+    studyfieldId: number,
+    name: text,
+    programmeId: number
+})
+
 export const programmeType = shape({
     programmeId: number,
     name: text
