@@ -32,7 +32,9 @@ export class ThesisCreatePage extends Component {
             }
             form.append(attachment.label, attachment);
         });
-        form.append('json', JSON.stringify(this.state.thesis));
+        const thesis = Object.assign({}, this.state.thesis);
+        delete thesis.programmeId
+        form.append('json', JSON.stringify(thesis));
         this.props.saveThesis(form);
     };
 
@@ -63,7 +65,7 @@ export class ThesisCreatePage extends Component {
     renderGraderSelecter() {
         const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
-                (role.name === 'grader' || role.name === 'supervisor')
+                role.name === 'grader'
                 && role.personId === person.personId
                 && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )

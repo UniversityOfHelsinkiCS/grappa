@@ -14,7 +14,7 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     if (!thesisAgreement) {
         return formattedThesis;
     }
-    formattedThesis.programmeId = thesisAgreement.programmeId;
+    formattedThesis.studyfieldId = thesisAgreement.studyfieldId;
 
     if (roles) {
         formattedThesis.graders = persons.filter(person =>
@@ -69,7 +69,7 @@ export const emptyThesisData = {
     id: undefined,
     authorFirstname: '',
     authorLastname: '',
-    email: '',
+    authorEmail: '',
     title: '',
     urkund: '',
     grade: '',

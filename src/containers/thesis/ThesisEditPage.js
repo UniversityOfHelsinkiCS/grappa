@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
 import { sendReminder } from '../email/emailActions';
-import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType } from '../../util/types';
+import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType } from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
@@ -58,14 +58,15 @@ export class ThesisEditPage extends Component {
             const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
             return formatThesis(thesis, agreements, persons, roles);
         } catch (error) {
-            console.log(error);
             return undefined
         }
     };
 
 
     handleSaveThesis = () => {
-        this.props.updateThesis(this.state.thesis);
+        const thesis = Object.assign({}, this.state.thesis);
+        delete thesis.programmeId
+        this.props.updateThesis(thesis);
     };
 
     deleteThesis = () => {
@@ -128,9 +129,9 @@ export class ThesisEditPage extends Component {
     renderGraderSelecter() {
         const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
-                (role.name === 'grader' || role.name === 'supervisor')
+                role.name === 'grader'
                 && role.personId === person.personId
-                && role.programmeId === this.state.thesis.programmeId
+                && role.programmeId === parseInt(this.state.thesis.programmeId)
             )
         );
         return (
@@ -151,6 +152,7 @@ export class ThesisEditPage extends Component {
                     <ThesisInformation
                         sendChange={this.handleChange}
                         thesis={this.state.thesis}
+                        studyfields={this.props.studyfields}
                         programmes={this.props.programmes}
                         allowEdit={this.state.allowEdit}
                         validationErrors={this.state.validationErrors}
@@ -211,6 +213,7 @@ const mapStateToProps = state => ({
     persons: state.persons,
     roles: state.roles,
     programmes: state.programmes,
+    studyfields: state.studyfields,
     theses: state.theses,
     user: state.user
 });
@@ -222,6 +225,7 @@ ThesisEditPage.propTypes = {
     persons: arrayOf(personType).isRequired,
     roles: arrayOf(roleType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
     theses: arrayOf(thesisType).isRequired,
     user: personType.isRequired,
     updateThesis: func.isRequired,
