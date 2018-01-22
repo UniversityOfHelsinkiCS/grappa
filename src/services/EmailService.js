@@ -27,7 +27,6 @@ async function sendMail(type, email, programmeId) {
 
 export async function sendInvite(emailInvite, type, programmeId) {
     const draftName = type === 'role' ? 'InviteRoleToLogin' : 'InviteAuthorToLogin';
-
     const draft = await emailDraftService.getEmailDraft(draftName, programmeId);
     const body = draft.body.replace('$LOGIN_URL$', `${SERVER_ADDRESS}/invite/${type}/${emailInvite.token}`);
 

@@ -4,7 +4,9 @@ import { createPerson } from '../utils';
 const request = require('supertest');
 const express = require('express');
 const invite = require('../../src/routes/invite');
+const persons = require('../../src/routes/persons');
 const knex = require('../../src/db/connection');
+const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
     const app = express();
@@ -13,11 +15,18 @@ const makeApp = (userId) => {
         req.session.user_id = userId;
         next();
     }, invite);
+    app.use('/persons', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, persons);
+    app.use(errorHandler);
     return app;
 };
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await knex.seed.run();
 });
 
 test('thesis is linked to author when invite is accepted', async t => {
@@ -47,7 +56,7 @@ test('invalid token is handled', async t => {
     t.is(res.status, 404);
 });
 
-test('token can be used only once', async t => {
+test('token can be used only once', async (t) => {
     const email = 'test1@opiskelija.example.com';
     const personId = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
@@ -59,4 +68,17 @@ test('token can be used only once', async t => {
 
     const res2 = await request(makeApp(personId)).get(`/invite/thesis/${token}`);
     t.is(res2.status, 404);
+});
+
+test('role can be invited', async (t) => {
+    const email = 'rooli@tarkastaja.example.com';
+
+    const res = await request(makeApp(1))
+        .post('/persons/invite')
+        .send({ email, programme: 1, role: 1 });
+
+    t.is(res.status, 200);
+
+    const rows = await knex.select().from('emailInvite').where('email', email);
+    t.is(rows.length, 1);
 });
