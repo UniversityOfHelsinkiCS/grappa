@@ -60,8 +60,6 @@ export async function getTheses(req, res) {
 
 export async function saveThesisForm(req, res) {
     const thesis = JSON.parse(req.body.json);
-
-    console.log("11")
     try {
         await checkit.run(thesis);
     } catch (error) {
@@ -71,7 +69,6 @@ export async function saveThesisForm(req, res) {
     // Order so that agreementId is available to save attachments.
     const agreement = await agreementService.createFakeAgreement();
     const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
-    console.log("22")
     const studyfieldId = thesis.studyfieldId;
     const authorEmail = thesis.authorEmail;
     const agreementId = agreement.agreementId;
@@ -89,22 +86,16 @@ export async function saveThesisForm(req, res) {
         updateGraders(thesis.graders, agreement);
         delete thesis.graders;
     }
-    console.log("33")
     const savedThesis = await thesisService.saveThesis(thesis);
 
     // Agreement was missing the thesisId completing linking.
     agreement.thesisId = savedThesis.thesisId;
     const savedAgreement = await agreementService.updateAgreement(agreement);
-    console.log('3333')
     const roles = await roleService.getRolesForAllPersons();
-    console.log("44", studyfieldId)
     const programme = await programmeService.getStudyfieldsProgramme(studyfieldId);
-    console.log("5555555555555555555", programme)
     await emailService.newThesisAddedNotifyRespProf(programme.programmeId);
-    console.log("55")
     await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme.programmeId);
 
-    console.log("66")
     const response = {
         thesis: savedThesis,
         agreement: savedAgreement,

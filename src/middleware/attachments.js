@@ -7,10 +7,7 @@ const storage = () => {
         return multer.memoryStorage();
     }
     return multer.diskStorage({
-        destination: PATH_TO_FOLDER,
-        filename: (req, file, cb) => {
-            cb(null, Date.now() + '-' + file.originalname);
-        }
+        destination: PATH_TO_FOLDER
     });
 };
 const upload = multer({ storage: storage() }).fields([
