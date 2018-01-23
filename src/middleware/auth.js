@@ -59,43 +59,44 @@ module.exports.shibRegister = async (req, res, next) => {
 
     console.log("shibRegister starts")
     if (!req.session.user_id) {
-        if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
-            // console.log('unknown shib session');
-            req.session.shib_session_id = req.headers['shib-session-id'];
-            const shibUid = req.headers['uid'];
-            const studentNumberRegex = /.*:([0-9]*)$/;
-            const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
-            let user = await personService.getPersonByShibbolethId(shibUid);
+        console.log("First if")
+        req.session.shib_session_id = req.headers['shib-session-id'];
+        const shibUid = req.headers['uid'];
+        const studentNumberRegex = /.*:([0-9]*)$/;
+        const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
+        let user = await personService.getPersonByShibbolethId(shibUid);
 
-            if (user) {
-                req.session.user_id = user.personId;
-                user.firstname = req.headers['givenname'];
-                user.lastname = req.headers['sn'];
-                user.email = req.headers['mail'];
-                try {
-                    console.log('update Person', user);
-                    await personService.updatePerson(user);
-                } catch (error) {
-                    console.log("Updating person failed", error)
-                }
-            } else {
-                user = {
-                    firstname: req.headers['givenname'],
-                    lastname: req.headers['sn'],
-                    studentNumber,
-                    shibbolethId: req.headers['uid'],
-                    email: req.headers['mail']
-                    // updated_at: Date.now()
-                };
+        if (user) {
+            console.log("Third if: user found")
+            req.session.user_id = user.personId;
+            user.firstname = req.headers['givenname'];
+            user.lastname = req.headers['sn'];
+            user.email = req.headers['mail'];
+            try {
+                console.log('update Person', user);
+                await personService.updatePerson(user);
+            } catch (error) {
+                console.log("Updating person failed", error)
+            }
+        } else {
+            console.log("Fourth if: user not found")
+            user = {
+                firstname: req.headers['givenname'],
+                lastname: req.headers['sn'],
+                studentNumber,
+                shibbolethId: req.headers['uid'],
+                email: req.headers['mail']
+                // updated_at: Date.now()
+            };
 
-                try {
-                    console.log('save Person', user);
-                    await personService.savePerson(user);
-                } catch (error) {
-                    console.log("Saving person failed", error);
-                }
+            try {
+                console.log('save Person', user);
+                await personService.savePerson(user);
+            } catch (error) {
+                console.log("Saving person failed", error);
             }
         }
+
     } else {
         console.log('session.user_id exists: ', req.session.user_id);
     }
