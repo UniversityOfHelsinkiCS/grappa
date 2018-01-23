@@ -28,6 +28,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
     };
 
     render() {
+        const chosenMeeting = this.props.chosenMeetingId !== null ? this.props.chosenMeetingId : '';
+
         return (
             <div>
                 <h3 className="ui dividing header">Choose the Councilmeeting date</h3>
@@ -38,7 +40,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
                 <select
                     className="ui fluid search dropdown"
                     onChange={this.chooseMeeting}
-                    value={this.props.chosenMeetingId}
+                    value={chosenMeeting}
                 >
                     {this.formatMeetings().map(meeting => (
                         <option key={meeting.id} value={meeting.id} >

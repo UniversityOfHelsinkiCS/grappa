@@ -75,7 +75,7 @@ export const emptyThesisData = {
     grade: '',
     graders: [],
     graderEval: '',
-    programmeId: '',
+    programmeId: undefined,
     councilmeetingId: undefined,
     printDone: undefined,
     thesisEmails: {
