@@ -64,11 +64,10 @@ module.exports.shibRegister = async (req, res, next) => {
             req.session.shib_session_id = req.headers['shib-session-id'];
             const shibUid = req.headers['uid'];
             const studentNumberRegex = /.*:([0-9]*)$/;
-            const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
-            let user = await personService.getPersonByShibbolethId(shibUid);
-
-            if (user) {
-                console.log("Third if: user found")
+            const regexResults = studentNumberRegex.exec(req.headers['unique-code'])
+            const studentNumber = regexResults ? regexResults[1] : undefined;
+            try {
+                const user = await personService.getPersonByShibbolethId(shibUid);
                 req.session.user_id = user.personId;
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
@@ -79,9 +78,8 @@ module.exports.shibRegister = async (req, res, next) => {
                 } catch (error) {
                     console.log("Updating person failed", error)
                 }
-            } else {
-                console.log("Fourth if: user not found")
-                user = {
+            } catch (error) {
+                const user = {
                     firstname: req.headers['givenname'],
                     lastname: req.headers['sn'],
                     studentNumber,
