@@ -33,7 +33,7 @@ module.exports = {
             directory: './src/db/migrations'
         },
         seeds: {
-            directory: './src/db/seeds'
+            directory: './src/db/production_seeds'
         }
     }
 }
