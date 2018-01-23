@@ -16,9 +16,8 @@ const invite = require('./routes/invite');
 const auth = require('./middleware/auth');
 
 module.exports = (app) => {
-    app.use(auth.shibRegister);
     app.use('/', index);
-    app.use('/user', shibboleth);
+    app.use('/user', auth.shibRegister, shibboleth);
     app.use('/persons', persons);
     app.use(auth.checkAuth);
     app.use('/invite', invite);
