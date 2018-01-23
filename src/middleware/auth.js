@@ -59,8 +59,9 @@ module.exports.shibRegister = async (req, res, next) => {
 
     console.log("shibRegister starts")
     if (!req.session.user_id) {
+        console.log("First if")
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
-            // console.log('unknown shib session');
+            console.log('Second if: unknown shib session');
             req.session.shib_session_id = req.headers['shib-session-id'];
             const shibUid = req.headers['uid'];
             const studentNumberRegex = /.*:([0-9]*)$/;
@@ -68,6 +69,7 @@ module.exports.shibRegister = async (req, res, next) => {
             let user = await personService.getPersonByShibbolethId(shibUid);
 
             if (user) {
+                console.log("Third if: user found")
                 req.session.user_id = user.personId;
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
@@ -79,6 +81,7 @@ module.exports.shibRegister = async (req, res, next) => {
                     console.log("Updating person failed", error)
                 }
             } else {
+                console.log("Fourth if: user not found")
                 user = {
                     firstname: req.headers['givenname'],
                     lastname: req.headers['sn'],
@@ -95,7 +98,10 @@ module.exports.shibRegister = async (req, res, next) => {
                     console.log("Saving person failed", error);
                 }
             }
+        } else {
+            console.log("First else")
         }
+
     } else {
         console.log('session.user_id exists: ', req.session.user_id);
     }
