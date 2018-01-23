@@ -9,7 +9,7 @@
     "start:win": "nodemon index.js",
     "start:prod": "NODE_ENV=production node index.js",
     "db:migrate": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest",
-    "db:seed": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
+    "db:seedprod": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run --env production",
     "db:remove": "rm ./src/db/grappa2db.sqlite",
     "db:reset": "rm ./src/db/grappa2db.sqlite && knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest && knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
