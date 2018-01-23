@@ -71,11 +71,16 @@ export class ThesisCreatePage extends Component {
             )
         );
         return (
-            <PersonSelector
-                persons={programmeGraders}
-                selected={this.state.thesis.graders}
-                changeList={list => this.handleChange('graders', list)}
-            />
+            <div className="field">
+                <label>
+                    Select graders
+                    <PersonSelector
+                        persons={programmeGraders}
+                        selected={this.state.thesis.graders}
+                        changeList={list => this.handleChange('graders', list)}
+                    />
+                </label>
+            </div>
         );
     }
 

@@ -38,9 +38,11 @@ export class ThesisEditPage extends Component {
     }
 
     init(props) {
+        const { theses, persons, agreements, roles } = props;
+
         if (props.match.params && props.match.params.id) {
             const thesisId = parseInt(props.match.params.id, 10);
-            const thesis = this.findAndFormatThesis(props.theses, props.persons, props.agreements, props.roles, thesisId);
+            const thesis = this.findAndFormatThesis(theses, persons, agreements, roles, thesisId);
             if (thesis) {
                 const attachments = props.attachments.filter((attachment) => {
                     const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
@@ -135,11 +137,16 @@ export class ThesisEditPage extends Component {
             )
         );
         return (
-            <PersonSelector
-                persons={programmeGraders}
-                selected={this.state.thesis.graders}
-                changeList={list => this.handleChange('graders', list)}
-            />
+            <div className="field">
+                <label>
+                    Select graders
+                    <PersonSelector
+                        persons={programmeGraders}
+                        selected={this.state.thesis.graders}
+                        changeList={list => this.handleChange('graders', list)}
+                    />
+                </label>
+            </div>
         );
     }
 
