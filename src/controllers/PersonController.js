@@ -124,7 +124,7 @@ export async function getPersons(req, res) {
 }
 
 async function userNotFound(res) {
-    if (process.env.NODE_ENV !== 'dev') {
+    if (process.env.NODE_ENV !== 'development') {
         throw new Error('No user found');
     }
     console.log('It indeed is a developer.');

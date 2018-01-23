@@ -16,7 +16,7 @@ router.get('/logout', jsonParser, (req, res) => {
 });
 
 //For now we use get to login for dev.
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'development') {
     router.get('/:id', jsonParser, (req, res) => {
         loginController.fakeLogin(req, res);
     });

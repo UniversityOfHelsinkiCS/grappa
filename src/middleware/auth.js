@@ -9,7 +9,7 @@ module.exports.checkAuth = async (req, res, next) => {
     if (!req.session.user_id) {
         if (!req.headers['shib-session-id']) {
             // forbid if in production and bypassed shibboleth
-            if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'dev') {
+            if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
                 res.status(403).end();
             }
         }

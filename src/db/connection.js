@@ -1,9 +1,8 @@
 const config = require('./knexfile.js');
-let env = 'development';
-if (process.env.NODE_ENV === 'test') {
-    env = 'test';
-}
+
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'not working';
 console.log('ENVIRONMENT IS', env);
+
 const knex = require('knex')(config[env]);
 
 if (env !== 'test') {

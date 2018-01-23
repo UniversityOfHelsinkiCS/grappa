@@ -13,4 +13,4 @@ RUN npm i;
 
 EXPOSE 3100
 
-CMD ["node", "index.js"]
+CMD ["npm", "run", "start:prod"]
