@@ -31,8 +31,8 @@ export async function sendEmail(to, subject, body, attachments) {
 
     const options = {
         from: senderSettings.from,
-        to: to,
-        subject: subject,
+        to,
+        subject,
         text: body,
         attachments: attachments || []
     };

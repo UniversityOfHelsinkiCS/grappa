@@ -84,14 +84,7 @@ export async function updateVisitorRoleStudyfields(personId, programmeIds) {
 // AgreementPerson
 
 export async function linkAgreementAndPersonRole(agreementId, personRoleId) {
-    const agreementPerson = {
-        agreementId,
-        personRoleId
-    };
-    return knex('agreementPerson').returning('agreementPersonId')
-        .insert(agreementPerson).then(agreementPersonIds =>
-            knex.select().from('agreementPerson').where('agreementPersonId', agreementPersonIds[0]).first()
-        );
+    return knex('agreementPerson').insert({ agreementId, personRoleId });
 }
 
 export async function unlinkAgreementAndPersonRole(agreementId, personRoleId) {
