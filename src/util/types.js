@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const { shape, string, number, text } = PropTypes;
+const { shape, string, number, bool } = PropTypes;
 
 export const personType = shape({
     personId: number,
@@ -8,7 +8,7 @@ export const personType = shape({
     firstname: string,
     lastname: string,
     title: string,
-    isRetired: number,
+    isRetired: bool,
     studentNumber: string,
     address: string,
     phone: string,
@@ -25,18 +25,18 @@ export const councilmeetingType = shape({
 
 export const studyfieldType = shape({
     studyfieldId: number,
-    name: text,
+    name: string,
     programmeId: number
 })
 
 export const programmeType = shape({
     programmeId: number,
-    name: text
+    name: string
 });
 
 export const availableRoleType = shape({
     roleId: number,
-    name: text
+    name: string
 });
 
 export const roleType = shape({
@@ -54,7 +54,7 @@ export const agreementType = shape({
     thesisId: number,
     responsibleSupervisorId: number,
     programmeId: number,
-    fake: number,
+    fake: bool,
     startDate: string,
     completionEta: string,
     performancePlace: string,
@@ -83,7 +83,7 @@ export const thesisType = shape({
     urkund: string,
     grade: string,
     graderEval: string,
-    printDone: number
+    printDone: bool
 });
 
 export const emailType = shape({

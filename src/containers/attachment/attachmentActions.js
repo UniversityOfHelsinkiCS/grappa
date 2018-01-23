@@ -8,7 +8,7 @@ export const createAttachment = (attachment) => {
 }
 
 export const deleteAttachment = (attachmentId) => {
-    const route = '/attachments/' + attachmentId;
+    const route = `/attachments/${attachmentId}`;
     const prefix = 'ATTACHMENT_DELETE_ONE_';
     const method = 'delete';
     return callController(route, prefix, attachmentId, method);
@@ -22,7 +22,7 @@ export const downloadAttachments = (attachmentIds) => {
         accumulated += current
         return accumulated;
     })
-    const route = '/attachments/' + idString;
+    const route = `/attachments/${idString}`;
     const prefix = 'ATTACHMENT_DOWNLOAD_';
     return callController(route, prefix);
 }

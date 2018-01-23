@@ -93,7 +93,7 @@ export default class ThesisList extends Component {
                                 <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>
-                                <td>{thesis.printDone}</td>
+                                <td>{thesis.printDone.toString()}</td>
                             </tr>
                         )}
                     </tbody>
