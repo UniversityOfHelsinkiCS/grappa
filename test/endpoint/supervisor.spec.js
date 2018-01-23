@@ -1,8 +1,9 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const supervisors = require('../../src/routes/supervisors');
-const roleService = require('../../src/services/RoleService');
 const knex = require('../../src/db/connection');
 
 const makeApp = (userId) => {
@@ -15,8 +16,9 @@ const makeApp = (userId) => {
     return app;
 }
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 })
 
@@ -26,10 +28,10 @@ const supervisorWithoutId = {
     email: '',
     address: '',
     title: '',
-    shibbolethId: '',
+    shibbolethId: ''
 }
 
-test('supervisor post & creates id', async t => {
+test('supervisor post & creates id', async (t) => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/supervisors/')

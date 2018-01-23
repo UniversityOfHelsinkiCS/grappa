@@ -1,37 +1,36 @@
 import test from 'ava';
-import sinon from 'sinon';
+import { deleteFromDb } from '../utils';
+
 const knex = require('../../src/db/connection');
 
 const agreementService = require('../../src/services/AgreementService');
 const mockAgreements = require('../../src/mockdata/MockAgreements');
-const mockPrevAgreements = require('../../src/mockdata/MockPrevAgreements');
 
-test.before(async t => {
+test.before(async () => {
     await knex.migrate.latest();
+    await deleteFromDb();
 });
 
-test.beforeEach(async t => {
-    await knex('agreement').del();
-    await knex('agreement').insert(mockAgreements);
-    await knex('previousagreements').del();
-    await knex('previousagreements').insert(mockPrevAgreements);
+test.beforeEach(async () => {
+    await deleteFromDb();
+    await knex.seed.run();
 });
 
-test.serial('getAllAgreements returns list of right length ', async t => {
-    let listOfAgreements = await agreementService.getAllAgreements();
+test.serial('getAllAgreements returns list of right length ', async (t) => {
+    const listOfAgreements = await agreementService.getAllAgreements();
     t.is(listOfAgreements.length, mockAgreements.length);
 });
 
-test.serial('saves previousAgreement and returns Id', async t => {
+test.serial('saves previousAgreement and returns Id', async (t) => {
     const prevData = {
         agreementId: 2,
         previousAgreementId: 1
     };
-    let agreementId = await agreementService.savePrevious(prevData);
+    const agreementId = await agreementService.savePrevious(prevData);
     t.deepEqual(agreementId, prevData.agreementId);
 });
 
-test.serial('updateAgreement', async t => {
+test.serial('updateAgreement', async (t) => {
     const updatedAgreement = {
         agreementId: 1,
         authorId: 1,
@@ -40,14 +39,14 @@ test.serial('updateAgreement', async t => {
         other: 'this agreement is updated'
     };
     const response = await agreementService.updateAgreement(updatedAgreement);
-    Object.keys(updatedAgreement).forEach(key => {
+    Object.keys(updatedAgreement).forEach((key) => {
         if (Object.keys(response).includes(key)) {
             t.is(response[key], updatedAgreement[key])
         }
     })
 });
 
-test.serial('saveAgreement call returns agreementId = 4', async t => {
+test.serial('saveAgreement', async (t) => {
     const testData = {
         authorId: 1,
         thesisId: 1,
@@ -57,6 +56,6 @@ test.serial('saveAgreement call returns agreementId = 4', async t => {
         fake: 0
     };
 
-    let temp = await agreementService.saveAgreement(testData);
-    t.is(temp.agreementId, 4);
+    const temp = await agreementService.saveAgreement(testData);
+    t.truthy(temp.agreementId);
 });

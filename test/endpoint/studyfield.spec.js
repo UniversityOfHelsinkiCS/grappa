@@ -1,4 +1,6 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const programmes = require('../../src/routes/programmes');
@@ -15,12 +17,13 @@ const makeApp = (userId) => {
     return app;
 }
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 })
 
-test('programme get all', async t => {
+test('programme get all', async (t) => {
     t.plan(2);
     const app = makeApp(1);
     const res = await request(app)

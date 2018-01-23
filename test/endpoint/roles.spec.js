@@ -1,5 +1,5 @@
 import test from 'ava';
-import { createPerson } from '../utils';
+import { createPerson, deleteFromDb } from '../utils';
 
 const request = require('supertest');
 const express = require('express');
@@ -17,12 +17,13 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 });
 
-test('study field can be set to visitor role', async t => {
+test('study field can be set to visitor role', async (t) => {
     t.plan(2);
 
     const personId = await createPerson();
@@ -43,7 +44,7 @@ test('study field can be set to visitor role', async t => {
     t.truthy(roles);
 });
 
-test('visitor role programme can be updated', async t => {
+test('visitor role programme can be updated', async (t) => {
     t.plan(2);
 
     const personId = await createPerson();
@@ -51,7 +52,7 @@ test('visitor role programme can be updated', async t => {
     await knex('personWithRole')
         .insert({
             programmeId: 1,
-            personId: personId,
+            personId,
             roleId: 7
         });
 
@@ -71,12 +72,12 @@ test('visitor role programme can be updated', async t => {
     t.is(role.programmeId, 2);
 });
 
-test('delete role', async t => {
+test('delete role', async (t) => {
     const personId = await createPerson();
     const idToDelete = await knex('personWithRole')
         .insert({
             programmeId: 1,
-            personId: personId,
+            personId,
             roleId: 1
         }).returning('personRoleId');
 
@@ -89,13 +90,13 @@ test('delete role', async t => {
     t.is(roles.length, 0);
 });
 
-test('get available roles', async t => {
+test('get available roles', async (t) => {
     const res = await request(makeApp()).get('/roles/available');
     t.is(res.status, 200);
     t.is(res.body.length, 7);
 });
 
-test('save role test', async t => {
+test('save role test', async (t) => {
     const personId = await createPerson();
     const res = await request(makeApp(personId))
         .post('/roles')

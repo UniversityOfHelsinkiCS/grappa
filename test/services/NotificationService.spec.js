@@ -5,15 +5,15 @@ const knex = require('../../src/db/connection');
 
 const notificationService = require('../../src/services/NotificationService');
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
 });
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
     await knex('notification').del();
 });
 
-test.serial('notification is saved', async t => {
+test.serial('notification is saved', async (t) => {
     await notificationService.saveNotification('TEST', 1);
     const notifications = await notificationService.getAllNotifications();
 

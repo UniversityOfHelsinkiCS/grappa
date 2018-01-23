@@ -1,4 +1,6 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const agreementdrafts = require('../../src/routes/agreementDrafts');
@@ -14,8 +16,9 @@ const makeApp = (userId) => {
     return app;
 }
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 })
 
@@ -30,8 +33,8 @@ const testAgreementDraft = {
     studentPhone: '050 1234567',
     studentMajor: 'Kemia',
     thesisTitle: 'Thesis Title',
-    thesisStartDate: '6.5.2005',
-    thesisCompletionEta: '1.2.2006',
+    thesisStartDate: '2005-06-04T21:00:00.000Z',
+    thesisCompletionEta: '2006-01-01T22:00:00.000Z',
     thesisPerformancePlace: 'paikka',
     studentGradeGoal: 5,
     studentTime: '1h viikossa',
@@ -41,32 +44,25 @@ const testAgreementDraft = {
     other: 'uuu'
 };
 
-const agreementDraftPersons = [{
-    agreementDraftId: 1,
-    personRoleId: 1
-}];
-
-test('agreementDraft post & creates id', async t => {
+test('agreementDraft post & creates id', async (t) => {
     t.plan(3);
     const res = await request(makeApp(1))
         .post('/agreement-drafts')
         .send(testAgreementDraft);
     t.is(res.status, 200);
     const body = res.body;
-    const draft = testAgreementDraft
-    t.truthy(body.agreementDraftId > 0)
-    delete body.agreementDraftId
-    t.deepEqual(body, draft);
+    t.truthy(body.agreementDraftId > 0);
+    delete body.agreementDraftId;
+    t.deepEqual(body, testAgreementDraft);
 });
 
-test('get agreementDraft by ID', async t => {
+test('get agreementDraft by ID', async (t) => {
     t.plan(3);
     const draft = testAgreementDraft;
     const draftPersons = [];
     const res = await request(makeApp(1))
-        .get('/agreement-drafts/' + 3);
+        .get(`/agreement-drafts/${3}`);
     t.is(res.status, 200);
-    const body = res.body;
 
     const agreementDraft = res.body.agreementDraft;
     const agreementDraftPersons = res.body.agreementDraftPersons;

@@ -1,4 +1,5 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
 
 const request = require('supertest');
 const express = require('express');
@@ -15,8 +16,9 @@ const makeApp = (userId) => {
     return app;
 }
 
-test.before(async (t) => {
+test.before(async () => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 })
 
@@ -27,7 +29,7 @@ const personWithoutId = {
     firstname: 'Testi',
     lastname: 'Testaaja',
     title: 'Dr.',
-    isRetired: 0,
+    isRetired: false,
     studentNumber: '0123456790',
     address: 'Leppäsuonkatu',
     phone: '050 1234567',
@@ -62,7 +64,7 @@ test('person get all for admin', async (t) => {
 test('person get all for student', async (t) => {
     t.plan(3);
 
-    const person = await knex('person').insert({ email: 'ei@ole.com' }).returning('peronsonId');
+    const person = await knex('person').insert({ email: 'ei@ole.com' }).returning('personId');
     const personId = person[0];
     const res = await request(makeApp(personId)).get('/persons');
 
