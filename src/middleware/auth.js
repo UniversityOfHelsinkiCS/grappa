@@ -64,7 +64,8 @@ module.exports.shibRegister = async (req, res, next) => {
             req.session.shib_session_id = req.headers['shib-session-id'];
             const shibUid = req.headers['uid'];
             const studentNumberRegex = /.*:([0-9]*)$/;
-            const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
+            const regexResults = studentNumberRegex.exec(req.headers['unique-code'])
+            const studentNumber = regexResults ? regexResults[1] : undefined;
             try {
                 const user = await personService.getPersonByShibbolethId(shibUid);
                 req.session.user_id = user.personId;
