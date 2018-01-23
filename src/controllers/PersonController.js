@@ -125,7 +125,7 @@ export async function getPersons(req, res) {
 
 async function userNotFound(res) {
     if (process.env.NODE_ENV !== 'development') {
-        throw new Error('No user found');
+        return res.status(200).json({}).end();
     }
     console.log('It indeed is a developer.');
     const persons = await personService.getAllPersons();
