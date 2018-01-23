@@ -71,7 +71,7 @@ export const emptyThesisData = {
     authorLastname: '',
     authorEmail: '',
     title: '',
-    urkund: '',
+    urkund: 'http://',
     grade: '',
     graders: [],
     graderEval: '',

@@ -21,8 +21,9 @@ export class PersonRoleManagePage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (this.state.person) {
-            const person = this.state.person;
+        const { person } = this.state;
+
+        if (person) {
             const roles = newProps.roles.filter(role => role.personId === person.personId)
                 .map((role) => {
                     role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name;
