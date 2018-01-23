@@ -5,13 +5,19 @@ import { oldGradeFields, gradeFields } from '../../util/theses';
 import { thesisType, programmeType, studyfieldType } from '../../util/types';
 
 export default class ThesisInformation extends Component {
-
     constructor() {
         super();
         this.state = {
-            programmeId: undefined,
             oldGrading: false
         }
+    }
+
+    componentWillReceiveProps(props) {
+        const selectedProgrammeId = props.studyfields
+            .find(studyfield => studyfield.programmeId === props.thesis.studyfieldId);
+
+        if (selectedProgrammeId)
+            props.thesis.programmeId = selectedProgrammeId.programmeId;
     }
 
     changeField = fieldName => (event) => {
@@ -20,41 +26,49 @@ export default class ThesisInformation extends Component {
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
         const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
+        const inputId = `${fieldName}-field`;
 
         return (
             <div className={className}>
-                <label>{label}</label>
-                <input
-                    type={type}
-                    name={fieldName}
-                    disabled={disabled ? 'true' : ''}
-                    value={this.props.thesis[fieldName]}
-                    onChange={this.changeField(fieldName)}
-                    placeholder={placeholder}
-                />
+                <label htmlFor={inputId}>
+                    {label}
+                    <input
+                        id={inputId}
+                        type={type}
+                        name={fieldName}
+                        disabled={disabled ? 'true' : ''}
+                        value={this.props.thesis[fieldName]}
+                        onChange={this.changeField(fieldName)}
+                        placeholder={placeholder}
+                    />
+                </label>
             </div>
         );
     }
 
     renderDropdownField(label, fieldArray, fieldName, disabled) {
         const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
+        const inputId = `${fieldName}-field`;
 
         return (
             <div className={className}>
-                <label>{label}</label>
-                <select
-                    className="ui fluid search dropdown"
-                    disabled={disabled ? 'true' : ''}
-                    value={this.props.thesis[fieldName]}
-                    onChange={this.changeField(fieldName)}
-                >
-                    <option key="0" value="">Select {label}</option>
-                    {fieldArray.map(field => (
-                        <option key={field.id} value={field.id}>
-                            {field.name}
-                        </option>
-                    ))}
-                </select>
+                <label htmlFor={inputId}>
+                    {label}
+                    <select
+                        id={inputId}
+                        className="ui fluid search dropdown"
+                        disabled={disabled ? 'true' : ''}
+                        value={this.props.thesis[fieldName]}
+                        onChange={this.changeField(fieldName)}
+                    >
+                        <option key="0" value="">Select {label}</option>
+                        {fieldArray.map(field => (
+                            <option key={field.id} value={field.id}>
+                                {field.name}
+                            </option>
+                        ))}
+                    </select>
+                </label>
             </div>
         );
     }
@@ -88,7 +102,7 @@ export default class ThesisInformation extends Component {
             .map(studyfield => ({
                 id: studyfield.studyfieldId,
                 name: studyfield.name
-            }))
+            }));
 
         return (
             <div className="ui form">
@@ -108,7 +122,10 @@ export default class ThesisInformation extends Component {
                     }
                     <div className="field">
                         <label>&nbsp;   </label>
-                        <button className="ui button" onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}>
+                        <button
+                            className="ui button"
+                            onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}
+                        >
                             {this.state.oldGrading ?
                                 'Enable new grading' : 'Enable old grading'}
                         </button>
