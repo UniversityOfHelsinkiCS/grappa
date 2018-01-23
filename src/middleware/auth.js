@@ -57,6 +57,7 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['edupersonaffiliation'] = 'student;member';
     // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
+    console.log("shibRegister starts")
     if (!req.session.user_id) {
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
             // console.log('unknown shib session');
@@ -67,43 +68,36 @@ module.exports.shibRegister = async (req, res, next) => {
             let user = await personService.getPersonByShibbolethId(shibUid);
 
             if (user) {
-                // console.log('existing user ', user);
                 req.session.user_id = user.personId;
-                // should also check if user data matches shibboleth headers and update db if needed
-                // or just update always:
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
                 user.email = req.headers['mail'];
-                // user.updated_at = Date.now();
-                await personService.updatePerson(user);
+                try {
+                    console.log('update Person', user);
+                    await personService.updatePerson(user);
+                } catch (error) {
+                    console.log("Updating person failed", error)
+                }
             } else {
-                // console.log('new user logged in');
-                const person = await personService.getPersonByDetails(req.headers['givenname'], req.headers['sn'], req.headers['mail']);
+                user = {
+                    firstname: req.headers['givenname'],
+                    lastname: req.headers['sn'],
+                    studentNumber,
+                    shibbolethId: req.headers['uid'],
+                    email: req.headers['mail']
+                    // updated_at: Date.now()
+                };
 
-                if (person) {
-                    // Person is already added to db, only need to update shibboleth id
-                    person.shibbolethId = req.headers['uid'];
-                    await personService.updatePerson(person);
-                } else {
-                    user = {
-                        firstname: req.headers['givenname'],
-                        lastname: req.headers['sn'],
-                        studentNumber,
-                        shibbolethId: req.headers['uid'],
-                        email: req.headers['mail']
-                        // updated_at: Date.now()
-                    };
-
-                    try {
-                        await personService.savePerson(user);
-                    } catch (error) {
-                        console.log(error);
-                    }
+                try {
+                    console.log('save Person', user);
+                    await personService.savePerson(user);
+                } catch (error) {
+                    console.log("Saving person failed", error);
                 }
             }
         }
     } else {
-        // console.log('userid ', req.session.user_id);
+        console.log('session.user_id exists: ', req.session.user_id);
     }
     next();
 };
