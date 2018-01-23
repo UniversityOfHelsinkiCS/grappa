@@ -57,6 +57,7 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['edupersonaffiliation'] = 'student;member';
     // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
+    console.log("shibRegister starts")
     if (!req.session.user_id) {
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
             // console.log('unknown shib session');
