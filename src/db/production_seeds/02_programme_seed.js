@@ -1,9 +1,9 @@
 exports.seed = (knex) => {
     // Deletes ALL existing entries
-    return knex('faculty').del()
+    return knex('programme').del()
         .then(() => {
             // Inserts seed entries
-            return knex('faculty').insert([
+            return knex('programme').insert([
                 {
                     facultyId: 1,
                     name: 'Computer Science Masters programme'
