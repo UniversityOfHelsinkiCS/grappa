@@ -2,5 +2,16 @@ language: node_js
 node_js:
   - "8"
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database grappa;' -U postgres
+  - psql -c 'drop schema public;' -U postgres
+  - psql -c 'create schema public;' -U postgres
+
+env:
+  - DATABASE_URL=postgres://postgres@localhost/grappa
+
 after_success:
   - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'

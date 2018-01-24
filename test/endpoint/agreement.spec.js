@@ -1,4 +1,6 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
@@ -16,6 +18,7 @@ const makeApp = (userId) => {
 
 test.before(async () => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 })
 

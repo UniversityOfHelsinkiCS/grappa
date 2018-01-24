@@ -79,7 +79,7 @@ export function updatePerson(personData) {
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
-        .then(personId => personId)
+        .then(personId => personId[0])
         .catch((error) => {
             throw error
         });
@@ -113,11 +113,3 @@ export const getPersonByPersonRoleId = personRoleId => knex.select().from('perso
 export const getAgreementPersonsByPersonRoleId = personRoleId => knex.select().from('agreementPerson')
     .where('personRoleId', personRoleId)
     .then(persons => persons);
-
-export function getPersonByDetails(firstname, lastname, email) {
-    return knex.select().from('person')
-        .where('firstname', firstname)
-        .where('lastname', lastname)
-        .where('email', email)
-        .first();
-}

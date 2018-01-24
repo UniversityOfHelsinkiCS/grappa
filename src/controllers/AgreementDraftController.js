@@ -2,8 +2,6 @@ require('babel-polyfill');
 const draftService = require('../services/DraftService');
 const supervisorService = require('../services/SupervisorService');
 const notificationService = require('../services/NotificationService');
-const express = require('express');
-const app = express();
 
 export async function getAgreementDraftById(req, res) {
     const agreementDraftId = req.params.id;
@@ -45,6 +43,7 @@ export async function saveAgreementDraft(req, res) {
         }
         res.status(200).json(savedAgreementDraft);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ text: 'error occured', error: error });
     }
 }
@@ -107,6 +106,12 @@ const getAgreementDraftData = (data) => {
         intermediateGoal: data.intermediateGoal,
         meetingAgreement: data.meetingAgreement,
         other: data.other
-    }
+    };
+
+    // TODO: Fix this mapping
+
+    if (!agreementDraftData.agreementDraftId)
+        delete agreementDraftData.agreementDraftId;
+
     return agreementDraftData;
 }

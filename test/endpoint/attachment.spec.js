@@ -1,4 +1,6 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const attachment = require('../../src/routes/attachments');
@@ -14,12 +16,13 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 });
 
-test('attachment post & creates id', async t => {
+test('attachment post & creates id', async (t) => {
     const agreementId = 1;
     const res = await request(makeApp(1))
         .post('/attachments')

@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import { createPerson } from '../utils';
+import { createPerson, deleteFromDb } from '../utils';
 
 const request = require('supertest');
 const express = require('express');
@@ -19,6 +19,7 @@ const makeApp = (userId) => {
 
 test.before(async () => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 });
 
@@ -32,7 +33,7 @@ const thesisForm = {
         address: 'Intiankatu',
         email: 'thomas@tarkastaja.com',
         firstname: 'Thomas',
-        isRetired: 0,
+        isRetired: false,
         lastname: 'CS-Tarkastaja',
         major: 'mathematics',
         personId: 5,
@@ -57,26 +58,13 @@ const thesisWithId = {
     urkund: 'https://example.com',
     grade: '4',
     graderEval: 'Tarkastajien esittely',
-    printDone: 0
-};
-
-const person = {
-    shibbolethId: null,
-    firstname: 'Etunimi',
-    lastname: 'Sukunimi',
-    email: 'Email',
-    title: null,
-    isRetired: null,
-    studentNumber: null,
-    address: null,
-    phone: null,
-    major: null
+    printDone: false
 };
 
 const fakeAgreement = {
     responsibleSupervisorId: null,
     studyfieldId: thesisForm.studyfieldId,
-    fake: 1,
+    fake: true,
     startDate: null,
     completionEta: null,
     performancePlace: null,
@@ -95,9 +83,9 @@ test('thesisForm post & creates id without attachment', async (t) => {
         .post('/theses')
         .field('json', JSON.stringify(thesisForm));
     t.is(res.status, 200);
-    let thesis = res.body.thesis;
-    let author = res.body.author;
-    let agreement = res.body.agreement;
+    const thesis = res.body.thesis;
+    const author = res.body.author;
+    const agreement = res.body.agreement;
     // Check the linking is right
     t.is(thesis.thesisId, agreement.thesisId);
     delete thesis.thesisId;
@@ -123,7 +111,7 @@ test.skip('thesis get all', async (t) => {
 const attachment = {
     filename: null, // Saving to memory has no filename
     mimetype: 'application/octet-stream',
-    savedOnDisk: 1,
+    savedOnDisk: true,
     label: 'otherFile',
     originalname: 'LICENSE'
 };
@@ -135,12 +123,10 @@ test('thesisForm post & creates id with attachment', async (t) => {
         .field('json', JSON.stringify(thesisForm))
         .attach('otherFile', './LICENSE');
     t.is(res.status, 200);
-    let thesis = res.body.thesis;
-    let author = res.body.author;
-    let agreement = res.body.agreement;
-    let attachments = res.body.attachments;
-    // Check the linking is right
 
+    const { thesis, author, agreement, attachments } = res.body;
+
+    // Check the linking is right
     t.is(thesis.thesisId, agreement.thesisId);
     t.is(attachments[0].agreementId, agreement.agreementId);
     delete thesis.thesisId;
@@ -174,10 +160,10 @@ test('thesisForm post sends emails', async (t) => {
     t.true(mailSpy.calledWith('erkki@erikoistapaus.com'), 'Email 3 ok');
 });
 
-test('author can see own thesis', async t => {
+test('author can see own thesis', async (t) => {
     const title = 'My own thesis';
     const personId = await createPerson();
-    const thesis = await knex('thesis').insert({ title }).returning('theisId');
+    const thesis = await knex('thesis').insert({ title }).returning('thesisId');
     await knex('agreement').insert({ authorId: personId, thesisId: thesis[0] }).returning('agreementId');
 
     const res = await request(makeApp(personId)).get('/theses');
@@ -186,12 +172,12 @@ test('author can see own thesis', async t => {
     t.is(res.body[0].title, title);
 });
 
-test('grader can see thesis', async t => {
+test('grader can see thesis', async (t) => {
     const title = 'Thesis to grade';
     const personId = await createPerson();
 
     const role = await knex('personWithRole').insert({ personId, roleId: 5 }).returning('personRoleId');
-    const thesis = await knex('thesis').insert({ title }).returning('theisId');
+    const thesis = await knex('thesis').insert({ title }).returning('thesisId');
     const agreement = await knex('agreement').insert({ thesisId: thesis[0] }).returning('agreementId');
     await knex('agreementPerson').insert({ agreementId: agreement[0], personRoleId: role[0] });
 
@@ -206,7 +192,7 @@ test('resp prof can see programme thesis', async (t) => {
     const personId = await createPerson();
     const programme = await knex('programme').insert({ name: 'test programme' }).returning('programmeId');
     const studyfield = await knex('studyfield').insert({ name: 'test studyfield', programmeId: programme[0] }).returning('studyfieldId')
-    const thesis = await knex('thesis').insert({ title }).returning('theisId');
+    const thesis = await knex('thesis').insert({ title }).returning('thesisId');
     await knex('personWithRole').insert({ personId, roleId: 4, programmeId: programme[0] }).returning('personRoleId');
     await knex('agreement').insert({ thesisId: thesis[0], studyfieldId: studyfield[0] }).returning('agreementId');
 
@@ -216,14 +202,14 @@ test('resp prof can see programme thesis', async (t) => {
     t.is(res.body[0].title, title);
 });
 
-test('admin can see all theses', async t => {
+test('admin can see all theses', async (t) => {
     const theses = await knex('thesis');
     const res = await request(makeApp(1)).get('/theses');
 
     t.is(res.body.length, theses.length);
 });
 
-test('invalid thesis is not accepted', async t => {
+test('invalid thesis is not accepted', async (t) => {
     const theses = await knex('thesis');
     const agreements = await knex('agreement');
 

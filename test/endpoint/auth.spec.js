@@ -1,4 +1,6 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const index = require('../../src/routes/index');
@@ -12,13 +14,13 @@ const makeApp = (email, id) => {
         req.session = {};
         req.headers['shib-session-id'] = 'test1234';
         req.headers['unique-code'] = 'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789';
-        req.headers['sn'] = 'Opiskelija';
-        req.headers['givenname'] = 'Olli O';
-        req.headers['displayname'] = 'Olli';
-        req.headers['uid'] = id || 'oopiskelija';
-        req.headers['mail'] = email || 'opiskelija@example.com';
-        req.headers['edupersonaffiliation'] = 'student;member';
-        req.headers['shib_logout_url'] = 'https://example.com/logout/';
+        req.headers.sn = 'Opiskelija';
+        req.headers.givenname = 'Olli O';
+        req.headers.displayname = 'Olli';
+        req.headers.uid = id || 'oopiskelija';
+        req.headers.mail = email || 'opiskelija@example.com';
+        req.headers.edupersonaffiliation = 'student;member';
+        req.headers.shib_logout_url = 'https://example.com/logout/';
         next();
     });
     app.use(auth.shibRegister);
@@ -28,12 +30,13 @@ const makeApp = (email, id) => {
     return app;
 };
 
-test.before(async t => {
+test.before(async (t) => {
     await knex.migrate.latest();
+    await deleteFromDb();
     await knex.seed.run();
 });
 
-test('new shibboleth login passes register', async t => {
+test('new shibboleth login passes register', async (t) => {
     t.plan(1);
     const app = makeApp();
     const res = await request(app)
@@ -42,7 +45,7 @@ test('new shibboleth login passes register', async t => {
 });
 
 // TODO: figure out why this test hangs if previous one is not there
-test.skip('new shibboleth login creates user', async t => {
+test.skip('new shibboleth login creates user', async (t) => {
     t.plan(3);
     const app = makeApp();
     const res = await request(app)
@@ -54,7 +57,7 @@ test.skip('new shibboleth login creates user', async t => {
     t.is(res.body.shibbolethId, 'oopiskelija');
 });
 
-test('exsisting user is updated if login with new sibboleth id', async t => {
+test('exsisting user is updated if login with new sibboleth id', async (t) => {
     t.plan(2);
     const email = 'exsisting@example.com';
     const shibbolethId = 'existing123';
@@ -77,7 +80,7 @@ test('exsisting user is updated if login with new sibboleth id', async t => {
     t.is(person.shibbolethId, shibbolethId);
 });
 
-test('logout gives redirect', async t => {
+test('logout gives redirect', async (t) => {
     t.plan(1);
     const app = makeApp();
     const res = await request(app)
