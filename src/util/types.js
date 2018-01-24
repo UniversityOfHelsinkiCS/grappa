@@ -82,7 +82,6 @@ export const thesisType = shape({
     title: string,
     urkund: string,
     grade: string,
-    graderEval: string,
     printDone: bool
 });
 
