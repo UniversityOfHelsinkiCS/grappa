@@ -74,7 +74,6 @@ export const emptyThesisData = {
     urkund: 'http://',
     grade: '',
     graders: [],
-    graderEval: '',
     programmeId: undefined,
     councilmeetingId: undefined,
     printDone: undefined,
