@@ -6,7 +6,7 @@ export const getAllCouncilmeetings = () => Councilmeeting.fetchAll();
 
 export const saveCouncilmeeting = (councilmeeting) => {
     validateMeetingDates(councilmeeting);
-    return new Councilmeeting(councilmeeting).save().then(m => m.get('councilmeetingId'));
+    return new Councilmeeting(toCouncilmeetingObject(councilmeeting)).save().then(m => m.get('councilmeetingId'));
 };
 
 export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
@@ -14,9 +14,16 @@ export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
     return knex('councilmeeting')
         .returning('councilmeetingId')
         .where('councilmeetingId', councilmeetingId)
-        .update(councilmeeting)
+        .update(toCouncilmeetingObject(councilmeeting))
         .then(councilmeetings => councilmeetings[0]);
 };
+
+const toCouncilmeetingObject = (councilmeeting) => ({
+    date: moment(councilmeeting.date).toDate(),
+    instructorDeadline: moment(councilmeeting.instructorDeadline).toDate(),
+    studentDeadline: moment(councilmeeting.studentDeadline).toDate(),
+    programmeId: councilmeeting.programmeId
+});
 
 export const deleteCouncilmeeting = councilmeetingId =>
     Councilmeeting.where('councilmeetingId', councilmeetingId).destroy();

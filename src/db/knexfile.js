@@ -9,6 +9,13 @@ module.exports = {
         },
         seeds: {
             directory: './src/db/seeds'
+        },
+        pool: {
+            afterCreate(connection, callback) {
+                connection.query('SET timezone = "Europe/Helsinki";', (err) => {
+                    callback(err, connection);
+                });
+            }
         }
     },
     test: {
@@ -21,6 +28,13 @@ module.exports = {
         },
         seeds: {
             directory: './src/db/seeds'
+        },
+        pool: {
+            afterCreate(connection, callback) {
+                connection.query('SET timezone = "Europe/Helsinki";', (err) => {
+                    callback(err, connection);
+                });
+            }
         }
     },
     production: {

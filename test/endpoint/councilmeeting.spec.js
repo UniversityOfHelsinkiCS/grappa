@@ -78,7 +78,7 @@ test('councilmeeting update', async (t) => {
     const meetingsAfter = await knex('councilmeeting').select().where('councilmeetingId', meeting[0]);
 
     updatedData.councilmeetingId = meeting[0];
-    t.deepEqual(meetingsAfter[0], updatedData);
+    t.deepEqual(res.body, updatedData);
 });
 
 test('councilmeeting with invalid dates cannot be created', async (t) => {
