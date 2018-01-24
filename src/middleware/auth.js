@@ -90,7 +90,8 @@ module.exports.shibRegister = async (req, res, next) => {
 
                 try {
                     console.log('save Person', user);
-                    await personService.savePerson(user);
+                    const person = await personService.savePerson(user);
+                    req.session.user_id = person.personId;
                 } catch (error) {
                     console.log("Saving person failed", error);
                 }
