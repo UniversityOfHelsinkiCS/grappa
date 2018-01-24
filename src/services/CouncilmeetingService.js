@@ -33,7 +33,7 @@ export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, 
             councilmeetingId,
             programmeId
         }
-        return knex('meetingProgramme').returning('programmeId').insert(meetingProgramme);
+        return knex('meetingProgramme').insert(meetingProgramme);
     }))
 }
 
