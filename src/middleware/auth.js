@@ -91,6 +91,7 @@ module.exports.shibRegister = async (req, res, next) => {
                 try {
                     console.log('save Person', user);
                     const person = await personService.savePerson(user);
+                    console.log("Done:", person);
                     req.session.user_id = person.personId;
                 } catch (error) {
                     console.log("Saving person failed", error);
@@ -100,8 +101,7 @@ module.exports.shibRegister = async (req, res, next) => {
             console.log("Already has a session");
         }
 
-    } else {
-        console.log('session.user_id exists: ', req.session.user_id);
     }
+    console.log('session.user_id exists: ', req.session.user_id);
     next();
 };

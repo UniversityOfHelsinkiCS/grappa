@@ -68,7 +68,7 @@ async function buildPerson(user) {
     const roleToId = await roleService.getRoles();
     const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
-    const readableRoles = personRoles.map(role => {
+    const readableRoles = personRoles.map((role) => {
         const programme = programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId);
         return {
             programme: programme.name,
