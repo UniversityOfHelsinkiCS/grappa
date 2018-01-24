@@ -3,14 +3,13 @@ node_js:
   - "8"
 
 services:
-  -postgresql
+  - postgresql
 
 before_script:
   - psql -c 'create database grappa;' -U postgres
-  - psql -c 'create schema grappa_test;' -U postgres
 
 env:
-  - DATABASE_URL=postgres://postgres@localhost/grappa?currentSchema=grappa_test
+  - DATABASE_URL=postgres://postgres@localhost/grappa
 
 after_success:
   - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
