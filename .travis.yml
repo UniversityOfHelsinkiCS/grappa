@@ -7,6 +7,8 @@ services:
 
 before_script:
   - psql -c 'create database grappa;' -U postgres
+  - psql -c 'drop schema public;' -U postgres
+  - psql -c 'create schema public;' -U postgres
 
 env:
   - DATABASE_URL=postgres://postgres@localhost/grappa
