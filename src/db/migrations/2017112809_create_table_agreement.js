@@ -26,6 +26,6 @@ exports.up = (knex) => {
     ]);
 };
 
-exports.down = (knex) => {
+exports.down = async (knex) => {
     knex.schema.dropTable('agreement');
 };

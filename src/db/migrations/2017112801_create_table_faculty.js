@@ -7,6 +7,6 @@ exports.up = (knex) => {
     ]);
 };
 
-exports.down = (knex) => {
-    knex.schema.dropTable('faculty');
+exports.down = async (knex) => {
+    await knex.schema.dropTable('faculty');
 };
