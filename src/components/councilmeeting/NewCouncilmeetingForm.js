@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment-timezone';
 import { programmeType } from '../../util/types';
 import ProgrammeSelect from '../programme/ProgrammeSelect';
+import { ProgrammeList } from '../programme/ProgrammeList';
 
 const dateFormat = 'DD.MM.YYYY';
 
@@ -14,8 +15,10 @@ class NewCouncilmeetingForm extends Component {
         this.state = {
             meeting: {
                 instructorDeadlineDays: 8,
-                studentDeadlineDays: 8
-            }
+                studentDeadlineDays: 8,
+                programmes: []
+            },
+            selectedProgramme: undefined
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -36,18 +39,38 @@ class NewCouncilmeetingForm extends Component {
     }
 
     handleProgrammeChange(event) {
-        const programmeId = Number(event.target.value);
-        const meeting = Object.assign({}, this.state.meeting, { programmeId });
-        this.setState({ meeting });
+        const programme = this.props.programmes.find(programme =>
+            programme.programmeId === Number(event.target.value)
+            && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
+        )
+        if (programme) {
+            const programmes = [...this.state.meeting.programmes, programme];
+            const meeting = Object.assign({}, this.state.meeting, { programmes });
+            this.setState({ meeting });
+        }
     }
+
+    selectProgramme = (programme) => {
+        this.setState({ selectedProgramme: programme })
+    }
+
+    removeSelected = () => {
+        const programmes = [...this.state.meeting.programmes
+            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)]
+        const meeting = Object.assign({}, this.state.meeting, { programmes });
+
+        this.setState({ selectedProgramme: undefined, meeting })
+    }
+
 
     saveMeeting() {
         // Since users only think about the difference but we want to save the date.
-        const { date, instructorDeadlineDays, studentDeadlineDays, programmeId } = this.state.meeting;
+        const { date, instructorDeadlineDays, studentDeadlineDays, programmes } = this.state.meeting;
         const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
         const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
+        const programmeIds = programmes.map(programme => programme.programmeId)
 
-        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmeId });
+        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmeIds });
     }
 
     render() {
@@ -91,17 +114,26 @@ class NewCouncilmeetingForm extends Component {
                                 placeholder="Days"
                             />
                         </div>
+                    </div>
+                    <div className="two fields">
                         <div className="field">
-                            <label htmlFor="newMeetingProgramme">Programme</label>
+                            <label htmlFor="newMeetingProgramme">Programmes</label>
                             <ProgrammeSelect
                                 id="newMeetingProgramme"
                                 onChange={this.handleProgrammeChange}
                                 programmes={this.props.programmes}
-                                value={this.state.meeting.programmeId}
+                            />
+                            <ProgrammeList
+                                programmes={this.state.meeting.programmes}
+                                select={this.selectProgramme}
                             />
                         </div>
+                        <div className="field">
+                            {this.state.selectedProgramme ? this.state.selectedProgramme.name : undefined}
+                            {this.state.selectedProgramme ? <button className="ui red button" onClick={this.removeSelected}>Remove</button> : undefined}
+                        </div>
                     </div>
-                    <button className="ui primary button" onClick={this.saveMeeting}>
+                    <button className="ui green button" onClick={this.saveMeeting}>
                         Submit
                     </button>
                 </div>

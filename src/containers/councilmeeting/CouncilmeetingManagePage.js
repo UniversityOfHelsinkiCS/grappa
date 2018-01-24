@@ -64,6 +64,7 @@ export class CouncilmeetingManagePage extends Component {
                        <UpdateCouncilmeetingForm
                            meeting={this.state.updateCouncilmeeting}
                            updateMeeting={this.updateMeeting}
+                           programmes={this.props.programmes}
                        />
                    </div>
                    <div className="field">

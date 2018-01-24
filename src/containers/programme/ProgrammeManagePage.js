@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import StudyfieldList from '../../components/programme/ProgrammeList';
+import ProgrammeList from '../../components/programme/ProgrammeList';
 import StudyfieldCreate from '../../components/programme/ProgrammeCreate';
 import StudyfieldEdit from '../../components/programme/ProgrammeEdit';
 import { deleteProgramme, saveProgramme, updateProgramme } from './programmeActions';
@@ -94,7 +94,7 @@ class StudyfieldManagePage extends Component {
               name changes it for every thesis connected to that field. If a field is no longer valid set it inactive
               and create a new one rather than change old one&lsquo;s name.
                       </p>
-                      <StudyfieldList
+                      <ProgrammeList
                           selectField={this.selectStudyfield}
                           programmes={this.props.studfields}
                       />

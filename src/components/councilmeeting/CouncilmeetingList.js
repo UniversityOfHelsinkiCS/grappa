@@ -16,8 +16,6 @@ function filterMeetings(meetings, showOld) {
 }
 
 const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, programmes }) => {
-    const programmeName = programmeId => programmes.find(programme => programmeId === programme.programmeId).name;
-
     return (
         <table className="ui celled table">
             <thead>
@@ -25,7 +23,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
                     <th>Date</th>
                     <th>Instructor deadline</th>
                     <th>Student deadline</th>
-                    <th>Programme</th>
+                    <th>Programmes</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -49,7 +47,19 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
                             </Link>
                         </td>
                         <td>
-                            {programmeName(councilmeeting.programmeId)}
+                            {councilmeeting.programmes
+                                .map(programmeId => {
+                                    const programme = programmes.find(programme => programmeId === programme.programmeId)
+                                    if (programme) {
+                                        return (
+                                            <div>
+                                                {programme.name}
+                                                <br />
+                                            </div>
+                                        )
+                                    }
+                                    return undefined;
+                                })}
                         </td>
                         <td>
                             <i className="write icon green" onClick={() => selectMeeting(councilmeeting)} />
