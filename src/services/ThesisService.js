@@ -6,7 +6,6 @@ const thesisSchema = [
     'thesis.councilmeetingId',
     'urkund',
     'grade',
-    'graderEval',
     'printDone'
 ];
 

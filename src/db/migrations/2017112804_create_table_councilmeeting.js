@@ -5,8 +5,6 @@ exports.up = (knex) => {
             table.date('date').notNullable();
             table.date('instructorDeadline');
             table.date('studentDeadline');
-            table.integer('programmeId').notNullable();
-            table.foreign('programmeId').references('programme.programmeId');
         })
     ]);
 };

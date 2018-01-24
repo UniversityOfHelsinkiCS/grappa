@@ -6,12 +6,9 @@ const personSchema = [
     'email',
     'firstname',
     'lastname',
-    'person.title',
     'isRetired',
     'studentNumber',
-    'address',
-    'phone',
-    'major'
+    'phone'
 ];
 
 export function getAllPersons() {
