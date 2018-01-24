@@ -10,7 +10,7 @@ before_script:
   - psql -c 'create schema grappa_test;' -U postgres
 
 env:
-  - DATABASE_URL=postgres://postgres@localhost/grappa
+  - DATABASE_URL=postgres://postgres@localhost/grappa?currentSchema=grappa_test
 
 after_success:
   - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
