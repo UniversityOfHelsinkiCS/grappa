@@ -5,6 +5,9 @@ node_js:
 services:
   - postgresql
 
+before_install:
+  - export TZ=Europe/Helsinki
+
 before_script:
   - psql -c 'create database grappa;' -U postgres
   - psql -c 'create schema grappa_test;' -U postgres grappa
