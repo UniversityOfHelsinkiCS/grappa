@@ -1,11 +1,8 @@
 module.exports = {
     development: {
-        client: 'sqlite3',
-        connection: {
-            filename: './src/db/grappa2db.sqlite'
-        },
-        // client: 'pg',
-        // connection: process.env.DATABASE_URL,
+        client: 'pg',
+        connection: process.env.DATABASE_URL,
+        searchPath: ['public'],
         useNullAsDefault: true,
         migrations: {
             directory: './src/db/migrations'

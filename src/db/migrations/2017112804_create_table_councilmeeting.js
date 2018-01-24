@@ -11,6 +11,6 @@ exports.up = function (knex, Promise) {
     ]);
 };
 
-exports.down = function (knex, Promise) {
-    knex.schema.dropTable('councilmeeting');
+exports.down = async function (knex) {
+    await knex.schema.dropTable('councilmeeting');
 };

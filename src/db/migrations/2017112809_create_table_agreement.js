@@ -26,6 +26,6 @@ exports.up = function(knex, Promise) {
     ]);
 };
 
-exports.down = function(knex, Promise) {
-    knex.schema.dropTable('agreement');
+exports.down = async function(knex) {
+    await knex.schema.dropTable('agreement');
 };
