@@ -5,7 +5,6 @@ exports.up = (knex) => {
             table.integer('programmeId').unsigned();
             table.foreign('programmeId').references('programme.programmeId');
             table.string('name');
-            table.timestamps();
         })
     ]);
 };

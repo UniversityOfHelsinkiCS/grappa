@@ -1,18 +1,17 @@
-exports.up = function (knex, Promise) {
+exports.up = (knex) => {
     return Promise.all([
-        knex.schema.createTable('thesis', function (table) {
+        knex.schema.createTable('thesis', (table) => {
             table.increments('thesisId').primary();
             table.integer('councilmeetingId').unsigned();
             table.foreign('councilmeetingId').references('councilmeeting.councilmeetingId');
             table.string('title');
             table.string('urkund');
             table.string('grade').defaultTo('-');
-            table.string('graderEval');
             table.boolean('printDone').defaultTo(false);
         })
     ]);
 };
 
-exports.down = function (knex, Promise) {
+exports.down = (knex) => {
     knex.schema.dropTable('thesis');
 };

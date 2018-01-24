@@ -1,6 +1,6 @@
-exports.up = function(knex, Promise) {
+exports.up = (knex) => {
     return Promise.all([
-        knex.schema.createTable('personWithRole', function(table) {
+        knex.schema.createTable('personWithRole', (table) => {
             table.increments('personRoleId').primary();
             table.integer('personId').unsigned().notNullable();
             table.foreign('personId').references('person.personId');
@@ -12,6 +12,6 @@ exports.up = function(knex, Promise) {
     ]);
 };
 
-exports.down = function(knex, Promise) {
+exports.down = (knex) => {
     knex.schema.dropTable('personWithRole');
 };
