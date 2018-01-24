@@ -4,8 +4,6 @@ import { deleteFromDb } from '../utils';
 const knex = require('../../src/db/connection');
 
 const personService = require('../../src/services/PersonService');
-const mockPersons = require('../../src/mockdata/MockPersons');
-const mockPersonRoles = require('../../src/mockdata/MockPersonRoleFields');
 
 test.before(async () => {
     await knex.migrate.latest();
@@ -13,18 +11,10 @@ test.before(async () => {
     await knex.seed.run();
 });
 
-test.beforeEach(async () => {
-    // await knex('person').del();
-    // await knex('person').insert(mockPersons);
-    // await knex('personWithRole').del();
-    // await knex('personWithRole').insert(mockPersonRoles);
-});
-
 test.serial('savePerson returns new personId', async (t) => {
     const newPerson = {
         shibbolethId: 'zippoletid10',
         email: 'firstname.lastname@gmail.com',
-        title: 'Dr.',
         firstname: 'New',
         lastname: 'Person',
         isRetired: false
@@ -48,7 +38,6 @@ test.serial('updatePerson', async (t) => {
         personId: 1,
         shibbolethId: 'zippoletid11',
         email: 'firstname.lastname@gmail.com',
-        title: 'Dr.',
         firstname: 'Updated',
         lastname: 'Person',
         isRetired: false

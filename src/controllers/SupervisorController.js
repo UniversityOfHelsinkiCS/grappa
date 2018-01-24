@@ -1,10 +1,7 @@
-require('babel-polyfill');
 const supervisorService = require('../services/SupervisorService');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const notificationService = require('../services/NotificationService');
-const express = require('express');
-const app = express();
 
 export async function getAllSupervisors(req, res) {
     const supervisors = await supervisorService.getAllSupervisors();
@@ -27,43 +24,39 @@ export async function getAgreementPersonsByStudyfield(req, res) {
 export async function saveSupervisor(req, res) {
     const supervisorData = req.body;
     if (supervisorData.personId == null || supervisorData.personId == '') { //save new
-        try {
-            const supervisorRoleId = await roleService.getRoleId('supervisor');
-            const personData = {
-                firstname: supervisorData.firstname,
-                lastname: supervisorData.lastname,
-                title: supervisorData.title,
-                email: supervisorData.email,
-                shibbolethId: supervisorData.shibbolethId,
-                isRetired: supervisorData.isRetired
-            };
-            const person = await personService.savePerson(personData);
-            const personId = person.personId;
-            const personRoleData = {
-                personId: personId,
-                programmeId: supervisorData.programmeId,
-                roleId: supervisorRoleId
-            };
-            const personRoleId = await personService.savePersonRole(personRoleData);
-            const agreementPersonData = {
-                agreementId: supervisorData.agreementId,
-                personRoleId: personRoleId,
-                roleId: supervisorRoleId,
-                approved: false,
-                statement: ''
-            };
-            const agreementId = await supervisorService.saveAgreementPerson(agreementPersonData);
-            personData.personId = personId;
 
-            notificationService.createNotification('ROLE_SAVE_ONE_SUCCESS', req);
+        const supervisorRoleId = await roleService.getRoleId('supervisor');
+        const personData = {
+            firstname: supervisorData.firstname,
+            lastname: supervisorData.lastname,
+            email: supervisorData.email,
+            shibbolethId: supervisorData.shibbolethId,
+            isRetired: supervisorData.isRetired
+        };
+        const person = await personService.savePerson(personData);
+        const personId = person.personId;
+        const personRoleData = {
+            personId,
+            programmeId: supervisorData.programmeId,
+            roleId: supervisorRoleId
+        };
+        const personRoleId = await personService.savePersonRole(personRoleData);
+        const agreementPersonData = {
+            agreementId: supervisorData.agreementId,
+            personRoleId,
+            roleId: supervisorRoleId,
+            approved: false,
+            statement: ''
+        };
 
-            res.status(200).json(personData);
-        } catch (err) {
-            res.status(500).json({ text: 'error occurred', error: err });
-        }
-    }
-    else {
-        res.status(500).json({ text: 'person already has id'});
+        await supervisorService.saveAgreementPerson(agreementPersonData);
+        personData.personId = personId;
+
+        notificationService.createNotification('ROLE_SAVE_ONE_SUCCESS', req);
+
+        res.status(200).json(personData);
+    } else {
+        throw new Error('person already has id');
     }
 }
 
@@ -106,7 +99,7 @@ export async function reviewSupervisor(req, res) {
 //         title: data.title,
 //         isRetired: data.isRetired
 //     };
-    
+
 //     if (personData.personId != null || personData.personId != '') {
 //             let updateData = {};
 //             // remove useless keys from data
@@ -121,7 +114,7 @@ export async function reviewSupervisor(req, res) {
 //             ).catch(err => {
 //                 res.status(500).json(err);
 //             });
-//         } 
+//         }
 //      else {
 //         res.status(500).json({text: "person does not exist"});
 //     }

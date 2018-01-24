@@ -61,7 +61,7 @@ test('get agreementDraft by ID', async (t) => {
     const draft = testAgreementDraft;
     const draftPersons = [];
     const res = await request(makeApp(1))
-        .get(`/agreement-drafts/${3}`);
+        .get(`/agreement-drafts/${4}`);
     t.is(res.status, 200);
 
     const agreementDraft = res.body.agreementDraft;

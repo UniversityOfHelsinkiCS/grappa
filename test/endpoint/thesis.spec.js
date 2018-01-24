@@ -6,6 +6,7 @@ const request = require('supertest');
 const express = require('express');
 const theses = require('../../src/routes/theses');
 const knex = require('../../src/db/connection');
+const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
     const app = express();
@@ -14,6 +15,9 @@ const makeApp = (userId) => {
         req.session.user_id = userId;
         next();
     }, theses);
+
+    app.use(errorHandler);
+
     return app;
 };
 
@@ -42,7 +46,6 @@ const thesisForm = {
         studentNumber: '876548321',
         title: ''
     }],
-    graderEval: 'Tarkastajien esittely',
     studyfieldId: 2,
     councilmeetingId: 1,
     printDone: false,
@@ -57,7 +60,6 @@ const thesisWithId = {
     title: 'Annin Grady',
     urkund: 'https://example.com',
     grade: '4',
-    graderEval: 'Tarkastajien esittely',
     printDone: false
 };
 

@@ -7,12 +7,8 @@ const emailInviteService = require('../services/EmailInviteService');
 export async function addPerson(req, res) {
     const personData = getPersonData(req.body);
     const saveData = removeEmptyKeys(personData);
-    try {
-        const savedPerson = await personService.savePerson(saveData);
-        res.status(200).json(savedPerson).end();
-    } catch (error) {
-        res.status(500).send(error).end();
-    }
+    const savedPerson = await personService.savePerson(saveData);
+    res.status(200).json(savedPerson).end();
 }
 
 export async function updatePerson(req, res) {

@@ -2,29 +2,20 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json()
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const supervisorController = require('../controllers/SupervisorController');
 const personController = require('../controllers/PersonController');
 
-router.get('/', (req, res) => {
-    supervisorController.getAllSupervisors(req, res);
-});
+router.get('/', (req, res, next) => supervisorController.getAllSupervisors(req, res).catch(next));
 
-router.post('/', jsonParser, (req, res) => {
-    supervisorController.saveSupervisor(req, res);
-});
+router.post('/', jsonParser, (req, res, next) => supervisorController.saveSupervisor(req, res).catch(next));
 
-router.put('/review', jsonParser, (req, res) => {
-    supervisorController.reviewSupervisor(req, res);
-});
+router.put('/review', jsonParser, (req, res, next) => supervisorController.reviewSupervisor(req, res).catch(next));
 
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', jsonParser, (req, res, next) => {
     // front should not use this route for this, but one for person
-    personController.updatePerson(req, res);
+    personController.updatePerson(req, res).catch(next);
 });
 
-router.get('/agreementPersons', (req, res) => {
-    supervisorController.getAgreementPersons(req, res);
-});
-    
+router.get('/agreementPersons', (req, res, next) => supervisorController.getAgreementPersons(req, res).catch(next));
+
 module.exports = router;

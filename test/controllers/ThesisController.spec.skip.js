@@ -56,7 +56,6 @@ test('saveThesisForm calls services method', async t => {
         thesisTitle: 'Annin Grady',
         urkund: 'http://',
         grade: 4,
-        graderEval: 'Tarkastajien esittely',
         userId: 1
     };
     req.body = body;
@@ -64,5 +63,5 @@ test('saveThesisForm calls services method', async t => {
     thesisController.saveThesisForm(req, res).then((response) => {
         t.is(spy.calledOnce, true, 'saveThesisForm calls services method saveThesis');
     })
-   
+
 });

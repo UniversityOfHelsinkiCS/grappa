@@ -5,6 +5,7 @@ const request = require('supertest');
 const express = require('express');
 const supervisors = require('../../src/routes/supervisors');
 const knex = require('../../src/db/connection');
+const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
     const app = express();
@@ -12,7 +13,10 @@ const makeApp = (userId) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, supervisors)
+    }, supervisors);
+
+    app.use(errorHandler);
+
     return app;
 }
 
@@ -26,8 +30,6 @@ const supervisorWithoutId = {
     firstname: 'Testi',
     lastname: 'Testinen',
     email: '',
-    address: '',
-    title: '',
     shibbolethId: ''
 }
 
