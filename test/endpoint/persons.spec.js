@@ -5,6 +5,7 @@ const request = require('supertest');
 const express = require('express');
 const persons = require('../../src/routes/persons');
 const knex = require('../../src/db/connection');
+const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
     const app = express();
@@ -12,7 +13,9 @@ const makeApp = (userId) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, persons)
+    }, persons);
+
+    app.use(errorHandler);
     return app;
 }
 
@@ -28,12 +31,9 @@ const personWithoutId = {
     email: 'testi@testaaja.com',
     firstname: 'Testi',
     lastname: 'Testaaja',
-    title: 'Dr.',
     isRetired: false,
     studentNumber: '0123456790',
-    address: 'Leppäsuonkatu',
-    phone: '050 1234567',
-    major: 'Käpistely'
+    phone: '050 1234567'
 }
 
 test('person post & creates id', async (t) => {

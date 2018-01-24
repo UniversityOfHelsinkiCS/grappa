@@ -57,7 +57,8 @@ test.skip('new shibboleth login creates user', async (t) => {
     t.is(res.body.shibbolethId, 'oopiskelija');
 });
 
-test('exsisting user is updated if login with new sibboleth id', async (t) => {
+// Currently not supported
+test.skip('exsisting user is updated if login with new sibboleth id', async (t) => {
     t.plan(2);
     const email = 'exsisting@example.com';
     const shibbolethId = 'existing123';

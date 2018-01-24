@@ -21,7 +21,7 @@ Dependencies: [![Known Vulnerabilities](https://snyk.io/test/github/ohtugrappa2/
 $ docker run --name grappa-postgres-container -d -e POSTGRES_PASSWORD=password -it -p 5433:5432 postgres:9.6.3
 $ docker exec -it postgres-container createdb -U postgres grappa
 $ docker exec -it grappa-postgres-container createdb -U postgres grappa
-$ docker exec -it grappa-postgres-container psql -c 'create schema grappa_test;' -U postgres
+$ docker exec -it grappa-postgres-container psql -c 'create schema grappa_test;' -U postgres grappa
 ```
 
 Run tests with DATABASE_URL env set:
