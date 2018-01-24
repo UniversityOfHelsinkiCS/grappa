@@ -64,7 +64,7 @@ class UpdateCouncilmeetingForm extends Component {
     updateMeeting = () => {
         const { councilmeetingId, date, instructorDeadline, studentDeadline, programmes } = this.state.meeting;
         const programmeIds = programmes.map(programme => programme.programmeId)
-        this.props.updateMeeting({ councilmeetingId, date, instructorDeadline, studentDeadline, programmeIds });
+        this.props.updateMeeting({ councilmeetingId, date, instructorDeadline, studentDeadline, programmes: programmeIds });
     }
 
     render() {

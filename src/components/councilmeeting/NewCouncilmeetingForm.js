@@ -70,7 +70,7 @@ class NewCouncilmeetingForm extends Component {
         const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
         const programmeIds = programmes.map(programme => programme.programmeId)
 
-        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmeIds });
+        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmes: programmeIds });
     }
 
     render() {
