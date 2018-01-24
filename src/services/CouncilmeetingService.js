@@ -50,7 +50,6 @@ const toCouncilmeetingObject = (councilmeeting) => ({
     date: moment(councilmeeting.date).toDate(),
     instructorDeadline: moment(councilmeeting.instructorDeadline).toDate(),
     studentDeadline: moment(councilmeeting.studentDeadline).toDate(),
-    programmeId: councilmeeting.programmeId
 });
 
 export const deleteCouncilmeeting = councilmeetingId =>
