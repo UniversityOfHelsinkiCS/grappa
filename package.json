@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test nyc ava -s -t",
-    "start": "NODE_ENV=development TEST_MAIL=grabbarobot EMAIL_HOST=gmail.com MAIL_PSWD=grabbasalasana nodemon index.js",
+    "start": "NODE_ENV=development nodemon index.js",
     "start:win": "nodemon index.js",
     "start:prod": "NODE_ENV=production node index.js",
     "db:migrate": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest",

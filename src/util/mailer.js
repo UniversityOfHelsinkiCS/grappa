@@ -1,33 +1,23 @@
 const nodemailer = require('nodemailer');
 
 const smtp = () => ({
-    from: 'Grappa Robot <noreply@' + process.env.EMAIL_HOST + '>',
-    host: 'smtp.' + process.env.EMAIL_HOST,
+    from: 'Grappa Robot <noreply@helsinki.fi>', // TODO: Move to env
+    host: 'smtp.helsinki.fi',
     port: 587,
     secure: false // false -> TLS, true -> SSL
 });
 
-const testSmtp = () => ({
-    from: 'Grabba Robot <' + process.env.TEST_MAIL + '@' + process.env.EMAIL_HOST + '>',
-    host: 'smtp.' + process.env.EMAIL_HOST,
-    port: 465,
-    secure: true, // false -> TLS, true -> SSL
-    auth: {
-        user: process.env.TEST_MAIL + '@' + process.env.EMAIL_HOST,
-        pass: process.env.MAIL_PSWD
-    }
-});
-
-export async function sendEmail(to, subject, body, attachments) {
-    var senderSettings = testSmtp();
-    var transporter = nodemailer.createTransport(senderSettings);
+export default async function sendEmail(to, subject, body, attachments) {
+    const senderSettings = smtp();
+    const transporter = nodemailer.createTransport(senderSettings);
 
     // if you don't want to spam people/yourself use this
     if (process.env.NODE_ENV !== 'production') {
         return logMail(to, subject, body, attachments);
     }
 
-    console.log('email sent');
+    console.log('Email sent, in production');
+    await logMail(to, subject, body, attachments);
 
     const options = {
         from: senderSettings.from,
@@ -54,11 +44,11 @@ export async function sendEmail(to, subject, body, attachments) {
 
 const logMail = (to, subject, body, attachments) => {
     console.log('----------------');
-    console.log(testSmtp());
-    console.log(to);
-    console.log(subject);
-    console.log(body);
-    console.log(attachments);
+    console.log('SETTINGS:', smtp());
+    console.log('TO:', to);
+    console.log('SUBJECT:', subject);
+    console.log('BODY:', body);
+    console.log('ATTACHMENTS:', attachments);
     console.log('----------------');
     return Promise.resolve();
 };
