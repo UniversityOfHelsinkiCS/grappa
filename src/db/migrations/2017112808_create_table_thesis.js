@@ -3,7 +3,7 @@ exports.up = (knex) => {
         knex.schema.createTable('thesis', (table) => {
             table.increments('thesisId').primary();
             table.integer('councilmeetingId').unsigned();
-            table.foreign('councilmeetingId').references('councilmeeting.councilmeetingId');
+            table.foreign('councilmeetingId').references('councilmeeting.councilmeetingId').onDelete('CASCADE');
             table.string('title');
             table.string('urkund');
             table.string('grade').defaultTo('-');

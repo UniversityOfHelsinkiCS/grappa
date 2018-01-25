@@ -3,7 +3,7 @@ exports.up = (knex) => {
         knex.schema.createTable('emailDraft', (table) => {
             table.increments('emailDraftId').primary();
             table.integer('programme');
-            table.foreign('programme').references('programme.programmeId');
+            table.foreign('programme').references('programme.programmeId').onDelete('CASCADE');
             table.text('type').notNullable();
             table.text('title');
             table.text('body');

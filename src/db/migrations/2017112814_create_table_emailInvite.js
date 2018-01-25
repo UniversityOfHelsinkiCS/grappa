@@ -9,9 +9,9 @@ exports.up = (knex) => {
             table.text('token').notNullable().unique();
             table.text('type').notNullable();
             table.boolean('used').default(false);
-            table.foreign('agreement').references('agreement.agreementId');
-            table.foreign('role').references('role.roleId');
-            table.foreign('programme').references('programme.programmeId');
+            table.foreign('agreement').references('agreement.agreementId').onDelete('CASCADE');
+            table.foreign('role').references('role.roleId').onDelete('CASCADE');
+            table.foreign('programme').references('programme.programmeId').onDelete('CASCADE');
         })
     ]);
 };

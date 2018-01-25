@@ -3,7 +3,7 @@ exports.up = (knex) => {
         knex.schema.createTable('attachment', (table) => {
             table.increments('attachmentId').primary();
             table.integer('agreementId').unsigned(); //author
-            table.foreign('agreementId').references('agreement.agreementId');
+            table.foreign('agreementId').references('agreement.agreementId').onDelete('CASCADE');
             table.string('filename');
             table.string('originalname');
             table.string('mimetype');

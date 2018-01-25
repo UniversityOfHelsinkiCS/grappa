@@ -4,10 +4,10 @@ exports.up = (knex) => {
             table.increments('notificationId').primary();
             table.text('type').notNullable();
             table.integer('userId');
-            table.foreign('userId').references('person.personId');
+            table.foreign('userId').references('person.personId').onDelete('CASCADE');
             table.timestamp('timestamp').defaultTo(knex.fn.now());
             table.integer('programmeId');
-            table.foreign('programmeId').references('programme.programmeId');
+            table.foreign('programmeId').references('programme.programmeId').onDelete('CASCADE');
         })
     ]);
 };

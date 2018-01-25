@@ -1,6 +1,5 @@
 exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    await knex('agreementDraftPerson').del() // Foreign key violation
     await knex('agreementDraft').del()
     // Inserts seed entries
     return knex('agreementDraft').insert([
