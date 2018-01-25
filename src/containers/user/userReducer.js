@@ -1,9 +1,9 @@
-const reducer = (state = [], action) => {
+const reducer = (state = {}, action) => {
     switch (action.type) {
         case 'USER_LOGIN_SUCCESS':
             return action.response;
         case 'USER_LOGOUT_SUCCESS':
-            return [];
+            return {};
         default:
             return state;
     }
