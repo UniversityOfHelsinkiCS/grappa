@@ -1,38 +1,38 @@
-const knex = require('../db/connection');
 const mailer = require('../util/mailer');
-const templates = require('../util/emailTemplates');
 
-export const agreementCreated = (data) => {
-    let body = templates.getEmailTemplate('createAgreement', data);
-    getEmailAddressByPersonRoleId(data.responsibleSupervisorId).then(address => {
-        return mailer.sendEmail(address, 'New Agreement created by ' + data.firstname + ' ' + data.lastname, body);
-    });
+const emailDraftService = require('../services/EmailDraftService');
+const personService = require('../services/PersonService');
+
+const PROD_ADDRESS = 'https://grappa.cs.helsinki.fi/v2/';
+const DEV_ADDRESS = 'http://localhost:3000/v2';
+
+const SERVER_ADDRESS = process.env.NODE_ENV === 'production' ? PROD_ADDRESS : DEV_ADDRESS;
+
+export async function newThesisAddedNotifyRespProf(programmeId) {
+    const respProfs = await personService.getPersonsWithRoleInStudyfield(4, programmeId);
+    const mails = respProfs.map(prof => sendMail('SupervisingProfessorNotification', prof.email, programmeId));
+
+    return Promise.all(mails);
 }
 
-export const agreementUpdated = (data) => {
-    let body = templates.getEmailTemplate('updateAgreement', data);
-    getEmailAddressByAgreementAndRole(data).then(address => {
-        mailer.sendEmail(address, 'Agreement updated by ' + data.firstname + ' ' + data.lastname, body);
-    });
+async function sendMail(type, email, programmeId) {
+    const emailDraft = await emailDraftService.getEmailDraft(type, programmeId);
+
+    try {
+        await mailer.sendEmail(email, emailDraft.title, emailDraft.body);
+    } catch (error) {
+        console.error('Email send error', error);
+    }
 }
 
-const getEmailAddressByPersonRoleId = (id) => {
-    return knex.select('person.email').from('personWithRole')
-        .join('person', 'personWithRole.personId', '=', 'person.personId')
-        .where('personWithRole.personId', id)
-        .then(to => to[0].email);
-}
+export async function sendInvite(emailInvite, type, programmeId) {
+    const draftName = type === 'role' ? 'InviteRoleToLogin' : 'InviteAuthorToLogin';
+    const draft = await emailDraftService.getEmailDraft(draftName, programmeId);
+    const body = draft.body.replace('$LOGIN_URL$', `${SERVER_ADDRESS}invite/${type}/${emailInvite.token}`);
 
-const getEmailAddressByAgreementAndRole = (data) => {
-    if (data.whoNext === 'supervisor') {
-        return knex.select('person.email').from('personWithRole')
-            .join('person', 'personWithRole.personId', '=', 'person.personId')
-            .where('personWithRole.personRoleId', data.responsibleSupervisorId)
-            .then(to => to);
-    } else if (data.whoNext === 'student') {
-        return knex.select('person.email').from('agreement')
-            .join('person', 'agreement.authorId', '=', 'person.personId')
-            .where('authorId', data.authorId)
-            .then(to => to);
+    try {
+        await mailer.sendEmail(emailInvite.email, draft.title, body);
+    } catch (error) {
+        console.error('Email send error', error);
     }
 }

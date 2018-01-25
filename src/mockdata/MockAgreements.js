@@ -1,7 +1,7 @@
 module.exports = [
     {
         agreementId: 1,
-        authorId: 1,
+        authorId: 10,
         thesisId: 1,
         responsibleSupervisorId: 1,
         studyfieldId: 1,
@@ -10,11 +10,11 @@ module.exports = [
         completionEta: '1.2.2006',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
-        studentWorkTime: "1h viikossa",
-        supervisorWorkTime: "tsiigaillaan",
-        intermediateGoal: "oispa valmistunut",
-        meetingAgreement: "just just",
-        other: "eihän tässä muuta"
+        studentWorkTime: '1h viikossa',
+        supervisorWorkTime: 'tsiigaillaan',
+        intermediateGoal: 'oispa valmistunut',
+        meetingAgreement: 'just just',
+        other: 'eihän tässä muuta'
     },
     {
         agreementId: 2,
@@ -27,11 +27,11 @@ module.exports = [
         completionEta: '1.2.2006',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
-        studentWorkTime: "200h viikossa",
-        supervisorWorkTime: "jee",
-        intermediateGoal: "valmistun",
-        meetingAgreement: "joka päivä",
-        other: "ddd"
+        studentWorkTime: '200h viikossa',
+        supervisorWorkTime: 'jee',
+        intermediateGoal: 'valmistun',
+        meetingAgreement: 'joka päivä',
+        other: 'ddd'
     },
     {
         agreementId: 3,
@@ -44,10 +44,10 @@ module.exports = [
         completionEta: '1.2.2006',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
-        studentWorkTime: "5h viikossa",
-        supervisorWorkTime: "jees",
-        intermediateGoal: "valmistunen",
-        meetingAgreement: "joka toinen päivä",
-        other: "eee"
+        studentWorkTime: '5h viikossa',
+        supervisorWorkTime: 'jees',
+        intermediateGoal: 'valmistunen',
+        meetingAgreement: 'joka toinen päivä',
+        other: 'eee'
     }
-];
+]

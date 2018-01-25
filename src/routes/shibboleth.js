@@ -7,7 +7,7 @@ const loginController = require('../controllers/LoginController');
 // logins with shibboleth are automatic and code is in auth middleware
 
 // this returns logged in user
-router.get('/', jsonParser, (req, res) => {
+router.get('/login', jsonParser, (req, res) => {
     loginController.showUser(req, res);
 });
 
@@ -16,8 +16,10 @@ router.get('/logout', jsonParser, (req, res) => {
 });
 
 //For now we use get to login for dev.
-router.get('/:id', jsonParser, (req, res) => {
-    loginController.fakeLogin(req, res);
-});
+if (process.env.NODE_ENV === 'development') {
+    router.get('/:id', jsonParser, (req, res) => {
+        loginController.fakeLogin(req, res);
+    });
+}
 
 module.exports = router;

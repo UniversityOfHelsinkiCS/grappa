@@ -1,11 +1,11 @@
 const agreementService = require('../services/AgreementService');
+const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService');
-
-const AttachmentController = require('./AttachmentController');
+const programmeService = require('../services/ProgrammeService');
+const notificationService = require('../services/NotificationService');
 
 export async function getAgreementById(req, res) {
     const agreement = await agreementService.getAgreementById(req.params.id);
@@ -17,61 +17,90 @@ export async function getPreviousAgreementById(req, res) {
     res.status(200).json(agreement);
 }
 
-//TODO: refactor
+// TODO: refactor
 export async function getAllAgreements(req, res) {
-    //All = return agreements that a user might be interested in.
+    // All = return agreements that a user might be interested in.
     try {
+        const user = await personService.getLoggedPerson(req);
+        const personId = user.personId;
         let agreements = [];
-        const loggedPerson = await personService.getLoggedPerson(req);
-        const personId = loggedPerson.personId;
-        const roleToId = await roleService.getRoles();
-        const studyfieldToId = await studyfieldService.getAllStudyfields();
-        const personRoles = await roleService.getPersonRoles(personId);
-        const readableRoles = personRoles.map(role => {
-            return {
-                studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
-                role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-            }
-        })
-        //First get all user is the "student" of.
-        agreements = await agreementService.getAgreementsByAuthor(personId);
-        //Get all if admin
-        if (readableRoles.find(readable => readable.role === 'admin')) {
-            const allAgreements = await agreementService.getAllAgreements();
-            agreements.concat(allAgreements);
-        } else {
-            //Get all where agreementPerson
-            const agreementsWhereAgreementPerson = await Promise.all(personRoles.map(async role => {
-                const personRoleId = role.personRoleId;
-                const agreementPersons = await personService.getAgreementPersonsByPersonRoleId(personRoleId);
-                const agreements = await Promise.all(agreementPersons.map(async agreementPerson => {
-                    const agreementId = agreementPerson.agreementId;
-                    const agreement = await agreementService.getAgreementById(agreementId);
-                    return agreement;
-                }))
-                return agreements[0];
-            }))
-            agreements.concat(agreementsWhereAgreementPerson);
+        let newAgreements = [];
+
+        const rolesInProgrammes = await getUsersRoles(user);
+
+        // If user is an admin, get everything
+        if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
+            agreements = await agreementService.getAllAgreements();
+            const attachments = await attachmentService.getAllAttachments();
+            const responseObject = {
+                agreements,
+                attachments
+            };
+            res.status(200).json(responseObject).end();
+            return;
         }
-        res.status(200).json(agreements);
-    } catch (err) {
-        res.status(500).json(err);
+
+        rolesInProgrammes.forEach(async (item) => {
+            // As resp_prof, print-person and manager persons who are writing theses in programme
+            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+                newAgreements = await agreementService.getAgreementsInProgramme(item.programme.programmeId);
+                agreements = [...new Set([...agreements, ...newAgreements])];
+            }
+        });
+
+        // Get all where agreementPerson
+        newAgreements = await agreementService.getAgreementsByAgreementPerson(personId);
+        agreements = [...new Set([...agreements, ...newAgreements])];
+
+        // Get all where user is the author.
+        newAgreements = await agreementService.getAgreementsByAuthor(personId);
+        agreements = [...new Set([...agreements, ...newAgreements])];
+
+        // Remove duplicates
+        const responseAgreements = [];
+        agreements.forEach((agreement) => {
+            if (!responseAgreements.find(item => item.agreementId === agreement.agreementId)) {
+                responseAgreements.push(agreement);
+            }
+        });
+
+        const attachments = await attachmentService.getAttachmentsForAgreements(responseAgreements);
+        const responseObject = {
+            agreements: responseAgreements,
+            attachments
+        };
+        res.status(200).json(responseObject);
+    } catch (error) {
+        console.log(error.stack);
+        res.status(500).json(error);
     }
 }
 
+const getUsersRoles = async(user) => {
+    const roleToId = await roleService.getRoles();
+    const programmeToId = await programmeService.getAllProgrammes();
+    const personRoles = await roleService.getPersonRoles(user.personId);
+    return personRoles.map(role => {
+        return {
+            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
+            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+        };
+    });
+};
+
 export async function getAgreementsByLoggedAuthor(req, res) {
-    //return agreements where user is set as author.
+    // return agreements where user is set as author.
     try {
         const person = await personService.getLoggedPerson(req);
         const agreements = await agreementService.getAgreementsByAuthor(person.personId);
-        //TO DO! refactor frontend and call getAgreementRelatedData here
+        // TODO! refactor frontend and call getAgreementRelatedData here
         res.status(200).json(agreements);
     } catch (err) {
         res.status(500).json(err);
     }
 }
 
-const getAgreementRelatedData = async function (data) {
+const getAgreementRelatedData = async function(data) {
     const mainSupervisor = await personService.getPersonByPersonRoleId(data.responsibleSupervisorId);
     data.responsibleSupervisorId = mainSupervisor;
     let agreement = getAgreementData(data);
@@ -85,19 +114,18 @@ const getAgreementRelatedData = async function (data) {
         supervisors: supervisors
     };
     return agreementRelatedData;
-}
+};
 
-const getAgreementPersonsByAgreementId = async function (agreementId) {
-    return await personService.getAgreementPersonsByAgreementId(agreementId);
-}
+const getAgreementPersonsByAgreementId = async function(agreementId) {
+    return await roleService.getAgreementPersonsByAgreementId(agreementId);
+};
 
 const getThesisData = (data) => {
     return ({
         thesisId: data.thesisId,
-        title: data.thesisTitle,
-        userId: data.personId
+        title: data.thesisTitle
     });
-}
+};
 
 const getAgreementData = (data, thesisId) => {
     return ({
@@ -105,7 +133,7 @@ const getAgreementData = (data, thesisId) => {
         authorId: data.personId,
         thesisId: thesisId,
         responsibleSupervisorId: data.thesisSupervisorMain,
-        studyfieldId: data.studyfieldId,
+        programmeId: data.programmeId,
         startDate: data.thesisStartDate,
         completionEta: data.thesisCompletionEta,
         performancePlace: data.thesisPerformancePlace,
@@ -116,7 +144,7 @@ const getAgreementData = (data, thesisId) => {
         meetingAgreement: data.thesisWorkMeetingAgreement,
         other: data.other
     });
-}
+};
 
 const getPersonData = (data) => {
     return ({
@@ -131,24 +159,25 @@ const getPersonData = (data) => {
         phone: data.phone,
         major: data.major
     });
-}
+};
 
 export async function saveAgreement(req, res) {
     const data = req.body;
     const user = await personService.getLoggedPerson(req);
     const personId = user.personId;
-    // console.log("Saving agreement");
-    if (!personId) res.status(500).json({ text: "No user_id in session" });
+    // console.log('Saving agreement');
+    if (!personId) res.status(500).json({ text: 'No user_id in session' });
     if (!data.agreementId) {
         try {
-            console.log("Before await");
+            console.log('Before await');
             let newAgreement = await agreementService.saveAgreement(data);
+            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
             return res.status(200).json(newAgreement);
         } catch (err) {
             return res.status(500).json(err);
         }
     }
-    res.status(500).json({ text: "Agreement had an id" });
+    res.status(500).json({ text: 'Agreement had an id' });
 }
 
 export async function saveAgreementForm(req, res) {
@@ -157,35 +186,23 @@ export async function saveAgreementForm(req, res) {
     const personId = user.personId;
     data.personId = personId;
     if (!personId) {
-        res.status(500).json({ text: "No user_id in session" });
+        res.status(500).json({ text: 'No user_id in session' });
     }
     try {
         data.personId = personId;
         const thesisData = getThesisData(data);
-        const thesisSaveResponse = await thesisService.saveThesis(thesisData);
+        const thesisSaveResponse = await thesisService.saveThesis(thesisData, req);
         const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
         const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
         agreementData.agreementId = agreementSaveResponse.agreementId;
-        let personData = await personService.getPersonById(data.personId);
-        //emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+        // let personData = await personService.getPersonById(data.personId);
+        // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.programmeId);
         res.status(200).json(agreementData);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ text: 'Error occured', error });
     }
-    catch (error) {
-        res.status(500).json({ text: "Error occured", error });
-    }
-}
-
-const updatePerson = async function (personData) {
-    return await personService.updatePerson(personData);
-}
-
-const saveThesis = async function (thesisData) {
-    return await thesisService.saveThesis(thesisData);
-}
-
-const saveAgreementToService = async function (agreementData) {
-    const agreement = await agreementService.saveAgreement(agreementData);
-    return agreement.agreementId;
 }
 
 export async function updateAgreement(req, res) {
@@ -219,7 +236,7 @@ export async function updateAgreement(req, res) {
                 authorId: data.personId,
                 thesisId: data.thesisId,
                 responsibleSupervisorId: data.responsibleSupervisorId,
-                studyfieldId: data.studyfieldId,
+                programmeId: data.programmeId,
                 studentGradeGoal: data.studentGradeGoal,
                 studentWorkTime: data.thesisWorkStudentTime,
                 supervisorWorkTime: data.thesisWorkSupervisorTime,
@@ -231,17 +248,18 @@ export async function updateAgreement(req, res) {
             const cleanAgreementData = removeUselessKeys(agreementData);
             const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
             emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
-            res.status(200).json({ text: "agreement update successfull(/SQL error)", agreementId: agreementId });
+            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
+            res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId: agreementId });
         } catch (err) {
-            res.status(500).json({ text: "error occurred", error: err });
+            res.status(500).json({ text: 'error occurred', error: err });
         }
     } else {
-        res.status(500).json({ text: "problem with agreementId" });
+        res.status(500).json({ text: 'problem with agreementId' });
     }
 }
 
 function removeUselessKeys(messyData) {
-    //removes keys that are undefined/null from data
+    // removes keys that are undefined/null from data
     let cleanData = {};
     Object.keys(messyData).map(key => {
         if (messyData[key] != null) {
@@ -255,8 +273,9 @@ export async function savePrevious(req, res) {
     const data = req.body;
     try {
         const daoResponse = await agreementService.savePrevious(data);
-        res.status(200).json({ text: "agreement linked to previous agreement successfully", agreementId: daoResponse });
+        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.programmeId);
+        res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
     } catch (err) {
-        res.status(500).json({ text: "error occurred", error: err });
+        res.status(500).json({ text: 'error occurred', error: err });
     }
 }

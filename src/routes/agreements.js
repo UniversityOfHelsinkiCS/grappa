@@ -5,7 +5,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const agreementController = require('../controllers/AgreementController');
 
 router.get('/', (req, res) => {
-    agreementController.getAgreementsByLoggedAuthor(req, res);
+    agreementController.getAllAgreements(req, res);
 });
 
 router.get('/:id/previous', (req, res) => {

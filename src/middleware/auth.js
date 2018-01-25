@@ -1,4 +1,5 @@
 const personService = require('../services/PersonService');
+const roleService = require('../services/RoleService');
 
 /**
  * Authentication middleware that is called before any requests.
@@ -8,7 +9,7 @@ module.exports.checkAuth = async (req, res, next) => {
     if (!req.session.user_id) {
         if (!req.headers['shib-session-id']) {
             // forbid if in production and bypassed shibboleth
-            if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'dev') {
+            if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
                 res.status(403).end();
             }
         }
@@ -16,21 +17,33 @@ module.exports.checkAuth = async (req, res, next) => {
         req.session.shib_session_id = req.headers['shib-session-id'];
         const shibUid = req.headers['uid'];
         try {
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
+            const user = await personService.getPersonByShibbolethId(shibUid);
+            if (user) {
+                req.session.user_id = user.personId;
+            }
+            next();
         } catch (err) {
             res.status(404).end();
         }
-        let user = userdata[0];
-        if (user) {
-            req.session.user_id = user.personId;
-        }
-        next();
     } else {
         next();
     }
 };
 
+module.exports.checkAdmin = async (req, res, next) => {
+    const user = await personService.getLoggedPerson(req);
+    try {
+        const roles = await roleService.getRoles(user.personId);
 
+        if (roles.filter(role => role.name === 'admin').length > 0) {
+            next();
+        } else {
+            res.status(404).end();
+        }
+    } catch (err) {
+        res.status(404).end();
+    }
+};
 
 module.exports.shibRegister = async (req, res, next) => {
     // fake shibboleth headers for testing
@@ -44,40 +57,58 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['edupersonaffiliation'] = 'student;member';
     // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
+    console.log("shibRegister starts")
     if (!req.session.user_id) {
+        console.log("First if")
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
-            // console.log('unknown shib session');
             req.session.shib_session_id = req.headers['shib-session-id'];
             const shibUid = req.headers['uid'];
-            const studentNumberRegex = /.*:([0-9]*)$/
-            const studentNumber = studentNumberRegex.exec(req.headers['unique-code'])[1];
-            const userdata = await personService.getPersonByShibbolethId(shibUid);
-            let user = userdata[0];
-            if (user) {
-                // console.log('existing user ', user);
+            const studentNumberRegex = /.*:([0-9]*)$/;
+            const regexResults = studentNumberRegex.exec(req.headers['unique-code'])
+            const studentNumber = regexResults ? regexResults[1] : undefined;
+            try {
+                const user = await personService.getPersonByShibbolethId(shibUid);
                 req.session.user_id = user.personId;
-                // should also check if user data matches shibboleth headers and update db if needed
-                // or just update always:
                 user.firstname = req.headers['givenname'];
                 user.lastname = req.headers['sn'];
                 user.email = req.headers['mail'];
-                // user.updated_at = Date.now();
-                await personService.updatePerson(user);
-            } else {
-                // console.log('new user logged in');
-                user = {
+                try {
+                    console.log('update Person', user);
+                    await personService.updatePerson(user);
+                } catch (error) {
+                    console.log("Updating person failed", error)
+                }
+            } catch (error) {
+                const user = {
                     firstname: req.headers['givenname'],
                     lastname: req.headers['sn'],
                     studentNumber,
                     shibbolethId: req.headers['uid'],
-                    email: req.headers['mail'],
-                    // updated_at: Date.now()
+                    email: req.headers['mail']
                 };
-                await personService.savePerson(user);
+
+                try {
+                    console.log('save Person', user);
+                    const person = await personService.savePerson(user);
+                    console.log("Done:", person);
+                    req.session.user_id = person.personId;
+                } catch (error) {
+                    console.log("Saving person failed", error);
+                }
             }
+            try {
+                const user = await personService.getPersonByShibbolethId(shibUid);
+                if (user) {
+                    req.session.user_id = user.personId;
+                }
+            } catch (error) {
+                console.log("Help", error)
+            }
+        } else {
+            console.log("Already has a session");
         }
-    } else {
-        // console.log('userid ', req.session.user_id);
+
     }
+    console.log('session.user_id exists: ', req.session.user_id);
     next();
-}
+};

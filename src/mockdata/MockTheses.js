@@ -1,27 +1,24 @@
 module.exports = [
-    { 
+    {
         thesisId: 1,
+        councilmeetingId: 1,
         title: 'Annin Grady',
         urkund: 'http://',
-        grade: 4,
-        graderEval: 'Tarkastajien esittely',
-        userId: 1
+        grade: 4
     },
     {
         thesisId: 2,
+        councilmeetingId: 1,
         title: 'Hieno Gradu',
         urkund: 'http://',
-        grade: 1,
-        graderEval: 'Tarkastajien esittely',
-        userId: 2
+        grade: 1
     },
     {
         thesisId: 3,
+        councilmeetingId: null,
         title: 'Amazing Thesis',
         urkund: 'http://',
-        grade: 4,
-        graderEval: 'Tarkastajien esittely',
-        userId: 5
+        grade: 4
     }
 ]
 

@@ -1,53 +1,103 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const councilmeetings = require('../../src/routes/councilmeeting');
-const config = require('../../src/db/knexfile');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/councilmeetings', councilmeetings)
+    app.use('/councilmeetings', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, councilmeetings);
     return app;
-}
+};
 
-test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    //console.log(waitString);
-})
+test.before(async () => {
+    await knex.migrate.latest();
+    await deleteFromDb();
+    await knex.seed.run();
+});
 
 const councilmeetingWithoutId = {
     date: '2017-11-29T22:00:00.000Z',
     instructorDeadline: '2017-11-20T22:00:00.000Z',
     studentDeadline: '2017-11-10T22:00:00.000Z',
-}
+    programmes: [1]
+};
 
-const councilmeetingWithId = {
-    councilmeetingId: 1,
-    date: '2017-11-29T22:00:00.000Z',
-    instructorDeadline: '2017-11-20T22:00:00.000Z',
-    studentDeadline: '2017-11-10T22:00:00.000Z',
-}
-
-test('councilmeeting post & creates id', async t => {
-    t.plan(2);
-    const res = await request(makeApp())
+test('councilmeeting post & creates id', async (t) => {
+    t.plan(3);
+    const res = await request(makeApp(1))
         .post('/councilmeetings')
         .send(councilmeetingWithoutId);
     t.is(res.status, 200);
-    const body = res.body;
-    const meeting = councilmeetingWithId
-    t.is(JSON.stringify(body), JSON.stringify(meeting));
-})
+    const councilmeeting = res.body;
+    t.truthy(councilmeeting.councilmeetingId);
+    delete councilmeeting.councilmeetingId;
+    t.deepEqual(councilmeeting, councilmeetingWithoutId);
+});
 
-test('councilmeeting get all', async t => {
+test('councilmeeting get all', async (t) => {
     t.plan(2);
-    const app = makeApp();
-    const res = await request(app)
-        .get('/councilmeetings');
+
+    const res = await request(makeApp(1)).get('/councilmeetings');
+
     t.is(res.status, 200);
-    const body = res.body;
-    const meetings = [ councilmeetingWithId ];
-    t.is(JSON.stringify(body), JSON.stringify(meetings));    
-})
+    t.truthy(res.body.length > 0);
+});
+
+test('councilmeeting delete', async (t) => {
+    const copy = Object.assign({}, councilmeetingWithoutId)
+    delete copy.programmes
+    const meeting = await knex('councilmeeting').insert(copy).returning('councilmeetingId');
+    const res = await request(makeApp(1)).del(`/councilmeetings/${meeting[0]}`);
+
+    t.is(res.status, 200);
+
+    const meetingsAfter = await knex('councilmeeting').select().where('councilmeetingId', meeting[0]);
+
+    t.is(meetingsAfter.length, 0);
+});
+
+test('councilmeeting update', async (t) => {
+    const updatedData = {
+        date: '2019-11-29T22:00:00.000Z',
+        instructorDeadline: '2019-11-20T22:00:00.000Z',
+        studentDeadline: '2019-11-10T22:00:00.000Z',
+        programmes: [1, 2]
+    };
+    const copy = Object.assign({}, councilmeetingWithoutId)
+    delete copy.programmes
+    const meeting = await knex('councilmeeting').insert(copy).returning('councilmeetingId');
+    const res = await request(makeApp(1))
+        .put(`/councilmeetings/${meeting[0]}`)
+        .send(updatedData);
+
+    t.is(res.status, 200);
+
+    const meetingsAfter = await knex('councilmeeting').select().where('councilmeetingId', meeting[0]);
+
+    updatedData.councilmeetingId = meeting[0];
+    t.deepEqual(res.body, updatedData);
+});
+
+test('councilmeeting with invalid dates cannot be created', async (t) => {
+    t.plan(1);
+
+    const data = {
+        date: '2019-11-19T22:00:00.000Z',
+        instructorDeadline: '2019-11-20T22:00:00.000Z',
+        studentDeadline: '2019-11-10T22:00:00.000Z',
+        programmes: [1]
+    };
+
+    const res = await request(makeApp(1))
+        .post('/councilmeetings')
+        .send(data);
+
+    t.is(res.status, 500);
+});

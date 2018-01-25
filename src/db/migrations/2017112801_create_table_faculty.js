@@ -1,12 +1,12 @@
-exports.up = function(knex, Promise) {
+exports.up = (knex) => {
     return Promise.all([
-        knex.schema.createTable('faculty', function (table) {
+        knex.schema.createTable('faculty', (table) => {
             table.increments('facultyId').primary();
             table.string('name');
         })
     ]);
 };
 
-exports.down = function(knex, Promise) {
-    knex.schema.dropTable('faculty');
+exports.down = async (knex) => {
+    await knex.schema.dropTable('faculty');
 };

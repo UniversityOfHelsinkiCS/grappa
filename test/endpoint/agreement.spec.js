@@ -1,52 +1,53 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
+const knex = require('../../src/db/connection');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
     app.use('/agreements', (req, res, next) => {
         req.session = {};
-        req.session.user_id = 1;
+        req.session.user_id = userId;
         next();
     }, agreement)
     return app;
 }
 
-test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" })
-    // console.log(waitString);
+test.before(async () => {
+    await knex.migrate.latest();
+    await deleteFromDb();
+    await knex.seed.run();
 })
 
 const agreementForm = {
-    thesisTitle: "my Thesis",
-    thesisStartDate: "9.9.2017",
-    thesisCompletionEta: "9.9.2018",
-    thesisPerformancePlace: "helsinki",
+    thesisTitle: 'my Thesis',
+    thesisStartDate: '9.9.2017',
+    thesisCompletionEta: '9.9.2018',
+    thesisPerformancePlace: 'helsinki',
 
-    thesisSupervisorMain: "matti luukkainen",
-    thesisSupervisorSecond: "sauli niinnistö",
-    thesisSupervisorOther: "",
+    thesisSupervisorMain: 'matti luukkainen',
+    thesisSupervisorSecond: 'sauli niinnistö',
+    thesisSupervisorOther: '',
 
-    thesisWorkStudentTime: "1h viikossa",
-    thesisWorkSupervisorTime: "2h viikossa",
-    thesisWorkIntermediateGoal: "vain taivas on rajana",
-    thesisWorkMeetingAgreement: "joka toinen viikko",
-    thesisWorkOther: "",
+    thesisWorkStudentTime: '1h viikossa',
+    thesisWorkSupervisorTime: '2h viikossa',
+    thesisWorkIntermediateGoal: 'vain taivas on rajana',
+    thesisWorkMeetingAgreement: 'joka toinen viikko',
+    thesisWorkOther: '',
 
-    studentGradeGoal: "5",
+    studentGradeGoal: '5',
 
     studyfieldId: 1,
     fake: false,
-    studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "2h viikossa",
-    intermediateGoal: "20 sivua ensi perjantaina",
-    meetingAgreement: "Jepsis",
-    other: "eihän tässä muuta",
-    whoNext: "supervisor",
+    studentWorkTime: '1h viikossa',
+    supervisorWorkTime: '2h viikossa',
+    intermediateGoal: '20 sivua ensi perjantaina',
+    meetingAgreement: 'Jepsis',
+    other: 'eihän tässä muuta',
+    whoNext: 'supervisor',
 }
 
 const agreementWithId = {
@@ -57,15 +58,15 @@ const agreementWithId = {
     studyfieldId: 1,
     fake: 0,
     studentGradeGoal: 5,
-    studentWorkTime: "1h viikossa",
-    supervisorWorkTime: "tsiigaillaan",
-    intermediateGoal: "oispa valmistunut",
-    meetingAgreement: "just just",
-    other: "eihän tässä muuta"
+    studentWorkTime: '1h viikossa',
+    supervisorWorkTime: 'tsiigaillaan',
+    intermediateGoal: 'oispa valmistunut',
+    meetingAgreement: 'just just',
+    other: 'eihän tässä muuta'
 }
 
 //TODO: Test something like thesis: thesisForm post & creates id without attachment
-test.skip('agreement post & correct response', async t => {
+test.skip('agreement post & correct response', async (t) => {
     t.plan(2);
     const res = await request(makeApp())
         .post('/agreements')
@@ -74,5 +75,16 @@ test.skip('agreement post & correct response', async t => {
     const thesis = res.body.thesis;
     const author = res.body.author;
     const agreement = res.body.agreement;
-    
+
+})
+
+test('agreements get should also return attachments', async (t) => {
+    t.plan(3);
+    const res = await request(makeApp(10))
+        .get('/agreements')
+    t.is(res.status, 200);
+    const agreements = res.body.agreements;
+    const attachments = res.body.attachments;
+    t.is(agreements.length, 1);
+    t.is(attachments.length, 1);
 })

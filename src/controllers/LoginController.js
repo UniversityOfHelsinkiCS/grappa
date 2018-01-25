@@ -1,6 +1,6 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const studyfieldService = require('../services/StudyfieldService')
+const programmeService = require('../services/ProgrammeService');
 
 //Used with Shibboleth
 // export async function login(req, res) {
@@ -17,14 +17,15 @@ const studyfieldService = require('../services/StudyfieldService')
 // }
 
 export async function logout(req, res) {
+    const logoutUrl = req.headers.shib_logout_url;
     if (req.session && req.session.user_id) {
         delete req.session.user_id;
         delete req.session.shib_session_id;
     }
-    if (req.headers['shib_logout_url']) {
-        res.redirect(req.headers['shib_logout_url']);
+    if (logoutUrl) {
+        res.redirect(logoutUrl);
     } else {
-        res.status(200).send('OK');
+        res.status(200).send('OK').end();
     }
 }
 
@@ -33,8 +34,7 @@ export async function logout(req, res) {
 export async function showUser(req, res) {
     if (req.session.user_id) {
         try {
-            const persons = await personService.getPersonById(req.session.user_id);
-            let user = persons[0]
+            let user = await personService.getPersonById(req.session.user_id);
 
             user = await buildPerson(user);
 
@@ -50,10 +50,9 @@ export async function showUser(req, res) {
 //Used without shibboleth
 export async function fakeLogin(req, res) {
     const shibbolethId = req.params.id;
-    console.log("Faking login with " + shibbolethId);
+    console.log('Faking login with ' + shibbolethId);
     try {
-        const persons = await personService.getPersonByShibbolethId(shibbolethId);
-        let user = persons[0]
+        let user = await personService.getPersonByShibbolethId(shibbolethId);
 
         req.session.user_id = user.personId;
 
@@ -67,14 +66,16 @@ export async function fakeLogin(req, res) {
 
 async function buildPerson(user) {
     const roleToId = await roleService.getRoles();
-    const studyfieldToId = await studyfieldService.getAllStudyfields();
+    const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
-    const readableRoles = personRoles.map(role => {
+    const readableRoles = personRoles.map((role) => {
+        const programme = programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId);
         return {
-            studyfield: studyfieldToId.find(studyfieldIdPair => studyfieldIdPair.studyfieldId === role.studyfieldId).name,
+            programme: programme.name,
+            programmeId: programme.programmeId,
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-        }
-    })
+        };
+    });
     user.roles = readableRoles;
 
     return user;

@@ -1,9 +1,10 @@
-require('babel-polyfill');
 const studyfieldService = require('../services/StudyfieldService');
-const express = require('express');
-const app = express();
 
 export async function getAllStudyfields(req, res) {
-    const studyfields = await studyfieldService.getAllStudyfields();
+    const studyfields = await studyfieldService.getStudyfields();
     res.status(200).json(studyfields);
+}
+
+export async function deleteStudyfield(req, res) {
+    res.status(501);
 }

@@ -1,31 +1,35 @@
 import test from 'ava';
+import { deleteFromDb } from '../utils';
+
 const request = require('supertest');
 const express = require('express');
-const studyfields = require('../../src/routes/studyfields');
-const config = require('../../src/db/knexfile');
+const programmes = require('../../src/routes/programmes');
+const mockStudyfields = require('../../src/mockdata/MockProgrammes');
 const knex = require('../../src/db/connection');
-const mockStudyfields = require('../../src/mockdata/MockStudyfields');
 
-const makeApp = () => {
+const makeApp = (userId) => {
     const app = express();
-    app.use('/studyfields', studyfields)
+    app.use('/programmes', (req, res, next) => {
+        req.session = {};
+        req.session.user_id = userId;
+        next();
+    }, programmes)
     return app;
 }
 
-test.before(async t => {
-    //TODO: Fix this waiting.
-    //Waiting for migrations to finish (in db/connection.js )
-    const waitString = await new Promise(r => setTimeout(r, 500)).then(() => { return "Waited" });
-    await knex('studyfield').del();
-    await knex('studyfield').insert(mockStudyfields);
-});
+test.before(async (t) => {
+    await knex.migrate.latest();
+    await deleteFromDb();
+    await knex.seed.run();
+})
 
-test('studyfield get all', async t => {
+test('programme get all', async (t) => {
     t.plan(2);
-    const app = makeApp();
+    const app = makeApp(1);
     const res = await request(app)
-        .get('/studyfields');
+        .get('/programmes');
     t.is(res.status, 200);
     const body = res.body;
-    t.is(JSON.stringify(body.length), JSON.stringify(mockStudyfields.length));
+
+    t.deepEqual(body, mockStudyfields);
 });

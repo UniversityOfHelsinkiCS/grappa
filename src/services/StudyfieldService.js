@@ -1,10 +1,12 @@
 const knex = require('../db/connection');
 
-export const getAllStudyfields = () => {
-    return knex.select('studyfieldId', 'name').from('studyfield')
-        .then(studyfield => studyfield);
-}
+const studyfieldSchema = [
+    'studyfieldId',
+    'studyfield.name',
+    'studyfield.programmeId'
+];
 
-export const getStudyfield = (studyfieldId) => {
-    return knex.select().from('studyfield').where('studyfieldId', studyfieldId).first();
-}
+export const getStudyfields = async () => knex.select(studyfieldSchema).from('studyfield');
+
+export const getStudyfield = async studyfieldId =>
+    knex.select(studyfieldSchema).from('studyfield').where('studyfield.studyfieldId', studyfieldId).first();
