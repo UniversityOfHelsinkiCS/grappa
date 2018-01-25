@@ -2,9 +2,9 @@ exports.up = (knex) => {
     return Promise.all([
         knex.schema.createTable('agreementDraftPerson', (table) => {
             table.integer('agreementDraftId').unsigned();
-            table.foreign('agreementDraftId').references('agreementDraft.agreementDraftId').onDelete('CASCADE');
+            table.foreign('agreementDraftId').references('agreementDraft.agreementDraftId').onDelete('SET NULL');
             table.integer('personRoleId').unsigned();
-            table.foreign('personRoleId').references('personWithRole.personRoleId').onDelete('CASCADE');
+            table.foreign('personRoleId').references('personWithRole.personRoleId').onDelete('SET NULL');
         })
     ]);
 };

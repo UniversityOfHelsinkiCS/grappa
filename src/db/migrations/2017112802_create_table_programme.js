@@ -3,7 +3,7 @@ exports.up = (knex) => {
         knex.schema.createTable('programme', (table) => {
             table.increments('programmeId').primary();
             table.integer('facultyId').unsigned();
-            table.foreign('facultyId').references('faculty.facultyId').onDelete('CASCADE');
+            table.foreign('facultyId').references('faculty.facultyId').onDelete('SET NULL');
             table.string('name');
         })
     ]);

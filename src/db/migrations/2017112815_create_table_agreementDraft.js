@@ -3,7 +3,7 @@ exports.up = (knex) => {
         knex.schema.createTable('agreementDraft', (table) => {
             table.increments('agreementDraftId').primary();
             table.integer('mainSupervisorId').unsigned();
-            table.foreign('mainSupervisorId').references('personWithRole.personRoleId').onDelete('CASCADE');
+            table.foreign('mainSupervisorId').references('personWithRole.personRoleId').onDelete('SET NULL');
             table.string('studentEmail');
             table.string('studentFirstname');
             table.string('studentLastname');

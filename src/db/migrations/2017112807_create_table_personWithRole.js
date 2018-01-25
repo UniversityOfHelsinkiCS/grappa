@@ -3,11 +3,11 @@ exports.up = (knex) => {
         knex.schema.createTable('personWithRole', (table) => {
             table.increments('personRoleId').primary();
             table.integer('personId').unsigned().notNullable();
-            table.foreign('personId').references('person.personId').onDelete('CASCADE');
+            table.foreign('personId').references('person.personId').onDelete('SET NULL');
             table.integer('roleId').unsigned().notNullable();
-            table.foreign('roleId').references('role.roleId').onDelete('CASCADE');
+            table.foreign('roleId').references('role.roleId').onDelete('SET NULL');
             table.integer('programmeId').unsigned();
-            table.foreign('programmeId').references('programme.programmeId').onDelete('CASCADE');
+            table.foreign('programmeId').references('programme.programmeId').onDelete('SET NULL');
         })
     ]);
 };
