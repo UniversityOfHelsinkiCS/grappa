@@ -45,7 +45,15 @@ const reducer = (state = {}, action) => {
                 saveThesis: {
                     active: true,
                     type: 'success',
-                    text: 'Invite sent.'
+                    text: 'Thesis saved.'
+                }
+            });
+        case action.type === 'THESIS_UPDATE_ONE_SUCCESS':
+            return Object.assign({}, state, {
+                saveThesis: {
+                    active: true,
+                    type: 'success',
+                    text: 'Thesis saved.'
                 }
             });
         case action.type.includes('_FAILURE'): {
@@ -58,6 +66,15 @@ const reducer = (state = {}, action) => {
             return Object.assign({}, state, message)
         }
         case action.type.includes('SAVE_ONE_SUCCESS'): {
+            const message = {};
+            message[action.type] = {
+                active: true,
+                type: 'success',
+                text: action.type
+            };
+            return Object.assign({}, state, message)
+        }
+        case action.type.includes('UPDATE_ONE_SUCCESS'): {
             const message = {};
             message[action.type] = {
                 active: true,
