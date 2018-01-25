@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 import moment from 'moment-timezone';
 import DatePicker from 'react-datepicker';
 import { councilmeetingType, programmeType } from '../../util/types';
@@ -13,7 +13,7 @@ class UpdateCouncilmeetingForm extends Component {
         super(props);
 
         this.state = {
-            meeting: {},
+            meeting: props.meeting,
             selectedProgramme: undefined
         };
 
@@ -26,7 +26,7 @@ class UpdateCouncilmeetingForm extends Component {
             const meetingCopy = Object.assign({}, props.meeting);
             meetingCopy.programmes = props.meeting.programmes
                 .map(programmeId => props.programmes
-                    .find(programme => programme.programmeId === programmeId))
+                    .find(programme => programme.programmeId === programmeId));
             this.setState({ meeting: meetingCopy });
         }
     }
@@ -41,31 +41,37 @@ class UpdateCouncilmeetingForm extends Component {
         const programme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
-        )
+        );
         if (programme) {
             const programmes = [...this.state.meeting.programmes, programme];
             const meeting = Object.assign({}, this.state.meeting, { programmes });
             this.setState({ meeting });
         }
-    }
+    };
 
     selectProgramme = (programme) => {
         this.setState({ selectedProgramme: programme })
-    }
+    };
 
     removeSelected = () => {
         const programmes = [...this.state.meeting.programmes
-            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)]
+            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)];
         const meeting = Object.assign({}, this.state.meeting, { programmes });
 
         this.setState({ selectedProgramme: undefined, meeting })
-    }
+    };
 
     updateMeeting = () => {
         const { councilmeetingId, date, instructorDeadline, studentDeadline, programmes } = this.state.meeting;
-        const programmeIds = programmes.map(programme => programme.programmeId)
-        this.props.updateMeeting({ councilmeetingId, date, instructorDeadline, studentDeadline, programmes: programmeIds });
-    }
+        const programmeIds = programmes.map(programme => programme.programmeId);
+        this.props.updateMeeting({
+            councilmeetingId,
+            date,
+            instructorDeadline,
+            studentDeadline,
+            programmes: programmeIds
+        });
+    };
 
     render() {
         const meetingDate = this.state.meeting.date;
@@ -143,7 +149,7 @@ class UpdateCouncilmeetingForm extends Component {
 }
 
 UpdateCouncilmeetingForm.propTypes = {
-    programmes: programmeType.isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     meeting: councilmeetingType.isRequired,
     updateMeeting: func.isRequired
 };

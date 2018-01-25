@@ -7,8 +7,7 @@ const reducer = (state = [], action) => {
         case 'COUNCILMEETING_UPDATE_ONE_SUCCESS':
             return [...state.filter(meeting => meeting.councilmeetingId !== action.response.councilmeetingId), action.response];
         case 'COUNCILMEETING_DELETE_ONE_SUCCESS':
-            console.log(action.response)
-            return state.filter(meeting => meeting.councilmeetingId !== Number(action.response.councilmeetingId));
+            return state.filter(meeting => meeting.councilmeetingId !== Number(action.response));
         default:
             return state;
     }

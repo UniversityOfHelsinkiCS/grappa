@@ -24,5 +24,5 @@ test('New councilmeeting can be created', (t) => {
     t.is(data.date.format(format), '2018-01-10');
     t.is(data.instructorDeadline.format(format), '2018-01-05');
     t.is(data.studentDeadline.format(format), '2018-01-04');
-    t.is(data.programmeId, 2);
+    t.is(data.programmes[0], 2);
 });
