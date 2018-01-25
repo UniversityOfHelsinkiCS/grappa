@@ -1,6 +1,10 @@
 language: node_js
 node_js:
-  - "8"
-
+- '8'
 after_success:
-  - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
+- "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
+notifications:
+  slack:
+    secure: idiDt/o894DMrvqR2RAq9FHFkDkeK8o4T1TJINibMlRstsf2v2X/hXjZKhef3vakLItCURrkFa7UMkxFfokJDKUl102w05MpT7MykzYdCVqI2x5GCh69sB9dHNX/jVVWoYvlY7rNrJErG3SNZ9i3Kb8nT8WF75Q9TZ0Gxhrt3Ai7I+B3p6wkUd1Ka+lA1uOs7bpd4HfMej5ud8eVZ0rEPd3kdt3CT3oxteRt+VcOqPEovPreE7VOxkunyJ9OZLTb6aIYI648czrAwd9zYDAedKv0VQ8GF8pgLrNLL/MmciFxl7oTtral4ECwdram8nY8CiEW4/mAgxashROv9vwBbFSIGRmVIwIKgaiVPs1uVdkWcM+F1aUd/lPKKoC8aXNkairXJaEUOxq98ymr/RTf16bJCzDw61jH/6L92zw9sL6+P1VGwE7E4m/pyIpJ6xAA1e0w3AxoKC0prPM4v12qmF2v0eQZn5MK7ApZ9o06mVdo4YJO2bk7pdymxD1mwI2i8DNeOTF/HQKNZk9lHuXDL9UXatoCr4xxFqWAY2xZVbupXulCunPrEt8x5mGtMsrOW9nqtG9By1TpjvyUs+OfvcNaKRTQfpH04MYCUrWHiZCY1rgEfau3NfkIfEW0bm0n9GHGy9nunwncn1F2V6qu0ro/2i50FufF2eXDhqXaLt4=
+    on_success: change
+    on_failure: always

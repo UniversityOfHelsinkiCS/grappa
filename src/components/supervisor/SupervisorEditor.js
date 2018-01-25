@@ -1,31 +1,31 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class SupervisorEditor extends Component {
     constructor() {
         super();
         this.state = {
             newSupervisor: {
-                firstname: "",
-                lastname: "",
-                title: "",
-                studyfieldId: ""
+                firstname: '',
+                lastname: '',
+                title: '',
+                programmeId: ''
             },
             updateSupervisor: {
                 id: undefined,
-                firstname: "",
-                lastname: "",
-                title: "",
-                studyfieldId: ""
+                firstname: '',
+                lastname: '',
+                title: '',
+                programmeId: ''
             }
         };
     }
 
     getTitles = () => {
-        return ["Prof.", "Assistant Prof.", "Adjunct Prof.", "Dr.", "Other"];
+        return ['Prof.', 'Assistant Prof.', 'Adjunct Prof.', 'Dr.', 'Other'];
     }
 
     getStudyfields = () => {
-        return [1, 2, 3, "n"]; //TODO get these from back and get their names, too
+        return [1, 2, 3, 'n']; //TODO get these from back and get their names, too
     }
 
     handleChange = (field, formname) => (event) => {
@@ -59,7 +59,7 @@ export default class SupervisorEditor extends Component {
     //not functioning yet in Grappa 2
     deleteSupervisor = () => {
         const supervisor = this.state.updateSupervisor;
-        console.log("deleting");
+        console.log('deleting');
         console.log(supervisor);
         this.props.deleteSupervisor(supervisor);
     }
@@ -81,12 +81,12 @@ export default class SupervisorEditor extends Component {
 
     renderTitleList(whichOne) {
         return (
-            <div id={"titles" + whichOne} className="ui field">
+            <div id={'titles' + whichOne} className="ui field">
                 <label>Title</label>
                 <select
                     className="ui fluid search dropdown"
                     value={this.state[whichOne].title}
-                    onChange={this.handleChange("title", whichOne)}
+                    onChange={this.handleChange('title', whichOne)}
                 >
                     <option value="">Select title</option>
                     {this.getTitles().map((title, index) => <option key={index} value={title}>{title}</option>)}
@@ -97,15 +97,15 @@ export default class SupervisorEditor extends Component {
 
     renderStudyfieldList(whichOne) {
         return (
-            <div id={"studyfields" + whichOne} className="ui field">
+            <div id={'programmes' + whichOne} className="ui field">
                 <label>Studyfield</label>
                 <select
                     className="ui fluid search dropdown"
-                    value={this.state[whichOne].studyfieldId}
-                    onChange={this.handleChange("studyfieldId", whichOne)}
+                    value={this.state[whichOne].programmeId}
+                    onChange={this.handleChange('programmeId', whichOne)}
                 >
-                    <option value="">Select studyfield</option>
-                    {this.getStudyfields().map((studyfield, index) => <option key={index} value={studyfield}>{studyfield}</option>)}
+                    <option value="">Select programme</option>
+                    {this.getStudyfields().map((programme, index) => <option key={index} value={programme}>{programme}</option>)}
                 </select>
             </div>
         )
@@ -116,10 +116,10 @@ export default class SupervisorEditor extends Component {
             <div>
                 <div>Add new supervisor</div>
                 <div className="five fields">
-                    {this.renderTitleList("newSupervisor")}
-                    {this.renderNameField("First name", "newSupervisor")}
-                    {this.renderNameField("Last name", "newSupervisor")}
-                    {this.renderStudyfieldList("newSupervisor")}
+                    {this.renderTitleList('newSupervisor')}
+                    {this.renderNameField('First name', 'newSupervisor')}
+                    {this.renderNameField('Last name', 'newSupervisor')}
+                    {this.renderStudyfieldList('newSupervisor')}
                     <div className="ui field">
                         <label>&nbsp;</label>
                         <button id="add" className="ui green button" onClick={this.saveNewSupervisor}>
@@ -142,15 +142,15 @@ export default class SupervisorEditor extends Component {
                             <option value="">Select supervisor</option>
                             {this.props.supervisors.map((supervisor, index) =>
                                 <option key={index} className="item" value={supervisor.personId}>
-                                    {supervisor.title} {supervisor.firstname} {supervisor.lastname} Studyfield: {supervisor.studyfieldId}
+                                    {supervisor.title} {supervisor.firstname} {supervisor.lastname} Studyfield: {supervisor.programmeId}
                                 </option>
                             )}
                         </select>
                     </div>
-                    {this.renderTitleList("updateSupervisor")}
-                    {this.renderNameField("First name", "updateSupervisor")}
-                    {this.renderNameField("Last name", "updateSupervisor")}
-                    {this.renderStudyfieldList("updateSupervisor")}
+                    {this.renderTitleList('updateSupervisor')}
+                    {this.renderNameField('First name', 'updateSupervisor')}
+                    {this.renderNameField('Last name', 'updateSupervisor')}
+                    {this.renderStudyfieldList('updateSupervisor')}
                     <div className="field">
                         <label>&nbsp;</label>
                         <button id="update" className="ui blue button" onClick={this.updateSupervisor}>

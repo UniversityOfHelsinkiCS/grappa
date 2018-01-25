@@ -1,36 +1,35 @@
 import React, { Component } from 'react';
-
-import EventMessage from '../EventMessage';
-import FormCreator from '../form/FormCreator';
+import PropTypes from 'prop-types';
 
 import StudentInfoForm from './form/StudentInfoForm';
 import ThesisInfoForm from './form/ThesisInfoForm';
 import SupervisingInfoForm from './form/SupervisingInfoForm';
 import GoalInfoForm from './form/GoalInfoForm';
 import AttachmentAdder from '../attachment/AttachmentAdder';
+import { personType, programmeType } from '../../util/types';
 
 export default class Agreement extends Component {
     constructor(props) {
         super(props);
         this.state = {
             form: {
-                thesisTitle: "",
-                thesisStartDate: "",
-                thesisCompletionEta: "",
-                thesisPerformancePlace: "",
+                thesisTitle: '',
+                thesisStartDate: '',
+                thesisCompletionEta: '',
+                thesisPerformancePlace: '',
 
-                thesisSupervisorMain: "",
-                thesisSupervisorSecond: "",
-                thesisSupervisorOther: "",
+                thesisSupervisorMain: '',
+                thesisSupervisorSecond: '',
+                thesisSupervisorOther: '',
 
-                thesisWorkStudentTime: "",
-                thesisWorkSupervisorTime: "",
-                thesisWorkIntermediateGoal: "",
-                thesisWorkMeetingAgreement: "",
-                thesisWorkOther: "",
+                thesisWorkStudentTime: '',
+                thesisWorkSupervisorTime: '',
+                thesisWorkIntermediateGoal: '',
+                thesisWorkMeetingAgreement: '',
+                thesisWorkOther: '',
 
-                studentGradeGoal: "",
-                studyfieldId: -1
+                studentGradeGoal: '',
+                programmeId: -1
             },
             attachments: [],
             filledRequiredFields: {}
@@ -38,41 +37,39 @@ export default class Agreement extends Component {
     }
 
     componentDidMount() {
-        let fields = this.props.requiredFields.reduce((obj, value) => (Object.assign(obj, {[value]: false})), {});
+        const fields = this.props.requiredFields.reduce((obj, value) => (Object.assign(obj, { [value]: false })), {});
         this.setState({ filledRequiredFields: fields });
     }
 
     handleFormChange = (event) => {
-        const oldForm = this.state.form;
-        let newForm = oldForm;
-        if (event.target) {  //input field
+        const newForm = Object.assign({}, this.state.form);
+        if (event.target) { // input field
             newForm[event.target.name] = event.target.value;
-        } //else { //a file
-            //newForm.attachments.push(event);
-        //}
+        } // else { //a file
+        // newForm.attachments.push(event);
+        // }
         this.setState({ form: newForm });
         this.validateData(event.target.name, event.target.value);
     }
 
     resetSupervisors = () => {
-        const oldForm = this.state.form;
-        let newForm = oldForm;
-        newForm['thesisSupervisorMain'] = '';
-        newForm['thesisSupervisorSecond'] = '';
-        const fields = this.state.filledRequiredFields;
-        let fieldsCopy = fields;
-        if (fieldsCopy['thesisSupervisorMain'] !== undefined)
-            fieldsCopy['thesisSupervisorMain'] = false;
-        if (fieldsCopy['thesisSupervisorSecond'] !== undefined)
-            fieldsCopy['thesisSupervisorSecond'] = false;
+        const newForm = Object.assign({}, this.state.form);
+        const fieldsCopy = Object.assign({}, this.state.filledRequiredFields);
+
+        newForm.thesisSupervisorMain = '';
+        newForm.thesisSupervisorSecond = '';
+
+        if (fieldsCopy.thesisSupervisorMain !== undefined)
+            fieldsCopy.thesisSupervisorMain = false;
+        if (fieldsCopy.thesisSupervisorSecond !== undefined)
+            fieldsCopy.thesisSupervisorSecond = false;
         this.setState({ form: newForm, filledRequiredFields: fieldsCopy });
     }
 
     validateData = (fieldName, value) => {
         if (this.state.filledRequiredFields[fieldName] !== undefined) {
-            const fields = this.state.filledRequiredFields;
-            let fieldsCopy = fields;
-            fieldsCopy[fieldName] = !(value === '' || value == -1);
+            const fieldsCopy = Object.assign({}, this.state.filledRequiredFields);
+            fieldsCopy[fieldName] = !(value === '' || value === -1);
             this.setState({ filledRequiredFields: fieldsCopy });
         }
     }
@@ -92,38 +89,49 @@ export default class Agreement extends Component {
 
     sendForm = (event) => {
         event.preventDefault();
-        this.props.saveAgreement({...this.state.form, attachments: this.state.attachments});
-        //this.props.saveAttachment(this.state.attachments, this.state.form);
+        this.props.saveAgreement({ ...this.state.form, attachments: this.state.attachments });
+        // this.props.saveAttachment(this.state.attachments, this.state.form);
     }
 
     sendFormDraft = (event) => {
         event.preventDefault();
-        this.props.saveAgreementDraft({...this.state.form});
+        this.props.saveAgreementDraft({ ...this.state.form });
     }
 
     render() {
-        //--TO DO--!: display users agreementDraft data here if user has created a draft!
+        // --TO DO--!: display users agreementDraft data here if user has created a draft!
         if (!this.props.user.firstname) {
             return (<div>Login to add agreement</div>);
         }
+        let buttonDisabled;
         if (Object.keys(this.state.filledRequiredFields).length === 0) {
-            var buttonDisabled = false;
+            buttonDisabled = false;
         } else {
-            var buttonDisabled = Object.values(this.state.filledRequiredFields).some((field) => field === false);
+            buttonDisabled = Object.values(this.state.filledRequiredFields).some(field => field === false);
         }
         return (
             <div>
                 <h2>Gradusopimus tehdään gradunohjauksen alkaessa</h2>
                 <p>Sopimusta voidaan muuttaa osapuolten yhteisestä päätöksestä.</p>
-                <StudentInfoForm user={this.props.user}/>
+                <StudentInfoForm user={this.props.user} />
                 <br />
-                <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
+                <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
                 <br />
-                <SupervisingInfoForm handleChange={this.handleFormChange} resetSupervisors={this.resetSupervisors} supervisors={this.props.supervisors} studyfields={this.props.studyfields} requiredFields={this.state.filledRequiredFields}/>
+                <SupervisingInfoForm
+                    handleChange={this.handleFormChange}
+                    resetSupervisors={this.resetSupervisors}
+                    supervisors={this.props.supervisors}
+                    programmes={this.props.programmes}
+                    requiredFields={this.state.filledRequiredFields}
+                />
                 <br />
-                <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields}/>
+                <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
                 <br />
-                <AttachmentAdder attachments={this.state.attachments} addAttachment={this.addAttachment} removeAttachment={this.removeAttachment}/>
+                <AttachmentAdder
+                    attachments={this.state.attachments}
+                    addAttachment={this.addAttachment}
+                    removeAttachment={this.removeAttachment}
+                />
                 <br />
                 <button className="green massive ui button" disabled={buttonDisabled} onClick={this.sendForm}>
                     {(buttonDisabled) ? 'Kaikkia pakollisia tietoja ei ole täytetty' : 'Save agreement'}
@@ -181,3 +189,12 @@ export default class Agreement extends Component {
     }
     */
 }
+
+const { array, arrayOf, func } = PropTypes;
+Agreement.propTypes = {
+    user: personType.isRequired,
+    requiredFields: array.isRequired,
+    saveAgreement: func.isRequired,
+    saveAgreementDraft: func.isRequired,
+    programmes: arrayOf(programmeType).isRequired
+};

@@ -1,30 +1,25 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Dropzone from "react-dropzone";
+import Dropzone from 'react-dropzone';
 
 export default class ThesisUploadWidget extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            attachments: [],
-        }
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (newProps.currentFile) {
+            attachments: []
         }
     }
 
     getLabel = () => {
         switch (this.props.type) {
-            case "reviewFile":
-                return "Upload Thesis review as PDF (max. 1 MB)";
-            case "abstractFile":
-                return "Upload Thesis with abstract on 2nd page (max. 40 MB)";
-            case "attachment":
-                return "Upload attachments"
+            case 'reviewFile':
+                return 'Upload Thesis review as PDF (max. 1 MB)';
+            case 'abstractFile':
+                return 'Upload Thesis with abstract on 2nd page (max. 40 MB)';
+            case 'attachment':
+                return 'Upload attachments'
             default:
-                return "Error ThesisUploadWidget getLabel";
+                return 'Error ThesisUploadWidget getLabel';
         }
     }
 
@@ -36,7 +31,7 @@ export default class ThesisUploadWidget extends Component {
     getFileList = () => {
         const attachmentElements = [];
         for (let i = 0; i < this.state.attachments.length; i++) {
-            console.log("filu: " + this.state.attachments[i].name);
+            console.log('filu: ' + this.state.attachments[i].name);
             const element = <p>{this.state.attachments[i].name}</p>
             attachmentElements.push(element);
         }
@@ -51,9 +46,9 @@ export default class ThesisUploadWidget extends Component {
 
     getFileNumberLabel = () => {
         if (this.state.attachments.length === 0) {
-            return "No attachments uploaded";
+            return 'No attachments uploaded';
         }
-        return this.state.attachments.length + " attachments uploaded:";
+        return this.state.attachments.length + ' attachments uploaded:';
     }
 
     render() {

@@ -1,64 +1,66 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { login, getAllPersons } from "./userActions";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from './userActions';
+import { personType } from '../../util/types';
+import PersonSwitcher from '../../components/person/PersonSwitcher';
 
 export class UserPage extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            personId: 1,
-            name: "Unnamed",
-            role: "student"
-        }
-    }
-
     componentDidMount() {
-        document.title = "Grappa: Main page";
-        this.props.getAllPersons();
+        document.title = 'Grappa: Main page';
     }
 
     handleRoleChange = (event) => {
-        if (!event.target.value) return
+        if (!event.target.value) return;
         const shibbolethId = event.target.value;
         this.props.login(shibbolethId);
-    }
+    };
 
     render() {
         return (
             <div>
                 <div className="ui segment">
-                    <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
-                        <option value="">Choose a role</option>
-                        {this.props.persons.map((person, index) =>
-                            <option key={index} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
-                        )}
-                    </select>
-                    <p>Your roles are: {this.props.user.roles ? 
-                        this.props.user.roles.map(roleObject => {
-                            return roleObject.studyfield + ": " + roleObject.role; 
-                        }) 
-                        : "No user in redux"} </p>
+                    <h2>{this.props.user.firstname} {this.props.user.lastname}</h2>
+                    <div className="ui list">
+                        <div className="item">
+                            <span className="header">Student number</span> {this.props.user.studentNumber}
+                        </div>
+                        <div className="item">
+                            <span className="header">Email</span> {this.props.user.email}
+                        </div>
+                        <div className="item">
+                            <span className="header">Phone</span> {this.props.user.phone}
+                        </div>
+                    </div>
                 </div>
+                {process.env.NODE_ENV !== 'production' ?
+                    <PersonSwitcher
+                        persons={this.props.persons}
+                        user={this.props.user}
+                        onChange={this.handleRoleChange}
+                    />
+                    : null}
             </div>
         );
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data));
-    },
-    getAllPersons() {
-        dispatch(getAllPersons());
     }
 });
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        persons: state.persons
-    };
-}
+const mapStateToProps = state => ({
+    user: state.user,
+    persons: state.persons
+});
+
+const { arrayOf, func } = PropTypes;
+UserPage.propTypes = {
+    user: personType.isRequired,
+    persons: arrayOf(personType).isRequired,
+    login: func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

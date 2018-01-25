@@ -4,9 +4,9 @@ import { reducerTest } from 'redux-ava';
 
 import reducer from '../../src/containers/thesis/thesisReducer';
 
-const thesis = { id: 1, title: "Testien jännittävyys", authorFirstname: "Testaaja" }
-const thesisEdited = { id: 1, title: "Testien vaikeus", authorFirstname: "Testaaja" }
-const thesis2 = { id: 2, title: "Koodin rikkominen", authorFirstname: "Hakkeri" }
+const thesis = { thesisId: 1, title: "Testien jännittävyys", authorFirstname: "Testaaja" }
+const thesisEdited = { thesisId: 1, title: "Testien vaikeus", authorFirstname: "Testaaja" }
+const thesis2 = { thesisId: 2, title: "Koodin rikkominen", authorFirstname: "Hakkeri" }
 
 const theses = [thesis, thesis2]
 const thesesUpdated = [thesis2, thesisEdited] //Not sorted
@@ -36,7 +36,7 @@ test('update one changes state correctly', reducerTest(
     theses,
     {
         type: "THESIS_UPDATE_ONE_SUCCESS",
-        response: thesisEdited,
+        response: { thesis: thesisEdited },
     },
     thesesUpdated
 ));
@@ -46,7 +46,7 @@ test('delete one changes state correctly', reducerTest(
     theses,
     {
         type: "THESIS_DELETE_ONE_SUCCESS",
-        response: thesis2.id,
+        response: { updatedThesis: thesis2 },
     },
     [thesis]
 ));

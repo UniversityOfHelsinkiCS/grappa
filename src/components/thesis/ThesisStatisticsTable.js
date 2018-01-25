@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 /**
  * StatisticsTable splits group of theses into tables and displays them.
@@ -19,23 +19,23 @@ export default class ThesisStatisticsTable extends Component {
 
 
     filterThesesByProgrammeAndGrade(theses) {
-        let filteredGradeTable = [];
+        const filteredGradeTable = [];
         theses.forEach(thesis => {
             this.findAndAddProgramme(thesis, filteredGradeTable);
         });
         this.sortGradeTableForView(filteredGradeTable);
-        let sumRow = this.createSumRow(filteredGradeTable);
+        const sumRow = this.createSumRow(filteredGradeTable);
 
         this.setState({ filteredGradeTable, sumRow });
     }
 
 
     createSumRow(filteredGradeTable) {
-        let sumRow = [];
+        const sumRow = [];
 
         filteredGradeTable.map(row => row.grades).forEach(grades => {
             grades.forEach(grade => {
-                let found = sumRow.findIndex(gr => gr.gradeName === grade.gradeName);
+                const found = sumRow.findIndex(gr => gr.gradeName === grade.gradeName);
                 if (found === -1) {
                     sumRow.push({ gradeName: grade.gradeName, sum: grade.sum })
                 } else {
@@ -56,7 +56,7 @@ export default class ThesisStatisticsTable extends Component {
             }
         });
         if (!foundProgramme) {
-            let programmeObject = { name: thesis.StudyField.name, grades: [] }
+            const programmeObject = { name: thesis.StudyField.name, grades: [] }
             this.findAndAddGrade(thesis.grade, programmeObject);
             filteredGradeTable.push(programmeObject);
         }
@@ -72,8 +72,8 @@ export default class ThesisStatisticsTable extends Component {
         });
         if (!foundGrade) {
             programmeObject.grades.push({
-                gradeName: gradeName,
-                sum: 1,
+                gradeName,
+                sum: 1
             });
             if (this.state.grades.indexOf(gradeName) === -1) {
                 this.state.grades.push(gradeName);
@@ -113,9 +113,9 @@ export default class ThesisStatisticsTable extends Component {
     }
 
     oldGradingSort(a, b) {
-        let oldGrades = ["Laudatur",
-            "Eximia Cum Laude Approbatur", "Magna Cum Laude Approbatur",
-            "Cum Laude Approbatur", "Non Sine Laude Approbatur", "Lubenter Approbatur", "Approbatur",]
+        const oldGrades = ['Laudatur',
+            'Eximia Cum Laude Approbatur', 'Magna Cum Laude Approbatur',
+            'Cum Laude Approbatur', 'Non Sine Laude Approbatur', 'Lubenter Approbatur', 'Approbatur',]
         if (oldGrades.indexOf(a) === -1 || oldGrades.indexOf(b) === -1) {
             return a - b;
         }
@@ -127,7 +127,7 @@ export default class ThesisStatisticsTable extends Component {
             <table className="ui definition table">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th />
                         {this.state.grades.map((grade, index) => {
                             return <th key={index}>{grade}</th>;
                         })}

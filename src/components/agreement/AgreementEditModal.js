@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import AgreementEditModalField from './AgreementEditModalField';
-import { connect } from "react-redux";
-import { getPermissions } from "../../util/rolePermissions";
+import { connect } from 'react-redux';
+import { getPermissions } from '../../util/rolePermissions';
 
 export class AgreementEditModal extends Component {
     constructor(props) {
@@ -16,7 +16,7 @@ export class AgreementEditModal extends Component {
     }
 
     componentWillReceiveProps(props) {
-        var original = Object.assign({}, props.formData); //can't use pointer here
+        const original = Object.assign({}, props.formData); // can't use pointer here
         if (props.role) {
             this.setState(
                 {
@@ -35,7 +35,7 @@ export class AgreementEditModal extends Component {
     }
 
     onFieldChange = (fieldName, value) => {
-        var newEditedFormData = this.state.editedFormData;
+        const newEditedFormData = this.state.editedFormData;
         newEditedFormData[fieldName] = value;
         this.setState(
             {
@@ -46,31 +46,31 @@ export class AgreementEditModal extends Component {
     }
 
     validateData = () => {
-        let hasEmptyField = Object.keys(this.state.editedFormData)
-            .filter((key) => this.state.editableFields.indexOf(key) !== -1)
-            .map((key) => this.state.editedFormData[key])
-            .some((field) => (field === ""));
+        const hasEmptyField = Object.keys(this.state.editedFormData)
+            .filter(key => this.state.editableFields.indexOf(key) !== -1)
+            .map(key => this.state.editedFormData[key])
+            .some(field => (field === ''));
         this.setState({ mandatoryDataFilled: !hasEmptyField });
     }
 
     generateFormFields = () => {
-        var elements = this.parseAgreementData(this.state.editedFormData).map((element) =>
+        const elements = this.parseAgreementData(this.state.editedFormData).map(element =>
             this.createFormField(element)
         );
         return (
             <div>
                 <form>
-                    <div className="ui form">{ elements }</div>
+                    <div className="ui form">{elements}</div>
                 </form>
             </div>
         );
     }
 
     parseAgreementData = (data) => {
-        var parsedList = [];
-        for (var p in data) {
-            var originalData = this.props.originalAgreement;
-            if(data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
+        const parsedList = [];
+        for (const p in data) {
+            const originalData = this.props.originalAgreement;
+            if (data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
                 parsedList.push({
                     fieldName: p,
                     content: data[p],
@@ -82,11 +82,16 @@ export class AgreementEditModal extends Component {
         return parsedList;
     }
 
-    createFormField = (c) => {
-        return (
-            <AgreementEditModalField key={ c.fieldName } fieldName={ c.fieldName } content={ c.content } originalContent={ c.originalContent } textField={ c.textField } onChange={ this.onFieldChange }/>
-        );
-    }
+    createFormField = c => (
+        <AgreementEditModalField
+            key={c.fieldName}
+            fieldName={c.fieldName}
+            content={c.content}
+            originalContent={c.originalContent}
+            textField={c.textField}
+            onChange={this.onFieldChange}
+        />
+    )
 
     handleFormSave = () => {
         this.props.updateFormData(this.state.editedFormData);
@@ -99,31 +104,29 @@ export class AgreementEditModal extends Component {
         }
         return (
             <div>
-                <div className="ui dimmer modals page transition visible active" onClick={ this.props.closeModal } />
+                <div className="ui dimmer modals page transition visible active" onClick={this.props.closeModal} />
                 <div className="ui active modal" style={{ top: 45, border: '2px solid black', borderRadius: '7px' }}>
-                    <i className="close icon" onClick={ this.props.closeModal }></i>
+                    <i className="close icon" onClick={this.props.closeModal} />
                     <div className="header">
                         Edit agreement
                     </div>
                     <div className="scrolling content">
                         <div className="description">
-                            { this.generateFormFields() }
+                            {this.generateFormFields()}
                         </div>
                     </div>
                     <br />
-                    <button className="ui fluid positive button" disabled={ !this.state.mandatoryDataFilled } onClick={ this.handleFormSave }>
+                    <button className="ui fluid positive button" disabled={!this.state.mandatoryDataFilled} onClick={this.handleFormSave}>
                         {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save local changes'}
                     </button>
                 </div>
             </div>
         );
     }
-};
-
-const mapStateToProps = (state) => {
-    if (!state.user[0])
-        return { role: undefined };
-    return { role: state.user[state.user.length - 1].role.id };
 }
+
+const mapStateToProps = state => ({
+    roles: state.user.roles
+})
 
 export default connect(mapStateToProps)(AgreementEditModal);

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 export default class GraderSelecter extends Component {
 
     constructor() {
         super();
         this.state = {
-            searchValue: "",
+            searchValue: '',
             menuActive: false,
             selected: [],
             filtered: [],
@@ -13,12 +13,12 @@ export default class GraderSelecter extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("mousedown", this.unfocusMenu);
+        window.addEventListener('mousedown', this.unfocusMenu);
         this.setState({ filtered: this.props.graders });
     }
 
     componentWillUnmount() {
-        window.removeEventListener("mousedown", this.unfocusMenu);
+        window.removeEventListener('mousedown', this.unfocusMenu);
     }
 
     removeGrader = (grader) => () => {
@@ -65,7 +65,7 @@ export default class GraderSelecter extends Component {
         this.setState({ menuActive: true });
     }
 
-    unfocusMenu = (event) => {
+    unfocusMenu = () => {
         if (this.state.menuActive) {
             this.setState({ menuActive: false });
         }
@@ -79,10 +79,11 @@ export default class GraderSelecter extends Component {
         return this.state.selected.map((grader, index) => {
             return (
                 <a key={index} className="ui label transition visible" onFocus={this.focusMenu}>
-                    {grader.title + " " + grader.name}
-                    <i className="delete icon"
+                    {grader.title + ' ' + grader.name}
+                    <i
+                        className="delete icon"
                         onClick={this.removeGrader(grader)}
-                    ></i>
+                    />
                 </a>
             );
         })
@@ -93,11 +94,11 @@ export default class GraderSelecter extends Component {
             className="search"
             autoComplete="off"
             tabIndex="0"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
-        ></input>
+        />
     }
 
     renderDropdown() {

@@ -1,28 +1,30 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import EmailDraft from "../../components/email/EmailDraft"
+import EmailDraft from '../../components/email/EmailDraft'
 
-import { connect } from "react-redux";
-import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from "./emailActions";
+import { connect } from 'react-redux';
+import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
+import { emailType, programmeType } from '../../util/types';
 
 export class EmailDraftPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            newDraftName: "",
+            newDraftName: '',
         };
     }
 
     componentDidMount() {
-        if (this.props.EmailDrafts) {
-            this.setState({ draftList: this.sortDraftList(this.props.EmailDrafts) });
+        if (this.props.emails) {
+            this.setState({ draftList: this.sortDraftList(this.props.emails) });
         }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.EmailDrafts) {
-            this.setState({ draftList: this.sortDraftList(newProps.EmailDrafts) });
+            this.setState({ draftList: this.sortDraftList(newProps.emailDrafts) });
         }
     }
 
@@ -46,26 +48,32 @@ export class EmailDraftPage extends Component {
     handleAddDraft = () => {
         if (this.state.newDraftName) {
             const draft = {
-                body: "",
-                title: "",
+                body: '',
+                title: '',
                 type: this.state.newDraftName,
             };
             this.props.saveEmailDraft(draft);
-            this.setState({ newDraftName: "" });
+            this.setState({ newDraftName: '' });
         }
     }
 
     render() {
-        const drafts = this.props.EmailDrafts;
+        const drafts = this.props.emails;
         return (
             <div className="ui form">
                 <h2 className="ui dividing header">Email drafts</h2>
                 <p>
-                    Drafts for the emails that are being sent by Grappa. Title is the email's title and body the text.
+                    Drafts for the emails that are being sent by Grappa. Title is the email&lsquo;s title and body the text.
                     Different variables are indicated with double dollars eg. $LINK$ which differ from draft to draft.
                 </p>
-                {drafts ? drafts.map((draft, index) =>
-                    <EmailDraft draft={draft} key={index} updateDraft={this.handleUpdateDraft} sendDeleteRequest={this.handleDeleteDraft} />
+                {drafts ? drafts.map((draft) =>
+                    <EmailDraft
+                        draft={draft}
+                        key={draft.emailDraftId}
+                        updateDraft={this.handleUpdateDraft}
+                        sendDeleteRequest={this.handleDeleteDraft}
+                        programmes={this.props.programmes}
+                    />
                 ) : undefined}
 
                 <div className="ui input focus">
@@ -77,10 +85,10 @@ export class EmailDraftPage extends Component {
     }
 }
 
-
 const mapStateToProps = (state) => {
     return {
-        EmailDrafts: state.emailDrafts,
+        emails: state.emails,
+        programmes: state.programmes
     };
 };
 
@@ -95,5 +103,14 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(deleteEmailDraft(draft));
     },
 });
+
+const { func, arrayOf } = PropTypes;
+EmailDraftPage.propTypes = {
+    updateEmailDraft: func.isRequired,
+    deleteEmailDraft: func.isRequired,
+    saveEmailDraft: func.isRequired,
+    emails: arrayOf(emailType.isRequired).isRequired,
+    programmes: arrayOf(programmeType).isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);
