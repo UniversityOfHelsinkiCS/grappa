@@ -197,13 +197,13 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         'agreement.agreementId',
         'thesis.title',
         'thesis.grade',
-        'grader.firstName',
-        'grader.lastName',
+        'grader.firstname',
+        'grader.lastname',
         'agreementPerson.statement as graderStatement',
         'graderReviewer.firstname as reviewerFirstname',
         'graderReviewer.lastname as reviewerLastname',
-        'author.firstName as authorFirstname',
-        'author.lastName as authorLastname',
+        'author.firstname as authorFirstname',
+        'author.lastname as authorLastname',
     ]
 
     return knex.select(informationSchema).from('agreement')
