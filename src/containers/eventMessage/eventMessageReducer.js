@@ -18,7 +18,7 @@ const reducer = (state = {}, action) => {
             });
         case action.type === 'INVITE_ACCEPT_THESIS_SUCCESS':
             return Object.assign({}, state, {
-                logout: {
+                inviteAuthor: {
                     active: true,
                     type: 'success',
                     text: 'Thesis linked to user'
@@ -26,7 +26,7 @@ const reducer = (state = {}, action) => {
             });
         case action.type === 'COUNCILMEETING_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                logout: {
+                meeting: {
                     active: true,
                     type: 'success',
                     text: 'Councilmeeting updated.'
@@ -34,7 +34,15 @@ const reducer = (state = {}, action) => {
             });
         case action.type === 'PERSON_INVITE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                logout: {
+                invitePerson: {
+                    active: true,
+                    type: 'success',
+                    text: 'Invite sent.'
+                }
+            });
+        case action.type === 'THESIS_SAVE_ONE_SUCCESS':
+            return Object.assign({}, state, {
+                saveThesis: {
                     active: true,
                     type: 'success',
                     text: 'Invite sent.'

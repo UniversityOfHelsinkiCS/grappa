@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { arrayOf, func, bool } from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { saveThesis } from './thesisActions';
@@ -33,7 +34,7 @@ export class ThesisCreatePage extends Component {
             form.append(attachment.label, attachment);
         });
         const thesis = Object.assign({}, this.state.thesis);
-        delete thesis.programmeId
+        delete thesis.programmeId;
         form.append('json', JSON.stringify(thesis));
         this.props.saveThesis(form);
     };
@@ -85,6 +86,10 @@ export class ThesisCreatePage extends Component {
     }
 
     render() {
+        if (this.props.success && this.state.showModal) {
+            return <Redirect to="/" />;
+        }
+
         return (
             <div>
                 <br />
@@ -135,17 +140,22 @@ const mapStateToProps = state => ({
     programmes: state.programmes,
     studyfields: state.studyfields,
     roles: state.roles,
-    persons: state.persons
+    persons: state.persons,
+    success: state.eventMessage.saveThesis && state.eventMessage.saveThesis.active
 });
 
-const { arrayOf, func } = PropTypes;
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
-    saveThesis: func.isRequired
+    saveThesis: func.isRequired,
+    success: bool
+};
+
+ThesisCreatePage.defaultProps = {
+    success: false
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage);
