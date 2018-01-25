@@ -5,7 +5,7 @@ exports.seed = (knex) => {
             // Inserts seed entries
             return knex('faculty').insert([
                 {
-                    name: 'Matemaattis-luonnontieteellinen tiedekunta'
+                    name: 'Faculty of Science'
                 }
             ]);
         });
