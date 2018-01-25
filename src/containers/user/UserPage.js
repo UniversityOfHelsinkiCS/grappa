@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { login } from './userActions';
 import UserStudyfieldSelector from './UserStudyfieldSelector';
 import { personType } from '../../util/types';
+import PersonSwitcher from '../../components/person/PersonSwitcher';
 
 export class UserPage extends Component {
     componentDidMount() {
@@ -11,10 +12,10 @@ export class UserPage extends Component {
     }
 
     handleRoleChange = (event) => {
-        if (!event.target.value) return
+        if (!event.target.value) return;
         const shibbolethId = event.target.value;
         this.props.login(shibbolethId);
-    }
+    };
 
     render() {
         return (
@@ -37,18 +38,13 @@ export class UserPage extends Component {
                     </div>
                     <UserStudyfieldSelector />
                 </div>
-                <div className="ui segment">
-                    <select id="roles" className="ui dropdown" onChange={this.handleRoleChange}>
-                        <option value="">Choose a role</option>
-                        {this.props.persons.map(person =>
-                            <option key={person.personId} value={person.shibbolethId}>{person.firstname} {person.lastname}</option>
-                        )}
-                    </select>
-                    <p>Your roles are: {this.props.user.roles ?
-                        this.props.user.roles.map(roleObject => `${roleObject.programme}: ${roleObject.role}`)
-                        : 'No user in redux'}
-                    </p>
-                </div>
+                {process.env.NODE_ENV !== 'production' ?
+                    <PersonSwitcher
+                        persons={this.props.persons}
+                        user={this.props.user}
+                        onChange={this.handleRoleChange}
+                    />
+                    : null}
             </div>
         );
     }
@@ -63,7 +59,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
     user: state.user,
     persons: state.persons
-})
+});
 
 const { arrayOf, func } = PropTypes;
 UserPage.propTypes = {
