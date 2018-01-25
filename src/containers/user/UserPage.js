@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from './userActions';
-import UserStudyfieldSelector from './UserStudyfieldSelector';
 import { personType } from '../../util/types';
 import PersonSwitcher from '../../components/person/PersonSwitcher';
 
@@ -30,13 +29,9 @@ export class UserPage extends Component {
                             <span className="header">Email</span> {this.props.user.email}
                         </div>
                         <div className="item">
-                            <span className="header">Address</span> {this.props.user.address}
-                        </div>
-                        <div className="item">
                             <span className="header">Phone</span> {this.props.user.phone}
                         </div>
                     </div>
-                    <UserStudyfieldSelector />
                 </div>
                 {process.env.NODE_ENV !== 'production' ?
                     <PersonSwitcher
