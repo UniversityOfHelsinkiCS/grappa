@@ -60,7 +60,8 @@ export const thesisValidationRules = {
     authorEmail: ['required', 'email'],
     urkund: ['required', 'url'],
     grade: 'required',
-    programmeId: 'required'
+    programmeId: 'required',
+    studyfieldId: 'required'
 };
 
 export const thesisValidation = new Checkit(thesisValidationRules);
