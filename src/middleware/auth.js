@@ -85,7 +85,6 @@ module.exports.shibRegister = async (req, res, next) => {
                     studentNumber,
                     shibbolethId: req.headers['uid'],
                     email: req.headers['mail']
-                    // updated_at: Date.now()
                 };
 
                 try {
@@ -96,6 +95,14 @@ module.exports.shibRegister = async (req, res, next) => {
                 } catch (error) {
                     console.log("Saving person failed", error);
                 }
+            }
+            try {
+                const user = await personService.getPersonByShibbolethId(shibUid);
+                if (user) {
+                    req.session.user_id = user.personId;
+                }
+            } catch (error) {
+                console.log("Help", error)
             }
         } else {
             console.log("Already has a session");
