@@ -6,7 +6,6 @@ const programmes = require('./routes/programmes');
 const studyfields = require('./routes/studyfields');
 const persons = require('./routes/persons');
 const attachments = require('./routes/attachments');
-const agreementDrafts = require('./routes/agreementDrafts');
 const shibboleth = require('./routes/shibboleth');
 const councilmeeting = require('./routes/councilmeeting');
 const notifications = require('./routes/notifications');
@@ -27,7 +26,6 @@ module.exports = (app) => {
     app.use('/programmes', programmes);
     app.use('/studyfields', studyfields)
     app.use('/attachments', attachments);
-    app.use('/agreement-drafts', agreementDrafts);
     app.use('/councilmeetings', councilmeeting);
     app.use('/emailDrafts', emailDrafts);
     app.use(auth.checkAdmin);

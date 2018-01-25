@@ -26,7 +26,7 @@ const councilmeetingWithoutId = {
     date: '2017-11-29T22:00:00.000Z',
     instructorDeadline: '2017-11-20T22:00:00.000Z',
     studentDeadline: '2017-11-10T22:00:00.000Z',
-    programmeId: 1
+    programmes: [1]
 };
 
 test('councilmeeting post & creates id', async (t) => {
@@ -51,7 +51,9 @@ test('councilmeeting get all', async (t) => {
 });
 
 test('councilmeeting delete', async (t) => {
-    const meeting = await knex('councilmeeting').insert(councilmeetingWithoutId).returning('councilmeetingId');
+    const copy = Object.assign({}, councilmeetingWithoutId)
+    delete copy.programmes
+    const meeting = await knex('councilmeeting').insert(copy).returning('councilmeetingId');
     const res = await request(makeApp(1)).del(`/councilmeetings/${meeting[0]}`);
 
     t.is(res.status, 200);
@@ -66,9 +68,11 @@ test('councilmeeting update', async (t) => {
         date: '2019-11-29T22:00:00.000Z',
         instructorDeadline: '2019-11-20T22:00:00.000Z',
         studentDeadline: '2019-11-10T22:00:00.000Z',
-        programmeId: 1
+        programmes: [1, 2]
     };
-    const meeting = await knex('councilmeeting').insert(councilmeetingWithoutId).returning('councilmeetingId');
+    const copy = Object.assign({}, councilmeetingWithoutId)
+    delete copy.programmes
+    const meeting = await knex('councilmeeting').insert(copy).returning('councilmeetingId');
     const res = await request(makeApp(1))
         .put(`/councilmeetings/${meeting[0]}`)
         .send(updatedData);
@@ -88,7 +92,7 @@ test('councilmeeting with invalid dates cannot be created', async (t) => {
         date: '2019-11-19T22:00:00.000Z',
         instructorDeadline: '2019-11-20T22:00:00.000Z',
         studentDeadline: '2019-11-10T22:00:00.000Z',
-        programmeId: 1
+        programmes: [1]
     };
 
     const res = await request(makeApp(1))

@@ -13,6 +13,7 @@ export async function createPerson(email) {
 }
 
 export async function deleteFromDb() {
+    await knex('meetingProgramme').del();
     await knex('previousagreements').del();
     await knex('agreementDraftPerson').del();
     await knex('agreementDraft').del();
