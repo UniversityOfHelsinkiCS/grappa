@@ -1,10 +1,10 @@
 const personWithRole = require('../../mockdata/MockPersonRoleFields');
 
-exports.seed = function (knex, Promise) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('personWithRole').del()
-        .then(function () {
-            // Inserts seed entries
-            return knex('personWithRole').insert(personWithRole);
-        });
+    await knex('agreementDraftPerson').del() // Foreign key violation
+    await knex('agreementDraft').del() // Foreign key violation
+    await knex('personWithRole').del()
+    // Inserts seed entries
+    return knex('personWithRole').insert(personWithRole);
 };

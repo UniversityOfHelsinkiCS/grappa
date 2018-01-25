@@ -1,10 +1,11 @@
 const agreements = require('../../mockdata/MockAgreements')
 
-exports.seed = function (knex, Promise) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('agreement').del()
-        .then(function () {
-            // Inserts seed entries
-            return knex('agreement').insert(agreements);
-        });
+    await knex('previousagreements').del() // Foreign key violation
+    await knex('agreementPerson').del() // Foreign key violation
+    await knex('attachment').del() // Foreign key violation
+    await knex('agreement').del()
+    // Inserts seed entries
+    return knex('agreement').insert(agreements);
 };

@@ -1,10 +1,9 @@
 const councilmeetings = require('../../mockdata/MockCouncilmeetings');
 
-exports.seed = function (knex, Promise) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('councilmeeting').del()
-        .then(function () {
-            // Inserts seed entries
-            return knex('councilmeeting').insert(councilmeetings);
-        });
+    await knex('thesis').del() // Foreign key violation
+    await knex('councilmeeting').del()
+    // Inserts seed entries
+    return knex('councilmeeting').insert(councilmeetings);
 };
