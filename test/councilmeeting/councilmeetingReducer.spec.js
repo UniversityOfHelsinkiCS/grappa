@@ -49,7 +49,7 @@ test('delete success changes state correctly', reducerTest(
     stateWithACouncilmeeting,
     {
         type: 'COUNCILMEETING_DELETE_ONE_SUCCESS',
-        response: councilmeeting.councilmeetingId
+        response: { councilmeetingId: councilmeeting.councilmeetingId }
     },
     []
 ));
