@@ -1,4 +1,5 @@
 const knex = require('../db/connection');
+const programmeService = require('./ProgrammeService');
 
 // Role
 
@@ -141,3 +142,13 @@ export async function getRoleWithAgreementIdAndPersonRole(agreementId, personRol
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .first();
 }
+
+export const getUsersRoles = async (user) => {
+    const roleToId = await getRoles();
+    const programmeToId = await programmeService.getAllProgrammes();
+    const personRoles = await getPersonRoles(user.personId);
+    return personRoles.map(role => ({
+        programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
+        role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
+    }))
+};

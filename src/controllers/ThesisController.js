@@ -26,7 +26,7 @@ export async function getTheses(req, res) {
     let theses = [];
     let newTheses = [];
 
-    const rolesInProgrammes = await getUsersRoles(user);
+    const rolesInProgrammes = await roleService.getUsersRoles(user);
     if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
         // As an admin, get all theses
         const allTheses = await thesisService.getAllTheses();
@@ -106,16 +106,6 @@ export async function saveThesisForm(req, res) {
     notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId);
     res.status(200).json(response);
 }
-
-const getUsersRoles = async (user) => {
-    const roleToId = await roleService.getRoles();
-    const programmeToId = await programmeService.getAllProgrammes();
-    const personRoles = await roleService.getPersonRoles(user.personId);
-    return personRoles.map(role => ({
-        programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
-        role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
-    }));
-};
 
 export async function updateThesis(req, res) {
     const updatedFields = req.body;

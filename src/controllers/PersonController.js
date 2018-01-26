@@ -1,6 +1,5 @@
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
 const emailInviteService = require('../services/EmailInviteService');
 
@@ -18,7 +17,7 @@ export async function updatePerson(req, res) {
         const updateData = removeEmptyKeys(personData);
         await personService.updatePerson(updateData).then((response) => {
             notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
-            res.status(200).json(`person updated succesfully ${response}`);
+            res.status(200).json(`person updated successfully ${response}`);
         }
         ).catch(err => res.status(500).json(err));
     } else {
@@ -67,7 +66,7 @@ export async function getPersons(req, res) {
         if (!user) {
             return userNotFound(res);
         }
-        const rolesInProgrammes = await getUsersRoles(user);
+        const rolesInProgrammes = await roleService.getUsersRoles(user);
 
         // Add user to person list
         persons.push(user);
@@ -142,16 +141,6 @@ async function getAllPersons(res) {
     };
     return res.status(200).json(responseObject).end();
 }
-
-const getUsersRoles = async (user) => {
-    const roleToId = await roleService.getRoles();
-    const programmeToId = await programmeService.getAllProgrammes();
-    const personRoles = await roleService.getPersonRoles(user.personId);
-    return personRoles.map(role => ({
-        programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
-        role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
-    }))
-};
 
 export async function getPersonById(req, res) {
     const person = await personService.getPersonById(req.params.id);

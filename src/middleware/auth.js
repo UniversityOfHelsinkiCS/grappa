@@ -1,3 +1,4 @@
+const utf8 = require('utf8');
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 
@@ -15,7 +16,7 @@ module.exports.checkAuth = async (req, res, next) => {
         }
         // log user in if shibboleth session id exists
         req.session.shib_session_id = req.headers['shib-session-id'];
-        const shibUid = req.headers['uid'];
+        const shibUid = req.headers.uid;
         try {
             const user = await personService.getPersonByShibbolethId(shibUid);
             if (user) {
@@ -57,43 +58,43 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['edupersonaffiliation'] = 'student;member';
     // req.headers['shib_logout_url'] = 'https://example.com/logout/';
 
-    console.log("shibRegister starts")
+    console.log('shibRegister starts');
     if (!req.session.user_id) {
-        console.log("First if")
+        console.log('First if');
         if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
             req.session.shib_session_id = req.headers['shib-session-id'];
-            const shibUid = req.headers['uid'];
+            const shibUid = req.headers.uid;
             const studentNumberRegex = /.*:([0-9]*)$/;
-            const regexResults = studentNumberRegex.exec(req.headers['unique-code'])
+            const regexResults = studentNumberRegex.exec(req.headers['unique-code']);
             const studentNumber = regexResults ? regexResults[1] : undefined;
             try {
                 const user = await personService.getPersonByShibbolethId(shibUid);
                 req.session.user_id = user.personId;
-                user.firstname = req.headers['givenname'];
-                user.lastname = req.headers['sn'];
-                user.email = req.headers['mail'];
+                user.firstname = utf8.decode(req.headers.givenname);
+                user.lastname = utf8.decode(req.headers.sn);
+                user.email = req.headers.mail;
                 try {
                     console.log('update Person', user);
                     await personService.updatePerson(user);
                 } catch (error) {
-                    console.log("Updating person failed", error)
+                    console.log('Updating person failed', error)
                 }
             } catch (error) {
                 const user = {
-                    firstname: req.headers['givenname'],
-                    lastname: req.headers['sn'],
+                    firstname: utf8.decode(req.headers.givenname),
+                    lastname: utf8.decode(req.headers.sn),
                     studentNumber,
-                    shibbolethId: req.headers['uid'],
-                    email: req.headers['mail']
+                    shibbolethId: req.headers.uid,
+                    email: req.headers.mail
                 };
 
                 try {
                     console.log('save Person', user);
                     const person = await personService.savePerson(user);
-                    console.log("Done:", person);
+                    console.log('Done:', person);
                     req.session.user_id = person.personId;
-                } catch (error) {
-                    console.log("Saving person failed", error);
+                } catch (error2) {
+                    console.log('Saving person failed', error2);
                 }
             }
             try {
@@ -102,12 +103,11 @@ module.exports.shibRegister = async (req, res, next) => {
                     req.session.user_id = user.personId;
                 }
             } catch (error) {
-                console.log("Help", error)
+                console.log('Help', error)
             }
         } else {
-            console.log("Already has a session");
+            console.log('Already has a session');
         }
-
     }
     console.log('session.user_id exists: ', req.session.user_id);
     next();

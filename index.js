@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 require('babel-core/register');
 require('babel-polyfill');
 
@@ -24,11 +26,18 @@ app.listen(3100, () => {
 });
 
 app.use(gracefulExit.middleware(app));
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 6000000 }, store, resave: false, saveUninitialized: false }));
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: { maxAge: 6000000 },
+    store,
+    resave: false,
+    saveUninitialized: false
+}));
 
 routes(app);
 
 app.use(errorHandler);
+app.disable('x-powered-by');
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'stack:', reason);

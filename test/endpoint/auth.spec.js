@@ -1,4 +1,5 @@
 import test from 'ava';
+import sinon from 'sinon';
 import { deleteFromDb } from '../utils';
 
 const request = require('supertest');
@@ -8,14 +9,17 @@ const shibboleth = require('../../src/routes/shibboleth');
 const knex = require('../../src/db/connection');
 const auth = require('../../src/middleware/auth');
 
-const makeApp = (email, id) => {
+let i = 0;
+
+const makeApp = (email, id, sn, fn) => {
     const app = express();
     app.use((req, res, next) => {
-        req.session = {};
+        i += 1;
+        req.session = { destroy: sinon.spy() };
         req.headers['shib-session-id'] = 'test1234';
-        req.headers['unique-code'] = 'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789';
-        req.headers.sn = 'Opiskelija';
-        req.headers.givenname = 'Olli O';
+        req.headers['unique-code'] = `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789${i}`;
+        req.headers.sn = sn || 'Opiskelija';
+        req.headers.givenname = fn || 'Olli O';
         req.headers.displayname = 'Olli';
         req.headers.uid = id || 'oopiskelija';
         req.headers.mail = email || 'opiskelija@example.com';
@@ -30,7 +34,7 @@ const makeApp = (email, id) => {
     return app;
 };
 
-test.before(async (t) => {
+test.before(async () => {
     await knex.migrate.latest();
     await deleteFromDb();
     await knex.seed.run();
@@ -82,9 +86,27 @@ test.skip('exsisting user is updated if login with new sibboleth id', async (t) 
 });
 
 test('logout gives redirect', async (t) => {
-    t.plan(1);
+    t.plan(2);
     const app = makeApp();
     const res = await request(app)
         .get('/user/logout');
-    t.is(res.status, 302);
+
+    t.is(res.status, 200);
+    t.is(res.body.logoutUrl, 'https://example.com/logout/');
+});
+
+test('names are saved in correct encoding', async (t) => {
+    const app = makeApp('encoding@example.com', 'encodingTest', 'LemstrÃ¶m', 'Ã¶');
+    const res = await request(app).get('/');
+
+    t.is(res.status, 200);
+
+    const person = await knex('person')
+        .select()
+        .where('email', 'encoding@example.com')
+        .where('lastname', 'Lemström')
+        .where('firstname', 'ö')
+        .first();
+
+    t.truthy(person);
 });
