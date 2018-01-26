@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { arrayOf } from 'prop-types'
 import { connect } from 'react-redux';
 
-import { agreementType, personType, thesisType } from '../../util/types';
+import { agreementType, personType, thesisType, attachmentType } from '../../util/types';
 import { downloadAttachments } from '../attachment/attachmentActions'
 
 import ThesisList from '../../components/thesis/ThesisList';
@@ -41,6 +41,8 @@ class ThesisListPage extends Component {
                     downloadSelected={this.handleDownload}
                     theses={this.state.theses}
                     userRoles={this.props.user.roles}
+                    agreements={this.props.agreements}
+                    attachments={this.props.attachments}
                 />
             </div>
         );
@@ -66,6 +68,7 @@ ThesisListPage.propTypes = {
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
     agreements: arrayOf(agreementType).isRequired,
+    attachments: arrayOf(attachmentType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);

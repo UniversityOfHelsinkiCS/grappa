@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { moveTheses } from '../thesis/thesisActions';
 import { downloadAttachments } from '../attachment/attachmentActions'
-import { personType, thesisType } from '../../util/types';
+import { personType, thesisType, agreementType, attachmentType } from '../../util/types';
 import { formatTheses } from '../../util/theses';
 
 import ThesisList from '../../components/thesis/ThesisList'
@@ -117,6 +117,8 @@ export class CouncilmeetingViewPage extends Component {
                     downloadSelected={this.handleDownload}
                     theses={this.state.theses}
                     userRoles={this.props.user.roles}
+                    attachments={this.props.attachments}
+                    agreements={this.props.agreements}
                 />
             </div>
         );
@@ -147,7 +149,9 @@ CouncilmeetingViewPage.propTypes = {
     moveTheses: func.isRequired,
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
-    downloadAttachments: func.isRequired
+    downloadAttachments: func.isRequired,
+    agreements: arrayOf(agreementType).isRequired,
+    attachments: arrayOf(attachmentType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);

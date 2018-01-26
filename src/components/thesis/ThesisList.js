@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 import { thesisType, agreementType, attachmentType } from '../../util/types';
 
@@ -158,11 +157,6 @@ class ThesisList extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    agreements: state.agreements,
-    attachments: state.attachments
-});
-
 ThesisList.propTypes = {
     theses: arrayOf(thesisType).isRequired,
     downloadSelected: func.isRequired,
@@ -171,4 +165,4 @@ ThesisList.propTypes = {
 };
 
 
-export default connect(mapStateToProps)(ThesisList);
+export default ThesisList;
