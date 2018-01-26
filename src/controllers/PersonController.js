@@ -18,7 +18,7 @@ export async function updatePerson(req, res) {
         const updateData = removeEmptyKeys(personData);
         await personService.updatePerson(updateData).then((response) => {
             notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
-            res.status(200).json(`person updated succesfully ${response}`);
+            res.status(200).json(`person updated successfully ${response}`);
         }
         ).catch(err => res.status(500).json(err));
     } else {

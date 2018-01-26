@@ -1,4 +1,5 @@
 import test from 'ava';
+import sinon from 'sinon';
 import { deleteFromDb } from '../utils';
 
 const request = require('supertest');
@@ -14,7 +15,7 @@ const makeApp = (email, id, sn, fn) => {
     const app = express();
     app.use((req, res, next) => {
         i += 1;
-        req.session = {};
+        req.session = { destroy: sinon.spy() };
         req.headers['shib-session-id'] = 'test1234';
         req.headers['unique-code'] = `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789${i}`;
         req.headers.sn = sn || 'Opiskelija';
@@ -85,11 +86,13 @@ test.skip('exsisting user is updated if login with new sibboleth id', async (t) 
 });
 
 test('logout gives redirect', async (t) => {
-    t.plan(1);
+    t.plan(2);
     const app = makeApp();
     const res = await request(app)
         .get('/user/logout');
-    t.is(res.status, 302);
+
+    t.is(res.status, 200);
+    t.is(res.body.logoutUrl, 'https://example.com/logout/');
 });
 
 test('names are saved in correct encoding', async (t) => {
