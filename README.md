@@ -24,7 +24,9 @@ $ docker exec -it grappa-postgres-container createdb -U postgres grappa
 $ docker exec -it grappa-postgres-container psql -c 'create schema grappa_test;' -U postgres grappa
 ```
 
-Run tests with DATABASE_URL env set:
-`DATABASE_URL=postgres://postgres:password@localhost:5433/grappa npm run test`
+Create .env file to project root and add database connection string
+```
+DATABASE_URL=postgres://postgres:password@localhost:5433/grappa
+```
 
 Test are run using grappa_test schema. Development app is run with public schema.
