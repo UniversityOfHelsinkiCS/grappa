@@ -74,7 +74,7 @@ export const attachmentType = shape({
     originalname: string,
     mimetype: string,
     label: string,
-    savedOnDisk: number
+    savedOnDisk: bool
 });
 
 export const thesisType = shape({

@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
 import { Link } from 'react-router-dom';
-import { thesisType } from '../../util/types';
+import { connect } from 'react-redux';
+import { arrayOf, func } from 'prop-types';
+import { thesisType, agreementType, attachmentType } from '../../util/types';
 
-export default class ThesisList extends Component {
+class ThesisList extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+            filteredTheses: props.theses,
             selectedThesesIds: [],
             cover: true
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.theses) {
+            this.setState({
+                filteredTheses: newProps.theses,
+                selectedThesesIds: []
+            })
         }
     }
 
@@ -21,9 +32,47 @@ export default class ThesisList extends Component {
         this.setState({ selectedThesesIds });
     }
 
+    search = (event) => {
+        if (!event.target.value) {
+            this.setState({ filteredTheses: this.state.formattedTheses });
+            return;
+        }
+        const searchValue = event.target.value.toLowerCase();
+        // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
+        const filteredTheses = this.state.formattedTheses
+            .filter(thesis => Object.keys(thesis)
+                .find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)));
+        this.setState({ filteredTheses });
+    };
+
     sendDownloadSelected = () => {
         if (this.state.selectedThesesIds.length > 0) {
-            this.props.downloadSelected(this.state.selectedThesesIds, this.state.cover);
+            const attachmentIds = this.props.agreements.map((agreement) => {
+                if (this.state.selectedThesesIds.find(id => id === agreement.thesisId)) {
+                    return this.props.attachments.filter((attachment) => {
+                        if (attachment.agreementId === agreement.agreementId) {
+                            // Pick correct files;
+                            if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                        .sort((a) => {
+                            if (a.label === 'thesisFile') { // Thesis comes before review.
+                                return -1;
+                            }
+                            return 1;
+                        });
+                }
+            }).reduce((acc, cur) => { // Flatten thesis, review pairs.
+                if (cur) {
+                    return acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
+                }
+                return acc;
+            }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
+                );
+            this.props.downloadSelected(attachmentIds);
         }
     }
 
@@ -64,6 +113,12 @@ export default class ThesisList extends Component {
     render() {
         return (
             <div>
+                <div className="ui fluid category search">
+                    <div className="ui icon input">
+                        <input className="prompt" type="text" placeholder="Filter theses" onChange={this.search} />
+                        <i className="search icon" />
+                    </div>
+                </div>
                 {this.renderButtons()}
                 <table className="ui celled table">
                     <thead>
@@ -77,7 +132,7 @@ export default class ThesisList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.theses.map(thesis =>
+                        {this.state.filteredTheses.map(thesis => (
                             <tr key={thesis.thesisId}>
                                 <td>
                                     <div className="ui fitted checkbox">
@@ -95,7 +150,7 @@ export default class ThesisList extends Component {
                                 <td>{thesis.grade}</td>
                                 <td>{thesis.printDone.toString()}</td>
                             </tr>
-                        )}
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -103,7 +158,17 @@ export default class ThesisList extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    agreements: state.agreements,
+    attachments: state.attachments
+});
+
 ThesisList.propTypes = {
     theses: arrayOf(thesisType).isRequired,
-    downloadSelected: func.isRequired
+    downloadSelected: func.isRequired,
+    agreements: arrayOf(agreementType).isRequired,
+    attachments: arrayOf(attachmentType).isRequired
 };
+
+
+export default connect(mapStateToProps)(ThesisList);

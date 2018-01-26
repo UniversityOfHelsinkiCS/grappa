@@ -7,8 +7,7 @@ export default class PersonRoleChoose extends Component {
         super();
         this.state = {
             roleId: undefined,
-            programmeId: undefined,
-            newUnits: true
+            programmeId: undefined
         };
     }
 

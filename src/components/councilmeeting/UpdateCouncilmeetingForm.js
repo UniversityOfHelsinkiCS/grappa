@@ -38,12 +38,12 @@ class UpdateCouncilmeetingForm extends Component {
     }
 
     handleProgrammeChange = (event) => {
-        const programme = this.props.programmes.find(programme =>
+        const foundProgramme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
         );
-        if (programme) {
-            const programmes = [...this.state.meeting.programmes, programme];
+        if (foundProgramme) {
+            const programmes = [...this.state.meeting.programmes, foundProgramme];
             const meeting = Object.assign({}, this.state.meeting, { programmes });
             this.setState({ meeting });
         }
@@ -123,7 +123,7 @@ class UpdateCouncilmeetingForm extends Component {
                     </div>
                     <div className="two fields">
                         <div className="field">
-                            <label htmlFor="newMeetingProgramme">Programmes</label>
+                            <label htmlFor="newMeetingProgramme">Units</label>
                             <ProgrammeSelect
                                 onChange={this.handleProgrammeChange}
                                 programmes={this.props.programmes}

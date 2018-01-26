@@ -117,7 +117,7 @@ class NewCouncilmeetingForm extends Component {
                     </div>
                     <div className="two fields">
                         <div className="field">
-                            <label htmlFor="newMeetingProgramme">Programmes</label>
+                            <label htmlFor="newMeetingProgramme">Units</label>
                             <ProgrammeSelect
                                 onChange={this.handleProgrammeChange}
                                 programmes={this.props.programmes}
