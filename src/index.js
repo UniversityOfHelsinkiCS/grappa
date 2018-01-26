@@ -9,7 +9,6 @@ import NavBar from './containers/NavBar';
 import EventMessageContainer from './containers/eventMessage/eventMessageContainer';
 
 // util
-import registerServiceWorker from './util/registerServiceWorker';
 import store from './util/store';
 
 // media
@@ -33,5 +32,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-registerServiceWorker();
