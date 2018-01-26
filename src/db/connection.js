@@ -1,3 +1,4 @@
+require('dotenv').config();
 const config = require('./knexfile.js');
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'not working';
