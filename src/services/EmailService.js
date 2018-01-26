@@ -4,7 +4,7 @@ const emailDraftService = require('../services/EmailDraftService');
 const personService = require('../services/PersonService');
 
 const PROD_ADDRESS = 'https://grappa.cs.helsinki.fi/v2/';
-const DEV_ADDRESS = 'http://localhost:3000/v2';
+const DEV_ADDRESS = 'http://localhost:3000/v2/';
 
 const SERVER_ADDRESS = process.env.NODE_ENV === 'production' ? PROD_ADDRESS : DEV_ADDRESS;
 
