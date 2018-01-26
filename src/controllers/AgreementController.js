@@ -4,7 +4,6 @@ const personService = require('../services/PersonService');
 const thesisService = require('../services/ThesisService');
 const emailService = require('../services/EmailService');
 const roleService = require('../services/RoleService');
-const programmeService = require('../services/ProgrammeService');
 const notificationService = require('../services/NotificationService');
 
 export async function getAgreementById(req, res) {
@@ -26,7 +25,7 @@ export async function getAllAgreements(req, res) {
         let agreements = [];
         let newAgreements = [];
 
-        const rolesInProgrammes = await getUsersRoles(user);
+        const rolesInProgrammes = await roleService.getUsersRoles(user);
 
         // If user is an admin, get everything
         if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
@@ -75,18 +74,6 @@ export async function getAllAgreements(req, res) {
         res.status(500).json(error);
     }
 }
-
-const getUsersRoles = async(user) => {
-    const roleToId = await roleService.getRoles();
-    const programmeToId = await programmeService.getAllProgrammes();
-    const personRoles = await roleService.getPersonRoles(user.personId);
-    return personRoles.map(role => {
-        return {
-            programme: programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId),
-            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
-        };
-    });
-};
 
 export async function getAgreementsByLoggedAuthor(req, res) {
     // return agreements where user is set as author.
