@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getPermissions } from '../util/rolePermissions';
-import { login, logout } from '../containers/user/userActions';
+import { login } from '../containers/user/userActions';
 import { personType } from '../util/types';
 
 // TODO: redux persistent storage & fetch in middleware
@@ -15,6 +15,13 @@ import { getTheses } from '../containers/thesis/thesisActions';
 import { getPersons } from '../containers/person/personActions';
 import { getNotifications } from './notifications/notificationsAction';
 import { getEmailDrafts } from './email/emailActions';
+import { getAxios } from '../util/apiConnection';
+
+const logout = () => {
+    getAxios()
+        .get('/user/logout')
+        .then((res) => { window.location = res.data.logoutUrl });
+};
 
 export class NavBar extends Component {
     constructor() {
@@ -65,7 +72,7 @@ export class NavBar extends Component {
         links = links.concat(linkPermissions.filter(link => !links.includes(link)));
 
         this.setState({ links });
-    }
+    };
 
     render() {
         return (
@@ -85,7 +92,7 @@ export class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <a className="item" onClick={this.props.logout}>Logout</a>
+                        <a className="item" onClick={logout}>Logout</a>
                     </div>
                 </div>
             </div>
@@ -96,9 +103,6 @@ export class NavBar extends Component {
 const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data));
-    },
-    logout() {
-        dispatch(logout());
     },
     getProgrammes() {
         dispatch(getProgrammes());
@@ -128,12 +132,11 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
     user: state.user
-})
+});
 
 const { func } = PropTypes;
 NavBar.propTypes = {
     login: func.isRequired,
-    logout: func.isRequired,
     getPersons: func.isRequired,
     getProgrammes: func.isRequired,
     getStudyfields: func.isRequired,

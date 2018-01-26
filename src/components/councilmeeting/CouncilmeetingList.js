@@ -48,11 +48,11 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
                         </td>
                         <td>
                             {councilmeeting.programmes
-                                .map(programmeId => {
+                                .map((programmeId) => {
                                     const programme = programmes.find(programme => programmeId === programme.programmeId)
                                     if (programme) {
                                         return (
-                                            <div>
+                                            <div key={programme.programmeId}>
                                                 {programme.name}
                                                 <br />
                                             </div>

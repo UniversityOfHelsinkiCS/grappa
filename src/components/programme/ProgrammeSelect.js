@@ -1,38 +1,61 @@
-import React from 'react';
-import { arrayOf, func, number, string } from 'prop-types';
+import React, { Component } from 'react';
+import { arrayOf, func, number } from 'prop-types';
 import { programmeType } from '../../util/types';
 
-const ProgrammeSelect = ({ onChange, programmes, value, id }) => (
-    <div style={{ width: '10em', display: 'inline-block' }}>
-        <select
-            id={id}
-            className="ui dropdown"
-            onChange={onChange}
-            value={value}
-        >
-            <option value="null">No programme</option>
-            {programmes.map(programme => (
-                <option
-                    key={programme.programmeId}
-                    value={programme.programmeId}
-                >
-                    {programme.name}
-                </option>
-            ))}
-        </select>
-    </div>
-);
+export default class ProgrammeSelect extends Component {
+    constructor() {
+        super()
+        this.state = {
+            newUnits: true
+        }
+    }
+
+    swapUnit = (event) => {
+        this.setState({ newUnits: !this.state.newUnits })
+        event.target.value = undefined
+        this.props.onChange(event)
+    }
+
+    render() {
+        const { onChange, value } = this.props
+        const programmes = this.props.programmes.filter(programme =>
+            !programme.name.includes('Department') === this.state.newUnits
+        )
+        return (
+            <div className="ui form">
+                <div className="two fields">
+                    <div className="field">
+                        <button onClick={this.swapUnit} className="ui button fluid" >Switch between old and new</button>
+                    </div>
+                    <div className="field twelve wide">
+                        <select
+                            className="ui dropdown"
+                            onChange={onChange}
+                            value={value}
+                        >
+                            <option value="null">Select unit</option>
+                            {programmes.map(programme => (
+                                <option
+                                    key={programme.programmeId}
+                                    value={programme.programmeId}
+                                >
+                                    {programme.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
 
 ProgrammeSelect.propTypes = {
     onChange: func.isRequired,
     programmes: arrayOf(programmeType).isRequired,
-    value: number,
-    id: string
+    value: number
 };
 
 ProgrammeSelect.defaultProps = {
-    id: '',
     value: undefined
 };
-
-export default ProgrammeSelect;

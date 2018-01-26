@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getAxios = () => {
+export const getAxios = () => {
     if (process.env.API_URL) {
         console.log('API_URL is', process.env.API_URL);
         return axios.create({

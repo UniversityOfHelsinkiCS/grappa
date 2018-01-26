@@ -9,7 +9,6 @@ import NavBar from './containers/NavBar';
 import EventMessageContainer from './containers/eventMessage/eventMessageContainer';
 
 // util
-import registerServiceWorker from './util/registerServiceWorker';
 import store from './util/store';
 
 // media
@@ -24,7 +23,7 @@ ReactDOM.render(
         <Router basename="/v2">
             <div className="App">
                 <Route component={NavBar} />
-                <div className="ui left aligned container">
+                <div className="ui left aligned container" style={{ margin: '1.5%' }}>
                     <EventMessageContainer />
                     {routes()}
                 </div>
@@ -33,5 +32,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-registerServiceWorker();

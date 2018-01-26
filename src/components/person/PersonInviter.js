@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { arrayOf, func } from 'prop-types';
 import { programmeType, roleType } from '../../util/types';
+import ProgrammeSelect from '../programme/ProgrammeSelect';
 
 export default class PersonInviter extends Component {
     constructor() {
@@ -8,7 +9,7 @@ export default class PersonInviter extends Component {
         this.state = {
             email: undefined,
             role: undefined,
-            programme: undefined
+            programmeId: undefined
         };
     }
 
@@ -18,9 +19,9 @@ export default class PersonInviter extends Component {
     };
 
     sendEmail = () => {
-        const { programme, role, email } = this.state;
-        if (programme && role && email) {
-            this.props.handleSendInvite(programme, role, email)
+        const { programmeId, role, email } = this.state;
+        if (programmeId && role && email) {
+            this.props.handleSendInvite(programmeId, role, email)
         }
     };
 
@@ -39,29 +40,24 @@ export default class PersonInviter extends Component {
     };
 
     programmeDropdown = () => {
-        if (!this.props.programmes) {
-            return undefined;
-        }
         return (
-            <select className="ui dropdown" onChange={this.changeValue('programme')}>
-                <option value="">Programme</option>
-                {this.props.programmes.map(programme =>
-                    <option key={programme.programmeId} value={programme.programmeId}>{programme.name}</option>
-                )}
-            </select>
+            <ProgrammeSelect
+                onChange={this.changeValue('programmeId')}
+                programmes={this.props.programmes}
+            />
         )
     };
 
     render() {
         return (
-            <div className="ui form" style={{ margin: '2%' }}>
+            <div className="ui form">
                 <h2>Invite a new non-student grappa user</h2>
                 <div className="three fields">
-                    <div className="field">
-                        <label>Programme</label>
+                    <div className="field ten wide">
+                        <label>Unit</label>
                         {this.programmeDropdown()}
                     </div>
-                    <div className="field">
+                    <div className="field two wide">
                         <label>Role</label>
                         {this.roleDropdown()}
                     </div>
