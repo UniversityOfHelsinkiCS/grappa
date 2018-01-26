@@ -119,7 +119,6 @@ class NewCouncilmeetingForm extends Component {
                         <div className="field">
                             <label htmlFor="newMeetingProgramme">Programmes</label>
                             <ProgrammeSelect
-                                id="newMeetingProgramme"
                                 onChange={this.handleProgrammeChange}
                                 programmes={this.props.programmes}
                             />

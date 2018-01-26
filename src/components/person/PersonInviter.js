@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { arrayOf, func } from 'prop-types';
 import { programmeType, roleType } from '../../util/types';
+import ProgrammeSelect from '../programme/ProgrammeSelect';
 
 export default class PersonInviter extends Component {
     constructor() {
@@ -8,8 +9,7 @@ export default class PersonInviter extends Component {
         this.state = {
             email: undefined,
             role: undefined,
-            programme: undefined,
-            newUnits: true
+            programmeId: undefined
         };
     }
 
@@ -19,9 +19,9 @@ export default class PersonInviter extends Component {
     };
 
     sendEmail = () => {
-        const { programme, role, email } = this.state;
-        if (programme && role && email) {
-            this.props.handleSendInvite(programme, role, email)
+        const { programmeId, role, email } = this.state;
+        if (programmeId && role && email) {
+            this.props.handleSendInvite(programmeId, role, email)
         }
     };
 
@@ -39,31 +39,12 @@ export default class PersonInviter extends Component {
         )
     };
 
-    swapUnit = () => {
-        this.setState({ newUnits: !this.state.newUnits });
-    }
-
     programmeDropdown = () => {
-        if (!this.props.programmes) {
-            return undefined;
-        }
-        const programmes = this.props.programmes.filter(programme =>
-            !programme.name.includes('Department') === this.state.newUnits
-        )
         return (
-            <div className="two fields">
-                <div className="field">
-                    <button onClick={this.swapUnit} className="ui button fluid" >Switch between old and new</button>
-                </div>
-                <div className="field twelve wide">
-                    <select className="ui dropdown" onChange={this.changeValue('programme')}>
-                        <option value="">Unit</option>
-                        {programmes.map(programme =>
-                            <option key={programme.programmeId} value={programme.programmeId}>{programme.name}</option>
-                        )}
-                    </select>
-                </div>
-            </div>
+            <ProgrammeSelect
+                onChange={this.changeValue('programmeId')}
+                programmes={this.props.programmes}
+            />
         )
     };
 
