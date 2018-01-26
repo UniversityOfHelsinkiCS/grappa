@@ -8,7 +8,8 @@ export default class PersonInviter extends Component {
         this.state = {
             email: undefined,
             role: undefined,
-            programme: undefined
+            programme: undefined,
+            newUnits: true
         };
     }
 
@@ -38,30 +39,44 @@ export default class PersonInviter extends Component {
         )
     };
 
+    swapUnit = () => {
+        this.setState({ newUnits: !this.state.newUnits });
+    }
+
     programmeDropdown = () => {
         if (!this.props.programmes) {
             return undefined;
         }
+        const programmes = this.props.programmes.filter(programme =>
+            !programme.name.includes('Department') === this.state.newUnits
+        )
         return (
-            <select className="ui dropdown" onChange={this.changeValue('programme')}>
-                <option value="">Programme</option>
-                {this.props.programmes.map(programme =>
-                    <option key={programme.programmeId} value={programme.programmeId}>{programme.name}</option>
-                )}
-            </select>
+            <div className="two fields">
+                <div className="field">
+                    <button onClick={this.swapUnit} className="ui button fluid" >Switch between old and new</button>
+                </div>
+                <div className="field twelve wide">
+                    <select className="ui dropdown" onChange={this.changeValue('programme')}>
+                        <option value="">Unit</option>
+                        {programmes.map(programme =>
+                            <option key={programme.programmeId} value={programme.programmeId}>{programme.name}</option>
+                        )}
+                    </select>
+                </div>
+            </div>
         )
     };
 
     render() {
         return (
-            <div className="ui form" style={{ margin: '2%' }}>
+            <div className="ui form">
                 <h2>Invite a new non-student grappa user</h2>
                 <div className="three fields">
-                    <div className="field">
-                        <label>Programme</label>
+                    <div className="field ten wide">
+                        <label>Unit</label>
                         {this.programmeDropdown()}
                     </div>
-                    <div className="field">
+                    <div className="field two wide">
                         <label>Role</label>
                         {this.roleDropdown()}
                     </div>

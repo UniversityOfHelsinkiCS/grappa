@@ -27,11 +27,11 @@ export default class PersonRoleChoose extends Component {
                 onChange={this.changeStudyfield}
             >
                 <option key="0" value="">Select</option>
-                {this.props.programmes.map(field =>
+                {this.props.programmes.map(field => (
                     <option key={field.programmeId} value={field.programmeId}>
                         {field.name}
                     </option>
-                )}
+                ))}
             </select>
         )
     }
@@ -43,11 +43,11 @@ export default class PersonRoleChoose extends Component {
                 onChange={this.changeRole}
             >
                 <option key="0" value="">Select</option>
-                {this.props.availableRoles.map(role =>
+                {this.props.availableRoles.map(role => (
                     <option key={role.roleId} value={role.roleId}>
                         {role.name}
                     </option>
-                )}
+                ))}
             </select>
         )
     }
@@ -84,20 +84,21 @@ export default class PersonRoleChoose extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {roles.map(role =>
+                        {roles.map(role => (
                             <tr key={role.personRoleId}>
                                 <td>{role.name}</td>
                                 <td>{role.programme}</td>
                                 <td>
-                                    {!role.agreementId ? <button
-                                        className="ui red icon button"
-                                        onClick={this.removeRole(role)}
-                                    >
-                                        Remove <i className="remove icon" />
-                                    </button> : 'Linked to agreement'}
+                                    {!role.agreementId ?
+                                        <button
+                                            className="ui red icon button"
+                                            onClick={this.removeRole(role)}
+                                        >
+                                            Remove <i className="remove icon" />
+                                        </button> : 'Linked to agreement'}
                                 </td>
-                            </tr>)
-                        }
+                            </tr>
+                        ))}
                         <tr>
                             <td>{this.roleDropdown()}</td>
                             <td>{this.programmeDropdown()}</td>

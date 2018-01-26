@@ -142,7 +142,7 @@ export class CouncilmeetingViewPage extends Component {
                         :
                         <span></span>
                     }
-                    <h2 className="ui dividing header" style={{ 'marginTop': '10px' }}>
+                    <h2 className="ui dividing header" style={{ marginTop: '1%' }}>
                         <span>
                             {this.state.currentMeeting !== undefined ?
                                 'Councilmeeting of ' + moment(this.state.currentMeeting.date).format('DD/MM/YYYY')

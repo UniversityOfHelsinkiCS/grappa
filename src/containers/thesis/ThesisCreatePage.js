@@ -92,7 +92,6 @@ export class ThesisCreatePage extends Component {
 
         return (
             <div>
-                <br />
                 <ThesisConfirmModal
                     sendSaveThesis={this.handleSaveThesis}
                     closeModal={this.toggleModal}

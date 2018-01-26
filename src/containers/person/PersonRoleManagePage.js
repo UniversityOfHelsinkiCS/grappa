@@ -70,26 +70,40 @@ export class PersonRoleManagePage extends Component {
                 />
             )
         }
-        return (<PersonRoleChoose
-            person={this.state.person}
-            roles={this.state.roles}
-            programmes={this.props.programmes}
-            availableRoles={this.props.availableRoles}
-            addRole={this.handleAddRole}
-            removeRole={this.handleRemoveRole}
-        />);
+        return (
+            <PersonRoleChoose
+                person={this.state.person}
+                roles={this.state.roles}
+                programmes={this.props.programmes}
+                availableRoles={this.props.availableRoles}
+                addRole={this.handleAddRole}
+                removeRole={this.handleRemoveRole}
+            />
+        );
     };
 
     render() {
         const selected = this.state.person ? [this.state.person] : [];
         return (
             <div>
+                <p>
+                    On this page you can invite new users
+                    by choosing the correct unit, role and inputting email address.
+                    Grappa will then send an email to that address
+                    with a link that will make them the role of your choosing.
+                    <br />
+                    In addition, you can choose a person using the selector.
+                    When a person is chosen you can edit their roles.
+                </p>
+                <div className="ui divider" />
+                {this.renderManagement()}
+                <div className="ui divider" />
+                <h2>Select person</h2>
                 <PersonSelector
                     persons={this.props.persons}
                     selected={selected}
                     changeList={this.selectPerson}
                 />
-                {this.renderManagement()}
             </div>
         )
     }

@@ -23,7 +23,7 @@ ReactDOM.render(
         <Router basename="/v2">
             <div className="App">
                 <Route component={NavBar} />
-                <div className="ui left aligned container">
+                <div className="ui left aligned container" style={{ margin: '1.5%' }}>
                     <EventMessageContainer />
                     {routes()}
                 </div>
