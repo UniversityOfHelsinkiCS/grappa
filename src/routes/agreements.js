@@ -1,15 +1,11 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
+
 const jsonParser = bodyParser.json()
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const agreementController = require('../controllers/AgreementController');
 
 router.get('/', (req, res) => {
     agreementController.getAllAgreements(req, res);
-});
-
-router.get('/:id/previous', (req, res) => {
-    agreementController.getPreviousAgreementById(req, res);
 });
 
 router.get('/:id', (req, res) => {
@@ -20,17 +16,8 @@ router.post('/', jsonParser, (req, res) => {
     agreementController.saveAgreementForm(req, res);
 });
 
-router.post('/form', jsonParser, (req, res) => {
-    agreementController.saveAgreementForm(req, res);
-})
-
 router.put('/:id', jsonParser, (req, res) => {
     agreementController.updateAgreement(req, res);
 });
-
-router.post('/previous', jsonParser, (req, res) => {
-    agreementController.savePrevious(req, res);
-});
-
 
 module.exports = router;
