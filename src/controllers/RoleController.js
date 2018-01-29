@@ -3,7 +3,6 @@ const personService = require('../services/PersonService');
 
 export async function getAvailableRoles(req, res) {
     try {
-        const person = await personService.getLoggedPerson(req);
         const roles = await roleService.getRoles();
         res.status(200).json(roles);
     } catch (error) {
@@ -14,8 +13,6 @@ export async function getAvailableRoles(req, res) {
 
 export async function saveRole(req, res) {
     try {
-        const person = await personService.getLoggedPerson(req);
-
         let personWithRole = {
             roleId: req.body.roleId,
             personId: req.body.personId,
@@ -33,7 +30,6 @@ export async function saveRole(req, res) {
 
 export async function deleteRole(req, res) {
     try {
-        const person = await personService.getLoggedPerson(req);
         let personRoleId = req.params.id;
         personRoleId = await roleService.deletePersonRole(personRoleId);
         res.status(200).json(personRoleId).end();

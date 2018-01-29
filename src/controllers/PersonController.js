@@ -3,13 +3,6 @@ const roleService = require('../services/RoleService');
 const notificationService = require('../services/NotificationService');
 const emailInviteService = require('../services/EmailInviteService');
 
-export async function addPerson(req, res) {
-    const personData = getPersonData(req.body);
-    const saveData = removeEmptyKeys(personData);
-    const savedPerson = await personService.savePerson(saveData);
-    res.status(200).json(savedPerson).end();
-}
-
 export async function updatePerson(req, res) {
     const data = req.body;
     const personData = getPersonData(data);

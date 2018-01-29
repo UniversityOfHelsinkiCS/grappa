@@ -75,78 +75,27 @@ export async function getAllAgreements(req, res) {
     }
 }
 
-export async function getAgreementsByLoggedAuthor(req, res) {
-    // return agreements where user is set as author.
-    try {
-        const person = await personService.getLoggedPerson(req);
-        const agreements = await agreementService.getAgreementsByAuthor(person.personId);
-        // TODO! refactor frontend and call getAgreementRelatedData here
-        res.status(200).json(agreements);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-}
+const getThesisData = data => ({
+    thesisId: data.thesisId,
+    title: data.thesisTitle
+});
 
-const getAgreementRelatedData = async function(data) {
-    const mainSupervisor = await personService.getPersonByPersonRoleId(data.responsibleSupervisorId);
-    data.responsibleSupervisorId = mainSupervisor;
-    let agreement = getAgreementData(data);
-    const thesis = getThesisData(data);
-    const author = getPersonData(data);
-    let supervisors = await getAgreementPersonsByAgreementId(agreement.agreementId);
-    const agreementRelatedData = {
-        agreement: agreement,
-        thesis: thesis,
-        author: author,
-        supervisors: supervisors
-    };
-    return agreementRelatedData;
-};
-
-const getAgreementPersonsByAgreementId = async function(agreementId) {
-    return await roleService.getAgreementPersonsByAgreementId(agreementId);
-};
-
-const getThesisData = (data) => {
-    return ({
-        thesisId: data.thesisId,
-        title: data.thesisTitle
-    });
-};
-
-const getAgreementData = (data, thesisId) => {
-    return ({
-        agreementId: data.agreementId,
-        authorId: data.personId,
-        thesisId: thesisId,
-        responsibleSupervisorId: data.thesisSupervisorMain,
-        programmeId: data.programmeId,
-        startDate: data.thesisStartDate,
-        completionEta: data.thesisCompletionEta,
-        performancePlace: data.thesisPerformancePlace,
-        studentGradeGoal: data.studentGradeGoal,
-        studentWorkTime: data.thesisWorkStudentTime,
-        supervisorWorkTime: data.thesisWorkSupervisorTime,
-        intermediateGoal: data.thesisWorkIntermediateGoal,
-        meetingAgreement: data.thesisWorkMeetingAgreement,
-        other: data.other
-    });
-};
-
-const getPersonData = (data) => {
-    return ({
-        personId: data.personId,
-        shibbolethId: data.shibbolethId,
-        email: data.email,
-        title: data.title,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        isRetired: data.isRetired,
-        address: data.address,
-        phone: data.phone,
-        major: data.major
-    });
-};
+const getAgreementData = (data, thesisId) => ({
+    agreementId: data.agreementId,
+    authorId: data.personId,
+    thesisId,
+    responsibleSupervisorId: data.thesisSupervisorMain,
+    programmeId: data.programmeId,
+    startDate: data.thesisStartDate,
+    completionEta: data.thesisCompletionEta,
+    performancePlace: data.thesisPerformancePlace,
+    studentGradeGoal: data.studentGradeGoal,
+    studentWorkTime: data.thesisWorkStudentTime,
+    supervisorWorkTime: data.thesisWorkSupervisorTime,
+    intermediateGoal: data.thesisWorkIntermediateGoal,
+    meetingAgreement: data.thesisWorkMeetingAgreement,
+    other: data.other
+});
 
 export async function saveAgreement(req, res) {
     const data = req.body;
@@ -157,14 +106,15 @@ export async function saveAgreement(req, res) {
     if (!data.agreementId) {
         try {
             console.log('Before await');
-            let newAgreement = await agreementService.saveAgreement(data);
+            const newAgreement = await agreementService.saveAgreement(data);
             notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
             return res.status(200).json(newAgreement);
         } catch (err) {
             return res.status(500).json(err);
         }
     }
-    res.status(500).json({ text: 'Agreement had an id' });
+
+    return res.status(500).json({ text: 'Agreement had an id' });
 }
 
 export async function saveAgreementForm(req, res) {
@@ -207,7 +157,9 @@ export async function updateAgreement(req, res) {
                 major: data.studentMajor
             };
             const cleanPersonData = removeUselessKeys(personData);
-            const personResponse = await personService.updatePerson(cleanPersonData);
+
+            await personService.updatePerson(cleanPersonData);
+
             const thesisData = {
                 thesisId: data.thesisId,
                 thesisTitle: data.thesisTitle,
@@ -216,10 +168,12 @@ export async function updateAgreement(req, res) {
                 performancePlace: data.thesisPerformancePlace
             };
             const cleanThesisData = removeUselessKeys(thesisData);
-            const thesisResponse = await thesisService.updateThesis(cleanThesisData);
+
+            await thesisService.updateThesis(cleanThesisData);
+
             const receiver = await agreementService.getAgreementReceiver(agreementId);
             const agreementData = {
-                agreementId: agreementId,
+                agreementId,
                 authorId: data.personId,
                 thesisId: data.thesisId,
                 responsibleSupervisorId: data.responsibleSupervisorId,
@@ -233,10 +187,11 @@ export async function updateAgreement(req, res) {
                 whoNext: receiver
             };
             const cleanAgreementData = removeUselessKeys(agreementData);
-            const agreementResponse = await agreementService.updateAgreement(cleanAgreementData);
+
+            await agreementService.updateAgreement(cleanAgreementData);
             emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
             notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
-            res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId: agreementId });
+            res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId });
         } catch (err) {
             res.status(500).json({ text: 'error occurred', error: err });
         }
@@ -247,8 +202,8 @@ export async function updateAgreement(req, res) {
 
 function removeUselessKeys(messyData) {
     // removes keys that are undefined/null from data
-    let cleanData = {};
-    Object.keys(messyData).map(key => {
+    const cleanData = {};
+    Object.keys(messyData).map((key) => {
         if (messyData[key] != null) {
             cleanData[key] = messyData[key];
         }
