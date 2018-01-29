@@ -105,14 +105,9 @@ export async function saveAgreement(req, res) {
     const personId = user.personId;
     if (!personId) res.status(500).json({ text: 'No user_id in session' });
     if (!data.agreementId) {
-        try {
-            const newAgreement = await agreementService.saveAgreement(data);
-            notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
-            return res.status(200).json(newAgreement);
-        } catch (err) {
-            logger.error('Save agreement failed', { error: err });
-            return res.status(500).json(err);
-        }
+        const newAgreement = await agreementService.saveAgreement(data);
+        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
+        return res.status(200).json(newAgreement);
     }
 
     return res.status(500).json({ text: 'Agreement had an id' });
@@ -126,77 +121,67 @@ export async function saveAgreementForm(req, res) {
     if (!personId) {
         res.status(500).json({ text: 'No user_id in session' });
     }
-    try {
-        data.personId = personId;
-        const thesisData = getThesisData(data);
-        const thesisSaveResponse = await thesisService.saveThesis(thesisData, req);
-        const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
-        const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
-        agreementData.agreementId = agreementSaveResponse.agreementId;
-        // let personData = await personService.getPersonById(data.personId);
-        // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
-        notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.programmeId);
-        res.status(200).json(agreementData);
-    } catch (error) {
-        logger.error('Save agreement form failed', { error });
-        res.status(500).json({ text: 'Error occured', error });
-    }
+    data.personId = personId;
+    const thesisData = getThesisData(data);
+    const thesisSaveResponse = await thesisService.saveThesis(thesisData, req);
+    const agreementData = getAgreementData(data, thesisSaveResponse.thesisId);
+    const agreementSaveResponse = await agreementService.saveAgreement(agreementData);
+    agreementData.agreementId = agreementSaveResponse.agreementId;
+    // let personData = await personService.getPersonById(data.personId);
+    // emailService.agreementCreated(Object.assign(personData[0], thesisData, agreementData));
+    notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.programmeId);
+    res.status(200).json(agreementData);
 }
 
 export async function updateAgreement(req, res) {
     const data = req.body;
     const agreementId = req.params.id;
     if (agreementId != null && agreementId !== '') {
-        try {
-            const personData = {
-                personId: data.personId,
-                firstname: data.studentFirstName,
-                lastname: data.studentLastName,
-                studentNumber: data.studentNumber,
-                email: data.studentEmail,
-                address: data.studentAddress,
-                major: data.studentMajor
-            };
-            const cleanPersonData = removeUselessKeys(personData);
+        const personData = {
+            personId: data.personId,
+            firstname: data.studentFirstName,
+            lastname: data.studentLastName,
+            studentNumber: data.studentNumber,
+            email: data.studentEmail,
+            address: data.studentAddress,
+            major: data.studentMajor
+        };
+        const cleanPersonData = removeUselessKeys(personData);
 
-            await personService.updatePerson(cleanPersonData);
+        await personService.updatePerson(cleanPersonData);
 
-            const thesisData = {
-                thesisId: data.thesisId,
-                thesisTitle: data.thesisTitle,
-                startDate: data.thesisStartDate,
-                completionEta: data.thesisCompletionEta,
-                performancePlace: data.thesisPerformancePlace
-            };
-            const cleanThesisData = removeUselessKeys(thesisData);
+        const thesisData = {
+            thesisId: data.thesisId,
+            thesisTitle: data.thesisTitle,
+            startDate: data.thesisStartDate,
+            completionEta: data.thesisCompletionEta,
+            performancePlace: data.thesisPerformancePlace
+        };
+        const cleanThesisData = removeUselessKeys(thesisData);
 
-            await thesisService.updateThesis(cleanThesisData);
+        await thesisService.updateThesis(cleanThesisData);
 
-            const receiver = await agreementService.getAgreementReceiver(agreementId);
-            const agreementData = {
-                agreementId,
-                authorId: data.personId,
-                thesisId: data.thesisId,
-                responsibleSupervisorId: data.responsibleSupervisorId,
-                programmeId: data.programmeId,
-                studentGradeGoal: data.studentGradeGoal,
-                studentWorkTime: data.thesisWorkStudentTime,
-                supervisorWorkTime: data.thesisWorkSupervisorTime,
-                intermediateGoal: data.thesisWorkIntermediateGoal,
-                meetingAgreement: data.thesisWorkMeetingAgreement,
-                other: data.thesisWorkOther,
-                whoNext: receiver
-            };
-            const cleanAgreementData = removeUselessKeys(agreementData);
+        const receiver = await agreementService.getAgreementReceiver(agreementId);
+        const agreementData = {
+            agreementId,
+            authorId: data.personId,
+            thesisId: data.thesisId,
+            responsibleSupervisorId: data.responsibleSupervisorId,
+            programmeId: data.programmeId,
+            studentGradeGoal: data.studentGradeGoal,
+            studentWorkTime: data.thesisWorkStudentTime,
+            supervisorWorkTime: data.thesisWorkSupervisorTime,
+            intermediateGoal: data.thesisWorkIntermediateGoal,
+            meetingAgreement: data.thesisWorkMeetingAgreement,
+            other: data.thesisWorkOther,
+            whoNext: receiver
+        };
+        const cleanAgreementData = removeUselessKeys(agreementData);
 
-            await agreementService.updateAgreement(cleanAgreementData);
-            emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
-            notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
-            res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId });
-        } catch (err) {
-            logger.error('Update agreement failed', { error: err });
-            res.status(500).json({ text: 'error occurred', error: err });
-        }
+        await agreementService.updateAgreement(cleanAgreementData);
+        emailService.agreementUpdated(Object.assign(personData, thesisData, agreementData));
+        notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
+        res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId });
     } else {
         res.status(500).json({ text: 'problem with agreementId' });
     }
@@ -205,7 +190,7 @@ export async function updateAgreement(req, res) {
 function removeUselessKeys(messyData) {
     // removes keys that are undefined/null from data
     const cleanData = {};
-    Object.keys(messyData).map((key) => {
+    Object.keys(messyData).forEach((key) => {
         if (messyData[key] != null) {
             cleanData[key] = messyData[key];
         }
@@ -215,12 +200,7 @@ function removeUselessKeys(messyData) {
 
 export async function savePrevious(req, res) {
     const data = req.body;
-    try {
-        const daoResponse = await agreementService.savePrevious(data);
-        notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.programmeId);
-        res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
-    } catch (err) {
-        logger.error('Save previous failed', { error: err });
-        res.status(500).json({ text: 'error occurred', error: err });
-    }
+    const daoResponse = await agreementService.savePrevious(data);
+    notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.programmeId);
+    res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
 }
