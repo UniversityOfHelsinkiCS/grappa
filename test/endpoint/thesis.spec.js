@@ -27,25 +27,26 @@ test.before(async () => {
     await knex.seed.run();
 });
 
+const grader = {
+    address: 'Intiankatu',
+    email: 'thomas@tarkastaja.com',
+    firstname: 'Thomas',
+    isRetired: false,
+    lastname: 'CS-Tarkastaja',
+    major: 'mathematics',
+    personId: 5,
+    phone: '050 1234567',
+    shibbolethId: 'thomastarkastajashibboId',
+    studentNumber: '876548321',
+    title: ''
+};
 const thesisForm = {
     id: undefined,
     authorEmail: 'author@example.com',
     title: 'Annin Grady',
     urkund: 'https://example.com',
     grade: '4',
-    graders: [{
-        address: 'Intiankatu',
-        email: 'thomas@tarkastaja.com',
-        firstname: 'Thomas',
-        isRetired: false,
-        lastname: 'CS-Tarkastaja',
-        major: 'mathematics',
-        personId: 5,
-        phone: '050 1234567',
-        shibbolethId: 'thomastarkastajashibboId',
-        studentNumber: '876548321',
-        title: ''
-    }],
+    graders: [grader],
     studyfieldId: 2,
     councilmeetingId: 1,
     printDone: false,
@@ -230,4 +231,72 @@ test('invalid thesis is not accepted', async (t) => {
 
     t.is(theses.length, thesesAfter.length);
     t.is(agreements.length, agreementsAfter.length);
+});
+
+test('thesis is validated when updated', async (t) => {
+    const thesis = {
+        title: 'Annin Grady',
+        urkund: 'https://example.com',
+        grade: '4',
+        printDone: false
+    };
+    const thesisId = await knex('thesis')
+        .insert(thesis)
+        .returning('thesisId');
+
+    const update = {
+        thesisId: thesisId[0],
+        title: '',
+        urkund: '',
+        grade: '',
+        printDone: false
+    };
+
+    const res = await request(makeApp(1))
+        .put('/theses')
+        .send(update);
+
+    t.is(res.status, 500);
+});
+
+test('thesis can be updated', async (t) => {
+    t.plan(2);
+
+    const thesis = {
+        title: 'Annin Grady',
+        urkund: 'https://example.com',
+        grade: '4',
+        printDone: false
+    };
+
+    const thesisId = await knex('thesis')
+        .insert(thesis)
+        .returning('thesisId');
+
+    const agreementId = await knex('agreement')
+        .insert({ thesisId: thesisId[0], studyfieldId: 2 })
+        .returning('agreementId');
+
+    await knex('agreementPerson').insert({
+        agreementId: agreementId[0],
+        personRoleId: 1,
+        approverId: 2,
+        approved: true
+    });
+
+    const update = {
+        thesisId: thesisId[0],
+        title: 'New name',
+        graders: [grader]
+    };
+
+    const res = await request(makeApp(1))
+        .put('/theses')
+        .send(update);
+
+    t.is(res.status, 200);
+
+    const thesisFromDb = await knex('thesis').select().where('thesisId', thesisId[0]).first();
+
+    t.is(thesisFromDb.title, 'New name');
 });

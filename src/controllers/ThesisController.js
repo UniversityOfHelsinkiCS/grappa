@@ -12,11 +12,9 @@ const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
 
 const checkit = new Checkit({
-    authorEmail: ['required', 'email'],
     title: 'required',
     urkund: ['required', 'url'],
-    grade: 'required',
-    studyfieldId: 'required'
+    grade: 'required'
 });
 
 export async function getTheses(req, res) {
@@ -60,9 +58,11 @@ export async function getTheses(req, res) {
 
 async function validateThesis(thesis) {
     try {
+        checkit.maybe({ authorEmail: ['required', 'email'], studyfieldId: 'required' }, input => !input.thesisId);
+
         await checkit.run(thesis);
     } catch (error) {
-        throw new Error('Posted thesis data is not valid');
+        throw new Error(`Posted thesis data is not valid: ${Object.keys(error.errors)}`);
     }
 }
 
@@ -117,7 +117,8 @@ export async function updateThesis(req, res) {
     let thesis = await thesisService.getThesisById(updatedFields.thesisId);
 
     Object.keys(thesis).forEach((key) => {
-        thesis[key] = updatedFields[key];
+        if (updatedFields[key] !== undefined)
+            thesis[key] = updatedFields[key];
     });
 
     await validateThesis(thesis);
