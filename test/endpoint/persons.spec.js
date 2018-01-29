@@ -25,7 +25,7 @@ test.before(async () => {
     await knex.seed.run();
 })
 
-
+/*
 const personWithoutId = {
     shibbolethId: '123',
     email: 'testi@testaaja.com',
@@ -35,18 +35,7 @@ const personWithoutId = {
     studentNumber: '0123456790',
     phone: '050 1234567'
 }
-
-test('person post & creates id', async (t) => {
-    t.plan(3);
-    const res = await request(makeApp(1))
-        .post('/persons')
-        .send(personWithoutId);
-    t.is(res.status, 200);
-    const person = res.body;
-    t.truthy(person.personId > 0)
-    delete person.personId;
-    t.deepEqual(person, personWithoutId);
-});
+*/
 
 test('person get all for admin', async (t) => {
     t.plan(3);
