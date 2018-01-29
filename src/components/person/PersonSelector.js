@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, bool, func } from 'prop-types';
 import { personType } from '../../util/types';
 
 export default class PersonSelector extends Component {
@@ -20,32 +20,34 @@ export default class PersonSelector extends Component {
         window.removeEventListener('mousedown', this.unfocusMenu);
     }
 
-    personToText = person => `${person.firstname} ${person.lastname} ${person.email}`
+    personToText = person => `${person.firstname} ${person.lastname} ${person.email}`;
 
     removePerson = person => () => {
         const removed = this.props.selected.filter(prsn => prsn !== person);
         this.props.changeList(removed)
-    }
+    };
 
     addPerson = person => () => {
         const selected = [...this.props.selected, person];
         this.props.changeList(selected)
-    }
+    };
 
     toggleMenu = () => {
         this.setState({ menuActive: !this.state.menuActive });
-    }
+    };
 
     search = (event) => {
         const searchValue = event.target.value.toLowerCase();
         if (this.props.persons) {
-            const filtered = this.props.persons.filter(person => this.personToText(person).toLowerCase().includes(searchValue));
+            const getPersonName = person => this.personToText(person).toLowerCase();
+            const filtered = this.props.persons.filter(person => getPersonName(person).includes(searchValue));
+
             this.setState({
                 searchValue,
                 filtered
             });
         }
-    }
+    };
 
     handleKeyPress = (target) => {
         // charCode 13 is ENTER
@@ -55,21 +57,25 @@ export default class PersonSelector extends Component {
                 this.addPerson(person)();
             }
         }
-    }
+    };
 
     focusMenu = (event) => {
-        event.stopPropagation()
+        event.stopPropagation();
         this.setState({ menuActive: true });
-    }
+    };
 
     unfocusMenu = () => {
         if (this.state.menuActive) {
             this.setState({ menuActive: false });
         }
-    }
+    };
 
     isActivated(person) {
         return this.props.selected.includes(person);
+    }
+
+    shouldRenderPerson(person) {
+        return (!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person);
     }
 
     renderSelected() {
@@ -100,7 +106,7 @@ export default class PersonSelector extends Component {
         return (this.state.menuActive ?
             <div className="menu transition visible" tabIndex="-1">
                 {this.props.persons ? this.props.persons.map((person) => {
-                    if ((!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person)) {
+                    if (this.shouldRenderPerson(person)) {
                         return (
                             <div
                                 key={person.personId}
@@ -124,10 +130,13 @@ export default class PersonSelector extends Component {
     }
 
     render() {
+        const errorClass = this.props.validationError ? 'error' : '';
+        const className = `ui fluid multiple search selection dropdown empty visible ${errorClass}`;
+
         return (
             <div>
                 <div
-                    className="ui fluid multiple search selection dropdown empty visible"
+                    className={className}
                     onMouseDown={this.focusMenu}
                 >
                     {this.props.selected ? this.renderSelected() : undefined}
@@ -142,5 +151,6 @@ export default class PersonSelector extends Component {
 PersonSelector.propTypes = {
     persons: arrayOf(personType).isRequired,
     selected: arrayOf(personType).isRequired,
-    changeList: func.isRequired
+    changeList: func.isRequired,
+    validationError: bool.isRequired
 };

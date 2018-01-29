@@ -79,6 +79,7 @@ export class ThesisCreatePage extends Component {
                         persons={programmeGraders}
                         selected={this.state.thesis.graders}
                         changeList={list => this.handleChange('graders', list)}
+                        validationError={Object.keys(this.state.validationErrors).includes('graders')}
                     />
                 </label>
             </div>

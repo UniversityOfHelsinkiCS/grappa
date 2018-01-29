@@ -2,7 +2,7 @@ import React from 'react';
 import { arrayOf, func } from 'prop-types';
 import { personType } from '../../util/types';
 
-const PersonSwitcher = ({ persons, user, onChange }) => (
+const PersonSwitcher = ({ persons, onChange }) => (
     <div className="ui segment">
         <select id="roles" className="ui dropdown" onChange={onChange}>
             <option value="">Choose a role</option>
@@ -15,16 +15,11 @@ const PersonSwitcher = ({ persons, user, onChange }) => (
                 </option>
             ))}
         </select>
-        <p>Your roles are: {user.roles ?
-            user.roles.map(roleObject => `${roleObject.programme}: ${roleObject.role}`)
-            : 'No user in redux'}
-        </p>
     </div>
 );
 
 PersonSwitcher.propTypes = {
     persons: arrayOf(personType).isRequired,
-    user: personType.isRequired,
     onChange: func.isRequired
 };
 

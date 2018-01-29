@@ -20,7 +20,7 @@ import PersonRoleReviewPage from '../containers/person/PersonRoleReviewPage';
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
-    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis List' },
+    theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis list' },
     agreementPersonManagement: { path: '/agreementPersonManagement', component: PersonRoleReviewPage, navText: 'Grader accepting' },
     personRoleManagement: {
         path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management'
@@ -28,8 +28,8 @@ export const paths = {
     thesisView: { path: '/thesis/:id', component: ThesisEdit },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
-    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next councilmeeting' },
-    councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Councilmeetings' },
+    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next council meeting' },
+    councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Council meetings' },
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
     notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' },
@@ -38,13 +38,13 @@ export const paths = {
 
 export default () => (
     <Switch>
-        {Object.keys(paths).map(key =>
+        {Object.keys(paths).map(key => (
             <Route
                 key={key}
                 exact
                 path={paths[key].path}
                 component={paths[key].component}
             />
-        )}
+        ))}
     </Switch>
 )
