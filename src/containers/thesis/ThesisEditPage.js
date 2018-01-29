@@ -3,7 +3,6 @@ import { arrayOf, array, func } from 'prop-types';
 import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
-import { sendReminder } from '../email/emailActions';
 import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType } from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
@@ -207,9 +206,6 @@ const mapDispatchToProps = dispatch => ({
     },
     downloadAttachments(attachmentIds) {
         dispatch(downloadAttachments(attachmentIds));
-    },
-    sendReminder(thesisId, type) {
-        dispatch(sendReminder(thesisId, type));
     }
 });
 
@@ -240,7 +236,6 @@ ThesisEditPage.propTypes = {
     createAttachment: func.isRequired,
     deleteAttachment: func.isRequired,
     downloadAttachments: func.isRequired,
-    sendReminder: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage);
