@@ -111,6 +111,10 @@ export class ThesisEditPage extends Component {
         this.props.downloadAttachments([attachmentId])
     };
 
+    validateThesis(thesis = this.state.thesis) {
+        return thesisValidation.run(thesis);
+    }
+
     renderControlButtons() {
         // Admin controls
         if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
@@ -152,10 +156,6 @@ export class ThesisEditPage extends Component {
                 </label>
             </div>
         );
-    }
-
-    validateThesis(thesis = this.state.thesis) {
-        return thesisValidation.run(thesis);
     }
 
     render() {
