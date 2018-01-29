@@ -27,6 +27,7 @@ ReactDOM.render(
                     <EventMessageContainer />
                     {routes()}
                 </div>
+                <h4 style={{ marginBottom: '2%' }}>If you have trouble, contact grp-toska@helsinki.fi</h4>
             </div>
         </Router>
     </Provider>,

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { login } from './userActions';
 import { personType } from '../../util/types';
 import PersonSwitcher from '../../components/person/PersonSwitcher';
+import RoleExplain from '../../components/role/RoleExplain';
 
 export class UserPage extends Component {
     componentDidMount() {
@@ -36,10 +37,10 @@ export class UserPage extends Component {
                 {process.env.NODE_ENV !== 'production' ?
                     <PersonSwitcher
                         persons={this.props.persons}
-                        user={this.props.user}
                         onChange={this.handleRoleChange}
                     />
                     : null}
+                <RoleExplain user={this.props.user} />
             </div>
         );
     }
