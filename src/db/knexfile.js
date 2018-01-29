@@ -1,3 +1,9 @@
+const setTimezone = function(connection, callback) {
+    connection.query('SET timezone = "Europe/Helsinki";', (err) => {
+        callback(err, connection);
+    });
+}
+
 module.exports = {
     development: {
         client: 'pg',
@@ -11,11 +17,7 @@ module.exports = {
             directory: './src/db/seeds'
         },
         pool: {
-            afterCreate(connection, callback) {
-                connection.query('SET timezone = "Europe/Helsinki";', (err) => {
-                    callback(err, connection);
-                });
-            }
+            afterCreate: setTimezone
         }
     },
     test: {
@@ -30,11 +32,7 @@ module.exports = {
             directory: './src/db/seeds'
         },
         pool: {
-            afterCreate(connection, callback) {
-                connection.query('SET timezone = "Europe/Helsinki";', (err) => {
-                    callback(err, connection);
-                });
-            }
+            afterCreate: setTimezone
         }
     },
     production: {
