@@ -61,7 +61,8 @@ export const thesisValidationRules = {
     urkund: ['required', 'url'],
     grade: 'required',
     programmeId: 'required',
-    studyfieldId: 'required'
+    studyfieldId: 'required',
+    graders: ['minLength:2']
 };
 
 export const thesisValidation = new Checkit(thesisValidationRules);
