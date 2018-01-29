@@ -101,11 +101,7 @@ export const getPersonsAsAgreementPersonInStudyfield = programmeId => knex.selec
 export const getPersonByPersonRoleId = personRoleId => knex.select().from('person')
     .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
     .where('personRoleId', personRoleId)
-    .then(persons => persons[0])
-    .catch((error) => {
-        console.log(error);
-        throw error;
-    });
+    .then(persons => persons[0]);
 
 export const getAgreementPersonsByPersonRoleId = personRoleId => knex.select().from('agreementPerson')
     .where('personRoleId', personRoleId)

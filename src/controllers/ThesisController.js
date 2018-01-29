@@ -12,11 +12,9 @@ const emailService = require('../services/EmailService');
 const emailInviteService = require('../services/EmailInviteService');
 
 const checkit = new Checkit({
-    authorEmail: ['required', 'email'],
     title: 'required',
     urkund: ['required', 'url'],
-    grade: 'required',
-    studyfieldId: 'required'
+    grade: 'required'
 });
 
 export async function getTheses(req, res) {
@@ -58,13 +56,20 @@ export async function getTheses(req, res) {
     res.status(200).json(response).end();
 }
 
-export async function saveThesisForm(req, res) {
-    const thesis = JSON.parse(req.body.json);
+async function validateThesis(thesis) {
     try {
+        checkit.maybe({ authorEmail: ['required', 'email'], studyfieldId: 'required' }, input => !input.thesisId);
+
         await checkit.run(thesis);
     } catch (error) {
-        throw new Error('Posted thesis data is not valid');
+        throw new Error(`Posted thesis data is not valid: ${Object.keys(error.errors)}`);
     }
+}
+
+export async function saveThesisForm(req, res) {
+    const thesis = JSON.parse(req.body.json);
+
+    await validateThesis(thesis);
 
     // Order so that agreementId is available to save attachments.
     const agreement = await agreementService.createFakeAgreement();
@@ -110,15 +115,19 @@ export async function saveThesisForm(req, res) {
 export async function updateThesis(req, res) {
     const updatedFields = req.body;
     let thesis = await thesisService.getThesisById(updatedFields.thesisId);
+
     Object.keys(thesis).forEach((key) => {
-        thesis[key] = updatedFields[key];
+        if (updatedFields[key] !== undefined)
+            thesis[key] = updatedFields[key];
     });
+
+    await validateThesis(thesis);
+
     thesis = await thesisService.updateThesis(thesis);
 
-    const graders = updatedFields.graders;
     const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId);
     // TODO: support multiple agreements on one thesis
-    await updateGraders(graders, agreements[0]);
+    await updateGraders(updatedFields.graders, agreements[0]);
 
     const roles = await roleService.getRolesForAllPersons();
     const responseObject = { thesis, roles };

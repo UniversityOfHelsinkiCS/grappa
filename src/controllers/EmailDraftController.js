@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const emailDraftService = require('../services/EmailDraftService');
 const notificationService = require('../services/NotificationService');
 
@@ -13,7 +15,7 @@ export async function saveEmailDraft(req, res) {
         await notificationService.createNotification('EMAILDRAFT_SAVE_ONE', req);
         res.status(200).json(emailDraft).end();
     } catch (error) {
-        console.log(error);
+        logger.error('Email draft save failed', { error });
         res.status(500).end();
     }
 }
@@ -25,7 +27,7 @@ export async function updateEmailDraft(req, res) {
         await notificationService.createNotification('EMAILDRAFT_UPDATE_ONE', req);
         res.status(200).json(emailDraft).end();
     } catch (error) {
-        console.log(error);
+        logger.error('Email draft update failed', { error });
         res.status(500).end();
     }
 }
@@ -36,7 +38,7 @@ export async function deleteEmailDraft(req, res) {
         await notificationService.createNotification('EMAILDRAFT_DELETE_ONE', req);
         res.status(200).json(req.params.id).end();
     } catch (error) {
-        console.log(error);
+        logger.error('Email draft delete failed', { error });
         res.status(500).end();
     }
 }

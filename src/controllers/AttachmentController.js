@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const attachmentService = require('../services/AttachmentService');
 const agreementService = require('../services/AgreementService');
 const councilmeetingService = require('../services/CouncilmeetingService');
@@ -67,7 +69,7 @@ export async function downloadAttachments(req, res) {
         res.type('pdf');
         res.end(fileStream, 'binary');
     } catch (error) {
-        console.log('Virhe ', error);
+        logger.error('Download failed', { error });
         res.status(501).send({ text: 'NOT YET IMPLEMENTED' }).end();
     }
 }

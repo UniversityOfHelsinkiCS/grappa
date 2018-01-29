@@ -61,11 +61,7 @@ export const saveThesis = async (thesis) => {
 
 export const updateThesis = async (thesisData) => {
     return knex('thesis')
-        .where('thesisId', '=', thesisData.thesisId)
+        .where('thesisId', thesisData.thesisId)
         .update(thesisData)
-        .then(() => {
-            return getThesisById(thesisData.thesisId);
-        }).catch(error => {
-            throw error;
-        });
+        .then(() => getThesisById(thesisData.thesisId));
 };

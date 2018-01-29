@@ -1,14 +1,9 @@
+import logger from '../util/logger';
+
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const notificationService = require('../services/NotificationService');
 const emailInviteService = require('../services/EmailInviteService');
-
-export async function addPerson(req, res) {
-    const personData = getPersonData(req.body);
-    const saveData = removeEmptyKeys(personData);
-    const savedPerson = await personService.savePerson(saveData);
-    res.status(200).json(savedPerson).end();
-}
 
 export async function updatePerson(req, res) {
     const data = req.body;
@@ -113,7 +108,7 @@ export async function getPersons(req, res) {
         };
         return res.status(200).json(responseObject);
     } catch (error) {
-        console.log(error);
+        logger.error('Get person failed', error);
         return res.status(500).json(error);
     }
 }
@@ -122,7 +117,7 @@ async function userNotFound(res) {
     if (process.env.NODE_ENV !== 'development') {
         return res.status(200).json({}).end();
     }
-    console.log('It indeed is a developer.');
+    logger.debug('It indeed is a developer.');
     const persons = await personService.getAllPersons();
     const roles = await roleService.getRolesForAllPersons();
     const responseObject = {

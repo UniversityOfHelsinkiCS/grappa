@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
 const programmeService = require('../services/ProgrammeService');
@@ -5,8 +7,8 @@ const programmeService = require('../services/ProgrammeService');
 export async function logout(req, res) {
     const logoutUrl = req.headers.shib_logout_url;
 
-    req.session.destroy((err) => {
-        if (err) console.log(err);
+    req.session.destroy((error) => {
+        if (error) logger.error('Logout error', { error });
     });
 
     res.status(200).send({ logoutUrl }).end();
@@ -33,7 +35,7 @@ export async function showUser(req, res) {
 // Used without shibboleth
 export async function fakeLogin(req, res) {
     const shibbolethId = req.params.id;
-    console.log(`Faking login with ${shibbolethId}`);
+    logger.debug(`Faking login with ${shibbolethId}`);
     try {
         let user = await personService.getPersonByShibbolethId(shibbolethId);
 
