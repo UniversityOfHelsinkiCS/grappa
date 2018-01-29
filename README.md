@@ -30,3 +30,71 @@ DATABASE_URL=postgres://postgres:password@localhost:5433/grappa
 ```
 
 Test are run using grappa_test schema. Development app is run with public schema.
+
+## Endpoints in use
+
+### GET
+
+| ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS                |
+|----------------------|-------|------|------|-------|------------------------|
+| /                    |       | X    |      |       | Hello world            |
+| /user/login          | X     | X    | X    |       |                        |
+| /user/logout         | X     | X    |      |       |                        |
+| /user/:id            | X     | X    | -    |       | Not used in production |
+| /agreements          | X     |      |      |       |                        |
+| /agreements/:id      | X     |      |      |       |                        |
+| /attachments/:string | X     | X    | X    |       |                        |
+| /councilmeetings     | X     | X    | X    |       |                        |
+| /emailDrafts         | X     | X    | X    |       |                        |
+| /invite/:type/:token | X     | X    | X    |       |                        |
+| /notifications       | X     | X    | X    |       |                        |
+| /persons             | X     | X    | X    |       |                        |
+| /programmes          | X     | X    | X    |       |                        |
+| /roles/available     | X     | X    | X    |       | All possible roles     |
+| /roles               | X     | X    | X    |       | personWithRole objects |
+| /studyfields         | X     | X    | X    |       |                        |
+| /theses              | X     | X    | X    |       |                        |
+| /theses/:id          | X     |      |      |       |                        |
+
+### POST
+
+| ACCESS            | FRONT | BACK | PROD | TESTS | DETAILS |
+|-------------------|-------|------|------|-------|---------|
+| /agreements       | X     | X    |      |       |         |
+| /agreement-drafts | X     |      |      |       |         |
+| /attachments      | X     | X    | X    |       |         |
+| /councilmeetings  | X     | X    | X    |       |         |
+| /emailDrafts      | X     | X    |      |       |         |
+| /emailDrafts/:id  | X     |      |      |       |         |
+| /persons/invite   | X     | X    | X    |       |         |
+| /programmes       | X     |      |      |       |         |
+| /roles            | X     | X    | X    |       |         |
+| /studyfields      | X     |      |      |       |         |
+| /theses           | X     | X    | X    |       |         |
+
+### DELETE
+
+| ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS |
+|----------------------|-------|------|------|-------|---------|
+| /agreements/:id      | X     | X    |      |       |         |
+| /attachments/:id     | X     | X    |      |       |         |
+| /councilmeetings/:id | X     | X    | X    |       |         |
+| /emailDrafts/:id     | X     | X    |      |       |         |
+| /programmes/:id      | X     |      |      |       |         |
+| /roles/:id           | X     | X    | X    |       |         |
+| /studyfields/:id     | X     |      |      |       |         |
+| /theses/:id          | X     |      |      |       |         |
+
+
+### PUT
+
+| ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS          |
+|----------------------|-------|------|------|-------|------------------|
+| /agreements/:id      | X     | X    |      |       |                  |
+| /councilmeetings/:id | X     | X    | X    |       |                  |
+| /emailDrafts/:id     | X     | X    |      |       |                  |
+| /programmes          | X     |      |      |       |                  |
+| /roles               | X     | X    | X    |       | update statement |
+| /roles/visitor       | X     |      |      |       |                  |
+| /studyfields         | X     |      |      |       |                  |
+| /theses              | X     | X    |      |       |                  |
