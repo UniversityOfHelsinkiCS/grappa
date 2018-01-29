@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const agreementService = require('../services/AgreementService');
 const attachmentService = require('../services/AttachmentService');
 const personService = require('../services/PersonService');
@@ -70,7 +72,7 @@ export async function getAllAgreements(req, res) {
         };
         res.status(200).json(responseObject);
     } catch (error) {
-        console.log(error.stack);
+        logger.error('Get agreements failed', { error });
         res.status(500).json(error);
     }
 }
@@ -101,15 +103,14 @@ export async function saveAgreement(req, res) {
     const data = req.body;
     const user = await personService.getLoggedPerson(req);
     const personId = user.personId;
-    // console.log('Saving agreement');
     if (!personId) res.status(500).json({ text: 'No user_id in session' });
     if (!data.agreementId) {
         try {
-            console.log('Before await');
             const newAgreement = await agreementService.saveAgreement(data);
             notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, data.programmeId);
             return res.status(200).json(newAgreement);
         } catch (err) {
+            logger.error('Save agreement failed', { error: err });
             return res.status(500).json(err);
         }
     }
@@ -137,7 +138,7 @@ export async function saveAgreementForm(req, res) {
         notificationService.createNotification('AGREEMENT_SAVE_ONE_SUCCESS', req, agreementData.programmeId);
         res.status(200).json(agreementData);
     } catch (error) {
-        console.log(error);
+        logger.error('Save agreement form failed', { error });
         res.status(500).json({ text: 'Error occured', error });
     }
 }
@@ -193,6 +194,7 @@ export async function updateAgreement(req, res) {
             notificationService.createNotification('AGREEMENT_UPDATE_ONE_SUCCESS', req, agreementData.programmeId);
             res.status(200).json({ text: 'agreement update successfull(/SQL error)', agreementId });
         } catch (err) {
+            logger.error('Update agreement failed', { error: err });
             res.status(500).json({ text: 'error occurred', error: err });
         }
     } else {
@@ -218,6 +220,7 @@ export async function savePrevious(req, res) {
         notificationService.createNotification('AGREEMENT_SAVE_PERVIOUS_SUCCESS', req, data.programmeId);
         res.status(200).json({ text: 'agreement linked to previous agreement successfully', agreementId: daoResponse });
     } catch (err) {
+        logger.error('Save previous failed', { error: err });
         res.status(500).json({ text: 'error occurred', error: err });
     }
 }

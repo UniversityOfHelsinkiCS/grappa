@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const knex = require('../db/connection');
 const pdfManipulator = require('../util/pdfManipulator');
 const multer = require('multer');
@@ -29,7 +31,7 @@ const attachmentSchema = [
 ];
 
 export async function saveAttachments(req, res, agreementId) {
-    console.log('Saving to disk');
+    logger.debug('Saving to disk');
     // TODO: Transaction
 
     try {
@@ -38,7 +40,7 @@ export async function saveAttachments(req, res, agreementId) {
                 if (error) {
                     reject(error);
                 }
-                console.log('Attachments saved to disk');
+                logger.info('Attachments saved to disk');
                 resolve(req);
             });
         });
@@ -52,9 +54,9 @@ export async function saveAttachments(req, res, agreementId) {
 
         const attachments = [].concat.apply([], await Promise.all(Object.keys(request.files).map(key => saveFileArray(id, request.files[key]))));
 
-        return { attachments: attachments, json: JSON.parse(request.body.json) };
+        return { attachments, json: JSON.parse(request.body.json) };
     } catch (error) {
-        console.log('Error during attachment save ', error);
+        logger.error('Error during attachment save ', error);
         return Promise.reject(error);
     }
 }
