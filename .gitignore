@@ -24,8 +24,5 @@ yarn-error.log*
 coverage
 .nyc_output
 
-# ignore packa-lock.json for now
-package-lock.json
-
 *.iml
 .idea
