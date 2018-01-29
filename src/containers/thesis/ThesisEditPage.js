@@ -11,7 +11,7 @@ import AttachmentAdder from '../../components/attachment/AttachmentAdder';
 import AttachmentList from '../../components/attachment/AttachmentList';
 import PersonSelector from '../../components/person/PersonSelector';
 import ThesisCouncilmeetingPicker from '../../components/thesis/ThesisCouncilmeetingPicker';
-import { emptyThesisData, formatThesis } from '../../util/theses';
+import { emptyThesisData, formatThesis, thesisValidation } from '../../util/theses';
 
 export class ThesisEditPage extends Component {
     /**
@@ -67,7 +67,7 @@ export class ThesisEditPage extends Component {
 
     handleSaveThesis = () => {
         const thesis = Object.assign({}, this.state.thesis);
-        delete thesis.programmeId
+        delete thesis.programmeId;
         this.props.updateThesis(thesis);
     };
 
@@ -80,10 +80,13 @@ export class ThesisEditPage extends Component {
     };
 
     handleChange = (fieldName, fieldValue) => {
-        console.log(`thesis.${fieldName} = ${fieldValue}`);
         const thesis = Object.assign({}, this.state.thesis);
         thesis[fieldName] = fieldValue;
         this.setState({ thesis });
+
+        this.validateThesis(thesis)
+            .then(() => this.setState({ thesis, validationErrors: {} }))
+            .catch(res => this.setState({ thesis, validationErrors: res.errors }));
     };
 
     editAttachmentList = (attachments) => {
@@ -133,7 +136,7 @@ export class ThesisEditPage extends Component {
             this.props.roles.find(role =>
                 role.name === 'grader'
                 && role.personId === person.personId
-                && role.programmeId === parseInt(this.state.thesis.programmeId)
+                && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
         );
         return (
@@ -144,10 +147,15 @@ export class ThesisEditPage extends Component {
                         persons={programmeGraders}
                         selected={this.state.thesis.graders}
                         changeList={list => this.handleChange('graders', list)}
+                        validationError={Object.keys(this.state.validationErrors).includes('graders')}
                     />
                 </label>
             </div>
         );
+    }
+
+    validateThesis(thesis = this.state.thesis) {
+        return thesisValidation.run(thesis);
     }
 
     render() {
