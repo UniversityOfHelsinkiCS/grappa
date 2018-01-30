@@ -7,15 +7,17 @@ const studyfields = require('./routes/studyfields');
 const persons = require('./routes/persons');
 const attachments = require('./routes/attachments');
 const shibboleth = require('./routes/shibboleth');
-const councilmeeting = require('./routes/councilmeeting');
+const councilMeeting = require('./routes/councilmeeting');
 const notifications = require('./routes/notifications');
 const emailDrafts = require('./routes/emailDrafts');
 const invite = require('./routes/invite');
 
 const auth = require('./middleware/auth');
+const auditLogger = require('./middleware/auditLogger');
 
 module.exports = (app) => {
-    app.use(auth.shibRegister)
+    app.use(auth.shibRegister);
+    app.use(auditLogger);
     app.use('/', index);
     app.use('/user', shibboleth);
     app.use('/persons', persons);
@@ -25,9 +27,9 @@ module.exports = (app) => {
     app.use('/theses', theses);
     app.use('/roles', roles);
     app.use('/programmes', programmes);
-    app.use('/studyfields', studyfields)
+    app.use('/studyfields', studyfields);
     app.use('/attachments', attachments);
-    app.use('/councilmeetings', councilmeeting);
+    app.use('/councilmeetings', councilMeeting);
     app.use('/emailDrafts', emailDrafts);
     app.use(auth.checkAdmin);
     app.use('/notifications', notifications);

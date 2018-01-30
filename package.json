@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test nyc ava -s -t",
     "start": "NODE_ENV=development nodemon index.js",
     "start:win": "nodemon index.js",
-    "start:prod": "NODE_ENV=production node index.js",
+    "start:prod": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest; NODE_ENV=production node index.js",
     "db:migrate": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest",
     "db:seedprod": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run --env production",
     "db:seed": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
