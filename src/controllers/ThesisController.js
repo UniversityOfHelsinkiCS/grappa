@@ -174,27 +174,40 @@ async function checkUserHasRightToModifyThesis(req, agreements) {
     const user = await personService.getLoggedPerson(req);
     const roles = await roleService.getUsersRoles(user);
 
-    if (roles.find(item => item.role.name === 'admin')) {
+    if (isAdmin(roles)) {
         return;
     }
 
+    if (await hasStudyfieldRole(roles, agreements)) {
+        return;
+    }
+
+    if (await isAgreementPersonForThesis(user, agreements)) {
+        return;
+    }
+
+    throw new Error('User has no access to edit thesis');
+}
+
+function isAdmin(roles) {
+    return !!roles.find(item => item.role.name === 'admin');
+}
+
+async function hasStudyfieldRole(roles, agreements) {
+    const studyfieldRoles = ['manager', 'resp_professor'];
     const thesisProgramme = await programmeService.getStudyfieldsProgramme(agreements[0].studyfieldId);
     const studyfieldRole = roles
         .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
-        .find(item => item.role === 'manager' || item.role === 'resp_professor');
+        .find(item => studyfieldRoles.includes(item.role.name));
 
-    if (studyfieldRole) {
-        return;
-    }
+    return !!studyfieldRole;
+}
 
+async function isAgreementPersonForThesis(user, agreements) {
     const agreementPersons = await Promise.map(
         agreements,
         agreement => roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
     ).reduce((prev, cur) => prev.concat(cur), []);
 
-    if (agreementPersons.find(person => person.personId === user.personId)) {
-        return;
-    }
-
-    throw new Error('User has no access to edit thesis');
+    return !!agreementPersons.find(person => person.personId === user.personId);
 }
