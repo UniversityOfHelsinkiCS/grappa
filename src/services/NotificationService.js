@@ -11,7 +11,9 @@ const notificationSchema = [
 ];
 
 export function getAllNotifications() {
-    return knex.select(notificationSchema).from('notification');
+    return knex.select(notificationSchema)
+        .from('notification')
+        .orderBy('timestamp', 'desc');
 }
 
 export async function createNotification(type, req, programmeId) {

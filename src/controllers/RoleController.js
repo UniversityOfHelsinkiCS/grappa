@@ -1,72 +1,56 @@
-import logger from '../util/logger';
-
 const roleService = require('../services/RoleService');
 const personService = require('../services/PersonService');
 
 export async function getAvailableRoles(req, res) {
-    try {
-        const roles = await roleService.getRoles();
-        res.status(200).json(roles);
-    } catch (error) {
-        logger.error('Get roles failed', { error: error.message, stack: error.stack });
-        res.status(500).end();
-    }
+    const roles = await roleService.getAvailableRoles();
+    res.status(200).json(roles);
 }
 
 export async function saveRole(req, res) {
-    try {
-        let personWithRole = {
-            roleId: req.body.roleId,
-            personId: req.body.personId,
-            programmeId: req.body.programmeId
-        };
-        personWithRole = await roleService.savePersonRole(personWithRole);
-        const roles = await roleService.getRolesForPersonWithRole(personWithRole.personRoleId)
-        const role = roles[0];
-        res.status(200).json(role).end();
-    } catch (error) {
-        logger.error('Save role failed', { error });
-        res.status(500).end();
+    if (req.body.roleId === 1) {
+        throw new Error('Admin role creation is not allowed.');
     }
+
+    const userRoles = await roleService.getUsersRoles(await personService.getLoggedPerson(req));
+
+    if (!userRoles.find(item => item.role.name === 'admin' || item.role.name === 'manager')) {
+        throw new Error('User has no access to edit roles');
+    }
+
+    let personWithRole = {
+        roleId: req.body.roleId,
+        personId: req.body.personId,
+        programmeId: req.body.programmeId
+    };
+    personWithRole = await roleService.savePersonRole(personWithRole);
+    const roles = await roleService.getRolesForPersonWithRole(personWithRole.personRoleId);
+    const role = roles[0];
+    res.status(200).json(role).end();
 }
 
 export async function deleteRole(req, res) {
-    try {
-        let personRoleId = req.params.id;
-        personRoleId = await roleService.deletePersonRole(personRoleId);
-        res.status(200).json(personRoleId).end();
-    } catch (error) {
-        res.status(500).end();
-    }
+    let personRoleId = req.params.id;
+    personRoleId = await roleService.deletePersonRole(personRoleId);
+    res.status(200).json(personRoleId).end();
 }
 
 export async function updateStatement(req, res) {
-    try {
-        const person = await personService.getLoggedPerson(req);
-        const agreementPerson = {
-            statement: req.body.statement,
-            approved: req.body.approved,
-            approverId: person.personId,
-            approvalDate: new Date(),
-        }
-        await roleService.updateAgreementPerson(req.body.agreementId, req.body.personRoleId, agreementPerson);
-        const updatedRole = await roleService.getRoleWithAgreementIdAndPersonRole(req.body.agreementId, req.body.personRoleId);
-        res.status(200).json(updatedRole).end();
-    } catch (error) {
-        logger.error('Update statement failed', { error });
-        res.status(500).end();
-    }
+    const person = await personService.getLoggedPerson(req);
+    const { agreementId, personRoleId } = req.body;
+    const agreementPerson = {
+        statement: req.body.statement,
+        approved: req.body.approved,
+        approverId: person.personId,
+        approvalDate: new Date()
+    };
+
+    await roleService.updateAgreementPerson(agreementId, personRoleId, agreementPerson);
+    const updatedRole = await roleService.getRoleWithAgreementIdAndPersonRole(agreementId, personRoleId);
+    res.status(200).json(updatedRole).end();
 }
 
 export async function updateVisitorRoles(req, res) {
-    const programmeIds = req.body.programmeIds;
     const person = await personService.getLoggedPerson(req);
-
-    try {
-        await roleService.updateVisitorRoleStudyfields(person.personId, programmeIds);
-        res.status(200).end();
-    } catch (error) {
-        logger.error('Update visitor role failed', { error });
-        res.status(500).end();
-    }
+    await roleService.updateVisitorRoleStudyfields(person.personId, req.body.programmeIds);
+    res.status(200).end();
 }

@@ -1,3 +1,5 @@
+import logger from '../util/logger';
+
 const mailer = require('../util/mailer');
 
 const emailDraftService = require('../services/EmailDraftService');
@@ -21,7 +23,7 @@ async function sendMail(type, email, programmeId) {
     try {
         await mailer.sendEmail(email, emailDraft.title, emailDraft.body);
     } catch (error) {
-        console.error('Email send error', error);
+        logger.error('Email send error', { error: error.message });
     }
 }
 
@@ -33,6 +35,6 @@ export async function sendInvite(emailInvite, type, programmeId) {
     try {
         await mailer.sendEmail(emailInvite.email, draft.title, body);
     } catch (error) {
-        console.error('Email send error', error);
+        logger.error('Email send error', { error: error.message });
     }
 }

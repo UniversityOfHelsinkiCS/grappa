@@ -1,4 +1,5 @@
 const knex = require('../db/connection');
+const moment = require('moment');
 
 const thesisSchema = [
     'thesis.thesisId',
@@ -10,8 +11,12 @@ const thesisSchema = [
 ];
 
 // In case we need all theses
+// Restricted to show only last 10 years thesis
 export function getAllTheses() {
-    return knex.select(thesisSchema).from('thesis');
+    return knex.select(thesisSchema)
+        .innerJoin('agreement', 'thesis.thesisId', 'agreement.thesisId')
+        .where('agreement.startDate', '>', moment().subtract(10, 'years'))
+        .from('thesis');
 }
 
 // In cases we need theses for a person (student)
@@ -23,18 +28,13 @@ export function getThesesByPersonId(personId) {
         .where('agreement.authorId', personId);
 }
 
-export function getThesesInStudyfield(studyfieldId) {
-    return knex.select(thesisSchema).from('thesis')
-        .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
-        .where('agreement.studyfieldId', studyfieldId);
-}
-
 // In cases we need theses for a programme (resp_prof)
 export function getThesesInProgramme(programmeId) {
     return knex.select(thesisSchema).from('thesis')
         .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
         .innerJoin('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
-        .where('studyfield.programmeId', programmeId);
+        .where('studyfield.programmeId', programmeId)
+        .where('agreement.startDate', '>', moment().subtract(10, 'years'));
 }
 
 // In cases we need theses for a supervisor/grader
@@ -46,10 +46,8 @@ export function getThesesByAgreementPerson(personId) {
         .innerJoin('thesis', 'thesis.thesisId', '=', 'agreement.thesisId');
 }
 
-export const getThesisById = (thesisId) => {
-    return knex.select(thesisSchema).from('thesis')
-        .where('thesisId', thesisId).first();
-};
+export const getThesisById = thesisId => knex.select(thesisSchema).from('thesis')
+    .where('thesisId', thesisId).first();
 
 export const saveThesis = async (thesis) => {
     const thesisIds = await knex('thesis')
@@ -59,9 +57,7 @@ export const saveThesis = async (thesis) => {
     return knex.select(thesisSchema).from('thesis').where('thesisId', thesisId).first();
 };
 
-export const updateThesis = async (thesisData) => {
-    return knex('thesis')
-        .where('thesisId', thesisData.thesisId)
-        .update(thesisData)
-        .then(() => getThesisById(thesisData.thesisId));
-};
+export const updateThesis = async thesisData => knex('thesis')
+    .where('thesisId', thesisData.thesisId)
+    .update(thesisData)
+    .then(() => getThesisById(thesisData.thesisId));

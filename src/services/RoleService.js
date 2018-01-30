@@ -7,6 +7,10 @@ export async function getRoles() {
     return knex.select().from('role');
 }
 
+export async function getAvailableRoles() {
+    return knex.select().from('role').whereNot('roleId', 1);
+}
+
 export async function getRoleId(roleName) {
     const role = await knex.select().from('role').where('name', roleName).first();
     return role.roleId;
