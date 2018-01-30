@@ -1,6 +1,6 @@
 exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    await knex('agreementDraft').del()
+    await knex('agreementDraft').del();
     // Inserts seed entries
     return knex('agreementDraft').insert([
         {
@@ -14,8 +14,8 @@ exports.seed = async (knex) => {
             studentPhone: '050 1234567',
             studentMajor: 'Kemia',
             thesisTitle: 'Life on Mars?',
-            thesisStartDate: '6.5.2005',
-            thesisCompletionEta: '1.2.2006',
+            thesisStartDate: '6.5.2018',
+            thesisCompletionEta: '1.2.2019',
             thesisPerformancePlace: 'paikka',
             studentGradeGoal: 5,
             studentTime: '1h viikossa',
@@ -35,8 +35,8 @@ exports.seed = async (knex) => {
             studentPhone: '050 1234567',
             studentMajor: 'Fysiikka',
             thesisTitle: 'Bing thesis',
-            thesisStartDate: '6.5.2005',
-            thesisCompletionEta: '1.2.2006',
+            thesisStartDate: '6.5.2018',
+            thesisCompletionEta: '1.2.2019',
             thesisPerformancePlace: 'paikka',
             studentGradeGoal: 5,
             studentTime: '1h viikossa',

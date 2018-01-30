@@ -6,8 +6,8 @@ module.exports = [
         responsibleSupervisorId: 1,
         studyfieldId: 1,
         fake: false,
-        startDate: '6.5.2005',
-        completionEta: '1.2.2006',
+        startDate: '6.5.2018',
+        completionEta: '1.2.2019',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
         studentWorkTime: '1h viikossa',
@@ -23,8 +23,8 @@ module.exports = [
         responsibleSupervisorId: 2,
         studyfieldId: 2,
         fake: false,
-        startDate: '6.5.2005',
-        completionEta: '1.2.2006',
+        startDate: '6.5.2018',
+        completionEta: '1.2.2019',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
         studentWorkTime: '200h viikossa',
@@ -40,8 +40,8 @@ module.exports = [
         responsibleSupervisorId: 1,
         studyfieldId: 1,
         fake: true,
-        startDate: '6.5.2005',
-        completionEta: '1.2.2006',
+        startDate: '6.5.2018',
+        completionEta: '1.2.2019',
         performancePlace: 'Hima',
         studentGradeGoal: 5,
         studentWorkTime: '5h viikossa',
@@ -50,4 +50,4 @@ module.exports = [
         meetingAgreement: 'joka toinen päivä',
         other: 'eee'
     }
-]
+];

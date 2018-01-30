@@ -40,7 +40,9 @@ export const getAgreementsInProgramme = programmeId => knex.select()
     .innerJoin('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
     .where('studyfield.programmeId', programmeId);
 
-export const getAgreementsByAgreementPerson = personId => knex.select(agreementSchema).distinct('agreement.agreementId').from('agreement')
+export const getAgreementsByAgreementPerson = personId => knex
+    .select(agreementSchema).distinct('agreement.agreementId')
+    .from('agreement')
     .innerJoin('agreementPerson', 'agreement.agreementId', '=', 'agreementPerson.agreementId')
     .innerJoin('personWithRole', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
     .where('personWithRole.personId', personId);
@@ -75,7 +77,7 @@ export const createFakeAgreement = () => {
         responsibleSupervisorId: null,
         studyfieldId: null,
         fake: true,
-        startDate: null,
+        // startDate: null,
         completionEta: null,
         performancePlace: null,
         studentGradeGoal: null,
@@ -94,7 +96,7 @@ export const updateAgreement = agreement => knex('agreement')
     .returning('agreementId')
     .where('agreementId', '=', agreement.agreementId)
     .update(agreement)
-    .then(agreementId =>
+    .then(() =>
         knex.select(agreementSchema).from('agreement')
             .where('agreementId', '=', agreement.agreementId)
             .first()
@@ -116,37 +118,34 @@ export function linkAuthorToAgreement(agreementId, authorId) {
 }
 
 // change data formatting from DB to front
-const parseAgreementData = (data) => {
-    const parsed = {
-        // person
-        personId: data.personId,
-        studentFirstName: data.firstname,
-        studentLastName: data.lastname,
-        studentNumber: data.studentNumber,
-        studentAddress: data.address,
-        studentPhone: data.phone,
-        studentEmail: data.email,
-        studentMajor: data.major,
-        // thesis
-        thesisTitle: data.thesisTitle,
-        thesisStartDate: data.startDate,
-        thesisCompletionEta: data.completionEta,
-        thesisPerformancePlace: data.performancePlace,
-        // agreement
-        agreementId: data.agreementId,
-        authorId: data.personId,
-        thesisId: data.thesisId,
-        responsibleSupervisorId: data.responsibleSupervisorId,
-        studyfieldId: data.studyfieldId,
-        studentGradeGoal: data.studentGradeGoal,
-        thesisWorkStudentTime: data.studentWorkTime,
-        thesisWorkSupervisorTime: data.supervisorWorkTime,
-        thesisWorkIntermediateGoal: data.intermediateGoal,
-        thesisWorkMeetingAgreement: data.meetingAgreement,
-        thesisWorkOther: data.other
-    };
-    return parsed;
-};
+const parseAgreementData = data => ({
+    // person
+    personId: data.personId,
+    studentFirstName: data.firstname,
+    studentLastName: data.lastname,
+    studentNumber: data.studentNumber,
+    studentAddress: data.address,
+    studentPhone: data.phone,
+    studentEmail: data.email,
+    studentMajor: data.major,
+    // thesis
+    thesisTitle: data.thesisTitle,
+    thesisStartDate: data.startDate,
+    thesisCompletionEta: data.completionEta,
+    thesisPerformancePlace: data.performancePlace,
+    // agreement
+    agreementId: data.agreementId,
+    authorId: data.personId,
+    thesisId: data.thesisId,
+    responsibleSupervisorId: data.responsibleSupervisorId,
+    studyfieldId: data.studyfieldId,
+    studentGradeGoal: data.studentGradeGoal,
+    thesisWorkStudentTime: data.studentWorkTime,
+    thesisWorkSupervisorTime: data.supervisorWorkTime,
+    thesisWorkIntermediateGoal: data.intermediateGoal,
+    thesisWorkMeetingAgreement: data.meetingAgreement,
+    thesisWorkOther: data.other
+});
 
 /*
 Figures out who should next receive the agreement for approval,
@@ -167,7 +166,7 @@ export const getAgreementReceiver = (id) => {
             }
             return 'supervisor';
         });
-}
+};
 
 
 export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
@@ -182,7 +181,7 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         'graderReviewer.lastname as reviewerLastname',
         'author.firstname as authorFirstname',
         'author.lastname as authorLastname'
-    ]
+    ];
 
     return knex.select(informationSchema).from('agreement')
         .whereIn('agreement.agreementId', agreementIds)
@@ -195,4 +194,4 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
         .innerJoin('personWithRole as graderReviewerRole', 'agreementPerson.approverId', '=', 'graderReviewerRole.personRoleId')
         .innerJoin('person as graderReviewer', 'graderReviewerRole.personId', '=', 'graderReviewer.personId')
-}
+};
