@@ -2,11 +2,21 @@ const roleService = require('../services/RoleService');
 const personService = require('../services/PersonService');
 
 export async function getAvailableRoles(req, res) {
-    const roles = await roleService.getRoles();
+    const roles = await roleService.getAvailableRoles();
     res.status(200).json(roles);
 }
 
 export async function saveRole(req, res) {
+    if (req.body.roleId === 1) {
+        throw new Error('Admin role creation is not allowed.');
+    }
+
+    const userRoles = await roleService.getUsersRoles(await personService.getLoggedPerson(req));
+
+    if (!userRoles.find(item => item.role.name === 'admin' || item.role.name === 'manager')) {
+        throw new Error('User has no access to edit roles');
+    }
+
     let personWithRole = {
         roleId: req.body.roleId,
         personId: req.body.personId,

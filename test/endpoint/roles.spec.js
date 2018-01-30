@@ -3,7 +3,7 @@ import { createPerson, deleteFromDb } from '../utils';
 
 const request = require('supertest');
 const express = require('express');
-const roles = require('../../src/routes/roles');
+const rolesRoute = require('../../src/routes/roles');
 const knex = require('../../src/db/connection');
 
 const makeApp = (userId) => {
@@ -12,12 +12,12 @@ const makeApp = (userId) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, roles);
+    }, rolesRoute);
 
     return app;
 };
 
-test.before(async (t) => {
+test.before(async () => {
     await knex.migrate.latest();
     await deleteFromDb();
     await knex.seed.run();
@@ -93,14 +93,28 @@ test('delete role', async (t) => {
 test('get available roles', async (t) => {
     const res = await request(makeApp()).get('/roles/available');
     t.is(res.status, 200);
-    t.is(res.body.length, 7);
+    t.is(res.body.length, 6);
 });
 
 test('save role test', async (t) => {
     const personId = await createPerson();
-    const res = await request(makeApp(personId))
+    const res = await request(makeApp(1))
+        .post('/roles')
+        .send({ roleId: 2, personId, programmeId: 1 });
+
+    t.is(res.status, 200);
+});
+
+test('save role test fail', async (t) => {
+    const personId = await createPerson();
+    const res = await request(makeApp(1))
         .post('/roles')
         .send({ roleId: 1, personId, programmeId: 1 });
 
-    t.is(res.status, 200);
+    const res2 = await request(makeApp(personId))
+        .post('/roles')
+        .send({ roleId: 5, personId, programmeId: 1 });
+
+    t.is(res.status, 500);
+    t.is(res2.status, 500);
 });
