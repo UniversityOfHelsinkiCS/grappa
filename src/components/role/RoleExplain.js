@@ -40,7 +40,7 @@ export const RoleExplain = ({ user }) => {
                 <h3>Welcome to Grappa, if you have theses you should find them on page Thesis List</h3>}
             {user.roles.map((role) => {
                 return (
-                    <div style={{ margin: '1%' }}>
+                    <div key={role.programmeId + parseInt(role.role, 10)} style={{ margin: '1%' }}>
                         <h3>
                             {role.role.charAt(0).toUpperCase() + role.role.slice(1)} in {role.programme}
                         </h3>

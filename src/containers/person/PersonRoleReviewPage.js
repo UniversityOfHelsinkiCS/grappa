@@ -115,11 +115,11 @@ export class PersonRoleReviewPage extends Component {
                 </thead>
                 <tbody>
                     {this.state.agreementPersons.map(rolePerson => (
-                        <tr key={parseInt(`${rolePerson.personRoleId}${rolePerson.thesis.thesisId}`, 10)}>
+                        <tr key={parseInt(`${rolePerson.personRoleId}${rolePerson.thesis ? rolePerson.thesis.thesisId : rolePerson.thesis}`, 10)}>
                             <td>{rolePerson.name}</td>
                             <td>{rolePerson.programme}</td>
                             <td>{rolePerson.role}</td>
-                            <td>{rolePerson.thesis.title}</td>
+                            <td>{rolePerson.thesis ? rolePerson.thesis.title : rolePerson.thesis}</td>
                             <td>{this.renderReviewButton(rolePerson)}</td>
                         </tr>
                     ))}
