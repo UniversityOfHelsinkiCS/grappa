@@ -259,9 +259,7 @@ test('thesis is validated when updated', async (t) => {
     t.is(res.status, 500);
 });
 
-test('thesis can be updated', async (t) => {
-    t.plan(2);
-
+async function createExistingThesis() {
     const thesis = {
         title: 'Annin Grady',
         urkund: 'https://example.com',
@@ -279,24 +277,52 @@ test('thesis can be updated', async (t) => {
 
     await knex('agreementPerson').insert({
         agreementId: agreementId[0],
-        personRoleId: 1,
+        personRoleId: 5,
         approverId: 2,
         approved: true
     });
 
+    return thesisId[0];
+}
+
+
+test('thesis can be updated', async (t) => {
+    t.plan(2);
+
+    const thesisId = await createExistingThesis();
+
     const update = {
-        thesisId: thesisId[0],
+        thesisId,
         title: 'New name',
         graders: [grader]
     };
 
-    const res = await request(makeApp(1))
+    const res = await request(makeApp(5))
         .put('/theses')
         .send(update);
 
     t.is(res.status, 200);
 
-    const thesisFromDb = await knex('thesis').select().where('thesisId', thesisId[0]).first();
+    const thesisFromDb = await knex('thesis').select().where('thesisId', thesisId).first();
 
     t.is(thesisFromDb.title, 'New name');
+});
+
+
+test('thesis edit access is checked', async (t) => {
+    const thesisId = await createExistingThesis();
+
+    const update = {
+        thesisId,
+        title: 'New name',
+        graders: [grader]
+    };
+
+    await request(makeApp(9))
+        .put('/theses')
+        .send(update);
+
+    const thesis = await knex('thesis').select().where('thesisId', thesisId).first();
+
+    t.is('Annin Grady', thesis.title);
 });

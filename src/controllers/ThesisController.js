@@ -1,4 +1,5 @@
 import Checkit from 'checkit';
+import Promise from 'bluebird';
 
 const thesisService = require('../services/ThesisService');
 const agreementService = require('../services/AgreementService');
@@ -115,6 +116,9 @@ export async function saveThesisForm(req, res) {
 export async function updateThesis(req, res) {
     const updatedFields = req.body;
     let thesis = await thesisService.getThesisById(updatedFields.thesisId);
+    const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId);
+
+    await checkUserHasRightToModifyThesis(req, agreements);
 
     Object.keys(thesis).forEach((key) => {
         if (updatedFields[key] !== undefined)
@@ -125,7 +129,6 @@ export async function updateThesis(req, res) {
 
     thesis = await thesisService.updateThesis(thesis);
 
-    const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId);
     // TODO: support multiple agreements on one thesis
     await updateGraders(updatedFields.graders, agreements[0]);
 
@@ -166,3 +169,32 @@ const updateGraders = async (graders, agreement) => {
         }
     }));
 };
+
+async function checkUserHasRightToModifyThesis(req, agreements) {
+    const user = await personService.getLoggedPerson(req);
+    const roles = await roleService.getUsersRoles(user);
+
+    if (roles.find(item => item.role.name === 'admin')) {
+        return;
+    }
+
+    const thesisProgramme = await programmeService.getStudyfieldsProgramme(agreements[0].studyfieldId);
+    const studyfieldRole = roles
+        .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
+        .find(item => item.role === 'manager' || item.role === 'resp_professor');
+
+    if (studyfieldRole) {
+        return;
+    }
+
+    const agreementPersons = await Promise.map(
+        agreements,
+        agreement => roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
+    ).reduce((prev, cur) => prev.concat(cur), []);
+
+    if (agreementPersons.find(person => person.personId === user.personId)) {
+        return;
+    }
+
+    throw new Error('User has no access to edit thesis');
+}
