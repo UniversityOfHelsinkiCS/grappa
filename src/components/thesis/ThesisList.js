@@ -112,13 +112,13 @@ class ThesisList extends Component {
     render() {
         return (
             <div>
+                {this.renderButtons()}
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" type="text" placeholder="Filter theses" onChange={this.search} />
                         <i className="search icon" />
                     </div>
                 </div>
-                {this.renderButtons()}
                 <table className="ui celled table">
                     <thead>
                         <tr>
