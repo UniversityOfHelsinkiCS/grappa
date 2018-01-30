@@ -76,7 +76,7 @@ class NewCouncilmeetingForm extends Component {
     render() {
         return (
             <div className="field">
-                <h2 className="ui dividing header">Create a councilmeeting date</h2>
+                <h2 className="ui dividing header">Create a council meeting date</h2>
                 <p>
                     There can be only one meeting per date. Deadline days is date minus days
                     when the deadline is set at 23:59. Eg. if date is 25/11/2016 and instructor

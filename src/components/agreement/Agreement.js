@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import StudentInfoForm from './form/StudentInfoForm';
 import ThesisInfoForm from './form/ThesisInfoForm';
-import SupervisingInfoForm from './form/SupervisingInfoForm';
 import GoalInfoForm from './form/GoalInfoForm';
 import AttachmentAdder from '../attachment/AttachmentAdder';
 import { personType, programmeType } from '../../util/types';
@@ -116,14 +115,6 @@ export default class Agreement extends Component {
                 <StudentInfoForm user={this.props.user} />
                 <br />
                 <ThesisInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
-                <br />
-                <SupervisingInfoForm
-                    handleChange={this.handleFormChange}
-                    resetSupervisors={this.resetSupervisors}
-                    supervisors={this.props.supervisors}
-                    programmes={this.props.programmes}
-                    requiredFields={this.state.filledRequiredFields}
-                />
                 <br />
                 <GoalInfoForm handleChange={this.handleFormChange} requiredFields={this.state.filledRequiredFields} />
                 <br />

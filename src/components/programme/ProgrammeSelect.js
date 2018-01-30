@@ -12,8 +12,9 @@ export default class ProgrammeSelect extends Component {
 
     swapUnit = (event) => {
         this.setState({ newUnits: !this.state.newUnits })
-        event.target.value = undefined
-        this.props.onChange(event)
+        const newEvent = Object.assign({}, event)
+        newEvent.target.value = undefined
+        this.props.onChange(newEvent)
     }
 
     render() {
