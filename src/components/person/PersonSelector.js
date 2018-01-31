@@ -80,13 +80,13 @@ export default class PersonSelector extends Component {
 
     renderSelected() {
         return this.props.selected.map(person => (
-            <a key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
+            <span key={person.personId} className="ui label transition visible" onFocus={this.focusMenu}>
                 {this.personToText(person)}
                 <i
                     className="delete icon"
                     onClick={this.removePerson(person)}
                 />
-            </a>
+            </span>
         ))
     }
 
@@ -152,5 +152,9 @@ PersonSelector.propTypes = {
     persons: arrayOf(personType).isRequired,
     selected: arrayOf(personType).isRequired,
     changeList: func.isRequired,
-    validationError: bool.isRequired
+    validationError: bool
+};
+
+PersonSelector.defaultProps = {
+    validationError: false
 };
