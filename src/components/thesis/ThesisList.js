@@ -8,15 +8,19 @@ class ThesisList extends Component {
         super(props);
         this.state = {
             filteredTheses: props.theses,
+            formattedTheses: props.theses,
             selectedThesesIds: [],
             cover: true
-        }
+        };
+
+        this.search = this.search.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.theses) {
             this.setState({
                 filteredTheses: newProps.theses,
+                formattedTheses: newProps.theses,
                 selectedThesesIds: []
             })
         }
@@ -30,18 +34,18 @@ class ThesisList extends Component {
         this.setState({ selectedThesesIds });
     };
 
-    search = (event) => {
+    search(event) {
         if (!event.target.value) {
             this.setState({ filteredTheses: this.state.formattedTheses });
             return;
         }
         const searchValue = event.target.value.toLowerCase();
         // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
-        const filteredTheses = this.state.formattedTheses
+        const filteredTheses = this.state.filteredTheses
             .filter(thesis => Object.keys(thesis)
                 .find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)));
         this.setState({ filteredTheses });
-    };
+    }
 
     sendDownloadSelected = () => {
         if (this.state.selectedThesesIds.length > 0) {
