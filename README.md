@@ -41,8 +41,7 @@ Test are run using grappa_test schema. Development app is run with public schema
 | /user/login          | X     | X    | X    |       |                        |
 | /user/logout         | X     | X    |      |       |                        |
 | /user/:id            | X     | X    | -    |       | Not used in production |
-| /agreements          | X     |      |      |       |                        |
-| /agreements/:id      | X     |      |      |       |                        |
+| /agreements          | X     | X    | X    |       |                        |
 | /attachments/:string | X     | X    | X    |       |                        |
 | /councilmeetings     | X     | X    | X    |       |                        |
 | /emailDrafts         | X     | X    | X    |       |                        |
@@ -60,8 +59,7 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS            | FRONT | BACK | PROD | TESTS | DETAILS |
 |-------------------|-------|------|------|-------|---------|
-| /agreements       | X     | X    |      |       |         |
-| /agreement-drafts | X     |      |      |       |         |
+| /agreements       | X     |      |      |       |         |
 | /attachments      | X     | X    | X    |       |         |
 | /councilmeetings  | X     | X    | X    |       |         |
 | /emailDrafts      | X     | X    |      |       |         |
@@ -76,7 +74,6 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS |
 |----------------------|-------|------|------|-------|---------|
-| /agreements/:id      | X     | X    |      |       |         |
 | /attachments/:id     | X     | X    |      |       |         |
 | /councilmeetings/:id | X     | X    | X    |       |         |
 | /emailDrafts/:id     | X     | X    |      |       |         |
@@ -90,7 +87,6 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS          |
 |----------------------|-------|------|------|-------|------------------|
-| /agreements/:id      | X     | X    |      |       |                  |
 | /councilmeetings/:id | X     | X    | X    |       |                  |
 | /emailDrafts/:id     | X     | X    |      |       |                  |
 | /programmes          | X     |      |      |       |                  |
