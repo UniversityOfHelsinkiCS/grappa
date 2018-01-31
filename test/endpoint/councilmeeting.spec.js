@@ -68,7 +68,7 @@ test('councilmeeting update', async (t) => {
         date: '2019-11-29T22:00:00.000Z',
         instructorDeadline: '2019-11-20T22:00:00.000Z',
         studentDeadline: '2019-11-10T22:00:00.000Z',
-        programmes: [1, 2]
+        programmes: [2, 1]
     };
     const copy = Object.assign({}, councilmeetingWithoutId)
     delete copy.programmes
@@ -82,6 +82,8 @@ test('councilmeeting update', async (t) => {
     const meetingsAfter = await knex('councilmeeting').select().where('councilmeetingId', meeting[0]);
 
     updatedData.councilmeetingId = meeting[0];
+    res.body.programmes.sort()
+    updatedData.programmes.sort()
     t.deepEqual(res.body, updatedData);
 });
 
