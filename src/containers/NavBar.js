@@ -84,10 +84,19 @@ export class NavBar extends Component {
                     {this.state.links ? this.state.links.map((elem) => {
                         // Handle special cases:
                         switch (elem.path) {
-                            case '/councilmeeting/:id': // Using navbar we want to display the NEXT councilmeeting, logic in component.
-                                return <NavLink key={elem.path} to="/councilmeeting/next" exact className="item">{elem.navText}</NavLink>
+                            // Using navbar we want to display the NEXT councilmeeting, logic in component.
+                            case '/councilmeeting/:id':
+                                return (
+                                    <NavLink key={elem.path} to="/councilmeeting/next" exact className="item">
+                                        {elem.navText}
+                                    </NavLink>
+                                );
                             default:
-                                return <NavLink key={elem.path} to={elem.path} exact className="item">{elem.navText}</NavLink>
+                                return (
+                                    <NavLink key={elem.path} to={elem.path} exact className="item">
+                                        {elem.navText}
+                                    </NavLink>
+                                );
                         }
                     }) : undefined}
                     <div className="right menu">

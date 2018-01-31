@@ -4,7 +4,6 @@ import moment from 'moment';
 import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux';
-import { moveTheses } from '../thesis/thesisActions';
 import { downloadAttachments } from '../attachment/attachmentActions'
 import { personType, thesisType, agreementType, attachmentType } from '../../util/types';
 import { formatTheses } from '../../util/theses';
@@ -33,12 +32,13 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     initState = (props) => {
-        const { councilmeetings, theses, persons, agreements } = props
+        const { councilmeetings, theses, persons, agreements } = props;
         if (councilmeetings.length < 1 || theses.length < 1 || persons.length < 1 || agreements.length < 1) return;
         const foundIndex = this.findIndexFromProps(props);
         const previousMeetingId = foundIndex > 0 ? councilmeetings[foundIndex - 1].councilmeetingId : undefined;
         const currentMeeting = councilmeetings[foundIndex];
-        const nextMeetingId = foundIndex === councilmeetings.length - 1 ? undefined : councilmeetings[foundIndex + 1].councilmeetingId;
+        const nextMeetingId = foundIndex === councilmeetings.length - 1 ?
+            undefined : councilmeetings[foundIndex + 1].councilmeetingId;
         const filteredTheses = currentMeeting && theses ? this.filterThesesByMeeting(theses, currentMeeting) : [];
         this.setState({
             previousMeetingId,
@@ -46,11 +46,10 @@ export class CouncilmeetingViewPage extends Component {
             nextMeetingId,
             theses: formatTheses(filteredTheses, props.agreements, props.persons)
         });
-    }
+    };
 
-    filterThesesByMeeting = (theses, meeting) => {
-        return theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
-    }
+    filterThesesByMeeting = (theses, meeting) =>
+        theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
 
     findIndexFromProps = (props) => {
         let foundIndex;
@@ -61,32 +60,19 @@ export class CouncilmeetingViewPage extends Component {
             foundIndex = this.findNextMeeting(new Date(), props.councilmeetings);
         }
         return foundIndex;
-    }
+    };
 
     /**
      * Finds the index of closest date including today from sorted list of CouncilMeetings
      */
-    findNextMeeting = (starting, meetings = []) => {
-        return meetings.findIndex((meeting) => {
-            const date = new Date(meeting.date);
-            return (date >= starting || date.toDateString() === starting.toDateString())
-        });
-    }
-
-    /*
-    // OLD FEATURE FROM GRAPPA 1
-    moveToPreviousMeeting = (thesisIds) => {
-        const meeting = this.state.previousMeetingId;
-        this.props.moveTheses({
-            thesisIds,
-            councilmeetingId: meeting.councilmeetingId,
-        });
-    }
-    */
+    findNextMeeting = (starting, meetings = []) => meetings.findIndex((meeting) => {
+        const date = new Date(meeting.date);
+        return (date >= starting || date.toDateString() === starting.toDateString())
+    });
 
     handleDownload = (attachmentIds) => {
         this.props.downloadAttachments(attachmentIds);
-    }
+    };
 
     render() {
         return (
@@ -94,7 +80,9 @@ export class CouncilmeetingViewPage extends Component {
                 <div>
                     {this.state.previousMeetingId ?
 
-                        <Link to={`/councilmeeting/${this.state.previousMeetingId}`} className="ui button blue">Previous</Link>
+                        <Link to={`/councilmeeting/${this.state.previousMeetingId}`} className="ui button blue">
+                            Previous
+                        </Link>
                         :
                         <span />
                     }
@@ -125,28 +113,22 @@ export class CouncilmeetingViewPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        persons: state.persons,
-        user: state.user,
-        councilmeetings: state.councilmeetings,
-        theses: state.theses,
-        attachments: state.attachments,
-        agreements: state.agreements
-    };
-};
+const mapStateToProps = state => ({
+    persons: state.persons,
+    user: state.user,
+    councilmeetings: state.councilmeetings,
+    theses: state.theses,
+    attachments: state.attachments,
+    agreements: state.agreements
+});
 
 const mapDispatchToProps = dispatch => ({
     downloadAttachments(attachmentIds) {
         dispatch(downloadAttachments(attachmentIds))
-    },
-    moveTheses(data) {
-        dispatch(moveTheses(data));
-    },
+    }
 });
 
 CouncilmeetingViewPage.propTypes = {
-    moveTheses: func.isRequired,
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
     downloadAttachments: func.isRequired,

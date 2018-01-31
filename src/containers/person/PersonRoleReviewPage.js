@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 
 import PersonRoleReviewModal from '../../components/person/PersonRoleReviewModal';
 import { updateRole } from '../role/roleActions';
+import { roleType } from '../../util/types';
 
 export class PersonRoleReviewPage extends Component {
     constructor(props) {
@@ -24,45 +25,38 @@ export class PersonRoleReviewPage extends Component {
             && newProps.roles.length > 0
             && newProps.persons.length > 0
             && newProps.theses.length > 0) {
-
             this.setState({
-                agreementPersons: this.filterAndFormatPersons(newProps),
-                personToBeReviewed: undefined,
-                showReviewModal: false
+                agreementPersons: this.filterAndFormatPersons(newProps)
             });
         }
     }
 
-    filterAndFormatPersons = (props) => {
-        const agreementPersons = props.roles.filter(role => role.name === 'grader')
-            .map((role) => {
-                const person = props.persons.find(p => p.personId === role.personId)
-                if (!person) {
-                    return undefined;
-                }
-                return {
-                    personId: person.personId,
-                    personRoleId: role.personRoleId,
-                    agreementId: role.agreementId,
-                    name: `${person.firstname} ${person.lastname}`,
-                    role: role.name,
-                    statement: role.statement,
-                    approved: role.approved,
-                    programme: props.programmes.find(programme => programme.programmeId === role.programmeId).name,
-                    thesis: props.theses.find((thesis) => {
-                        return props.agreements.find(agreement =>
-                            thesis.thesisId === agreement.thesisId && role.agreementId === agreement.agreementId
-                        )
-                    })
-                }
-            }).sort((a, b) => {
-                if (!a.statement === !b.statement) {
-                    return a.name.toLowerCase() > b.name.toLowerCase()
-                }
-                return !a.statement ? -1 : 1
-            })
-        return agreementPersons
-    }
+    filterAndFormatPersons = props => props.roles
+        .filter(role => role.name === 'grader')
+        .map((role) => {
+            const person = props.persons.find(p => p.personId === role.personId);
+            if (!person) {
+                return undefined;
+            }
+            return {
+                personId: person.personId,
+                personRoleId: role.personRoleId,
+                agreementId: role.agreementId,
+                name: `${person.firstname} ${person.lastname}`,
+                role: role.name,
+                statement: role.statement,
+                approved: role.approved,
+                programme: props.programmes.find(programme => programme.programmeId === role.programmeId).name,
+                thesis: props.theses.find(thesis => props.agreements.find(agreement =>
+                    thesis.thesisId === agreement.thesisId && role.agreementId === agreement.agreementId
+                ))
+            }
+        }).sort((a, b) => {
+            if (!a.statement === !b.statement) {
+                return a.name.toLowerCase() > b.name.toLowerCase()
+            }
+            return !a.statement ? -1 : 1
+        });
 
     reviewAgreementPerson = (statement, approved, personRole) => {
         if (statement && personRole) {
@@ -73,21 +67,21 @@ export class PersonRoleReviewPage extends Component {
             this.props.updateRole(agreementPersonRole);
             this.setState({ personRoleInReview: undefined })
         }
-    }
+    };
 
     toggleEditModal = personRoleToReview => () => {
         this.setState({ personRoleInReview: personRoleToReview });
-    }
+    };
 
     renderReviewButton(rolePerson) {
-        let text = 'Review'
-        let buttonClass = 'ui button'
+        let text = 'Review';
+        let buttonClass = 'ui button';
         if (rolePerson.statement) {
             if (rolePerson.approved) {
-                text = 'Approved'
+                text = 'Approved';
                 buttonClass += ' green'
             } else {
-                text = 'Rejected'
+                text = 'Rejected';
                 buttonClass += ' red'
             }
         } else {
@@ -115,7 +109,10 @@ export class PersonRoleReviewPage extends Component {
                 </thead>
                 <tbody>
                     {this.state.agreementPersons.map(rolePerson => (
-                        <tr key={parseInt(`${rolePerson.personRoleId}${rolePerson.thesis ? rolePerson.thesis.thesisId : rolePerson.thesis}`, 10)}>
+                        <tr
+                            key={parseInt(`${rolePerson.personRoleId}${rolePerson.thesis ?
+                                rolePerson.thesis.thesisId : rolePerson.thesis}`, 10)}
+                        >
                             <td>{rolePerson.name}</td>
                             <td>{rolePerson.programme}</td>
                             <td>{rolePerson.role}</td>
@@ -157,11 +154,11 @@ const mapStateToProps = state => ({
     roles: state.roles,
     persons: state.persons,
     programmes: state.programmes
-})
+});
 
-const { func } = PropTypes;
 PersonRoleReviewPage.propTypes = {
-    updateRole: func.isRequired
+    updateRole: func.isRequired,
+    roles: arrayOf(roleType).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleReviewPage);

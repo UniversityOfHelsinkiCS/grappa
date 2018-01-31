@@ -4,19 +4,21 @@ import moment from 'moment';
 import { councilmeetingType } from '../../util/types';
 
 export default class ThesisCouncilmeetingPicker extends Component {
-
     formatMeetings = () => {
         const { programmeId, councilmeetings } = this.props;
 
         if (!councilmeetings)
             return [];
 
-        const meetings = councilmeetings.filter((meeting) => {
-            return moment(meeting.instructorDeadline).isAfter(moment()) && meeting.programmeId === programmeId;
-        }).map(meeting => ({
-            id: meeting.councilmeetingId,
-            content: `${moment(meeting.date).format('DD.MM.YYYY')} Deadline: ${moment(meeting.instructorDeadline).format('HH:mm DD.MM.YYYY')}`
-        }));
+        const isInFuture = meeting => moment(meeting.instructorDeadline).isAfter(moment());
+        const formatDate = meeting => moment(meeting.date).format('DD.MM.YYYY');
+        const formatDeadline = meeting => moment(meeting.instructorDeadline).format('HH:mm DD.MM.YYYY');
+
+        const meetings = councilmeetings.filter(meeting => isInFuture(meeting) && meeting.programmeId === programmeId)
+            .map(meeting => ({
+                id: meeting.councilmeetingId,
+                content: `${formatDate(meeting)} Deadline: ${formatDeadline(meeting)}`
+            }));
 
         return [{ id: '', content: 'Select Date' }, ...meetings];
     };

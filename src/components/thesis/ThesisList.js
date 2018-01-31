@@ -4,7 +4,6 @@ import { arrayOf, func } from 'prop-types';
 import { thesisType, agreementType, attachmentType } from '../../util/types';
 
 class ThesisList extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +28,7 @@ class ThesisList extends Component {
             [...this.state.selectedThesesIds, thesis.thesisId];
 
         this.setState({ selectedThesesIds });
-    }
+    };
 
     search = (event) => {
         if (!event.target.value) {
@@ -70,10 +69,10 @@ class ThesisList extends Component {
                 }
                 return acc;
             }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
-                );
+            );
             this.props.downloadSelected(attachmentIds);
         }
-    }
+    };
 
     toggleAll = () => {
         if (this.state.selectedThesesIds.length > 0) {
@@ -81,11 +80,11 @@ class ThesisList extends Component {
         } else {
             this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) });
         }
-    }
+    };
 
     toggleCover = () => {
         this.setState({ cover: !this.state.cover });
-    }
+    };
 
     renderButtons() {
         return (
@@ -143,7 +142,9 @@ class ThesisList extends Component {
                                         <label />
                                     </div>
                                 </td>
-                                <td>{thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}</td>
+                                <td>
+                                    {thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}
+                                </td>
                                 <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>

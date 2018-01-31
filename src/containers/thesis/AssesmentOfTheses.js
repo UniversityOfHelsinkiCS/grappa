@@ -27,13 +27,13 @@ class AssesmentOfTheses extends Component {
         } else if (this.state.language === 'swe') {
             assesment = AssesmentInSwedish;
         }
-        return assesment.map((all, index) => (
-            <div key={index}>
+        return assesment.map(all => (
+            <div key={all.title}>
                 <h2>{all.title}</h2>
                 <p>{all.text}</p>
                 <ul className="ui list"> {all.list !== undefined &&
-                    all.list.map((lista, index) => (
-                        <li key={index}><b>{lista.title}</b> {lista.text}</li>
+                    all.list.map(lista => (
+                        <li key={lista.title}><b>{lista.title}</b> {lista.text}</li>
                     ))
                 }
                 </ul>
@@ -81,9 +81,15 @@ class AssesmentOfTheses extends Component {
         return (
             <div className="App">
                 <div className="ui left aligned segment">
-                    <button id="fin" className="ui button" onClick={e => this.changeLanguage('fin', e)}>suomeksi</button>
-                    <button id="en" className="ui button" onClick={e => this.changeLanguage('en', e)}>in English</button>
-                    <button id="swe" className="ui button" onClick={e => this.changeLanguage('swe', e)}>på svenska</button>
+                    <button id="fin" className="ui button" onClick={e => this.changeLanguage('fin', e)}>
+                        Suomeksi
+                    </button>
+                    <button id="en" className="ui button" onClick={e => this.changeLanguage('en', e)}>
+                        In English
+                    </button>
+                    <button id="swe" className="ui button" onClick={e => this.changeLanguage('swe', e)}>
+                        På svenska
+                    </button>
                     <p />
                     {this.renderTitles()}
                     {this.renderAssesment()}

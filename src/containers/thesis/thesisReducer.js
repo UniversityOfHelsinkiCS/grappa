@@ -6,7 +6,9 @@ const reducer = (state = [], action) => {
         // Saving thesis response has multiple fields.
             return [...state, action.response.thesis];
         case 'THESIS_UPDATE_ONE_SUCCESS':
-            return [...state.filter(thesis => thesis.thesisId !== action.response.thesis.thesisId), action.response.thesis];
+            return [
+                ...state.filter(thesis => thesis.thesisId !== action.response.thesis.thesisId), action.response.thesis
+            ];
         case 'THESIS_DELETE_ONE_SUCCESS':
             return state.filter(thesis => thesis.thesisId !== action.response.updatedThesis.thesisId);
         default:
