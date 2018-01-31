@@ -5,7 +5,7 @@ import { deleteFromDb } from '../utils';
 const request = require('supertest');
 const express = require('express');
 const index = require('../../src/routes/index');
-const shibboleth = require('../../src/routes/shibboleth');
+const shibboleth = require('../../src/routes/auth');
 const knex = require('../../src/db/connection');
 const auth = require('../../src/middleware/auth');
 
