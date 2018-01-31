@@ -156,15 +156,6 @@ export class AgreementPage extends Component {
 const mapDispatchToProps = dispatch => ({
     saveAgreement(data) {
         dispatch(saveAgreement(data));
-    },
-    saveAgreementDraft(data) {
-        dispatch(saveAgreementDraft(data));
-    },
-    saveAttachment(data) {
-        dispatch(saveAttachment(data));
-    },
-    updateAgreement(data) {
-        dispatch(updateAgreement(data));
     }
 });
 
