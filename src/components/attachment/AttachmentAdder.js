@@ -7,13 +7,10 @@ import { attachmentType } from '../../util/types';
 export default class AttachmentAdder extends Component {
     onDrop = (files) => {
         const droppedFile = files[0];
-        const selected = [...this.props.attachments, droppedFile];
-        this.props.changeList(selected);
-    }
-
-    removeAttachment = attachment => () => {
-        const removed = this.props.attachments.filter(att => att !== attachment);
-        this.props.changeList(removed);
+        if (!this.props.attachments.find(a => a.name === droppedFile.name)) {
+            const selected = [...this.props.attachments, droppedFile];
+            this.props.changeList(selected);
+        }
     }
 
     // TODO: Add/change labels in a better way
@@ -24,8 +21,8 @@ export default class AttachmentAdder extends Component {
     getFileList = () => (
         <div className="ui form">
             {this.getFileNumberLabel()}
-            {this.props.attachments ? this.props.attachments.map((attachment, index) => (
-                <div className="ui two fields" key={index}>
+            {this.props.attachments ? this.props.attachments.map(attachment => (
+                <div className="ui two fields" key={attachment.name}>
                     <select
                         className="ui field dropdown"
                         onChange={this.setLabel(attachment)}
@@ -42,7 +39,7 @@ export default class AttachmentAdder extends Component {
                         >
                             <i className="remove icon" />
                         </button>
-                            &nbsp;
+                        &nbsp;
                         {attachment.name}
                     </div>
                     <hr />
@@ -58,13 +55,28 @@ export default class AttachmentAdder extends Component {
         return <h2>Upload maximum {this.props.limit} attachments</h2>
     }
 
-    getFileNumberLabel = () => (
-        <h3>
-            {!this.props.attachments ? 'No attachments to be uploaded' :
-                (this.props.attachments.length === 1) ? 'One attachment to be uploaded:' :
+    getFileNumberLabel = () => {
+        if (!this.props.attachments || this.props.attachments.length < 1) {
+            return <h3>No attachments to be uploaded</h3>
+        }
+        return (
+            <h3>
+                {(this.props.attachments.length === 1) ? 'One attachment to be uploaded:' :
                     `${this.props.attachments.length} attachments to be uploaded:`}
-        </h3>
-    )
+            </h3>
+        )
+    }
+
+    removeAttachment = attachment => () => {
+        const removed = this.props.attachments.filter(att => att !== attachment);
+        this.props.changeList(removed);
+    }
+
+    thereIsNoLimit = () => !this.props.limit
+
+    thereIsRoomForAttachment = () => this.props.attachments.length < this.props.limit
+
+    canAttachmentBeUploaded = () => this.thereIsNoLimit() || this.thereIsRoomForAttachment()
 
     renderDropzone = () => {
         if (this.canAttachmentBeUploaded()) {
@@ -82,12 +94,6 @@ export default class AttachmentAdder extends Component {
         return <br />;
     }
 
-    thereIsNoLimit = () => !this.props.limit
-
-    thereIsRoomForAttachment = () => this.props.attachments.length < this.props.limit
-
-    canAttachmentBeUploaded = () => this.thereIsNoLimit() || this.thereIsRoomForAttachment()
-
     render() {
         return (
             <div>
@@ -95,7 +101,12 @@ export default class AttachmentAdder extends Component {
                 {this.renderDropzone()}
                 {this.props.attachments ? this.getFileList() : undefined}
                 {this.props.uploadAttachments && this.props.attachments.length > 0 ?
-                    <button className="ui green button" onClick={this.props.uploadAttachments}>Upload attachments</button>
+                    <button
+                        className="ui green button"
+                        onClick={this.props.uploadAttachments}
+                    >
+                        Upload attachments
+                    </button>
                     : undefined}
             </div>
         );

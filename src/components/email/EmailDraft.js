@@ -94,24 +94,28 @@ export default class EmailDraft extends Component {
                     {editing ? 'Editing draft: ' : ''}{`${this.getProgrammeName(this.props.draft)} ${this.props.draft.type}`}
                 </h3>
                 <div className="field">
-                    <label htmlFor="changeDraftTitle">Title</label>
-                    <input
-                        id="changeDraftTitle"
-                        type="text"
-                        value={this.state.draft.title}
-                        placeholder="Title"
-                        readOnly={!editing}
-                        onChange={this.changeTitle}
-                    />
+                    <label htmlFor="changeDraftTitle">
+                        Title
+                        <input
+                            id="changeDraftTitle"
+                            type="text"
+                            value={this.state.draft.title}
+                            placeholder="Title"
+                            readOnly={!editing}
+                            onChange={this.changeTitle}
+                        />
+                    </label>
                 </div>
                 <div className="field">
-                    <label htmlFor="changeDraftBody">Body</label>
-                    <textarea
-                        id="changeDraftBody"
-                        value={this.state.draft.body}
-                        readOnly={!editing}
-                        onChange={this.changeBody}
-                    />
+                    <label htmlFor="changeDraftBody">
+                        Body
+                        <textarea
+                            id="changeDraftBody"
+                            value={this.state.draft.body}
+                            readOnly={!editing}
+                            onChange={this.changeBody}
+                        />
+                    </label>
                 </div>
 
                 {this.renderButtons()}

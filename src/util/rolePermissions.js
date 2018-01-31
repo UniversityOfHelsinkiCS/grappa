@@ -6,7 +6,7 @@ export const getPermissions = (role, context, method) => {
     return permissions[role][context][method];
 };
 
-export const userRoles = ['admin', 'manager', 'print_person', 'resp_professor', 'grader', 'supervisor', 'student']
+export const userRoles = ['admin', 'manager', 'print_person', 'resp_professor', 'grader', 'supervisor', 'student'];
 
 const permissions = {
     admin: {
@@ -17,19 +17,70 @@ const permissions = {
             ]
         },
         agreement: {
-            create: ['studentAddress', 'studentEmail', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
-            edit: ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorPrimary', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
+            create: [
+                'studentAddress',
+                'studentEmail',
+                'studentAddress',
+                'studentName',
+                'studentPhone',
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ],
+            edit: [
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisSupervisorPrimary',
+                'thesisSupervisorSecond',
+                'thesisSupervisorOther',
+                'thesisWorkSupervisorTime',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ]
         }
     },
     manager: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.personRoleManagement, nav.thesis, nav.councilMeeting, nav.councilMeetings, nav.emailDrafts, nav.statistics
+                nav.home,
+                nav.theses,
+                nav.personRoleManagement,
+                nav.thesis,
+                nav.councilMeeting,
+                nav.councilMeetings,
+                nav.emailDrafts,
+                nav.statistics
             ]
         },
         agreement: {
-            create: ['studentAddress', 'studentEmail', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
-            edit: ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorPrimary', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
+            create: [
+                'studentAddress',
+                'studentEmail',
+                'studentAddress',
+                'studentName',
+                'studentPhone',
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ],
+            edit: [
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisSupervisorPrimary',
+                'thesisSupervisorSecond',
+                'thesisSupervisorOther',
+                'thesisWorkSupervisorTime',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ]
         }
     },
     print_person: {
@@ -39,7 +90,17 @@ const permissions = {
             ]
         },
         agreement: {
-            edit: ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
+            edit: [
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisSupervisorSecond',
+                'thesisSupervisorOther',
+                'thesisWorkSupervisorTime',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ]
         }
     },
     resp_professor: {
@@ -70,8 +131,30 @@ const permissions = {
             ]
         },
         agreement: {
-            create: ['studentAddress', 'studentEmail', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
-            edit: ['thesisCompletionEta', 'thesisWorkStudentTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisSupervisorPrimary', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisWorkSupervisorTime', 'thesisWorkMeetingAgreement', 'thesisWorkOther']
+            create: [
+                'studentAddress',
+                'studentEmail',
+                'studentAddress',
+                'studentName',
+                'studentPhone',
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ],
+            edit: [
+                'thesisCompletionEta',
+                'thesisWorkStudentTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisSupervisorPrimary',
+                'thesisSupervisorSecond',
+                'thesisSupervisorOther',
+                'thesisWorkSupervisorTime',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ]
         }
     }
 };

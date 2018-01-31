@@ -42,7 +42,7 @@ class NewCouncilmeetingForm extends Component {
         const programme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
-        )
+        );
         if (programme) {
             const programmes = [...this.state.meeting.programmes, programme];
             const meeting = Object.assign({}, this.state.meeting, { programmes });
@@ -52,15 +52,15 @@ class NewCouncilmeetingForm extends Component {
 
     selectProgramme = (programme) => {
         this.setState({ selectedProgramme: programme })
-    }
+    };
 
     removeSelected = () => {
         const programmes = [...this.state.meeting.programmes
-            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)]
+            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)];
         const meeting = Object.assign({}, this.state.meeting, { programmes });
 
         this.setState({ selectedProgramme: undefined, meeting })
-    }
+    };
 
 
     saveMeeting() {
@@ -68,7 +68,7 @@ class NewCouncilmeetingForm extends Component {
         const { date, instructorDeadlineDays, studentDeadlineDays, programmes } = this.state.meeting;
         const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
         const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
-        const programmeIds = programmes.map(programme => programme.programmeId)
+        const programmeIds = programmes.map(programme => programme.programmeId);
 
         this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmes: programmeIds });
     }
@@ -76,7 +76,7 @@ class NewCouncilmeetingForm extends Component {
     render() {
         return (
             <div className="field">
-                <h2 className="ui dividing header">Create a councilmeeting date</h2>
+                <h2 className="ui dividing header">Create a council meeting date</h2>
                 <p>
                     There can be only one meeting per date. Deadline days is date minus days
                     when the deadline is set at 23:59. Eg. if date is 25/11/2016 and instructor

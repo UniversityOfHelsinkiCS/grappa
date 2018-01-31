@@ -8,11 +8,16 @@ const thesis = {
     authorLastname: 'Testaaja',
     thesisTitle: 'Gradu',
     grade: '5',
-    thesisId: '1',
+    thesisId: 1,
     printDone: false
 };
 const thesisList = [thesis];
-const thesisApp = <ThesisList theses={thesisList} downloadSelected={() => ({})} />;
+const thesisApp = (<ThesisList
+    theses={thesisList}
+    downloadSelected={() => ({})}
+    attachments={[]}
+    agreements={[]}
+/>);
 const wrapper = shallow(thesisApp);
 
 

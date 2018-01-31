@@ -8,7 +8,7 @@ import { personType, programmeType, roleType, agreementType, thesisType } from '
 
 // redux
 import { connect } from 'react-redux';
-import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from './agreementActions';
+import { saveAgreement } from './agreementActions';
 
 export class AgreementPage extends Component {
     constructor(props) {
@@ -156,15 +156,6 @@ export class AgreementPage extends Component {
 const mapDispatchToProps = dispatch => ({
     saveAgreement(data) {
         dispatch(saveAgreement(data));
-    },
-    saveAgreementDraft(data) {
-        dispatch(saveAgreementDraft(data));
-    },
-    saveAttachment(data) {
-        dispatch(saveAttachment(data));
-    },
-    updateAgreement(data) {
-        dispatch(updateAgreement(data));
     }
 });
 

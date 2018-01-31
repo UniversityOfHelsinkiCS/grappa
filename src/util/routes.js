@@ -21,7 +21,9 @@ export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
     agreement: { path: '/agreement', component: AgreementPage, navText: 'Agreement' },
     theses: { path: '/theses', component: ThesisListPage, navText: 'Thesis list' },
-    agreementPersonManagement: { path: '/agreementPersonManagement', component: PersonRoleReviewPage, navText: 'Grader accepting' },
+    agreementPersonManagement: {
+        path: '/agreementPersonManagement', component: PersonRoleReviewPage, navText: 'Grader accepting'
+    },
     personRoleManagement: {
         path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management'
     },

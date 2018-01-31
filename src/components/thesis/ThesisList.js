@@ -4,20 +4,23 @@ import { arrayOf, func } from 'prop-types';
 import { thesisType, agreementType, attachmentType } from '../../util/types';
 
 class ThesisList extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             filteredTheses: props.theses,
+            formattedTheses: props.theses,
             selectedThesesIds: [],
             cover: true
-        }
+        };
+
+        this.search = this.search.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.theses) {
             this.setState({
                 filteredTheses: newProps.theses,
+                formattedTheses: newProps.theses,
                 selectedThesesIds: []
             })
         }
@@ -29,20 +32,20 @@ class ThesisList extends Component {
             [...this.state.selectedThesesIds, thesis.thesisId];
 
         this.setState({ selectedThesesIds });
-    }
+    };
 
-    search = (event) => {
+    search(event) {
         if (!event.target.value) {
             this.setState({ filteredTheses: this.state.formattedTheses });
             return;
         }
         const searchValue = event.target.value.toLowerCase();
         // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
-        const filteredTheses = this.state.formattedTheses
+        const filteredTheses = this.state.filteredTheses
             .filter(thesis => Object.keys(thesis)
                 .find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)));
         this.setState({ filteredTheses });
-    };
+    }
 
     sendDownloadSelected = () => {
         if (this.state.selectedThesesIds.length > 0) {
@@ -70,10 +73,10 @@ class ThesisList extends Component {
                 }
                 return acc;
             }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
-                );
+            );
             this.props.downloadSelected(attachmentIds);
         }
-    }
+    };
 
     toggleAll = () => {
         if (this.state.selectedThesesIds.length > 0) {
@@ -81,11 +84,11 @@ class ThesisList extends Component {
         } else {
             this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) });
         }
-    }
+    };
 
     toggleCover = () => {
         this.setState({ cover: !this.state.cover });
-    }
+    };
 
     renderButtons() {
         return (
@@ -112,13 +115,13 @@ class ThesisList extends Component {
     render() {
         return (
             <div>
+                {this.renderButtons()}
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" type="text" placeholder="Filter theses" onChange={this.search} />
                         <i className="search icon" />
                     </div>
                 </div>
-                {this.renderButtons()}
                 <table className="ui celled table">
                     <thead>
                         <tr>
@@ -143,7 +146,9 @@ class ThesisList extends Component {
                                         <label />
                                     </div>
                                 </td>
-                                <td>{thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}</td>
+                                <td>
+                                    {thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}
+                                </td>
                                 <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
                                 <td>{thesis.grade}</td>

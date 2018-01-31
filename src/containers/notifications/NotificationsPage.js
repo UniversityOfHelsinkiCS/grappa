@@ -9,7 +9,7 @@ const NotificationsPage = ({ notifications, persons }) => {
     const getPersonNameForId = (personId) => {
         const person = persons.find(person => person.personId === personId);
         return person ? `${person.firstname} ${person.lastname}` : 'UNKNOWN USER';
-    }
+    };
 
     return (
         <div>

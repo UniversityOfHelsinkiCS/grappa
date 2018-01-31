@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf } from 'prop-types'
+import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux';
 
 import { agreementType, personType, thesisType, attachmentType } from '../../util/types';
@@ -68,7 +68,8 @@ ThesisListPage.propTypes = {
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
     agreements: arrayOf(agreementType).isRequired,
-    attachments: arrayOf(attachmentType).isRequired
+    attachments: arrayOf(attachmentType).isRequired,
+    downloadAttachments: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);

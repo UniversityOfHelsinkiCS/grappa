@@ -3,7 +3,9 @@ import { arrayOf, array, func } from 'prop-types';
 import { connect } from 'react-redux';
 import { updateThesis, deleteThesis } from './thesisActions';
 import { createAttachment, deleteAttachment, downloadAttachments } from '../attachment/attachmentActions';
-import { agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType } from '../../util/types';
+import {
+    agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType
+} from '../../util/types';
 
 import ThesisInformation from '../../components/thesis/ThesisInformation';
 import AttachmentAdder from '../../components/attachment/AttachmentAdder';
@@ -114,26 +116,6 @@ export class ThesisEditPage extends Component {
         return thesisValidation.run(thesis);
     }
 
-    renderControlButtons() {
-        // Admin controls
-        if (this.props.user.roles && this.props.user.roles.find(programmeRole => programmeRole.role === 'admin')) {
-            return (
-                <div className="field">
-                    {this.state.allowEdit ?
-                        <div className="ui red button" onClick={this.toggleEditing}>Stop editing</div>
-                        :
-                        <div className="ui green button" onClick={this.toggleEditing}>Edit</div>
-                    }
-                    <div className="ui blue button" onClick={this.saveThesis}>Save</div>
-                    <div className="ui red button" onClick={this.deleteThesis}>Delete</div>
-                    <button className="ui violet button" onClick={this.downloadThesis}>Download as PDF</button>
-                </div>
-            );
-        }
-
-        return <div />;
-    }
-
     renderGraderSelecter() {
         const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
@@ -162,7 +144,6 @@ export class ThesisEditPage extends Component {
             <div>
                 <br />
                 <div className="ui form">
-                    {this.renderControlButtons()}
                     <ThesisInformation
                         sendChange={this.handleChange}
                         thesis={this.state.thesis}
@@ -243,7 +224,7 @@ ThesisEditPage.propTypes = {
     deleteThesis: func.isRequired,
     createAttachment: func.isRequired,
     deleteAttachment: func.isRequired,
-    downloadAttachments: func.isRequired,
+    downloadAttachments: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage);
