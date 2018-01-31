@@ -69,20 +69,34 @@ test('theses can be filtered', (t) => {
 });
 
 test('theses can be selected to download', (t) => {
+    const agreements = [
+        {
+            agreementId: 1,
+            thesisId: 1
+        }
+    ];
+    const attachments = [
+        {
+            attachmentId: 1,
+            agreementId: 1,
+            label: 'thesisFile'
+        }
+    ];
+
     const download = sinon.spy();
     const component = mount(
         <MemoryRouter>
             <ThesisList
                 theses={theses}
                 downloadSelected={download}
-                agreements={[]}
-                attachments={[]}
+                agreements={agreements}
+                attachments={attachments}
             />
         </MemoryRouter>);
 
     component.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true } });
-    component.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } });
     component.find('.orange').simulate('click');
 
     t.true(download.called);
+    t.is(download.args[0][0].length, 2);
 });
