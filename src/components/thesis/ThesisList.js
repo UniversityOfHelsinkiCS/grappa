@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, bool } from 'prop-types';
 import { thesisType, agreementType, attachmentType } from '../../util/types';
 
 class ThesisList extends Component {
@@ -91,6 +91,10 @@ class ThesisList extends Component {
     };
 
     renderButtons() {
+        if (!this.props.showButtons) {
+            return null;
+        }
+
         return (
             <div className="ui form">
                 <div className="three fields" >
@@ -166,7 +170,8 @@ ThesisList.propTypes = {
     theses: arrayOf(thesisType).isRequired,
     downloadSelected: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
-    attachments: arrayOf(attachmentType).isRequired
+    attachments: arrayOf(attachmentType).isRequired,
+    showButtons: bool.isRequired
 };
 
 

@@ -30,7 +30,7 @@ class ThesisListPage extends Component {
 
     handleDownload = (attachmentIds) => {
         this.props.downloadAttachments(attachmentIds);
-    }
+    };
 
     render() {
         return (
@@ -43,6 +43,7 @@ class ThesisListPage extends Component {
                     userRoles={this.props.user.roles}
                     agreements={this.props.agreements}
                     attachments={this.props.attachments}
+                    showButtons={false}
                 />
             </div>
         );

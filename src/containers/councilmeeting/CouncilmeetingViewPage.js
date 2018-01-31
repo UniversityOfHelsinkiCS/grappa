@@ -107,6 +107,7 @@ export class CouncilmeetingViewPage extends Component {
                     userRoles={this.props.user.roles}
                     attachments={this.props.attachments}
                     agreements={this.props.agreements}
+                    showButtons
                 />
             </div>
         );
