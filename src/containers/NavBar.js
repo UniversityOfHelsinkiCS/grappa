@@ -35,11 +35,17 @@ export class NavBar extends Component {
     componentDidMount() {
         // This login will allow shibboleth to check on page reload
         this.props.login();
-        this.props.getPersons();
-        this.refreshLinks(this.props)
+
+        if (process.env.NODE_ENV !== 'production') {
+            this.props.getPersons();
+        }
     }
 
     componentWillReceiveProps(newProps) {
+        if (newProps.user.personId) {
+            this.props.getPersons();
+        }
+
         this.refreshLinks(newProps);
         // TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
