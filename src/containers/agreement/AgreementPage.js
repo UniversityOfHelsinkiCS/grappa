@@ -8,7 +8,7 @@ import { personType, programmeType, roleType, agreementType, thesisType } from '
 
 // redux
 import { connect } from 'react-redux';
-import { saveAgreement, updateAgreement, saveAttachment, saveAgreementDraft } from './agreementActions';
+import { saveAgreement } from './agreementActions';
 
 export class AgreementPage extends Component {
     constructor(props) {
