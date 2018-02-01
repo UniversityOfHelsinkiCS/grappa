@@ -21,6 +21,7 @@ const thesisApp = (<ThesisList
     attachments={[]}
     agreements={[]}
     showButtons
+    markPrinted={() => ({})}
 />);
 const wrapper = shallow(thesisApp);
 
@@ -57,6 +58,7 @@ test('theses can be filtered', (t) => {
             <ThesisList
                 theses={theses}
                 downloadSelected={() => ({})}
+                markPrinted={() => ({})}
                 agreements={[]}
                 attachments={[]}
                 showButtons
@@ -91,6 +93,7 @@ test('theses can be selected to download', (t) => {
             <ThesisList
                 theses={theses}
                 downloadSelected={download}
+                markPrinted={() => ({})}
                 agreements={agreements}
                 attachments={attachments}
                 showButtons

@@ -10,7 +10,8 @@ class ThesisList extends Component {
             filteredTheses: props.theses,
             formattedTheses: props.theses,
             selectedThesesIds: [],
-            cover: true
+            cover: true,
+            markDone: false
         };
 
         this.search = this.search.bind(this);
@@ -75,6 +76,7 @@ class ThesisList extends Component {
             }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
             );
             this.props.downloadSelected(attachmentIds);
+            this.props.markPrinted(this.state.selectedThesesIds);
         }
     };
 
@@ -90,6 +92,10 @@ class ThesisList extends Component {
         this.setState({ cover: !this.state.cover });
     };
 
+    toggleMarkDone = () => {
+        this.setState({ markDone: !this.state.markDone });
+    };
+
     renderButtons() {
         if (!this.props.showButtons) {
             return null;
@@ -97,7 +103,7 @@ class ThesisList extends Component {
 
         return (
             <div className="ui form">
-                <div className="three fields" >
+                <div className="two fields" >
                     <div className="field">
                         <button className="ui orange button" onClick={this.sendDownloadSelected}>Download</button>
                         &nbsp;
@@ -109,8 +115,19 @@ class ThesisList extends Component {
                             />
                             <label>Include cover</label>
                         </div>
+                        &nbsp;
+                        <div className="ui toggle checkbox">
+                            <input
+                                type="checkbox"
+                                checked={this.state.markDone ? 'true' : ''}
+                                onChange={this.toggleMarkDone}
+                            />
+                            <label>Mark print done</label>
+                        </div>
                     </div>
-                    <button className="ui purple button" onClick={this.toggleAll}>Select all</button>
+                    <div className="field">
+                        <button className="ui purple button" onClick={this.toggleAll}>Select all</button>
+                    </div>
                 </div>
             </div>
         );
@@ -171,7 +188,8 @@ ThesisList.propTypes = {
     downloadSelected: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
-    showButtons: bool.isRequired
+    showButtons: bool.isRequired,
+    markPrinted: func.isRequired
 };
 
 

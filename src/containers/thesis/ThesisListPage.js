@@ -44,6 +44,7 @@ class ThesisListPage extends Component {
                     agreements={this.props.agreements}
                     attachments={this.props.attachments}
                     showButtons={false}
+                    markPrinted={() => ({})}
                 />
             </div>
         );

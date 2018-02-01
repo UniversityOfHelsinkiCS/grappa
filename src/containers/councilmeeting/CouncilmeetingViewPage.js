@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux';
 import { downloadAttachments } from '../attachment/attachmentActions'
+import { markPrinted } from '../thesis/thesisActions';
 import { personType, thesisType, agreementType, attachmentType } from '../../util/types';
 import { formatTheses } from '../../util/theses';
 
@@ -74,6 +75,14 @@ export class CouncilmeetingViewPage extends Component {
         this.props.downloadAttachments(attachmentIds);
     };
 
+    renderCouncilMeetingTitle() {
+        if (this.state.currentMeeting) {
+            return `Councilmeeting of ${moment(this.state.currentMeeting.date).format('DD.MM.YYYY')}`;
+        }
+
+        return 'No Councilmeeting found';
+    }
+
     render() {
         return (
             <div>
@@ -93,11 +102,7 @@ export class CouncilmeetingViewPage extends Component {
                     }
                     <h2 className="ui dividing header" style={{ marginTop: '1%' }}>
                         <span>
-                            {this.state.currentMeeting !== undefined ?
-                                `Councilmeeting of ${moment(this.state.currentMeeting.date).format('DD/MM/YYYY')}`
-                                :
-                                'No Councilmeeting found'
-                            }
+                            {this.renderCouncilMeetingTitle()}
                         </span>
                     </h2>
                 </div>
@@ -107,6 +112,7 @@ export class CouncilmeetingViewPage extends Component {
                     userRoles={this.props.user.roles}
                     attachments={this.props.attachments}
                     agreements={this.props.agreements}
+                    markPrinted={this.props.markPrinted}
                     showButtons
                 />
             </div>
@@ -126,6 +132,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     downloadAttachments(attachmentIds) {
         dispatch(downloadAttachments(attachmentIds))
+    },
+    markPrinted(thesisIds) {
+        dispatch(markPrinted(thesisIds))
     }
 });
 
@@ -134,7 +143,8 @@ CouncilmeetingViewPage.propTypes = {
     theses: arrayOf(thesisType).isRequired,
     downloadAttachments: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
-    attachments: arrayOf(attachmentType).isRequired
+    attachments: arrayOf(attachmentType).isRequired,
+    markPrinted: func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);
