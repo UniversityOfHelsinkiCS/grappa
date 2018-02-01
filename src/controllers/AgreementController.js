@@ -28,9 +28,10 @@ export async function getAllAgreements(req, res) {
             return;
         }
 
+        const programmeRoles = ['resp_professor', 'print_person', 'manager'];
         rolesInProgrammes.forEach(async (item) => {
             // As resp_prof, print-person and manager persons who are writing theses in programme
-            if (item.role.name === 'resp_professor' || item.role.name === 'print-person' || item.role.name === 'manager') {
+            if (programmeRoles.includes(item.role.name)) {
                 newAgreements = await agreementService.getAgreementsInProgramme(item.programme.programmeId);
                 agreements = [...new Set([...agreements, ...newAgreements])];
             }
