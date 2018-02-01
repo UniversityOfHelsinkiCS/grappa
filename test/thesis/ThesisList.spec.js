@@ -100,7 +100,7 @@ test('theses can be selected to download', (t) => {
             />
         </MemoryRouter>);
 
-    component.find('input[type="checkbox"]').at(1).simulate('change', { target: { checked: true } });
+    component.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } });
     component.find('.orange').simulate('click');
 
     t.true(download.called);
