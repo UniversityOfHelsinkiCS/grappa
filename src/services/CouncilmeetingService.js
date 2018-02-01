@@ -5,20 +5,13 @@ const moment = require('moment');
 // TODO: Use bookshelf to combine programmes into councilmeeting
 
 export const getAllCouncilmeetings = async () => {
-    const meetings = await Councilmeeting.fetchAll();
-    return Promise.all(meetings.models.map(async (model) => {
-        const meeting = model.attributes;
-        const programmes = await getProgrammesForMeeting(meeting.councilmeetingId)
-        meeting.programmes = programmes.reduce((acc, cur) => {
-            acc.push(cur.programmeId)
-            return acc
-        }, [])
-        return meeting;
-    }))
+    return Councilmeeting.fetchAll({ withRelated: ['programmes']});
 }
 
 export const saveCouncilmeeting = (councilmeeting) => {
     validateMeetingDates(councilmeeting);
+
+
     return new Councilmeeting(toCouncilmeetingObject(councilmeeting)).save().then(m => m.get('councilmeetingId'));
 };
 

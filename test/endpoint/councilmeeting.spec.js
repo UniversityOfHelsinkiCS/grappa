@@ -144,6 +144,7 @@ test('councilmeeting update', async (t) => {
 test('councilmeeting with invalid data cannot be created', async (t) => {
     t.plan(3);
     const app = makeApp(1);
+    //const getBefore = await validGet(t, app);
 
     const badMeeting1 = {
         date: '2017-02-31T22:00:00.000Z', // Invalid date
@@ -180,4 +181,12 @@ test('councilmeeting with invalid data cannot be created', async (t) => {
         t.is(response.status, 500,
             `Response wasn't 500 at request number ${index}`)
     })
+
+    //const getAfter = await validGet(t, app)
+    /*console.log('--------------------------')
+    console.log(JSON.stringify(getBefore));
+    console.log('--------------------------')
+    console.log(JSON.stringify(getAfter));
+    console.log('--------------------------')
+    t.deepEqual(getBefore, getAfter)*/
 });
