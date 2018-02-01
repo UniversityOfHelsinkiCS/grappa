@@ -12,14 +12,17 @@ export async function saveCouncilmeeting(req, res) {
     if (councilmeeting) {
         const programmeIds = councilmeeting.programmes;
         delete councilmeeting.programmes;
-
-        const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
-        await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(savedMeetingId, programmeIds);
-        const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
-        programmeIds.forEach((programmeId) => {
-            notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId);
-        });
-        res.status(200).json(savedMeeting);
+        try {
+            const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
+            await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(savedMeetingId, programmeIds);
+            const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
+            programmeIds.forEach((programmeId) => {
+                notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId);
+            });
+            res.status(200).json(savedMeeting);
+        } catch (error) {
+            res.status(500).end()
+        }
     }
 }
 
