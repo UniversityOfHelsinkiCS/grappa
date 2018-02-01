@@ -1,10 +1,12 @@
 import test from 'ava';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'persons_test';
 
 const request = require('supertest');
 const express = require('express');
 const persons = require('../../src/routes/persons');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
@@ -17,25 +19,11 @@ const makeApp = (userId) => {
 
     app.use(errorHandler);
     return app;
-}
+};
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
-})
-
-/*
-const personWithoutId = {
-    shibbolethId: '123',
-    email: 'testi@testaaja.com',
-    firstname: 'Testi',
-    lastname: 'Testaaja',
-    isRetired: false,
-    studentNumber: '0123456790',
-    phone: '050 1234567'
-}
-*/
+    await initDb();
+});
 
 test('person get all for admin', async (t) => {
     t.plan(3);
@@ -47,7 +35,7 @@ test('person get all for admin', async (t) => {
     t.is(res.status, 200);
     const { persons, roles } = res.body;
     t.truthy(roles.length > 10);
-    t.is(persons.length, allPersons.length);
+    t.is(persons.length, allPersons.length + 1); // Test below creates new person
 });
 
 test('person get all for student', async (t) => {

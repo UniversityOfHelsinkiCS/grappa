@@ -1,4 +1,4 @@
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 
 export async function getEmailDrafts() {
     return knex.select().table('emailDraft');

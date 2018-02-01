@@ -1,10 +1,12 @@
 import test from 'ava';
-import { createPerson, deleteFromDb } from '../utils';
+import { createPerson, initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'roles_test';
 
 const request = require('supertest');
 const express = require('express');
 const rolesRoute = require('../../src/routes/roles');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 
 const makeApp = (userId) => {
     const app = express();
@@ -18,9 +20,7 @@ const makeApp = (userId) => {
 };
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+    await initDb();
 });
 
 test('study field can be set to visitor role', async (t) => {

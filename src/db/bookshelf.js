@@ -1,5 +1,4 @@
-'use strict';
-const knex = require('./connection')
+const knex = require('./connection').getKnex();
 const bookshelf = require('bookshelf')(knex);
 
 module.exports = bookshelf;

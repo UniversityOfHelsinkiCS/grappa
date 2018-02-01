@@ -1,11 +1,13 @@
 import test from 'ava';
-import { createPerson, deleteFromDb } from '../utils';
+import { createPerson, initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'invite_test';
 
 const request = require('supertest');
 const express = require('express');
 const invite = require('../../src/routes/invite');
 const persons = require('../../src/routes/persons');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
@@ -25,9 +27,7 @@ const makeApp = (userId) => {
 };
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+    await initDb();
 });
 
 test('thesis is linked to author when invite is accepted', async (t) => {

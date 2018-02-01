@@ -1,7 +1,9 @@
+import Promise from 'bluebird';
+
 const knex = require('../src/db/connection');
 
 export async function createPerson(email) {
-    const insert = await knex('person')
+    const insert = await knex.getKnex()('person')
         .returning('personId')
         .insert({
             email,
@@ -12,34 +14,47 @@ export async function createPerson(email) {
     return insert[0];
 }
 
-export async function deleteFromDb() {
-    await knex('meetingProgramme').del();
-    await knex('previousagreements').del();
-    await knex('agreementDraftPerson').del();
-    await knex('agreementDraft').del();
-    await knex('notification').del();
-    await knex('emailDraft').del();
-    await knex('attachment').del();
-    await knex('agreementPerson').del();
-    await knex('emailInvite').del();
-    await knex('agreement').del();
-    await knex('thesis').del();
-    await knex('personWithRole').del();
-    await knex('person').del();
-    await knex('role').del();
-    await knex('councilmeeting').del();
-    await knex('studyfield').del();
-    await knex('programme').del();
-    await knex('faculty').del();
+export async function deleteFromDb(connection) {
+    return Promise.all([
+        connection('meetingProgramme').del(),
+        connection('previousagreements').del(),
+        connection('agreementDraftPerson').del(),
+        connection('agreementDraft').del(),
+        connection('notification').del(),
+        connection('emailDraft').del(),
+        connection('attachment').del(),
+        connection('agreementPerson').del(),
+        connection('emailInvite').del(),
+        connection('agreement').del(),
+        connection('thesis').del(),
+        connection('personWithRole').del(),
+        connection('person').del(),
+        connection('role').del(),
+        connection('councilmeeting').del(),
+        connection('studyfield').del(),
+        connection('programme').del(),
+        connection('faculty').del(),
 
-    await knex.raw('alter sequence "agreementDraft_agreementDraftId_seq" restart with 4');
-    await knex.raw('alter sequence "agreement_agreementId_seq" restart with 4');
-    await knex.raw('alter sequence "attachment_attachmentId_seq" restart with 2');
-    await knex.raw('alter sequence "councilmeeting_councilmeetingId_seq" restart with 2');
-    await knex.raw('alter sequence "notification_notificationId_seq" restart with 2');
-    await knex.raw('alter sequence "personWithRole_personRoleId_seq" restart with 17');
-    await knex.raw('alter sequence "person_personId_seq" restart with 20');
-    await knex.raw('alter sequence "programme_programmeId_seq" restart with 9');
-    await knex.raw('alter sequence "studyfield_studyfieldId_seq" restart with 8');
-    await knex.raw('alter sequence "thesis_thesisId_seq" restart with 5');
+        connection.raw('alter sequence "agreementDraft_agreementDraftId_seq" restart with 4'),
+        connection.raw('alter sequence "agreement_agreementId_seq" restart with 4'),
+        connection.raw('alter sequence "attachment_attachmentId_seq" restart with 2'),
+        connection.raw('alter sequence "councilmeeting_councilmeetingId_seq" restart with 2'),
+        connection.raw('alter sequence "notification_notificationId_seq" restart with 2'),
+        connection.raw('alter sequence "personWithRole_personRoleId_seq" restart with 17'),
+        connection.raw('alter sequence "person_personId_seq" restart with 20'),
+        connection.raw('alter sequence "programme_programmeId_seq" restart with 9'),
+        connection.raw('alter sequence "studyfield_studyfieldId_seq" restart with 8'),
+        connection.raw('alter sequence "thesis_thesisId_seq" restart with 5')
+    ]);
+}
+
+export async function initDb() {
+    const schema = process.env.DB_SCHEMA;
+    const connection = knex.getKnex();
+
+    await connection.raw(`drop schema if exists ${schema} cascade`);
+    await connection.raw(`create schema ${schema}`);
+    await connection.migrate.latest();
+    await deleteFromDb(connection);
+    await connection.seed.run();
 }

@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const Checkit = require('checkit');
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 
 const emailService = require('./EmailService');
 

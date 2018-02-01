@@ -1,9 +1,10 @@
 import test from 'ava';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'notification_test';
 
 const request = require('supertest');
 const express = require('express');
-const knex = require('../../src/db/connection');
 const index = require('../../src/routes/index');
 const errorHandler = require('../../src/util/errorHandler');
 
@@ -17,12 +18,10 @@ const makeApp = (userId) => {
 
     app.use(errorHandler);
     return app;
-}
+};
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+    await initDb();
 });
 
 test('Initial test', async (t) => {
