@@ -211,3 +211,8 @@ async function isAgreementPersonForThesis(user, agreements) {
 
     return !!agreementPersons.find(person => person.personId === user.personId);
 }
+
+export async function markPrinted(req, res) {
+    await thesisService.markPrinted(req.body);
+    res.status(200).json(req.body);
+}

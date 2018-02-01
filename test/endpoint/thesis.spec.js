@@ -216,14 +216,14 @@ test('resp prof can see programme thesis', async (t) => {
     t.is(res.body[0].title, title);
 });
 
-test('admin can see all theses', async (t) => {
+test.serial('admin can see all theses', async (t) => {
     const theses = await knex('thesis');
     const res = await request(makeApp(1)).get('/theses');
 
     t.is(res.body.length, theses.length);
 });
 
-test('invalid thesis is not accepted', async (t) => {
+test.serial('invalid thesis is not accepted', async (t) => {
     const theses = await knex('thesis');
     const agreements = await knex('agreement');
 
@@ -319,7 +319,6 @@ test('thesis can be updated', async (t) => {
     t.is(thesisFromDb.title, 'New name');
 });
 
-
 test('thesis edit access is checked', async (t) => {
     const thesisId = await createExistingThesis();
 
@@ -336,4 +335,16 @@ test('thesis edit access is checked', async (t) => {
     const thesis = await knex('thesis').select().where('thesisId', thesisId).first();
 
     t.is('Annin Grady', thesis.title);
+});
+
+test('mark thesis printed', async (t) => {
+    const thesisId = await createExistingThesis();
+
+    const res = await request(makeApp(1))
+        .put('/theses/printed')
+        .send([thesisId]);
+
+    t.is(res.status, 200);
+    const thesisAfter = await knex('thesis').select().where('thesisId', thesisId).first();
+    t.true(thesisAfter.printDone);
 });
