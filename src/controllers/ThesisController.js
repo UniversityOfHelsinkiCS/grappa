@@ -19,7 +19,7 @@ const checkit = new Checkit({
 });
 
 export async function getTheses(req, res) {
-    const programmeRoles = ['resp_professor', 'print-person', 'manager'];
+    const programmeRoles = ['resp_professor', 'print_person', 'manager'];
 
     const user = await personService.getLoggedPerson(req);
     let theses = [];
