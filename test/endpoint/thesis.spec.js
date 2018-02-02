@@ -27,44 +27,43 @@ test.before(async () => {
     await initDb();
 });
 
-const grader = {
-    address: 'Intiankatu',
-    email: 'thomas@tarkastaja.com',
-    firstname: 'Thomas',
-    isRetired: false,
-    lastname: 'CS-Tarkastaja',
-    major: 'mathematics',
-    personId: 5,
-    phone: '050 1234567',
-    shibbolethId: 'thomastarkastajashibboId',
-    studentNumber: '876548321',
-    title: ''
-};
-const thesisForm = {
-    id: undefined,
-    authorEmail: 'author@example.com',
-    title: 'Annin Grady',
-    urkund: 'https://example.com',
-    grade: '4',
-    graders: [grader],
-    studyfieldId: 2,
-    councilmeetingId: 1,
-    printDone: false,
-    thesisEmails: {
-        graderEvalReminder: 3,
-        printReminder: 2
+const numberFromTo = (from, to) => Math.round(Math.random() * (to - from)) + from;
+
+const generateThesisForm = async () => {
+    const persons = await knex('person').select()
+    const person1 = persons[numberFromTo(0, (persons.length / 2) - 1)]
+    const person2 = persons[numberFromTo(persons.length / 2, persons.length - 1)]
+    const thesisForm = {
+        id: undefined,
+        authorEmail: `author${numberFromTo(0, 1000)}@example.com`,
+        title: `Gradu number ${numberFromTo(0, 1000)}`,
+        urkund: `https://example.com/${numberFromTo(0, 1000)}`,
+        grade: `${numberFromTo(1, 5)}`,
+        graders: [person1, person2],
+        studyfieldId: 2,
+        councilmeetingId: 1,
+        printDone: false,
+        thesisEmails: {
+            graderEvalReminder: 3,
+            printReminder: 2
+        }
     }
-};
+    return { thesisForm, person1, person2 }
+}
+const generateThesisWithId = (thesisForm, thesisId) => ({
+    thesisId,
+    councilmeetingId: thesisForm.councilmeetingId,
+    title: thesisForm.title,
+    urkund: thesisForm.urkund,
+    grade: thesisForm.grade,
+    printDone: thesisForm.printDone
+})
 
-const thesisWithId = {
-    councilmeetingId: 1,
-    title: 'Annin Grady',
-    urkund: 'https://example.com',
-    grade: '4',
-    printDone: false
-};
-
-const fakeAgreement = {
+const generateAgreement = (thesisForm, agreementId, thesisId, authorId, startDate) => ({
+    agreementId,
+    thesisId,
+    authorId,
+    startDate,
     responsibleSupervisorId: null,
     studyfieldId: thesisForm.studyfieldId,
     fake: true,
@@ -77,88 +76,105 @@ const fakeAgreement = {
     meetingAgreement: null,
     other: null,
     whoNext: null
-};
+})
 
-test('thesisForm post & creates id without attachment', async (t) => {
-    t.plan(5);
-    const res = await request(makeApp(1))
-        .post('/theses')
-        .field('json', JSON.stringify(thesisForm));
-    t.is(res.status, 200);
-
-    const { thesis, author, agreement } = res.body;
-
-    // Check the linking is right
-    t.is(thesis.thesisId, agreement.thesisId);
-    delete thesis.thesisId;
-    delete agreement.agreementId;
-    delete agreement.thesisId;
-    delete agreement.authorId;
-    delete agreement.startDate;
-    // Check the contents are right
-    t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
-    t.deepEqual(author, undefined, 'Author person is correct');
-    t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
-});
-
-test.skip('thesis get all', async (t) => {
-    t.plan(2);
-    const app = makeApp(1);
-    const res = await request(app)
-        .get('/theses');
-    t.is(res.status, 200);
-    const theses = res.body;
-    t.is(theses.length, 4); // TODO: Fix this, fails if this spec file is run alone
-});
-
-const attachment = {
+const generateAttachment = (attachmentId, agreementId) => ({
+    attachmentId,
+    agreementId,
     filename: null, // Saving to memory has no filename
     mimetype: 'application/octet-stream',
     savedOnDisk: true,
     label: 'otherFile',
     originalname: 'LICENSE'
-};
+});
+
+const validPostForm = async (t, app, thesisForm, addAttachment) => {
+    let res
+    if (!addAttachment) {
+        res = await request(app)
+            .post('/theses')
+            .field('json', JSON.stringify(thesisForm))
+    } else {
+        res = await request(app)
+            .post('/theses')
+            .field('json', JSON.stringify(thesisForm))
+            .attach('otherFile', './LICENSE')
+    }
+    t.is(res.status, 200)
+    const { thesis, author, agreement, attachments } = res.body
+    const expectedThesis = generateThesisWithId(thesisForm, thesis.thesisId)
+    const expectedAuthor = undefined
+    const expectedAgreement = generateAgreement(thesisForm, agreement.agreementId, agreement.thesisId, agreement.authorId, agreement.startDate)
+    // Check the linking is right
+    t.is(thesis.thesisId, agreement.thesisId);
+    // Check the contents are right
+    t.deepEqual(thesis, expectedThesis, 'Thesis is not correct');
+    t.deepEqual(author, expectedAuthor, 'Author person is not correct');
+    t.deepEqual(agreement, expectedAgreement, 'Agreement is not correct');
+    if (addAttachment) {
+        t.is(attachments[0].agreementId, agreement.agreementId);
+        const expectedAttachment = generateAttachment(attachments[0].attachmentId, agreement.agreementId)
+        t.deepEqual(attachments[0], expectedAttachment, 'Attachment is not correct');
+    }
+    return res.body
+}
+
+test('thesisForm post & creates id without attachment', async (t) => {
+    t.plan(6);
+    const { thesisForm, person1, person2 } = await generateThesisForm()
+    const app = makeApp(1)
+    const { agreement } = await validPostForm(t, app, thesisForm)
+
+    // Check that the persons are agreementPersons through personWithRole
+    const personRoles = await knex.select().from('personWithRole')
+        .innerJoin('agreementPerson', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
+        .where('roleId', 5)
+        .where('agreementId', agreement.agreementId)
+        .where('personId', person1.personId)
+        .orWhere('personId', person2.personId)
+    t.truthy(personRoles.length, 2,
+        `Someone else was found linked to agreement: ${JSON.stringify(personRoles)}`);
+});
+
+test('thesis get all', async (t) => {
+    t.plan(13);
+    const { thesisForm: thesisForm1 } = await generateThesisForm()
+    const { thesisForm: thesisForm2 } = await generateThesisForm()
+    const app = makeApp(1);
+    const { thesis: thesis1 } = await validPostForm(t, app, thesisForm1)
+    const { thesis: thesis2 } = await validPostForm(t, app, thesisForm2)
+    const sentTheses = [thesis1, thesis2]
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200);
+    const responseTheses = res.body;
+    sentTheses.forEach((thesis) => {
+        const found = responseTheses.find(th =>
+            th.thesisId === thesis.thesisId &&
+            th.title === thesis.title
+        )
+        t.truthy(found,
+            `Thesis ${JSON.stringify(thesis)} was not found in response, ${JSON.stringify(responseTheses)}`)
+    })
+});
 
 test('thesisForm post & creates id with attachment', async (t) => {
     t.plan(7);
-    const res = await request(makeApp(1))
-        .post('/theses')
-        .field('json', JSON.stringify(thesisForm))
-        .attach('otherFile', './LICENSE');
-    t.is(res.status, 200);
-
-    const { thesis, author, agreement, attachments } = res.body;
-
-    // Check the linking is right
-    t.is(thesis.thesisId, agreement.thesisId);
-    t.is(attachments[0].agreementId, agreement.agreementId);
-    delete thesis.thesisId;
-    delete attachments[0].attachmentId;
-    delete agreement.agreementId;
-
-    delete agreement.thesisId;
-    delete agreement.authorId;
-    delete agreement.startDate;
-    delete attachments[0].agreementId;
-    // Check the contents are right
-    t.deepEqual(thesis, thesisWithId, 'Thesis is correct');
-    t.deepEqual(author, undefined, 'Author person is correct');
-    t.deepEqual(agreement, fakeAgreement, 'Agreement is correct');
-    t.deepEqual(attachments[0], attachment, 'Attachments are correct');
+    const { thesisForm } = await generateThesisForm()
+    const app = makeApp(1);
+    await validPostForm(t, app, thesisForm, true)
 });
 
 test('thesisForm post sends emails', async (t) => {
     const mailer = require('../../src/util/mailer');
     const mailSpy = sinon.spy(mailer, 'sendEmail');
+    const { thesisForm } = await generateThesisForm()
     const form = Object.assign({}, thesisForm);
 
     form.authorEmail = 'emailTest@example.com';
     form.studyfieldId = 1;
-
-    await request(makeApp(1))
-        .post('/theses')
-        .field('json', JSON.stringify(form));
-
+    const app = makeApp(1)
+    await validPostForm(t, app, form)
     t.true(mailSpy.calledWith(form.authorEmail), 'Email 1 ok');
     t.true(mailSpy.calledWith('victoria@vastuuproffa.com'), 'Email 2 ok');
     t.true(mailSpy.calledWith('erkki@erikoistapaus.com'), 'Email 3 ok');
@@ -269,8 +285,8 @@ test('thesis is validated when updated', async (t) => {
 
     t.is(res.status, 500);
 });
-
-async function createExistingThesis() {
+/*
+const createExistingThesis = async () => {
     const thesis = {
         title: 'Annin Grady',
         urkund: 'https://example.com',
@@ -302,6 +318,9 @@ test('thesis can be updated', async (t) => {
 
     const thesisId = await createExistingThesis();
 
+    const persons = await knex('person').select()
+    const grader = persons[numberFromTo(0, persons.length - 1)]
+
     const update = {
         thesisId,
         title: 'New name',
@@ -321,6 +340,9 @@ test('thesis can be updated', async (t) => {
 
 test('thesis edit access is checked', async (t) => {
     const thesisId = await createExistingThesis();
+
+    const persons = await knex('person').select()
+    const grader = persons[numberFromTo(0, persons.length - 1)]
 
     const update = {
         thesisId,
@@ -348,3 +370,4 @@ test('mark thesis printed', async (t) => {
     const thesisAfter = await knex('thesis').select().where('thesisId', thesisId).first();
     t.true(thesisAfter.printDone);
 });
+*/

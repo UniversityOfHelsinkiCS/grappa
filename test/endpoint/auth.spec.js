@@ -38,9 +38,7 @@ test.before(async () => {
     await initDb();
 });
 
-const numberFromTo = (from, to) => {
-    return Math.round(Math.random() * (to - from)) + from
-}
+const numberFromTo = (from, to) => Math.round(Math.random() * (to - from)) + from
 
 const generateUser = () => ({
     email: `sahko${numberFromTo(0, 10000)}@posti.fi`,
