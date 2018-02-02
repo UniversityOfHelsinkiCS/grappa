@@ -1,10 +1,11 @@
 import test from 'ava';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'agreement_test';
 
 const request = require('supertest');
 const express = require('express');
 const agreement = require('../../src/routes/agreements');
-const knex = require('../../src/db/connection');
 
 const makeApp = (userId) => {
     const app = express();
@@ -12,15 +13,13 @@ const makeApp = (userId) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, agreement)
+    }, agreement);
     return app;
-}
+};
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
-})
+    await initDb();
+});
 
 const agreementForm = {
     thesisTitle: 'my Thesis',
@@ -47,8 +46,8 @@ const agreementForm = {
     intermediateGoal: '20 sivua ensi perjantaina',
     meetingAgreement: 'Jepsis',
     other: 'eihän tässä muuta',
-    whoNext: 'supervisor',
-}
+    whoNext: 'supervisor'
+};
 
 const agreementWithId = {
     agreementId: 1,
@@ -63,9 +62,9 @@ const agreementWithId = {
     intermediateGoal: 'oispa valmistunut',
     meetingAgreement: 'just just',
     other: 'eihän tässä muuta'
-}
+};
 
-//TODO: Test something like thesis: thesisForm post & creates id without attachment
+// TODO: Test something like thesis: thesisForm post & creates id without attachment
 test.skip('agreement post & correct response', async (t) => {
     t.plan(2);
     const res = await request(makeApp())
@@ -75,16 +74,15 @@ test.skip('agreement post & correct response', async (t) => {
     const thesis = res.body.thesis;
     const author = res.body.author;
     const agreement = res.body.agreement;
-
-})
+});
 
 test('agreements get should also return attachments', async (t) => {
     t.plan(3);
     const res = await request(makeApp(10))
-        .get('/agreements')
+        .get('/agreements');
     t.is(res.status, 200);
     const agreements = res.body.agreements;
     const attachments = res.body.attachments;
     t.is(agreements.length, 1);
     t.is(attachments.length, 1);
-})
+});

@@ -1,10 +1,12 @@
 import test from 'ava';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'emaildraft_test';
 
 const request = require('supertest');
 const express = require('express');
 const emailDrafts = require('../../src/routes/emailDrafts');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 
 const makeApp = (userId) => {
     const app = express();
@@ -16,10 +18,8 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async (t) => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+test.before(async () => {
+    await initDb();
 });
 
 test('emailDrafts get all', async (t) => {

@@ -1,6 +1,6 @@
 import logger from '../util/logger';
 
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 
 const agreementSchema = [
     'agreement.agreementId',

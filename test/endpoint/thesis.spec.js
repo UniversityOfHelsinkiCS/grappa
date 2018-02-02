@@ -1,11 +1,13 @@
 import test from 'ava';
 import sinon from 'sinon';
-import { createPerson, deleteFromDb } from '../utils';
+import { createPerson, initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'thesis_test';
 
 const request = require('supertest');
 const express = require('express');
 const theses = require('../../src/routes/theses');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
@@ -22,9 +24,7 @@ const makeApp = (userId) => {
 };
 
 test.before(async () => {
-    await deleteFromDb();
-    await knex.migrate.latest();
-    await knex.seed.run();
+    await initDb();
 });
 
 const grader = {

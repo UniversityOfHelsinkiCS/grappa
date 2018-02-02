@@ -1,12 +1,14 @@
 import test from 'ava';
 import sinon from 'sinon';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'auth_test';
 
 const request = require('supertest');
 const express = require('express');
 const index = require('../../src/routes/index');
 const shibboleth = require('../../src/routes/auth');
-const knex = require('../../src/db/connection');
+const knex = require('../../src/db/connection').getKnex();
 const auth = require('../../src/middleware/auth');
 
 let i = 0;
@@ -36,9 +38,7 @@ const makeApp = (user, logout) => {
 };
 
 test.before(async () => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+    await initDb();
 });
 
 const numberFromTo = (from, to) => {
