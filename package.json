@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "KISSA=true NODE_ENV=test nyc ava | tnyan",
+    "test": "NODE_ENV=test nyc ava | tnyan",
+    "test-tap": "NODE_ENV=test nyc ava",
     "start": "NODE_ENV=development nodemon index.js",
     "start:win": "nodemon index.js",
     "start:prod": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest; NODE_ENV=production node index.js",
