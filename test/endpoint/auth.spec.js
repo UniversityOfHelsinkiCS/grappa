@@ -11,18 +11,15 @@ const shibboleth = require('../../src/routes/auth');
 const knex = require('../../src/db/connection').getKnex();
 const auth = require('../../src/middleware/auth');
 
-let i = 0;
-
 const makeApp = (user, logout) => {
     const app = express();
-    i += 1;
 
     const { email, id, surname, firstname } = user;
 
     app.use((req, res, next) => {
         req.session = { destroy: logout };
         req.headers['shib-session-id'] = 'test1234';
-        req.headers['unique-code'] = `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:123456789${i}`;
+        req.headers['unique-code'] = `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:0${numberFromTo(10000000, 19999999)}`;
         req.headers.sn = surname;
         req.headers.givenname = firstname;
         req.headers.uid = id;
@@ -102,6 +99,5 @@ test('names are saved in correct encoding', async (t) => {
         .where('lastname', 'Lemström')
         .where('firstname', 'ö')
         .first();
-
     t.truthy(person);
 });
