@@ -50,7 +50,7 @@ export async function initDb() {
     const schema = process.env.DB_SCHEMA;
     const connection = knex.getKnex();
 
-    await connection.raw(`create schema if not exists ${schema}`);
+    await connection.raw(`CREATE SCHEMA IF NOT EXISTS ${schema}`);
     await connection.migrate.latest();
     await deleteFromDb(connection);
     await connection.seed.run();
