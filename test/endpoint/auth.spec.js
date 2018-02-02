@@ -81,6 +81,7 @@ test('logout gives redirect address', async (t) => {
 });
 
 test('names are saved in correct encoding', async (t) => {
+    t.plan(2)
     const user = {
         email: 'encoding@example.com',
         id: 'encodingTest',
@@ -101,3 +102,41 @@ test('names are saved in correct encoding', async (t) => {
         .first();
     t.truthy(person);
 });
+
+test('user will have their data updated when logging in', async (t) => {
+    t.plan(3)
+    const user = generateUser();
+    const user2 = generateUser();
+    user2.id = user.id;
+    const app = makeApp(user);
+    let res = await request(app)
+        .get('/');
+    t.is(res.status, 200);
+
+    const person = await knex('person')
+        .select()
+        .where('email', user.email)
+        .where('lastname', user.surname)
+        .where('firstname', user.firstname)
+        .first();
+
+    const app2 = makeApp(user2)
+    res = await request(app2)
+        .get('/');
+    t.is(res.status, 200);
+
+    const updatedPerson = await knex('person')
+        .select()
+        .where('personId', person.personId)
+        .first()
+
+    t.deepEqual(updatedPerson,
+        Object.assign(person,
+            {
+                firstname: user2.firstname,
+                lastname: user2.surname,
+                shibbolethId: user2.id,
+                email: user2.email
+            }
+        ));
+})
