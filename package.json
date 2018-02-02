@@ -86,7 +86,7 @@
       "**/*.{js,jsx}",
       "!dist/**/*"
     ],
-    "concurrency": 4,
+    "concurrency": 8,
     "failFast": true,
     "failWithoutAssertions": true,
     "tap": true,
