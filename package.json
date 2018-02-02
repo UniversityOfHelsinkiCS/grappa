@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc ava",
+    "test": "KISSA=true NODE_ENV=test nyc ava | tnyan",
     "start": "NODE_ENV=development nodemon index.js",
     "start:win": "nodemon index.js",
     "start:prod": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest; NODE_ENV=production node index.js",
@@ -14,8 +14,7 @@
     "db:reset": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:rollback",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
-    "lint": "eslint --ext .js . || true",
-    "ava": "NODE_ENV=test ava -s"
+    "lint": "eslint --ext .js . || true"
   },
   "repository": {
     "type": "git",
@@ -76,7 +75,8 @@
     "reqres": "^2.1.0",
     "sinon": "^4.2.1",
     "standard": "^10.0.3",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "tap-nyan": "^1.1.0"
   },
   "ava": {
     "files": [
