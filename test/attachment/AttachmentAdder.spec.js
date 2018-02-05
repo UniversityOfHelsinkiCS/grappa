@@ -20,12 +20,6 @@ test('has Dropzone element', (t) => {
     t.is(wrapper.find(Dropzone).length, 1);
 });
 
-test('if no maximum size, header tells it', (t) => {
-    const wrapper = shallow(defaultAttachmentAdder);
-    const header = 'Upload attachments as much as you want';
-    t.truthy(wrapper.contains(header));
-})
-
 test('header informs no files uploaded when started', (t) => {
     const wrapper = shallow(defaultAttachmentAdder);
     const noElementsHeader = 'No attachments to be uploaded';
@@ -72,20 +66,6 @@ test('when button is clicked, it removes file from the list', (t) => {
     // const noElementsHeader = <h2>No attachments uploaded</h2>;
     t.truthy(files.length === 0);
     // t.truthy(wrapper.contains(noElementsHeader));
-})
-
-test('when limit is given, it is told', (t) => {
-    const files = getFileList();
-    const adder = (<AttachmentAdder
-        attachments={files}
-        removeAttachment={(file) => { files.splice(files.indexOf(file), 1) }}
-        addAttachment={(file) => { files.push(file) }}
-        limit={1}
-        changeList={sinon.spy()}
-    />)
-    const wrapper = shallow(adder);
-    const header = <h2>Upload maximum 1 attachments</h2>;
-    t.truthy(wrapper.contains(header));
 })
 
 test('when limit is set to 1 and attachment added, dropzone is not there', (t) => {
