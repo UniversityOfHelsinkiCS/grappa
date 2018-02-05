@@ -1,20 +1,22 @@
 import test from 'ava';
 import { initDb } from '../utils';
 
-process.env.DB_SCHEMA = 'studyfield_test';
+process.env.DB_SCHEMA = 'index_test';
 
 const request = require('supertest');
 const express = require('express');
-const programmes = require('../../src/routes/programmes');
-const mockStudyfields = require('../../src/mockdata/MockProgrammes');
+const index = require('../../src/routes/index');
+const errorHandler = require('../../src/util/errorHandler');
 
 const makeApp = (userId) => {
     const app = express();
-    app.use('/programmes', (req, res, next) => {
+    app.use('/', (req, res, next) => {
         req.session = {};
         req.session.user_id = userId;
         next();
-    }, programmes);
+    }, index);
+
+    app.use(errorHandler);
     return app;
 };
 
@@ -22,12 +24,10 @@ test.before(async () => {
     await initDb();
 });
 
-test('programme get all', async (t) => {
-    t.plan(2);
-    const app = makeApp(1);
+test('Initial test', async (t) => {
+    t.plan(1);
+    const app = makeApp();
     const res = await request(app)
-        .get('/programmes');
-
+        .get('/');
     t.is(res.status, 200);
-    t.deepEqual(res.body, mockStudyfields);
 });

@@ -2,8 +2,21 @@ const councilmeetingService = require('../services/CouncilmeetingService');
 const notificationService = require('../services/NotificationService');
 
 export async function getAllCouncilmeetings(req, res) {
-    const councilmeetings = await councilmeetingService.getAllCouncilmeetings();
-    res.status(200).json(councilmeetings);
+    try {
+        const councilmeetings = await councilmeetingService.getAllCouncilmeetings();
+
+        const responseMeetings = councilmeetings.serialize({ omitPivot: true })
+            .map((meeting) => { // Trim programmes to simply array of ids
+                const copyMeeting = Object.assign({}, meeting);
+                copyMeeting.programmes = meeting.programmes.reduce((acc, cur) => {
+                    return acc.concat(cur.programmeId);
+                }, [])
+                return copyMeeting
+            })
+        res.status(200).json(responseMeetings);
+    } catch (error) {
+        res.status(500).end()
+    }
 }
 
 export async function saveCouncilmeeting(req, res) {
@@ -12,14 +25,17 @@ export async function saveCouncilmeeting(req, res) {
     if (councilmeeting) {
         const programmeIds = councilmeeting.programmes;
         delete councilmeeting.programmes;
-
-        const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
-        await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(savedMeetingId, programmeIds);
-        const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
-        programmeIds.forEach((programmeId) => {
-            notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId);
-        });
-        res.status(200).json(savedMeeting);
+        try {
+            const savedMeetingId = await councilmeetingService.saveCouncilmeeting(councilmeeting);
+            await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(savedMeetingId, programmeIds);
+            const savedMeeting = await councilmeetingService.getCouncilmeeting(savedMeetingId);
+            programmeIds.forEach((programmeId) => {
+                notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId);
+            });
+            res.status(200).json(savedMeeting);
+        } catch (error) {
+            res.status(500).end()
+        }
     }
 }
 

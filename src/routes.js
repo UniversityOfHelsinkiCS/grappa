@@ -6,11 +6,12 @@ const programmes = require('./routes/programmes');
 const studyfields = require('./routes/studyfields');
 const persons = require('./routes/persons');
 const attachments = require('./routes/attachments');
-const shibboleth = require('./routes/shibboleth');
+const shibboleth = require('./routes/auth');
 const councilMeeting = require('./routes/councilmeeting');
 const notifications = require('./routes/notifications');
 const emailDrafts = require('./routes/emailDrafts');
 const invite = require('./routes/invite');
+const statistics = require('./routes/statisctics');
 
 const auth = require('./middleware/auth');
 const auditLogger = require('./middleware/auditLogger');
@@ -22,6 +23,7 @@ module.exports = (app) => {
     app.use('/user', shibboleth);
     app.use('/persons', persons);
     app.use(auth.checkAuth);
+    app.use('/statistics', statistics);
     app.use('/invite', invite);
     app.use('/agreements', agreements);
     app.use('/theses', theses);

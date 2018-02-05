@@ -1,4 +1,4 @@
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 
 const personSchema = [
     'person.personId',

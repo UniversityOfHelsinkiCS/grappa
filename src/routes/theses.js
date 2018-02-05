@@ -8,5 +8,6 @@ const attachment = require('../middleware/attachments');
 router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(next));
 router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(req, res).catch(next));
 router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next));
+router.put('/printed', jsonParser, (req, res, next) => thesisController.markPrinted(req, res).catch(next));
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 const moment = require('moment');
 
 const thesisSchema = [
@@ -61,3 +61,7 @@ export const updateThesis = async thesisData => knex('thesis')
     .where('thesisId', thesisData.thesisId)
     .update(thesisData)
     .then(() => getThesisById(thesisData.thesisId));
+
+export const markPrinted = thesisIds => knex('thesis')
+    .update({ printDone: true })
+    .whereIn('thesisId', thesisIds);

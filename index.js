@@ -11,7 +11,7 @@ const gracefulExit = require('express-graceful-exit');
 const routes = require('./src/routes.js');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
-const knex = require('./src/db/connection.js');
+const knex = require('./src/db/connection').getKnex();
 const server = require('http').createServer(app);
 const errorHandler = require('./src/util/errorHandler');
 

@@ -1,10 +1,11 @@
 import test from 'ava';
-import { deleteFromDb } from '../utils';
+import { initDb } from '../utils';
+
+process.env.DB_SCHEMA = 'attachment_test';
 
 const request = require('supertest');
 const express = require('express');
 const attachment = require('../../src/routes/attachments');
-const knex = require('../../src/db/connection');
 
 const makeApp = (userId) => {
     const app = express();
@@ -16,10 +17,8 @@ const makeApp = (userId) => {
     return app;
 };
 
-test.before(async (t) => {
-    await knex.migrate.latest();
-    await deleteFromDb();
-    await knex.seed.run();
+test.before(async () => {
+    await initDb();
 });
 
 test('attachment post & creates id', async (t) => {

@@ -21,7 +21,6 @@ Dependencies: [![Known Vulnerabilities](https://snyk.io/test/github/UniversityOf
 $ docker run --name grappa-postgres-container -d -e POSTGRES_PASSWORD=password -it -p 5433:5432 postgres:9.6.3
 $ docker exec -it postgres-container createdb -U postgres grappa
 $ docker exec -it grappa-postgres-container createdb -U postgres grappa
-$ docker exec -it grappa-postgres-container psql -c 'create schema grappa_test;' -U postgres grappa
 ```
 
 Create .env file to project root and add database connection string
@@ -29,7 +28,10 @@ Create .env file to project root and add database connection string
 DATABASE_URL=postgres://postgres:password@localhost:5433/grappa
 ```
 
-Test are run using grappa_test schema. Development app is run with public schema.
+Tests are run using own schema for each test file. Test schema is defined using
+`DB_SCHEMA` env which is set in each test file.
+
+If you want to see logging output in console for unit tests set `CONSOLE_OUTPUT=true`
 
 ## Endpoints in use
 
@@ -41,8 +43,7 @@ Test are run using grappa_test schema. Development app is run with public schema
 | /user/login          | X     | X    | X    |       |                        |
 | /user/logout         | X     | X    |      |       |                        |
 | /user/:id            | X     | X    | -    |       | Not used in production |
-| /agreements          | X     |      |      |       |                        |
-| /agreements/:id      | X     |      |      |       |                        |
+| /agreements          | X     | X    | X    |       |                        |
 | /attachments/:string | X     | X    | X    |       |                        |
 | /councilmeetings     | X     | X    | X    |       |                        |
 | /emailDrafts         | X     | X    | X    |       |                        |
@@ -60,8 +61,7 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS            | FRONT | BACK | PROD | TESTS | DETAILS |
 |-------------------|-------|------|------|-------|---------|
-| /agreements       | X     | X    |      |       |         |
-| /agreement-drafts | X     |      |      |       |         |
+| /agreements       | X     |      |      |       |         |
 | /attachments      | X     | X    | X    |       |         |
 | /councilmeetings  | X     | X    | X    |       |         |
 | /emailDrafts      | X     | X    |      |       |         |
@@ -76,7 +76,6 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS |
 |----------------------|-------|------|------|-------|---------|
-| /agreements/:id      | X     | X    |      |       |         |
 | /attachments/:id     | X     | X    |      |       |         |
 | /councilmeetings/:id | X     | X    | X    |       |         |
 | /emailDrafts/:id     | X     | X    |      |       |         |
@@ -90,7 +89,6 @@ Test are run using grappa_test schema. Development app is run with public schema
 
 | ACCESS               | FRONT | BACK | PROD | TESTS | DETAILS          |
 |----------------------|-------|------|------|-------|------------------|
-| /agreements/:id      | X     | X    |      |       |                  |
 | /councilmeetings/:id | X     | X    | X    |       |                  |
 | /emailDrafts/:id     | X     | X    |      |       |                  |
 | /programmes          | X     |      |      |       |                  |

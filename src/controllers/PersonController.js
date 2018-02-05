@@ -2,56 +2,14 @@ import logger from '../util/logger';
 
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
-const notificationService = require('../services/NotificationService');
 const emailInviteService = require('../services/EmailInviteService');
-
-export async function updatePerson(req, res) {
-    const data = req.body;
-    const personData = getPersonData(data);
-    if (personData.personId) {
-        const updateData = removeEmptyKeys(personData);
-        await personService.updatePerson(updateData).then((response) => {
-            notificationService.createNotification('ROLE_UPDATE_ONE_SUCCESS', req);
-            res.status(200).json(`person updated successfully ${response}`);
-        }
-        ).catch(err => res.status(500).json(err));
-    } else {
-        res.status(500).json({ text: 'person does not exist' });
-    }
-}
-
-function getPersonData(data) {
-    return {
-        personId: data.personId,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        shibbolethId: data.shibbolethId,
-        email: data.email,
-        title: data.title,
-        isRetired: data.isRetired,
-        studentNumber: data.studentNumber,
-        address: data.address,
-        phone: data.phone,
-        major: data.major
-    };
-}
-
-function removeEmptyKeys(personData) {
-    const parsedData = {};
-    Object.keys(personData).forEach((key) => {
-        if (personData[key] != null) {
-            parsedData[key] = personData[key];
-        }
-    });
-    return parsedData;
-}
 
 /**
  * Get persons that are of interest to the person doing query
  */
 export async function getPersons(req, res) {
     // TODO test & refactor
-    const programmeRoles = ['resp_professor', 'print-person', 'manager'];
+    const programmeRoles = ['resp_professor', 'print_person', 'manager'];
 
     let persons = [];
     let newPersons = [];
@@ -130,11 +88,6 @@ async function getAllPersons(res) {
         persons
     };
     return res.status(200).json(responseObject).end();
-}
-
-export async function getPersonById(req, res) {
-    const person = await personService.getPersonById(req.params.id);
-    res.status(200).json(person);
 }
 
 export async function invitePerson(req, res) {

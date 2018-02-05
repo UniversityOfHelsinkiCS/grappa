@@ -1,6 +1,6 @@
 import logger from '../util/logger';
 
-const knex = require('../db/connection');
+const knex = require('../db/connection').getKnex();
 const pdfManipulator = require('../util/pdfManipulator');
 const multer = require('multer');
 
@@ -36,7 +36,7 @@ export async function saveAttachments(req, res, agreementId) {
 
     try {
         const uploaded = new Promise((resolve, reject) => {
-            upload(req, res, error => {
+            upload(req, res, (error) => {
                 if (error) {
                     reject(error);
                 }
@@ -65,24 +65,22 @@ export async function saveAttachmentFiles(files, agreementId) {
     return [].concat.apply([], await Promise.all(Object.keys(files).map(key => saveFileArray(agreementId, files[key]))));
 }
 
-const saveFileArray = async (agreementId, fileArray) => {
-    return Promise.all(fileArray.map(async (file) => {
-        const attachment = {
-            agreementId,
-            savedOnDisk: true,
-            filename: file.filename,
-            originalname: file.originalname,
-            mimetype: file.mimetype,
-            label: file.fieldname
-        };
+const saveFileArray = async (agreementId, fileArray) => Promise.all(fileArray.map(async (file) => {
+    const attachment = {
+        agreementId,
+        savedOnDisk: true,
+        filename: file.filename,
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+        label: file.fieldname
+    };
 
-        const attachmentIds = await knex('attachment')
-            .returning('attachmentId')
-            .insert(attachment);
-        const attachmentId = attachmentIds[0];
-        return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first();
-    }));
-};
+    const attachmentIds = await knex('attachment')
+        .returning('attachmentId')
+        .insert(attachment);
+    const attachmentId = attachmentIds[0];
+    return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first();
+}));
 
 export async function getAllAttachments() {
     return knex.select(attachmentSchema).from('attachment');
@@ -140,4 +138,4 @@ export async function deleteAttachment(attachmentId) {
         .del()
         .then(() => attachmentId)
         .catch(err => err);
-};
+}
