@@ -15,7 +15,7 @@ class NewCouncilmeetingForm extends Component {
         this.state = {
             meeting: {
                 instructorDeadlineDays: 8,
-                studentDeadlineDays: 8,
+                studentDeadlineDays: 6,
                 programmes: []
             },
             selectedProgramme: undefined
