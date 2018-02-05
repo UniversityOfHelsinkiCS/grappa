@@ -39,9 +39,18 @@ export class ThesisCreatePage extends Component {
         this.props.saveThesis(form);
     };
 
+    validateAttachments = (attachments) => {
+        return attachments.find(attachment => attachment.label === 'thesisFile')
+            && attachments.find(attachment => attachment.label === 'reviewFile')
+    }
+
     toggleModal = () => {
         this.validateThesis()
-            .then(() => this.setState({ showModal: !this.state.showModal }))
+            .then(() => {
+                if (this.validateAttachments(this.state.attachments)) {
+                    this.setState({ showModal: !this.state.showModal })
+                }
+            })
             .catch(res => this.setState({ validationErrors: res.errors }));
     };
 
@@ -108,6 +117,7 @@ export class ThesisCreatePage extends Component {
                         validationErrors={this.state.validationErrors}
                     />
                     {this.renderGraderSelecter()}
+                    <h2>Upload at least thesis file and the review file</h2>
                     <AttachmentAdder
                         attachments={this.state.attachments}
                         changeList={this.editAttachmentList}

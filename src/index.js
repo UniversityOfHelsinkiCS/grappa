@@ -18,6 +18,15 @@ import './media/App.css';
 // routes
 import routes from './util/routes';
 
+const killServiceWorkers = () => {
+    if (window.navigator && navigator.serviceWorker) {
+        navigator.serviceWorker.getRegistrations()
+            .then((registrations) => {
+                registrations.forEach(registration => registration.unregister())
+            });
+    }
+}
+
 ReactDOM.render(
     <Provider store={store}>
         <Router basename="/v2">
@@ -25,6 +34,7 @@ ReactDOM.render(
                 <Route component={NavBar} />
                 <div className="ui left aligned container" style={{ margin: '1.5%' }}>
                     <EventMessageContainer />
+                    {killServiceWorkers()}
                     {routes()}
                 </div>
                 <h4 style={{ marginBottom: '2%' }}>If you have trouble, contact grp-toska@helsinki.fi</h4>

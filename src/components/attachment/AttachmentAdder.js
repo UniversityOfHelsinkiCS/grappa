@@ -48,13 +48,6 @@ export default class AttachmentAdder extends Component {
         </div>
     )
 
-    getHeader = () => {
-        if (!this.props.limit) {
-            return <h2>Upload attachments as much as you want</h2>
-        }
-        return <h2>Upload maximum {this.props.limit} attachments</h2>
-    }
-
     getFileNumberLabel = () => {
         if (!this.props.attachments || this.props.attachments.length < 1) {
             return <h3>No attachments to be uploaded</h3>
@@ -97,7 +90,7 @@ export default class AttachmentAdder extends Component {
     render() {
         return (
             <div>
-                {this.getHeader()}
+                <h3>Upload attachments</h3>
                 {this.renderDropzone()}
                 {this.props.attachments ? this.getFileList() : undefined}
                 {this.props.uploadAttachments && this.props.attachments.length > 0 ?

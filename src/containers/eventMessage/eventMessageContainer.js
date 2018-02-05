@@ -7,7 +7,7 @@ const EventMessageContainer = ({ messages, clearMessages }) => (
     <div>
         {messages.map(message =>
             (<EventMessage
-                key={message.type}
+                key={`${message.type}-${message.key}`}
                 type={message.type}
                 message={message.text}
                 clearMessages={clearMessages}
@@ -17,7 +17,9 @@ const EventMessageContainer = ({ messages, clearMessages }) => (
 );
 
 const mapStateToProps = ({ eventMessage }) => ({
-    messages: Object.keys(eventMessage).filter(key => eventMessage[key].active === true).map(key => eventMessage[key])
+    messages: Object.keys(eventMessage)
+        .filter(key => eventMessage[key].active === true)
+        .map(key => Object.assign({ key }, eventMessage[key]))
 });
 
 const mapDispatchToProps = dispatch => ({

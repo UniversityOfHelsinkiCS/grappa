@@ -11,6 +11,13 @@ const reducer = (state = [], action) => {
             ];
         case 'THESIS_DELETE_ONE_SUCCESS':
             return state.filter(thesis => thesis.thesisId !== action.response.updatedThesis.thesisId);
+        case 'THESIS_MARK_PRINTED_SUCCESS':
+            return [...state].map((thesis) => {
+                if (action.response.includes(thesis.thesisId)) {
+                    thesis.printDone = true;
+                }
+                return thesis;
+            });
         default:
             return state;
     }
