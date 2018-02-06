@@ -23,8 +23,10 @@ export default class PersonSelector extends Component {
     personToText = person => `${person.firstname} ${person.lastname} ${person.email}`;
 
     removePerson = person => () => {
-        const removed = this.props.selected.filter(prsn => prsn !== person);
-        this.props.changeList(removed)
+        if (this.props.allowEdit) {
+            const removed = this.props.selected.filter(prsn => prsn !== person);
+            this.props.changeList(removed);
+        }
     };
 
     addPerson = person => () => {
@@ -61,7 +63,8 @@ export default class PersonSelector extends Component {
 
     focusMenu = (event) => {
         event.stopPropagation();
-        this.setState({ menuActive: true });
+        if (this.props.allowEdit)
+            this.setState({ menuActive: true });
     };
 
     unfocusMenu = () => {
@@ -99,6 +102,7 @@ export default class PersonSelector extends Component {
             value={this.state.searchValue}
             onChange={this.search}
             onKeyPress={this.handleKeyPress}
+            disabled={!this.props.allowEdit}
         />)
     }
 
@@ -152,9 +156,11 @@ PersonSelector.propTypes = {
     persons: arrayOf(personType).isRequired,
     selected: arrayOf(personType).isRequired,
     changeList: func.isRequired,
-    validationError: bool
+    validationError: bool,
+    allowEdit: bool
 };
 
 PersonSelector.defaultProps = {
-    validationError: false
+    validationError: false,
+    allowEdit: true
 };

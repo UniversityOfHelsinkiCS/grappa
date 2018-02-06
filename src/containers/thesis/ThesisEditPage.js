@@ -39,17 +39,27 @@ export class ThesisEditPage extends Component {
     }
 
     init(props) {
-        const { theses, persons, agreements, roles } = props;
+        const { theses, persons, agreements, roles, studyfields, user } = props;
+
+        if (!user.roles)
+            this.setState({ allowEdit: false });
 
         if (props.match.params && props.match.params.id) {
             const thesisId = parseInt(props.match.params.id, 10);
             const thesis = this.findAndFormatThesis(theses, persons, agreements, roles, thesisId);
+
             if (thesis) {
                 const attachments = props.attachments.filter((attachment) => {
-                    const agreement = props.agreements.find(agreement => agreement.agreementId === attachment.agreementId
+                    const agreement = agreements.find(agreement => agreement.agreementId === attachment.agreementId
                         && agreement.thesisId === thesis.thesisId);
                     return agreement && agreement.agreementId === attachment.agreementId
                 });
+
+                const selectedProgrammeId = studyfields
+                    .find(studyfield => studyfield.programmeId === thesis.studyfieldId);
+
+                if (selectedProgrammeId)
+                    thesis.programmeId = selectedProgrammeId.programmeId;
 
                 this.setState({ thesis, attachments })
             }
@@ -133,6 +143,7 @@ export class ThesisEditPage extends Component {
                         selected={this.state.thesis.graders}
                         changeList={list => this.handleChange('graders', list)}
                         validationError={Object.keys(this.state.validationErrors).includes('graders')}
+                        allowEdit={this.state.allowEdit}
                     />
                 </label>
             </div>
@@ -140,6 +151,11 @@ export class ThesisEditPage extends Component {
     }
 
     render() {
+        // Don't render page if thesis with no access is opened.
+        if (!this.state.thesis.thesisId) {
+            return null;
+        }
+
         return (
             <div>
                 <br />
@@ -153,11 +169,11 @@ export class ThesisEditPage extends Component {
                         validationErrors={this.state.validationErrors}
                     />
                     {this.renderGraderSelecter()}
-                    <AttachmentAdder
+                    {this.state.allowEdit ? <AttachmentAdder
                         attachments={this.state.newAttachments}
                         changeList={this.editAttachmentList}
                         uploadAttachments={this.uploadAttachments}
-                    />
+                    /> : null}
                     <AttachmentList
                         attachments={this.state.attachments}
                         downloadAttachment={this.downloadAttachment}
@@ -172,7 +188,7 @@ export class ThesisEditPage extends Component {
                     /> : undefined}
                 </div>
                 <br />
-                <button className="ui positive button" onClick={this.handleSaveThesis}>
+                <button className="ui positive button" onClick={this.handleSaveThesis} disabled={!this.state.allowEdit}>
                     Submit
                 </button>
             </div>
