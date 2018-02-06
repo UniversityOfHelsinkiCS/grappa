@@ -168,7 +168,7 @@ export class ThesisEditPage extends Component {
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
-                        programmeId={this.state.thesis.programmeId}
+                        programmeId={Number(this.state.thesis.programmeId)}
                     /> : undefined}
                 </div>
                 <br />
