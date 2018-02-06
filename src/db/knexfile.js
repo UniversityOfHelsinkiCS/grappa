@@ -1,4 +1,6 @@
-const setTimezone = function(connection, callback) {
+require('dotenv').config();
+
+const setTimezone = (connection, callback) => {
     connection.query('SET timezone = "Europe/Helsinki";', (err) => {
         callback(err, connection);
     });
