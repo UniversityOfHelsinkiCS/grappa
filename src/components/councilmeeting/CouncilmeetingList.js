@@ -15,6 +15,8 @@ function filterMeetings(meetings, showOld) {
     return meetings;
 }
 
+const sortMeetings = (a, b) => ((moment(a.date).isAfter(moment(b.date))) ? 1 : -1);
+
 const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, programmes }) => (
     <table className="ui celled table">
         <thead>
@@ -28,7 +30,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
             </tr>
         </thead>
         <tbody>
-            {filterMeetings(meetings, showOld).map(councilmeeting => (
+            {filterMeetings(meetings, showOld).sort(sortMeetings).map(councilmeeting => (
                 <tr key={councilmeeting.councilmeetingId} onClick={() => selectMeeting(councilmeeting)}>
                     <td>
                         <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
