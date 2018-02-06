@@ -13,7 +13,7 @@ class UpdateCouncilmeetingForm extends Component {
         super(props);
 
         this.state = {
-            meeting: props.meeting,
+            meeting: Object.assign({}, props.meeting),
             selectedProgramme: undefined
         };
 
@@ -71,6 +71,7 @@ class UpdateCouncilmeetingForm extends Component {
             studentDeadline,
             programmes: programmeIds
         });
+        this.setState({ meeting: {} });
     };
 
     render() {
