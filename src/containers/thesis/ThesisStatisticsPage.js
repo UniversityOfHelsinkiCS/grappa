@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { array, arrayOf, func } from 'prop-types';
+import { object, arrayOf, func } from 'prop-types';
 
 import { getStatistics } from '../thesis/statisticsActions';
 import ThesisProgrammeStatistics from '../../components/thesis/ThesisProgrammeStatistics';
 import { programmeType, studyfieldType } from '../../util/types';
 import { oldGradeFields } from '../../util/theses';
 
-class StatisticsPage extends Component {
+class ThesisStatisticsPage extends Component {
     componentDidMount() {
         this.props.getStatistics();
     }
@@ -32,15 +32,23 @@ class StatisticsPage extends Component {
                 {years.map(year => (
                     <div key={year}>
                         <h2>{year}</h2>
-                        {programmeIds.map((progremmeId) => (this.props.stats[year][progremmeId] ? (
-                            <ThesisProgrammeStatistics
-                                stats={this.props.stats}
-                                year={year}
-                                programmeId={progremmeId}
-                                programmeName={getProgrammeName(progremmeId)}
-                                grades={grades}
-                                getStudyfieldName={getStudyfieldName}
-                            />
+                        {programmeIds.map(programmeId => (this.props.stats[year][programmeId] ? (
+                            <div key={`${year}-${programmeId}`}>
+                                <ThesisProgrammeStatistics
+                                    stats={this.props.stats[year][programmeId]}
+                                    programmeName={getProgrammeName(programmeId)}
+                                    grades={grades}
+                                    getStudyfieldName={getStudyfieldName}
+                                    gradeType="oldGrades"
+                                />
+                                <ThesisProgrammeStatistics
+                                    stats={this.props.stats[year][programmeId]}
+                                    programmeName={getProgrammeName(programmeId)}
+                                    grades={[5, 4, 3, 2, 1]}
+                                    getStudyfieldName={getStudyfieldName}
+                                    gradeType="newGrades"
+                                />
+                            </div>
                         ) : null))}
                     </div>
                 ))}
@@ -61,11 +69,11 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-StatisticsPage.propTypes = {
-    stats: array.isRequired,
+ThesisStatisticsPage.propTypes = {
+    stats: object.isRequired,
     getStatistics: func.isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     programmes: arrayOf(programmeType).isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatisticsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisStatisticsPage);
