@@ -40,21 +40,25 @@ test('statistics can be fetched', async (t) => {
 
     const res = await request(makeApp(1)).get('/statistics');
 
-    const expectedResponse = [
-        {
-            studyfieldId: 1,
-            year: 2017,
-            grade: 'Laudatur',
-            count: 1
-        },
-        {
-            studyfieldId: 1,
-            year: 2017,
-            grade: 'Lubenter Approbatur',
-            count: 1
+    const expectedResponse = {
+        2017: {
+            1: {
+                1: {
+                    newGrades: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+                    oldGrades: {
+                        Approbatur: 0,
+                        'Lubenter Approbatur': 1,
+                        'Non Sine Laude Approbatur': 0,
+                        'Cum Laude Approbatur': 0,
+                        'Magna Cum Laude Approbatur': 0,
+                        'Eximia Cum Laude Approbatur': 0,
+                        Laudatur: 1
+                    }
+                }
+            }
         }
-    ];
+    };
 
     t.is(res.status, 200);
-    t.deepEqual(res.body, expectedResponse);
+    t.deepEqual(res.body, expectedResponse, 'invalid response');
 });
