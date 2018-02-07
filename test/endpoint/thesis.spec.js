@@ -29,10 +29,16 @@ test.before(async () => {
 
 const numberFromTo = (from, to) => Math.round(Math.random() * (to - from)) + from;
 
+const createAdmin = async () => {
+    const person = await createPerson();
+    await knex('personWithRole')
+        .insert({ personId: person.personId, roleId: 1, programmeId: 1 })
+    return person
+}
+
 const generateThesisForm = async () => {
-    const persons = await knex('person').select()
-    const person1 = persons[numberFromTo(0, (persons.length / 2) - 1)]
-    const person2 = persons[numberFromTo(persons.length / 2, persons.length - 1)]
+    const person1 = await createPerson();
+    const person2 = await createPerson();
     const thesisForm = {
         id: undefined,
         authorEmail: `author${numberFromTo(0, 1000)}@example.com`,
@@ -122,7 +128,8 @@ const validPostForm = async (t, app, thesisForm, addAttachment) => {
 test('thesisForm post & creates id without attachment', async (t) => {
     t.plan(6);
     const { thesisForm, person1, person2 } = await generateThesisForm()
-    const app = makeApp(1)
+    const { personId: adminId } = await createAdmin();
+    const app = makeApp(adminId)
     const { agreement } = await validPostForm(t, app, thesisForm)
 
     // Check that the persons are agreementPersons through personWithRole
@@ -140,7 +147,8 @@ test('thesis get all', async (t) => {
     t.plan(13);
     const { thesisForm: thesisForm1 } = await generateThesisForm()
     const { thesisForm: thesisForm2 } = await generateThesisForm()
-    const app = makeApp(1);
+    const { personId: adminId } = await createAdmin();
+    const app = makeApp(adminId)
     const { thesis: thesis1 } = await validPostForm(t, app, thesisForm1)
     const { thesis: thesis2 } = await validPostForm(t, app, thesisForm2)
     const sentTheses = [thesis1, thesis2]
@@ -161,93 +169,190 @@ test('thesis get all', async (t) => {
 test('thesisForm post & creates id with attachment', async (t) => {
     t.plan(7);
     const { thesisForm } = await generateThesisForm()
-    const app = makeApp(1);
+    const { personId: adminId } = await createAdmin();
+    const app = makeApp(adminId)
     await validPostForm(t, app, thesisForm, true)
 });
 
 test('thesisForm post sends emails', async (t) => {
+    t.plan(8);
     const mailer = require('../../src/util/mailer');
-    const mailSpy = sinon.spy(mailer, 'sendEmail');
+    const mailSpy = sinon.stub(mailer, 'sendEmail');
     const { thesisForm } = await generateThesisForm()
     const form = Object.assign({}, thesisForm);
 
     form.authorEmail = 'emailTest@example.com';
     form.studyfieldId = 1;
-    const app = makeApp(1)
+    const { personId: adminId } = await createAdmin();
+    const app = makeApp(adminId)
     await validPostForm(t, app, form)
     t.true(mailSpy.calledWith(form.authorEmail), 'Email 1 ok');
     t.true(mailSpy.calledWith('victoria@vastuuproffa.com'), 'Email 2 ok');
     t.true(mailSpy.calledWith('erkki@erikoistapaus.com'), 'Email 3 ok');
 });
 
+// Since linking is done via email, insert data straight to tables
+
+const insertThesisWithAuthorAndPersonInRole = async (authorId, personId, roleId) => {
+    // RoleIds: 1 admin, 2 manager, 3 print-person, 4 resp-prof, 5 grader, 6 supervisor
+    const title = `Another ${numberFromTo(1, 10000)} title ${numberFromTo(1, 10000)}`
+    const thesisIds = await knex('thesis')
+        .insert({
+            title,
+            urkund: 'https://urkund.com',
+        })
+        .returning('thesisId');
+    const programmeIds = await knex('programme')
+        .insert({ name: `test programme${numberFromTo(1, 10000)}` })
+        .returning('programmeId');
+    const studyfieldIds = await knex('studyfield')
+        .insert({ name: 'test studyfield', programmeId: programmeIds[0] })
+        .returning('studyfieldId');
+    const agreementIds = await knex('agreement')
+        .insert({ authorId, thesisId: thesisIds[0], studyfieldId: studyfieldIds[0] })
+        .returning('agreementId');
+    if (personId && roleId) {
+        const personRoleIds = await knex('personWithRole')
+            .insert({ personId, roleId, programmeId: programmeIds[0] })
+            .returning('personRoleId');
+        if (roleId === 5 || roleId === 6) {
+            await knex('agreementPerson').insert({ agreementId: agreementIds[0], personRoleId: personRoleIds[0] });
+        }
+    }
+    return { thesisId: thesisIds[0], title }
+}
+
 test('author can see own thesis', async (t) => {
-    const title = 'My own thesis';
-    const personId = await createPerson();
-    const thesis = await knex('thesis').insert({ title }).returning('thesisId');
-    await knex('agreement').insert({ authorId: personId, thesisId: thesis[0] }).returning('agreementId');
+    t.plan(2);
+    const { personId: authorId } = await createPerson();
+    const app = makeApp(authorId);
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId);
 
-    const res = await request(makeApp(personId)).get('/theses');
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
+
+    const foundTheses = res.body;
+    t.truthy(foundTheses.find(thesis => thesis.title === title),
+        `thesis with title ${title} was not found in ${JSON.stringify(foundTheses)}`);
+});
+
+test('grader can see theses they are agreementPerson of', async (t) => {
+    t.plan(3);
+    const { personId: authorId } = await createPerson();
+    const { personId: graderId } = await createPerson();
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, graderId, 5);
+    await insertThesisWithAuthorAndPersonInRole(authorId);
+    await insertThesisWithAuthorAndPersonInRole(authorId);
+    const app = makeApp(graderId);
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
 
     t.is(res.body.length, 1);
     t.is(res.body[0].title, title);
 });
 
-test('grader can see thesis', async (t) => {
-    const title = 'Thesis to grade';
-    const personId = await createPerson();
-
-    const role = await knex('personWithRole').insert({ personId, roleId: 5 }).returning('personRoleId');
-    const thesis = await knex('thesis').insert({ title }).returning('thesisId');
-    const agreement = await knex('agreement').insert({ thesisId: thesis[0] }).returning('agreementId');
-    await knex('agreementPerson').insert({ agreementId: agreement[0], personRoleId: role[0] });
-
-    const res = await request(makeApp(personId)).get('/theses');
+test('supervisor can see theses they are agreementPerson of', async (t) => {
+    t.plan(3);
+    const { personId: authorId } = await createPerson();
+    const { personId: supervisorId } = await createPerson();
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, supervisorId, 6);
+    await insertThesisWithAuthorAndPersonInRole(authorId);
+    await insertThesisWithAuthorAndPersonInRole(authorId);
+    const app = makeApp(supervisorId);
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
 
     t.is(res.body.length, 1);
     t.is(res.body[0].title, title);
-});
+})
 
 test('resp prof can see programme thesis', async (t) => {
-    const title = 'Studyfield thesis';
-    const personId = await createPerson();
-    const programme = await knex('programme')
-        .insert({ name: 'test programme' })
-        .returning('programmeId');
-    const studyfield = await knex('studyfield')
-        .insert({ name: 'test studyfield', programmeId: programme[0] })
-        .returning('studyfieldId');
-    const thesis = await knex('thesis')
-        .insert({ title })
-        .returning('thesisId');
-    await knex('personWithRole')
-        .insert({ personId, roleId: 4, programmeId: programme[0] })
-        .returning('personRoleId');
-    await knex('agreement')
-        .insert({ thesisId: thesis[0], studyfieldId: studyfield[0] })
-        .returning('agreementId');
-
-    const res = await request(makeApp(personId)).get('/theses');
+    t.plan(3);
+    const { personId: authorId } = await createPerson();
+    const { personId: respProfId } = await createPerson();
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, respProfId, 4);
+    const app = makeApp(respProfId);
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
 
     t.is(res.body.length, 1);
     t.is(res.body[0].title, title);
 });
 
-test.serial('admin can see all theses', async (t) => {
-    const theses = await knex('thesis');
-    const res = await request(makeApp(1)).get('/theses');
+test('manager can see programme thesis', async (t) => {
+    t.plan(3);
+    const { personId: authorId } = await createPerson();
+    const { personId: managerId } = await createPerson();
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, managerId, 2);
+    const app = makeApp(managerId);
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
 
-    t.is(res.body.length, theses.length);
+    t.is(res.body.length, 1);
+    t.is(res.body[0].title, title);
 });
 
-test.serial('invalid thesis is not accepted', async (t) => {
-    const theses = await knex('thesis');
-    const agreements = await knex('agreement');
+test('print-person can see programme thesis', async (t) => {
+    t.plan(3);
+
+    const { personId: authorId } = await createPerson();
+    const { personId: printPersonId } = await createPerson();
+    const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, printPersonId, 3);
+    const app = makeApp(printPersonId);
+    const res = await request(app)
+        .get('/theses');
+    t.is(res.status, 200)
+
+    t.is(res.body.length, 1);
+    t.is(res.body[0].title, title);
+});
+
+test('admin can see all theses', async (t) => {
+    t.plan(7);
+    const { personId: authorId } = await createPerson();
+    const { personId: author2Id } = await createPerson();
+    const { personId: respProfId } = await createPerson();
+    const { personId: supervisorId } = await createPerson();
+    const { personId: adminId } = await createAdmin();
+
+    const theses = await Promise.all([
+        await insertThesisWithAuthorAndPersonInRole(authorId),
+        await insertThesisWithAuthorAndPersonInRole(authorId, respProfId, 4),
+        await insertThesisWithAuthorAndPersonInRole(authorId, supervisorId, 6),
+        await insertThesisWithAuthorAndPersonInRole(author2Id),
+        await insertThesisWithAuthorAndPersonInRole(author2Id, respProfId, 4),
+        await insertThesisWithAuthorAndPersonInRole(author2Id, supervisorId, 6)
+    ])
+
+    const app = makeApp(adminId)
+    const res = await request(app).get('/theses');
+    t.is(res.status, 200)
+
+    const foundTheses = res.body;
+    theses.map(thesis => thesis.title).forEach((title) => {
+        t.truthy(foundTheses.find(thesis => thesis.title === title),
+            `Title ${title} was not found in ${JSON.stringify(foundTheses)}`)
+    })
+});
+
+test.serial('invalid thesis is not accepted and has does not modify database', async (t) => {
+    t.plan(3);
+    const thesesBefore = await knex('thesis');
+    const agreementsBefore = await knex('agreement');
 
     const data = {
         grade: '4'
     };
 
-    const res = await request(makeApp(1))
+    const { personId: adminId } = await createAdmin();
+    const app = makeApp(adminId)
+
+    const res = await request(app)
         .post('/theses')
         .field('json', JSON.stringify(data));
 
@@ -256,78 +361,58 @@ test.serial('invalid thesis is not accepted', async (t) => {
     const thesesAfter = await knex('thesis');
     const agreementsAfter = await knex('agreement');
 
-    t.is(theses.length, thesesAfter.length);
-    t.is(agreements.length, agreementsAfter.length);
+    t.deepEqual(thesesBefore, thesesAfter);
+    t.deepEqual(agreementsBefore, agreementsAfter)
 });
 
 test('thesis is validated when updated', async (t) => {
+    t.plan(1);
+    const { personId: adminId } = await createAdmin();
+
     const thesis = {
         title: 'Annin Grady',
         urkund: 'https://example.com',
         grade: '4',
         printDone: false
     };
-    const thesisId = await knex('thesis')
+    const thesisIds = await knex('thesis')
         .insert(thesis)
         .returning('thesisId');
 
     const update = {
-        thesisId: thesisId[0],
+        thesisId: thesisIds[0],
         title: '',
         urkund: '',
         grade: '',
         printDone: false
     };
 
-    const res = await request(makeApp(1))
+    const app = makeApp(adminId)
+    const res = await request(app)
         .put('/theses')
         .send(update);
 
     t.is(res.status, 500);
 });
-/*
-const createExistingThesis = async () => {
-    const thesis = {
-        title: 'Annin Grady',
-        urkund: 'https://example.com',
-        grade: '4',
-        printDone: false
-    };
-
-    const thesisId = await knex('thesis')
-        .insert(thesis)
-        .returning('thesisId');
-
-    const agreementId = await knex('agreement')
-        .insert({ thesisId: thesisId[0], studyfieldId: 2 })
-        .returning('agreementId');
-
-    await knex('agreementPerson').insert({
-        agreementId: agreementId[0],
-        personRoleId: 5,
-        approverId: 2,
-        approved: true
-    });
-
-    return thesisId[0];
-}
-
 
 test('thesis can be updated', async (t) => {
     t.plan(2);
+    const { personId: authorId } = await createPerson();
+    const { personId: graderId } = await createPerson();
+    const { personId: adminId } = await createAdmin();
 
-    const thesisId = await createExistingThesis();
+    const { thesisId } = await insertThesisWithAuthorAndPersonInRole(authorId, graderId, 5);
 
-    const persons = await knex('person').select()
-    const grader = persons[numberFromTo(0, persons.length - 1)]
-
+    const newGrader = await createPerson();
+    const newTitle = 'New name';
     const update = {
         thesisId,
-        title: 'New name',
-        graders: [grader]
+        title: newTitle,
+        graders: [newGrader]
     };
 
-    const res = await request(makeApp(5))
+    const app = makeApp(adminId);
+    const res = await request(app)
         .put('/theses')
         .send(update);
 
@@ -335,39 +420,44 @@ test('thesis can be updated', async (t) => {
 
     const thesisFromDb = await knex('thesis').select().where('thesisId', thesisId).first();
 
-    t.is(thesisFromDb.title, 'New name');
+    t.is(thesisFromDb.title, newTitle);
 });
 
 test('thesis edit access is checked', async (t) => {
-    const thesisId = await createExistingThesis();
+    t.plan(1);
+    const { personId: authorId } = await createPerson();
+    const { personId: graderId } = await createPerson();
+    const { thesisId, title } = await insertThesisWithAuthorAndPersonInRole(authorId, graderId, 5);
 
-    const persons = await knex('person').select()
-    const grader = persons[numberFromTo(0, persons.length - 1)]
-
+    const newGrader = await createPerson();
     const update = {
         thesisId,
         title: 'New name',
-        graders: [grader]
+        graders: [newGrader]
     };
 
-    await request(makeApp(9))
+    const app = makeApp(authorId)
+    await request(app)
         .put('/theses')
         .send(update);
 
     const thesis = await knex('thesis').select().where('thesisId', thesisId).first();
 
-    t.is('Annin Grady', thesis.title);
+    t.is(title, thesis.title);
 });
 
 test('mark thesis printed', async (t) => {
-    const thesisId = await createExistingThesis();
+    t.plan(2);
+    const { personId: authorId } = await createPerson();
+    const { personId: printPersonId } = await createPerson();
+    const { thesisId } = await insertThesisWithAuthorAndPersonInRole(authorId, printPersonId, 3);
 
-    const res = await request(makeApp(1))
+    const app = makeApp(printPersonId)
+    const res = await request(app)
         .put('/theses/printed')
-        .send([thesisId]);
+        .send([thesisId])
 
-    t.is(res.status, 200);
-    const thesisAfter = await knex('thesis').select().where('thesisId', thesisId).first();
-    t.true(thesisAfter.printDone);
+    t.is(res.status, 200)
+    const thesisAfter = await knex('thesis').select().where('thesisId', thesisId).first()
+    t.true(thesisAfter.printDone)
 });
-*/

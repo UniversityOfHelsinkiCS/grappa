@@ -26,7 +26,7 @@ test.before(async () => {
 test('study field can be set to visitor role', async (t) => {
     t.plan(2);
 
-    const personId = await createPerson();
+    const { personId } = await createPerson();
     const visitorRoleForm = { programmeIds: [1] };
 
     const res = await request(makeApp(personId))
@@ -47,7 +47,7 @@ test('study field can be set to visitor role', async (t) => {
 test('visitor role programme can be updated', async (t) => {
     t.plan(2);
 
-    const personId = await createPerson();
+    const { personId } = await createPerson();
 
     await knex('personWithRole')
         .insert({
@@ -73,7 +73,7 @@ test('visitor role programme can be updated', async (t) => {
 });
 
 test('delete role', async (t) => {
-    const personId = await createPerson();
+    const { personId } = await createPerson();
     const idToDelete = await knex('personWithRole')
         .insert({
             programmeId: 1,
@@ -97,7 +97,7 @@ test('get available roles', async (t) => {
 });
 
 test('save role test', async (t) => {
-    const personId = await createPerson();
+    const { personId } = await createPerson();
     const res = await request(makeApp(1))
         .post('/roles')
         .send({ roleId: 2, personId, programmeId: 1 });
@@ -106,7 +106,7 @@ test('save role test', async (t) => {
 });
 
 test('save role test fail', async (t) => {
-    const personId = await createPerson();
+    const { personId } = await createPerson();
     const res = await request(makeApp(1))
         .post('/roles')
         .send({ roleId: 1, personId, programmeId: 1 });
