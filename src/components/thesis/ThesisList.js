@@ -68,6 +68,7 @@ class ThesisList extends Component {
                             return 1;
                         });
                 }
+                return false;
             }).reduce((acc, cur) => { // Flatten thesis, review pairs.
                 if (cur) {
                     return acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
@@ -161,7 +162,9 @@ class ThesisList extends Component {
                                     <div className="ui fitted checkbox">
                                         <input
                                             type="checkbox"
-                                            checked={this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''}
+                                            checked={
+                                                this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''
+                                            }
                                             onChange={this.toggleThesis(thesis)}
                                         />
                                         <label />

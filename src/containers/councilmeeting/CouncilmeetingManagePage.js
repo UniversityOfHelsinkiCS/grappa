@@ -48,7 +48,10 @@ export class CouncilmeetingManagePage extends Component {
    };
 
    saveMeeting = meeting => this.props.saveCouncilmeeting(meeting);
-   updateMeeting = meeting => this.props.updateCouncilmeeting(meeting);
+   updateMeeting = (meeting) => {
+       this.props.updateCouncilmeeting(meeting);
+       this.setState({ updateCouncilmeeting: {} });
+   };
    selectMeeting = meeting => this.setState({ updateCouncilmeeting: meeting });
    deleteMeeting = meeting => this.props.deleteCouncilmeeting(meeting.councilmeetingId);
 

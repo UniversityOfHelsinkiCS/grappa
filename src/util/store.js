@@ -16,6 +16,7 @@ import roleReducer from '../containers/role/roleReducer';
 import notificationsReducer from '../containers/notifications/notificationsReducer';
 import eventMessageReducer from '../containers/eventMessage/eventMessageReducer';
 import inviteReducer from '../containers/invite/inviteReducer';
+import statisticsReducer from '../containers/thesis/statisticsReducer';
 
 const combinedReducers = combineReducers({
     agreements: agreementReducer,
@@ -31,7 +32,8 @@ const combinedReducers = combineReducers({
     persons: personReducer,
     notifications: notificationsReducer,
     eventMessage: eventMessageReducer,
-    invite: inviteReducer
+    invite: inviteReducer,
+    statistics: statisticsReducer
 });
 
 let store;

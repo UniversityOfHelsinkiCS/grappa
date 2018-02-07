@@ -125,6 +125,7 @@ export default class ThesisInformation extends Component {
                         <button
                             className="ui button"
                             onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}
+                            disabled={!this.props.allowEdit}
                         >
                             {this.state.oldGrading ?
                                 'Enable new grading' : 'Enable old grading'}

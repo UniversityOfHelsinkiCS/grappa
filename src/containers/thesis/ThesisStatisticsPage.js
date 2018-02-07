@@ -1,107 +1,79 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { object, arrayOf, func } from 'prop-types';
 
-import ThesisStatisticsYearElement from '../../components/thesis/ThesisStatisticsYearElement';
+import { getStatistics } from '../thesis/statisticsActions';
+import ThesisProgrammeStatistics from '../../components/thesis/ThesisProgrammeStatistics';
+import { programmeType, studyfieldType } from '../../util/types';
+import { oldGradeFields } from '../../util/theses';
 
-
-/**
- * StatisticPage is a page that can be accessed by a user that is not logged in.
- * The page shows tables for each year, defined by the studyfields/programmes and grades.
- */
-export default class StatisticsPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filteredTheses: []
-        };
-    }
-
+class ThesisStatisticsPage extends Component {
     componentDidMount() {
-        // this.props.getGrades();
-        this.filterThesesByYear(this.generateTheses());
-    }
-
-    componentWillReceiveProps() {
-        // this.filterThesesByYear(nextProps.theses);
-        this.filterThesesByYear(this.generateTheses());
-    }
-
-    // Generator function for in-browser testing.
-    generateTheses() {
-        const theses = [];
-        for (let year = 10; year < 15; year++) {
-            for (let index = 0; index < 10; index++) {
-                theses.push({
-                    CouncilMeeting: { date: `20${year}` },
-                    StudyField: { name: `Linja ${Math.ceil(Math.random() * 3)}` },
-                    grade: Math.ceil(Math.random() * 5)
-                });
-            }
-        }
-        return theses;
-    }
-
-    filterThesesByYear(theses) {
-        const filteredTheses = [];
-        if (theses) {
-            theses.forEach((thesis) => {
-                let found = false;
-                const year = thesis.CouncilMeeting.date.slice(0, 4);
-                filteredTheses.forEach((yearlyArray) => {
-                    if (yearlyArray[0].CouncilMeeting.date.startsWith(year)) {
-                        found = true;
-                        yearlyArray.push(thesis);
-                    }
-                });
-                if (!found) {
-                    filteredTheses.push([thesis]);
-                }
-            });
-        }
-        filteredTheses.sort((a, b) => this.sortByCouncilMeetingYear(a, b));
-
-        this.setState({ filteredTheses });
-    }
-
-    sortByCouncilMeetingYear(a, b) {
-        const aYear = parseInt(a[0].CouncilMeeting.date.slice(0, 4), 10);
-        const bYear = parseInt(b[0].CouncilMeeting.date.slice(0, 4), 10);
-        // The order is "reversed" because the newest will be highest.
-        if (aYear > bYear) {
-            return -1;
-        } else if (aYear < bYear) {
-            return 1;
-        }
-        return 0;
+        this.props.getStatistics();
     }
 
     render() {
-        console.log(this.state.filteredTheses);
+        const years = Object.keys(this.props.stats).reverse();
+        const grades = oldGradeFields.map(field => field.id).reverse();
+        const programmeIds = [...new Set(this.props.studyfields.map(field => field.programmeId))];
+
+        const getStudyfieldName = (field) => {
+            const found = this.props.studyfields.find(f => f.studyfieldId === Number(field));
+            return found ? found.name : 'unknown';
+        };
+
+        const getProgrammeName = (programmeId) => {
+            const programme = this.props.programmes.find(prg => prg.programmeId === programmeId);
+            return programme ? programme.name : '';
+        };
+
         return (
             <div>
-                {this.state.filteredTheses.map((thesesByYear, index) =>
-                    <ThesisStatisticsYearElement key={index} theses={thesesByYear} />
-                )}
+                {years.map(year => (
+                    <div key={year}>
+                        <h2>{year}</h2>
+                        {programmeIds.map(programmeId => (this.props.stats[year][programmeId] ? (
+                            <div key={`${year}-${programmeId}`}>
+                                <ThesisProgrammeStatistics
+                                    stats={this.props.stats[year][programmeId]}
+                                    programmeName={getProgrammeName(programmeId)}
+                                    grades={grades}
+                                    getStudyfieldName={getStudyfieldName}
+                                    gradeType="oldGrades"
+                                />
+                                <ThesisProgrammeStatistics
+                                    stats={this.props.stats[year][programmeId]}
+                                    programmeName={getProgrammeName(programmeId)}
+                                    grades={[5, 4, 3, 2, 1]}
+                                    getStudyfieldName={getStudyfieldName}
+                                    gradeType="newGrades"
+                                />
+                            </div>
+                        ) : null))}
+                    </div>
+                ))}
             </div>
         );
     }
 }
-/*
-import { connect } from "react-redux";
-import { getGrades } from "../thesis/thesis.actions";
 
-
-const mapStateToProps = (state) => {
-    const thesis = state.get("thesis");
-    return {
-        theses: thesis.get("theses").toJS(),
-    };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-    getGrades() {
-        dispatch(getGrades());
-    },
+const mapStateToProps = state => ({
+    stats: state.statistics,
+    studyfields: state.studyfields,
+    programmes: state.programmes
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatisticsPage);
-*/
+const mapDispatchToProps = dispatch => ({
+    getStatistics() {
+        dispatch(getStatistics());
+    }
+});
+
+ThesisStatisticsPage.propTypes = {
+    stats: object.isRequired,
+    getStatistics: func.isRequired,
+    studyfields: arrayOf(studyfieldType).isRequired,
+    programmes: arrayOf(programmeType).isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisStatisticsPage);

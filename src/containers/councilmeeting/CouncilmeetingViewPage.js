@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom'
 
@@ -144,7 +144,12 @@ CouncilmeetingViewPage.propTypes = {
     downloadAttachments: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
-    markPrinted: func.isRequired
+    markPrinted: func.isRequired,
+    match: shape({
+        params: shape({
+            id: string.isRequired
+        })
+    }).isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingViewPage);

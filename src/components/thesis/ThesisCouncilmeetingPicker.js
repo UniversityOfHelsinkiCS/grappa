@@ -13,8 +13,10 @@ export default class ThesisCouncilmeetingPicker extends Component {
         const isInFuture = meeting => moment(meeting.instructorDeadline).isAfter(moment());
         const formatDate = meeting => moment(meeting.date).format('DD.MM.YYYY');
         const formatDeadline = meeting => moment(meeting.instructorDeadline).format('HH:mm DD.MM.YYYY');
+        const isMeetingSelectable = meeting => isInFuture(meeting) && meeting.programmes.includes(programmeId);
 
-        const meetings = councilmeetings.filter(meeting => isInFuture(meeting) && meeting.programmeId === programmeId)
+        const meetings = councilmeetings
+            .filter(isMeetingSelectable)
             .map(meeting => ({
                 id: meeting.councilmeetingId,
                 content: `${formatDate(meeting)} Deadline: ${formatDeadline(meeting)}`

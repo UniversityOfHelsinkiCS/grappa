@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import AgreementEditModalField from './AgreementEditModalField';
+import { bool, func } from 'prop-types';
 import { connect } from 'react-redux';
+import AgreementEditModalField from './AgreementEditModalField';
 import { getPermissions } from '../../util/rolePermissions';
 
 export class AgreementEditModal extends Component {
@@ -10,7 +11,13 @@ export class AgreementEditModal extends Component {
             editedFormData: {},
             editableFields: [],
             ignoredFields: ['agreementId', 'created_at', 'updated_at'],
-            textFields: ['thesisWorkStudentTime', 'thesisWorkSupervisorTime', 'thesisWorkIntermediateGoal', 'thesisWorkMeetingAgreement', 'thesisWorkOther'],
+            textFields: [
+                'thesisWorkStudentTime',
+                'thesisWorkSupervisorTime',
+                'thesisWorkIntermediateGoal',
+                'thesisWorkMeetingAgreement',
+                'thesisWorkOther'
+            ],
             mandatoryDataFilled: true
         }
     }
@@ -28,7 +35,18 @@ export class AgreementEditModal extends Component {
             this.setState(
                 {
                     editedFormData: original,
-                    editableFields: ['studentAddress', 'studentEmail', 'studentGradeGoal', 'studentAddress', 'studentName', 'studentPhone', 'thesisCompletionEta', 'thesisSupervisorSecond', 'thesisSupervisorOther', 'thesisTitle']
+                    editableFields: [
+                        'studentAddress',
+                        'studentEmail',
+                        'studentGradeGoal',
+                        'studentAddress',
+                        'studentName',
+                        'studentPhone',
+                        'thesisCompletionEta',
+                        'thesisSupervisorSecond',
+                        'thesisSupervisorOther',
+                        'thesisTitle'
+                    ]
                 }
             );
         }
@@ -116,7 +134,11 @@ export class AgreementEditModal extends Component {
                         </div>
                     </div>
                     <br />
-                    <button className="ui fluid positive button" disabled={!this.state.mandatoryDataFilled} onClick={this.handleFormSave}>
+                    <button
+                        className="ui fluid positive button"
+                        disabled={!this.state.mandatoryDataFilled}
+                        onClick={this.handleFormSave}
+                    >
                         {(!this.state.mandatoryDataFilled) ? 'Kaikkia tietoja ei ole täytetty' : 'Save local changes'}
                     </button>
                 </div>
@@ -128,5 +150,11 @@ export class AgreementEditModal extends Component {
 const mapStateToProps = state => ({
     roles: state.user.roles
 })
+
+AgreementEditModal.propTypes = {
+    closeModal: func.isRequired,
+    updateFormData: func.isRequired,
+    showModal: bool.isRequired
+};
 
 export default connect(mapStateToProps)(AgreementEditModal);

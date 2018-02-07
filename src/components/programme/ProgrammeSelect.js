@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
-import { arrayOf, func, number } from 'prop-types';
+import { arrayOf, func, bool } from 'prop-types';
 import { programmeType } from '../../util/types';
 
 export default class ProgrammeSelect extends Component {
     constructor() {
-        super()
+        super();
         this.state = {
             newUnits: true
         }
     }
 
     swapUnit = (event) => {
-        this.setState({ newUnits: !this.state.newUnits })
-        const newEvent = Object.assign({}, event)
-        newEvent.target.value = undefined
+        this.setState({ newUnits: !this.state.newUnits });
+        const newEvent = Object.assign({}, event);
         this.props.onChange(newEvent)
-    }
+    };
+
+    handleChange = (event) => {
+        this.props.onChange(event);
+
+        if (this.props.clearSelect)
+            this.select.value = null;
+    };
 
     render() {
-        const { onChange, value } = this.props
         const programmes = this.props.programmes.filter(programme =>
             !programme.name.includes('Department') === this.state.newUnits
-        )
+        );
+
         return (
             <div className="ui form">
                 <div className="two fields">
                     <div className="field">
-                        <button onClick={this.swapUnit} className="ui button fluid" >Switch between old and new</button>
+                        <button onClick={this.swapUnit} className="ui button fluid" >
+                            {this.state.newUnits ? 'Switch to old units' : 'Switch to new units'}
+                        </button>
                     </div>
-                    <div className="field twelve wide">
+                    <div className="field">
                         <select
                             className="ui dropdown"
-                            onChange={onChange}
-                            value={value}
+                            onChange={this.handleChange}
+                            ref={(select) => { this.select = select }}
                         >
                             <option value="null">Select unit</option>
                             {programmes.map(programme => (
@@ -54,9 +62,9 @@ export default class ProgrammeSelect extends Component {
 ProgrammeSelect.propTypes = {
     onChange: func.isRequired,
     programmes: arrayOf(programmeType).isRequired,
-    value: number
+    clearSelect: bool
 };
 
 ProgrammeSelect.defaultProps = {
-    value: undefined
+    clearSelect: false
 };

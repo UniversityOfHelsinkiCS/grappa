@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func, object } from 'prop-types';
 
 export default class ThesisInfoForm extends Component {
     field = (label, formName) => (
@@ -8,9 +9,11 @@ export default class ThesisInfoForm extends Component {
             <div className="ui fluid input">
                 <input type="text" name={formName} onChange={this.props.handleChange} />
                 {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
-                    (<div className="ui left pointing red basic label">
-                      Täytä tiedot
-                     </div>) : ''}
+                    (
+                        <div className="ui left pointing red basic label">
+                            Täytä tiedot
+                        </div>
+                    ) : ''}
             </div>
         </div>
     )
@@ -26,3 +29,8 @@ export default class ThesisInfoForm extends Component {
         )
     }
 }
+
+ThesisInfoForm.propTypes = {
+    handleChange: func.isRequired,
+    requiredFields: object.isRequired
+};

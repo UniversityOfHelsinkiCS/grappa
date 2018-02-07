@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { arrayOf } from 'prop-types';
+import { arrayOf, array } from 'prop-types';
 
 import { personType } from '../../util/types';
 
 const NotificationsPage = ({ notifications, persons }) => {
-
     const getPersonNameForId = (personId) => {
         const person = persons.find(person => person.personId === personId);
         return person ? `${person.firstname} ${person.lastname}` : 'UNKNOWN USER';
@@ -43,7 +42,8 @@ const mapStateToProps = ({ notifications, persons }) => ({
 });
 
 NotificationsPage.propTypes = {
-    persons: arrayOf(personType).isRequired
+    persons: arrayOf(personType).isRequired,
+    notifications: array.isRequired
 };
 
 export default connect(mapStateToProps)(NotificationsPage);

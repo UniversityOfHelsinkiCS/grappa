@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, object } from 'prop-types';
 
 export default class GoalInfoForm extends Component {
     constructor() {
@@ -16,9 +16,11 @@ export default class GoalInfoForm extends Component {
             <div className="ui fluid input">
                 <input type="text" name={formName} onChange={this.props.handleChange} />
                 {(Object.keys(this.props.requiredFields).includes(formName) && !this.props.requiredFields[formName]) ?
-                    (<div className="ui left pointing red basic label">
-                      Täytä tiedot
-                     </div>) : ''}
+                    (
+                        <div className="ui left pointing red basic label">
+                            Täytä tiedot
+                        </div>
+                    ) : ''}
             </div>
         </div>
     )
@@ -52,34 +54,43 @@ export default class GoalInfoForm extends Component {
                 {this.field('Opiskelijan arvioima opinnäytetyöhön käytettävä työaika', 'thesisWorkStudentTime')}
                 {this.field('Ohjaajien ohjaukseen varaama aika (työn eri vaiheissa)', 'thesisWorkSupervisorTime')}
                 {this.field('Välitavoitteet (deadlinet työn eri vaiheille)', 'thesisWorkIntermediateGoal')}
-                {this.field('Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta', 'thesisWorkMeetingAgreement')}
+                {this.field('Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä ' +
+                    'olevasta ajasta', 'thesisWorkMeetingAgreement')}
                 {this.field('Muuta', 'thesisWorkOther')}
 
                 <h1>Tavoitearvosana</h1>
                 <br />
                 <p>
                     <b>
-                        Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja määrittää tavoitearvosanakseen:
+                        Opiskelija on tutustunut laitoksen opinnäytetyön arviointimatriisiin ja
+                        määrittää tavoitearvosanakseen:
                     </b>
                 </p>
                 <div>
                     <select className="ui dropdown" onChange={this.props.handleChange} name="studentGradeGoal" >
-                        {this.grades(this.state.old).map(grade => <option key={grade.value} value={grade.value}>{grade.text}</option>)}
+                        {this.grades(this.state.old).map(grade =>
+                            <option key={grade.value} value={grade.value}>{grade.text}</option>
+                        )}
                     </select>
                     {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields.studentGradeGoal) ?
-                        (<div className="ui left pointing red basic label">
-                      Valitse tavoitearvosana
-                         </div>) : ''}
-                    <button className="ui button" onClick={() => this.setState({ old: !this.state.old })} style={{ marginLeft: '1em' }}>
+                        (
+                            <div className="ui left pointing red basic label">
+                                Valitse tavoitearvosana
+                            </div>) : ''}
+                    <button
+                        className="ui button"
+                        onClick={() => this.setState({ old: !this.state.old })}
+                        style={{ marginLeft: '1em' }}
+                    >
                         Vaihda arvosana-asteikko
                     </button>
                 </div>
-
             </div>
         )
     }
 }
 
 GoalInfoForm.propTypes = {
-    handleChange: func.isRequired
+    handleChange: func.isRequired,
+    requiredFields: object.isRequired
 };

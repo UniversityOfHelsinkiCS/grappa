@@ -39,10 +39,8 @@ export class ThesisCreatePage extends Component {
         this.props.saveThesis(form);
     };
 
-    validateAttachments = (attachments) => {
-        return attachments.find(attachment => attachment.label === 'thesisFile')
-            && attachments.find(attachment => attachment.label === 'reviewFile')
-    }
+    validateAttachments = attachments => attachments.find(attachment => attachment.label === 'thesisFile')
+            && attachments.find(attachment => attachment.label === 'reviewFile');
 
     toggleModal = () => {
         this.validateThesis()
@@ -59,9 +57,10 @@ export class ThesisCreatePage extends Component {
         newState[fieldName] = fieldValue;
         const thesis = Object.assign({}, this.state.thesis, newState);
 
+        this.setState({ thesis });
         this.validateThesis(thesis)
-            .then(() => this.setState({ thesis, validationErrors: {} }))
-            .catch(res => this.setState({ thesis, validationErrors: res.errors }));
+            .then(() => this.setState({ validationErrors: {} }))
+            .catch(res => this.setState({ validationErrors: res.errors }));
     };
 
     editAttachmentList = (attachments) => {
@@ -127,7 +126,7 @@ export class ThesisCreatePage extends Component {
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
-                        programmeId={this.state.thesis.programmeId}
+                        programmeId={Number(this.state.thesis.programmeId)}
                     />
                 </div>
                 <br />
