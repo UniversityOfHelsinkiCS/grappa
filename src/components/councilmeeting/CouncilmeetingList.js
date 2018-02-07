@@ -31,7 +31,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
         </thead>
         <tbody>
             {filterMeetings(meetings, showOld).sort(sortMeetings).map(councilmeeting => (
-                <tr key={councilmeeting.councilmeetingId} onClick={() => selectMeeting(councilmeeting)}>
+                <tr key={councilmeeting.councilmeetingId}>
                     <td>
                         <Link to={`/councilmeeting/${councilmeeting.councilmeetingId}`}>
                             {moment(councilmeeting.date).format(dateFormat)}
