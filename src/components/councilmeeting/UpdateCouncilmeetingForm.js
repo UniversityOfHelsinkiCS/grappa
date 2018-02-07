@@ -11,14 +11,7 @@ const dateFormat = 'DD.MM.YYYY';
 class UpdateCouncilmeetingForm extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            meeting: Object.assign({}, props.meeting),
-            selectedProgramme: undefined
-        };
-
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.updateMeeting = this.updateMeeting.bind(this);
+        this.state = { meeting: Object.assign({}, props.meeting) };
     }
 
     componentWillReceiveProps(props) {
@@ -31,11 +24,11 @@ class UpdateCouncilmeetingForm extends Component {
         }
     }
 
-    handleDateChange(date, field) {
+    handleDateChange = (date, field) => {
         const meeting = Object.assign({}, this.state.meeting);
         meeting[field] = date;
         this.setState({ meeting });
-    }
+    };
 
     handleProgrammeChange = (event) => {
         const foundProgramme = this.props.programmes.find(programme =>
@@ -49,16 +42,12 @@ class UpdateCouncilmeetingForm extends Component {
         }
     };
 
-    selectProgramme = (programme) => {
-        this.setState({ selectedProgramme: programme })
-    };
-
-    removeSelected = () => {
+    removeSelected = (programmeId) => {
         const programmes = [...this.state.meeting.programmes
-            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)];
+            .filter(programme => programme.programmeId !== programmeId)];
         const meeting = Object.assign({}, this.state.meeting, { programmes });
 
-        this.setState({ selectedProgramme: undefined, meeting })
+        this.setState({ meeting })
     };
 
     updateMeeting = () => {
@@ -122,7 +111,7 @@ class UpdateCouncilmeetingForm extends Component {
                             />
                         </div>
                     </div>
-                    <div className="two fields">
+                    <div className="fields">
                         <div className="field">
                             <label htmlFor="newMeetingProgramme">Units</label>
                             <ProgrammeSelect
@@ -131,12 +120,8 @@ class UpdateCouncilmeetingForm extends Component {
                             />
                             <ProgrammeList
                                 programmes={this.state.meeting.programmes}
-                                select={this.selectProgramme}
+                                removeProgramme={this.removeSelected}
                             />
-                        </div>
-                        <div className="field">
-                            {this.state.selectedProgramme ? this.state.selectedProgramme.name : undefined}
-                            {this.state.selectedProgramme ? <button className="ui red button" onClick={this.removeSelected}>Remove</button> : undefined}
                         </div>
                     </div>
                     <button className="ui green button" onClick={this.updateMeeting}>

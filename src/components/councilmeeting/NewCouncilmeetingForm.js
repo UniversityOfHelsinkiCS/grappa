@@ -7,38 +7,33 @@ import ProgrammeSelect from '../programme/ProgrammeSelect';
 import { ProgrammeList } from '../programme/ProgrammeList';
 
 const dateFormat = 'DD.MM.YYYY';
+const initialState = {
+    meeting: {
+        instructorDeadlineDays: 8,
+        studentDeadlineDays: 6,
+        programmes: []
+    }
+};
+
 
 class NewCouncilmeetingForm extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            meeting: {
-                instructorDeadlineDays: 8,
-                studentDeadlineDays: 6,
-                programmes: []
-            },
-            selectedProgramme: undefined
-        };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.saveMeeting = this.saveMeeting.bind(this);
-        this.handleProgrammeChange = this.handleProgrammeChange.bind(this);
+        this.state = Object.assign({}, initialState);
     }
 
-    handleChange(field, event) {
+    handleChange = (field, event) => {
         const meeting = Object.assign({}, this.state.meeting);
         meeting[field] = event.target.value;
         this.setState({ meeting });
-    }
+    };
 
-    handleDateChange(date) {
+    handleDateChange = (date) => {
         const meeting = Object.assign({}, this.state.meeting, { date });
         this.setState({ meeting });
-    }
+    };
 
-    handleProgrammeChange(event) {
+    handleProgrammeChange = (event) => {
         const programme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
@@ -48,22 +43,18 @@ class NewCouncilmeetingForm extends Component {
             const meeting = Object.assign({}, this.state.meeting, { programmes });
             this.setState({ meeting });
         }
-    }
-
-    selectProgramme = (programme) => {
-        this.setState({ selectedProgramme: programme })
     };
 
-    removeSelected = () => {
+    removeSelected = (programmeId) => {
         const programmes = [...this.state.meeting.programmes
-            .filter(programme => programme.programmeId !== this.state.selectedProgramme.programmeId)];
+            .filter(programme => programme.programmeId !== programmeId)];
         const meeting = Object.assign({}, this.state.meeting, { programmes });
 
-        this.setState({ selectedProgramme: undefined, meeting })
+        this.setState({ meeting })
     };
 
 
-    saveMeeting() {
+    saveMeeting = () => {
         // Since users only think about the difference but we want to save the date.
         const { date, instructorDeadlineDays, studentDeadlineDays, programmes } = this.state.meeting;
         const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
@@ -71,7 +62,8 @@ class NewCouncilmeetingForm extends Component {
         const programmeIds = programmes.map(programme => programme.programmeId);
 
         this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmes: programmeIds });
-    }
+        this.setState(Object.assign({}, initialState));
+    };
 
     render() {
         return (
@@ -115,7 +107,7 @@ class NewCouncilmeetingForm extends Component {
                             />
                         </div>
                     </div>
-                    <div className="two fields">
+                    <div className="one fields">
                         <div className="field">
                             <label htmlFor="newMeetingProgramme">Units</label>
                             <ProgrammeSelect
@@ -124,12 +116,8 @@ class NewCouncilmeetingForm extends Component {
                             />
                             <ProgrammeList
                                 programmes={this.state.meeting.programmes}
-                                select={this.selectProgramme}
+                                removeProgramme={this.removeSelected}
                             />
-                        </div>
-                        <div className="field">
-                            {this.state.selectedProgramme ? this.state.selectedProgramme.name : undefined}
-                            {this.state.selectedProgramme ? <button className="ui red button" onClick={this.removeSelected}>Remove</button> : undefined}
                         </div>
                     </div>
                     <button className="ui green button" onClick={this.saveMeeting}>
