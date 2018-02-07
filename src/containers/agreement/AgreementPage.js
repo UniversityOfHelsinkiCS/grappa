@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AgreementEditModal from '../../components/agreement/AgreementEditModal';
 import AgreementView from '../../components/agreement/AgreementView';
@@ -6,8 +7,6 @@ import Agreement from '../../components/agreement/Agreement';
 import { getRequiredFields } from './agreementValidations';
 import { personType, programmeType, roleType, agreementType, thesisType } from '../../util/types';
 
-// redux
-import { connect } from 'react-redux';
 import { saveAgreement } from './agreementActions';
 
 export class AgreementPage extends Component {
@@ -23,12 +22,12 @@ export class AgreementPage extends Component {
         }
     }
 
-    componentDidMount() {
-        document.title = 'Agreement Page';
-    }
-
     componentWillMount() {
         this.setState({ agreements: this.props.agreements });
+    }
+
+    componentDidMount() {
+        document.title = 'Agreement Page';
     }
 
     componentWillReceiveProps(newProps) {
@@ -59,36 +58,36 @@ export class AgreementPage extends Component {
             }
         }
         return parsedData;
-    }
+    };
 
     // TODO strange warnings when closing a modal
     toggleEditModal = () => {
         const editable = !this.state.editMode;
         this.setState({ editMode: editable });
-    }
+    };
 
     updateFormData = (data) => {
         this.setState({ agreement: data });
-    }
+    };
 
     sendForm = () => {
         this.props.updateAgreement(this.state.agreements);
-    }
+    };
 
     startNewAgreement = () => {
         this.setState({ newAgreement: !this.state.newAgreement });
-    }
+    };
 
     handleSaveAgreement = (agreement) => {
         this.props.saveAgreement(agreement);
         if (agreement.attachments !== undefined) {
             this.props.saveAttachment(agreement.attachments);
         }
-    }
+    };
 
     handleSaveAgreementDraft = (agreementDraft) => {
         this.props.saveAgreementDraft(agreementDraft);
-    }
+    };
 
     checkForChanges = (a, b) => {
         if (a === undefined || b === undefined)
@@ -102,7 +101,7 @@ export class AgreementPage extends Component {
                 return false;
         }
         return true;
-    }
+    };
 
     render() {
         if (this.state.newAgreement) {
@@ -146,7 +145,14 @@ export class AgreementPage extends Component {
                     /> : undefined}
 
                 <div className="ui segment">
-                    <button className="ui primary button" type="submit" disabled={disableSubmit} onClick={this.sendForm}>Save Agreement</button>
+                    <button
+                        className="ui primary button"
+                        type="submit"
+                        disabled={disableSubmit}
+                        onClick={this.sendForm}
+                    >
+                        Save Agreement
+                    </button>
                 </div>
             </div>
         );

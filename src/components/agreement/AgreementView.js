@@ -50,13 +50,26 @@ class AgreementView extends Component {
             <div>
                 {data.map(agreement => (
                     <div className="ui padded segment" key={agreement.agreementId}>
-                        <h2 className="ui header">{this.getAuthorName(agreement)}: {this.getThesis(agreement).title}</h2>
+                        <h2 className="ui header">
+                            {this.getAuthorName(agreement)}: {this.getThesis(agreement).title}
+                        </h2>
                         <b>Ohjausvastuut: </b> <br />
                         Vastuuohjaaja: {agreement.title} {this.getSupervisor(agreement)}<br />
                         Muuohjaaja: to be shown here<br />
                         2. ohjaaja: to be shown here<br />
-                        <button key={agreement.agreementId} className="ui primary button" onClick={e => this.changeShowing(e, agreement)}>Show/hide agreement information</button>
-                        <button className="ui primary button" onClick={e => this.handleEdit(e, agreement)}>Edit agreement</button>
+                        <button
+                            key={agreement.agreementId}
+                            className="ui primary button"
+                            onClick={e => this.changeShowing(e, agreement)}
+                        >
+                            Show/hide agreement information
+                        </button>
+                        <button
+                            className="ui primary button"
+                            onClick={e => this.handleEdit(e, agreement)}
+                        >
+                            Edit agreement
+                        </button>
                         {this.renderOne(agreement)}
                     </div>
                 ))}
@@ -105,10 +118,15 @@ class AgreementView extends Component {
                         </p>
                         <h4>Työskentelyn tavoitteet ja ajankäyttö</h4>
                         <p>
-                            Viikoittainen työaika: {agreement.studentWorkTime}<br />
-                            Ohjaajien varmaama ohjausaika: {agreement.supervisorWorkTime}<br />
-                            Välitavoitteet: {agreement.intermediateGoal}<br />
-                            Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun käytettävissä olevasta ajasta: {agreement.meetingAgreement}<br />
+                            Viikoittainen työaika: {agreement.studentWorkTime}
+                            <br />
+                            Ohjaajien varmaama ohjausaika: {agreement.supervisorWorkTime}
+                            <br />
+                            Välitavoitteet: {agreement.intermediateGoal}
+                            <br />
+                            Sopimus tapaamistiheydestä, yhteydenpitotavoista ja keskusteluun
+                            käytettävissä olevasta ajasta: {agreement.meetingAgreement}
+                            <br />
                             Tavoitearvosana: {agreement.studentGradeGoal}
                         </p>
                         <p>

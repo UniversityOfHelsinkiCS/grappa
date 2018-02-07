@@ -28,9 +28,9 @@ const ThesisConfirmModal = ({ showModal, closeModal, sendSaveThesis }) => {
                         </a>
                     </div>
                     <br />
-                    <div className="ui fluid positive button" onClick={sendSaveThesis}>
+                    <button className="ui fluid positive button" onClick={sendSaveThesis}>
                         Confirm
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>

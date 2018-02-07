@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func } from 'prop-types';
 import FormSection from './FormSection';
 
 export default class FormCreator extends Component {
@@ -13,7 +14,14 @@ export default class FormCreator extends Component {
         // const lastAction = this.getLastAction();
         const lastAction = undefined;
         const workableButton = <button className="ui primary button" type="submit" onClick={clickFunc}>Save</button>;
-        const disabledLoadingButton = <button className="ui primary disabled loading button" type="submit" onClick={clickFunc}>Save</button>;
+        const disabledLoadingButton = (
+            <button
+                className="ui primary disabled loading button"
+                type="submit"
+                onClick={clickFunc}
+            >
+                Save
+            </button>);
 
         if (lastAction === undefined) return workableButton;
 
@@ -46,3 +54,9 @@ export default class FormCreator extends Component {
         return <div>{this.createForm()}</div>;
     }
 }
+
+FormCreator.propTypes = {
+    buttonOnClickFunc: func.isRequired,
+    onSubmitFunc: func.isRequired,
+    fieldOnChangeFunc: func.isRequired
+};

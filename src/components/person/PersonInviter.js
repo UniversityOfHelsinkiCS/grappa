@@ -39,14 +39,12 @@ export default class PersonInviter extends Component {
         )
     };
 
-    programmeDropdown = () => {
-        return (
-            <ProgrammeSelect
-                onChange={this.changeValue('programmeId')}
-                programmes={this.props.programmes}
-            />
-        )
-    };
+    programmeDropdown = () => (
+        <ProgrammeSelect
+            onChange={this.changeValue('programmeId')}
+            programmes={this.props.programmes}
+        />
+    );
 
     render() {
         return (

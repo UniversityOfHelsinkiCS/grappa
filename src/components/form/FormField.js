@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func, object, string } from 'prop-types';
 import AttachmentAdder from '../attachment/AttachmentAdder';
 
 export default class Field extends Component {
@@ -46,9 +47,14 @@ export default class Field extends Component {
                 break;
             case 'dropdown':
                 forReturn = [<label key={`${this.props.fieldKey}label`} >{this.props.fieldData.label}</label>,
-                    <select className="ui dropdown" onChange={this.props.fieldOnChangeFunc} name={this.props.fieldData.name} >
-                        {this.props.fieldData.responses.map(
-                            response => <option value={response.value} selected={response.selected} >{response.text}</option>)}
+                    <select
+                        className="ui dropdown"
+                        onChange={this.props.fieldOnChangeFunc}
+                        name={this.props.fieldData.name}
+                    >
+                        {this.props.fieldData.responses.map(response => (
+                            <option value={response.value} selected={response.selected} >{response.text}</option>
+                        ))}
                     </select>
                 ];
                 break;
@@ -62,9 +68,18 @@ export default class Field extends Component {
         }
 
         return (
-            <div key={`${this.props.fieldKey}fieldDiv`} className={this.defineFieldClasses(this.props.fieldData.extraClassNames, this.props.fieldData.inputType, this.props.fieldData.required)}>
+            <div
+                key={`${this.props.fieldKey}fieldDiv`}
+                className={this.defineFieldClasses(this.props.fieldData.extraClassNames, this.props.fieldData.inputType, this.props.fieldData.required)}
+            >
                 {forReturn}
             </div>
         );
     }
 }
+
+Field.propTypes = {
+    fieldData: object.isRequired,
+    fieldKey: string.isRequired,
+    fieldOnChangeFunc: func.isRequired
+};

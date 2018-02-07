@@ -3,15 +3,13 @@ import FormField from './FormField';
 
 export default class Section extends Component {
     render() {
-        let fieldList = this.props.elements.map(
-            (fieldData, fieldKey) => {
-                return (
-                    <FormField
-                        fieldKey={fieldKey}
-                        fieldData={fieldData}
-                        fieldOnChangeFunc={this.props.fieldOnChangeFunc}
-                    />);
-            });
+        const fieldList = this.props.elements.map(
+            (fieldData, fieldKey) => (
+                <FormField
+                    fieldKey={fieldKey}
+                    fieldData={fieldData}
+                    fieldOnChangeFunc={this.props.fieldOnChangeFunc}
+                />));
 
         return (
             <div key={`section${this.props.sectionKey}`}><br />

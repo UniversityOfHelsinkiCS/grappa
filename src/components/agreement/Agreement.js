@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { array, func } from 'prop-types';
 
 import StudentInfoForm from './form/StudentInfoForm';
 import ThesisInfoForm from './form/ThesisInfoForm';
 import GoalInfoForm from './form/GoalInfoForm';
 import AttachmentAdder from '../attachment/AttachmentAdder';
-import { personType, programmeType } from '../../util/types';
+import { personType } from '../../util/types';
 
 export default class Agreement extends Component {
     constructor(props) {
@@ -68,7 +68,7 @@ export default class Agreement extends Component {
     validateData = (fieldName, value) => {
         if (this.state.filledRequiredFields[fieldName] !== undefined) {
             const fieldsCopy = Object.assign({}, this.state.filledRequiredFields);
-            fieldsCopy[fieldName] = !(value === '' || value === -1);
+            fieldsCopy[fieldName] = !(value === '' || value === -1);
             this.setState({ filledRequiredFields: fieldsCopy });
         }
     }
@@ -135,57 +135,11 @@ export default class Agreement extends Component {
 
         );
     }
-
-    /* SAVE FROM OLD BRANCH - AGREEMENT WIZARD BAR
-    getWizardLine() {
-        return (<div className="ui mini steps">
-            <a className={"step " + (this.state.formSteps == 0 ? 'active' : (this.state.formSteps > 0 ? 'completed' : ''))} onClick={() => this.wizardOnClick(0)}>
-                <i className="small address card outline icon"></i>
-                <div className="content">
-                    <div className="title">Personal Info</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 1 ? 'active' : (this.state.formSteps > 1 ? 'completed' : ''))} onClick={() => this.wizardOnClick(1)}>
-                <i className="small file text outline icon"></i>
-                <div className="content">
-                    <div className="title">Thesis</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 2 ? 'active' : (this.state.formSteps > 2 ? 'completed' : ''))} onClick={() => this.wizardOnClick(2)}>
-                <i className="small user icon"></i>
-                <div className="content">
-                    <div className="title">Supervisor</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 3 ? 'active' : (this.state.formSteps > 3 ? 'completed' : ''))} onClick={() => this.wizardOnClick(3)}>
-                <i className="small edit outline icon"></i>
-                <div className="content">
-                    <div className="title">Agreement</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 4 ? 'active' : (this.state.formSteps > 4 ? 'completed' : ''))} onClick={() => this.wizardOnClick(4)}>
-                <i className="small comments outline icon"></i>
-                <div className="content">
-                    <div className="title">Other</div>
-                </div>
-            </a>
-            <a className={"step " + (this.state.formSteps == 5 ? 'active' : (this.state.formSteps > 5 ? 'completed' : ''))} onClick={() => this.wizardOnClick(5)}>
-                <i className="small info icon"></i>
-                <div className="content">
-                    <div className="title">Confirm</div>
-
-                </div>
-            </a>
-        </div>);
-    }
-    */
 }
 
-const { array, arrayOf, func } = PropTypes;
 Agreement.propTypes = {
     user: personType.isRequired,
     requiredFields: array.isRequired,
     saveAgreement: func.isRequired,
-    saveAgreementDraft: func.isRequired,
-    programmes: arrayOf(programmeType).isRequired
+    saveAgreementDraft: func.isRequired
 };

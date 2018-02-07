@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { func, object } from 'prop-types';
 
 export default class PersonRoleReviewModal extends Component {
 
@@ -72,3 +73,9 @@ export default class PersonRoleReviewModal extends Component {
         );
     }
 }
+
+PersonRoleReviewModal.propTypes = {
+    sendReview: func.isRequired,
+    closeModal: func.isRequired,
+    personRole: object.isRequired
+};
