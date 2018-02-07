@@ -32,7 +32,7 @@ test.before(async () => {
 
 test('thesis is linked to author when invite is accepted', async (t) => {
     const email = 'test19-invite@opiskelija.example.com';
-    const personId = await createPerson(email);
+    const { personId } = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
     const token = 'jk3h25jk45hjghj';
     await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
@@ -47,7 +47,7 @@ test('thesis is linked to author when invite is accepted', async (t) => {
 
 test('invalid token is handled', async (t) => {
     const email = 'test5-invite@opiskelija.example.com';
-    const personId = await createPerson(email);
+    const { personId } = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
     const token = 'kbhjbjj3bjb234';
     await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
@@ -59,7 +59,7 @@ test('invalid token is handled', async (t) => {
 
 test('token can be used only once', async (t) => {
     const email = 'test2-invite@opiskelija.example.com';
-    const personId = await createPerson(email);
+    const { personId } = await createPerson(email);
     const agreementId = await knex('agreement').insert({}).returning('agreementId');
     const token = 'jkhiuhiad3';
     await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
@@ -86,7 +86,7 @@ test('role can be invited', async (t) => {
 
 test('role is linked to user when invite is accepted', async (t) => {
     const email = 'test1-invite@opiskelija.example.com';
-    const personId = await createPerson(email);
+    const { personId } = await createPerson(email);
     const token = 'fsdwe234gfd3';
     await knex('emailInvite').insert({ email, token, programme: 1, role: 1, type: 'role' });
 
