@@ -76,7 +76,7 @@ module.exports = {
         'arrow-body-style': 'warn',
         'arrow-parens':'warn',
         'import/no-mutable-exports':'warn',
-        'import/no-named-as-default': 'warn',
+        'import/no-named-as-default': 'off',
         'no-underscore-dangle': 'warn',
         'react/jsx-filename-extension': 'off',
         'quote-props': 'warn',

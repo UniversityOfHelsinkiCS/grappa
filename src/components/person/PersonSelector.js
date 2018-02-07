@@ -13,11 +13,11 @@ export default class PersonSelector extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('mousedown', this.unfocusMenu);
+        window.addEventListener('mousedown', this.unfocusMenu);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.unfocusMenu);
+        window.removeEventListener('mousedown', this.unfocusMenu);
     }
 
     personToText = person => `${person.firstname} ${person.lastname} ${person.email}`;
