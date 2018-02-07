@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, bool } from 'prop-types';
 import { programmeType } from '../../util/types';
 
 export default class ProgrammeSelect extends Component {
@@ -18,7 +18,9 @@ export default class ProgrammeSelect extends Component {
 
     handleChange = (event) => {
         this.props.onChange(event);
-        this.select.value = null;
+
+        if (this.props.clearSelect)
+            this.select.value = null;
     };
 
     render() {
@@ -59,5 +61,10 @@ export default class ProgrammeSelect extends Component {
 
 ProgrammeSelect.propTypes = {
     onChange: func.isRequired,
-    programmes: arrayOf(programmeType).isRequired
+    programmes: arrayOf(programmeType).isRequired,
+    clearSelect: bool
+};
+
+ProgrammeSelect.defaultProps = {
+    clearSelect: false
 };

@@ -117,6 +117,7 @@ class UpdateCouncilmeetingForm extends Component {
                             <ProgrammeSelect
                                 onChange={this.handleProgrammeChange}
                                 programmes={this.props.programmes}
+                                clearSelect
                             />
                             <ProgrammeList
                                 programmes={this.state.meeting.programmes}
