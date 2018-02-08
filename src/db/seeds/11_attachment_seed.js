@@ -1,10 +1,10 @@
 const attachments = require('../../mockdata/MockAttachments')
 
-exports.seed = function (knex, Promise) {
+exports.seed = function (knex) {
     // Deletes ALL existing entries
     return knex('attachment').del()
-        .then(function () {
+        .then(() =>
             // Inserts seed entries
-            return knex('attachment').insert(attachments);
-        });
+            knex('attachment').insert(attachments)
+        );
 };

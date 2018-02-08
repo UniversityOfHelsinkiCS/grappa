@@ -6,7 +6,7 @@ const MeetingProgramme = require('./meetingProgramme');
 const Councilmeeting = bookshelf.Model.extend({
     tableName: 'councilmeeting',
     idAttribute: 'councilmeetingId',
-    programmes: function () {
+    programmes() {
         return this.belongsToMany(Programme).through(MeetingProgramme, 'councilmeetingId', 'programmeId')
     }
 });

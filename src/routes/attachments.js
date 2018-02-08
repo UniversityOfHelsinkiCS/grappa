@@ -5,7 +5,7 @@ router.post('/', (req, res) => {
     attachmentController.saveAttachments(req, res);
 });
 
-//Download attachment
+// Download attachment
 router.get('/:ids', (req, res) => {
     attachmentController.downloadAttachments(req, res);
 })

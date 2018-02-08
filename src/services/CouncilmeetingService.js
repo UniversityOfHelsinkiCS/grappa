@@ -4,9 +4,7 @@ const moment = require('moment');
 
 // TODO: Use bookshelf to combine programmes into councilmeeting
 
-export const getAllCouncilmeetings = async () => {
-    return Councilmeeting.fetchAll({ withRelated: ['programmes'] });
-};
+export const getAllCouncilmeetings = async () => Councilmeeting.fetchAll({ withRelated: ['programmes'] });
 
 export const saveCouncilmeeting = (councilmeeting) => {
     validateMeetingDates(councilmeeting);
@@ -32,7 +30,7 @@ export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
 const toCouncilmeetingObject = councilmeeting => ({
     date: moment(councilmeeting.date).toDate(),
     instructorDeadline: moment(councilmeeting.instructorDeadline).toDate(),
-    studentDeadline: moment(councilmeeting.studentDeadline).toDate(),
+    studentDeadline: moment(councilmeeting.studentDeadline).toDate()
 });
 
 export const deleteCouncilmeeting = councilmeetingId =>

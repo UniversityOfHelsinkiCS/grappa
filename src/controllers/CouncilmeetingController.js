@@ -8,11 +8,9 @@ export async function getAllCouncilmeetings(req, res) {
         const responseMeetings = councilmeetings.serialize({ omitPivot: true })
             .map((meeting) => { // Trim programmes to simply array of ids
                 const copyMeeting = Object.assign({}, meeting);
-                copyMeeting.programmes = meeting.programmes.reduce((acc, cur) => {
-                    return acc.concat(cur.programmeId);
-                }, [])
+                copyMeeting.programmes = meeting.programmes.reduce((acc, cur) => acc.concat(cur.programmeId), []);
                 return copyMeeting
-            })
+            });
         res.status(200).json(responseMeetings);
     } catch (error) {
         res.status(500).end()

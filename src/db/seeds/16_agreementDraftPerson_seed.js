@@ -1,17 +1,17 @@
-exports.seed = function (knex, Promise) {
+exports.seed = function (knex) {
     // Deletes ALL existing entries
     return knex('agreementDraftPerson').del()
-        .then(function () {
+        .then(() =>
             // Inserts seed entries
-            return knex('agreementDraftPerson').insert([
+            knex('agreementDraftPerson').insert([
                 {
                     personRoleId: 1,
-                    agreementDraftId: 1,
+                    agreementDraftId: 1
                 },
                 {
                     personRoleId: 2,
-                    agreementDraftId: 2,
+                    agreementDraftId: 2
                 }
-            ]);
-        });
+            ])
+        );
 };
