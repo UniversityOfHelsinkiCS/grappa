@@ -5,9 +5,7 @@ const Bookshelf = require('../db/bookshelf');
 
 // TODO: Use bookshelf to combine programmes into councilmeeting
 
-export const getAllCouncilmeetings = async () => {
-    return Councilmeeting.fetchAll({ withRelated: ['programmes'] });
-}
+export const getAllCouncilmeetings = async () => Councilmeeting.fetchAll({ withRelated: ['programmes'] });
 
 export const saveCouncilmeeting = async (councilmeeting, programmeIds) => {
     validateMeetingDates(councilmeeting);
@@ -28,12 +26,8 @@ export const saveCouncilmeeting = async (councilmeeting, programmeIds) => {
     return savedMeeting.load(['programmes'])
 };
 
-const getProgrammesForMeeting = (councilmeetingId) => {
-    return knex('meetingProgramme').select().where('councilmeetingId', councilmeetingId)
-}
-
 export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, programmeIds) => {
-    await knex('meetingProgramme').where('councilmeetingId', councilmeetingId).del()
+    await knex('meetingProgramme').where('councilmeetingId', councilmeetingId).del();
     return Promise.all(programmeIds.map(async (programmeId) => {
         const meetingProgramme = {
             councilmeetingId,
@@ -41,36 +35,31 @@ export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, 
         }
         return knex('meetingProgramme').insert(meetingProgramme);
     }))
-}
+};
 
 export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
     validateMeetingDates(councilmeeting);
-    return knex('councilmeeting')
-        .returning('councilmeetingId')
-        .where('councilmeetingId', councilmeetingId)
-        .update(toCouncilmeetingObject(councilmeeting))
-        .then(councilmeetings => councilmeetings[0]);
+    return new Councilmeeting({ councilmeetingId }).save(toCouncilmeetingObject(councilmeeting));
 };
 
 const toCouncilmeetingObject = councilmeeting => ({
     date: moment(councilmeeting.date).toDate(),
     instructorDeadline: moment(councilmeeting.instructorDeadline).toDate(),
-    studentDeadline: moment(councilmeeting.studentDeadline).toDate(),
+    studentDeadline: moment(councilmeeting.studentDeadline).toDate()
 });
 
 export const deleteCouncilmeeting = councilmeetingId =>
     Councilmeeting.where('councilmeetingId', councilmeetingId).destroy();
 
 export const getCouncilmeeting = async (councilmeetingId) => {
-    const model = await Councilmeeting.where('councilmeetingId', councilmeetingId).fetch();
-    const programmes = await getProgrammesForMeeting(councilmeetingId)
+    const model = await Councilmeeting
+        .where('councilmeetingId', councilmeetingId)
+        .fetch({ withRelated: ['programmes'] });
+
     const meeting = model.attributes;
-    meeting.programmes = programmes.reduce((acc, cur) => {
-        acc.push(cur.programmeId)
-        return acc
-    }, [])
+    meeting.programmes = model.related('programmes').map(p => p.attributes.programmeId);
     return meeting;
-}
+};
 
 function validateMeetingDates(meeting) {
     const meetingDate = moment(meeting.date);

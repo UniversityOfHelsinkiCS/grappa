@@ -1,7 +1,8 @@
-'use strict';
+
 const bookshelf = require('../bookshelf');
+
 const Attachment = bookshelf.Model.extend({
     tableName: 'attachment',
-    idAttribute: 'attachmentId',
+    idAttribute: 'attachmentId'
 });
 module.exports = Attachment;

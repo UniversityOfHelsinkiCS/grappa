@@ -1,10 +1,10 @@
 const agreementPersons = require('../../mockdata/MockAgreementPersons')
 
-exports.seed = function (knex, Promise) {
+exports.seed = function (knex) {
     // Deletes ALL existing entries
     return knex('agreementPerson').del()
-        .then(function () {
+        .then(() =>
             // Inserts seed entries
-            return knex('agreementPerson').insert(agreementPersons);
-        });
+            knex('agreementPerson').insert(agreementPersons)
+        );
 };

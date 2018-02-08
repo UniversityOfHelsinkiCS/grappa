@@ -7,6 +7,7 @@ const request = require('supertest');
 const express = require('express');
 const councilmeetings = require('../../src/routes/councilmeeting');
 const errorHandler = require('../../src/util/errorHandler');
+const knex = require('../../src/db/connection').getKnex();
 
 const makeApp = (userId) => {
     const app = express();
@@ -184,4 +185,17 @@ test.serial('councilmeeting with invalid data cannot be created', async (t) => {
 
     const getAfter = await validGet(t, app)
     t.deepEqual(getBefore, getAfter)
+});
+
+test('meeting with theses cant be deleted', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(1);
+    const meeting = await validPost(t, app, councilMeeting);
+    const meetingId = meeting.councilmeetingId;
+
+    await knex('thesis').insert({ title: 'foo', councilmeetingId: meetingId, grade: '3' });
+
+    const res = await request(app).del(`/councilmeetings/${meetingId}`);
+
+    t.is(res.status, 500);
 });

@@ -27,6 +27,7 @@ module.exports = {
         'import/no-named-as-default': 'warn',
         'no-underscore-dangle': 'warn',
         'quote-props': 'warn',
+        'func-names': 'off',
 
         'no-use-before-define': 'off',
         'no-shadow': 'warn',

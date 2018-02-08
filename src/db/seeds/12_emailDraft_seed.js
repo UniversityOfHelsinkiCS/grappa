@@ -1,9 +1,9 @@
-exports.seed = function (knex, Promise) {
+exports.seed = function (knex) {
     // Deletes ALL existing entries
     return knex('emailDraft').del()
-        .then(function () {
+        .then(() =>
             // Inserts seed entries
-            return knex('emailDraft').insert([
+            knex('emailDraft').insert([
                 {
                     type: 'StudentRegistrationNotification',
                     title: 'Thesis approval',
@@ -11,7 +11,9 @@ exports.seed = function (knex, Promise) {
                         `Hi,
 
 Your thesis has now been approved by the Department Council and 
-all the required modules have been registered in Oodi. If you would like to alter something in these modules, please contact us (opintoesimies@cs.helsinki.fi). Otherwise you should fill in the Application form for the Master of Science Degree Diploma:
+all the required modules have been registered in Oodi. If you would like to alter something in these modules, please \
+contact us (opintoesimies@cs.helsinki.fi). Otherwise you should fill in the Application form for the Master of Science \
+Degree Diploma:
 
 -in English: https://elomake.helsinki.fi/lomakkeet/81238/lomake.html?rinnakkaislomake=Mscenglish
 -in Finnish: https://elomake.helsinki.fi/lomakkeet/81238/lomake.html
@@ -31,12 +33,16 @@ A new thesis which you supervise has been added to Grappa.`
                     body:
                         `Hi
 
-This is an automatic reminder from Grappa, https://grappa.cs.helsinki.fi, a web application created to help in managing the final stages of approving student's master's degree.
+This is an automatic reminder from Grappa, https://grappa.cs.helsinki.fi, a web application created to help in \
+managing the final stages of approving student's master's degree.
 
-Your thesis has been reviewed and submitted to the system. In this email's attachments you can find and read your review. If you're not satisfied with your grade, please contact Kjell Lemström.
+Your thesis has been reviewed and submitted to the system. In this email's attachments you can find and read your \
+review. If you're not satisfied with your grade, please contact Kjell Lemström.
 
-If you accept your grade, please submit your thesis into eThesis https://ethesis.helsinki.fi/. And after submitting please re-submit the same PDF-document to Grappa using the supplied field below.
-Your thesis is set to be accepted in the next councilmeeting of $DATE$. If you submit your thesis after the deadline of $STUDENTDEADLINE$ your thesis will be automatically moved to the next councilmeeting.
+If you accept your grade, please submit your thesis into eThesis https://ethesis.helsinki.fi/. And after submitting \
+please re-submit the same PDF-document to Grappa using the supplied field below.
+Your thesis is set to be accepted in the next councilmeeting of $DATE$. If you submit your thesis after the deadline \
+of $STUDENTDEADLINE$ your thesis will be automatically moved to the next councilmeeting.
 $LINK$`
                 },
                 {
@@ -45,9 +51,11 @@ $LINK$`
                     body:
                         `Hi
 
-This is an automatic reminder from Grappa, https://grappa.cs.helsinki.fi, a web application created to help in managing the final stages of approving student's master's degree.
+This is an automatic reminder from Grappa, https://grappa.cs.helsinki.fi, a web application created to help in \
+managing the final stages of approving student's master's degree.
 
-Due to rules of the process, your evaluation of the instructors is needed for the process to continue. Please submit your evaluation in the provided link.
+Due to rules of the process, your evaluation of the instructors is needed for the process to continue. Please submit \
+your evaluation in the provided link.
 $LINK$`
                 },
                 {
@@ -56,7 +64,8 @@ $LINK$`
                     body:
                         `Hi
 
-Your thesis has been added to Grappa, a web application created to help in managing the final stages of approving student's master's degree.
+Your thesis has been added to Grappa, a web application created to help in managing the final stages of approving \
+student's master's degree.
 $LOGIN_URL$`
                 },
                 {
@@ -65,9 +74,10 @@ $LOGIN_URL$`
                     body:
                         `Hi
 
-You have been invited to Grappa, a web application created to help in managing the final stages of approving student's master's degree.
+You have been invited to Grappa, a web application created to help in managing the final stages of approving \
+student's master's degree.
 $LOGIN_URL$`
                 }
-            ]);
-        });
+            ])
+        );
 };

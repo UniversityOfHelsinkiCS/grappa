@@ -1,5 +1,5 @@
 module.exports = [
-    //Range of ordinary personRoleIds, personIds and roleIds from 1 to 6
+    // Range of ordinary personRoleIds, personIds and roleIds from 1 to 6
     {
         personRoleId: 1,
         personId: 1, // Amanda Admin
@@ -36,7 +36,7 @@ module.exports = [
         roleId: 6, // supervisor
         programmeId: 1 // Tietojenkäsittelytiede
     },
-    //Defaults ended here, now special people:
+    // Defaults ended here, now special people:
     {
         personRoleId: 8,
         personId: 8, // Venla Math-vastuuproffa

@@ -79,9 +79,7 @@ export async function generateReviewPage(reviewInformationArray) {
 function createReviewString(reviewInfoArray) {
     return reviewInfoArray.map((agreementObject) => {
         const identifyString = `${agreementObject.authorLastname} ${agreementObject.authorFirstname}: ${agreementObject.grade}\n${agreementObject.title}`
-        const graderString = agreementObject.graders.map((grader) => {
-            return `${grader.lastname} ${grader.firstname}.\nReviewed by ${grader.reviewerName}:\n${grader.statement}`
-        }).join('\n\n');
+        const graderString = agreementObject.graders.map(grader => `${grader.lastname} ${grader.firstname}.\nReviewed by ${grader.reviewerName}:\n${grader.statement}`).join('\n\n');
         return `${identifyString}\n\n${graderString}`;
     }).join('\n\n')
 }

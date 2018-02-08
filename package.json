@@ -14,7 +14,7 @@
     "db:reset": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:rollback",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
-    "lint": "eslint --ext .js . || true"
+    "lint": "eslint --ext .js src || true"
   },
   "repository": {
     "type": "git",
