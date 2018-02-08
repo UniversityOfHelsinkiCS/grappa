@@ -1,18 +1,31 @@
 const knex = require('../db/connection').getKnex();
 const Councilmeeting = require('../db/models/councilmeeting');
 const moment = require('moment');
+const Bookshelf = require('../db/bookshelf');
 
 // TODO: Use bookshelf to combine programmes into councilmeeting
 
 export const getAllCouncilmeetings = async () => {
-    return Councilmeeting.fetchAll({ withRelated: ['programmes']});
+    return Councilmeeting.fetchAll({ withRelated: ['programmes'] });
 }
 
-export const saveCouncilmeeting = (councilmeeting) => {
+export const saveCouncilmeeting = async (councilmeeting, programmeIds) => {
     validateMeetingDates(councilmeeting);
+    const savedMeeting = await Bookshelf.transaction(async (t) => {
+        const meeting = await Councilmeeting
+            .forge(toCouncilmeetingObject(councilmeeting))
+            .save(null, {
+                transacting: t
+            })
+        await meeting
+            .programmes()
+            .attach(programmeIds, {
+                transacting: t
+            });
+        return meeting;
+    })
 
-
-    return new Councilmeeting(toCouncilmeetingObject(councilmeeting)).save().then(m => m.get('councilmeetingId'));
+    return savedMeeting.load(['programmes'])
 };
 
 const getProgrammesForMeeting = (councilmeetingId) => {
