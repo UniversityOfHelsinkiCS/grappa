@@ -5,22 +5,16 @@ const moment = require('moment');
 // TODO: Use bookshelf to combine programmes into councilmeeting
 
 export const getAllCouncilmeetings = async () => {
-    return Councilmeeting.fetchAll({ withRelated: ['programmes']});
-}
+    return Councilmeeting.fetchAll({ withRelated: ['programmes'] });
+};
 
 export const saveCouncilmeeting = (councilmeeting) => {
     validateMeetingDates(councilmeeting);
-
-
     return new Councilmeeting(toCouncilmeetingObject(councilmeeting)).save().then(m => m.get('councilmeetingId'));
 };
 
-const getProgrammesForMeeting = (councilmeetingId) => {
-    return knex('meetingProgramme').select().where('councilmeetingId', councilmeetingId)
-}
-
 export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, programmeIds) => {
-    await knex('meetingProgramme').where('councilmeetingId', councilmeetingId).del()
+    await knex('meetingProgramme').where('councilmeetingId', councilmeetingId).del();
     return Promise.all(programmeIds.map(async (programmeId) => {
         const meetingProgramme = {
             councilmeetingId,
@@ -28,15 +22,11 @@ export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, 
         }
         return knex('meetingProgramme').insert(meetingProgramme);
     }))
-}
+};
 
 export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
     validateMeetingDates(councilmeeting);
-    return knex('councilmeeting')
-        .returning('councilmeetingId')
-        .where('councilmeetingId', councilmeetingId)
-        .update(toCouncilmeetingObject(councilmeeting))
-        .then(councilmeetings => councilmeetings[0]);
+    return new Councilmeeting({ councilmeetingId }).save(toCouncilmeetingObject(councilmeeting));
 };
 
 const toCouncilmeetingObject = councilmeeting => ({
@@ -49,15 +39,14 @@ export const deleteCouncilmeeting = councilmeetingId =>
     Councilmeeting.where('councilmeetingId', councilmeetingId).destroy();
 
 export const getCouncilmeeting = async (councilmeetingId) => {
-    const model = await Councilmeeting.where('councilmeetingId', councilmeetingId).fetch();
-    const programmes = await getProgrammesForMeeting(councilmeetingId)
+    const model = await Councilmeeting
+        .where('councilmeetingId', councilmeetingId)
+        .fetch({ withRelated: ['programmes'] });
+
     const meeting = model.attributes;
-    meeting.programmes = programmes.reduce((acc, cur) => {
-        acc.push(cur.programmeId)
-        return acc
-    }, [])
+    meeting.programmes = model.related('programmes').map(p => p.attributes.programmeId);
     return meeting;
-}
+};
 
 function validateMeetingDates(meeting) {
     const meetingDate = moment(meeting.date);
