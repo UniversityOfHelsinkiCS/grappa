@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { downloadAttachments } from '../attachment/attachmentActions'
 import { markPrinted } from '../thesis/thesisActions';
-import { personType, thesisType, agreementType, attachmentType } from '../../util/types';
+import { personType, thesisType, agreementType, attachmentType, programmeType } from '../../util/types';
 import { formatTheses } from '../../util/theses';
 
 import ThesisList from '../../components/thesis/ThesisList'
@@ -32,9 +32,19 @@ export class CouncilmeetingViewPage extends Component {
         }
     }
 
+    getProgrammeName(programmeId) {
+        return this.props.programmes.find(programme => programme.programmeId === programmeId).name;
+    }
+
+    getProgrammeNames() {
+        if (this.state.currentMeeting)
+            return this.state.currentMeeting.programmes.map(programme => `${this.getProgrammeName(programme)} `);
+
+        return null;
+    }
+
     initState = (props) => {
-        const { councilmeetings, theses, persons, agreements } = props;
-        if (councilmeetings.length < 1 || theses.length < 1 || persons.length < 1 || agreements.length < 1) return;
+        const { councilmeetings, theses, agreements, persons } = props;
         const foundIndex = this.findIndexFromProps(props);
         const previousMeetingId = foundIndex > 0 ? councilmeetings[foundIndex - 1].councilmeetingId : undefined;
         const currentMeeting = councilmeetings[foundIndex];
@@ -45,7 +55,7 @@ export class CouncilmeetingViewPage extends Component {
             previousMeetingId,
             currentMeeting,
             nextMeetingId,
-            theses: formatTheses(filteredTheses, props.agreements, props.persons)
+            theses: formatTheses(filteredTheses, agreements, persons)
         });
     };
 
@@ -93,12 +103,12 @@ export class CouncilmeetingViewPage extends Component {
                             Previous
                         </Link>
                         :
-                        <span />
+                        <button className="ui button blue" disabled>Previous</button>
                     }
                     {this.state.nextMeetingId ?
                         <Link to={`/councilmeeting/${this.state.nextMeetingId}`} className="ui button blue">Next</Link>
                         :
-                        <span />
+                        <button className="ui button blue" disabled>Next</button>
                     }
                     <h2 className="ui dividing header" style={{ marginTop: '1%' }}>
                         <span>
@@ -106,6 +116,7 @@ export class CouncilmeetingViewPage extends Component {
                         </span>
                     </h2>
                 </div>
+                <div style={{ marginTop: '1em', marginBottom: '1em' }}>{this.getProgrammeNames()}</div>
                 <ThesisList
                     downloadSelected={this.handleDownload}
                     theses={this.state.theses}
@@ -126,7 +137,8 @@ const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     theses: state.theses,
     attachments: state.attachments,
-    agreements: state.agreements
+    agreements: state.agreements,
+    programmes: state.programmes
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -145,6 +157,7 @@ CouncilmeetingViewPage.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
     markPrinted: func.isRequired,
+    programmes: arrayOf(programmeType).isRequired,
     match: shape({
         params: shape({
             id: string.isRequired
