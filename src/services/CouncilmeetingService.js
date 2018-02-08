@@ -37,9 +37,26 @@ export const unlinkAndLinkCouncilmeetingToProgrammes = async (councilmeetingId, 
     }))
 };
 
-export const updateCouncilmeeting = (councilmeeting, councilmeetingId) => {
+export const updateCouncilmeeting = async (councilmeeting, councilmeetingId, programmeIds) => {
     validateMeetingDates(councilmeeting);
-    return new Councilmeeting({ councilmeetingId }).save(toCouncilmeetingObject(councilmeeting));
+    const savedMeeting = await Bookshelf.transaction(async (t) => {
+        const meeting = await Councilmeeting
+            .forge({ councilmeetingId })
+            .save(toCouncilmeetingObject(councilmeeting), {
+                transacting: t
+            })
+        await meeting.programmes().detach(null, {
+            transacting: t
+        }) // TODO: Update better
+        await meeting
+            .programmes()
+            .attach(programmeIds, {
+                transacting: t
+            });
+        return meeting;
+    })
+
+    return savedMeeting.load(['programmes'])
 };
 
 const toCouncilmeetingObject = councilmeeting => ({
