@@ -52,8 +52,10 @@ export async function saveAttachments(req, res, agreementId) {
             id = JSON.parse(request.body.json).agreementId;
         }
 
-        const attachments = [].concat.apply([], await Promise.all(Object.keys(request.files).map(key => saveFileArray(id, request.files[key]))));
-
+        const attachments = [].concat(...await Promise.all(
+            Object.keys(request.files)
+                .map(key => saveFileArray(id, request.files[key]))
+        ));
         return { attachments, json: JSON.parse(request.body.json) };
     } catch (error) {
         logger.error('Error during attachment save ', error);
@@ -62,7 +64,10 @@ export async function saveAttachments(req, res, agreementId) {
 }
 
 export async function saveAttachmentFiles(files, agreementId) {
-    return [].concat.apply([], await Promise.all(Object.keys(files).map(key => saveFileArray(agreementId, files[key]))));
+    return [].concat(...await Promise.all(
+        Object.keys(files)
+            .map(key => saveFileArray(agreementId, files[key]))
+    ));
 }
 
 const saveFileArray = async (agreementId, fileArray) => Promise.all(fileArray.map(async (file) => {

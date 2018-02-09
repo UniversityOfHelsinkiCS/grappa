@@ -1,10 +1,8 @@
 const persons = require('../../mockdata/MockPersons')
 
-exports.seed = function (knex) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('person').del()
-        .then(() =>
-            // Inserts seed entries
-            knex('person').insert(persons)
-        );
+    await knex('person').del()
+    // Inserts seed entries
+    return knex('person').insert(persons)
 };

@@ -9,6 +9,10 @@ const smtp = () => ({
     secure: false // false -> TLS, true -> SSL
 });
 
+export async function getSettings() {
+    return smtp();
+}
+
 export async function sendEmail(to, subject, body, attachments) {
     const senderSettings = smtp();
     const transporter = nodemailer.createTransport(senderSettings);

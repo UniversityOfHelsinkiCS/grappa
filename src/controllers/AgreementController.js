@@ -10,7 +10,7 @@ export async function getAllAgreements(req, res) {
     // All = return agreements that a user might be interested in.
     try {
         const user = await personService.getLoggedPerson(req);
-        const personId = user.personId;
+        const { personId } = user;
         let agreements = [];
         let newAgreements = [];
 
