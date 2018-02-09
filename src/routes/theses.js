@@ -47,6 +47,14 @@ router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(re
  * @apiName CreateThesis
  * @apiGroup Theses
  *
+ * @apiDescription
+ * Multipart post. Saves attachments & thesis data with same post.
+ *
+ * @apiParam {File} thesisFile Thesis PDF
+ * @apiParam {File} reviewFile Review PDF
+ * @apiParam {File[]} otherFile Other file type
+ * @apiParam {JSON} json Thesis data, see example
+ *
  *  @apiParamExample {json} Request-Example
  *  {
  *      "title":"Example title",
