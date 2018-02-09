@@ -73,9 +73,6 @@ src/util/ethesis_credentials.js
 #uploads
 /uploads/**
 
-#package-lock before launch
-package-lock.json
-
 .DS_Store
 .idea
 back-grappa2.iml
