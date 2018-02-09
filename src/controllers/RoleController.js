@@ -48,9 +48,3 @@ export async function updateStatement(req, res) {
     const updatedRole = await roleService.getRoleWithAgreementIdAndPersonRole(agreementId, personRoleId);
     res.status(200).json(updatedRole).end();
 }
-
-export async function updateVisitorRoles(req, res) {
-    const person = await personService.getLoggedPerson(req);
-    await roleService.updateVisitorRoleStudyfields(person.personId, req.body.programmeIds);
-    res.status(200).end();
-}
