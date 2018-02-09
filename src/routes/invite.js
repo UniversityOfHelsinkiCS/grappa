@@ -6,6 +6,8 @@ const inviteController = require('../controllers/InviteController');
  * @apiName AcceptThesisInvite
  * @apiGroup Invite
  *
+ * @apiPermission admin manager
+ *
  * @apiParam {String} token Invite token
  *
  * @apiDescription
@@ -18,6 +20,8 @@ router.get('/thesis/:token', (req, res, next) => inviteController.thesisAuthorIn
  * @api {get} invite/role/:token Accept role invite
  * @apiName AcceptRoleInvite
  * @apiGroup Invite
+ *
+ * @apiPermission admin manager
  *
  * @apiParam {String} token Invite token
  *

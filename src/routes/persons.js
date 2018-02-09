@@ -47,6 +47,8 @@ router.get('/', (req, res, next) => personController.getPersons(req, res).catch(
  * @apiName InvitePerson
  * @apiGroup Persons
  *
+ * @apiPermission admin manager
+ *
  * @apiDescription Sends invite to role email.
  *
  * @apiParam {Number} programme Programme id

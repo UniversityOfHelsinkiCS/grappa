@@ -1,3 +1,5 @@
+import { getLoggedPerson } from './PersonService';
+
 const knex = require('../db/connection').getKnex();
 const programmeService = require('./ProgrammeService');
 
@@ -130,3 +132,28 @@ export const getUsersRoles = async (user) => {
         role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
     }))
 };
+
+export async function isUserAdmin(user) {
+    knex.select()
+        .from('personWithRole')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('personId', user.personId)
+        .where('name', 'admin')
+        .then(res => res.length > 1);
+}
+
+export async function isUserAdminOrManager(user) {;
+    return knex.select()
+        .from('personWithRole')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('personId', user.personId)
+        .where('name', 'admin')
+        .orWhere('name', 'manager')
+        .then(res => res.length > 0);
+}
+
+export async function checkUserIsAdminOrManager(req) {
+    if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
+        throw new Error('User is not admin or manager');
+    }
+}

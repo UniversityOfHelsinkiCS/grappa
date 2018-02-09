@@ -1,3 +1,5 @@
+import { checkUserIsAdminOrManager } from '../services/RoleService';
+
 const roleService = require('../services/RoleService');
 const personService = require('../services/PersonService');
 
@@ -29,6 +31,7 @@ export async function saveRole(req, res) {
 }
 
 export async function deleteRole(req, res) {
+    await checkUserIsAdminOrManager(req);
     let personRoleId = req.params.id;
     personRoleId = await roleService.deletePersonRole(personRoleId);
     res.status(200).json(personRoleId).end();

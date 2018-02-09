@@ -10,6 +10,8 @@ const notificationController = require('../controllers/NotificationController');
  * Returns admin notificatios. Notifications are created when
  * data is modified in system.
  *
+ * @apiPermission admin manager
+ *
  * @apiSuccessExample {json} Success-Response
  * [
  *  {

@@ -1,3 +1,5 @@
+import { checkUserIsAdminOrManager } from '../services/RoleService';
+
 const councilmeetingService = require('../services/CouncilmeetingService');
 const notificationService = require('../services/NotificationService');
 
@@ -30,6 +32,8 @@ export async function getAllCouncilmeetings(req, res) {
 export async function saveCouncilmeeting(req, res) {
     const councilmeeting = req.body;
 
+    await checkUserIsAdminOrManager(req);
+
     if (councilmeeting) {
         const programmeIds = councilmeeting.programmes;
         delete councilmeeting.programmes;
@@ -50,6 +54,8 @@ export async function updateCouncilmeeting(req, res) {
     const councilmeetingId = req.params.id;
     const councilmeeting = req.body;
 
+    await checkUserIsAdminOrManager(req);
+
     if (councilmeetingId && councilmeeting) {
         const programmeIds = councilmeeting.programmes;
         delete councilmeeting.programmes;
@@ -65,6 +71,8 @@ export async function updateCouncilmeeting(req, res) {
 
 export async function deleteCouncilmeeting(req, res) {
     const councilmeetingId = req.params.id;
+
+    await checkUserIsAdminOrManager(req);
 
     if (councilmeetingId) {
         await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(councilmeetingId, []);

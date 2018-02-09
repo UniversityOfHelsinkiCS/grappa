@@ -29,6 +29,8 @@ router.get('/available', (req, res, next) => {
  * @apiName SaveRole
  * @apiGroup Roles
  *
+ * @apiPermission admin manager
+ *
  * @apiParam {Number} roleId Role id
  * @apiParam {Number} personId Person id
  * @apiParam {Number} programmeId Programme id
@@ -53,6 +55,8 @@ router.put('/', jsonParser, (req, res, next) => {
  * @api {delete} roles/:id Remove role
  * @apiName DeleteRole
  * @apiGroup Roles
+ *
+ * @apiPermission admin manager
  *
  * @apiParam {Number} id Role id
  */

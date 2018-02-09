@@ -9,6 +9,8 @@ const emailDraftController = require('../controllers/EmailDraftController');
  * @apiName GetDrafts
  * @apiGroup EmailDraft
  *
+ * @apiPermission admin manager
+ *
  * @apiSuccessExample {json} Success-Response
  * [
  *      {
@@ -29,6 +31,8 @@ router.get('/', (req, res) => {
  * @apiName SaveDraft
  * @apiGroup EmailDraft
  *
+ * @apiPermission admin manager
+ *
  * @apiParam {String} title Email title
  * @apiParam {String} body Email body
  * @apiParam {String} type Draft type
@@ -43,6 +47,8 @@ router.post('/', jsonParser, (req, res) => {
  * @apiName UpdateDraft
  * @apiGroup EmailDraft
  *
+ * @apiPermission admin manager
+ *
  * @apiParam {Number} id Draft id
  * @apiParam {String} title Email title
  * @apiParam {String} body Email body
@@ -56,6 +62,8 @@ router.post('/:id', jsonParser, (req, res) => {
  * @api {delete} emailDrafts/:id Delete draft
  * @apiName DeleteDraft
  * @apiGroup EmailDraft
+ *
+ * @apiPermission admin manager
  *
  * @apiParam {Number} id Draft id
  */

@@ -29,6 +29,8 @@ router.get('/', (req, res, next) => {
  * @apiName CreateMeeting
  * @apiGroup Councilmeeting
  *
+ * @apiPermission admin, manager
+ *
  * @apiParamExample {json} Request-Example
  *  {
  *      "date": "2017-11-19T22:00:00.000Z",
@@ -45,6 +47,8 @@ router.post('/', jsonParser, (req, res, next) => {
  * @api {post} councilmeetings/ Update councilmeeting
  * @apiName UpdateMeeting
  * @apiGroup Councilmeeting
+ *
+ * @apiPermission admin, manager
  *
  * @apiParamExample {json} Request-Example
  *  {
@@ -63,6 +67,8 @@ router.put('/:id', jsonParser, (req, res, next) => {
  * @api {delete} councilmeetings/:id Delete councilmeeting
  * @apiName DeleteCouncilmeeting
  * @apiGroup Councilmeeting
+ *
+ * @apiPermission admin, manager
  *
  * @apiParam {Number} id meeting id
  */

@@ -199,3 +199,40 @@ test('meeting with theses cant be deleted', async (t) => {
 
     t.is(res.status, 500);
 });
+
+test('normal people can\'t create meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(99);
+
+    const res = await request(app)
+        .post('/councilmeetings')
+        .send(councilMeeting);
+    t.is(res.status, 500);
+});
+
+test('normal people can\'t edit meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(1);
+    const responseMeeting = await validPost(t, app, councilMeeting);
+    const councilMeetingId = responseMeeting.councilmeetingId;
+
+    const app2 = makeApp(99);
+
+    const res = await request(app2)
+        .put(`/councilmeetings/${councilMeetingId}`)
+        .send(councilMeeting);
+    t.is(res.status, 500);
+});
+
+test('normal people can\'t delete meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(1);
+    const responseMeeting = await validPost(t, app, councilMeeting);
+    const councilMeetingId = responseMeeting.councilmeetingId;
+
+    const app2 = makeApp(99);
+
+    const res = await request(app2)
+        .del(`/councilmeetings/${councilMeetingId}`);
+    t.is(res.status, 500);
+});
