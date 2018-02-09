@@ -1,10 +1,8 @@
 const notifications = require('../../mockdata/MockNotifications')
 
-exports.seed = knex =>
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    knex('notification').del()
-        .then(() =>
-            // Inserts seed entries
-            knex('notification').insert(notifications)
-        );
-
+    await knex('notification').del()
+    // Inserts seed entries
+    return knex('notification').insert(notifications)
+}

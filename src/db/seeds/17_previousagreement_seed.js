@@ -1,7 +1,8 @@
 const previousAgreements = require('../../mockdata/MockPrevAgreements')
 
-exports.seed = function (knex) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('previousagreements').del()
-        .then(() => knex('previousagreements').insert(previousAgreements));
+    await knex('previousagreements').del()
+    // Inserts seed entries
+    return knex('previousagreements').insert(previousAgreements);
 };

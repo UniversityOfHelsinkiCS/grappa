@@ -75,9 +75,8 @@ export async function saveThesisForm(req, res) {
     // Order so that agreementId is available to save attachments.
     const agreement = await agreementService.createFakeAgreement();
     const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
-    const studyfieldId = thesis.studyfieldId;
-    const authorEmail = thesis.authorEmail;
-    const agreementId = agreement.agreementId;
+    const { studyfieldId, authorEmail } = thesis;
+    const { agreementId } = agreement;
 
     agreement.studyfieldId = thesis.studyfieldId;
 

@@ -4,9 +4,8 @@ const notificationService = require('../services/NotificationService');
 const mapProgrammesToIds = (councilmeeting) => {
     const copyMeeting = Object.assign({}, councilmeeting);
     copyMeeting.councilmeetingId = Number(councilmeeting.councilmeetingId)
-    copyMeeting.programmes = councilmeeting.programmes.reduce((acc, cur) => {
-        return acc.concat(cur.programmeId);
-    }, [])
+    copyMeeting.programmes = councilmeeting.programmes
+        .reduce((acc, cur) => acc.concat(cur.programmeId), [])
     return copyMeeting
 }
 
@@ -54,7 +53,8 @@ export async function updateCouncilmeeting(req, res) {
     if (councilmeetingId && councilmeeting) {
         const programmeIds = councilmeeting.programmes;
         delete councilmeeting.programmes;
-        const updatedMeeting = await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId, programmeIds);
+        const updatedMeeting =
+            await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId, programmeIds);
         const responseMeeting = serializeAndTrim(updatedMeeting)
         programmeIds.forEach((programmeId) => {
             notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req, programmeId);

@@ -1,7 +1,5 @@
 
-const ethesis_credentials = {
+export default {
     username: '',
     password: ''
 }
-
-export default ethesis_credentials
