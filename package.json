@@ -14,7 +14,8 @@
     "db:reset": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:rollback",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
     "report": "nyc report --reporter=html",
-    "lint": "eslint --ext .js . || true"
+    "lint": "eslint --ext .js src || true",
+    "apidoc": "apidoc -i src -o apidoc"
   },
   "repository": {
     "type": "git",
@@ -58,6 +59,7 @@
     "xmlbuilder": "^9.0.4"
   },
   "devDependencies": {
+    "apidoc": "^0.17.6",
     "ava": "^0.24.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
@@ -95,5 +97,9 @@
       "babel-register"
     ],
     "babel": "inherit"
+  },
+  "apidoc": {
+    "name": "Grappa backend",
+    "url": "https://grappa.cs.helsinki.fi/v2api/"
   }
 }

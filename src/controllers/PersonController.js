@@ -1,4 +1,5 @@
 import logger from '../util/logger';
+import { checkUserIsAdminOrManager } from '../services/RoleService';
 
 const personService = require('../services/PersonService');
 const roleService = require('../services/RoleService');
@@ -91,6 +92,7 @@ async function getAllPersons(res) {
 }
 
 export async function invitePerson(req, res) {
+    await checkUserIsAdminOrManager(req);
     await emailInviteService.createEmailInviteForRole(req.body);
     res.status(200).end();
 }

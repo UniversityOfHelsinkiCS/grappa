@@ -1,3 +1,5 @@
+import { getLoggedPerson } from './PersonService';
+
 const knex = require('../db/connection').getKnex();
 const programmeService = require('./ProgrammeService');
 
@@ -58,32 +60,6 @@ export async function getPersonRole(personId, programmeId, roleName) {
         .where('personWithRole.programmeId', programmeId)
         .where('personWithRole.personId', personId)
         .first();
-}
-
-export async function updateVisitorRoleStudyfields(personId, programmeIds) {
-    const visitorRoleId = 7;
-
-    const visitorRoles = await knex('personWithRole')
-        .select()
-        .where('personId', personId)
-        .where('roleId', visitorRoleId);
-
-    const rolesToDelete = visitorRoles
-        .filter(role => !programmeIds.includes(role.programmeId))
-        .map(role => role.programmeId)
-        .map(programmeId =>
-            knex('personWithRole')
-                .delete()
-                .where('personId', personId)
-                .where('programmeId', programmeId)
-        );
-    const rolesToAdd = programmeIds
-        .filter(role => !programmeIds.includes(role.programmeId))
-        .map(programmeId =>
-            knex('personWithRole').insert({ personId, programmeId, roleId: visitorRoleId })
-        );
-
-    return Promise.all([...rolesToDelete, ...rolesToAdd]);
 }
 
 // AgreementPerson
@@ -156,3 +132,28 @@ export const getUsersRoles = async (user) => {
         role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId)
     }))
 };
+
+export async function isUserAdmin(user) {
+    knex.select()
+        .from('personWithRole')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('personId', user.personId)
+        .where('name', 'admin')
+        .then(res => res.length > 1);
+}
+
+export async function isUserAdminOrManager(user) {;
+    return knex.select()
+        .from('personWithRole')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('personId', user.personId)
+        .where('name', 'admin')
+        .orWhere('name', 'manager')
+        .then(res => res.length > 0);
+}
+
+export async function checkUserIsAdminOrManager(req) {
+    if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
+        throw new Error('User is not admin or manager');
+    }
+}

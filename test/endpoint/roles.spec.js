@@ -23,55 +23,6 @@ test.before(async () => {
     await initDb();
 });
 
-test('study field can be set to visitor role', async (t) => {
-    t.plan(2);
-
-    const { personId } = await createPerson();
-    const visitorRoleForm = { programmeIds: [1] };
-
-    const res = await request(makeApp(personId))
-        .put('/roles/visitor')
-        .send(visitorRoleForm);
-
-    t.is(res.status, 200);
-
-    const roles = await knex.select()
-        .from('personWithRole')
-        .where('personId', personId)
-        .where('roleId', 7)
-        .first();
-
-    t.truthy(roles);
-});
-
-test('visitor role programme can be updated', async (t) => {
-    t.plan(2);
-
-    const { personId } = await createPerson();
-
-    await knex('personWithRole')
-        .insert({
-            programmeId: 1,
-            personId,
-            roleId: 7
-        });
-
-    const visitorRoleForm = { programmeIds: [2] };
-    const res = await request(makeApp(personId))
-        .put('/roles/visitor')
-        .send(visitorRoleForm);
-
-    t.is(res.status, 200);
-
-    const role = await knex.select()
-        .from('personWithRole')
-        .where('personId', personId)
-        .where('roleId', 7)
-        .first();
-
-    t.is(role.programmeId, 2);
-});
-
 test('delete role', async (t) => {
     const { personId } = await createPerson();
     const idToDelete = await knex('personWithRole')

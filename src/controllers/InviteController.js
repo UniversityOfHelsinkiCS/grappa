@@ -1,9 +1,12 @@
+import { checkUserIsAdminOrManager } from '../services/RoleService';
+
 const emailInviteService = require('../services/EmailInviteService');
 const personService = require('../services/PersonService');
 const agreementService = require('../services/AgreementService');
 const roleService = require('../services/RoleService');
 
 export async function thesisAuthorInvite(req, res) {
+    await checkUserIsAdminOrManager(req);
     const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token);
 
     if (!inviteData) {
@@ -18,6 +21,7 @@ export async function thesisAuthorInvite(req, res) {
 }
 
 export async function roleInvite(req, res) {
+    await checkUserIsAdminOrManager(req);
     const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token);
 
     if (!inviteData) {

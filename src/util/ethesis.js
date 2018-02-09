@@ -1,18 +1,24 @@
 import request from 'request';
 import xml from 'xmlbuilder';
+import logger from '../util/logger';
+import creds from './ethesis_credentials.dist';
 
-import creds from './ethesis_credentials';
+const fs = require('fs');
+const JSZip = require('jszip');
+const { parseString } = require('xml2js');
 
 /*
 to test:
 console.log('LETS START E-THESIS!');
 ethesis = require( './src/util/ethesis');
-ethesis.saveToEThesis(
-    {thesisTitle: 'the awesome thesis', author: 'awesome author', abstract: {en: 'english abstract', fi: 'finnish abstract'}}, 
-    './data/file/example_thesis.pdf');
+ethesis.saveToEThesis({
+    thesisTitle: 'the awesome thesis',
+    author: 'awesome author',
+    abstract: {en: 'english abstract', fi: 'finnish abstract'}
+}, './data/file/example_thesis.pdf');
 */
 
-function generateMetaXML(meta){
+function generateMetaXML(meta) {
     return xml.create({
         mets: {
             '@ID': 'sort-mets_mets',
@@ -49,12 +55,18 @@ function generateMetaXML(meta){
                                 '@element': 'title',
                                 '#text': meta.thesisTitle
                             },
-                            //result wanted: <dim:field mdschema="dct" element="identifier" qualifier="urn">URN-testitunnus</dim:field>
+                            /**
+                             * result wanted: <dim:field mdschema="dct"
+                             * element="identifier"
+                             * qualifier="urn">
+                             * URN-testitunnus
+                             * </dim:field>
+                             */
                             // x.y.z -> x = mdschema, y = element, z = qualifier
                             {
                                 '@mdschema': 'dct',
                                 '@element': 'identifier',
-                                '@qualifier':'urn',
+                                '@qualifier': 'urn',
                                 '#text': meta.URN
                             }, {
                                 '@mdschema': 'dct',
@@ -94,9 +106,9 @@ function generateMetaXML(meta){
                                 '@lang': 'en',
                                 '#text': 'discipline'
                             }
-                        ],
+                        ]
                     }
-                },
+                }
             },
             fileSec: {
                 fileGrp: {
@@ -109,9 +121,9 @@ function generateMetaXML(meta){
                         FLocat: {
                             '@LOCTYPE': 'URL',
                             '@xlink:href': 'gradu.pdf'
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             },
             structMap: {
                 '@ID': 'sword-mets-struct-1',
@@ -131,92 +143,84 @@ function generateMetaXML(meta){
                 }
             }
         }
-    },
-        { version: '1.0', encoding: 'UTF-8', standalone: false }).end({ pretty: true });
+    }, { version: '1.0', encoding: 'UTF-8', standalone: false })
+        .end({ pretty: true });
 }
 
-async function eThesisAPI(meta, pdfAddr){
-    const fs = require('fs');
-    const JSZip = require('jszip');
-    
+async function eThesisAPI(meta, pdfAddr) {
     const pdf = await fs.readFileSync(pdfAddr);
-    
-        const metaData = await generateMetaXML(meta);
-        //xml structure test output
-        //console.log(metaData.toString());
-        const dataBuffer = new Buffer(metaData, 'utf-8');
 
-        var zip = new JSZip();
-        zip.file('gradu.pdf', pdf);
-        zip.file('mets.xml', metaData.toString());
+    const metaData = await generateMetaXML(meta);
+    // xml structure test output
+    // console.log(metaData.toString());
+    // const dataBuffer = new Buffer(metaData, 'utf-8');
 
-       // /* to test zip-output to disc
-    zip
-    .generateNodeStream({type:'nodebuffer',streamFiles:true})
-    .pipe(fs.createWriteStream('/tmp/test.zip'))
-    .on('finish', function () {
-        // JSZip generates a readable stream with a "end" event,
-        // but is piped here in a writable stream which emits a "finish" event.
-        console.log('out.zip written.');
-    });
-    //*/
+    const zip = new JSZip();
+    zip.file('gradu.pdf', pdf);
+    zip.file('mets.xml', metaData.toString());
 
-        request({
-            method: 'POST',
-            preambleCRLF: false,
-            postambleCRLF: false,
-            uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-sword/deposit/123456789/13',
-            'auth': creds,
-            headers: {
-                'Content-Disposition': 'filename=ex.zip',
-                'Content-Type': 'application/zip',
-                'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP',
-                'X-No-Op': 'false',
-                'X-Verbose': 'true',
-            },
-            body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+    // /* to test zip-output to disc
+    zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+        .pipe(fs.createWriteStream('/tmp/test.zip'))
+        .on('finish', () => {
+            // JSZip generates a readable stream with a "end" event,
+            // but is piped here in a writable stream which emits a "finish" event.
+            console.log('out.zip written.');
+        });
+    //* /
+    const settings = {
+        method: 'POST',
+        preambleCRLF: false,
+        postambleCRLF: false,
+        uri: 'http://kirjasto-test.hulib.helsinki.fi/ethesis-sword/deposit/123456789/13',
+        auth: creds,
+        headers: {
+            'Content-Disposition': 'filename=ex.zip',
+            'Content-Type': 'application/zip',
+            'X-Packaging': 'http://purl.org/net/sword-types/METSDSpaceSIP',
+            'X-No-Op': 'false',
+            'X-Verbose': 'true'
         },
-        function (error, response, body) {
-            console.log('does it work?');
-            console.log(response);
-            console.log(response.statusCode);
-            if (error) {
-                console.error('upload failed:', error);
-            }
-            if(response){
-                if(response.statusCode == 201){
-                    console.log('Upload successful!');
-                    console.log('statusCode:', response && response.statusCode);
-                    
-                    var parseString = require('xml2js').parseString;
-                    parseString(body, function (err, result) {
-                        console.dir(result);
-                    });
-                }
-            }
+        body: zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+    }
 
-        })
+    request(settings, (error, response, body) => {
+        logger.info('Ethesis request callback', { response });
+        if (error) {
+            logger.error('upload failed', { error });
+        }
+        if (response) {
+            if (response.statusCode === 201) {
+                logger.info('Upload successful!', { response });
+
+                parseString(body, (err, result) => {
+                    logger.info('parsing done!', { result });
+                });
+            }
+        }
+    })
 }
 
-export async function saveToEThesis(meta, pdfAddr) {
+export default async function saveToEThesis(metaData, pdfAddr) {
     const today = new Date();
+    const meta = Object.assign({}, metaData)
     meta.yearNow = today.getFullYear();
 
-    //haetaan urn-tunnus
-    //yleinen generaattori: http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn
-    //hulib aliavaruuden generaattori (vaatii serverin white listingin): http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib
-    request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib', 
-    function (error, response, body) {
-        if(error) {
-            return error;
-        }
-        if(body.toLowerCase().indexOf('error') != -1 || body === ''){
-            return 'ERROR: could not get URN.'
-        } else {
+    // haetaan urn-tunnus
+    // yleinen generaattori: http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn
+    // hulib aliavaruuden generaattori (vaatii serverin white listingin):
+    // http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib
+    request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib',
+        (error, response, body) => {
+            if (error) {
+                return error;
+            }
+            if (body.toLowerCase().indexOf('error') !== -1 || body === '') {
+                return 'ERROR: could not get URN.'
+            }
             meta.URN = body;
-            eThesisAPI(meta, pdfAddr)
-        }
-    });/*
+            return eThesisAPI(meta, pdfAddr)
+        });/*
     console.log(meta);
 
     const pdf = await fs.readFileSync(pdfAddr);
@@ -264,7 +268,7 @@ export async function saveToEThesis(meta, pdfAddr) {
                 if(response.statusCode == 201){
                     console.log('Upload successful!');
                     console.log('statusCode:', response && response.statusCode);
-                    
+
                     var parseString = require('xml2js').parseString;
                     parseString(body, function (err, result) {
                         console.dir(result);
@@ -272,5 +276,5 @@ export async function saveToEThesis(meta, pdfAddr) {
                 }
             }
 
-        })*/
+        }) */
 }

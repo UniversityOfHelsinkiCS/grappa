@@ -1,10 +1,8 @@
 const theses = require('../../mockdata/MockTheses')
 
-exports.seed = function (knex, Promise) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('thesis').del()
-        .then(function () {
-            // Inserts seed entries
-            return knex('thesis').insert(theses);
-        });
+    await knex('thesis').del()
+    // Inserts seed entries
+    return knex('thesis').insert(theses)
 };

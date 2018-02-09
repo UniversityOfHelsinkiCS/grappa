@@ -53,14 +53,14 @@ const validPost = async (t, app, data) => {
 const validGet = async (t, app) => {
     const res = await request(app)
         .get('/councilmeetings');
-    t.is(res.status, 200);
+    t.is(res.status, 200, 'get is not working');
     return res.body
 };
 
 const validDelete = async (t, app, id) => {
     const res = await request(app)
         .del(`/councilmeetings/${id}`);
-    t.is(res.status, 200);
+    t.is(res.status, 200, 'delete is not working');
     return res.body
 };
 
@@ -142,10 +142,10 @@ test('councilmeeting update', async (t) => {
 });
 
 
-test('councilmeeting with invalid data cannot be created', async (t) => {
-    t.plan(3);
+test.serial('councilmeeting with invalid data cannot be created', async (t) => {
+    t.plan(6);
     const app = makeApp(1);
-    //const getBefore = await validGet(t, app);
+    const getBefore = await validGet(t, app);
 
     const badMeeting1 = {
         date: '2017-02-31T22:00:00.000Z', // Invalid date
@@ -183,13 +183,8 @@ test('councilmeeting with invalid data cannot be created', async (t) => {
             `Response wasn't 500 at request number ${index}`)
     })
 
-    //const getAfter = await validGet(t, app)
-    /*console.log('--------------------------')
-    console.log(JSON.stringify(getBefore));
-    console.log('--------------------------')
-    console.log(JSON.stringify(getAfter));
-    console.log('--------------------------')
-    t.deepEqual(getBefore, getAfter)*/
+    const getAfter = await validGet(t, app)
+    t.deepEqual(getBefore, getAfter)
 });
 
 test('meeting with theses cant be deleted', async (t) => {
@@ -202,5 +197,42 @@ test('meeting with theses cant be deleted', async (t) => {
 
     const res = await request(app).del(`/councilmeetings/${meetingId}`);
 
+    t.is(res.status, 500);
+});
+
+test('normal people can\'t create meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(99);
+
+    const res = await request(app)
+        .post('/councilmeetings')
+        .send(councilMeeting);
+    t.is(res.status, 500);
+});
+
+test('normal people can\'t edit meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(1);
+    const responseMeeting = await validPost(t, app, councilMeeting);
+    const councilMeetingId = responseMeeting.councilmeetingId;
+
+    const app2 = makeApp(99);
+
+    const res = await request(app2)
+        .put(`/councilmeetings/${councilMeetingId}`)
+        .send(councilMeeting);
+    t.is(res.status, 500);
+});
+
+test('normal people can\'t delete meetings', async (t) => {
+    const councilMeeting = generateCouncilMeeting();
+    const app = makeApp(1);
+    const responseMeeting = await validPost(t, app, councilMeeting);
+    const councilMeetingId = responseMeeting.councilmeetingId;
+
+    const app2 = makeApp(99);
+
+    const res = await request(app2)
+        .del(`/councilmeetings/${councilMeetingId}`);
     t.is(res.status, 500);
 });

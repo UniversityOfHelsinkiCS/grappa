@@ -35,7 +35,7 @@ export async function getEmailDraft(type, programme) {
     return knex('emailDraft')
         .select()
         .where('type', type)
-        .where(function() {
+        .where(function () {
             if (programme) {
                 this
                     .where('programme', programme)

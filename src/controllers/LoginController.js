@@ -53,6 +53,7 @@ async function buildPerson(user) {
     const roleToId = await roleService.getRoles();
     const programmeToId = await programmeService.getAllProgrammes();
     const personRoles = await roleService.getPersonRoles(user.personId);
+    const roleHash = {};
 
     user.roles = personRoles.map((role) => {
         const programme = programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId);
@@ -61,6 +62,14 @@ async function buildPerson(user) {
             programmeId: programme.programmeId,
             role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
         };
+    }).filter((role) => {
+        const included = roleHash[`${role.programmeId}-${role.role}`];
+
+        if (included)
+            return false;
+
+        roleHash[`${role.programmeId}-${role.role}`] = true;
+        return true;
     });
 
     return user;

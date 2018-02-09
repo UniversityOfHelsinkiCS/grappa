@@ -1,10 +1,8 @@
 const roles = require('../../mockdata/MockRoles')
 
-exports.seed = function (knex, Promise) {
+exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    return knex('role').del()
-        .then(function () {
-            // Inserts seed entries
-            return knex('role').insert(roles);
-        });
+    await knex('role').del()
+    // Inserts seed entries
+    return knex('role').insert(roles)
 };

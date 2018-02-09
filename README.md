@@ -33,6 +33,9 @@ Tests are run using own schema for each test file. Test schema is defined using
 
 If you want to see logging output in console for unit tests set `CONSOLE_OUTPUT=true`
 
+## API documentation
+Generate docs `npm run apidoc`
+
 ## Endpoints in use
 
 ### GET
@@ -93,6 +96,5 @@ If you want to see logging output in console for unit tests set `CONSOLE_OUTPUT=
 | /emailDrafts/:id     | X     | X    |      |       |                  |
 | /programmes          | X     |      |      |       |                  |
 | /roles               | X     | X    | X    |       | update statement |
-| /roles/visitor       | X     |      |      |       |                  |
 | /studyfields         | X     |      |      |       |                  |
 | /theses              | X     | X    |      |       |                  |

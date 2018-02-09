@@ -45,7 +45,7 @@ const generateThesisForm = async () => {
         title: `Gradu number ${numberFromTo(0, 1000)}`,
         urkund: `https://example.com/${numberFromTo(0, 1000)}`,
         grade: `${numberFromTo(1, 5)}`,
-        graders: [person1, person2],
+        graders: [person1.personId, person2.personId],
         studyfieldId: 2,
         councilmeetingId: 1,
         printDone: false,
@@ -408,7 +408,7 @@ test('thesis can be updated', async (t) => {
     const update = {
         thesisId,
         title: newTitle,
-        graders: [newGrader]
+        graders: [newGrader.personId]
     };
 
     const app = makeApp(adminId);
@@ -433,7 +433,7 @@ test('thesis edit access is checked', async (t) => {
     const update = {
         thesisId,
         title: 'New name',
-        graders: [newGrader]
+        graders: [newGrader.personId]
     };
 
     const app = makeApp(authorId)

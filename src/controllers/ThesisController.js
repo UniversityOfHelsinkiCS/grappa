@@ -75,9 +75,8 @@ export async function saveThesisForm(req, res) {
     // Order so that agreementId is available to save attachments.
     const agreement = await agreementService.createFakeAgreement();
     const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId);
-    const studyfieldId = thesis.studyfieldId;
-    const authorEmail = thesis.authorEmail;
-    const agreementId = agreement.agreementId;
+    const { studyfieldId, authorEmail } = thesis;
+    const { agreementId } = agreement;
 
     agreement.studyfieldId = thesis.studyfieldId;
 
@@ -143,13 +142,13 @@ const updateGraders = async (graders, agreement) => {
     const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId);
     await Promise.all(agreementPersons.map(async (agreementPerson) => {
         const personRole = await roleService.getPersonRoleWithId(agreementPerson.personRoleId);
-        if (!graders.find(grader => grader.personId == personRole.personId)) {
+        if (!graders.find(grader => grader === personRole.personId)) {
             await roleService.unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId);
         }
     }));
     // If grader not in agreementperson, link them.
     await Promise.all(graders.map(async (grader) => {
-        const personRole = await roleService.getPersonRole(grader.personId, agreement.studyfieldId, 'grader');
+        const personRole = await roleService.getPersonRole(grader, agreement.studyfieldId, 'grader');
         if (personRole) {
             // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
@@ -160,7 +159,7 @@ const updateGraders = async (graders, agreement) => {
             const roleId = await roleService.getRoleId('grader');
             const studyfield = await studyfieldService.getStudyfield(agreement.studyfieldId);
             let personWithRole = {
-                personId: grader.personId,
+                personId: grader,
                 programmeId: studyfield.programmeId,
                 roleId
             };
