@@ -35,6 +35,7 @@ export class ThesisCreatePage extends Component {
         });
         const thesis = Object.assign({}, this.state.thesis);
         delete thesis.programmeId;
+        thesis.graders = thesis.graders.map(person => person.personId);
         form.append('json', JSON.stringify(thesis));
         this.props.saveThesis(form);
     };

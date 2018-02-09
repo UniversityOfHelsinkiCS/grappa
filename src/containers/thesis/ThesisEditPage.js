@@ -79,6 +79,7 @@ export class ThesisEditPage extends Component {
     handleSaveThesis = () => {
         const thesis = Object.assign({}, this.state.thesis);
         delete thesis.programmeId;
+        thesis.graders = thesis.graders.map(person => person.personId);
         this.props.updateThesis(thesis);
     };
 

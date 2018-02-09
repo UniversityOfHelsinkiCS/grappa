@@ -26,10 +26,3 @@ export const updateRole = (role) => {
     const method = 'put';
     return callController(route, prefix, role, method);
 }
-
-export const updateVisitorRoles = (role) => {
-    const route = '/roles/visitor';
-    const prefix = 'ROLE_VISITOR_UPDATE_';
-    const method = 'put';
-    return callController(route, prefix, role, method);
-}

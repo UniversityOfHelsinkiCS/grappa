@@ -108,7 +108,7 @@ export class PersonRoleReviewPage extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.agreementPersons.map(rolePerson => (
+                    {this.state.agreementPersons.filter(rolePerson => rolePerson.thesis).map(rolePerson => (
                         <tr
                             key={parseInt(`${rolePerson.personRoleId}${rolePerson.thesis ?
                                 rolePerson.thesis.thesisId : rolePerson.thesis}`, 10)}
