@@ -91,9 +91,8 @@ export class ThesisEditPage extends Component {
         this.setState({ allowEdit: !this.state.allowEdit });
     };
 
-    handleChange = (fieldName, fieldValue) => {
-        const thesis = Object.assign({}, this.state.thesis);
-        thesis[fieldName] = fieldValue;
+    handleChange = (changedValues) => {
+        const thesis = Object.assign({}, this.state.thesis, changedValues);
         this.setState({ thesis });
 
         this.validateThesis(thesis)
@@ -142,7 +141,7 @@ export class ThesisEditPage extends Component {
                     <PersonSelector
                         persons={programmeGraders}
                         selected={this.state.thesis.graders}
-                        changeList={list => this.handleChange('graders', list)}
+                        changeList={list => this.handleChange({ graders: list })}
                         validationError={Object.keys(this.state.validationErrors).includes('graders')}
                         allowEdit={this.state.allowEdit}
                     />

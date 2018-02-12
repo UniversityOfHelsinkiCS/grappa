@@ -41,7 +41,7 @@ export class ThesisCreatePage extends Component {
     };
 
     validateAttachments = attachments => attachments.find(attachment => attachment.label === 'thesisFile')
-            && attachments.find(attachment => attachment.label === 'reviewFile');
+        && attachments.find(attachment => attachment.label === 'reviewFile');
 
     toggleModal = () => {
         this.validateThesis()
@@ -53,10 +53,8 @@ export class ThesisCreatePage extends Component {
             .catch(res => this.setState({ validationErrors: res.errors }));
     };
 
-    handleChange = (fieldName, fieldValue) => {
-        const newState = {};
-        newState[fieldName] = fieldValue;
-        const thesis = Object.assign({}, this.state.thesis, newState);
+    handleChange = (changedValues) => {
+        const thesis = Object.assign({}, this.state.thesis, changedValues);
 
         this.setState({ thesis });
         this.validateThesis(thesis)
@@ -87,7 +85,7 @@ export class ThesisCreatePage extends Component {
                     <PersonSelector
                         persons={programmeGraders}
                         selected={this.state.thesis.graders}
-                        changeList={list => this.handleChange('graders', list)}
+                        changeList={list => this.handleChange({ graders: list })}
                         validationError={Object.keys(this.state.validationErrors).includes('graders')}
                     />
                 </label>

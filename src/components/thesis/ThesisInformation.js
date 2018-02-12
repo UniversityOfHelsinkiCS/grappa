@@ -21,8 +21,17 @@ export default class ThesisInformation extends Component {
     }
 
     changeField = fieldName => (event) => {
-        this.props.sendChange(fieldName, event.target.value);
+        this.props.sendChange({[fieldName]: event.target.value});
     };
+
+    toggleGrading = () => {
+        this.props.sendChange({
+            programmeId: "",
+            studyfieldId: "",
+            grade: ""
+        })
+        this.setState({ oldGrading: !this.state.oldGrading })
+    }
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
         const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
@@ -73,6 +82,19 @@ export default class ThesisInformation extends Component {
         );
     }
 
+    renderToggleUnitsAndGradingButton() {
+        return (
+            <button
+                className="ui button"
+                onClick={this.toggleGrading}
+                disabled={!this.props.allowEdit}
+            >
+                {this.state.oldGrading ?
+                    'Enable new grading' : 'Enable old grading'}
+            </button>
+        )
+    }
+
     renderThesisAuthor() {
         if (!this.props.thesis.authorFirstname) {
             return (
@@ -92,13 +114,17 @@ export default class ThesisInformation extends Component {
     }
 
     renderThesisInformation() {
-        const programmes = this.props.programmes.map(programme => ({
-            id: programme.programmeId,
-            name: programme.name
-        }));
+        const programmes = this.props.programmes
+            .filter(programme => (
+                programme.name.includes('Department') === this.state.oldGrading
+            ))
+            .map(programme => ({
+                id: programme.programmeId,
+                name: programme.name
+            }))
 
         const studyfields = this.props.studyfields
-            .filter(studyfield => studyfield.programmeId === parseInt(this.props.thesis.programmeId, 10))
+            .filter(studyfield => studyfield.programmeId === Number(this.props.thesis.programmeId))
             .map(studyfield => ({
                 id: studyfield.studyfieldId,
                 name: studyfield.name
@@ -107,12 +133,15 @@ export default class ThesisInformation extends Component {
         return (
             <div className="ui form">
                 <div className="three fields">
-                    {this.renderDropdownField('Programme', programmes, 'programmeId', !this.props.allowEdit)}
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
-
+                    <div className="field">
+                        <label>&nbsp;   </label>
+                        {this.renderToggleUnitsAndGradingButton()}
+                    </div>
                 </div>
                 <div className="three fields">
+                    {this.renderDropdownField('Unit', programmes, 'programmeId', !this.props.allowEdit)}
                     <div className="field">
                         {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
                     </div>
@@ -120,17 +149,7 @@ export default class ThesisInformation extends Component {
                         this.renderDropdownField('Grade', oldGradeFields, 'grade', !this.props.allowEdit) :
                         this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)
                     }
-                    <div className="field">
-                        <label>&nbsp;   </label>
-                        <button
-                            className="ui button"
-                            onClick={() => { this.setState({ oldGrading: !this.state.oldGrading }) }}
-                            disabled={!this.props.allowEdit}
-                        >
-                            {this.state.oldGrading ?
-                                'Enable new grading' : 'Enable old grading'}
-                        </button>
-                    </div>
+
                 </div>
             </div>
         );
