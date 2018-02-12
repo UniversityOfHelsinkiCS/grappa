@@ -127,7 +127,7 @@ export class ThesisCreatePage extends Component {
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
-                        programmeId={Number(this.state.thesis.programmeId)}
+                        programmes={this.props.programmes}
                     />
                 </div>
                 <br />
