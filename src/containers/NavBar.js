@@ -42,13 +42,10 @@ export class NavBar extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.user.personId) {
-            this.props.getPersons();
-        }
-
         this.refreshLinks(newProps);
         // TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
+            this.props.getPersons();
             this.props.getStudyfields();
             this.props.getProgrammes();
             this.props.getAgreements();
