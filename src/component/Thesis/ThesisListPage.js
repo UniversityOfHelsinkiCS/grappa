@@ -3,7 +3,7 @@ import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux';
 
 import { agreementType, personType, thesisType, attachmentType } from '../../util/types';
-import { downloadAttachments } from '../Attachment/attachmentActions'
+import { downloadAttachments } from '../Attachment/services/attachmentActions'
 
 import ThesisList from './components/ThesisList';
 import { formatTheses } from '../../util/theses';

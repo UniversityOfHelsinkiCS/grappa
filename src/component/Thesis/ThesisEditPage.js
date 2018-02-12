@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { arrayOf, array, func } from 'prop-types';
 import { connect } from 'react-redux';
-import { updateThesis, deleteThesis } from './thesisActions';
-import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/attachmentActions';
+import { updateThesis, deleteThesis } from './services/thesisActions';
+import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/services/attachmentActions';
 import {
     agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType
 } from '../../util/types';

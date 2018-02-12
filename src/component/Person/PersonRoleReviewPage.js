@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 
 import PersonRoleReviewModal from './components/PersonRoleReviewModal';
-import { updateRole } from '../Role/roleActions';
+import { updateRole } from '../Role/services/roleActions';
 import { roleType } from '../../util/types';
 
 export class PersonRoleReviewPage extends Component {

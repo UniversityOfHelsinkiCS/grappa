@@ -7,8 +7,8 @@ import PersonSelector from './components/PersonSelector';
 import PersonInviter from './components/PersonInviter';
 import PersonRoleChoose from './components/PersonRoleChoose';
 
-import { getAvailableRoles, saveRole, deleteRole } from '../Role/roleActions';
-import { invitePerson } from './personActions';
+import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions';
+import { invitePerson } from './services/personActions';
 
 export class PersonRoleManagePage extends Component {
     constructor(props) {

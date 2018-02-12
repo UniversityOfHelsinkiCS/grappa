@@ -3,7 +3,7 @@ import { arrayOf, func, bool } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { saveThesis } from './thesisActions';
+import { saveThesis } from './services/thesisActions';
 import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types';
 
 import ThesisConfirmModal from './components/ThesisConfirmModal';

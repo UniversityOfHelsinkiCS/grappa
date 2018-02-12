@@ -1,4 +1,4 @@
-import { callController } from '../../util/apiConnection';
+import { callController } from '../../../util/apiConnection';
 
 export const getPersons = () => callController('/persons', 'PERSON_GET_ALL_');
 

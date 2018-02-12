@@ -1,4 +1,4 @@
-import { callController } from '../../util/apiConnection';
+import { callController } from '../../../util/apiConnection';
 
 export const getAgreements = () => {
     const prefix = 'AGREEMENT_GET_ALL_';

@@ -1,4 +1,4 @@
-import { callController } from '../../util/apiConnection';
+import { callController } from '../../../util/apiConnection';
 
 export const login = (shibbolethId) => {
     const prefix = 'USER_LOGIN_';
