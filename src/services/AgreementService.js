@@ -52,14 +52,14 @@ export const getPreviousAgreementById = id => knex.select().from('previousagreem
     .where('previousagreements.agreementId', id)
     .then(agreement => agreement);
 
-export const getAllAgreements = () => knex.select(agreementSchema)
+export const getAllAgreements = () => knex.select()
     .from('agreement')
     .leftJoin('emailInvite', 'agreement.agreementId', 'emailInvite.agreement');
 
-export const getAgreementsByAuthor = personId => knex.select(agreementSchema).from('agreement')
+export const getAgreementsByAuthor = personId => knex.select().from('agreement')
     .where('authorId', personId);
 
-export const getAgreementsByThesisId = thesisId => knex.select(agreementSchema).from('agreement')
+export const getAgreementsByThesisId = thesisId => knex.select().from('agreement')
     .where('thesisId', thesisId);
 
 export const saveAgreement = async (agreement) => {
