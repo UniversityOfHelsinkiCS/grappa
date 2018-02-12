@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { arrayOf, func, shape, string } from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom'
+import { isEqual } from 'lodash-es'
 
 import { connect } from 'react-redux';
 import { downloadAttachments } from '../attachment/attachmentActions'
@@ -27,7 +28,11 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (this.props.match.params.id !== newProps.match.params.id || !this.state.currentMeeting) {
+        const idChanged = !isEqual(this.props.match.params.id, newProps.match.params.id);
+        const thesesUpdated = !isEqual(this.props.theses, newProps.theses);
+        const agreementsUpdated = !isEqual(this.props.agreements, newProps.agreements);
+
+        if (idChanged || thesesUpdated || agreementsUpdated || !this.state.currentMeeting) {
             this.initState(newProps);
         }
     }
