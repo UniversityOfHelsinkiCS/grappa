@@ -7,7 +7,7 @@ import Agreement from './components/Agreement';
 import { getRequiredFields } from './agreementValidations';
 import { personType, programmeType, roleType, agreementType, thesisType } from '../../util/types';
 
-import { saveAgreement } from './agreementActions';
+import { saveAgreement } from './services/agreementActions';
 
 export class AgreementPage extends Component {
     constructor(props) {

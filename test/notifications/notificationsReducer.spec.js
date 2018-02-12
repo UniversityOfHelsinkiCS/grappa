@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/component/Notification/notificationsReducer';
+import reducer from '../../src/component/Notification/services/notificationsReducer';
 
 const notifications = [{ type: 'TEST', userId: 1, timestamp: '' }]
 

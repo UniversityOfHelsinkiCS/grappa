@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import { isEqual } from 'lodash-es'
 
 import { connect } from 'react-redux';
-import { downloadAttachments } from '../Attachment/attachmentActions'
-import { markPrinted } from '../Thesis/thesisActions';
+import { downloadAttachments } from '../Attachment/services/attachmentActions'
+import { markPrinted } from '../Thesis/services/thesisActions';
 import { personType, thesisType, agreementType, attachmentType, programmeType } from '../../util/types';
 import { formatTheses } from '../../util/theses';
 

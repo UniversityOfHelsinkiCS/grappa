@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/component/CouncilMeeting/councilmeetingReducer';
+import reducer from '../../src/component/CouncilMeeting/services/councilmeetingReducer';
 
 const councilmeeting = { councilmeetingId: 1, instructorDeadlineDays: 8, studentDeadlineDays: 8, date: 'date' };
 const councilmeetingEdited = { councilmeetingId: 1, instructorDeadlineDays: 10, studentDeadlineDays: 10, date: 'date' };

@@ -9,7 +9,7 @@ import ThesisListPage from '../component/Thesis/ThesisListPage';
 import AssesmentOfTheses from '../component/Thesis/AssesmentOfTheses';
 import ThesisCreate from '../component/Thesis/ThesisCreatePage';
 import ThesisEdit from '../component/Thesis/ThesisEditPage';
-import ThesisStatistics from '../component/Thesis/ThesisStatisticsPage';
+import ThesisStatistics from '../component/Statistics/ThesisStatisticsPage';
 import CouncilmeetingManage from '../component/CouncilMeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../component/CouncilMeeting/CouncilmeetingViewPage';
 import EmailDraftPage from '../component/Email/EmailDraftPage';

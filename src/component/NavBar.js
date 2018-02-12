@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getPermissions } from '../util/rolePermissions';
-import { login } from './User/userActions';
+import { login } from './User/services/userActions';
 import { personType } from '../util/types';
 
 // TODO: redux persistent storage & fetch in middleware
-import { getProgrammes } from './Unit/programmeActions';
-import { getStudyfields } from './Studyfield/studyfieldActions';
-import { getAgreements } from './Agreement/agreementActions';
-import { getCouncilmeetings } from './CouncilMeeting/councilmeetingActions';
-import { getTheses } from './Thesis/thesisActions';
-import { getPersons } from './Person/personActions';
-import { getNotifications } from './Notification/notificationsAction';
-import { getEmailDrafts } from './Email/emailActions';
+import { getProgrammes } from './Unit/services/programmeActions';
+import { getStudyfields } from './Studyfield/services/studyfieldActions';
+import { getAgreements } from './Agreement/services/agreementActions';
+import { getCouncilmeetings } from './CouncilMeeting/services/councilmeetingActions';
+import { getTheses } from './Thesis/services/thesisActions';
+import { getPersons } from './Person/services/personActions';
+import { getNotifications } from './Notification/services/notificationsAction';
+import { getEmailDrafts } from './Email/services/emailActions';
 import { getAxios } from '../util/apiConnection';
 
 const logout = () => {

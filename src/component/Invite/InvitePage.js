@@ -3,7 +3,7 @@ import { string, shape, bool, func } from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
-import { acceptThesis, acceptRole } from './inviteAction';
+import { acceptThesis, acceptRole } from './services/inviteAction';
 
 const InvitePage = ({ acceptThesisAction, acceptRoleAction, match, status }) => {
     const { type, token } = match.params;

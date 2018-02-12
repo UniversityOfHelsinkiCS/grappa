@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from './userActions';
+import { login } from './services/userActions';
 import { personType } from '../../util/types';
 import PersonSwitcher from '../Person/components/PersonSwitcher';
 import RoleExplain from '../Role/components/RoleExplain';

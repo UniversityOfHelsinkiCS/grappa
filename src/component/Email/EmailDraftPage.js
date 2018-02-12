@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import EmailDraft from './components/EmailDraft'
 
-import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './emailActions';
+import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './services/emailActions';
 import { emailType, programmeType } from '../../util/types';
 
 export class EmailDraftPage extends Component {

@@ -1,4 +1,4 @@
-import { callController } from '../../util/apiConnection';
+import { callController } from '../../../util/apiConnection';
 
 export const getEmailDrafts = () => {
     const prefix = 'EMAILDRAFT_GET_ALL_';

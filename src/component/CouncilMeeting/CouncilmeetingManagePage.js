@@ -8,7 +8,7 @@ import {
     saveCouncilmeeting,
     updateCouncilmeeting,
     deleteCouncilmeeting
-} from './councilmeetingActions';
+} from './services/councilmeetingActions';
 import NewCouncilmeetingForm from './components/NewCouncilmeetingForm';
 import UpdateCouncilmeetingForm from './components/UpdateCouncilmeetingForm';
 import CouncilmeetingList from './components/CouncilmeetingList';
