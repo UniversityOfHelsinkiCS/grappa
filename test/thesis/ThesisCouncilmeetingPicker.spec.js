@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import ThesisCouncilmeetingPicker from '../../src/components/thesis/ThesisCouncilmeetingPicker';
+import ThesisCouncilmeetingPicker from '../../src/component/Thesis/components/ThesisCouncilmeetingPicker';
 
 const meetings = [
     {

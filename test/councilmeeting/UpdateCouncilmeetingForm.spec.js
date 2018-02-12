@@ -3,7 +3,7 @@ import test from 'ava';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 import moment from 'moment';
-import UpdateCouncilmeetingForm from '../../src/components/councilmeeting/UpdateCouncilmeetingForm';
+import UpdateCouncilmeetingForm from '../../src/component/CouncilMeeting/components/UpdateCouncilmeetingForm';
 
 const programmes = [{ programmeId: 1, name: 'test' }];
 

@@ -1,20 +1,20 @@
 import React from 'react';
 import test from 'ava';
-import EventMessage from '../src/components/EventMessage';
-import {shallow} from 'enzyme';
+import EventMessage from '../src/component/EventMessage/components/EventMessage';
+import { shallow } from 'enzyme';
 
 
 test('with success message element is correct', t => {
-   t.truthy(checkIfEventMessageRenders('success', 'onnistumisviesti'));
+    t.truthy(checkIfEventMessageRenders('success', 'onnistumisviesti'));
 });
 
-test('with error message element has correct text', t=> {
-    t.truthy(checkIfEventMessageRenders('failure' , 'epäonnistumisviesti'));
+test('with error message element has correct text', t => {
+    t.truthy(checkIfEventMessageRenders('failure', 'epäonnistumisviesti'));
 });
 
 
 const getEventMessage = (typeOfMessage, eventMessage) => {
-    return <EventMessage type = {typeOfMessage} message = {eventMessage} clearMessages={()=> {}} />;
+    return <EventMessage type={typeOfMessage} message={eventMessage} clearMessages={() => { }} />;
 };
 
 const checkIfEventMessageRenders = (typeOfMessage, eventMessage) => {

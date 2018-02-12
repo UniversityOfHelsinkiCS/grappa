@@ -2,21 +2,21 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { handleRequest } from './apiConnection';
 
-import availableRolesReducer from '../containers/role/availableRolesReducer';
-import userReducer from '../containers/user/userReducer';
-import agreementReducer from '../containers/agreement/agreementReducer';
-import attachmentReducer from '../containers/attachment/attachmentReducer';
-import councilmeetingReducer from '../containers/councilmeeting/councilmeetingReducer';
-import thesisReducer from '../containers/thesis/thesisReducer';
-import studyfieldReducer from '../containers/studyfield/studyfieldReducer';
-import programmeReducer from '../containers/programme/programmeReducer';
-import emailReducer from '../containers/email/emailReducer';
-import personReducer from '../containers/person/personReducer';
-import roleReducer from '../containers/role/roleReducer';
-import notificationsReducer from '../containers/notifications/notificationsReducer';
-import eventMessageReducer from '../containers/eventMessage/eventMessageReducer';
-import inviteReducer from '../containers/invite/inviteReducer';
-import statisticsReducer from '../containers/thesis/statisticsReducer';
+import availableRolesReducer from '../component/Role/availableRolesReducer';
+import userReducer from '../component/User/userReducer';
+import agreementReducer from '../component/Agreement/agreementReducer';
+import attachmentReducer from '../component/Attachment/attachmentReducer';
+import councilmeetingReducer from '../component/CouncilMeeting/councilmeetingReducer';
+import thesisReducer from '../component/Thesis/thesisReducer';
+import studyfieldReducer from '../component/Studyfield/studyfieldReducer';
+import programmeReducer from '../component/Unit/programmeReducer';
+import emailReducer from '../component/Email/emailReducer';
+import personReducer from '../component/Person/personReducer';
+import roleReducer from '../component/Role/roleReducer';
+import notificationsReducer from '../component/Notification/notificationsReducer';
+import eventMessageReducer from '../component/EventMessage/eventMessageReducer';
+import inviteReducer from '../component/Invite/inviteReducer';
+import statisticsReducer from '../component/Thesis/statisticsReducer';
 
 const combinedReducers = combineReducers({
     agreements: agreementReducer,

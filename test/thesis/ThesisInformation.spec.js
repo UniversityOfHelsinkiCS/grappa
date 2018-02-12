@@ -1,7 +1,7 @@
 import test from 'ava';
 import React from 'react';
 import { shallow } from 'enzyme';
-import ThesisInformation from '../../src/components/thesis/ThesisInformation';
+import ThesisInformation from '../../src/component/Thesis/components/ThesisInformation';
 
 
 test.skip('invalid fields are highlighted', t => {

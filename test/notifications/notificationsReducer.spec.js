@@ -1,8 +1,7 @@
 import test from 'ava';
-import sinon from 'sinon';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/containers/notifications/notificationsReducer';
+import reducer from '../../src/component/Notification/notificationsReducer';
 
 const notifications = [{ type: 'TEST', userId: 1, timestamp: '' }]
 

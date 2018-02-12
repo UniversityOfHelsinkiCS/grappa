@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Dropzone from 'react-dropzone';
 
-import AttachmentAdder from '../../src/components/attachment/AttachmentAdder';
+import AttachmentAdder from '../../src/component/Attachment/components/AttachmentAdder';
 
 const defaultAttachmentAdder = (<AttachmentAdder
     attachments={[]}

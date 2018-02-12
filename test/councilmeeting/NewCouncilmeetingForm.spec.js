@@ -3,7 +3,7 @@ import test from 'ava';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 import moment from 'moment';
-import NewCouncilmeetingForm from '../../src/components/councilmeeting/NewCouncilmeetingForm';
+import NewCouncilmeetingForm from '../../src/component/CouncilMeeting/components/NewCouncilmeetingForm';
 
 test('New councilmeeting can be created', (t) => {
     const saveMeeting = sinon.spy();
