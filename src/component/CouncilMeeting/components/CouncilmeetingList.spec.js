@@ -3,7 +3,7 @@ import test from 'ava';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import CouncilmeetingList from '../../src/component/CouncilMeeting/components/CouncilmeetingList';
+import CouncilmeetingList from './CouncilmeetingList';
 
 const selectMeeting = sinon.spy();
 const deleteMeeting = sinon.spy();

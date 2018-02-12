@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 
-import EmailDraft from '../../src/component/Email/components/EmailDraft';
+import EmailDraft from './EmailDraft';
 
 const programmes = [
     { programmeId: 1, name: 'Tietojenkäsittelytiede' },

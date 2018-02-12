@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
-import PersonInviter from '../../src/component/Person/components/PersonInviter';
+import PersonInviter from './PersonInviter';
 
 const roles = [{ roleId: 1, name: 'role1' }, { roleId: 2, name: 'role2' }];
 const programmes = [{ programmeId: 1, name: 'programme 1' }, { programmeId: 2, name: 'programme 2' }];

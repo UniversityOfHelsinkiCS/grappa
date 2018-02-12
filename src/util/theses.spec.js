@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { formatTheses } from '../../src/util/theses';
+import { formatTheses } from './theses';
 
 test('Thesis formatter finds correct names to thesis', t => {
     const theses = [{ thesisId: 1, title: 'The Gradu' }];

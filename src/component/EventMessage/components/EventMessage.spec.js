@@ -1,6 +1,6 @@
 import React from 'react';
 import test from 'ava';
-import EventMessage from '../src/component/EventMessage/components/EventMessage';
+import EventMessage from './EventMessage';
 import { shallow } from 'enzyme';
 
 

@@ -3,7 +3,7 @@ import test from 'ava';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
 
-import { ThesisCreatePage } from '../../src/component/Thesis/ThesisCreatePage';
+import { ThesisCreatePage } from './ThesisCreatePage';
 
 
 test('New thesis can be created', (t) => {

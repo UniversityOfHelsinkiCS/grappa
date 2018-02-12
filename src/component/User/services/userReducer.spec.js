@@ -1,8 +1,8 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/component/User/services/userReducer';
-import { userRoles } from '../../src/util/rolePermissions';
+import reducer from './userReducer';
+import { userRoles } from '../../../util/rolePermissions';
 
 test('login changes state correctly', reducerTest(
     reducer,

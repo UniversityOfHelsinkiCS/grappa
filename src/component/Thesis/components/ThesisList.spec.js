@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { shallow, mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 
-import ThesisList from '../../src/component/Thesis/components/ThesisList';
+import ThesisList from './ThesisList';
 
 const thesis = {
     authorFirstname: 'Teppo',
