@@ -27,14 +27,15 @@ app.listen(3100, () => {
 });
 
 app.use(gracefulExit.middleware(app));
-app.use(session({
-    secret: 'keyboard cat',
-    cookie: { maxAge: 6000000 },
-    store,
-    resave: false,
-    saveUninitialized: false
-}));
-
+if (process.env.NODE_ENV === 'development') {
+    app.use(session({
+        secret: 'keyboard cat',
+        cookie: { maxAge: 6000000 },
+        store,
+        resave: false,
+        saveUninitialized: false
+    }));
+}
 routes(app);
 
 app.use(errorHandler);
