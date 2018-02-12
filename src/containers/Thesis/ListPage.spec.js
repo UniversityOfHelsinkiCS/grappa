@@ -2,7 +2,7 @@ import test from 'ava';
 import React from 'react';
 import { mountWithStore, mockStore } from '../../util/testUtils';
 
-import ThesisListPage from './ThesisListPage';
+import ThesisListPage from './ListPage';
 
 test('Empty thesis list renders without errors', (t) => {
     const store = mockStore({

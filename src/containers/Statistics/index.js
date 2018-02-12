@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { object, arrayOf, func } from 'prop-types';
 
 import { getStatistics } from './services/statisticsActions'
-import ThesisProgrammeStatistics from '../Thesis/components/ThesisProgrammeStatistics';
+import ThesisProgrammeStatistics from './components/ThesisProgrammeStatistics';
 import { programmeType, studyfieldType } from '../../util/types';
 import { oldGradeFields } from '../../util/theses';
 
