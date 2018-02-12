@@ -8,7 +8,8 @@ import PersonRoleManagement from '../containers/person/PersonRoleManagePage';
 import ThesisListPage from '../containers/thesis/ThesisListPage';
 import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
 import ThesisCreate from '../containers/thesis/ThesisCreatePage';
-import ThesisEdit from '../containers/thesis/ThesisEditPage';
+// import ThesisEdit from '../containers/thesis/ThesisEditPage';
+import ThesisViewPage from '../containers/thesis/ThesisViewPage';
 import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
 import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
@@ -27,7 +28,7 @@ export const paths = {
     personRoleManagement: {
         path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management'
     },
-    thesisView: { path: '/thesis/:id', component: ThesisEdit },
+    thesisView: { path: '/thesis/:id', component: ThesisViewPage },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
     councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next council meeting' },
