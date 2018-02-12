@@ -36,7 +36,7 @@ export class NavBar extends Component {
         // This login will allow shibboleth to check on page reload
         this.props.login();
 
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV === 'development') {
             this.props.getPersons();
         }
     }
