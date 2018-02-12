@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
-import AgreementEditModalField from '../../src/components/agreement/AgreementEditModalField';
+import AgreementEditModalField from '../../src/component/Agreement/components/AgreementEditModalField';
 
 const mockField = shallow(
     <AgreementEditModalField

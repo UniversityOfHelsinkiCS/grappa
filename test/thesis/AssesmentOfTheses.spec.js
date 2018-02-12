@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { shallow } from 'enzyme';
-import AssesmentOfThesis from '../../src/containers/thesis/AssesmentOfTheses';
+import AssesmentOfThesis from '../../src/component/Thesis/AssesmentOfTheses';
 
 const assesment = <AssesmentOfThesis />;
 const wrapper = shallow(assesment);

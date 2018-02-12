@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import { mountWithStore, mockStore } from '../testUtils';
-import ThesisStatisticsPage from '../../src/containers/thesis/ThesisStatisticsPage';
+import ThesisStatisticsPage from '../../src/component/Thesis/ThesisStatisticsPage';
 
 test('thesis statistics page renders', (t) => {
     const stats = { 2018: { 1: { 1: { newGrades: { 1: 0, 2: 2 }, oldGrades: { Laudatur: 1 } } } } };

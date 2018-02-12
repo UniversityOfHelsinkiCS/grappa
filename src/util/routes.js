@@ -2,21 +2,21 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 // components
-import UserPage from '../containers/user/UserPage';
-import AgreementPage from '../containers/agreement/AgreementPage';
-import PersonRoleManagement from '../containers/person/PersonRoleManagePage';
-import ThesisListPage from '../containers/thesis/ThesisListPage';
-import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
-import ThesisCreate from '../containers/thesis/ThesisCreatePage';
-// import ThesisEdit from '../containers/thesis/ThesisEditPage';
+import UserPage from '../component/User/UserPage';
+import AgreementPage from '../component/Agreement/AgreementPage';
+import PersonRoleManagement from '../component/Person/PersonRoleManagePage';
+import ThesisListPage from '../component/Thesis/ThesisListPage';
+import AssesmentOfTheses from '../component/Thesis/AssesmentOfTheses';
+import ThesisCreate from '../component/Thesis/ThesisCreatePage';
+// import ThesisEdit from '../component/Thesis/ThesisEditPage';
 import ThesisViewPage from '../containers/thesis/ThesisViewPage';
-import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
-import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
-import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
-import EmailDraftPage from '../containers/email/EmailDraftPage';
-import NotificationsPage from '../containers/notifications/NotificationsPage';
-import InvitePage from '../containers/invite/InvitePage';
-import PersonRoleReviewPage from '../containers/person/PersonRoleReviewPage';
+import ThesisStatistics from '../component/Thesis/ThesisStatisticsPage';
+import CouncilmeetingManage from '../component/CouncilMeeting/CouncilmeetingManagePage';
+import CouncilmeetingView from '../component/CouncilMeeting/CouncilmeetingViewPage';
+import EmailDraftPage from '../component/Email/EmailDraftPage';
+import NotificationsPage from '../component/Notification/NotificationsPage';
+import InvitePage from '../component/Invite/InvitePage';
+import PersonRoleReviewPage from '../component/Person/PersonRoleReviewPage';
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },

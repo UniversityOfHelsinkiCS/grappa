@@ -2,7 +2,7 @@ import test from 'ava';
 import sinon from 'sinon';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/containers/thesis/thesisReducer';
+import reducer from '../../src/component/Thesis/thesisReducer';
 
 const thesis = { thesisId: 1, title: "Testien jännittävyys", authorFirstname: "Testaaja" }
 const thesisEdited = { thesisId: 1, title: "Testien vaikeus", authorFirstname: "Testaaja" }

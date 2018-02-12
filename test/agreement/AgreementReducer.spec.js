@@ -3,7 +3,7 @@ import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
 // internal modules
-import reducer from '../../src/containers/agreement/agreementReducer';
+import reducer from '../../src/component/Agreement/agreementReducer';
 
 const agreement = { id: 1, title: "test" } // Other fields as well
 const agreement2 = { id: 2, title: "test2" } // Other fields as well

@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
 
-import reducer from '../../src/containers/email/emailReducer';
+import reducer from '../../src/component/Email/emailReducer';
 
 const email = { emailDraftId: 1, title: 'Otsikko', body: 'Sisältö' }
 const email2 = { emailDraftId: 2, title: 'Otsikko2', body: 'Sisältö2' }

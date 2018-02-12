@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 // nav
-import NavBar from './containers/NavBar';
+import NavBar from './component/NavBar';
 
-import EventMessageContainer from './containers/eventMessage/eventMessageContainer';
+import EventMessageContainer from './component/EventMessage/eventMessageContainer';
 
 // util
 import store from './util/store';
