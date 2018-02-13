@@ -5,4 +5,4 @@ exports.seed = async (knex) => {
     await knex('thesis').del()
     // Inserts seed entries
     return knex('thesis').insert(theses)
-};
+}

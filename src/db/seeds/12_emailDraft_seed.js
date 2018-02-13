@@ -78,4 +78,4 @@ student's master's degree.
 $LOGIN_URL$`
         }
     ])
-};
+}

@@ -5,4 +5,4 @@ exports.seed = async (knex) => {
     await knex('attachment').del()
     // Inserts seed entries
     return knex('attachment').insert(attachments)
-};
+}

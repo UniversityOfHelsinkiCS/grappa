@@ -4,7 +4,7 @@ exports.up = async (knex) => {
             facultyId: 1,
             name: 'OLD Computer Computer Science master programmes'
         }
-    ]).returning('programmeId')[0];
+    ]).returning('programmeId')[0]
 
     return knex('studyfield').insert([
         {
@@ -79,7 +79,7 @@ exports.up = async (knex) => {
             programmeId,
             name: 'Algoritminen bioinformatiikka'
         }
-    ]);
-};
+    ])
+}
 
-exports.down = () => {};
+exports.down = () => {}

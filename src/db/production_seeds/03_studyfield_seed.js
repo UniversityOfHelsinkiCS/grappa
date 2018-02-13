@@ -83,5 +83,5 @@ exports.seed = async (knex) => {
             programmeId: 7,
             name: 'No studyfield'
         }
-    ]);
-};
+    ])
+}

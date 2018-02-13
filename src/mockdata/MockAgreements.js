@@ -50,4 +50,4 @@ module.exports = [
         meetingAgreement: 'joka toinen päivä',
         other: 'eee'
     }
-];
+]

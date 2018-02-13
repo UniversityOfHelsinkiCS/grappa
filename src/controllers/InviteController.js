@@ -1,43 +1,43 @@
-import { checkUserIsAdminOrManager } from '../services/RoleService';
+import { checkUserIsAdminOrManager } from '../services/RoleService'
 
-const emailInviteService = require('../services/EmailInviteService');
-const personService = require('../services/PersonService');
-const agreementService = require('../services/AgreementService');
-const roleService = require('../services/RoleService');
+const emailInviteService = require('../services/EmailInviteService')
+const personService = require('../services/PersonService')
+const agreementService = require('../services/AgreementService')
+const roleService = require('../services/RoleService')
 
 export async function thesisAuthorInvite(req, res) {
-    await checkUserIsAdminOrManager(req);
-    const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token);
+    await checkUserIsAdminOrManager(req)
+    const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token)
 
     if (!inviteData) {
-        res.status(404).end();
-        return;
+        res.status(404).end()
+        return
     }
 
-    const person = await personService.getLoggedPerson(req);
-    await agreementService.linkAuthorToAgreement(inviteData.agreement, person.personId);
-    await emailInviteService.markTokenUsed(req.params.token);
-    res.status(200).end();
+    const person = await personService.getLoggedPerson(req)
+    await agreementService.linkAuthorToAgreement(inviteData.agreement, person.personId)
+    await emailInviteService.markTokenUsed(req.params.token)
+    res.status(200).end()
 }
 
 export async function roleInvite(req, res) {
-    await checkUserIsAdminOrManager(req);
-    const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token);
+    await checkUserIsAdminOrManager(req)
+    const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token)
 
     if (!inviteData) {
-        res.status(404).end();
-        return;
+        res.status(404).end()
+        return
     }
 
-    const person = await personService.getLoggedPerson(req);
+    const person = await personService.getLoggedPerson(req)
     const personWithRole = {
         roleId: inviteData.role,
         personId: person.personId,
         programmeId: inviteData.programme
-    };
+    }
 
-    await roleService.savePersonRole(personWithRole);
-    await emailInviteService.markTokenUsed(req.params.token);
+    await roleService.savePersonRole(personWithRole)
+    await emailInviteService.markTokenUsed(req.params.token)
 
-    res.status(200).end();
+    res.status(200).end()
 }

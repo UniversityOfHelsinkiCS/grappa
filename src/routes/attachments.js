@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const attachmentController = require('../controllers/AttachmentController');
+const router = require('express').Router()
+const attachmentController = require('../controllers/AttachmentController')
 
 /**
  * @api {post} attachments/ Save attachments
@@ -10,8 +10,8 @@ const attachmentController = require('../controllers/AttachmentController');
  * TODO: Describe metadata
  */
 router.post('/', (req, res) => {
-    attachmentController.saveAttachments(req, res);
-});
+    attachmentController.saveAttachments(req, res)
+})
 
 /**
  * @api {get} attachments/:ids Download attachments
@@ -21,8 +21,8 @@ router.post('/', (req, res) => {
  * @apiParam {String} ids List of attachment ids
  */
 router.get('/:ids', (req, res) => {
-    attachmentController.downloadAttachments(req, res);
-});
+    attachmentController.downloadAttachments(req, res)
+})
 
 /**
  * @api {delete} attachments/:id Delete attachment
@@ -32,7 +32,7 @@ router.get('/:ids', (req, res) => {
  * @apiParam {Number} id Attachment id
  */
 router.delete('/:id', (req, res) => {
-    attachmentController.deleteAttachment(req, res);
-});
+    attachmentController.deleteAttachment(req, res)
+})
 
-module.exports = router;
+module.exports = router

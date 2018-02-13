@@ -5,4 +5,4 @@ exports.seed = async (knex) => {
     await knex('role').del()
     // Inserts seed entries
     return knex('role').insert(roles)
-};
+}

@@ -39,4 +39,4 @@ module.exports = [
         facultyId: 3,
         name: 'Economy'
     }
-];
+]

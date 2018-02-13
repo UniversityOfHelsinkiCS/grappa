@@ -1,8 +1,8 @@
-const bodyParser = require('body-parser');
-const router = require('express').Router();
-const loginController = require('../controllers/LoginController');
+const bodyParser = require('body-parser')
+const router = require('express').Router()
+const loginController = require('../controllers/LoginController')
 
-const jsonParser = bodyParser.json();
+const jsonParser = bodyParser.json()
 
 // logins with shibboleth are automatic and code is in auth middleware
 
@@ -33,8 +33,8 @@ const jsonParser = bodyParser.json();
  *  }
  */
 router.get('/login', jsonParser, (req, res) => {
-    loginController.showUser(req, res);
-});
+    loginController.showUser(req, res)
+})
 
 /**
  * @api {get} user/logout Logout
@@ -46,14 +46,14 @@ router.get('/login', jsonParser, (req, res) => {
  * @apiSuccess {String} logoutUrl Shibboleth logout url
  */
 router.get('/logout', jsonParser, (req, res) => {
-    loginController.logout(req, res);
-});
+    loginController.logout(req, res)
+})
 
 // For now we use get to login for dev.
 if (process.env.NODE_ENV === 'development') {
     router.get('/:id', jsonParser, (req, res) => {
-        loginController.fakeLogin(req, res);
-    });
+        loginController.fakeLogin(req, res)
+    })
 }
 
-module.exports = router;
+module.exports = router

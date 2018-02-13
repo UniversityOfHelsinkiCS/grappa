@@ -1,7 +1,7 @@
-const pg = require('pg');
-const knex = require('../db/connection').getKnex();
+const pg = require('pg')
+const knex = require('../db/connection').getKnex()
 
-pg.types.setTypeParser(20, 'text', parseInt);
+pg.types.setTypeParser(20, 'text', parseInt)
 
 export async function getStatistics() {
     const results = await knex('agreement')
@@ -19,18 +19,18 @@ export async function getStatistics() {
         .where('printDone', true)
         .groupBy('agreement.studyfieldId', 'grade', 'year', 'studyfield.programmeId')
         .orderBy('year', 'desc')
-        .orderBy('studyfieldId');
+        .orderBy('studyfieldId')
 
-    const output = {};
+    const output = {}
 
     // Create nested response object
     results.forEach((row) => {
-        const { year, programmeId, studyfieldId, grade, count } = row;
+        const { year, programmeId, studyfieldId, grade, count } = row
 
         if (!output[year])
-            output[year] = {};
+            output[year] = {}
         if (!output[year][programmeId])
-            output[year][programmeId] = {};
+            output[year][programmeId] = {}
         if (!output[year][programmeId][studyfieldId]) {
             output[year][programmeId][studyfieldId] = {
                 newGrades: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
@@ -43,16 +43,16 @@ export async function getStatistics() {
                     'Eximia Cum Laude Approbatur': 0,
                     Laudatur: 0
                 }
-            };
+            }
         }
 
-        const rowToAdd = output[year][programmeId][studyfieldId];
+        const rowToAdd = output[year][programmeId][studyfieldId]
 
         if (Number.isNaN(Number(grade)))
-            rowToAdd.oldGrades[grade] = count;
+            rowToAdd.oldGrades[grade] = count
         else
-            rowToAdd.newGrades[grade] = count;
-    });
+            rowToAdd.newGrades[grade] = count
+    })
 
-    return output;
+    return output
 }

@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser');
+const router = require('express').Router()
+const bodyParser = require('body-parser')
 
-const jsonParser = bodyParser.json();
-const emailDraftController = require('../controllers/EmailDraftController');
+const jsonParser = bodyParser.json()
+const emailDraftController = require('../controllers/EmailDraftController')
 
 /**
  * @api {get} emailDrafts/ Get all email drafts
@@ -23,8 +23,8 @@ const emailDraftController = require('../controllers/EmailDraftController');
  * ]
  */
 router.get('/', (req, res) => {
-    emailDraftController.getEmailDrafts(req, res);
-});
+    emailDraftController.getEmailDrafts(req, res)
+})
 
 /**
  * @api {post} emailDrafts/ Save new draft
@@ -39,8 +39,8 @@ router.get('/', (req, res) => {
  * @apiParam {Number} [programme] Programme id of related programme
  */
 router.post('/', jsonParser, (req, res) => {
-    emailDraftController.saveEmailDraft(req, res);
-});
+    emailDraftController.saveEmailDraft(req, res)
+})
 
 /**
  * @api {put} emailDrafts/:id Update draft
@@ -55,8 +55,8 @@ router.post('/', jsonParser, (req, res) => {
  * @apiParam {Number} [programme] Programme id of related programme
  */
 router.post('/:id', jsonParser, (req, res) => {
-    emailDraftController.updateEmailDraft(req, res);
-});
+    emailDraftController.updateEmailDraft(req, res)
+})
 
 /**
  * @api {delete} emailDrafts/:id Delete draft
@@ -68,7 +68,7 @@ router.post('/:id', jsonParser, (req, res) => {
  * @apiParam {Number} id Draft id
  */
 router.delete('/:id', (req, res) => {
-    emailDraftController.deleteEmailDraft(req, res);
-});
+    emailDraftController.deleteEmailDraft(req, res)
+})
 
-module.exports = router;
+module.exports = router

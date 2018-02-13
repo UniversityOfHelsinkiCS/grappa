@@ -1,4 +1,4 @@
-const knex = require('../src/db/connection');
+const knex = require('../src/db/connection')
 
 export async function createPerson(email) {
     const person = {
@@ -8,9 +8,9 @@ export async function createPerson(email) {
     }
     const insert = await knex.getKnex()('person')
         .returning('personId')
-        .insert(person);
-    person.personId = insert[0];
-    return person;
+        .insert(person)
+    person.personId = insert[0]
+    return person
 }
 
 export const deleteFromDb = async (connection) => {
@@ -46,12 +46,12 @@ export const deleteFromDb = async (connection) => {
 }
 
 export async function initDb() {
-    const schema = process.env.DB_SCHEMA;
-    const connection = knex.getKnex();
+    const schema = process.env.DB_SCHEMA
+    const connection = knex.getKnex()
 
-    await connection.raw(`drop schema if exists ${schema} cascade`);
-    await connection.raw(`create schema ${schema}`);
-    await connection.migrate.latest();
-    await deleteFromDb(connection);
-    await connection.seed.run();
+    await connection.raw(`drop schema if exists ${schema} cascade`)
+    await connection.raw(`create schema ${schema}`)
+    await connection.migrate.latest()
+    await deleteFromDb(connection)
+    await connection.seed.run()
 }

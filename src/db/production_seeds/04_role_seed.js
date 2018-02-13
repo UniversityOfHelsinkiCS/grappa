@@ -36,5 +36,5 @@ exports.seed = async (knex) => {
             name: 'visitor'
             // Visitor is a person who is part of a programme
         }
-    ]);
-};
+    ])
+}

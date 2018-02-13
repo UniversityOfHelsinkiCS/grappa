@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const notificationController = require('../controllers/NotificationController');
+const router = require('express').Router()
+const notificationController = require('../controllers/NotificationController')
 
 /**
  * @api {get} notifications/ Get notifications
@@ -23,6 +23,6 @@ const notificationController = require('../controllers/NotificationController');
  *   }
  * ]
  */
-router.get('/', notificationController.getNotifications);
+router.get('/', notificationController.getNotifications)
 
-module.exports = router;
+module.exports = router

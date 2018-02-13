@@ -1,10 +1,10 @@
-import { checkUserIsAdminOrManager } from '../services/RoleService';
+import { checkUserIsAdminOrManager } from '../services/RoleService'
 
-const councilmeetingService = require('../services/CouncilmeetingService');
-const notificationService = require('../services/NotificationService');
+const councilmeetingService = require('../services/CouncilmeetingService')
+const notificationService = require('../services/NotificationService')
 
 const mapProgrammesToIds = (councilmeeting) => {
-    const copyMeeting = Object.assign({}, councilmeeting);
+    const copyMeeting = Object.assign({}, councilmeeting)
     copyMeeting.councilmeetingId = Number(councilmeeting.councilmeetingId)
     copyMeeting.programmes = councilmeeting.programmes
         .reduce((acc, cur) => acc.concat(cur.programmeId), [])
@@ -12,7 +12,7 @@ const mapProgrammesToIds = (councilmeeting) => {
 }
 
 const serializeAndTrim = (councilmeetings) => {
-    const serialized = councilmeetings.serialize({ omitPivot: true });
+    const serialized = councilmeetings.serialize({ omitPivot: true })
     if (serialized instanceof Array) {
         return serialized.map(meeting => mapProgrammesToIds(meeting))
     }
@@ -30,20 +30,20 @@ export async function getAllCouncilmeetings(req, res) {
 }
 
 export async function saveCouncilmeeting(req, res) {
-    const councilmeeting = req.body;
+    const councilmeeting = req.body
 
-    await checkUserIsAdminOrManager(req);
+    await checkUserIsAdminOrManager(req)
 
     if (councilmeeting) {
-        const programmeIds = councilmeeting.programmes;
-        delete councilmeeting.programmes;
+        const programmeIds = councilmeeting.programmes
+        delete councilmeeting.programmes
         try {
-            const savedMeeting = await councilmeetingService.saveCouncilmeeting(councilmeeting, programmeIds);
+            const savedMeeting = await councilmeetingService.saveCouncilmeeting(councilmeeting, programmeIds)
             const responseMeeting = serializeAndTrim(savedMeeting)
             programmeIds.forEach((programmeId) => {
-                notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId);
-            });
-            res.status(200).json(responseMeeting);
+                notificationService.createNotification('COUNCILMEETING_SAVE_ONE_SUCCESS', req, programmeId)
+            })
+            res.status(200).json(responseMeeting)
         } catch (error) {
             res.status(500).end()
         }
@@ -51,33 +51,33 @@ export async function saveCouncilmeeting(req, res) {
 }
 
 export async function updateCouncilmeeting(req, res) {
-    const councilmeetingId = req.params.id;
-    const councilmeeting = req.body;
+    const councilmeetingId = req.params.id
+    const councilmeeting = req.body
 
-    await checkUserIsAdminOrManager(req);
+    await checkUserIsAdminOrManager(req)
 
     if (councilmeetingId && councilmeeting) {
-        const programmeIds = councilmeeting.programmes;
-        delete councilmeeting.programmes;
+        const programmeIds = councilmeeting.programmes
+        delete councilmeeting.programmes
         const updatedMeeting =
-            await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId, programmeIds);
+            await councilmeetingService.updateCouncilmeeting(councilmeeting, councilmeetingId, programmeIds)
         const responseMeeting = serializeAndTrim(updatedMeeting)
         programmeIds.forEach((programmeId) => {
-            notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req, programmeId);
-        });
-        res.status(200).json(responseMeeting);
+            notificationService.createNotification('COUNCILMEETING_UPDATE_ONE_SUCCESS', req, programmeId)
+        })
+        res.status(200).json(responseMeeting)
     }
 }
 
 export async function deleteCouncilmeeting(req, res) {
-    const councilmeetingId = req.params.id;
+    const councilmeetingId = req.params.id
 
-    await checkUserIsAdminOrManager(req);
+    await checkUserIsAdminOrManager(req)
 
     if (councilmeetingId) {
-        await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(councilmeetingId, []);
-        await councilmeetingService.deleteCouncilmeeting(councilmeetingId);
-        notificationService.createNotification('COUNCILMEETING_DELETE_ONE_SUCCESS', req);
-        res.status(200).json({ councilmeetingId });
+        await councilmeetingService.unlinkAndLinkCouncilmeetingToProgrammes(councilmeetingId, [])
+        await councilmeetingService.deleteCouncilmeeting(councilmeetingId)
+        notificationService.createNotification('COUNCILMEETING_DELETE_ONE_SUCCESS', req)
+        res.status(200).json({ councilmeetingId })
     }
 }

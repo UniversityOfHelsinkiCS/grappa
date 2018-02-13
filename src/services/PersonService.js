@@ -1,4 +1,4 @@
-const knex = require('../db/connection').getKnex();
+const knex = require('../db/connection').getKnex()
 
 const personSchema = [
     'person.personId',
@@ -9,17 +9,17 @@ const personSchema = [
     'isRetired',
     'studentNumber',
     'phone'
-];
+]
 
 export function getAllPersons() {
-    return knex.select(personSchema).from('person');
+    return knex.select(personSchema).from('person')
 }
 
 export function getPersonsWithRole(roleId) {
     return knex.table('person').distinct('person.personId')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
-        .select(personSchema);
+        .select(personSchema)
 }
 
 export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
@@ -27,25 +27,25 @@ export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
         .join('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
         .where('personWithRole.programmeId', programmeId)
-        .select(personSchema);
+        .select(personSchema)
 }
 
 export async function getLoggedPerson(req) {
     if (req.session.user_id) {
-        const userId = req.session.user_id;
-        return getPersonById(userId);
+        const userId = req.session.user_id
+        return getPersonById(userId)
     } else if (req.headers.uid) {
-        const shibbolethId = req.headers.uid;
-        return getPersonByShibbolethId(shibbolethId);
+        const shibbolethId = req.headers.uid
+        return getPersonByShibbolethId(shibbolethId)
     }
 
-    return null;
+    return null
 }
 
-export const getPersonById = id => knex.select().from('person').where('personId', id).first();
+export const getPersonById = id => knex.select().from('person').where('personId', id).first()
 
 export const getPersonByShibbolethId = shibbolethId =>
-    knex.select().from('person').where('shibbolethId', shibbolethId).first();
+    knex.select().from('person').where('shibbolethId', shibbolethId).first()
 
 export async function savePerson(personData) {
     // If already exists then return that person
@@ -53,15 +53,15 @@ export async function savePerson(personData) {
         email: personData.email,
         firstname: personData.firstname,
         lastname: personData.lastname
-    }).first();
+    }).first()
     if (!person) {
         const personIds = await knex('person')
             .returning('personId')
-            .insert(personData);
-        const personId = personIds[0];
-        person = knex.select(personSchema).from('person').where('personId', personId).first();
+            .insert(personData)
+        const personId = personIds[0]
+        person = knex.select(personSchema).from('person').where('personId', personId).first()
     }
-    return person;
+    return person
 }
 
 export function savePersonRole(personRoleData) {
@@ -71,7 +71,7 @@ export function savePersonRole(personRoleData) {
         .then(personRoleId => personRoleId[0])
         .catch((error) => {
             throw error
-        });
+        })
 }
 
 export function updatePerson(personData) {
@@ -82,17 +82,17 @@ export function updatePerson(personData) {
         .then(personId => personId[0])
         .catch((error) => {
             throw error
-        });
+        })
 }
 
 export const getPersonsWithAgreementPerson = agreementpersonId => knex.select(personSchema).from('person')
     .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
     .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-    .where('personWithRole.personId', agreementpersonId);
+    .where('personWithRole.personId', agreementpersonId)
 
 export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(personSchema).from('person')
     .innerJoin('agreement', 'agreement.authorId', '=', 'person.personId')
     .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-    .where('personWithRole.programmeId', programmeId);
+    .where('personWithRole.programmeId', programmeId)

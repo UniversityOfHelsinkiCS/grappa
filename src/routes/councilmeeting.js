@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser');
-const councilmeetingController = require('../controllers/CouncilmeetingController');
+const router = require('express').Router()
+const bodyParser = require('body-parser')
+const councilmeetingController = require('../controllers/CouncilmeetingController')
 
-const jsonParser = bodyParser.json();
+const jsonParser = bodyParser.json()
 
 /**
  * @api {get} councilmeetings/ Get councilmeetings
@@ -21,8 +21,8 @@ const jsonParser = bodyParser.json();
  * ]
  */
 router.get('/', (req, res, next) => {
-    councilmeetingController.getAllCouncilmeetings(req, res).catch(next);
-});
+    councilmeetingController.getAllCouncilmeetings(req, res).catch(next)
+})
 
 /**
  * @api {post} councilmeetings/ Create councilmeeting
@@ -40,8 +40,8 @@ router.get('/', (req, res, next) => {
  *  }
  */
 router.post('/', jsonParser, (req, res, next) => {
-    councilmeetingController.saveCouncilmeeting(req, res).catch(next);
-});
+    councilmeetingController.saveCouncilmeeting(req, res).catch(next)
+})
 
 /**
  * @api {post} councilmeetings/ Update councilmeeting
@@ -60,8 +60,8 @@ router.post('/', jsonParser, (req, res, next) => {
  *  }
  */
 router.put('/:id', jsonParser, (req, res, next) => {
-    councilmeetingController.updateCouncilmeeting(req, res).catch(next);
-});
+    councilmeetingController.updateCouncilmeeting(req, res).catch(next)
+})
 
 /**
  * @api {delete} councilmeetings/:id Delete councilmeeting
@@ -73,8 +73,8 @@ router.put('/:id', jsonParser, (req, res, next) => {
  * @apiParam {Number} id meeting id
  */
 router.delete('/:id', jsonParser, (req, res, next) => {
-    councilmeetingController.deleteCouncilmeeting(req, res).catch(next);
-});
+    councilmeetingController.deleteCouncilmeeting(req, res).catch(next)
+})
 
 
-module.exports = router;
+module.exports = router

@@ -30,5 +30,5 @@ exports.seed = async (knex) => {
             facultyId: 1, // 7 NEW
             name: 'Master\'s Programme in Mathematics and Statistics'
         }
-    ]);
-};
+    ])
+}

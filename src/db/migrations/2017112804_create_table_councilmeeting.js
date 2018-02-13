@@ -1,12 +1,12 @@
 exports.up = knex => Promise.all([
     knex.schema.createTable('councilmeeting', (table) => {
-        table.increments('councilmeetingId').primary();
-        table.date('date').notNullable();
-        table.date('instructorDeadline');
-        table.date('studentDeadline');
+        table.increments('councilmeetingId').primary()
+        table.date('date').notNullable()
+        table.date('instructorDeadline')
+        table.date('studentDeadline')
     })
-]);
+])
 
 exports.down = async (knex) => {
-    knex.schema.dropTable('councilmeeting');
-};
+    knex.schema.dropTable('councilmeeting')
+}

@@ -1,9 +1,9 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser');
-const thesisController = require('../controllers/ThesisController');
+const router = require('express').Router()
+const bodyParser = require('body-parser')
+const thesisController = require('../controllers/ThesisController')
 
-const jsonParser = bodyParser.json();
-const attachment = require('../middleware/attachments');
+const jsonParser = bodyParser.json()
+const attachment = require('../middleware/attachments')
 
 /**
  * @api {get} theses/ Get all theses
@@ -13,7 +13,7 @@ const attachment = require('../middleware/attachments');
  * @apiDescription Returns all theses accessed by current user.
  * @apiSuccess theses List of theses
  */
-router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(next));
+router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(next))
 
 /**
  * @api {put} theses/ Update thesis
@@ -40,7 +40,7 @@ router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(n
  * @apiSuccess thesis Updated thesis
  * @apiSuccess roles Updated roles
  */
-router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(req, res).catch(next));
+router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(req, res).catch(next))
 
 /**
  * @api {post} theses/ Save new thesis
@@ -72,7 +72,7 @@ router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(re
  * @apiSuccess thesis New thesis
  * @apiSuccess roles New roles
  */
-router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next));
+router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next))
 
 /**
  * @api {put} theses/printed Mark theses as printed
@@ -83,6 +83,6 @@ router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm
  *
  * @apiParam {Number[]} body theses ids
  */
-router.put('/printed', jsonParser, (req, res, next) => thesisController.markPrinted(req, res).catch(next));
+router.put('/printed', jsonParser, (req, res, next) => thesisController.markPrinted(req, res).catch(next))
 
-module.exports = router;
+module.exports = router
