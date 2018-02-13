@@ -1,21 +1,21 @@
-import React from 'react';
-import { arrayOf, func, bool } from 'prop-types';
-import { Link } from 'react-router-dom';
-import moment from 'moment/moment';
-import { councilmeetingType, programmeType } from '../../../util/types';
+import React from 'react'
+import { arrayOf, func, bool } from 'prop-types'
+import { Link } from 'react-router-dom'
+import moment from 'moment/moment'
+import { councilmeetingType, programmeType } from '../../../util/types'
 
-const dateFormat = 'DD.MM.YYYY';
+const dateFormat = 'DD.MM.YYYY'
 
 function filterMeetings(meetings, showOld) {
     if (!showOld) {
-        const today = moment();
-        return meetings.filter(meeting => moment(meeting.date).isAfter(today));
+        const today = moment()
+        return meetings.filter(meeting => moment(meeting.date).isAfter(today))
     }
 
-    return meetings;
+    return meetings
 }
 
-const sortMeetings = (a, b) => ((moment(a.date).isAfter(moment(b.date))) ? 1 : -1);
+const sortMeetings = (a, b) => ((moment(a.date).isAfter(moment(b.date))) ? 1 : -1)
 
 const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, programmes }) => (
     <table className="ui celled table">
@@ -50,7 +50,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
                     <td>
                         {councilmeeting.programmes
                             .map((programmeId) => {
-                                const programme = programmes.find(prg => programmeId === prg.programmeId);
+                                const programme = programmes.find(prg => programmeId === prg.programmeId)
                                 if (programme) {
                                     return (
                                         <div key={programme.programmeId}>
@@ -59,7 +59,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
                                         </div>
                                     )
                                 }
-                                return undefined;
+                                return undefined
                             })}
                     </td>
                     <td>
@@ -72,7 +72,7 @@ const CouncilmeetingList = ({ meetings, selectMeeting, deleteMeeting, showOld, p
             )}
         </tbody>
     </table>
-);
+)
 
 CouncilmeetingList.propTypes = {
     meetings: arrayOf(councilmeetingType).isRequired,
@@ -80,6 +80,6 @@ CouncilmeetingList.propTypes = {
     deleteMeeting: func.isRequired,
     showOld: bool.isRequired,
     programmes: arrayOf(programmeType).isRequired
-};
+}
 
-export default CouncilmeetingList;
+export default CouncilmeetingList

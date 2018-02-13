@@ -1,84 +1,84 @@
-import React, { Component } from 'react';
-import { arrayOf, bool, func } from 'prop-types';
-import { personType } from '../../../util/types';
+import React, { Component } from 'react'
+import { arrayOf, bool, func } from 'prop-types'
+import { personType } from '../../../util/types'
 
 export default class PersonSelector extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             searchValue: '',
             menuActive: false,
             filtered: []
-        };
+        }
     }
 
     componentDidMount() {
-        window.addEventListener('mousedown', this.unfocusMenu);
+        window.addEventListener('mousedown', this.unfocusMenu)
     }
 
     componentWillUnmount() {
-        window.removeEventListener('mousedown', this.unfocusMenu);
+        window.removeEventListener('mousedown', this.unfocusMenu)
     }
 
     personToText = person => `${person.firstname} ${person.lastname} ${person.email}`;
 
     removePerson = person => () => {
         if (this.props.allowEdit) {
-            const removed = this.props.selected.filter(prsn => prsn !== person);
-            this.props.changeList(removed);
+            const removed = this.props.selected.filter(prsn => prsn !== person)
+            this.props.changeList(removed)
         }
     };
 
     addPerson = person => () => {
-        const selected = [...this.props.selected, person];
+        const selected = [...this.props.selected, person]
         this.props.changeList(selected)
     };
 
     toggleMenu = () => {
-        this.setState({ menuActive: !this.state.menuActive });
+        this.setState({ menuActive: !this.state.menuActive })
     };
 
     search = (event) => {
-        const searchValue = event.target.value.toLowerCase();
+        const searchValue = event.target.value.toLowerCase()
         if (this.props.persons) {
-            const getPersonName = person => this.personToText(person).toLowerCase();
-            const filtered = this.props.persons.filter(person => getPersonName(person).includes(searchValue));
+            const getPersonName = person => this.personToText(person).toLowerCase()
+            const filtered = this.props.persons.filter(person => getPersonName(person).includes(searchValue))
 
             this.setState({
                 searchValue,
                 filtered
-            });
+            })
         }
     };
 
     handleKeyPress = (target) => {
         // charCode 13 is ENTER
         if (target.charCode === 13) {
-            const person = this.state.filtered.find(person => !this.isActivated(person));
+            const person = this.state.filtered.find(person => !this.isActivated(person))
             if (person !== undefined) {
-                this.addPerson(person)();
+                this.addPerson(person)()
             }
         }
     };
 
     focusMenu = (event) => {
-        event.stopPropagation();
+        event.stopPropagation()
         if (this.props.allowEdit)
-            this.setState({ menuActive: true });
+            this.setState({ menuActive: true })
     };
 
     unfocusMenu = () => {
         if (this.state.menuActive) {
-            this.setState({ menuActive: false });
+            this.setState({ menuActive: false })
         }
     };
 
     isActivated(person) {
-        return this.props.selected.includes(person);
+        return this.props.selected.includes(person)
     }
 
     shouldRenderPerson(person) {
-        return (!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person);
+        return (!this.state.searchValue || this.state.filtered.includes(person)) && !this.isActivated(person)
     }
 
     renderSelected() {
@@ -119,11 +119,11 @@ export default class PersonSelector extends Component {
                             >
                                 {this.personToText(person)}
                             </div>
-                        );
+                        )
                     }
                     return (
                         <div key={person.personId} className="item filtered">{this.personToText(person)}</div>
-                    );
+                    )
                 })
                     : undefined
                 }
@@ -134,8 +134,8 @@ export default class PersonSelector extends Component {
     }
 
     render() {
-        const errorClass = this.props.validationError ? 'error' : '';
-        const className = `ui fluid multiple search selection dropdown empty visible ${errorClass}`;
+        const errorClass = this.props.validationError ? 'error' : ''
+        const className = `ui fluid multiple search selection dropdown empty visible ${errorClass}`
 
         return (
             <div>
@@ -148,7 +148,7 @@ export default class PersonSelector extends Component {
                     {this.renderDropdown()}
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -158,9 +158,9 @@ PersonSelector.propTypes = {
     changeList: func.isRequired,
     validationError: bool,
     allowEdit: bool
-};
+}
 
 PersonSelector.defaultProps = {
     validationError: false,
     allowEdit: true
-};
+}

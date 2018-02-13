@@ -1,52 +1,52 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { arrayOf, func } from 'prop-types';
-import { personType, roleType, programmeType, availableRoleType } from '../../util/types';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { arrayOf, func } from 'prop-types'
+import { personType, roleType, programmeType, availableRoleType } from '../../util/types'
 
-import PersonSelector from './components/PersonSelector';
-import PersonInviter from './components/PersonInviter';
-import PersonRoleChoose from './components/PersonRoleChoose';
+import PersonSelector from './components/PersonSelector'
+import PersonInviter from './components/PersonInviter'
+import PersonRoleChoose from './components/PersonRoleChoose'
 
-import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions';
-import { invitePerson } from './services/personActions';
+import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions'
+import { invitePerson } from './services/personActions'
 
 export class PersonRoleManagePage extends Component {
     constructor(props) {
-        super(props);
-        this.props.getAvailableRoles();
+        super(props)
+        this.props.getAvailableRoles()
         this.state = {
             person: undefined,
             roles: undefined
-        };
+        }
     }
 
     componentWillReceiveProps(newProps) {
-        const { person } = this.state;
+        const { person } = this.state
 
         if (person) {
             const roles = newProps.roles.filter(role => role.personId === person.personId)
                 .map((role) => {
-                    role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name;
-                    return role;
-                });
-            this.setState({ roles });
+                    role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name
+                    return role
+                })
+            this.setState({ roles })
         }
     }
 
     selectPerson = (persons) => {
-        const person = persons.find(item => !this.state.person || item.personId !== this.state.person.personId);
+        const person = persons.find(item => !this.state.person || item.personId !== this.state.person.personId)
         const roles = person ?
             this.props.roles.filter(role => role.personId === person.personId)
                 .map((role) => {
-                    role.programme = this.props.programmes.find(field => field.programmeId === role.programmeId).name;
-                    return role;
+                    role.programme = this.props.programmes.find(field => field.programmeId === role.programmeId).name
+                    return role
                 })
-            : undefined;
-        this.setState({ person, roles });
+            : undefined
+        this.setState({ person, roles })
     };
 
     handleAddRole = (role) => {
-        role.personId = this.state.person.personId;
+        role.personId = this.state.person.personId
         if (role.personId && role.roleId && role.programmeId) {
             this.props.saveRole(role)
         }
@@ -57,7 +57,7 @@ export class PersonRoleManagePage extends Component {
     };
 
     handleSendInvite = (programme, role, email) => {
-        this.props.invitePerson({ programme, role, email });
+        this.props.invitePerson({ programme, role, email })
     };
 
     renderManagement = () => {
@@ -79,11 +79,11 @@ export class PersonRoleManagePage extends Component {
                 addRole={this.handleAddRole}
                 removeRole={this.handleRemoveRole}
             />
-        );
+        )
     };
 
     render() {
-        const selected = this.state.person ? [this.state.person] : [];
+        const selected = this.state.person ? [this.state.person] : []
         return (
             <div>
                 <p>
@@ -111,7 +111,7 @@ export class PersonRoleManagePage extends Component {
 
 const mapDispatchToProps = dispatch => ({
     getAvailableRoles() {
-        dispatch(getAvailableRoles());
+        dispatch(getAvailableRoles())
     },
     saveRole(role) {
         dispatch(saveRole(role))
@@ -122,14 +122,14 @@ const mapDispatchToProps = dispatch => ({
     invitePerson(invite) {
         dispatch(invitePerson(invite))
     }
-});
+})
 
 const mapStateToProps = state => ({
     programmes: state.programmes,
     persons: state.persons,
     roles: state.roles,
     availableRoles: state.availableRoles
-});
+})
 
 PersonRoleManagePage.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
@@ -140,6 +140,6 @@ PersonRoleManagePage.propTypes = {
     saveRole: func.isRequired,
     deleteRole: func.isRequired,
     invitePerson: func.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage);
+export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage)

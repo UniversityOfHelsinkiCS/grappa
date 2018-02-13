@@ -1,5 +1,5 @@
-import React from 'react';
-import { object } from 'prop-types';
+import React from 'react'
+import { object } from 'prop-types'
 
 export const RoleExplain = ({ user }) => {
     if (!user.roles) {
@@ -49,11 +49,11 @@ export const RoleExplain = ({ user }) => {
                 </div>
             ))}
         </div>
-    );
+    )
 }
 
 RoleExplain.propTypes = {
     user: object.isRequired
-};
+}
 
-export default RoleExplain;
+export default RoleExplain

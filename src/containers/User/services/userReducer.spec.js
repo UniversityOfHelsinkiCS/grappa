@@ -1,8 +1,8 @@
-import test from 'ava';
-import { reducerTest } from 'redux-ava';
+import test from 'ava'
+import { reducerTest } from 'redux-ava'
 
-import reducer from './userReducer';
-import { userRoles } from '../../../util/rolePermissions';
+import reducer from './userReducer'
+import { userRoles } from '../../../util/rolePermissions'
 
 test('login changes state correctly', reducerTest(
     reducer,
@@ -12,7 +12,7 @@ test('login changes state correctly', reducerTest(
         response: userRoles[0]
     },
     userRoles[0]
-));
+))
 
 test('logout changes state correctly', reducerTest(
     reducer,
@@ -21,4 +21,4 @@ test('logout changes state correctly', reducerTest(
         type: 'USER_LOGOUT_SUCCESS'
     },
     {},
-));
+))

@@ -1,50 +1,50 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { arrayOf, func, object } from 'prop-types';
-import { Grid, GridColumn, GridRow } from 'semantic-ui-react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { arrayOf, func, object } from 'prop-types'
+import { Grid, GridColumn, GridRow } from 'semantic-ui-react'
+import moment from 'moment'
 import {
     agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
     thesisType
-} from '../../util/types';
-import { downloadAttachments } from '../Attachment/services/attachmentActions';
-import AttachmentList from '../Attachment/components/AttachmentList';
+} from '../../util/types'
+import { downloadAttachments } from '../Attachment/services/attachmentActions'
+import AttachmentList from '../Attachment/components/AttachmentList'
 
 class ThesisViewPage extends Component {
     getThesisData() {
         const {
             theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
-        } = this.props;
+        } = this.props
         const hasAllDataLoaded = [
             theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
-        ].every(arr => arr.length > 0);
+        ].every(arr => arr.length > 0)
 
         if (!hasAllDataLoaded)
-            return {};
+            return {}
 
-        const selectedId = Number(this.props.match.params.id);
-        const thesis = theses.find(t => t.thesisId === selectedId);
-        const agreement = agreements.find(agr => agr.thesisId === selectedId);
-        const author = (agreement) ? persons.find(person => person.personId === agreement.authorId) : null;
-        const studyfield = studyfields.find(field => field.studyfieldId === agreement.studyfieldId);
-        const programme = programmes.find(prg => prg.programmeId === studyfield.programmeId);
-        const programmeData = { studyfield, programme };
+        const selectedId = Number(this.props.match.params.id)
+        const thesis = theses.find(t => t.thesisId === selectedId)
+        const agreement = agreements.find(agr => agr.thesisId === selectedId)
+        const author = (agreement) ? persons.find(person => person.personId === agreement.authorId) : null
+        const studyfield = studyfields.find(field => field.studyfieldId === agreement.studyfieldId)
+        const programme = programmes.find(prg => prg.programmeId === studyfield.programmeId)
+        const programmeData = { studyfield, programme }
         const graders = roles
             .filter(role => role.agreementId === agreement.agreementId)
-            .map(role => persons.find(person => person.personId === role.personId));
+            .map(role => persons.find(person => person.personId === role.personId))
         const councilMeeting = councilMeetings
-            .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId);
-        const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId);
+            .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId)
+        const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId)
 
-        return { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments };
+        return { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments }
     }
 
     render() {
-        const data = this.getThesisData();
-        const { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments } = data;
+        const data = this.getThesisData()
+        const { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments } = data
 
         if (!thesis || !agreement)
-            return null;
+            return null
 
         return (
             <Grid columns={3}>
@@ -106,7 +106,7 @@ class ThesisViewPage extends Component {
                     </GridColumn>
                 </GridRow>
             </Grid>
-        );
+        )
     }
 }
 
@@ -119,11 +119,11 @@ const mapStateToProps = state => ({
     roles: state.roles,
     councilMeetings: state.councilmeetings,
     attachments: state.attachments
-});
+})
 
 const mapDispatchToProps = dispatch => ({
     downloadAttachments: attachmentId => dispatch(downloadAttachments([attachmentId]))
-});
+})
 
 ThesisViewPage.propTypes = {
     theses: arrayOf(thesisType).isRequired,
@@ -136,6 +136,6 @@ ThesisViewPage.propTypes = {
     attachments: arrayOf(attachmentType).isRequired,
     match: object.isRequired,
     downloadAttachments: func.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps())(ThesisViewPage);
+export default connect(mapStateToProps, mapDispatchToProps())(ThesisViewPage)

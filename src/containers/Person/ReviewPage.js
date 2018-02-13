@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { arrayOf, func } from 'prop-types';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { arrayOf, func } from 'prop-types'
 
-import PersonRoleReviewModal from './components/PersonRoleReviewModal';
-import { updateRole } from '../Role/services/roleActions';
-import { roleType } from '../../util/types';
+import PersonRoleReviewModal from './components/PersonRoleReviewModal'
+import { updateRole } from '../Role/services/roleActions'
+import { roleType } from '../../util/types'
 
 export class PersonRoleReviewPage extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             agreementPersons: this.filterAndFormatPersons(props),
             personRoleInReview: undefined
@@ -16,7 +16,7 @@ export class PersonRoleReviewPage extends Component {
     }
 
     componentDidMount() {
-        document.title = 'Grader Management';
+        document.title = 'Grader Management'
     }
 
     componentWillReceiveProps(newProps) {
@@ -27,16 +27,16 @@ export class PersonRoleReviewPage extends Component {
             && newProps.theses.length > 0) {
             this.setState({
                 agreementPersons: this.filterAndFormatPersons(newProps)
-            });
+            })
         }
     }
 
     filterAndFormatPersons = props => props.roles
         .filter(role => role.name === 'grader')
         .map((role) => {
-            const person = props.persons.find(p => p.personId === role.personId);
+            const person = props.persons.find(p => p.personId === role.personId)
             if (!person) {
-                return undefined;
+                return undefined
             }
             return {
                 personId: person.personId,
@@ -61,27 +61,27 @@ export class PersonRoleReviewPage extends Component {
     reviewAgreementPerson = (statement, approved, personRole) => {
         if (statement && personRole) {
             const agreementPersonRole = this.props.roles.find(role =>
-                role.personRoleId === personRole.personRoleId && role.agreementId === personRole.agreementId);
-            agreementPersonRole.statement = statement;
-            agreementPersonRole.approved = approved;
-            this.props.updateRole(agreementPersonRole);
+                role.personRoleId === personRole.personRoleId && role.agreementId === personRole.agreementId)
+            agreementPersonRole.statement = statement
+            agreementPersonRole.approved = approved
+            this.props.updateRole(agreementPersonRole)
             this.setState({ personRoleInReview: undefined })
         }
     };
 
     toggleEditModal = personRoleToReview => () => {
-        this.setState({ personRoleInReview: personRoleToReview });
+        this.setState({ personRoleInReview: personRoleToReview })
     };
 
     renderReviewButton(rolePerson) {
-        let text = 'Review';
-        let buttonClass = 'ui button';
+        let text = 'Review'
+        let buttonClass = 'ui button'
         if (rolePerson.statement) {
             if (rolePerson.approved) {
-                text = 'Approved';
+                text = 'Approved'
                 buttonClass += ' green'
             } else {
-                text = 'Rejected';
+                text = 'Rejected'
                 buttonClass += ' red'
             }
         } else {
@@ -137,7 +137,7 @@ export class PersonRoleReviewPage extends Component {
                 <h2>List of thesis supervisors </h2>
                 {this.renderList()}
             </div>
-        );
+        )
     }
 }
 
@@ -145,7 +145,7 @@ const mapDispatchToProps = dispatch => ({
     updateRole(data) {
         dispatch(updateRole(data))
     }
-});
+})
 
 const mapStateToProps = state => ({
     theses: state.theses,
@@ -154,11 +154,11 @@ const mapStateToProps = state => ({
     roles: state.roles,
     persons: state.persons,
     programmes: state.programmes
-});
+})
 
 PersonRoleReviewPage.propTypes = {
     updateRole: func.isRequired,
     roles: arrayOf(roleType).isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleReviewPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleReviewPage)

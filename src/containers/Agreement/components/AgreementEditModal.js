@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { bool, func } from 'prop-types';
-import { connect } from 'react-redux';
-import AgreementEditModalField from './AgreementEditModalField';
-import { getPermissions } from '../../../util/rolePermissions';
+import React, { Component } from 'react'
+import { bool, func } from 'prop-types'
+import { connect } from 'react-redux'
+import AgreementEditModalField from './AgreementEditModalField'
+import { getPermissions } from '../../../util/rolePermissions'
 
 export class AgreementEditModal extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             editedFormData: {},
             editableFields: [],
@@ -23,14 +23,14 @@ export class AgreementEditModal extends Component {
     }
 
     componentWillReceiveProps(props) {
-        const original = Object.assign({}, props.formData); // can't use pointer here
+        const original = Object.assign({}, props.formData) // can't use pointer here
         if (props.role) {
             this.setState(
                 {
                     editedFormData: original,
                     editableFields: getPermissions(props.role, 'agreement', 'edit')
                 }
-            );
+            )
         } else {
             this.setState(
                 {
@@ -48,56 +48,56 @@ export class AgreementEditModal extends Component {
                         'thesisTitle'
                     ]
                 }
-            );
+            )
         }
     }
 
     onFieldChange = (fieldName, value) => {
-        const newEditedFormData = this.state.editedFormData;
-        newEditedFormData[fieldName] = value;
+        const newEditedFormData = this.state.editedFormData
+        newEditedFormData[fieldName] = value
         this.setState(
             {
                 editedFormData: newEditedFormData
             }
-        );
-        this.validateData();
+        )
+        this.validateData()
     }
 
     validateData = () => {
         const hasEmptyField = Object.keys(this.state.editedFormData)
             .filter(key => this.state.editableFields.indexOf(key) !== -1)
             .map(key => this.state.editedFormData[key])
-            .some(field => (field === ''));
-        this.setState({ mandatoryDataFilled: !hasEmptyField });
+            .some(field => (field === ''))
+        this.setState({ mandatoryDataFilled: !hasEmptyField })
     }
 
     generateFormFields = () => {
         const elements = this.parseAgreementData(this.state.editedFormData).map(element =>
             this.createFormField(element)
-        );
+        )
         return (
             <div>
                 <form>
                     <div className="ui form">{elements}</div>
                 </form>
             </div>
-        );
+        )
     }
 
     parseAgreementData = (data) => {
-        const parsedList = [];
+        const parsedList = []
         for (const p in data) {
-            const originalData = this.props.originalAgreement;
+            const originalData = this.props.originalAgreement
             if (data.hasOwnProperty(p) && (this.state.ignoredFields.indexOf(p) === -1) && (this.state.editableFields.indexOf(p) > -1)) {
                 parsedList.push({
                     fieldName: p,
                     content: data[p],
                     originalContent: originalData[p],
                     textField: (this.state.textFields.indexOf(p) > -1)
-                });
+                })
             }
         }
-        return parsedList;
+        return parsedList
     }
 
     createFormField = c => (
@@ -112,13 +112,13 @@ export class AgreementEditModal extends Component {
     )
 
     handleFormSave = () => {
-        this.props.updateFormData(this.state.editedFormData);
-        this.props.closeModal();
+        this.props.updateFormData(this.state.editedFormData)
+        this.props.closeModal()
     }
 
     render() {
         if (!this.props.showModal) {
-            return (<div />);
+            return (<div />)
         }
         return (
             <div>
@@ -143,7 +143,7 @@ export class AgreementEditModal extends Component {
                     </button>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -155,6 +155,6 @@ AgreementEditModal.propTypes = {
     closeModal: func.isRequired,
     updateFormData: func.isRequired,
     showModal: bool.isRequired
-};
+}
 
-export default connect(mapStateToProps)(AgreementEditModal);
+export default connect(mapStateToProps)(AgreementEditModal)

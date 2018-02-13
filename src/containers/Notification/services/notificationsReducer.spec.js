@@ -1,7 +1,7 @@
-import test from 'ava';
-import { reducerTest } from 'redux-ava';
+import test from 'ava'
+import { reducerTest } from 'redux-ava'
 
-import reducer from './notificationsReducer';
+import reducer from './notificationsReducer'
 
 const notifications = [{ type: 'TEST', userId: 1, timestamp: '' }]
 
@@ -13,4 +13,4 @@ test('get all notifications correctly', reducerTest(
         response: notifications
     },
     notifications
-));
+))

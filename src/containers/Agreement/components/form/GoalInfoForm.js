@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { func, object } from 'prop-types';
+import React, { Component } from 'react'
+import { func, object } from 'prop-types'
 
 export default class GoalInfoForm extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             old: false
         }
@@ -93,4 +93,4 @@ export default class GoalInfoForm extends Component {
 GoalInfoForm.propTypes = {
     handleChange: func.isRequired,
     requiredFields: object.isRequired
-};
+}

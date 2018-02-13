@@ -2,11 +2,11 @@ import { paths as nav } from './routes'
 
 export const getPermissions = (role, context, method) => {
     if (!(role && context && method))
-        return undefined;
-    return permissions[role][context][method];
-};
+        return undefined
+    return permissions[role][context][method]
+}
 
-export const userRoles = ['admin', 'manager', 'print_person', 'resp_professor', 'grader', 'supervisor', 'student'];
+export const userRoles = ['admin', 'manager', 'print_person', 'resp_professor', 'grader', 'supervisor', 'student']
 
 const permissions = {
     admin: {
@@ -157,7 +157,7 @@ const permissions = {
             ]
         }
     }
-};
+}
 
 // Student & visitor are now same role
-permissions.visitor = permissions.student;
+permissions.visitor = permissions.student

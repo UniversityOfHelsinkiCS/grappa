@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { arrayOf, func, bool } from 'prop-types';
-import { thesisType, agreementType, attachmentType } from '../../../util/types';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { arrayOf, func, bool } from 'prop-types'
+import { thesisType, agreementType, attachmentType } from '../../../util/types'
 
 class ThesisList extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             filteredTheses: props.theses,
             formattedTheses: props.theses,
             selectedThesesIds: [],
             cover: true,
             markDone: false
-        };
+        }
 
-        this.search = this.search.bind(this);
+        this.search = this.search.bind(this)
     }
 
     componentWillReceiveProps(newProps) {
@@ -30,22 +30,22 @@ class ThesisList extends Component {
     toggleThesis = thesis => () => {
         const selectedThesesIds = this.state.selectedThesesIds.includes(thesis.thesisId) ?
             this.state.selectedThesesIds.filter(id => id !== thesis.thesisId) :
-            [...this.state.selectedThesesIds, thesis.thesisId];
+            [...this.state.selectedThesesIds, thesis.thesisId]
 
-        this.setState({ selectedThesesIds });
+        this.setState({ selectedThesesIds })
     };
 
     search(event) {
         if (!event.target.value) {
-            this.setState({ filteredTheses: this.state.formattedTheses });
-            return;
+            this.setState({ filteredTheses: this.state.formattedTheses })
+            return
         }
-        const searchValue = event.target.value.toLowerCase();
+        const searchValue = event.target.value.toLowerCase()
         // if searchTerm is empty set filteredTheses = theses, else filter theses based on searchTerm
         const filteredTheses = this.state.filteredTheses
             .filter(thesis => Object.keys(thesis)
-                .find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)));
-        this.setState({ filteredTheses });
+                .find(key => typeof thesis[key] === 'string' && thesis[key].toLowerCase().includes(searchValue)))
+        this.setState({ filteredTheses })
     }
 
     sendDownloadSelected = () => {
@@ -56,50 +56,50 @@ class ThesisList extends Component {
                         if (attachment.agreementId === agreement.agreementId) {
                             // Pick correct files;
                             if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
-                                return true;
+                                return true
                             }
                         }
-                        return false;
+                        return false
                     })
                         .sort((a) => {
                             if (a.label === 'thesisFile') { // Thesis comes before review.
-                                return -1;
+                                return -1
                             }
-                            return 1;
-                        });
+                            return 1
+                        })
                 }
-                return false;
+                return false
             }).reduce((acc, cur) => { // Flatten thesis, review pairs.
                 if (cur) {
                     return acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
                 }
-                return acc;
+                return acc
             }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
-            );
-            this.props.downloadSelected(attachmentIds);
-            this.props.markPrinted(this.state.selectedThesesIds);
+            )
+            this.props.downloadSelected(attachmentIds)
+            this.props.markPrinted(this.state.selectedThesesIds)
         }
     };
 
     toggleAll = () => {
         if (this.state.selectedThesesIds.length > 0) {
-            this.setState({ selectedThesesIds: [] });
+            this.setState({ selectedThesesIds: [] })
         } else {
-            this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) });
+            this.setState({ selectedThesesIds: this.props.theses.map(thesis => thesis.thesisId) })
         }
     };
 
     toggleCover = () => {
-        this.setState({ cover: !this.state.cover });
+        this.setState({ cover: !this.state.cover })
     };
 
     toggleMarkDone = () => {
-        this.setState({ markDone: !this.state.markDone });
+        this.setState({ markDone: !this.state.markDone })
     };
 
     renderButtons() {
         if (!this.props.showButtons) {
-            return null;
+            return null
         }
 
         return (
@@ -131,7 +131,7 @@ class ThesisList extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     render() {
@@ -193,7 +193,7 @@ ThesisList.propTypes = {
     attachments: arrayOf(attachmentType).isRequired,
     showButtons: bool.isRequired,
     markPrinted: func.isRequired
-};
+}
 
 
-export default ThesisList;
+export default ThesisList

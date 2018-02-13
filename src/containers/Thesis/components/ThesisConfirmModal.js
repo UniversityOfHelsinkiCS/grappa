@@ -1,9 +1,9 @@
-import React from 'react';
-import { bool, func } from 'prop-types';
+import React from 'react'
+import { bool, func } from 'prop-types'
 
 const ThesisConfirmModal = ({ showModal, closeModal, sendSaveThesis }) => {
     if (!showModal) {
-        return (<div />);
+        return (<div />)
     }
     return (
         <div>
@@ -35,12 +35,12 @@ const ThesisConfirmModal = ({ showModal, closeModal, sendSaveThesis }) => {
             </div>
         </div>
     )
-};
+}
 
 ThesisConfirmModal.propTypes = {
     showModal: bool.isRequired,
     closeModal: func.isRequired,
     sendSaveThesis: func.isRequired
-};
+}
 
-export default ThesisConfirmModal;
+export default ThesisConfirmModal

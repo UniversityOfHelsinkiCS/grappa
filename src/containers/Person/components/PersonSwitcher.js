@@ -1,6 +1,6 @@
-import React from 'react';
-import { arrayOf, func } from 'prop-types';
-import { personType } from '../../../util/types';
+import React from 'react'
+import { arrayOf, func } from 'prop-types'
+import { personType } from '../../../util/types'
 
 const PersonSwitcher = ({ persons, onChange }) => (
     <div className="ui segment">
@@ -16,11 +16,11 @@ const PersonSwitcher = ({ persons, onChange }) => (
             ))}
         </select>
     </div>
-);
+)
 
 PersonSwitcher.propTypes = {
     persons: arrayOf(personType).isRequired,
     onChange: func.isRequired
-};
+}
 
-export default PersonSwitcher;
+export default PersonSwitcher

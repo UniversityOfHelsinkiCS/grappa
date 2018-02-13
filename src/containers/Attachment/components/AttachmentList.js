@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { func, arrayOf } from 'prop-types';
-import { attachmentType } from '../../../util/types';
-import { labelToText } from '../../../util/theses';
+import React, { Component } from 'react'
+import { func, arrayOf } from 'prop-types'
+import { attachmentType } from '../../../util/types'
+import { labelToText } from '../../../util/theses'
 
 export default class AttachmentList extends Component {
     download = attachmentId => () => {
-        this.props.downloadAttachment(attachmentId);
+        this.props.downloadAttachment(attachmentId)
     };
 
     delete = attachmentId => () => {
-        this.props.deleteAttachment(attachmentId);
+        this.props.deleteAttachment(attachmentId)
     };
 
     render() {
@@ -58,8 +58,8 @@ AttachmentList.propTypes = {
     downloadAttachment: func.isRequired,
     deleteAttachment: func,
     attachments: arrayOf(attachmentType).isRequired
-};
+}
 
 AttachmentList.defaultProps = {
     deleteAttachment: undefined
-};
+}

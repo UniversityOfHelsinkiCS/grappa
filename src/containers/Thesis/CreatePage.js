@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { arrayOf, func, bool } from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import React, { Component } from 'react'
+import { arrayOf, func, bool } from 'prop-types'
+import { Redirect } from 'react-router-dom'
 
-import { connect } from 'react-redux';
-import { saveThesis } from './services/thesisActions';
-import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types';
+import { connect } from 'react-redux'
+import { saveThesis } from './services/thesisActions'
+import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types'
 
-import ThesisConfirmModal from './components/ThesisConfirmModal';
-import ThesisInformation from './components/ThesisInformation';
-import AttachmentAdder from '../Attachment/components/AttachmentAdder';
-import PersonSelector from '../Person/components/PersonSelector';
-import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker';
-import { emptyThesisData, thesisValidation } from '../../util/theses';
+import ThesisConfirmModal from './components/ThesisConfirmModal'
+import ThesisInformation from './components/ThesisInformation'
+import AttachmentAdder from '../Attachment/components/AttachmentAdder'
+import PersonSelector from '../Person/components/PersonSelector'
+import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
+import { emptyThesisData, thesisValidation } from '../../util/theses'
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             thesis: emptyThesisData,
             attachments: [],
@@ -25,19 +25,19 @@ export class ThesisCreatePage extends Component {
     }
 
     handleSaveThesis = () => {
-        const form = new FormData();
+        const form = new FormData()
         // TODO: If no review & thesis, then don't save
         this.state.attachments.forEach((attachment) => {
             if (!attachment.label) {
-                attachment.label = 'otherFile';
+                attachment.label = 'otherFile'
             }
-            form.append(attachment.label, attachment);
-        });
-        const thesis = Object.assign({}, this.state.thesis);
-        delete thesis.programmeId;
-        thesis.graders = thesis.graders.map(person => person.personId);
-        form.append('json', JSON.stringify(thesis));
-        this.props.saveThesis(form);
+            form.append(attachment.label, attachment)
+        })
+        const thesis = Object.assign({}, this.state.thesis)
+        delete thesis.programmeId
+        thesis.graders = thesis.graders.map(person => person.personId)
+        form.append('json', JSON.stringify(thesis))
+        this.props.saveThesis(form)
     };
 
     validateAttachments = attachments => attachments.find(attachment => attachment.label === 'thesisFile')
@@ -50,24 +50,24 @@ export class ThesisCreatePage extends Component {
                     this.setState({ showModal: !this.state.showModal })
                 }
             })
-            .catch(res => this.setState({ validationErrors: res.errors }));
+            .catch(res => this.setState({ validationErrors: res.errors }))
     };
 
     handleChange = (changedValues) => {
-        const thesis = Object.assign({}, this.state.thesis, changedValues);
+        const thesis = Object.assign({}, this.state.thesis, changedValues)
 
-        this.setState({ thesis });
+        this.setState({ thesis })
         this.validateThesis(thesis)
             .then(() => this.setState({ validationErrors: {} }))
-            .catch(res => this.setState({ validationErrors: res.errors }));
+            .catch(res => this.setState({ validationErrors: res.errors }))
     };
 
     editAttachmentList = (attachments) => {
-        this.setState({ attachments });
+        this.setState({ attachments })
     };
 
     validateThesis(thesis = this.state.thesis) {
-        return thesisValidation.run(thesis);
+        return thesisValidation.run(thesis)
     }
 
     renderGraderSelecter() {
@@ -77,7 +77,7 @@ export class ThesisCreatePage extends Component {
                 && role.personId === person.personId
                 && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
-        );
+        )
         return (
             <div className="field">
                 <label>
@@ -90,12 +90,12 @@ export class ThesisCreatePage extends Component {
                     />
                 </label>
             </div>
-        );
+        )
     }
 
     render() {
         if (this.props.success && this.state.showModal) {
-            return <Redirect to="/" />;
+            return <Redirect to="/" />
         }
 
         return (
@@ -139,9 +139,9 @@ export class ThesisCreatePage extends Component {
 
 const mapDispatchToProps = dispatch => ({
     saveThesis(thesis) {
-        dispatch(saveThesis(thesis));
+        dispatch(saveThesis(thesis))
     }
-});
+})
 
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
@@ -150,7 +150,7 @@ const mapStateToProps = state => ({
     roles: state.roles,
     persons: state.persons,
     success: state.eventMessage.saveThesis && state.eventMessage.saveThesis.active
-});
+})
 
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
@@ -160,10 +160,10 @@ ThesisCreatePage.propTypes = {
     persons: arrayOf(personType).isRequired,
     saveThesis: func.isRequired,
     success: bool
-};
+}
 
 ThesisCreatePage.defaultProps = {
     success: false
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage);
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage)

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { func, object } from 'prop-types';
+import React, { Component } from 'react'
+import { func, object } from 'prop-types'
 
 export default class ThesisInfoForm extends Component {
     field = (label, formName) => (
@@ -33,4 +33,4 @@ export default class ThesisInfoForm extends Component {
 ThesisInfoForm.propTypes = {
     handleChange: func.isRequired,
     requiredFields: object.isRequired
-};
+}

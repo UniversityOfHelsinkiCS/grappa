@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import AssesmentInFinnish from '../../resources/assesmentInFinnish.json';
-import AssesmentInEnglish from '../../resources/assesmentInEnglish.json';
-import AssesmentInSwedish from '../../resources/assesmentInSwedish.json';
+import AssesmentInFinnish from '../../resources/assesmentInFinnish.json'
+import AssesmentInEnglish from '../../resources/assesmentInEnglish.json'
+import AssesmentInSwedish from '../../resources/assesmentInSwedish.json'
 
 class AssesmentOfTheses extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             language: 'en'
-        };
+        }
     }
 
     componentDidMount() {
-        document.title = 'Assesment of Theses';
+        document.title = 'Assesment of Theses'
     }
 
     changeLanguage = (lang) => {
-        this.setState({ language: lang });
+        this.setState({ language: lang })
     };
 
     renderAssesment() {
-        let assesment = AssesmentInFinnish;
+        let assesment = AssesmentInFinnish
         if (this.state.language === 'en') {
-            assesment = AssesmentInEnglish;
+            assesment = AssesmentInEnglish
         } else if (this.state.language === 'swe') {
-            assesment = AssesmentInSwedish;
+            assesment = AssesmentInSwedish
         }
         return assesment.map(all => (
             <div key={all.title}>
@@ -52,7 +52,7 @@ class AssesmentOfTheses extends Component {
                         <h1>Assessment of Master’s theses included in second-cycle degrees</h1>
                     </b>
                 </div>
-            );
+            )
         } else if (this.state.language === 'swe') {
             return (
                 <div>
@@ -63,7 +63,7 @@ class AssesmentOfTheses extends Component {
                         <h1>Bedömningen av pro gradu-avhandlingen som hör till högre högskoleexamen</h1>
                     </b>
                 </div>
-            );
+            )
         }
         return (
             <div>
@@ -74,7 +74,7 @@ class AssesmentOfTheses extends Component {
                     <h1>Ylempään korkeakoulututkintoon sisältyvän pro gradu -tutkielman arviointi</h1>
                 </b>
             </div>
-        );
+        )
     }
 
     render() {
@@ -95,8 +95,8 @@ class AssesmentOfTheses extends Component {
                     {this.renderAssesment()}
                 </div>
             </div >
-        );
+        )
     }
 }
 
-export default AssesmentOfTheses;
+export default AssesmentOfTheses

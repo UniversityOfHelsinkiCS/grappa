@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { emailType, programmeType } from '../../../util/types';
-import ProgrammeSelect from '../../Unit/components/ProgrammeSelect';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { emailType, programmeType } from '../../../util/types'
+import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
 
 export default class EmailDraft extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             editing: false,
             draft: this.props.draft,
             deleteConfirmation: false
-        };
+        }
     }
 
     getProgrammeName(draft) {
         if (draft.programme) {
-            return `${this.props.programmes.filter(field => draft.programme === field.programmeId)[0].name}:`;
+            return `${this.props.programmes.filter(field => draft.programme === field.programmeId)[0].name}:`
         }
-        return '';
+        return ''
     }
 
     saveEdit = () => {
-        this.props.updateDraft(this.state.draft);
+        this.props.updateDraft(this.state.draft)
     };
 
     cancelEdit = () => {
@@ -34,28 +34,28 @@ export default class EmailDraft extends Component {
 
     delete = () => {
         if (this.state.deleteConfirmation) {
-            this.props.sendDeleteRequest(this.props.draft);
-            this.setState({ deleteConfirmation: false });
+            this.props.sendDeleteRequest(this.props.draft)
+            this.setState({ deleteConfirmation: false })
         } else {
-            this.setState({ deleteConfirmation: true });
+            this.setState({ deleteConfirmation: true })
         }
     };
 
     changeTitle = (event) => {
-        const draft = Object.assign({}, this.state.draft);
-        draft.title = event.target.value;
+        const draft = Object.assign({}, this.state.draft)
+        draft.title = event.target.value
         this.setState({ draft })
     };
 
     changeBody = (event) => {
-        const draft = Object.assign({}, this.state.draft);
-        draft.body = event.target.value;
+        const draft = Object.assign({}, this.state.draft)
+        draft.body = event.target.value
         this.setState({ draft })
     };
 
     changeProgramme = (event) => {
-        const draft = Object.assign({}, this.state.draft);
-        draft.programme = Number(event.target.value);
+        const draft = Object.assign({}, this.state.draft)
+        draft.programme = Number(event.target.value)
         this.setState({ draft })
     };
 
@@ -74,19 +74,19 @@ export default class EmailDraft extends Component {
                         {this.state.deleteConfirmation ? 'Click again to confirm' : 'Delete this draft'}
                     </button>
                 </div>
-            );
+            )
         }
         return (
             <div className="field">
                 <button className="ui green button" onClick={this.startEdit}>Edit</button>
             </div>
-        );
+        )
     }
 
     render() {
-        const { editing } = this.state;
+        const { editing } = this.state
         if (!this.state.draft) {
-            return <div />;
+            return <div />
         }
         return (
             <div className="m-bot">
@@ -120,14 +120,14 @@ export default class EmailDraft extends Component {
 
                 {this.renderButtons()}
             </div>
-        );
+        )
     }
 }
 
-const { func } = PropTypes;
+const { func } = PropTypes
 EmailDraft.propTypes = {
     draft: emailType.isRequired,
     updateDraft: func.isRequired,
     sendDeleteRequest: func.isRequired,
     programmes: PropTypes.arrayOf(programmeType).isRequired
-};
+}

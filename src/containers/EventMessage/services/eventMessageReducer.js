@@ -7,7 +7,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Tietojen päivitys onnistui'
                 }
-            });
+            })
         case action.type === 'USER_LOGOUT_SUCCESS':
             return Object.assign({}, state, {
                 logout: {
@@ -15,7 +15,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Uloskirjautuminen onnistui'
                 }
-            });
+            })
         case action.type === 'INVITE_ACCEPT_THESIS_SUCCESS':
             return Object.assign({}, state, {
                 inviteAuthor: {
@@ -23,7 +23,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Thesis linked to user'
                 }
-            });
+            })
         case action.type === 'COUNCILMEETING_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
                 meeting: {
@@ -31,7 +31,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Councilmeeting updated.'
                 }
-            });
+            })
         case action.type === 'PERSON_INVITE_ONE_SUCCESS':
             return Object.assign({}, state, {
                 invitePerson: {
@@ -39,7 +39,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Invite sent.'
                 }
-            });
+            })
         case action.type === 'THESIS_SAVE_ONE_SUCCESS':
             return Object.assign({}, state, {
                 saveThesis: {
@@ -47,7 +47,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Thesis saved.'
                 }
-            });
+            })
         case action.type === 'THESIS_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
                 saveThesis: {
@@ -55,39 +55,39 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Thesis saved.'
                 }
-            });
+            })
         case action.type.includes('_FAILURE'): {
-            const message = {};
+            const message = {}
             message[action.type] = {
                 active: true,
                 type: 'error',
                 text: action.type
-            };
+            }
             return Object.assign({}, state, message)
         }
         case action.type.includes('SAVE_ONE_SUCCESS'): {
-            const message = {};
+            const message = {}
             message[action.type] = {
                 active: true,
                 type: 'success',
                 text: action.type
-            };
+            }
             return Object.assign({}, state, message)
         }
         case action.type.includes('UPDATE_ONE_SUCCESS'): {
-            const message = {};
+            const message = {}
             message[action.type] = {
                 active: true,
                 type: 'success',
                 text: action.type
-            };
+            }
             return Object.assign({}, state, message)
         }
         case action.type === 'EVENT_MESSAGE_CLEAR':
-            return {};
+            return {}
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default reducer;
+export default reducer

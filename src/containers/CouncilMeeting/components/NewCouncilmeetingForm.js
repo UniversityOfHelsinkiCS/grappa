@@ -1,54 +1,54 @@
-import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
-import DatePicker from 'react-datepicker';
-import moment from 'moment-timezone';
-import { programmeType } from '../../../util/types';
-import ProgrammeSelect from '../../Unit/components/ProgrammeSelect';
-import { ProgrammeList } from '../../Unit/components/ProgrammeList';
+import React, { Component } from 'react'
+import { arrayOf, func } from 'prop-types'
+import DatePicker from 'react-datepicker'
+import moment from 'moment-timezone'
+import { programmeType } from '../../../util/types'
+import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
+import { ProgrammeList } from '../../Unit/components/ProgrammeList'
 
-const dateFormat = 'DD.MM.YYYY';
+const dateFormat = 'DD.MM.YYYY'
 const initialState = {
     meeting: {
         instructorDeadlineDays: 8,
         studentDeadlineDays: 6,
         programmes: []
     }
-};
+}
 
 
 class NewCouncilmeetingForm extends Component {
     constructor(props) {
-        super(props);
-        this.state = Object.assign({}, initialState);
+        super(props)
+        this.state = Object.assign({}, initialState)
     }
 
     handleChange = (field, event) => {
-        const meeting = Object.assign({}, this.state.meeting);
-        meeting[field] = event.target.value;
-        this.setState({ meeting });
+        const meeting = Object.assign({}, this.state.meeting)
+        meeting[field] = event.target.value
+        this.setState({ meeting })
     };
 
     handleDateChange = (date) => {
-        const meeting = Object.assign({}, this.state.meeting, { date });
-        this.setState({ meeting });
+        const meeting = Object.assign({}, this.state.meeting, { date })
+        this.setState({ meeting })
     };
 
     handleProgrammeChange = (event) => {
         const programme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
-        );
+        )
         if (programme) {
-            const programmes = [...this.state.meeting.programmes, programme];
-            const meeting = Object.assign({}, this.state.meeting, { programmes });
-            this.setState({ meeting });
+            const programmes = [...this.state.meeting.programmes, programme]
+            const meeting = Object.assign({}, this.state.meeting, { programmes })
+            this.setState({ meeting })
         }
     };
 
     removeSelected = (programmeId) => {
         const programmes = [...this.state.meeting.programmes
-            .filter(programme => programme.programmeId !== programmeId)];
-        const meeting = Object.assign({}, this.state.meeting, { programmes });
+            .filter(programme => programme.programmeId !== programmeId)]
+        const meeting = Object.assign({}, this.state.meeting, { programmes })
 
         this.setState({ meeting })
     };
@@ -56,13 +56,13 @@ class NewCouncilmeetingForm extends Component {
 
     saveMeeting = () => {
         // Since users only think about the difference but we want to save the date.
-        const { date, instructorDeadlineDays, studentDeadlineDays, programmes } = this.state.meeting;
-        const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days');
-        const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days');
-        const programmeIds = programmes.map(programme => programme.programmeId);
+        const { date, instructorDeadlineDays, studentDeadlineDays, programmes } = this.state.meeting
+        const instructorDeadline = moment(date).subtract(instructorDeadlineDays, 'days')
+        const studentDeadline = moment(date).subtract(studentDeadlineDays, 'days')
+        const programmeIds = programmes.map(programme => programme.programmeId)
 
-        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmes: programmeIds });
-        this.setState(Object.assign({}, initialState));
+        this.props.saveMeeting({ date, instructorDeadline, studentDeadline, programmes: programmeIds })
+        this.setState(Object.assign({}, initialState))
     };
 
     render() {
@@ -126,13 +126,13 @@ class NewCouncilmeetingForm extends Component {
                     </button>
                 </div>
             </div>
-        );
+        )
     }
 }
 
 NewCouncilmeetingForm.propTypes = {
     saveMeeting: func.isRequired,
     programmes: arrayOf(programmeType).isRequired
-};
+}
 
-export default NewCouncilmeetingForm;
+export default NewCouncilmeetingForm

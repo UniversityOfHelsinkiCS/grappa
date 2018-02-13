@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { func, bool, string } from 'prop-types';
+import React, { Component } from 'react'
+import { func, bool, string } from 'prop-types'
 
 class AgreementEditModalField extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             content: this.props.content
         }
@@ -14,19 +14,19 @@ class AgreementEditModalField extends Component {
             {
                 content: e.target.value
             }
-        );
-        this.props.onChange(this.props.fieldName, e.target.value);
+        )
+        this.props.onChange(this.props.fieldName, e.target.value)
     }
 
     resetContent = (e) => {
-        const originalContent = this.props.originalContent;
+        const originalContent = this.props.originalContent
         this.setState(
             {
                 content: originalContent
             }
-        );
-        e.preventDefault();
-        this.props.onChange(this.props.fieldName, originalContent);
+        )
+        e.preventDefault()
+        this.props.onChange(this.props.fieldName, originalContent)
     }
 
     render() {
@@ -46,7 +46,7 @@ class AgreementEditModalField extends Component {
                     </div>
                     <button className="ui right floated primary button" onClick={this.resetContent}>reset</button>
                 </div>
-            );
+            )
         }
         return (
             <div className="two fields" style={{ flex: 1 }}>
@@ -62,7 +62,7 @@ class AgreementEditModalField extends Component {
                     <button className="ui primary button" onClick={this.resetContent}>reset</button>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -71,6 +71,6 @@ AgreementEditModalField.propTypes = {
     fieldName: string.isRequired,
     originalContent: string.isRequired,
     onChange: func.isRequired
-};
+}
 
-export default AgreementEditModalField;
+export default AgreementEditModalField

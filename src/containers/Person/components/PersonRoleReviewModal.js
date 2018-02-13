@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { func, object } from 'prop-types';
+import React, { Component } from 'react'
+import { func, object } from 'prop-types'
 
 export default class PersonRoleReviewModal extends Component {
-
     constructor() {
         super()
         this.state = {
@@ -17,11 +16,11 @@ export default class PersonRoleReviewModal extends Component {
     }
 
     saveReview = approved => () => {
-        this.props.sendReview(this.state.statement, approved, this.props.personRole);
+        this.props.sendReview(this.state.statement, approved, this.props.personRole)
     }
 
     handleReviewChange = (event) => {
-        this.setState({ statement: event.target.value });
+        this.setState({ statement: event.target.value })
     }
 
     renderTexts() {
@@ -50,7 +49,7 @@ export default class PersonRoleReviewModal extends Component {
 
     render() {
         if (!this.props.personRole) {
-            return (<div />);
+            return (<div />)
         }
         return (
             <div>
@@ -70,7 +69,7 @@ export default class PersonRoleReviewModal extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -78,4 +77,4 @@ PersonRoleReviewModal.propTypes = {
     sendReview: func.isRequired,
     closeModal: func.isRequired,
     personRole: object.isRequired
-};
+}

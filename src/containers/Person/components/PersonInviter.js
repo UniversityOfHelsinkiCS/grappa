@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
-import { programmeType, roleType } from '../../../util/types';
-import ProgrammeSelect from '../../Unit/components/ProgrammeSelect';
+import React, { Component } from 'react'
+import { arrayOf, func } from 'prop-types'
+import { programmeType, roleType } from '../../../util/types'
+import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
 
 export default class PersonInviter extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             email: undefined,
             role: undefined,
             programmeId: undefined
-        };
+        }
     }
 
     changeValue = type => (event) => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({ [type]: value })
     };
 
     sendEmail = () => {
-        const { programmeId, role, email } = this.state;
+        const { programmeId, role, email } = this.state
         if (programmeId && role && email) {
             this.props.handleSendInvite(programmeId, role, email)
         }
@@ -27,7 +27,7 @@ export default class PersonInviter extends Component {
 
     roleDropdown = () => {
         if (!this.props.roles) {
-            return undefined;
+            return undefined
         }
         return (
             <select className="ui dropdown" onChange={this.changeValue('role')}>
@@ -80,4 +80,4 @@ PersonInviter.propTypes = {
     handleSendInvite: func.isRequired,
     roles: arrayOf(roleType).isRequired,
     programmes: arrayOf(programmeType).isRequired
-};
+}
