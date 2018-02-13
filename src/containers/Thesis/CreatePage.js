@@ -12,6 +12,7 @@ import AttachmentAdder from '../Attachment/components/AttachmentAdder';
 import PersonSelector from '../Person/components/PersonSelector';
 import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker';
 import { emptyThesisData, thesisValidation } from '../../util/theses';
+import LoadingIndicator from '../LoadingIndicator';
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -26,7 +27,6 @@ export class ThesisCreatePage extends Component {
 
     handleSaveThesis = () => {
         const form = new FormData();
-        // TODO: If no review & thesis, then don't save
         this.state.attachments.forEach((attachment) => {
             if (!attachment.label) {
                 attachment.label = 'otherFile';
@@ -37,7 +37,7 @@ export class ThesisCreatePage extends Component {
         delete thesis.programmeId;
         thesis.graders = thesis.graders.map(person => person.personId);
         form.append('json', JSON.stringify(thesis));
-        this.props.saveThesis(form);
+        this.setState({ showModal: !this.state.showModal }, this.props.saveThesis(form))
     };
 
     validateAttachments = attachments => attachments.find(attachment => attachment.label === 'thesisFile')
@@ -100,6 +100,7 @@ export class ThesisCreatePage extends Component {
 
         return (
             <div>
+                <LoadingIndicator type="THESIS_SAVE" />
                 <ThesisConfirmModal
                     sendSaveThesis={this.handleSaveThesis}
                     closeModal={this.toggleModal}

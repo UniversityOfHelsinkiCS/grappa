@@ -83,6 +83,15 @@ const reducer = (state = {}, action) => {
             };
             return Object.assign({}, state, message)
         }
+        case action.type.includes('_ATTEMPT'): {
+            const message = {};
+            message[action.type] = {
+                active: false,
+                type: 'attempt',
+                text: action.type
+            }
+            return Object.assign({}, state, message)
+        }
         case action.type === 'EVENT_MESSAGE_CLEAR':
             return {};
         default:
