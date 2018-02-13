@@ -2,21 +2,21 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 // components
-import UserPage from '../component/User/UserPage';
-import AgreementPage from '../component/Agreement/AgreementPage';
-import PersonRoleManagement from '../component/Person/PersonRoleManagePage';
-import ThesisListPage from '../component/Thesis/ThesisListPage';
-import AssesmentOfTheses from '../component/Thesis/AssesmentOfTheses';
-import ThesisCreate from '../component/Thesis/ThesisCreatePage';
+import UserPage from '../containers/User';
+import AgreementPage from '../containers/Agreement';
+import PersonRoleManagement from '../containers/Person/ManagePage';
+import ThesisListPage from '../containers/Thesis/ListPage';
+import AssesmentOfTheses from '../containers/Thesis/AssesmentOfTheses';
+import ThesisCreate from '../containers/Thesis/CreatePage';
 // import ThesisEdit from '../component/Thesis/ThesisEditPage';
-import ThesisViewPage from '../component/Thesis/ThesisViewPage';
-import ThesisStatistics from '../component/Statistics/ThesisStatisticsPage';
-import CouncilmeetingManage from '../component/CouncilMeeting/CouncilmeetingManagePage';
-import CouncilmeetingView from '../component/CouncilMeeting/CouncilmeetingViewPage';
-import EmailDraftPage from '../component/Email/EmailDraftPage';
-import NotificationsPage from '../component/Notification/NotificationsPage';
-import InvitePage from '../component/Invite/InvitePage';
-import PersonRoleReviewPage from '../component/Person/PersonRoleReviewPage';
+import ThesisViewPage from '../containers/Thesis/ViewPage';
+import ThesisStatistics from '../containers/Statistics';
+import CouncilmeetingManage from '../containers/CouncilMeeting/ManagePage';
+import CouncilmeetingView from '../containers/CouncilMeeting/ViewPage';
+import EmailDraftPage from '../containers/Email/DraftPage';
+import NotificationsPage from '../containers/Notification/NotificationsPage';
+import InvitePage from '../containers/Invite';
+import PersonRoleReviewPage from '../containers/Person/ReviewPage';
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },

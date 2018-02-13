@@ -84,7 +84,7 @@
   },
   "ava": {
     "files": [
-      "test/**/*.spec.js"
+      "src/**/*.spec.js"
     ],
     "source": [
       "src/**/*.{js,jsx}",
@@ -98,28 +98,8 @@
     "require": [
       "babel-register",
       "ignore-styles",
-      "./test/test-env.js"
+      "./src/util/test-env.js"
     ],
     "babel": "inherit"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-runtime"
-    ],
-    "ignore": "test.js",
-    "env": {
-      "development": {
-        "sourceMaps": "inline"
-      }
-    }
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "parserOptions": {
-      "ecmaVersion": 6
-    }
   }
 }
