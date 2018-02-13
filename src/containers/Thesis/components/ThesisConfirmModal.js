@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { bool, func } from 'prop-types';
+import React, { Component } from 'react'
+import { bool, func } from 'prop-types'
 
 class ThesisConfirmModal extends Component {
     state = {
@@ -51,12 +51,12 @@ class ThesisConfirmModal extends Component {
             </div >
         )
     }
-};
+}
 
 ThesisConfirmModal.propTypes = {
     showModal: bool.isRequired,
     closeModal: func.isRequired,
     sendSaveThesis: func.isRequired
-};
+}
 
-export default ThesisConfirmModal;
+export default ThesisConfirmModal

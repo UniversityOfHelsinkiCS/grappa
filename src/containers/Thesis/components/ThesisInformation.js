@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { arrayOf, bool, func, object } from 'prop-types';
+import React, { Component } from 'react'
+import { arrayOf, bool, func, object } from 'prop-types'
 
-import { oldGradeFields, gradeFields } from '../../../util/theses';
-import { thesisType, programmeType, studyfieldType } from '../../../util/types';
+import { oldGradeFields, gradeFields } from '../../../util/theses'
+import { thesisType, programmeType, studyfieldType } from '../../../util/types'
 
 export default class ThesisInformation extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             oldGrading: false
         }
@@ -14,28 +14,28 @@ export default class ThesisInformation extends Component {
 
     componentWillReceiveProps(props) {
         const selectedProgrammeId = props.studyfields
-            .find(studyfield => studyfield.programmeId === props.thesis.studyfieldId);
+            .find(studyfield => studyfield.programmeId === props.thesis.studyfieldId)
 
         if (selectedProgrammeId)
-            props.thesis.programmeId = selectedProgrammeId.programmeId;
+            props.thesis.programmeId = selectedProgrammeId.programmeId
     }
 
     changeField = fieldName => (event) => {
-        this.props.sendChange({[fieldName]: event.target.value});
+        this.props.sendChange({ [fieldName]: event.target.value })
     };
 
     toggleGrading = () => {
         this.props.sendChange({
-            programmeId: "",
-            studyfieldId: "",
-            grade: ""
+            programmeId: '',
+            studyfieldId: '',
+            grade: ''
         })
         this.setState({ oldGrading: !this.state.oldGrading })
     }
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
-        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
-        const inputId = `${fieldName}-field`;
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field'
+        const inputId = `${fieldName}-field`
 
         return (
             <div className={className}>
@@ -52,12 +52,12 @@ export default class ThesisInformation extends Component {
                     />
                 </label>
             </div>
-        );
+        )
     }
 
     renderDropdownField(label, fieldArray, fieldName, disabled) {
-        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field';
-        const inputId = `${fieldName}-field`;
+        const className = this.props.validationErrors[fieldName] ? 'field error' : 'field'
+        const inputId = `${fieldName}-field`
 
         return (
             <div className={className}>
@@ -79,7 +79,7 @@ export default class ThesisInformation extends Component {
                     </select>
                 </label>
             </div>
-        );
+        )
     }
 
     renderToggleUnitsAndGradingButton() {
@@ -101,7 +101,7 @@ export default class ThesisInformation extends Component {
                 <div className="three fields">
                     {this.renderTextField('Email', 'authorEmail', 'Email Address', false, 'email')}
                 </div>
-            );
+            )
         }
 
         return (
@@ -110,7 +110,7 @@ export default class ThesisInformation extends Component {
                 {this.renderTextField('First name', 'authorFirstname', 'Email Address', true, 'email')}
                 {this.renderTextField('Last name', 'authorLastname', 'Email Address', true, 'email')}
             </div>
-        );
+        )
     }
 
     renderThesisInformation() {
@@ -128,7 +128,7 @@ export default class ThesisInformation extends Component {
             .map(studyfield => ({
                 id: studyfield.studyfieldId,
                 name: studyfield.name
-            }));
+            }))
 
         return (
             <div className="ui form">
@@ -152,7 +152,7 @@ export default class ThesisInformation extends Component {
 
                 </div>
             </div>
-        );
+        )
     }
 
     render() {
@@ -163,7 +163,7 @@ export default class ThesisInformation extends Component {
                 <h3 className="ui dividing header">Thesis Information</h3>
                 {this.renderThesisInformation()}
             </div>
-        );
+        )
     }
 }
 
@@ -174,4 +174,4 @@ ThesisInformation.propTypes = {
     studyfields: arrayOf(studyfieldType).isRequired,
     allowEdit: bool.isRequired,
     validationErrors: object.isRequired
-};
+}

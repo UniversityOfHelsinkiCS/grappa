@@ -1,10 +1,10 @@
 const reducer = (state = [], action) => {
     switch (action.type) {
         case 'AVAILABLEROLES_GET_ALL_SUCCESS':
-            return action.response;
+            return action.response
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default reducer;
+export default reducer

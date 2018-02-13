@@ -1,56 +1,56 @@
-import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { Component } from 'react'
+import { arrayOf, func } from 'prop-types'
+import 'react-datepicker/dist/react-datepicker.css'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import {
     getCouncilmeetings,
     saveCouncilmeeting,
     updateCouncilmeeting,
     deleteCouncilmeeting
-} from './services/councilmeetingActions';
-import NewCouncilmeetingForm from './components/NewCouncilmeetingForm';
-import UpdateCouncilmeetingForm from './components/UpdateCouncilmeetingForm';
-import CouncilmeetingList from './components/CouncilmeetingList';
-import { councilmeetingType, programmeType } from '../../util/types';
+} from './services/councilmeetingActions'
+import NewCouncilmeetingForm from './components/NewCouncilmeetingForm'
+import UpdateCouncilmeetingForm from './components/UpdateCouncilmeetingForm'
+import CouncilmeetingList from './components/CouncilmeetingList'
+import { councilmeetingType, programmeType } from '../../util/types'
 
 export class CouncilmeetingManagePage extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             newCouncilmeeting: { instructorDeadlineDays: 8, studentDeadlineDays: 8 },
             updateCouncilmeeting: {},
             showOld: false
-        };
+        }
     }
 
     componentDidMount() {
-        this.props.getCouncilmeetings();
+        this.props.getCouncilmeetings()
     }
 
     handleDateChange = (formname, name) => (date) => {
-        const meeting = this.state[formname];
-        meeting[name] = date;
-        this.setState({ [formname]: meeting });
+        const meeting = this.state[formname]
+        meeting[name] = date
+        this.setState({ [formname]: meeting })
     };
 
    handleChange = (formname, name) => (event) => {
-       const meeting = this.state[formname];
-       meeting[name] = event.target.value;
-       this.setState({ [formname]: meeting });
+       const meeting = this.state[formname]
+       meeting[name] = event.target.value
+       this.setState({ [formname]: meeting })
    };
 
    handleCheckboxChange = () => {
        this.setState({
            shownDates: !this.state.showOld ? this.state.formattedDates : this.state.filteredDates,
            showOld: !this.state.showOld
-       });
+       })
    };
 
    saveMeeting = meeting => this.props.saveCouncilmeeting(meeting);
    updateMeeting = (meeting) => {
-       this.props.updateCouncilmeeting(meeting);
-       this.setState({ updateCouncilmeeting: {} });
+       this.props.updateCouncilmeeting(meeting)
+       this.setState({ updateCouncilmeeting: {} })
    };
    selectMeeting = meeting => this.setState({ updateCouncilmeeting: meeting });
    deleteMeeting = meeting => this.props.deleteCouncilmeeting(meeting.councilmeetingId);
@@ -95,29 +95,29 @@ export class CouncilmeetingManagePage extends Component {
                    </div>
                </div>
            </div>
-       );
+       )
    }
 }
 
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     programmes: state.programmes
-});
+})
 
 const mapDispatchToProps = dispatch => ({
     getCouncilmeetings() {
-        dispatch(getCouncilmeetings());
+        dispatch(getCouncilmeetings())
     },
     saveCouncilmeeting(data) {
-        dispatch(saveCouncilmeeting(data));
+        dispatch(saveCouncilmeeting(data))
     },
     updateCouncilmeeting(data) {
-        dispatch(updateCouncilmeeting(data));
+        dispatch(updateCouncilmeeting(data))
     },
     deleteCouncilmeeting(data) {
-        dispatch(deleteCouncilmeeting(data));
+        dispatch(deleteCouncilmeeting(data))
     }
-});
+})
 
 CouncilmeetingManagePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
@@ -126,6 +126,6 @@ CouncilmeetingManagePage.propTypes = {
     updateCouncilmeeting: func.isRequired,
     deleteCouncilmeeting: func.isRequired,
     programmes: arrayOf(programmeType).isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingManagePage);
+export default connect(mapStateToProps, mapDispatchToProps)(CouncilmeetingManagePage)

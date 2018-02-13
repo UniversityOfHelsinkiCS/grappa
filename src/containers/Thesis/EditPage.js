@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { arrayOf, array, func } from 'prop-types';
-import { connect } from 'react-redux';
-import { updateThesis, deleteThesis } from './services/thesisActions';
-import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/services/attachmentActions';
+import React, { Component } from 'react'
+import { arrayOf, array, func } from 'prop-types'
+import { connect } from 'react-redux'
+import { updateThesis, deleteThesis } from './services/thesisActions'
+import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/services/attachmentActions'
 import {
     agreementType, personType, roleType, programmeType, thesisType, councilmeetingType, studyfieldType
-} from '../../util/types';
+} from '../../util/types'
 
-import ThesisInformation from './components/ThesisInformation';
-import AttachmentAdder from '../Attachment/components/AttachmentAdder';
-import AttachmentList from '../Attachment/components/AttachmentList';
-import PersonSelector from '../Person/components/PersonSelector';
-import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker';
-import { emptyThesisData, formatThesis, thesisValidation } from '../../util/theses';
+import ThesisInformation from './components/ThesisInformation'
+import AttachmentAdder from '../Attachment/components/AttachmentAdder'
+import AttachmentList from '../Attachment/components/AttachmentList'
+import PersonSelector from '../Person/components/PersonSelector'
+import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
+import { emptyThesisData, formatThesis, thesisValidation } from '../../util/theses'
 
 export class ThesisEditPage extends Component {
     /**
@@ -20,7 +20,7 @@ export class ThesisEditPage extends Component {
      *  If allowEdit is true, we are editing a thesis
      */
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             thesis: emptyThesisData,
             attachments: [],
@@ -31,35 +31,35 @@ export class ThesisEditPage extends Component {
     }
 
     componentDidMount() {
-        this.init(this.props);
+        this.init(this.props)
     }
 
     componentWillReceiveProps(newProps) {
-        this.init(newProps);
+        this.init(newProps)
     }
 
     init(props) {
-        const { theses, persons, agreements, roles, studyfields, user } = props;
+        const { theses, persons, agreements, roles, studyfields, user } = props
 
         if (!user.roles)
-            this.setState({ allowEdit: false });
+            this.setState({ allowEdit: false })
 
         if (props.match.params && props.match.params.id) {
-            const thesisId = parseInt(props.match.params.id, 10);
-            const thesis = this.findAndFormatThesis(theses, persons, agreements, roles, thesisId);
+            const thesisId = parseInt(props.match.params.id, 10)
+            const thesis = this.findAndFormatThesis(theses, persons, agreements, roles, thesisId)
 
             if (thesis) {
                 const attachments = props.attachments.filter((attachment) => {
                     const agreement = agreements.find(agreement => agreement.agreementId === attachment.agreementId
-                        && agreement.thesisId === thesis.thesisId);
+                        && agreement.thesisId === thesis.thesisId)
                     return agreement && agreement.agreementId === attachment.agreementId
-                });
+                })
 
                 const selectedProgrammeId = studyfields
-                    .find(studyfield => studyfield.programmeId === thesis.studyfieldId);
+                    .find(studyfield => studyfield.programmeId === thesis.studyfieldId)
 
                 if (selectedProgrammeId)
-                    thesis.programmeId = selectedProgrammeId.programmeId;
+                    thesis.programmeId = selectedProgrammeId.programmeId
 
                 this.setState({ thesis, attachments })
             }
@@ -68,8 +68,8 @@ export class ThesisEditPage extends Component {
 
     findAndFormatThesis = (theses, persons, agreements, roles, thesisId) => {
         try {
-            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId));
-            return formatThesis(thesis, agreements, persons, roles);
+            const thesis = Object.assign({}, theses.find(thesis => thesis.thesisId === thesisId))
+            return formatThesis(thesis, agreements, persons, roles)
         } catch (error) {
             return undefined
         }
@@ -77,44 +77,44 @@ export class ThesisEditPage extends Component {
 
 
     handleSaveThesis = () => {
-        const thesis = Object.assign({}, this.state.thesis);
-        delete thesis.programmeId;
-        thesis.graders = thesis.graders.map(person => person.personId);
-        this.props.updateThesis(thesis);
+        const thesis = Object.assign({}, this.state.thesis)
+        delete thesis.programmeId
+        thesis.graders = thesis.graders.map(person => person.personId)
+        this.props.updateThesis(thesis)
     };
 
     deleteThesis = () => {
-        this.props.deleteThesis(this.state.thesis.id);
+        this.props.deleteThesis(this.state.thesis.id)
     };
 
     toggleEditing = () => {
-        this.setState({ allowEdit: !this.state.allowEdit });
+        this.setState({ allowEdit: !this.state.allowEdit })
     };
 
     handleChange = (changedValues) => {
-        const thesis = Object.assign({}, this.state.thesis, changedValues);
-        this.setState({ thesis });
+        const thesis = Object.assign({}, this.state.thesis, changedValues)
+        this.setState({ thesis })
 
         this.validateThesis(thesis)
             .then(() => this.setState({ thesis, validationErrors: {} }))
-            .catch(res => this.setState({ thesis, validationErrors: res.errors }));
+            .catch(res => this.setState({ thesis, validationErrors: res.errors }))
     };
 
     editAttachmentList = (attachments) => {
-        this.setState({ newAttachments: attachments });
+        this.setState({ newAttachments: attachments })
     };
 
     uploadAttachments = () => {
-        const form = new FormData();
+        const form = new FormData()
         // agreementId needed to link the attachment to.
-        const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId);
-        form.append('json', JSON.stringify(agreement));
+        const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId)
+        form.append('json', JSON.stringify(agreement))
         this.state.newAttachments.forEach((attachment) => {
             if (!attachment.label) {
-                attachment.label = 'otherFile';
+                attachment.label = 'otherFile'
             }
-            form.append(attachment.label, attachment);
-        });
+            form.append(attachment.label, attachment)
+        })
         this.props.createAttachment(form)
     };
 
@@ -123,7 +123,7 @@ export class ThesisEditPage extends Component {
     };
 
     validateThesis(thesis = this.state.thesis) {
-        return thesisValidation.run(thesis);
+        return thesisValidation.run(thesis)
     }
 
     renderGraderSelecter() {
@@ -133,7 +133,7 @@ export class ThesisEditPage extends Component {
                 && role.personId === person.personId
                 && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
-        );
+        )
         return (
             <div className="field">
                 <label>
@@ -147,13 +147,13 @@ export class ThesisEditPage extends Component {
                     />
                 </label>
             </div>
-        );
+        )
     }
 
     render() {
         // Don't render page if thesis with no access is opened.
         if (!this.state.thesis.thesisId) {
-            return null;
+            return null
         }
 
         return (
@@ -192,27 +192,27 @@ export class ThesisEditPage extends Component {
                     Submit
                 </button>
             </div>
-        );
+        )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     updateThesis(thesis) {
-        dispatch(updateThesis(thesis));
+        dispatch(updateThesis(thesis))
     },
     deleteThesis(thesisId) {
-        dispatch(deleteThesis(thesisId));
+        dispatch(deleteThesis(thesisId))
     },
     createAttachment(attachment) {
-        dispatch(createAttachment(attachment));
+        dispatch(createAttachment(attachment))
     },
     deleteAttachment(attachmentId) {
-        dispatch(deleteAttachment(attachmentId));
+        dispatch(deleteAttachment(attachmentId))
     },
     downloadAttachments(attachmentIds) {
-        dispatch(downloadAttachments(attachmentIds));
+        dispatch(downloadAttachments(attachmentIds))
     }
-});
+})
 
 const mapStateToProps = state => ({
     agreements: state.agreements,
@@ -224,7 +224,7 @@ const mapStateToProps = state => ({
     studyfields: state.studyfields,
     theses: state.theses,
     user: state.user
-});
+})
 
 ThesisEditPage.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
@@ -241,6 +241,6 @@ ThesisEditPage.propTypes = {
     createAttachment: func.isRequired,
     deleteAttachment: func.isRequired,
     downloadAttachments: func.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisEditPage)

@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
-import { arrayOf, func, bool } from 'prop-types';
-import { programmeType } from '../../../util/types';
+import React, { Component } from 'react'
+import { arrayOf, func, bool } from 'prop-types'
+import { programmeType } from '../../../util/types'
 
 export default class ProgrammeSelect extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             newUnits: true
         }
     }
 
     swapUnit = (event) => {
-        this.setState({ newUnits: !this.state.newUnits });
-        const newEvent = Object.assign({}, event);
+        this.setState({ newUnits: !this.state.newUnits })
+        const newEvent = Object.assign({}, event)
         this.props.onChange(newEvent)
     };
 
     handleChange = (event) => {
-        this.props.onChange(event);
+        this.props.onChange(event)
 
         if (this.props.clearSelect)
-            this.select.value = null;
+            this.select.value = null
     };
 
     render() {
         const programmes = this.props.programmes.filter(programme =>
             !programme.name.includes('Department') === this.state.newUnits
-        );
+        )
 
         return (
             <div className="ui form">
@@ -55,7 +55,7 @@ export default class ProgrammeSelect extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -63,8 +63,8 @@ ProgrammeSelect.propTypes = {
     onChange: func.isRequired,
     programmes: arrayOf(programmeType).isRequired,
     clearSelect: bool
-};
+}
 
 ProgrammeSelect.defaultProps = {
     clearSelect: false
-};
+}

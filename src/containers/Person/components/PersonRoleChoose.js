@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { arrayOf, func } from 'prop-types';
-import ProgrammeSelect from '../../Unit/components/ProgrammeSelect';
-import { personType, programmeType, roleType } from '../../../util/types';
+import React, { Component } from 'react'
+import { arrayOf, func } from 'prop-types'
+import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
+import { personType, programmeType, roleType } from '../../../util/types'
 
 export default class PersonRoleChoose extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             roleId: undefined,
             programmeId: undefined
-        };
+        }
     }
 
     changeValue = type => (event) => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({ [type]: value })
     };
 
@@ -42,14 +42,14 @@ export default class PersonRoleChoose extends Component {
         const role = {
             roleId: this.state.roleId,
             programmeId: this.state.programmeId
-        };
+        }
         this.props.addRole(role)
     };
 
     removeRole = role => () => this.props.removeRole(role);
 
     render() {
-        const { person, roles } = this.props;
+        const { person, roles } = this.props
         return (
             <div>
                 <h2>{`${person.firstname} ${person.lastname}`}</h2>
@@ -109,4 +109,4 @@ PersonRoleChoose.propTypes = {
     person: personType.isRequired,
     addRole: func.isRequired,
     removeRole: func.isRequired
-};
+}

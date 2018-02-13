@@ -1,29 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
 // nav
-import NavBar from './containers/NavBar';
+import NavBar from './containers/NavBar'
 
-import EventMessageContainer from './containers/EventMessage';
+import EventMessageContainer from './containers/EventMessage'
 
 // util
-import store from './util/store';
+import store from './util/store'
 
 // media
-import './media/index.css';
-import './media/App.css';
+import './media/index.css'
+import './media/App.css'
 
 // routes
-import routes from './util/routes';
+import routes from './util/routes'
 
 const killServiceWorkers = () => {
     if (window.navigator && navigator.serviceWorker) {
         navigator.serviceWorker.getRegistrations()
             .then((registrations) => {
                 registrations.forEach(registration => registration.unregister())
-            });
+            })
     }
 }
 
@@ -42,4 +42,4 @@ ReactDOM.render(
         </Router>
     </Provider>,
     document.getElementById('root')
-);
+)

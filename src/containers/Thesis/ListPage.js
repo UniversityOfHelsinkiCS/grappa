@@ -1,35 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { agreementType, personType, thesisType, attachmentType } from '../../util/types';
+import { agreementType, personType, thesisType, attachmentType } from '../../util/types'
 import { downloadAttachments } from '../Attachment/services/attachmentActions'
 
-import ThesisList from './components/ThesisList';
-import { formatTheses } from '../../util/theses';
+import ThesisList from './components/ThesisList'
+import { formatTheses } from '../../util/theses'
 
 class ThesisListPage extends Component {
     constructor(props) {
-        super(props);
-        const theses = formatTheses(props.theses, props.agreements, props.persons);
+        super(props)
+        const theses = formatTheses(props.theses, props.agreements, props.persons)
         this.state = {
             theses
-        };
+        }
     }
 
     componentDidMount() {
-        document.title = 'Thesis List';
+        document.title = 'Thesis List'
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.theses.length > 0 && newProps.persons.length > 0 && newProps.agreements.length > 0) {
-            const theses = formatTheses(newProps.theses, newProps.agreements, newProps.persons);
+            const theses = formatTheses(newProps.theses, newProps.agreements, newProps.persons)
             this.setState({ theses })
         }
     }
 
     handleDownload = (attachmentIds) => {
-        this.props.downloadAttachments(attachmentIds);
+        this.props.downloadAttachments(attachmentIds)
     };
 
     render() {
@@ -47,7 +47,7 @@ class ThesisListPage extends Component {
                     markPrinted={() => ({})}
                 />
             </div>
-        );
+        )
     }
 }
 
@@ -57,13 +57,13 @@ const mapStateToProps = state => ({
     theses: state.theses,
     agreements: state.agreements,
     attachments: state.attachments
-});
+})
 
 const mapDispatchToProps = dispatch => ({
     downloadAttachments(attachmentIds) {
-        dispatch(downloadAttachments(attachmentIds));
+        dispatch(downloadAttachments(attachmentIds))
     }
-});
+})
 
 ThesisListPage.propTypes = {
     persons: arrayOf(personType).isRequired,
@@ -72,6 +72,6 @@ ThesisListPage.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
     downloadAttachments: func.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisListPage)

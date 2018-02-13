@@ -1,8 +1,8 @@
-import test from 'ava';
-import React from 'react';
-import { mountWithStore, mockStore } from '../../util/testUtils';
+import test from 'ava'
+import React from 'react'
+import { mountWithStore, mockStore } from '../../util/testUtils'
 
-import ThesisListPage from './ListPage';
+import ThesisListPage from './ListPage'
 
 test('Empty thesis list renders without errors', (t) => {
     const store = mockStore({
@@ -13,7 +13,7 @@ test('Empty thesis list renders without errors', (t) => {
         user: {
             roles: []
         }
-    });
+    })
 
-    mountWithStore(<ThesisListPage />, store);
-});
+    mountWithStore(<ThesisListPage />, store)
+})

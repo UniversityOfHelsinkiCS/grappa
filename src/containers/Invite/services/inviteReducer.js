@@ -1,14 +1,14 @@
 const reducer = (state = false, action) => {
     switch (action.type) {
         case 'INVITE_ACCEPT_THESIS_ATTEMPT':
-            return false;
+            return false
         case 'INVITE_ACCEPT_THESIS_SUCCESS':
-            return true;
+            return true
         case 'INVITE_ACCEPT_ROLE_SUCCESS':
-            return true;
+            return true
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default reducer;
+export default reducer

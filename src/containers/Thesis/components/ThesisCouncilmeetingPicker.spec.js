@@ -1,8 +1,8 @@
-import React from 'react';
-import test from 'ava';
-import sinon from 'sinon';
-import { shallow } from 'enzyme';
-import ThesisCouncilmeetingPicker from './ThesisCouncilmeetingPicker';
+import React from 'react'
+import test from 'ava'
+import sinon from 'sinon'
+import { shallow } from 'enzyme'
+import ThesisCouncilmeetingPicker from './ThesisCouncilmeetingPicker'
 
 const meetings = [
     {
@@ -26,10 +26,10 @@ const meetings = [
         programmes: [3],
         councilmeetingId: 3
     }
-];
+]
 
 test('list is empty if programme is not selected', (t) => {
-    const change = sinon.spy();
+    const change = sinon.spy()
 
     const picker = shallow(
         <ThesisCouncilmeetingPicker
@@ -38,7 +38,7 @@ test('list is empty if programme is not selected', (t) => {
             sendChange={change}
             programmes={undefined}
         />
-    );
+    )
 
-    t.is(picker.find('option').length, 1);
-});
+    t.is(picker.find('option').length, 1)
+})

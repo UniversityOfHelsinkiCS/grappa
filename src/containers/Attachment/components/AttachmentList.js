@@ -1,27 +1,15 @@
-import React, { Component } from 'react';
-import { func, arrayOf } from 'prop-types';
-import { attachmentType } from '../../../util/types';
+import React, { Component } from 'react'
+import { func, arrayOf } from 'prop-types'
+import { attachmentType } from '../../../util/types'
+import { labelToText } from '../../../util/theses'
 
 export default class AttachmentList extends Component {
     download = attachmentId => () => {
-        this.props.downloadAttachment(attachmentId);
+        this.props.downloadAttachment(attachmentId)
     };
 
     delete = attachmentId => () => {
-        this.props.deleteAttachment(attachmentId);
-    };
-
-    labelToText = (label) => {
-        switch (label) {
-            case 'otherFile':
-                return 'Other';
-            case 'reviewFile':
-                return 'Review';
-            case 'thesisFile':
-                return 'Thesis';
-            default:
-                return 'Label not handled'
-        }
+        this.props.deleteAttachment(attachmentId)
     };
 
     render() {
@@ -32,14 +20,14 @@ export default class AttachmentList extends Component {
                         <th>Filename</th>
                         <th>Label</th>
                         <th>Download</th>
-                        <th>Delete</th>
+                        {this.props.deleteAttachment ? <th>Delete</th> : null}
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.attachments.map(attachment =>
-                        (<tr key={attachment.attachmentId}>
+                    {this.props.attachments.map(attachment => (
+                        <tr key={attachment.attachmentId}>
                             <td>{attachment.originalname}</td>
-                            <td>{this.labelToText(attachment.label)}</td>
+                            <td>{labelToText(attachment.label)}</td>
                             <td>
                                 <button
                                     className="ui primary button"
@@ -48,14 +36,16 @@ export default class AttachmentList extends Component {
                                     Download
                                 </button>
                             </td>
-                            <td>
-                                <button
-                                    className="ui primary button"
-                                    onClick={this.delete(attachment.attachmentId)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
+                            {this.props.deleteAttachment ? (
+                                <td>
+                                    <button
+                                        className="ui primary button"
+                                        onClick={this.delete(attachment.attachmentId)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            ) : null}
                         </tr>)
                     )}
                 </tbody>
@@ -66,6 +56,10 @@ export default class AttachmentList extends Component {
 
 AttachmentList.propTypes = {
     downloadAttachment: func.isRequired,
-    deleteAttachment: func.isRequired,
+    deleteAttachment: func,
     attachments: arrayOf(attachmentType).isRequired
-};
+}
+
+AttachmentList.defaultProps = {
+    deleteAttachment: undefined
+}

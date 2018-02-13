@@ -1,22 +1,22 @@
-import React from 'react';
-import { array, object, func, string } from 'prop-types';
+import React from 'react'
+import { array, object, func, string } from 'prop-types'
 
 const getThesisCount = gradesByField => Object.keys(gradesByField)
     .map(field => gradesByField[field])
-    .reduce((sum, thesisCount) => sum + thesisCount);
+    .reduce((sum, thesisCount) => sum + thesisCount)
 
-const renderGradeCount = grade => (!grade ? '' : grade);
+const renderGradeCount = grade => (!grade ? '' : grade)
 
 const ThesisProgrammeStatistics = ({
     stats, grades, getStudyfieldName, programmeName, gradeType
 }) => {
-    const countTheses = data => Object.values(data).reduce((sum, val) => sum + val);
+    const countTheses = data => Object.values(data).reduce((sum, val) => sum + val)
     const thesisCount = Object.keys(stats)
         .map(field => countTheses(stats[field][gradeType]))
-        .reduce((sum, val) => sum + val);
+        .reduce((sum, val) => sum + val)
 
     if (thesisCount === 0) {
-        return null;
+        return null
     }
 
     return (
@@ -43,7 +43,7 @@ const ThesisProgrammeStatistics = ({
             </tbody>
         </table>
     )
-};
+}
 
 ThesisProgrammeStatistics.propTypes = {
     stats: object.isRequired,
@@ -51,6 +51,6 @@ ThesisProgrammeStatistics.propTypes = {
     grades: array.isRequired,
     getStudyfieldName: func.isRequired,
     gradeType: string.isRequired
-};
+}
 
-export default ThesisProgrammeStatistics;
+export default ThesisProgrammeStatistics

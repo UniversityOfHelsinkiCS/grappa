@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import EmailDraft from './components/EmailDraft'
 
-import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './services/emailActions';
-import { emailType, programmeType } from '../../util/types';
+import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './services/emailActions'
+import { emailType, programmeType } from '../../util/types'
 
 export class EmailDraftPage extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             newDraftName: ''
-        };
+        }
     }
 
     sortDraftList = draftList => draftList.sort((a, b) => a.id > b.id);
 
     editName = (event) => {
-        this.setState({ newDraftName: event.target.value });
+        this.setState({ newDraftName: event.target.value })
     };
 
 
     handleUpdateDraft = (draft) => {
-        this.props.updateEmailDraft(draft);
+        this.props.updateEmailDraft(draft)
     };
 
     handleDeleteDraft = (draft) => {
-        this.props.deleteEmailDraft(draft);
+        this.props.deleteEmailDraft(draft)
     };
 
     handleAddDraft = () => {
@@ -36,14 +36,14 @@ export class EmailDraftPage extends Component {
                 body: '',
                 title: '',
                 type: this.state.newDraftName
-            };
-            this.props.saveEmailDraft(draft);
-            this.setState({ newDraftName: '' });
+            }
+            this.props.saveEmailDraft(draft)
+            this.setState({ newDraftName: '' })
         }
     };
 
     render() {
-        const drafts = this.props.emails;
+        const drafts = this.props.emails
         return (
             <div className="ui form">
                 <h2 className="ui dividing header">Email drafts</h2>
@@ -73,34 +73,34 @@ export class EmailDraftPage extends Component {
                 </div>
                 <button className="ui green button" onClick={this.handleAddDraft}>Create A New Draft</button>
             </div>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
     emails: state.emails,
     programmes: state.programmes
-});
+})
 
 const mapDispatchToProps = dispatch => ({
     updateEmailDraft(draft) {
-        dispatch(updateEmailDraft(draft));
+        dispatch(updateEmailDraft(draft))
     },
     saveEmailDraft(draft) {
-        dispatch(saveEmailDraft(draft));
+        dispatch(saveEmailDraft(draft))
     },
     deleteEmailDraft(draft) {
-        dispatch(deleteEmailDraft(draft));
+        dispatch(deleteEmailDraft(draft))
     }
-});
+})
 
-const { func, arrayOf } = PropTypes;
+const { func, arrayOf } = PropTypes
 EmailDraftPage.propTypes = {
     updateEmailDraft: func.isRequired,
     deleteEmailDraft: func.isRequired,
     saveEmailDraft: func.isRequired,
     emails: arrayOf(emailType.isRequired).isRequired,
     programmes: arrayOf(programmeType).isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EmailDraftPage)

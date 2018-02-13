@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { login } from './services/userActions';
-import { personType } from '../../util/types';
-import PersonSwitcher from '../Person/components/PersonSwitcher';
-import RoleExplain from '../Role/components/RoleExplain';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { login } from './services/userActions'
+import { personType } from '../../util/types'
+import PersonSwitcher from '../Person/components/PersonSwitcher'
+import RoleExplain from '../Role/components/RoleExplain'
 
 export class UserPage extends Component {
     componentDidMount() {
-        document.title = 'Grappa: Main page';
+        document.title = 'Grappa: Main page'
     }
 
     handleRoleChange = (event) => {
-        if (!event.target.value) return;
-        const shibbolethId = event.target.value;
-        this.props.login(shibbolethId);
+        if (!event.target.value) return
+        const shibbolethId = event.target.value
+        this.props.login(shibbolethId)
     };
 
     render() {
@@ -42,26 +42,26 @@ export class UserPage extends Component {
                     : null}
                 <RoleExplain user={this.props.user} />
             </div>
-        );
+        )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     login(data) {
-        dispatch(login(data));
+        dispatch(login(data))
     }
-});
+})
 
 const mapStateToProps = state => ({
     user: state.user,
     persons: state.persons
-});
+})
 
-const { arrayOf, func } = PropTypes;
+const { arrayOf, func } = PropTypes
 UserPage.propTypes = {
     user: personType.isRequired,
     persons: arrayOf(personType).isRequired,
     login: func.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage)

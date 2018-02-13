@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
-import { arrayOf, func, number } from 'prop-types';
-import { attachmentType } from '../../../util/types';
+import React, { Component } from 'react'
+import Dropzone from 'react-dropzone'
+import { arrayOf, func, number } from 'prop-types'
+import { attachmentType } from '../../../util/types'
 
 
 export default class AttachmentAdder extends Component {
     onDrop = (files) => {
-        const droppedFile = files[0];
+        const droppedFile = files[0]
         if (!this.props.attachments.find(a => a.name === droppedFile.name)) {
-            const selected = [...this.props.attachments, droppedFile];
-            this.props.changeList(selected);
+            const selected = [...this.props.attachments, droppedFile]
+            this.props.changeList(selected)
         }
     }
 
     // TODO: Add/change labels in a better way
     setLabel = attachment => (event) => {
-        attachment.label = event.target.value;
+        attachment.label = event.target.value
     }
 
     getFileList = () => (
@@ -61,8 +61,8 @@ export default class AttachmentAdder extends Component {
     }
 
     removeAttachment = attachment => () => {
-        const removed = this.props.attachments.filter(att => att !== attachment);
-        this.props.changeList(removed);
+        const removed = this.props.attachments.filter(att => att !== attachment)
+        this.props.changeList(removed)
     }
 
     thereIsNoLimit = () => !this.props.limit
@@ -82,9 +82,9 @@ export default class AttachmentAdder extends Component {
                         <br />
                     </div>
                 </Dropzone>
-            );
+            )
         }
-        return <br />;
+        return <br />
     }
 
     render() {
@@ -102,7 +102,7 @@ export default class AttachmentAdder extends Component {
                     </button>
                     : undefined}
             </div>
-        );
+        )
     }
 }
 
@@ -111,7 +111,7 @@ AttachmentAdder.propTypes = {
     changeList: func.isRequired,
     uploadAttachments: func,
     limit: number
-};
+}
 
 AttachmentAdder.defaultProps = {
     uploadAttachments: undefined,

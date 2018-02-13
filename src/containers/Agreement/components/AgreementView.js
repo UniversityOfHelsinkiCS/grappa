@@ -1,51 +1,51 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { agreementType, personType, thesisType } from '../../../util/types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { agreementType, personType, thesisType } from '../../../util/types'
 
 class AgreementView extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             showAgreements: []
         }
     }
 
     getAuthorName(agreement) {
-        const author = this.props.persons.find(person => person.personId === agreement.authorId);
-        return author ? `${author.firstname} ${author.lastname}` : '';
+        const author = this.props.persons.find(person => person.personId === agreement.authorId)
+        return author ? `${author.firstname} ${author.lastname}` : ''
     }
 
     getSupervisor(agreement) {
-        const supervisor = this.props.persons.find(person => person.personId === agreement.responsibleSupervisorId);
+        const supervisor = this.props.persons.find(person => person.personId === agreement.responsibleSupervisorId)
         if (supervisor)
-            return `${supervisor.firstname} ${supervisor.lastname}`;
+            return `${supervisor.firstname} ${supervisor.lastname}`
 
-        return '';
+        return ''
     }
 
     getThesis(agreement) {
-        return this.props.theses.find(thesis => thesis.thesisId === agreement.thesisId) || {};
+        return this.props.theses.find(thesis => thesis.thesisId === agreement.thesisId) || {}
     }
 
     handleEdit= (e, agreement) => {
-        this.props.handleEditAgreement(agreement);
+        this.props.handleEditAgreement(agreement)
     }
 
     changeShowing(e, agreement) {
-        const index = this.props.agreements.findIndex((x => x.agreementId === agreement.agreementId));
-        const newState = Object.assign({}, this.state);
+        const index = this.props.agreements.findIndex((x => x.agreementId === agreement.agreementId))
+        const newState = Object.assign({}, this.state)
         if (newState.showAgreements[index]) { // can't use x = !x since x is at first undefined
-            newState.showAgreements[index] = false; // if is visible, hide
+            newState.showAgreements[index] = false // if is visible, hide
         } else {
-            newState.showAgreements[index] = true;
+            newState.showAgreements[index] = true
         }
         this.setState({
             showAgreements: newState.showAgreements
-        });
+        })
     }
 
     renderList() {
-        const data = this.props.agreements;
+        const data = this.props.agreements
         return (
             <div>
                 {data.map(agreement => (
@@ -74,11 +74,11 @@ class AgreementView extends Component {
                     </div>
                 ))}
             </div>
-        );
+        )
     }
 
     renderOne(agreement) {
-        const index = this.props.agreements.findIndex(x => x.agreementId === agreement.agreementId);
+        const index = this.props.agreements.findIndex(x => x.agreementId === agreement.agreementId)
         return (
             <div>
                 {this.state.showAgreements[index] ?
@@ -135,23 +135,23 @@ class AgreementView extends Component {
                     </div>
                     : undefined}
             </div>
-        );
+        )
     }
 
     render() {
         if (this.props.agreements.length > 0) return <div>{this.renderList()}</div>
         return (
             <div>{this.renderOne(this.props.agreements)}</div>
-        );
+        )
     }
 }
 
-const { arrayOf, func } = PropTypes;
+const { arrayOf, func } = PropTypes
 AgreementView.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
     persons: arrayOf(personType).isRequired,
     theses: arrayOf(thesisType).isRequired,
     handleEditAgreement: func.isRequired
-};
+}
 
-export default AgreementView;
+export default AgreementView
