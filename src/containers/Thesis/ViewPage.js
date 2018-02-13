@@ -11,6 +11,9 @@ import { downloadAttachments } from '../Attachment/services/attachmentActions'
 import AttachmentList from '../Attachment/components/AttachmentList'
 import { updateThesis } from './services/thesisActions'
 import TextEdit from './components/edit/TextEdit'
+import ThesisFieldEdit from './components/edit/ThesisFieldEdit'
+import PersonSelector from '../Person/components/PersonSelector'
+import { getAgreements } from '../Agreement/services/agreementActions'
 
 class ThesisViewPage extends Component {
     constructor(props) {
@@ -67,6 +70,17 @@ class ThesisViewPage extends Component {
         thesis[field] = this.state.value
         this.props.saveThesis(thesis)
         this.setState({ open: '', value: '' })
+    }
+
+    updateGraders = graders => this.setState({ graders })
+
+    saveGraders = () => {
+        this.props.saveThesis({
+            thesisId: this.state.thesis.thesisId,
+            graders: this.state.graders.map(grader => grader.personId)
+        })
+        this.setState({ open: '', value: '' })
+        this.props.getAgreements();
     }
 
     render() {
@@ -141,9 +155,17 @@ class ThesisViewPage extends Component {
                     <GridColumn />
                     {allowEdit ? (
                         <GridColumn>
-                            <Button>Edit</Button>
+                            <Button onClick={() => this.toggleEditField('graders')}>Edit</Button>
                         </GridColumn>
                     ) : null}
+                    <ThesisFieldEdit active={this.state.open === 'graders'}>
+                        <Button onClick={this.saveGraders} >Save</Button>
+                        <PersonSelector
+                            persons={this.props.persons}
+                            selected={graders}
+                            changeList={this.updateGraders}
+                        />
+                    </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
@@ -203,7 +225,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     downloadAttachments: attachmentId => dispatch(downloadAttachments([attachmentId])),
-    saveThesis: thesis => dispatch(updateThesis(thesis))
+    saveThesis: thesis => dispatch(updateThesis(thesis)),
+    getAgreements: () => dispatch(getAgreements())
 })
 
 ThesisViewPage.propTypes = {
@@ -218,7 +241,8 @@ ThesisViewPage.propTypes = {
     attachments: arrayOf(attachmentType).isRequired,
     match: object.isRequired,
     downloadAttachments: func.isRequired,
-    saveThesis: func.isRequired
+    saveThesis: func.isRequired,
+    getAgreements: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisViewPage)
