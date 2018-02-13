@@ -129,7 +129,8 @@ export async function updateThesis(req, res) {
     thesis = await thesisService.updateThesis(thesis)
 
     // TODO: support multiple agreements on one thesis
-    await updateGraders(updatedFields.graders, agreements[0])
+    if (updatedFields.graders)
+        await updateGraders(updatedFields.graders, agreements[0])
 
     const roles = await roleService.getRolesForAllPersons()
     const responseObject = { thesis, roles }
