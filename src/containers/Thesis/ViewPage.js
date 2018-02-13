@@ -7,27 +7,39 @@ import {
     agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
     thesisType
 } from '../../util/types'
-import { downloadAttachments } from '../Attachment/services/attachmentActions'
+import { createAttachment, downloadAttachments } from '../Attachment/services/attachmentActions'
 import AttachmentList from '../Attachment/components/AttachmentList'
 import { updateThesis } from './services/thesisActions'
 import TextEdit from './components/edit/TextEdit'
 import ThesisFieldEdit from './components/edit/ThesisFieldEdit'
-import PersonSelector from '../Person/components/PersonSelector'
 import { getAgreements } from '../Agreement/services/agreementActions'
+import ThesisValueField from './components/edit/ThesisValueField'
+import EditButton from './components/edit/EditButton'
+import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
+import AttachmentAdder from '../Attachment/components/AttachmentAdder'
+import GraderSelector from './components/edit/GraderSelector'
 
 class ThesisViewPage extends Component {
     constructor(props) {
         super(props)
-        this.state = { value: '', open: '' }
+        this.state = { value: '', open: '', newAttachments: [] }
+    }
+
+    componentDidMount() {
+        this.updateState(this.props)
     }
 
     componentWillReceiveProps(newProps) {
+        this.updateState(newProps)
+    }
+
+    updateState(newProps) {
         const editRoles = ['manager', 'admin']
         const {
             theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
         } = newProps
         const hasAllDataLoaded = [
-            theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
+            theses, agreements, persons, studyfields, programmes, roles, councilMeetings
         ].every(arr => arr.length > 0)
 
         if (!hasAllDataLoaded)
@@ -46,7 +58,7 @@ class ThesisViewPage extends Component {
         const councilMeeting = councilMeetings
             .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId)
         const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId)
-        const allowEdit = this.props.user.roles.find(role => editRoles.includes(role.role))
+        const allowEdit = !!this.props.user.roles.find(role => editRoles.includes(role.role))
 
         this.setState({
             thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments, allowEdit
@@ -57,7 +69,8 @@ class ThesisViewPage extends Component {
         if (this.state.open === fieldName) {
             this.setState({ open: '' })
         } else {
-            this.setState({ open: fieldName, value: this.state.thesis[fieldName] })
+            const value = this.state.thesis[fieldName]
+            this.setState({ open: fieldName, value: value || '' })
         }
     }
 
@@ -72,7 +85,31 @@ class ThesisViewPage extends Component {
         this.setState({ open: '', value: '' })
     }
 
+    saveMeeting = (meeting) => {
+        const councilmeetingId = Number(meeting.councilmeetingId)
+        this.props.saveThesis({ thesisId: this.state.thesis.thesisId, councilmeetingId })
+        this.setState({ open: '', value: '' })
+    }
+
     updateGraders = graders => this.setState({ graders })
+
+    updateAttachments = attachments => this.setState({ newAttachments: attachments })
+
+    uploadAttachments = () => {
+        const form = new FormData()
+        // agreementId needed to link the attachment to.
+        const agreement = this.props.agreements.find(agreement => agreement.thesisId === this.state.thesis.thesisId)
+        form.append('json', JSON.stringify(agreement))
+        this.state.newAttachments.forEach((attachment) => {
+            if (!attachment.label) {
+                attachment.label = 'otherFile'
+            }
+            form.append(attachment.label, attachment)
+        })
+
+        this.props.createAttachment(form)
+        this.setState({ open: '', newAttachments: [] })
+    }
 
     saveGraders = () => {
         this.props.saveThesis({
@@ -80,7 +117,7 @@ class ThesisViewPage extends Component {
             graders: this.state.graders.map(grader => grader.personId)
         })
         this.setState({ open: '', value: '' })
-        this.props.getAgreements();
+        this.props.getAgreements()
     }
 
     render() {
@@ -95,22 +132,14 @@ class ThesisViewPage extends Component {
         return (
             <Grid columns={3}>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Author</h3>
+                    <ThesisValueField title="Author">
                         {author ? `${author.firstname} ${author.lastname}` : agreement.email}
-                    </GridColumn>
+                    </ThesisValueField>
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Thesis title</h3>
-                        {thesis.title}
-                    </GridColumn>
+                    <ThesisValueField title="Thesis title">{thesis.title}</ThesisValueField>
                     <GridColumn />
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button onClick={() => this.toggleEditField('title')}>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <EditButton toggle={() => this.toggleEditField('title')} allowEdit={allowEdit} />
                     <TextEdit
                         active={this.state.open === 'title'}
                         value={this.state.value}
@@ -119,65 +148,41 @@ class ThesisViewPage extends Component {
                     />
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Unit</h3>
-                        {programmeData.programme.name}
-                    </GridColumn>
-                    <GridColumn>
-                        <h3 className="ui sub header">Studyfield</h3>
-                        {programmeData.studyfield.name}
-                    </GridColumn>
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <ThesisValueField title="Unit">{programmeData.programme.name}</ThesisValueField>
+                    <ThesisValueField title="Studyfield">{programmeData.studyfield.name}</ThesisValueField>
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Grade</h3>
-                        {thesis.grade}
-                    </GridColumn>
+                    <ThesisValueField title="Grade">{thesis.grade}</ThesisValueField>
                     <GridColumn />
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <EditButton toggle={() => this.toggleEditField('grade')} allowEdit={allowEdit} />
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Graders</h3>
+                    <ThesisValueField title="Graders">
                         {graders.map(grader => (
                             <div key={grader.personId}>{grader.firstname} {grader.lastname}</div>
                         ))}
-                    </GridColumn>
+                    </ThesisValueField>
                     <GridColumn />
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button onClick={() => this.toggleEditField('graders')}>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <EditButton toggle={() => this.toggleEditField('graders')} allowEdit={allowEdit} />
                     <ThesisFieldEdit active={this.state.open === 'graders'}>
                         <Button onClick={this.saveGraders} >Save</Button>
-                        <PersonSelector
+                        <GraderSelector
+                            graders={graders}
+                            validationErrors={{}}
+                            allowEdit={allowEdit}
                             persons={this.props.persons}
-                            selected={graders}
-                            changeList={this.updateGraders}
+                            programmeId={programmeData.programme.programmeId}
+                            roles={this.props.roles}
+                            change={this.updateGraders}
                         />
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Urkund link</h3>
+                    <ThesisValueField title="Urkund link">
                         <a href={thesis.urkund} target="new">{thesis.urkund}</a>
-                    </GridColumn>
+                    </ThesisValueField>
                     <GridColumn />
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button onClick={() => this.toggleEditField('urkund')}>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <EditButton toggle={() => this.toggleEditField('urkund')} allowEdit={allowEdit} />
                     <TextEdit
                         active={this.state.open === 'urkund'}
                         value={this.state.value}
@@ -186,25 +191,35 @@ class ThesisViewPage extends Component {
                     />
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
-                        <h3 className="ui sub header">Councilmeeting</h3>
+                    <ThesisValueField title="Council meeting">
                         {councilMeeting ? moment(councilMeeting.date).format('DD.MM.YYYY') : 'Not selected'}
-                    </GridColumn>
+                    </ThesisValueField>
                     <GridColumn />
-                    {allowEdit ? (
-                        <GridColumn>
-                            <Button>Edit</Button>
-                        </GridColumn>
-                    ) : null}
+                    <EditButton toggle={() => this.toggleEditField('councilmeeting')} allowEdit={allowEdit} />
+                    <ThesisFieldEdit active={this.state.open === 'councilmeeting'}>
+                        <ThesisCouncilmeetingPicker
+                            councilmeetings={this.props.councilMeetings}
+                            sendChange={this.saveMeeting}
+                            programmes={this.props.programmes}
+                        />
+                    </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
-                    <GridColumn width={9}>
+                    <GridColumn width={10}>
                         <h3 className="ui sub header">Attachments</h3>
                         <AttachmentList
                             downloadAttachment={this.props.downloadAttachments}
                             attachments={thesisAttachments}
                         />
                     </GridColumn>
+                    <EditButton toggle={() => this.toggleEditField('attachments')} allowEdit={allowEdit} />
+                    <ThesisFieldEdit active={this.state.open === 'attachments'}>
+                        <AttachmentAdder
+                            attachments={this.state.newAttachments}
+                            changeList={this.updateAttachments}
+                            uploadAttachments={this.uploadAttachments}
+                        />
+                    </ThesisFieldEdit>
                 </GridRow>
             </Grid>
         )
@@ -226,7 +241,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     downloadAttachments: attachmentId => dispatch(downloadAttachments([attachmentId])),
     saveThesis: thesis => dispatch(updateThesis(thesis)),
-    getAgreements: () => dispatch(getAgreements())
+    getAgreements: () => dispatch(getAgreements()),
+    createAttachment: attachment => dispatch(createAttachment(attachment))
 })
 
 ThesisViewPage.propTypes = {
@@ -242,7 +258,8 @@ ThesisViewPage.propTypes = {
     match: object.isRequired,
     downloadAttachments: func.isRequired,
     saveThesis: func.isRequired,
-    getAgreements: func.isRequired
+    getAgreements: func.isRequired,
+    createAttachment: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisViewPage)
