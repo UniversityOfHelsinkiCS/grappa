@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, object } from 'prop-types';
+import { arrayOf, func, object } from 'prop-types';
 import { Grid, GridColumn, GridRow } from 'semantic-ui-react';
 import moment from 'moment';
 import {
-    agreementType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
+    agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
     thesisType
 } from '../../util/types';
+import { downloadAttachments } from '../Attachment/services/attachmentActions';
+import AttachmentList from '../Attachment/components/AttachmentList';
 
 class ThesisViewPage extends Component {
-
     getThesisData() {
-        const { theses, agreements, persons, studyfields, programmes, roles, councilMeetings } = this.props;
-        const noData = arr => arr.length === 0;
+        const {
+            theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
+        } = this.props;
+        const hasAllDataLoaded = [
+            theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments
+        ].every(arr => arr.length > 0);
 
-        if (noData(theses) || noData(agreements) || noData(studyfields) || noData(programmes)
-            || noData(roles) || noData(councilMeetings))
+        if (!hasAllDataLoaded)
             return {};
 
         const selectedId = Number(this.props.match.params.id);
-        const selectedThesis = theses.find(thesis => thesis.thesisId === selectedId);
+        const thesis = theses.find(t => t.thesisId === selectedId);
         const agreement = agreements.find(agr => agr.thesisId === selectedId);
         const author = (agreement) ? persons.find(person => person.personId === agreement.authorId) : null;
         const studyfield = studyfields.find(field => field.studyfieldId === agreement.studyfieldId);
@@ -29,16 +33,17 @@ class ThesisViewPage extends Component {
             .filter(role => role.agreementId === agreement.agreementId)
             .map(role => persons.find(person => person.personId === role.personId));
         const councilMeeting = councilMeetings
-            .find(meeting => meeting.councilmeetingId === selectedThesis.councilmeetingId);
+            .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId);
+        const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId);
 
-        return { thesis: selectedThesis, agreement, author, programmeData, graders, councilMeeting };
+        return { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments };
     }
 
     render() {
         const data = this.getThesisData();
-        console.log(data);
+        const { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments } = data;
 
-        if (!data.thesis || !data.agreement)
+        if (!thesis || !agreement)
             return null;
 
         return (
@@ -46,35 +51,35 @@ class ThesisViewPage extends Component {
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Author</h3>
-                        {data.author ? `${data.author.firstname} ${data.author.lastname}` : data.agreement.email}
+                        {author ? `${author.firstname} ${author.lastname}` : agreement.email}
                     </GridColumn>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Thesis title</h3>
-                        {data.thesis.title}
+                        {thesis.title}
                     </GridColumn>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Unit</h3>
-                        {data.programmeData.programme.name}
+                        {programmeData.programme.name}
                     </GridColumn>
                     <GridColumn>
                         <h3 className="ui sub header">Studyfield</h3>
-                        {data.programmeData.studyfield.name}
+                        {programmeData.studyfield.name}
                     </GridColumn>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Grade</h3>
-                        {data.thesis.grade}
+                        {thesis.grade}
                     </GridColumn>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Graders</h3>
-                        {data.graders.map(grader => (
+                        {graders.map(grader => (
                             <div key={grader.personId}>{grader.firstname} {grader.lastname}</div>
                         ))}
                     </GridColumn>
@@ -82,18 +87,22 @@ class ThesisViewPage extends Component {
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Urkund link</h3>
-                        <a href={data.thesis.urkund} target="new">{data.thesis.urkund}</a>
+                        <a href={thesis.urkund} target="new">{thesis.urkund}</a>
                     </GridColumn>
                 </GridRow>
                 <GridRow>
                     <GridColumn>
                         <h3 className="ui sub header">Councilmeeting</h3>
-                        {moment(data.councilMeeting.date).format('DD.MM.YYYY')}
+                        {councilMeeting ? moment(councilMeeting.date).format('DD.MM.YYYY') : 'Not selected'}
                     </GridColumn>
                 </GridRow>
                 <GridRow>
-                    <GridColumn>
+                    <GridColumn width={9}>
                         <h3 className="ui sub header">Attachments</h3>
+                        <AttachmentList
+                            downloadAttachment={this.props.downloadAttachments}
+                            attachments={thesisAttachments}
+                        />
                     </GridColumn>
                 </GridRow>
             </Grid>
@@ -101,14 +110,19 @@ class ThesisViewPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     theses: state.theses,
     agreements: state.agreements,
     persons: state.persons,
     studyfields: state.studyfields,
     programmes: state.programmes,
     roles: state.roles,
-    councilMeetings: state.councilmeetings
+    councilMeetings: state.councilmeetings,
+    attachments: state.attachments
+});
+
+const mapDispatchToProps = dispatch => ({
+    downloadAttachments: attachmentId => dispatch(downloadAttachments([attachmentId]))
 });
 
 ThesisViewPage.propTypes = {
@@ -119,7 +133,9 @@ ThesisViewPage.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
     roles: arrayOf(roleType).isRequired,
     councilMeetings: arrayOf(councilmeetingType).isRequired,
-    match: object.isRequired
+    attachments: arrayOf(attachmentType).isRequired,
+    match: object.isRequired,
+    downloadAttachments: func.isRequired
 };
 
-export default connect(mapStateToProps)(ThesisViewPage);
+export default connect(mapStateToProps, mapDispatchToProps())(ThesisViewPage);

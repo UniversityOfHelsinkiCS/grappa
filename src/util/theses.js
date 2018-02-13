@@ -84,3 +84,16 @@ export const emptyThesisData = {
         printReminder: undefined
     }
 };
+
+export const labelToText = (label) => {
+    switch (label) {
+        case 'otherFile':
+            return 'Other';
+        case 'reviewFile':
+            return 'Review';
+        case 'thesisFile':
+            return 'Thesis';
+        default:
+            return 'Label not handled'
+    }
+};

@@ -9,7 +9,7 @@ import ThesisListPage from '../component/Thesis/ThesisListPage';
 import AssesmentOfTheses from '../component/Thesis/AssesmentOfTheses';
 import ThesisCreate from '../component/Thesis/ThesisCreatePage';
 // import ThesisEdit from '../component/Thesis/ThesisEditPage';
-import ThesisViewPage from '../containers/thesis/ThesisViewPage';
+import ThesisViewPage from '../component/Thesis/ThesisViewPage';
 import ThesisStatistics from '../component/Statistics/ThesisStatisticsPage';
 import CouncilmeetingManage from '../component/CouncilMeeting/CouncilmeetingManagePage';
 import CouncilmeetingView from '../component/CouncilMeeting/CouncilmeetingViewPage';
@@ -37,7 +37,7 @@ export const paths = {
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
     notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' },
     invite: { path: '/invite/:type/:token', component: InvitePage }
-}
+};
 
 export default () => (
     <Switch>
