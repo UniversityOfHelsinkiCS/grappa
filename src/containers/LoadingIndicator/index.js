@@ -12,7 +12,7 @@ export class LoadingIndicator extends Component {
         const { messages } = newProps
         const { type } = this.props
         if (messages && messages.length > 0) {
-            const messagesWithType = messages.filter(message => message.text.includes(type))
+            const messagesWithType = messages.filter(message => message.key.includes(type))
             if (messagesWithType.find(message => message.type !== 'attempt')) {
                 if (loading) {
                     this.setState({ loading: false })

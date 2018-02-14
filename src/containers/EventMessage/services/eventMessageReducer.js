@@ -2,7 +2,7 @@ const reducer = (state = {}, action) => {
     switch (true) {
         case action.type === 'ROLE_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                roleUpdated: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Tietojen päivitys onnistui'
@@ -10,7 +10,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'USER_LOGOUT_SUCCESS':
             return Object.assign({}, state, {
-                logout: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Uloskirjautuminen onnistui'
@@ -18,7 +18,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'INVITE_ACCEPT_THESIS_SUCCESS':
             return Object.assign({}, state, {
-                inviteAuthor: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Thesis linked to user'
@@ -26,7 +26,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'COUNCILMEETING_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                meeting: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Councilmeeting updated.'
@@ -34,7 +34,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'PERSON_INVITE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                invitePerson: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Invite sent.'
@@ -42,7 +42,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'THESIS_SAVE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                saveThesis: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Thesis saved.'
@@ -50,7 +50,7 @@ const reducer = (state = {}, action) => {
             })
         case action.type === 'THESIS_UPDATE_ONE_SUCCESS':
             return Object.assign({}, state, {
-                saveThesis: {
+                [action.type]: {
                     active: true,
                     type: 'success',
                     text: 'Thesis saved.'
