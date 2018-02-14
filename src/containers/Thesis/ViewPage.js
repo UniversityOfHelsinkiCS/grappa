@@ -18,6 +18,7 @@ import EditButton from './components/edit/EditButton'
 import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
 import GraderSelector from './components/edit/GraderSelector'
+import { gradeFields, oldGradeFields } from '../../util/theses'
 
 class ThesisViewPage extends Component {
     constructor(props) {
@@ -155,6 +156,17 @@ class ThesisViewPage extends Component {
                     <ThesisValueField title="Grade">{thesis.grade}</ThesisValueField>
                     <GridColumn />
                     <EditButton toggle={() => this.toggleEditField('grade')} allowEdit={allowEdit} />
+                    <ThesisFieldEdit active={this.state.open === 'grade'}>
+                        <select value={this.state.value} onChange={this.handleChange}>
+                            {programmeData.programme.name.includes('Department') ?
+                                oldGradeFields.map(grade => (
+                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                )) : gradeFields.map(grade => (
+                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                ))}
+                        </select>
+                        <Button onClick={this.saveChanges}>Save</Button>
+                    </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Graders">
