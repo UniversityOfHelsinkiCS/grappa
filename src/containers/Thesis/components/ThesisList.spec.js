@@ -53,23 +53,21 @@ test('should have 2 tr elements', (t) => {
 })
 
 test('theses can be filtered', (t) => {
-    const component = mount(
-        <MemoryRouter>
-            <ThesisList
-                theses={theses}
-                downloadSelected={() => ({})}
-                markPrinted={() => ({})}
-                agreements={[]}
-                attachments={[]}
-                showButtons
-            />
-        </MemoryRouter>)
+    const component = shallow(
+        <ThesisList
+            theses={theses}
+            downloadSelected={() => ({})}
+            markPrinted={() => ({})}
+            agreements={[]}
+            attachments={[]}
+            showButtons
+        />)
 
     component.find('.prompt').simulate('change', { target: { value: 'kaksi' } })
-    t.is(component.find('a[href="/thesis/2"]').length, 1)
-    t.is(component.find('a[href="/thesis/1"]').length, 0)
+    t.is(component.state().filteredTheses.length, 1)
+    t.is(component.state().filteredTheses[0].thesisId, 2)
     component.find('.prompt').simulate('change', { target: { value: '' } })
-    t.is(component.find('a[href="/thesis/1"]').length, 1)
+    t.is(component.state().filteredTheses.length, 2)
 })
 
 test('theses can be selected to download', (t) => {
@@ -88,17 +86,16 @@ test('theses can be selected to download', (t) => {
     ]
 
     const download = sinon.spy()
-    const component = mount(
-        <MemoryRouter>
-            <ThesisList
-                theses={theses}
-                downloadSelected={download}
-                markPrinted={() => ({})}
-                agreements={agreements}
-                attachments={attachments}
-                showButtons
-            />
-        </MemoryRouter>)
+    const component = shallow(
+        <ThesisList
+            theses={theses}
+            downloadSelected={download}
+            markPrinted={() => ({})}
+            agreements={agreements}
+            attachments={attachments}
+            showButtons
+        />
+    )
 
     component.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } })
     component.find('.orange').simulate('click')
