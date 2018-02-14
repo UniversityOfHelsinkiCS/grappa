@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import { councilmeetingType, programmeType } from '../../../util/types'
 import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
@@ -87,7 +87,6 @@ class UpdateCouncilmeetingForm extends Component {
                                 dateFormat={dateFormat}
                                 selected={moment(meetingDate)}
                                 onChange={date => this.handleDateChange(date, 'date')}
-                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                         <div className="field">
@@ -97,7 +96,6 @@ class UpdateCouncilmeetingForm extends Component {
                                 dateFormat={dateFormat}
                                 selected={moment(this.state.meeting.instructorDeadline)}
                                 onChange={date => this.handleDateChange(date, 'instructorDeadline')}
-                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                         <div className="field">
@@ -107,7 +105,6 @@ class UpdateCouncilmeetingForm extends Component {
                                 dateFormat={dateFormat}
                                 selected={moment(this.state.meeting.studentDeadline)}
                                 onChange={date => this.handleDateChange(date, 'studentDeadline')}
-                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                     </div>
