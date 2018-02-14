@@ -7,7 +7,7 @@ import {
     agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
     thesisType
 } from '../../util/types'
-import { createAttachment, downloadAttachments } from '../Attachment/services/attachmentActions'
+import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/services/attachmentActions'
 import AttachmentList from '../Attachment/components/AttachmentList'
 import { updateThesis } from './services/thesisActions'
 import TextEdit from './components/edit/TextEdit'
@@ -263,6 +263,7 @@ class ThesisViewPage extends Component {
                         <h3 className="ui sub header">Attachments</h3>
                         <AttachmentList
                             downloadAttachment={this.props.downloadAttachments}
+                            deleteAttachment={allowEdit ? this.props.deleteAttachment : null}
                             attachments={thesisAttachments}
                         />
                     </GridColumn>
@@ -296,7 +297,8 @@ const mapDispatchToProps = dispatch => ({
     downloadAttachments: attachmentId => dispatch(downloadAttachments([attachmentId])),
     saveThesis: thesis => dispatch(updateThesis(thesis)),
     getAgreements: () => dispatch(getAgreements()),
-    createAttachment: attachment => dispatch(createAttachment(attachment))
+    createAttachment: attachment => dispatch(createAttachment(attachment)),
+    deleteAttachment: attachmentId => dispatch(deleteAttachment(attachmentId))
 })
 
 ThesisViewPage.propTypes = {
@@ -313,7 +315,8 @@ ThesisViewPage.propTypes = {
     downloadAttachments: func.isRequired,
     saveThesis: func.isRequired,
     getAgreements: func.isRequired,
-    createAttachment: func.isRequired
+    createAttachment: func.isRequired,
+    deleteAttachment: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisViewPage)
