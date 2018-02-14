@@ -84,7 +84,7 @@ const reducer = (state = {}, action) => {
             return Object.assign({}, state, message)
         }
         case action.type.includes('_ATTEMPT'): {
-            const message = {};
+            const message = {}
             message[action.type] = {
                 active: false,
                 type: 'attempt',

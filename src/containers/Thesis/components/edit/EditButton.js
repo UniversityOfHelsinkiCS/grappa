@@ -4,13 +4,13 @@ import { Button, GridColumn } from 'semantic-ui-react'
 
 const EditButton = ({ toggle, allowEdit }) => {
     if (!allowEdit)
-        return false;
+        return false
 
     return (
         <GridColumn>
             <Button onClick={toggle}>Edit</Button>
         </GridColumn>
-    );
+    )
 }
 
 EditButton.propTypes = {

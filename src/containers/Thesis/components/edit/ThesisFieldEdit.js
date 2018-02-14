@@ -1,5 +1,5 @@
 import React from 'react'
-import { bool, node } from 'prop-types';
+import { bool, node } from 'prop-types'
 import { Accordion, AccordionContent } from 'semantic-ui-react'
 
 const ThesisFieldEdit = ({ active, children }) => (
@@ -16,4 +16,4 @@ ThesisFieldEdit.propTypes = {
     children: node.isRequired
 }
 
-export default ThesisFieldEdit;
+export default ThesisFieldEdit

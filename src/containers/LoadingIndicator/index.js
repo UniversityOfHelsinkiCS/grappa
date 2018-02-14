@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 export class LoadingIndicator extends Component {
     state = {
@@ -26,7 +26,7 @@ export class LoadingIndicator extends Component {
     }
 
     render() {
-        const { loading } = this.state;
+        const { loading } = this.state
         if (!loading) {
             return null
         }
@@ -50,18 +50,18 @@ export class LoadingIndicator extends Component {
 
 const mapDispatchToProps = dispatch => ({
     clearMessages: () => dispatch({ type: 'EVENT_MESSAGE_CLEAR' })
-});
+})
 
 const mapStateToProps = ({ eventMessage }) => ({
     messages: Object.keys(eventMessage)
         .map(key => Object.assign({ key }, eventMessage[key]))
-});
+})
 
-const { string } = PropTypes;
+const { string } = PropTypes
 
 LoadingIndicator.propTypes = {
     type: string.isRequired
-};
+}
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoadingIndicator);
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingIndicator)

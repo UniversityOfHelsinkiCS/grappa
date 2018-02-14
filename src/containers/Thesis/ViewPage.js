@@ -131,7 +131,7 @@ class ThesisViewPage extends Component {
             return null
 
         return (
-            <Grid columns={3}>
+            <Grid columns={4}>
                 <GridRow>
                     <ThesisValueField title="Author">
                         {author ? `${author.firstname} ${author.lastname}` : agreement.email}
@@ -139,7 +139,7 @@ class ThesisViewPage extends Component {
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Thesis title">{thesis.title}</ThesisValueField>
-                    <GridColumn />
+                    <GridColumn width={8} />
                     <EditButton toggle={() => this.toggleEditField('title')} allowEdit={allowEdit} />
                     <TextEdit
                         active={this.state.open === 'title'}
@@ -151,21 +151,20 @@ class ThesisViewPage extends Component {
                 <GridRow>
                     <ThesisValueField title="Unit">{programmeData.programme.name}</ThesisValueField>
                     <ThesisValueField title="Studyfield">{programmeData.studyfield.name}</ThesisValueField>
-                </GridRow>
-                <GridRow>
                     <ThesisValueField title="Grade">{thesis.grade}</ThesisValueField>
-                    <GridColumn />
                     <EditButton toggle={() => this.toggleEditField('grade')} allowEdit={allowEdit} />
                     <ThesisFieldEdit active={this.state.open === 'grade'}>
-                        <select value={this.state.value} onChange={this.handleChange}>
-                            {programmeData.programme.name.includes('Department') ?
-                                oldGradeFields.map(grade => (
-                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                )) : gradeFields.map(grade => (
-                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                ))}
-                        </select>
-                        <Button onClick={this.saveChanges}>Save</Button>
+                        <GridColumn>
+                            <select value={this.state.value} onChange={this.handleChange}>
+                                {programmeData.programme.name.includes('Department') ?
+                                    oldGradeFields.map(grade => (
+                                        <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                    )) : gradeFields.map(grade => (
+                                        <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                    ))}
+                            </select>
+                            <Button onClick={this.saveChanges}>Save</Button>
+                        </GridColumn>
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
@@ -174,7 +173,7 @@ class ThesisViewPage extends Component {
                             <div key={grader.personId}>{grader.firstname} {grader.lastname}</div>
                         ))}
                     </ThesisValueField>
-                    <GridColumn />
+                    <GridColumn width={8} />
                     <EditButton toggle={() => this.toggleEditField('graders')} allowEdit={allowEdit} />
                     <ThesisFieldEdit active={this.state.open === 'graders'}>
                         <Button onClick={this.saveGraders} >Save</Button>
@@ -193,7 +192,7 @@ class ThesisViewPage extends Component {
                     <ThesisValueField title="Urkund link">
                         <a href={thesis.urkund} target="new">{thesis.urkund}</a>
                     </ThesisValueField>
-                    <GridColumn />
+                    <GridColumn width={8} />
                     <EditButton toggle={() => this.toggleEditField('urkund')} allowEdit={allowEdit} />
                     <TextEdit
                         active={this.state.open === 'urkund'}
@@ -206,7 +205,7 @@ class ThesisViewPage extends Component {
                     <ThesisValueField title="Council meeting">
                         {councilMeeting ? moment(councilMeeting.date).format('DD.MM.YYYY') : 'Not selected'}
                     </ThesisValueField>
-                    <GridColumn />
+                    <GridColumn width={8} />
                     <EditButton toggle={() => this.toggleEditField('councilmeeting')} allowEdit={allowEdit} />
                     <ThesisFieldEdit active={this.state.open === 'councilmeeting'}>
                         <ThesisCouncilmeetingPicker
@@ -217,7 +216,7 @@ class ThesisViewPage extends Component {
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
-                    <GridColumn width={10}>
+                    <GridColumn width={12}>
                         <h3 className="ui sub header">Attachments</h3>
                         <AttachmentList
                             downloadAttachment={this.props.downloadAttachments}

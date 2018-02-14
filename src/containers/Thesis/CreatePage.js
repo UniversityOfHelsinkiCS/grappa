@@ -32,7 +32,7 @@ export class ThesisCreatePage extends Component {
                 attachment.label = 'otherFile'
             }
             form.append(attachment.label, attachment)
-        });
+        })
         const thesis = Object.assign({}, this.state.thesis)
         delete thesis.programmeId
         thesis.graders = thesis.graders.map(person => person.personId)

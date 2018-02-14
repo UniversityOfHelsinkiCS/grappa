@@ -14,7 +14,7 @@ class ThesisConfirmModal extends Component {
         const { showModal, closeModal } = this.props
 
         if (!showModal) {
-            return null;
+            return null
         }
         return (
             <div>
