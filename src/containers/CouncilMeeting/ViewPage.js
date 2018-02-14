@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { arrayOf, func, shape, string } from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { isEqual } from 'lodash-es'
+import isEqual from 'lodash/isEqual'
 
 import { connect } from 'react-redux'
 import { downloadAttachments } from '../Attachment/services/attachmentActions'
