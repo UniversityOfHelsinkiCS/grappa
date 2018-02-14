@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { arrayOf, func, bool } from 'prop-types'
 import { thesisType, agreementType, attachmentType } from '../../../util/types'
+import LoadingIndicator from '../../LoadingIndicator'
 
 class ThesisList extends Component {
     constructor(props) {
@@ -106,6 +107,7 @@ class ThesisList extends Component {
             <div className="ui form">
                 <div className="two fields" >
                     <div className="field">
+                        <LoadingIndicator type="DOWNLOAD" />
                         <button className="ui orange button" onClick={this.sendDownloadSelected}>Download</button>
                         &nbsp;
                         <div className="ui toggle checkbox">

@@ -5,11 +5,19 @@ import { attachmentType } from '../../../util/types'
 
 
 export default class AttachmentAdder extends Component {
-    onDrop = (files) => {
-        const droppedFile = files[0]
-        if (!this.props.attachments.find(a => a.name === droppedFile.name)) {
+
+    state = {
+        rejected: 0
+    }
+
+    onDrop = (approved, rejected) => {
+        const droppedFile = approved[0]
+        if (droppedFile && !this.props.attachments.find(a => a.name === droppedFile.name)) {
             const selected = [...this.props.attachments, droppedFile]
             this.props.changeList(selected)
+        }
+        if (rejected[0]) {
+            this.setState({ rejected: this.state.rejected + 1 })
         }
     }
 
@@ -74,10 +82,15 @@ export default class AttachmentAdder extends Component {
     renderDropzone = () => {
         if (this.canAttachmentBeUploaded()) {
             return (
-                <Dropzone className="field upload-box" onDrop={this.onDrop} multiple={false}>
+                <Dropzone
+                    className="field upload-box"
+                    onDrop={this.onDrop}
+                    multiple={false}
+                    accept="application/pdf"
+                >
                     <div className="field" style={{ borderStyle: 'dashed' }}>
                         <p className="upload-p">
-                            Click to navigate to the file or drop them from your file system.
+                            Click to navigate to the file or drag and drop them here.
                         </p>
                         <br />
                     </div>
@@ -88,9 +101,10 @@ export default class AttachmentAdder extends Component {
     }
 
     render() {
+        const pdfFontSize = `${(this.state.rejected * 50) + 100}%`
         return (
             <div>
-                <h3>Upload attachments</h3>
+                <h3>Upload <span style={{ fontSize: pdfFontSize }}>pdf</span> attachments</h3>
                 {this.renderDropzone()}
                 {this.props.attachments ? this.getFileList() : undefined}
                 {this.props.uploadAttachments && this.props.attachments.length > 0 ?

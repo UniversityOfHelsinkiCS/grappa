@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import { string } from 'prop-types'
 
 export class LoadingIndicator extends Component {
     state = {
-        loading: false
+        loading: false,
+        done: false
     }
 
     componentWillReceiveProps(newProps) {
@@ -12,8 +14,12 @@ export class LoadingIndicator extends Component {
         const { messages } = newProps
         const { type } = this.props
         if (messages && messages.length > 0) {
-            const messagesWithType = messages.filter(message => message.text.includes(type))
-            if (messagesWithType.find(message => message.type !== 'attempt')) {
+            const messagesWithType = messages.filter(message => message.key.includes(type))
+            if (messagesWithType.find(message => message.type === 'success')) {
+                if (loading) {
+                    this.setState({ loading: false, done: true })
+                }
+            } else if (messagesWithType.find(message => message.type === 'error')) {
                 if (loading) {
                     this.setState({ loading: false })
                 }
@@ -26,10 +32,16 @@ export class LoadingIndicator extends Component {
     }
 
     render() {
-        const { loading } = this.state
+        const { loading, done } = this.state
+        const { redirect } = this.props
+        if (done && redirect) {
+            return <Redirect to={redirect} />
+        }
+
         if (!loading) {
             return null
         }
+
         return (
             <div>
                 <div className="ui dimmer modals page transition visible active" />
@@ -57,11 +69,13 @@ const mapStateToProps = ({ eventMessage }) => ({
         .map(key => Object.assign({ key }, eventMessage[key]))
 })
 
-const { string } = PropTypes
-
 LoadingIndicator.propTypes = {
-    type: string.isRequired
+    type: string.isRequired,
+    redirect: string
 }
 
+LoadingIndicator.defaultProps = {
+    redirect: undefined
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadingIndicator)

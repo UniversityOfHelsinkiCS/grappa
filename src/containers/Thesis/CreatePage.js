@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { arrayOf, func, bool } from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { arrayOf, func } from 'prop-types'
 
 import { connect } from 'react-redux'
 import { saveThesis } from './services/thesisActions'
@@ -28,10 +27,11 @@ export class ThesisCreatePage extends Component {
     handleSaveThesis = () => {
         const form = new FormData()
         this.state.attachments.forEach((attachment) => {
-            if (!attachment.label) {
-                attachment.label = 'otherFile'
+            const copyAttachment = Object.assign({}, attachment)
+            if (!copyAttachment.label) {
+                copyAttachment.label = 'otherFile'
             }
-            form.append(attachment.label, attachment)
+            form.append(copyAttachment.label, copyAttachment)
         })
         const thesis = Object.assign({}, this.state.thesis)
         delete thesis.programmeId
@@ -94,13 +94,9 @@ export class ThesisCreatePage extends Component {
     }
 
     render() {
-        if (this.props.success && this.state.showModal) {
-            return <Redirect to="/" />
-        }
-
         return (
             <div>
-                <LoadingIndicator type="THESIS_SAVE" />
+                <LoadingIndicator type="THESIS_SAVE" redirect="/" />
                 <ThesisConfirmModal
                     sendSaveThesis={this.handleSaveThesis}
                     closeModal={this.toggleModal}
@@ -149,8 +145,7 @@ const mapStateToProps = state => ({
     programmes: state.programmes,
     studyfields: state.studyfields,
     roles: state.roles,
-    persons: state.persons,
-    success: state.eventMessage.saveThesis && state.eventMessage.saveThesis.active
+    persons: state.persons
 })
 
 ThesisCreatePage.propTypes = {
@@ -159,12 +154,7 @@ ThesisCreatePage.propTypes = {
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
-    saveThesis: func.isRequired,
-    success: bool
-}
-
-ThesisCreatePage.defaultProps = {
-    success: false
+    saveThesis: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThesisCreatePage)

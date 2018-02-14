@@ -33,14 +33,16 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
     chooseMeeting = (event) => {
         if (event.target.value) {
-            this.props.sendChange({ councilmeetingId: event.target.value })
+            this.props.sendChange({ councilmeetingId: Number(event.target.value) })
         }
     };
 
     chooseProgramme = (event) => {
         const programmeId = Number(event.target.value)
         if (programmeId) {
-            this.setState({ programmeId })
+            this.setState({ programmeId },
+                this.props.sendChange({ councilmeetingId: undefined })
+            )
         }
     }
 
