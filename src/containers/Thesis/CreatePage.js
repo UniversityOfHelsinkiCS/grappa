@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { arrayOf, func, bool } from 'prop-types'
-import { Redirect } from 'react-router-dom'
 
 import { connect } from 'react-redux'
 import { saveThesis } from './services/thesisActions'
@@ -94,13 +93,9 @@ export class ThesisCreatePage extends Component {
     }
 
     render() {
-        if (this.props.success && this.state.showModal) {
-            return <Redirect to="/" />
-        }
-
         return (
             <div>
-                <LoadingIndicator type="THESIS_SAVE" />
+                <LoadingIndicator type="THESIS_SAVE" redirect="/" />
                 <ThesisConfirmModal
                     sendSaveThesis={this.handleSaveThesis}
                     closeModal={this.toggleModal}
