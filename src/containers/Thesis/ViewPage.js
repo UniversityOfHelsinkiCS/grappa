@@ -21,9 +21,14 @@ import GraderSelector from './components/edit/GraderSelector'
 import { gradeFields, oldGradeFields } from '../../util/theses'
 
 class ThesisViewPage extends Component {
-    constructor(props) {
-        super(props)
-        this.state = { value: '', open: '', newAttachments: [] }
+
+    state = {
+        value: '',
+        open: '',
+        newAttachments: [],
+        programmeId: '',
+        studyfieldId: '',
+        grade: ''
     }
 
     componentDidMount() {
@@ -77,11 +82,27 @@ class ThesisViewPage extends Component {
 
     handleChange = event => this.setState({ value: event.target.value })
 
+    changeProgramme = event => this.setState({ programmeId: Number(event.target.value), studyfieldId: '' })
+    changeStudyfield = event => this.setState({ studyfieldId: Number(event.target.value) })
+    changeGrade = event => this.setState({ grade: event.target.value })
+
     saveChanges = () => {
         const field = this.state.open
         const thesis = { thesisId: this.state.thesis.thesisId }
 
         thesis[field] = this.state.value
+        this.props.saveThesis(thesis)
+        this.setState({ open: '', value: '' })
+    }
+
+    saveStudyfieldAndGrade = () => {
+        const thesis = {
+            thesisId: this.state.thesis.thesisId,
+            programmeId: this.state.programmeId,
+            studyfieldId: this.state.studyfieldId,
+            grade: this.state.grade
+        }
+
         this.props.saveThesis(thesis)
         this.setState({ open: '', value: '' })
     }
@@ -109,7 +130,7 @@ class ThesisViewPage extends Component {
         })
 
         this.props.createAttachment(form)
-        this.setState({ open: '', newAttachments: [] })
+        this.setState({ open: '', newAttachments: [] })
     }
 
     saveGraders = () => {
@@ -119,6 +140,15 @@ class ThesisViewPage extends Component {
         })
         this.setState({ open: '', value: '' })
         this.props.getAgreements()
+    }
+
+    toggleGradeAndStudyfieldEdit = () => {
+        this.setState({
+            studyfieldId: this.state.programmeData.studyfield.studyfieldId,
+            programmeId: this.state.programmeData.programme.programmeId,
+            grade: this.state.thesis.grade
+        })
+        this.toggleEditField('grade')
     }
 
     render() {
@@ -152,19 +182,32 @@ class ThesisViewPage extends Component {
                     <ThesisValueField title="Unit">{programmeData.programme.name}</ThesisValueField>
                     <ThesisValueField title="Studyfield">{programmeData.studyfield.name}</ThesisValueField>
                     <ThesisValueField title="Grade">{thesis.grade}</ThesisValueField>
-                    <EditButton toggle={() => this.toggleEditField('grade')} allowEdit={allowEdit} />
+                    <EditButton toggle={this.toggleGradeAndStudyfieldEdit} allowEdit={allowEdit} />
                     <ThesisFieldEdit active={this.state.open === 'grade'}>
-                        <GridColumn>
-                            <select value={this.state.value} onChange={this.handleChange}>
-                                {programmeData.programme.name.includes('Department') ?
-                                    oldGradeFields.map(grade => (
-                                        <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                    )) : gradeFields.map(grade => (
-                                        <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                    ))}
-                            </select>
-                            <Button onClick={this.saveChanges}>Save</Button>
-                        </GridColumn>
+                        <select value={this.state.programmeId} onChange={this.changeProgramme}>
+                            {this.props.programmes.map(programme => (
+                                <option key={programme.programmeId} value={programme.programmeId}>
+                                    {programme.name}
+                                </option>
+                            ))}
+                        </select>
+                        <select value={this.state.studyfieldId} onChange={this.changeStudyfield}>
+                            <option />
+                            {this.props.studyfields
+                                .filter(field => field.programmeId === this.state.programmeId)
+                                .map(field => (
+                                    <option key={field.studyfieldId} value={field.studyfieldId}>{field.name}</option>
+                                ))}
+                        </select>
+                        <select value={this.state.grade} onChange={this.changeGrade}>
+                            {programmeData.programme.name.includes('Department') ?
+                                oldGradeFields.map(grade => (
+                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                )) : gradeFields.map(grade => (
+                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
+                                ))}
+                        </select>
+                        <Button onClick={this.saveStudyfieldAndGrade}>Save</Button>
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>

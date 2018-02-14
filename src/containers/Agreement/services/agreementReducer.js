@@ -14,6 +14,11 @@ const reducer = (state = [], action) => {
         case 'THESIS_SAVE_ONE_SUCCESS':
             // Saving thesis response has multiple fields.
             return [...state, action.response.agreement]
+        case 'THESIS_UPDATE_ONE_SUCCESS':
+            return [
+                ...state.filter(agreement => agreement.agreementId !== action.response.agreements[0].agreementId),
+                action.response.agreements[0]
+            ]
         default:
             return state
     }
