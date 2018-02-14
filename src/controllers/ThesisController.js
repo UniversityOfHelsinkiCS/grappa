@@ -132,8 +132,13 @@ export async function updateThesis(req, res) {
     if (updatedFields.graders)
         await updateGraders(updatedFields.graders, agreements[0])
 
+    if (updatedFields.studyfieldId) {
+        agreements[0].studyfieldId = updatedFields.studyfieldId
+        await agreementService.updateAgreement(agreements[0])
+    }
+
     const roles = await roleService.getRolesForAllPersons()
-    const responseObject = { thesis, roles }
+    const responseObject = { thesis, roles, agreements: [agreements[0]] }
     res.status(200).json(responseObject).end()
 }
 
