@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const bodyParser = require('body-parser');
+const router = require('express').Router()
+const bodyParser = require('body-parser')
 
-const jsonParser = bodyParser.json();
-const roleController = require('../controllers/RoleController');
+const jsonParser = bodyParser.json()
+const roleController = require('../controllers/RoleController')
 
 /**
  * @api {get} roles/available Get available roles
@@ -21,8 +21,8 @@ const roleController = require('../controllers/RoleController');
  * ]
  */
 router.get('/available', (req, res, next) => {
-    roleController.getAvailableRoles(req, res).catch(next);
-});
+    roleController.getAvailableRoles(req, res).catch(next)
+})
 
 /**
  * @api {post} roles/ Save new role
@@ -36,8 +36,8 @@ router.get('/available', (req, res, next) => {
  * @apiParam {Number} programmeId Programme id
  */
 router.post('/', jsonParser, (req, res, next) => {
-    roleController.saveRole(req, res).catch(next);
-});
+    roleController.saveRole(req, res).catch(next)
+})
 
 /**
  * @api {put} roles/ Update statement
@@ -48,8 +48,8 @@ router.post('/', jsonParser, (req, res, next) => {
  * @apiParam {Boolean} approved Is person role approved
  */
 router.put('/', jsonParser, (req, res, next) => {
-    roleController.updateStatement(req, res).catch(next);
-});
+    roleController.updateStatement(req, res).catch(next)
+})
 
 /**
  * @api {delete} roles/:id Remove role
@@ -61,7 +61,7 @@ router.put('/', jsonParser, (req, res, next) => {
  * @apiParam {Number} id Role id
  */
 router.delete('/:id', jsonParser, (req, res, next) => {
-    roleController.deleteRole(req, res).catch(next);
-});
+    roleController.deleteRole(req, res).catch(next)
+})
 
-module.exports = router;
+module.exports = router

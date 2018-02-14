@@ -1,99 +1,99 @@
-import test from 'ava';
-import { createPerson, initDb } from '../utils';
+import test from 'ava'
+import { createPerson, initDb } from '../utils'
 
-process.env.DB_SCHEMA = 'invite_test';
+process.env.DB_SCHEMA = 'invite_test'
 
-const request = require('supertest');
-const express = require('express');
-const invite = require('../../src/routes/invite');
-const persons = require('../../src/routes/persons');
-const knex = require('../../src/db/connection').getKnex();
-const errorHandler = require('../../src/util/errorHandler');
+const request = require('supertest')
+const express = require('express')
+const invite = require('../../src/routes/invite')
+const persons = require('../../src/routes/persons')
+const knex = require('../../src/db/connection').getKnex()
+const errorHandler = require('../../src/util/errorHandler')
 
 const makeApp = (userId) => {
-    const app = express();
+    const app = express()
     app.use('/invite', (req, res, next) => {
-        req.session = {};
-        req.session.user_id = userId;
-        next();
-    }, invite);
+        req.session = {}
+        req.session.user_id = userId
+        next()
+    }, invite)
     app.use('/persons', (req, res, next) => {
-        req.session = {};
-        req.session.user_id = userId;
-        next();
-    }, persons);
-    app.use(errorHandler);
-    return app;
-};
+        req.session = {}
+        req.session.user_id = userId
+        next()
+    }, persons)
+    app.use(errorHandler)
+    return app
+}
 
 test.before(async () => {
-    await initDb();
-});
+    await initDb()
+})
 
 test('thesis is linked to author when invite is accepted', async (t) => {
-    const email = 'test19-invite@opiskelija.example.com';
-    const { personId } = await createPerson(email);
-    const agreementId = await knex('agreement').insert({}).returning('agreementId');
-    const token = 'jk3h25jk45hjghj';
-    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
+    const email = 'test19-invite@opiskelija.example.com'
+    const { personId } = await createPerson(email)
+    const agreementId = await knex('agreement').insert({}).returning('agreementId')
+    const token = 'jk3h25jk45hjghj'
+    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' })
 
-    const res = await request(makeApp(personId)).get(`/invite/thesis/${token}`);
+    const res = await request(makeApp(personId)).get(`/invite/thesis/${token}`)
 
-    t.is(res.status, 200);
+    t.is(res.status, 200)
 
-    const agreement = await knex('agreement').select().where('agreementId', agreementId[0]).first();
-    t.is(agreement.authorId, personId);
-});
+    const agreement = await knex('agreement').select().where('agreementId', agreementId[0]).first()
+    t.is(agreement.authorId, personId)
+})
 
 test('invalid token is handled', async (t) => {
-    const email = 'test5-invite@opiskelija.example.com';
-    const { personId } = await createPerson(email);
-    const agreementId = await knex('agreement').insert({}).returning('agreementId');
-    const token = 'kbhjbjj3bjb234';
-    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
+    const email = 'test5-invite@opiskelija.example.com'
+    const { personId } = await createPerson(email)
+    const agreementId = await knex('agreement').insert({}).returning('agreementId')
+    const token = 'kbhjbjj3bjb234'
+    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' })
 
-    const res = await request(makeApp(personId)).get('/invite/thesis/FAKE_NEWS');
+    const res = await request(makeApp(personId)).get('/invite/thesis/FAKE_NEWS')
 
-    t.is(res.status, 404);
-});
+    t.is(res.status, 404)
+})
 
 test('token can be used only once', async (t) => {
-    const email = 'test2-invite@opiskelija.example.com';
-    const { personId } = await createPerson(email);
-    const agreementId = await knex('agreement').insert({}).returning('agreementId');
-    const token = 'jkhiuhiad3';
-    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' });
+    const email = 'test2-invite@opiskelija.example.com'
+    const { personId } = await createPerson(email)
+    const agreementId = await knex('agreement').insert({}).returning('agreementId')
+    const token = 'jkhiuhiad3'
+    await knex('emailInvite').insert({ email, token, agreement: agreementId[0], type: 'thesis_author' })
 
-    const res = await request(makeApp(personId)).get(`/invite/thesis/${token}`);
-    t.is(res.status, 200);
+    const res = await request(makeApp(personId)).get(`/invite/thesis/${token}`)
+    t.is(res.status, 200)
 
-    const res2 = await request(makeApp(personId)).get(`/invite/thesis/${token}`);
-    t.is(res2.status, 404);
-});
+    const res2 = await request(makeApp(personId)).get(`/invite/thesis/${token}`)
+    t.is(res2.status, 404)
+})
 
 test('role can be invited', async (t) => {
-    const email = 'rooli@tarkastaja.example.com';
+    const email = 'rooli@tarkastaja.example.com'
 
     const res = await request(makeApp(1))
         .post('/persons/invite')
-        .send({ email, programme: 1, role: 1 });
+        .send({ email, programme: 1, role: 1 })
 
-    t.is(res.status, 200);
+    t.is(res.status, 200)
 
-    const rows = await knex.select().from('emailInvite').where('email', email);
-    t.is(rows.length, 1);
-});
+    const rows = await knex.select().from('emailInvite').where('email', email)
+    t.is(rows.length, 1)
+})
 
 test('role is linked to user when invite is accepted', async (t) => {
-    const email = 'test1-invite@opiskelija.example.com';
-    const { personId } = await createPerson(email);
-    const token = 'fsdwe234gfd3';
-    await knex('emailInvite').insert({ email, token, programme: 1, role: 1, type: 'role' });
+    const email = 'test1-invite@opiskelija.example.com'
+    const { personId } = await createPerson(email)
+    const token = 'fsdwe234gfd3'
+    await knex('emailInvite').insert({ email, token, programme: 1, role: 1, type: 'role' })
 
-    const res = await request(makeApp(personId)).get(`/invite/role/${token}`);
+    const res = await request(makeApp(personId)).get(`/invite/role/${token}`)
 
-    t.is(res.status, 200);
+    t.is(res.status, 200)
 
-    const personWithRole = await knex('personWithRole').select().where('personId', personId).first();
-    t.is(personWithRole.roleId, 1);
-});
+    const personWithRole = await knex('personWithRole').select().where('personId', personId).first()
+    t.is(personWithRole.roleId, 1)
+})

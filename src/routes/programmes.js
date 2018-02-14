@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const programmeController = require('../controllers/ProgrammeController');
+const router = require('express').Router()
+const programmeController = require('../controllers/ProgrammeController')
 
 /**
  * @api {get} programmes/ Get all programmes
@@ -13,7 +13,7 @@ const programmeController = require('../controllers/ProgrammeController');
  * ]
  */
 router.get('/', (req, res) => {
-    programmeController.getAllProgrammes(req, res);
-});
+    programmeController.getAllProgrammes(req, res)
+})
 
-module.exports = router;
+module.exports = router

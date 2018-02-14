@@ -6,5 +6,5 @@ exports.seed = async (knex) => {
         {
             name: 'Faculty of Science'
         }
-    ]);
-};
+    ])
+}

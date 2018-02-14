@@ -1,11 +1,11 @@
-import request from 'request';
-import xml from 'xmlbuilder';
-import logger from '../util/logger';
-import creds from './ethesis_credentials.dist';
+import request from 'request'
+import xml from 'xmlbuilder'
+import logger from '../util/logger'
+import creds from './ethesis_credentials.dist'
 
-const fs = require('fs');
-const JSZip = require('jszip');
-const { parseString } = require('xml2js');
+const fs = require('fs')
+const JSZip = require('jszip')
+const { parseString } = require('xml2js')
 
 /*
 to test:
@@ -144,20 +144,20 @@ function generateMetaXML(meta) {
             }
         }
     }, { version: '1.0', encoding: 'UTF-8', standalone: false })
-        .end({ pretty: true });
+        .end({ pretty: true })
 }
 
 async function eThesisAPI(meta, pdfAddr) {
-    const pdf = await fs.readFileSync(pdfAddr);
+    const pdf = await fs.readFileSync(pdfAddr)
 
-    const metaData = await generateMetaXML(meta);
+    const metaData = await generateMetaXML(meta)
     // xml structure test output
     // console.log(metaData.toString());
     // const dataBuffer = new Buffer(metaData, 'utf-8');
 
-    const zip = new JSZip();
-    zip.file('gradu.pdf', pdf);
-    zip.file('mets.xml', metaData.toString());
+    const zip = new JSZip()
+    zip.file('gradu.pdf', pdf)
+    zip.file('mets.xml', metaData.toString())
 
     // /* to test zip-output to disc
     zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
@@ -165,8 +165,8 @@ async function eThesisAPI(meta, pdfAddr) {
         .on('finish', () => {
             // JSZip generates a readable stream with a "end" event,
             // but is piped here in a writable stream which emits a "finish" event.
-            console.log('out.zip written.');
-        });
+            console.log('out.zip written.')
+        })
     //* /
     const settings = {
         method: 'POST',
@@ -185,26 +185,26 @@ async function eThesisAPI(meta, pdfAddr) {
     }
 
     request(settings, (error, response, body) => {
-        logger.info('Ethesis request callback', { response });
+        logger.info('Ethesis request callback', { response })
         if (error) {
-            logger.error('upload failed', { error });
+            logger.error('upload failed', { error })
         }
         if (response) {
             if (response.statusCode === 201) {
-                logger.info('Upload successful!', { response });
+                logger.info('Upload successful!', { response })
 
                 parseString(body, (err, result) => {
-                    logger.info('parsing done!', { result });
-                });
+                    logger.info('parsing done!', { result })
+                })
             }
         }
     })
 }
 
 export default async function saveToEThesis(metaData, pdfAddr) {
-    const today = new Date();
+    const today = new Date()
     const meta = Object.assign({}, metaData)
-    meta.yearNow = today.getFullYear();
+    meta.yearNow = today.getFullYear()
 
     // haetaan urn-tunnus
     // yleinen generaattori: http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn
@@ -213,14 +213,14 @@ export default async function saveToEThesis(metaData, pdfAddr) {
     request('http://generator.urn.fi/cgi-bin/urn_generator.cgi?type=nbn&subnamespace=hulib',
         (error, response, body) => {
             if (error) {
-                return error;
+                return error
             }
             if (body.toLowerCase().indexOf('error') !== -1 || body === '') {
                 return 'ERROR: could not get URN.'
             }
-            meta.URN = body;
+            meta.URN = body
             return eThesisAPI(meta, pdfAddr)
-        });/*
+        })/*
     console.log(meta);
 
     const pdf = await fs.readFileSync(pdfAddr);

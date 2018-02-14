@@ -77,5 +77,5 @@ You have been invited to Grappa, a web application created to help in managing t
 master's degree.
 $LOGIN_URL$`
         }
-    ]);
-};
+    ])
+}

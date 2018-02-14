@@ -1,25 +1,25 @@
-import test from 'ava';
-import { initDb } from '../utils';
+import test from 'ava'
+import { initDb } from '../utils'
 
-process.env.DB_SCHEMA = 'agreement_test';
+process.env.DB_SCHEMA = 'agreement_test'
 
-const request = require('supertest');
-const express = require('express');
-const agreement = require('../../src/routes/agreements');
+const request = require('supertest')
+const express = require('express')
+const agreement = require('../../src/routes/agreements')
 
 const makeApp = (userId) => {
-    const app = express();
+    const app = express()
     app.use('/agreements', (req, res, next) => {
-        req.session = {};
-        req.session.user_id = userId;
-        next();
-    }, agreement);
-    return app;
-};
+        req.session = {}
+        req.session.user_id = userId
+        next()
+    }, agreement)
+    return app
+}
 
 test.before(async () => {
-    await initDb();
-});
+    await initDb()
+})
 
 const agreementForm = {
     thesisTitle: 'my Thesis',
@@ -47,7 +47,7 @@ const agreementForm = {
     meetingAgreement: 'Jepsis',
     other: 'eihän tässä muuta',
     whoNext: 'supervisor'
-};
+}
 
 const agreementWithId = {
     agreementId: 1,
@@ -62,27 +62,27 @@ const agreementWithId = {
     intermediateGoal: 'oispa valmistunut',
     meetingAgreement: 'just just',
     other: 'eihän tässä muuta'
-};
+}
 
 // TODO: Test something like thesis: thesisForm post & creates id without attachment
 test.skip('agreement post & correct response', async (t) => {
-    t.plan(2);
+    t.plan(2)
     const res = await request(makeApp())
         .post('/agreements')
-        .send(agreementForm);
-    t.is(res.status, 200);
-    const thesis = res.body.thesis;
-    const author = res.body.author;
-    const agreement = res.body.agreement;
-});
+        .send(agreementForm)
+    t.is(res.status, 200)
+    const thesis = res.body.thesis
+    const author = res.body.author
+    const agreement = res.body.agreement
+})
 
 test('agreements get should also return attachments', async (t) => {
-    t.plan(3);
+    t.plan(3)
     const res = await request(makeApp(10))
-        .get('/agreements');
-    t.is(res.status, 200);
-    const agreements = res.body.agreements;
-    const attachments = res.body.attachments;
-    t.is(agreements.length, 1);
-    t.is(attachments.length, 1);
-});
+        .get('/agreements')
+    t.is(res.status, 200)
+    const agreements = res.body.agreements
+    const attachments = res.body.attachments
+    t.is(agreements.length, 1)
+    t.is(attachments.length, 1)
+})

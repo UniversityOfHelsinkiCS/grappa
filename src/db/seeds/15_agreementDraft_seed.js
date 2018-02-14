@@ -1,6 +1,6 @@
 exports.seed = async (knex) => {
     // Deletes ALL existing entries
-    await knex('agreementDraft').del();
+    await knex('agreementDraft').del()
     // Inserts seed entries
     return knex('agreementDraft').insert([
         {
@@ -45,5 +45,5 @@ exports.seed = async (knex) => {
             meetingAgreement: 'agreement on meeting',
             other: 'muuta?'
         }
-    ]);
-};
+    ])
+}

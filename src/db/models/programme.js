@@ -1,8 +1,8 @@
-const bookshelf = require('../bookshelf');
+const bookshelf = require('../bookshelf')
 
 const Programme = bookshelf.Model.extend({
     tableName: 'programme',
     idAttribute: 'programmeId'
-});
+})
 
-module.exports = Programme;
+module.exports = Programme

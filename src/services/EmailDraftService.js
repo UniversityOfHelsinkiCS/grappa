@@ -1,11 +1,11 @@
-const knex = require('../db/connection').getKnex();
+const knex = require('../db/connection').getKnex()
 
 export async function getEmailDrafts() {
-    return knex.select().table('emailDraft');
+    return knex.select().table('emailDraft')
 }
 
 export async function getEmailDraftById(emailDraftId) {
-    return knex('emailDraft').select().where('emailDraftId', emailDraftId).first();
+    return knex('emailDraft').select().where('emailDraftId', emailDraftId).first()
 }
 
 export async function saveEmailDraft(emailDraft) {
@@ -16,7 +16,7 @@ export async function saveEmailDraft(emailDraft) {
         programme: emailDraft.programme
     })
         .returning('emailDraftId')
-        .then(emailDraftId => emailDraftId[0]);
+        .then(emailDraftId => emailDraftId[0])
 }
 
 export async function updateEmailDraft(emailDraftId, emailDraft) {
@@ -24,11 +24,11 @@ export async function updateEmailDraft(emailDraftId, emailDraft) {
         title: emailDraft.title,
         body: emailDraft.body,
         programme: emailDraft.programme
-    }).where('emailDraftId', emailDraftId);
+    }).where('emailDraftId', emailDraftId)
 }
 
 export async function deleteEmailDraft(draftId) {
-    return knex('emailDraft').delete().where('emailDraftId', draftId);
+    return knex('emailDraft').delete().where('emailDraftId', draftId)
 }
 
 export async function getEmailDraft(type, programme) {
@@ -40,10 +40,10 @@ export async function getEmailDraft(type, programme) {
                 this
                     .where('programme', programme)
                     .orWhereNull('programme')
-                    .orderBy('programme');
+                    .orderBy('programme')
             } else {
-                this.whereNull('programme');
+                this.whereNull('programme')
             }
         })
-        .first();
+        .first()
 }

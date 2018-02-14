@@ -34,4 +34,4 @@ module.exports = [
         programmeId: 3,
         name: 'Math studyfield 2'
     }
-];
+]

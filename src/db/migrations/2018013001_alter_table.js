@@ -3,10 +3,10 @@ exports.up = knex => Promise.all([
         table
             .date('startDate')
             .defaultTo(knex.fn.now())
-            .alter();
+            .alter()
     })
-]);
+])
 
 exports.down = async () => {
 
-};
+}

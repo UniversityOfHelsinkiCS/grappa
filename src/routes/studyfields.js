@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const studyfieldController = require('../controllers/StudyfieldController');
+const router = require('express').Router()
+const studyfieldController = require('../controllers/StudyfieldController')
 
 /**
  * @api {get} studyfields/ Get all studyfields
@@ -13,7 +13,7 @@ const studyfieldController = require('../controllers/StudyfieldController');
  * ]
  */
 router.get('/', (req, res) => {
-    studyfieldController.getAllStudyfields(req, res);
-});
+    studyfieldController.getAllStudyfields(req, res)
+})
 
-module.exports = router;
+module.exports = router

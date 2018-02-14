@@ -1,9 +1,9 @@
-require('dotenv').config();
+require('dotenv').config()
 
 const setTimezone = (connection, callback) => {
     connection.query('SET timezone = "Europe/Helsinki";', (err) => {
-        callback(err, connection);
-    });
+        callback(err, connection)
+    })
 }
 
 module.exports = {

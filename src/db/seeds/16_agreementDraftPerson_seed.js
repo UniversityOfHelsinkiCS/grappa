@@ -12,4 +12,4 @@ exports.seed = async (knex) => {
             agreementDraftId: 2
         }
     ])
-};
+}
