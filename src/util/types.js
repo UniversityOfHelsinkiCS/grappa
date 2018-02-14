@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-const { shape, string, number, bool } = PropTypes;
+const { shape, string, number, bool } = PropTypes
 
 export const personType = shape({
     personId: number,
@@ -13,7 +13,7 @@ export const personType = shape({
     address: string,
     phone: string,
     major: string
-});
+})
 
 export const councilmeetingType = shape({
     councilmeetingId: number,
@@ -21,7 +21,7 @@ export const councilmeetingType = shape({
     instructorDeadline: string,
     studentDeadline: string,
     programmeId: number
-});
+})
 
 export const studyfieldType = shape({
     studyfieldId: number,
@@ -32,12 +32,12 @@ export const studyfieldType = shape({
 export const programmeType = shape({
     programmeId: number,
     name: string
-});
+})
 
 export const availableRoleType = shape({
     roleId: number,
     name: string
-});
+})
 
 export const roleType = shape({
     personRoleId: number,
@@ -46,7 +46,7 @@ export const roleType = shape({
     name: string,
     agreementId: number,
     statement: string
-});
+})
 
 export const agreementType = shape({
     agreementId: number,
@@ -65,7 +65,7 @@ export const agreementType = shape({
     meetingAgreement: string,
     other: string,
     whoNext: string
-});
+})
 
 export const attachmentType = shape({
     attachmentId: number,
@@ -75,7 +75,7 @@ export const attachmentType = shape({
     mimetype: string,
     label: string,
     savedOnDisk: bool
-});
+})
 
 export const thesisType = shape({
     thesisId: number,
@@ -83,11 +83,11 @@ export const thesisType = shape({
     urkund: string,
     grade: string,
     printDone: bool
-});
+})
 
 export const emailType = shape({
     type: string,
     title: string,
     body: string,
     programme: number
-});
+})

@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { NavLink, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { getPermissions } from '../util/rolePermissions';
-import { login } from '../containers/user/userActions';
-import { personType } from '../util/types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { NavLink, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { getPermissions } from '../util/rolePermissions'
+import { login } from './User/services/userActions'
+import { personType } from '../util/types'
 
 // TODO: redux persistent storage & fetch in middleware
-import { getProgrammes } from './programme/programmeActions';
-import { getStudyfields } from './studyfield/studyfieldActions';
-import { getAgreements } from '../containers/agreement/agreementActions';
-import { getCouncilmeetings } from '../containers/councilmeeting/councilmeetingActions';
-import { getTheses } from '../containers/thesis/thesisActions';
-import { getPersons } from '../containers/person/personActions';
-import { getNotifications } from './notifications/notificationsAction';
-import { getEmailDrafts } from './email/emailActions';
-import { getAxios } from '../util/apiConnection';
+import { getProgrammes } from './Unit/services/programmeActions'
+import { getStudyfields } from './Studyfield/services/studyfieldActions'
+import { getAgreements } from './Agreement/services/agreementActions'
+import { getCouncilmeetings } from './CouncilMeeting/services/councilmeetingActions'
+import { getTheses } from './Thesis/services/thesisActions'
+import { getPersons } from './Person/services/personActions'
+import { getNotifications } from './Notification/services/notificationsAction'
+import { getEmailDrafts } from './Email/services/emailActions'
+import { getAxios } from '../util/apiConnection'
 
 const logout = () => {
     getAxios()
         .get('/user/logout')
-        .then((res) => { window.location = res.data.logoutUrl });
-};
+        .then((res) => { window.location = res.data.logoutUrl })
+}
 
 export class NavBar extends Component {
     constructor() {
-        super();
+        super()
         this.state = {
             links: [],
             loaded: false
@@ -34,30 +34,27 @@ export class NavBar extends Component {
 
     componentDidMount() {
         // This login will allow shibboleth to check on page reload
-        this.props.login();
+        this.props.login()
 
-        if (process.env.NODE_ENV !== 'production') {
-            this.props.getPersons();
+        if (process.env.NODE_ENV === 'development') {
+            this.props.getPersons()
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.user.personId) {
-            this.props.getPersons();
-        }
-
-        this.refreshLinks(newProps);
+        this.refreshLinks(newProps)
         // TODO: redux persistent storage & fetch in middleware
         if (newProps.user && !this.state.loaded) {
-            this.props.getStudyfields();
-            this.props.getProgrammes();
-            this.props.getAgreements();
-            this.props.getCouncilmeetings();
-            this.props.getTheses();
-            this.props.getEmailDrafts();
+            this.props.getPersons()
+            this.props.getStudyfields()
+            this.props.getProgrammes()
+            this.props.getAgreements()
+            this.props.getCouncilmeetings()
+            this.props.getTheses()
+            this.props.getEmailDrafts()
 
             if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
-                this.props.getNotifications();
+                this.props.getNotifications()
             }
 
             this.setState({ loaded: true })
@@ -65,19 +62,19 @@ export class NavBar extends Component {
     }
 
     refreshLinks = (props) => {
-        let links = [];
+        let links = []
         // Get all links that the user could require in their work.
         if (props.user && props.user.roles) {
             props.user.roles.forEach((roleObject) => {
-                const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show');
-                links = links.concat(linkPermissions.filter(link => !links.includes(link)));
+                const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show')
+                links = links.concat(linkPermissions.filter(link => !links.includes(link)))
             })
         }
         // Everyone who can access Grappa is a student
-        const linkPermissions = getPermissions('student', 'nav-bar', 'show');
-        links = links.concat(linkPermissions.filter(link => !links.includes(link)));
+        const linkPermissions = getPermissions('student', 'nav-bar', 'show')
+        links = links.concat(linkPermissions.filter(link => !links.includes(link)))
 
-        this.setState({ links });
+        this.setState({ links })
     };
 
     render() {
@@ -96,13 +93,13 @@ export class NavBar extends Component {
                                     <NavLink key={elem.path} to="/councilmeeting/next" exact className="item">
                                         {elem.navText}
                                     </NavLink>
-                                );
+                                )
                             default:
                                 return (
                                     <NavLink key={elem.path} to={elem.path} exact className="item">
                                         {elem.navText}
                                     </NavLink>
-                                );
+                                )
                         }
                     }) : undefined}
                     <div className="right menu">
@@ -111,45 +108,45 @@ export class NavBar extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     login(data) {
-        dispatch(login(data));
+        dispatch(login(data))
     },
     getProgrammes() {
-        dispatch(getProgrammes());
+        dispatch(getProgrammes())
     },
     getStudyfields() {
-        dispatch(getStudyfields());
+        dispatch(getStudyfields())
     },
     getAgreements() {
-        dispatch(getAgreements());
+        dispatch(getAgreements())
     },
     getCouncilmeetings() {
-        dispatch(getCouncilmeetings());
+        dispatch(getCouncilmeetings())
     },
     getTheses() {
-        dispatch(getTheses());
+        dispatch(getTheses())
     },
     getPersons() {
-        dispatch(getPersons());
+        dispatch(getPersons())
     },
     getNotifications() {
-        dispatch(getNotifications());
+        dispatch(getNotifications())
     },
     getEmailDrafts() {
-        dispatch(getEmailDrafts());
+        dispatch(getEmailDrafts())
     }
-});
+})
 
 const mapStateToProps = state => ({
     user: state.user
-});
+})
 
-const { func } = PropTypes;
+const { func } = PropTypes
 NavBar.propTypes = {
     login: func.isRequired,
     getPersons: func.isRequired,
@@ -161,6 +158,6 @@ NavBar.propTypes = {
     getNotifications: func.isRequired,
     getEmailDrafts: func.isRequired,
     user: personType.isRequired
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

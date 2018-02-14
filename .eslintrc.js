@@ -10,7 +10,7 @@ module.exports = {
     'rules': {
         'quotes': ['warn', 'single'],
         'indent': ['warn', 4, { SwitchCase: 1 }],
-        'semi': 'off',
+        'semi': ['error', 'never'],
         'comma-dangle': ['warn', 'never'],
         'max-len': ['warn', 120],
         'function-paren-newline': 'off',
@@ -44,7 +44,7 @@ module.exports = {
         'react/prefer-stateless-function': 'warn',
         'react/jsx-boolean-value': ['warn', 'never', { always: [] }],
         'react/jsx-indent-props': ['warn', 4],
-        'react/jsx-indent':['warn', 4],
+        'react/jsx-indent': ['warn', 4],
         'react/jsx-no-duplicate-props': ['warn', { ignoreCase: true }],
         'react/jsx-no-literals': ['off', { noStrings: true }],
         'react/jsx-no-undef': 'warn',
@@ -74,8 +74,8 @@ module.exports = {
         'object-curly-newline': 'off',
         'curly': 'off',
         'arrow-body-style': 'warn',
-        'arrow-parens':'warn',
-        'import/no-mutable-exports':'warn',
+        'arrow-parens': 'warn',
+        'import/no-mutable-exports': 'warn',
         'import/no-named-as-default': 'off',
         'no-underscore-dangle': 'warn',
         'react/jsx-filename-extension': 'off',
@@ -88,7 +88,8 @@ module.exports = {
         'no-irregular-whitespace': 'warn',
         'react/jsx-tag-spacing': 'warn',
         'import/first': 'warn',
-        'no-restricted-syntax':'warn',
+        'import/no-extraneous-dependencies': ["error", { "devDependencies": true }],
+        'no-restricted-syntax': 'warn',
         'vars-on-top': 'warn',
         'no-prototype-builtins': 'warn',
         'jsx-a11y/no-static-element-interactions': 'off',
@@ -102,7 +103,7 @@ module.exports = {
         'eol-last': 'warn',
         'no-param-reassign': 'warn',
         'consistent-return': 'warn',
-        'jsx-quotes':'warn',
+        'jsx-quotes': 'warn',
         'react/jsx-closing-tag-location': 'warn',
         'comma-spacing': 'warn',
         'class-methods-use-this': 'warn',
@@ -110,9 +111,9 @@ module.exports = {
         'array-callback-return': 'warn',
         'guard-for-in': 'warn',
         'jsx-a11y/anchor-is-valid': ['warn', {
-            "components": [ "Link" ],
-            "specialLink": [ "to", "hrefLeft", "hrefRight" ],
-            "aspects": [ "noHref", "invalidHref", "preferButton" ]
+            "components": ["Link"],
+            "specialLink": ["to", "hrefLeft", "hrefRight"],
+            "aspects": ["noHref", "invalidHref", "preferButton"]
         }],
         'import/prefer-default-export': 'warn',
         'react/sort-comp': 'warn',
@@ -127,7 +128,7 @@ module.exports = {
         'prefer-const': ['warn', {
             destructuring: 'any',
             ignoreReadBeforeAssign: true,
-          }],
+        }],
         'no-var': 'warn'
     }
 };

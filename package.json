@@ -21,8 +21,8 @@
     "file-loader": "1.1.6",
     "fs-extra": "5.0.0",
     "html-webpack-plugin": "2.30.1",
+    "lodash": "^4.17.5",
     "moment": "^2.19.4",
-    "moment-timezone": "^0.5.14",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.3.0",
     "postcss-loader": "2.1.0",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "babel-eslint": "^8.2.1",
+    "babel-plugin-lodash": "^3.3.2",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "coveralls": "^3.0.0",
@@ -83,7 +84,7 @@
   },
   "ava": {
     "files": [
-      "test/**/*.spec.js"
+      "src/**/*.spec.js"
     ],
     "source": [
       "src/**/*.{js,jsx}",
@@ -97,28 +98,8 @@
     "require": [
       "babel-register",
       "ignore-styles",
-      "./test/test-env.js"
+      "./src/util/test-env.js"
     ],
     "babel": "inherit"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-runtime"
-    ],
-    "ignore": "test.js",
-    "env": {
-      "development": {
-        "sourceMaps": "inline"
-      }
-    }
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "parserOptions": {
-      "ecmaVersion": 6
-    }
   }
 }

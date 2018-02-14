@@ -1,30 +1,30 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export const getAxios = () => {
     if (process.env.API_URL) {
         return axios.create({
             baseURL: process.env.API_URL
-        });
+        })
     }
-    return axios;
-};
+    return axios
+}
 
 function callApi(url, method = 'get', data, prefix) {
     if (prefix.includes('DOWNLOAD')) {
-        return getAxios().get(url, { responseType: 'arraybuffer' });
+        return getAxios().get(url, { responseType: 'arraybuffer' })
     }
     switch (method) {
         case 'get':
-            return getAxios().get(url);
+            return getAxios().get(url)
         case 'post':
-            return getAxios().post(url, data);
+            return getAxios().post(url, data)
         case 'put':
-            return getAxios().put(url, data);
+            return getAxios().put(url, data)
         case 'delete':
-            return getAxios().delete(url);
+            return getAxios().delete(url)
         default:
-            console.error('Invalid http method');
-            return Promise.reject();
+            console.error('Invalid http method')
+            return Promise.reject()
     }
 }
 
@@ -34,19 +34,19 @@ export const callController = (route, prefix, data, method = 'get') => (dispatch
         method,
         data,
         prefix
-    };
-    dispatch({ type: `${prefix}ATTEMPT`, payload });
-};
+    }
+    dispatch({ type: `${prefix}ATTEMPT`, payload })
+}
 
 // If you feel a sudden urge to call this. Don't.
 export const handleRequest = store => next => (action) => {
-    next(action);
-    const payload = action.payload;
+    next(action)
+    const payload = action.payload
     if (payload) {
         callApi(payload.route, payload.method, payload.data, payload.prefix)
             .then((res) => {
                 store.dispatch({ type: `${payload.prefix}SUCCESS`, response: res.data })
             })
-            .catch(err => store.dispatch({ type: `${payload.prefix}FAILURE`, response: err }));
+            .catch(err => store.dispatch({ type: `${payload.prefix}FAILURE`, response: err }))
     }
-};
+}

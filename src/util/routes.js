@@ -1,21 +1,22 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 
 // components
-import UserPage from '../containers/user/UserPage';
-import AgreementPage from '../containers/agreement/AgreementPage';
-import PersonRoleManagement from '../containers/person/PersonRoleManagePage';
-import ThesisListPage from '../containers/thesis/ThesisListPage';
-import AssesmentOfTheses from '../containers/thesis/AssesmentOfTheses';
-import ThesisCreate from '../containers/thesis/ThesisCreatePage';
-import ThesisEdit from '../containers/thesis/ThesisEditPage';
-import ThesisStatistics from '../containers/thesis/ThesisStatisticsPage';
-import CouncilmeetingManage from '../containers/councilmeeting/CouncilmeetingManagePage';
-import CouncilmeetingView from '../containers/councilmeeting/CouncilmeetingViewPage';
-import EmailDraftPage from '../containers/email/EmailDraftPage';
-import NotificationsPage from '../containers/notifications/NotificationsPage';
-import InvitePage from '../containers/invite/InvitePage';
-import PersonRoleReviewPage from '../containers/person/PersonRoleReviewPage';
+import UserPage from '../containers/User'
+import AgreementPage from '../containers/Agreement'
+import PersonRoleManagement from '../containers/Person/ManagePage'
+import ThesisListPage from '../containers/Thesis/ListPage'
+import AssesmentOfTheses from '../containers/Thesis/AssesmentOfTheses'
+import ThesisCreate from '../containers/Thesis/CreatePage'
+// import ThesisEdit from '../component/Thesis/ThesisEditPage';
+import ThesisViewPage from '../containers/Thesis/ViewPage'
+import ThesisStatistics from '../containers/Statistics'
+import CouncilmeetingManage from '../containers/CouncilMeeting/ManagePage'
+import CouncilmeetingView from '../containers/CouncilMeeting/ViewPage'
+import EmailDraftPage from '../containers/Email/DraftPage'
+import NotificationsPage from '../containers/Notification/NotificationsPage'
+import InvitePage from '../containers/Invite'
+import PersonRoleReviewPage from '../containers/Person/ReviewPage'
 
 export const paths = {
     home: { path: '/', component: UserPage, navText: 'Homepage' },
@@ -27,7 +28,7 @@ export const paths = {
     personRoleManagement: {
         path: '/PersonRoleManagement', component: PersonRoleManagement, navText: 'Role management'
     },
-    thesisView: { path: '/thesis/:id', component: ThesisEdit },
+    thesisView: { path: '/thesis/:id', component: ThesisViewPage },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
     councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next council meeting' },

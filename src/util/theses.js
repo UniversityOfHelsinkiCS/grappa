@@ -1,20 +1,20 @@
-import Checkit from 'checkit';
+import Checkit from 'checkit'
 
 export const formatTheses = (theses, agreements, persons, roles) => {
     if (!theses || !persons || !agreements)
-        return [];
+        return []
 
-    return theses.map(thesis => formatThesis(thesis, agreements, persons, roles));
-};
+    return theses.map(thesis => formatThesis(thesis, agreements, persons, roles))
+}
 
 export const formatThesis = (thesis, agreements, persons, roles) => {
-    const thesisAgreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId);
-    const author = thesisAgreement ? persons.find(person => person.personId === thesisAgreement.authorId) : {};
-    const formattedThesis = Object.assign({}, thesis);
+    const thesisAgreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId)
+    const author = thesisAgreement ? persons.find(person => person.personId === thesisAgreement.authorId) : {}
+    const formattedThesis = Object.assign({}, thesis)
     if (!thesisAgreement) {
-        return formattedThesis;
+        return formattedThesis
     }
-    formattedThesis.studyfieldId = thesisAgreement.studyfieldId;
+    formattedThesis.studyfieldId = thesisAgreement.studyfieldId
 
     if (roles) {
         formattedThesis.graders = persons.filter(person =>
@@ -22,19 +22,19 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
                 role.personId === person.personId &&
                 role.agreementId === thesisAgreement.agreementId
             )
-        );
+        )
     }
 
     if (author) {
-        formattedThesis.authorEmail = author.email;
-        formattedThesis.authorFirstname = author.firstname;
-        formattedThesis.authorLastname = author.lastname;
+        formattedThesis.authorEmail = author.email
+        formattedThesis.authorFirstname = author.firstname
+        formattedThesis.authorLastname = author.lastname
     } else { // Thesis not linked to person yet, use invite link email
-        formattedThesis.authorEmail = thesisAgreement.email;
+        formattedThesis.authorEmail = thesisAgreement.email
     }
 
-    return formattedThesis;
-};
+    return formattedThesis
+}
 
 
 export const oldGradeFields = [
@@ -45,7 +45,7 @@ export const oldGradeFields = [
     { id: 'Magna Cum Laude Approbatur', name: 'Magna Cum Laude Approbatur' },
     { id: 'Eximia Cum Laude Approbatur', name: 'Eximia Cum Laude Approbatur' },
     { id: 'Laudatur', name: 'Laudatur' }
-];
+]
 
 export const gradeFields = [
     { id: '1', name: '1' },
@@ -53,7 +53,7 @@ export const gradeFields = [
     { id: '3', name: '3' },
     { id: '4', name: '4' },
     { id: '5', name: '5' }
-];
+]
 
 export const thesisValidationRules = {
     title: 'required',
@@ -63,9 +63,9 @@ export const thesisValidationRules = {
     programmeId: 'required',
     studyfieldId: 'required',
     graders: ['minLength:2']
-};
+}
 
-export const thesisValidation = new Checkit(thesisValidationRules);
+export const thesisValidation = new Checkit(thesisValidationRules)
 
 export const emptyThesisData = {
     id: undefined,
@@ -83,4 +83,17 @@ export const emptyThesisData = {
         graderEvalReminder: undefined,
         printReminder: undefined
     }
-};
+}
+
+export const labelToText = (label) => {
+    switch (label) {
+        case 'otherFile':
+            return 'Other'
+        case 'reviewFile':
+            return 'Review'
+        case 'thesisFile':
+            return 'Thesis'
+        default:
+            return 'Label not handled'
+    }
+}

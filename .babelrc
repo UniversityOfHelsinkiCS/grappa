@@ -3,5 +3,8 @@
       "react",
       "env",
       "stage-2"
+    ],
+    "plugins": [
+      ["lodash", { "id": ["lodash", "semantic-ui-react"] }]
     ]
 }

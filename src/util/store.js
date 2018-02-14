@@ -1,22 +1,22 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import { handleRequest } from './apiConnection';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import { handleRequest } from './apiConnection'
 
-import availableRolesReducer from '../containers/role/availableRolesReducer';
-import userReducer from '../containers/user/userReducer';
-import agreementReducer from '../containers/agreement/agreementReducer';
-import attachmentReducer from '../containers/attachment/attachmentReducer';
-import councilmeetingReducer from '../containers/councilmeeting/councilmeetingReducer';
-import thesisReducer from '../containers/thesis/thesisReducer';
-import studyfieldReducer from '../containers/studyfield/studyfieldReducer';
-import programmeReducer from '../containers/programme/programmeReducer';
-import emailReducer from '../containers/email/emailReducer';
-import personReducer from '../containers/person/personReducer';
-import roleReducer from '../containers/role/roleReducer';
-import notificationsReducer from '../containers/notifications/notificationsReducer';
-import eventMessageReducer from '../containers/eventMessage/eventMessageReducer';
-import inviteReducer from '../containers/invite/inviteReducer';
-import statisticsReducer from '../containers/thesis/statisticsReducer';
+import availableRolesReducer from '../containers/Role/services/availableRolesReducer'
+import userReducer from '../containers/User/services/userReducer'
+import agreementReducer from '../containers/Agreement/services/agreementReducer'
+import attachmentReducer from '../containers/Attachment/services/attachmentReducer'
+import councilmeetingReducer from '../containers/CouncilMeeting/services/councilmeetingReducer'
+import thesisReducer from '../containers/Thesis/services/thesisReducer'
+import studyfieldReducer from '../containers/Studyfield/services/studyfieldReducer'
+import programmeReducer from '../containers/Unit/services/programmeReducer'
+import emailReducer from '../containers/Email/services/emailReducer'
+import personReducer from '../containers/Person/services/personReducer'
+import roleReducer from '../containers/Role/services/roleReducer'
+import notificationsReducer from '../containers/Notification/services/notificationsReducer'
+import eventMessageReducer from '../containers/EventMessage/services/eventMessageReducer'
+import inviteReducer from '../containers/Invite/services/inviteReducer'
+import statisticsReducer from '../containers/Statistics/services/statisticsReducer'
 
 const combinedReducers = combineReducers({
     agreements: agreementReducer,
@@ -34,9 +34,9 @@ const combinedReducers = combineReducers({
     eventMessage: eventMessageReducer,
     invite: inviteReducer,
     statistics: statisticsReducer
-});
+})
 
-let store;
+let store
 if (process.env.REACT_APP_DEVTOOLS === '1') {
     store = createStore(
         combinedReducers,
@@ -46,6 +46,6 @@ if (process.env.REACT_APP_DEVTOOLS === '1') {
 } else {
     store = createStore(
         combinedReducers,
-        applyMiddleware(thunk, handleRequest));
+        applyMiddleware(thunk, handleRequest))
 }
-export default store;
+export default store
