@@ -83,7 +83,6 @@ class NewCouncilmeetingForm extends Component {
                                 dateFormat={dateFormat}
                                 selected={this.state.meeting.date}
                                 onChange={date => this.handleDateChange(date)}
-                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                         <div className="field">
