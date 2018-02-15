@@ -34,12 +34,12 @@ class NewCouncilmeetingForm extends Component {
     };
 
     handleProgrammeChange = (event) => {
-        const programme = this.props.programmes.find(programme =>
+        const newProgramme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
         )
-        if (programme) {
-            const programmes = [...this.state.meeting.programmes, programme]
+        if (newProgramme) {
+            const programmes = [...this.state.meeting.programmes, newProgramme]
             const meeting = Object.assign({}, this.state.meeting, { programmes })
             this.setState({ meeting })
         }
@@ -83,6 +83,7 @@ class NewCouncilmeetingForm extends Component {
                                 dateFormat={dateFormat}
                                 selected={this.state.meeting.date}
                                 onChange={date => this.handleDateChange(date)}
+                                utcOffset={moment.tz('Europe/Helsinki').utcOffset()}
                             />
                         </div>
                         <div className="field">

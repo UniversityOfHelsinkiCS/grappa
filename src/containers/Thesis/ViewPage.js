@@ -21,7 +21,6 @@ import GraderSelector from './components/edit/GraderSelector'
 import { combineAllThesisData, gradeFields, oldGradeFields } from '../../util/theses'
 
 class ThesisViewPage extends Component {
-
     state = {
         value: '',
         open: '',

@@ -1,7 +1,7 @@
 import React from 'react'
 import test from 'ava'
-import EventMessage from './EventMessage'
 import { shallow } from 'enzyme'
+import EventMessage from './EventMessage'
 
 
 test('with success message element is correct', (t) => {
@@ -13,7 +13,12 @@ test('with error message element has correct text', (t) => {
 })
 
 
-const getEventMessage = (typeOfMessage, eventMessage) => <EventMessage type={typeOfMessage} message={eventMessage} clearMessages={() => { }} />
+const getEventMessage = (typeOfMessage, eventMessage) => (
+    <EventMessage
+        type={typeOfMessage}
+        message={eventMessage}
+        clearMessages={() => { }}
+    />)
 
 const checkIfEventMessageRenders = (typeOfMessage, eventMessage) => {
     const eventElement = getEventMessage(typeOfMessage, eventMessage)

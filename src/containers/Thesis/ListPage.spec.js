@@ -4,7 +4,7 @@ import { mountWithStore, mockStore } from '../../util/testUtils'
 
 import ThesisListPage from './ListPage'
 
-test('Empty thesis list renders without errors', (t) => {
+test('Empty thesis list renders without errors', () => {
     const store = mockStore({
         theses: [],
         persons: [],

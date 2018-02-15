@@ -14,7 +14,7 @@ const reducer = (state = [], action) => {
         case 'THESIS_MARK_PRINTED_SUCCESS':
             return [...state].map((thesis) => {
                 if (action.response.includes(thesis.thesisId)) {
-                    thesis.printDone = true
+                    Object.assign(thesis, { printDone: true })
                 }
                 return thesis
             })

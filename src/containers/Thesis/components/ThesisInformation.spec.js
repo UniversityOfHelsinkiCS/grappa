@@ -10,9 +10,10 @@ test.skip('invalid fields are highlighted', (t) => {
         authorEmail: {}
     }
     const form = shallow(<ThesisInformation
-        sendChange={function () {}}
+        sendChange={() => {}}
         thesis={thesis}
         programmes={[{ programmeId: 1, name: 'test' }]}
+        studyfields={[]}
         allowEdit
         validationErrors={validationErrors}
     />)

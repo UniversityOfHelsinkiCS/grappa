@@ -91,7 +91,8 @@ export default class EmailDraft extends Component {
         return (
             <div className="m-bot">
                 <h3 className="ui dividing header">
-                    {editing ? 'Editing draft: ' : ''}{`${this.getProgrammeName(this.props.draft)} ${this.props.draft.type}`}
+                    {editing ? 'Editing draft: ' : ''}
+                    {`${this.getProgrammeName(this.props.draft)} ${this.props.draft.type}`}
                 </h3>
                 <div className="field">
                     <label htmlFor="changeDraftTitle">

@@ -15,13 +15,7 @@ export const deleteAttachment = (attachmentId) => {
 }
 
 export const downloadAttachments = (attachmentIds) => {
-    const idString = attachmentIds.reduce((accumulated, current) => {
-        if (accumulated) {
-            accumulated += '&'
-        }
-        accumulated += current
-        return accumulated
-    })
+    const idString = attachmentIds.reduce((accumulated, current) => (accumulated ? `${accumulated}&` : '') + current)
     const route = `/attachments/${idString}`
     const prefix = 'ATTACHMENT_DOWNLOAD_'
     return callController(route, prefix)
