@@ -16,9 +16,10 @@ export default class ThesisCouncilmeetingPicker extends Component {
         if (!councilmeetings)
             return []
 
-        const isInFuture = meeting => moment(meeting.instructorDeadline).isAfter(moment())
+        // Deadline is always at the end of the day, so if day is either same or after, then it's not past the deadline.
+        const isInFuture = meeting => moment(meeting.instructorDeadline).isSameOrAfter(moment(), 'day')
         const formatDate = meeting => moment(meeting.date).format('DD.MM.YYYY')
-        const formatDeadline = meeting => moment(meeting.instructorDeadline).format('HH:mm DD.MM.YYYY')
+        const formatDeadline = meeting => moment(meeting.instructorDeadline).format('23:59 DD.MM.YYYY')
         const isMeetingSelectable = meeting => isInFuture(meeting) && meeting.programmes.includes(programmeId)
 
         const meetings = councilmeetings
