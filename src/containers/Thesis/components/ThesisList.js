@@ -78,7 +78,9 @@ class ThesisList extends Component {
             }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
             )
             this.props.downloadSelected(attachmentIds)
-            this.props.markPrinted(this.state.selectedThesesIds)
+            if (this.state.markDone) {
+                this.props.markPrinted(this.state.selectedThesesIds)
+            }
         }
     };
 
