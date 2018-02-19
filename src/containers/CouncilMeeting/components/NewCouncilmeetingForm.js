@@ -22,7 +22,7 @@ class NewCouncilmeetingForm extends Component {
         this.state = Object.assign({}, initialState)
     }
 
-    handleChange = (field, event) => {
+    handleChange = field => (event) => {
         const meeting = Object.assign({}, this.state.meeting)
         meeting[field] = event.target.value
         this.setState({ meeting })
@@ -82,7 +82,7 @@ class NewCouncilmeetingForm extends Component {
                                 id="newCouncilmeetingDate"
                                 dateFormat={dateFormat}
                                 selected={this.state.meeting.date}
-                                onChange={date => this.handleDateChange(date)}
+                                onChange={this.handleDateChange}
                             />
                         </div>
                         <div className="field">
@@ -91,7 +91,7 @@ class NewCouncilmeetingForm extends Component {
                                 id="newCouncilmeetingInstructorDeadlineDays"
                                 type="text"
                                 value={this.state.meeting.instructorDeadlineDays}
-                                onChange={event => this.handleChange('instructorDeadlineDays', event)}
+                                onChange={this.handleChange('instructorDeadlineDays')}
                                 placeholder="Days"
                             />
                         </div>
@@ -101,7 +101,7 @@ class NewCouncilmeetingForm extends Component {
                                 id="newCouncilmeetingStudentDeadlineDays"
                                 type="text"
                                 value={this.state.meeting.studentDeadlineDays}
-                                onChange={event => this.handleChange('studentDeadlineDays', event)}
+                                onChange={this.handleChange('studentDeadlineDays')}
                                 placeholder="Days"
                             />
                         </div>

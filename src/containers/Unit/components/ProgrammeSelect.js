@@ -25,7 +25,8 @@ export default class ProgrammeSelect extends Component {
 
     render() {
         const programmes = this.props.programmes.filter(programme =>
-            !programme.name.includes('Department') === this.state.newUnits
+            !programme.name.includes('Department') === this.state.newUnits &&
+            !programme.name.includes('OLD')
         )
 
         return (
