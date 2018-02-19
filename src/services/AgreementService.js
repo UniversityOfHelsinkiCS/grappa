@@ -192,7 +192,7 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         .innerJoin('person as grader', 'personWithRole.personId', '=', 'grader.personId')
         .innerJoin('person as author', 'agreement.authorId', '=', 'author.personId')
         .innerJoin('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-        .innerJoin('personWithRole as graderReviewerRole',
+        .leftJoin('personWithRole as graderReviewerRole',
             'agreementPerson.approverId', '=', 'graderReviewerRole.personRoleId')
-        .innerJoin('person as graderReviewer', 'graderReviewerRole.personId', '=', 'graderReviewer.personId')
+        .leftJoin('person as graderReviewer', 'graderReviewerRole.personId', '=', 'graderReviewer.personId')
 }

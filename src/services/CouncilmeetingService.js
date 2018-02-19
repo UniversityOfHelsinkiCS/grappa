@@ -3,8 +3,6 @@ const Councilmeeting = require('../db/models/councilmeeting')
 const moment = require('moment')
 const Bookshelf = require('../db/bookshelf')
 
-// TODO: Use bookshelf to combine programmes into councilmeeting
-
 export const getAllCouncilmeetings = async () => Councilmeeting.fetchAll({ withRelated: ['programmes'] })
 
 export const saveCouncilmeeting = async (councilmeeting, programmeIds) => {

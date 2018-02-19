@@ -29,9 +29,11 @@ export async function downloadAttachments(req, res) {
             }
             if (id.includes('cm')) {
                 councilmeetingId = id.replace('cm', '')
+                return false
             }
             return true
         })
+
         const attachments = await attachmentService.getAttachments(attachmentIds)
 
         // To keep the order that was used to call (eq, 3&1&2)
@@ -56,12 +58,10 @@ export async function downloadAttachments(req, res) {
         }))
 
         let fileStream = await attachmentService.mergePdfs(...promiseList)
-
         if (cover) {
             const councilmeeting = councilmeetingId ?
                 await councilmeetingService.getCouncilmeeting(councilmeetingId)
                 : undefined
-
             const coverStream = await attachmentService.createCover(thesisObjects, councilmeeting)
             fileStream = await attachmentService.mergePdfs(coverStream, fileStream)
         }
@@ -83,15 +83,20 @@ async function getAgreementObjects(agreementIds) {
     'grader.firstname',
     'grader.lastname',
     'agreementPerson.statement as graderStatement',
+    'graderReviewer.firstname as reviewerFirstname',
+    'graderReviewer.lastname as reviewerLastname',
     'author.firstname as authorFirstname',
     'author.lastname as authorLastname', */
     return agreementObjects.reduce((acc, cur) => {
         const idx = acc.findIndex(obj => obj.agreementId === cur.agreementId)
+        const reviewerName = cur.reviewerFirstname && cur.reviewerLastname ?
+            `${cur.reviewerLastname} ${cur.reviewerFirstname}` : 'not yet reviewed'
+        const statement = cur.graderStatement ? cur.graderStatement : 'No statement'
         const grader = {
             firstname: cur.firstname,
             lastname: cur.lastname,
-            statement: cur.graderStatement,
-            reviewerName: `${cur.reviewerLastname} ${cur.reviewerFirstname}`
+            statement,
+            reviewerName
         }
         if (idx !== -1) {
             acc[idx].graders.push(grader)

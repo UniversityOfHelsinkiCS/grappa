@@ -34,14 +34,13 @@ export async function combinePdf(...buffers) {
 export async function generateThesesCover(thesisInformationArray, councilmeeting) {
     const template = './data/coverTemplate.pdf'
     const dateInformation = councilmeeting ?
-        createDateString(new Date(councilmeeting.date))
+        createDateString(councilmeeting.date)
         : ''
     const thesisInformation = createThesisString(thesisInformationArray)
     const formData = {
         dateInformation,
         thesisInformation
     }
-
     return pdftk
         .input(template)
         .fillForm(formData)
@@ -50,7 +49,10 @@ export async function generateThesesCover(thesisInformationArray, councilmeeting
 }
 
 function createDateString(date) {
-    return `0${(date.getDate()).slice(-2)}/0${(date.getMonth() + 1).slice(-2)}/${date.getFullYear()}`
+    const day = `0${date.getDate()}`.slice(-2)
+    const month = `0${date.getMonth() + 1}`.slice(-2)
+    const year = date.getFullYear()
+    return `${day}/${month}/${year}`
 }
 
 function createThesisString(thesisInfoArray) {
