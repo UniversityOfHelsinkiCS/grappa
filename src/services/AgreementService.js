@@ -177,7 +177,7 @@ export const getThesesGradersAuthorsForAgreements = (agreementIds) => {
         'grader.firstname',
         'grader.lastname',
         'agreementPerson.statement as graderStatement',
-        'graderReviewer.firstname as reviewerFirstname', // TODO: confirm graderReviewer is correct.
+        'graderReviewer.firstname as reviewerFirstname',
         'graderReviewer.lastname as reviewerLastname',
         'author.firstname as authorFirstname',
         'author.lastname as authorLastname'
