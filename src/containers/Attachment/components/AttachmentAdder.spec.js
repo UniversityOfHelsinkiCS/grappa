@@ -57,7 +57,7 @@ test('when button is clicked, it removes file from the list', (t) => {
         attachments={files}
         removeAttachment={(file) => { files.splice(files.indexOf(file), 1) }}
         addAttachment={(file) => { files.push(file) }}
-        changeList={attachments => files = attachments}
+        changeList={(attachments) => { files = attachments }}
     />)
     const wrapper = shallow(adder)
     wrapper.find('button').simulate('click')

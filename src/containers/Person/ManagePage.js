@@ -25,10 +25,12 @@ export class PersonRoleManagePage extends Component {
 
         if (person) {
             const roles = newProps.roles.filter(role => role.personId === person.personId)
-                .map((role) => {
-                    role.programme = newProps.programmes.find(field => field.programmeId === role.programmeId).name
-                    return role
-                })
+                .map(role =>
+                    Object.assign(
+                        role,
+                        { programme: newProps.programmes.find(field => field.programmeId === role.programmeId).name }
+                    )
+                )
             this.setState({ roles })
         }
     }
@@ -37,18 +39,19 @@ export class PersonRoleManagePage extends Component {
         const person = persons.find(item => !this.state.person || item.personId !== this.state.person.personId)
         const roles = person ?
             this.props.roles.filter(role => role.personId === person.personId)
-                .map((role) => {
-                    role.programme = this.props.programmes.find(field => field.programmeId === role.programmeId).name
-                    return role
-                })
+                .map(role =>
+                    Object.assign(
+                        role,
+                        { programme: this.props.programmes.find(field => field.programmeId === role.programmeId).name }
+                    )
+                )
             : undefined
         this.setState({ person, roles })
     };
 
     handleAddRole = (role) => {
-        role.personId = this.state.person.personId
-        if (role.personId && role.roleId && role.programmeId) {
-            this.props.saveRole(role)
+        if (this.state.person.personId && role.roleId && role.programmeId) {
+            this.props.saveRole(Object.assign(role, { personId: this.state.person.personId }))
         }
     };
 

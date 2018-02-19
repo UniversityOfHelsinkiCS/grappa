@@ -4,13 +4,36 @@ import { attachmentType } from '../../../util/types'
 import { labelToText } from '../../../util/theses'
 
 export default class AttachmentList extends Component {
+    state = {
+        confirmId: undefined
+    }
+
     download = attachmentId => () => {
         this.props.downloadAttachment(attachmentId)
     };
 
     delete = attachmentId => () => {
-        this.props.deleteAttachment(attachmentId)
+        if (this.state.confirmId === attachmentId) {
+            this.props.deleteAttachment(attachmentId)
+        } else {
+            this.setState({ confirmId: attachmentId })
+        }
     };
+
+    renderDeleteButton = (attachmentId) => {
+        const primed = this.state.confirmId === attachmentId
+        const buttonColor = primed ? 'red' : 'blue'
+        return (
+            <td>
+                <button
+                    className={`ui ${buttonColor} button`}
+                    onClick={this.delete(attachmentId)}
+                >
+                    {primed ? 'Confirm delete' : 'Delete'}
+                </button>
+            </td>
+        )
+    }
 
     render() {
         return (
@@ -36,16 +59,8 @@ export default class AttachmentList extends Component {
                                     Download
                                 </button>
                             </td>
-                            {this.props.deleteAttachment ? (
-                                <td>
-                                    <button
-                                        className="ui primary button"
-                                        onClick={this.delete(attachment.attachmentId)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            ) : null}
+                            {this.props.deleteAttachment ?
+                                this.renderDeleteButton(attachment.attachmentId) : null}
                         </tr>)
                     )}
                 </tbody>

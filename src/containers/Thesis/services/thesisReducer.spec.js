@@ -1,5 +1,4 @@
 import test from 'ava'
-import sinon from 'sinon'
 import { reducerTest } from 'redux-ava'
 
 import reducer from './thesisReducer'

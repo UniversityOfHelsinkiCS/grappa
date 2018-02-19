@@ -1,8 +1,7 @@
 import React from 'react'
 import test from 'ava'
 import sinon from 'sinon'
-import { shallow, mount } from 'enzyme'
-import { MemoryRouter } from 'react-router-dom'
+import { shallow } from 'enzyme'
 
 import ThesisList from './ThesisList'
 

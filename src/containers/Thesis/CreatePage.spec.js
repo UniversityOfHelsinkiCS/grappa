@@ -1,6 +1,7 @@
 import React from 'react'
 import test from 'ava'
 import sinon from 'sinon'
+import { mount } from 'enzyme'
 
 import { ThesisCreatePage } from './CreatePage'
 

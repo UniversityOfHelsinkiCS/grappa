@@ -36,6 +36,35 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
     return formattedThesis
 }
 
+export const combineAllThesisData = (thesisId, props) => {
+    const { theses, agreements, persons, studyfields, programmes, roles, councilMeetings, attachments, user } = props
+
+    const editRoles = ['manager', 'admin']
+    const hasAllDataLoaded = [
+        theses, agreements, persons, studyfields, programmes, roles, councilMeetings
+    ].every(arr => arr.length > 0)
+
+    if (!hasAllDataLoaded)
+        return { invalid: true }
+
+    const selectedId = Number(thesisId)
+    const thesis = theses.find(t => t.thesisId === selectedId)
+    const agreement = agreements.find(agr => agr.thesisId === selectedId)
+    const author = (agreement) ? persons.find(person => person.personId === agreement.authorId) : null
+    const studyfield = studyfields.find(field => field.studyfieldId === agreement.studyfieldId)
+    const programme = programmes.find(prg => prg.programmeId === studyfield.programmeId)
+    const programmeData = { studyfield, programme }
+    const graders = roles
+        .filter(role => role.agreementId === agreement.agreementId)
+        .map(role => persons.find(person => person.personId === role.personId))
+    const councilMeeting = councilMeetings
+        .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId)
+    const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId)
+    const allowEdit = !!user.roles.find(role => editRoles.includes(role.role))
+
+    return { thesis, agreement, author, programmeData, graders, councilMeeting, thesisAttachments, allowEdit }
+}
+
 
 export const oldGradeFields = [
     { id: 'Approbatur', name: 'Approbatur' },

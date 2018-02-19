@@ -5,7 +5,6 @@ import { attachmentType } from '../../../util/types'
 
 
 export default class AttachmentAdder extends Component {
-
     state = {
         rejected: 0
     }
