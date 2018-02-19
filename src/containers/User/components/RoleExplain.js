@@ -3,7 +3,7 @@ import { object } from 'prop-types'
 
 export const RoleExplain = ({ user }) => {
     if (!user.roles) {
-        return <div />
+        return null
     }
 
     const roleInfo = (roleName) => {
@@ -32,19 +32,28 @@ export const RoleExplain = ({ user }) => {
                 return `Unknown role: ${roleName}, contact grp-toska@helsinki.fi`
         }
     }
+    const roleObject = user.roles.reduce((acc, cur) => {
+        if (acc[cur.role]) {
+            acc[cur.role].push(cur.programme)
+        } else {
+            acc[cur.role] = [cur.programme]
+        }
+        return acc
+    }, {})
 
     return (
         <div>
             {user.roles.length > 0 ?
                 <h3>You have the following role(s):</h3> :
                 <h3>Welcome to Grappa, if you have theses you should find them on page Thesis List</h3>}
-            {user.roles.map(role => (
-                <div key={role.programmeId + role.role} style={{ margin: '1%' }}>
+
+            {Object.keys(roleObject).map(key => (
+                <div key={roleObject[key]} style={{ margin: '1%' }}>
                     <h3>
-                        {role.role.charAt(0).toUpperCase() + role.role.slice(1)} in {role.programme}
+                        {key.charAt(0).toUpperCase() + key.slice(1)} in {roleObject[key].join(', ')}
                     </h3>
                     <p>
-                            As {role.role} you {roleInfo(role.role)}
+                        As {key} you {roleInfo(key)}
                     </p>
                 </div>
             ))}

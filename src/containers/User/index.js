@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { login } from './services/userActions'
 import { personType } from '../../util/types'
 import PersonSwitcher from '../Person/components/PersonSwitcher'
-import RoleExplain from '../Role/components/RoleExplain'
+import RoleExplain from './components/RoleExplain'
 
 export class UserPage extends Component {
     componentDidMount() {
