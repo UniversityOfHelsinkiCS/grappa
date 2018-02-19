@@ -128,10 +128,12 @@ export async function mergePdfs(...buffers) {
 }
 
 export async function createCover(infoObjects, councilmeeting) {
+    console.log("Createcover", infoObjects, councilmeeting)
     return pdfManipulator.generateThesesCover(infoObjects, councilmeeting)
 }
 
 export async function createReviewPage(reviewObject) {
+    console.log("Createreview", reviewObject)
     return pdfManipulator.generateReviewPage(reviewObject)
 }
 
