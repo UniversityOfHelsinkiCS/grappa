@@ -27,11 +27,10 @@ export class ThesisCreatePage extends Component {
     handleSaveThesis = () => {
         const form = new FormData()
         this.state.attachments.forEach((attachment) => {
-            const copyAttachment = Object.assign({}, attachment)
-            if (!copyAttachment.label) {
-                copyAttachment.label = 'otherFile'
+            if (!attachment.label) {
+                attachment.label = 'otherFile'
             }
-            form.append(copyAttachment.label, copyAttachment)
+            form.append(attachment.label, attachment)
         })
         const thesis = Object.assign({}, this.state.thesis)
         delete thesis.programmeId
