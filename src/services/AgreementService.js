@@ -28,11 +28,13 @@ const agreementSchema = [
 
 export const getAgreementById = agreementId => knex.select().from('agreement')
     .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-    .leftJoin('person', 'agreement.authorId', '=', 'person.personId')
+    .join('person', 'agreement.authorId', '=', 'person.personId')
     .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
     .join('programme', 'studyfield.programmeId', '=', 'programme.programmeId')
     .where('agreementId', agreementId)
     .then(agreement => parseAgreementData(agreement[0]))
+
+export const getAgreement = agreementId => knex.select().from('agreement').where('agreementId', agreementId)
 
 export const getAgreementsInStudyfield = studyfieldId => knex.select()
     .from('agreement')
