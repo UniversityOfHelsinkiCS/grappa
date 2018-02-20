@@ -28,7 +28,7 @@ const agreementSchema = [
 
 export const getAgreementById = agreementId => knex.select().from('agreement')
     .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
-    .join('person', 'agreement.authorId', '=', 'person.personId')
+    .leftJoin('person', 'agreement.authorId', '=', 'person.personId')
     .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
     .join('programme', 'studyfield.programmeId', '=', 'programme.programmeId')
     .where('agreementId', agreementId)

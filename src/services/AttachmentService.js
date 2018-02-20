@@ -53,7 +53,8 @@ export async function saveAttachments(req, res, agreementId) {
             id = JSON.parse(request.body.json).agreementId
         }
 
-        await checkUserHasRightToModifyAgreement(req, [await getAgreementById(id)])
+        const agreement = await getAgreementById(id)
+        await checkUserHasRightToModifyAgreement(req, [agreement])
 
         const attachments = [].concat(...await Promise.all(
             Object.keys(request.files)
