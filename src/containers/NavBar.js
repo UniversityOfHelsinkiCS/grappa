@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { func } from 'prop-types'
 import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Button } from 'semantic-ui-react'
+
 import { getPermissions } from '../util/rolePermissions'
 import { login } from './User/services/userActions'
 import { personType } from '../util/types'
+
 
 // TODO: redux persistent storage & fetch in middleware
 import { getProgrammes } from './Unit/services/programmeActions'
@@ -23,43 +26,53 @@ const logout = () => {
         .then((res) => { window.location = res.data.logoutUrl })
 }
 
-export class NavBar extends Component {
-    constructor() {
-        super()
-        this.state = {
-            links: [],
-            loaded: false
-        }
-    }
+class NavBar extends Component {
+  static propTypes = {
+      login: func.isRequired,
+      getPersons: func.isRequired,
+      getProgrammes: func.isRequired,
+      getStudyfields: func.isRequired,
+      getAgreements: func.isRequired,
+      getCouncilmeetings: func.isRequired,
+      getTheses: func.isRequired,
+      getNotifications: func.isRequired,
+      getEmailDrafts: func.isRequired,
+      user: personType.isRequired
+  }
 
-    componentDidMount() {
-        // This login will allow shibboleth to check on page reload
-        this.props.login()
+  state = {
+      links: [],
+      loaded: false
+  }
 
-        if (process.env.NODE_ENV === 'development') {
-            this.props.getPersons()
-        }
-    }
+  componentDidMount() {
+      // This login will allow shibboleth to check on page reload
+      this.props.login()
 
-    componentWillReceiveProps(newProps) {
-        this.refreshLinks(newProps)
-        // TODO: redux persistent storage & fetch in middleware
-        if (newProps.user && !this.state.loaded) {
-            this.props.getPersons()
-            this.props.getStudyfields()
-            this.props.getProgrammes()
-            this.props.getAgreements()
-            this.props.getCouncilmeetings()
-            this.props.getTheses()
-            this.props.getEmailDrafts()
+      if (process.env.NODE_ENV === 'development') {
+          this.props.getPersons()
+      }
+  }
 
-            if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
-                this.props.getNotifications()
-            }
+  componentWillReceiveProps(newProps) {
+      this.refreshLinks(newProps)
+      // TODO: redux persistent storage & fetch in middleware
+      if (newProps.user && !this.state.loaded) {
+          this.props.getPersons()
+          this.props.getStudyfields()
+          this.props.getProgrammes()
+          this.props.getAgreements()
+          this.props.getCouncilmeetings()
+          this.props.getTheses()
+          this.props.getEmailDrafts()
 
-            this.setState({ loaded: true })
-        }
-    }
+          if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
+              this.props.getNotifications()
+          }
+
+          this.setState({ loaded: true })
+      }
+  }
 
     refreshLinks = (props) => {
         let links = []
@@ -88,9 +101,9 @@ export class NavBar extends Component {
                         // Handle special cases:
                         switch (elem.path) {
                             // Using navbar we want to display the NEXT councilmeeting, logic in component.
-                            case '/councilmeeting/:id':
+                            case '/councilmeeting/:id?':
                                 return (
-                                    <NavLink key={elem.path} to="/councilmeeting/next" exact className="item">
+                                    <NavLink key={elem.path} to="/councilmeeting" strict className="item">
                                         {elem.navText}
                                     </NavLink>
                                 )
@@ -104,7 +117,7 @@ export class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <a className="item" onClick={logout}>Logout</a>
+                        <Button as="a" className="item" onClick={logout}>Logout</Button>
                     </div>
                 </div>
             </div>
@@ -146,18 +159,5 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-const { func } = PropTypes
-NavBar.propTypes = {
-    login: func.isRequired,
-    getPersons: func.isRequired,
-    getProgrammes: func.isRequired,
-    getStudyfields: func.isRequired,
-    getAgreements: func.isRequired,
-    getCouncilmeetings: func.isRequired,
-    getTheses: func.isRequired,
-    getNotifications: func.isRequired,
-    getEmailDrafts: func.isRequired,
-    user: personType.isRequired
-}
-
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
+
