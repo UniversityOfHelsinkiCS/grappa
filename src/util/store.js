@@ -40,7 +40,7 @@ const store = createStore(
     combinedReducers,
     compose(applyMiddleware(thunk, handleRequest)),
     // eslint-disable-next-line
-    (process.env.NODE_ENV !== 'produvtion' && window.__REDUX_DEVTOOLS_EXTENSION__) && window.__REDUX_DEVTOOLS_EXTENSION__()
+    (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION__) && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
 export default store
