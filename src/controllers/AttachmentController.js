@@ -6,14 +6,10 @@ const councilmeetingService = require('../services/CouncilmeetingService')
 const notificationService = require('../services/NotificationService')
 
 export async function saveAttachments(req, res) {
-    try {
-        const attachmentObject = await attachmentService.saveAttachments(req, res)
-        const { attachments } = attachmentObject
-        notificationService.createNotification('ATTACHMENT_SAVE_ONE_SUCCESS', req)
-        res.status(200).send(attachments).end()
-    } catch (error) {
-        res.status(500).end()
-    }
+    const attachmentObject = await attachmentService.saveAttachments(req, res)
+    const { attachments } = attachmentObject
+    notificationService.createNotification('ATTACHMENT_SAVE_ONE_SUCCESS', req)
+    res.status(200).send(attachments).end()
 }
 
 export async function downloadAttachments(req, res) {

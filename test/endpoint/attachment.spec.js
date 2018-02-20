@@ -36,6 +36,21 @@ test('attachment post & creates id', async (t) => {
     t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 })
 
+test('attachment post permissions chekced', async (t) => {
+    const person = await knex.getKnex()('person')
+        .insert({ firstname: 'test', lastname: 'test' })
+        .returning('personId')
+        .first()
+
+    const agreementId = 1
+    const res = await request(makeApp(person))
+        .post('/attachments')
+        .field('json', JSON.stringify({ agreementId }))
+        .attach('otherFile', './LICENSE')
+
+    t.is(res.status, 500)
+})
+
 test('attachment permissions are checked on delete', async (t) => {
     const agreementId = 1
     const res1 = await request(makeApp(1))
@@ -63,7 +78,6 @@ test('attachment can be deleted', async (t) => {
 
     const attachments = res1.body
     t.is(attachments.length, 1)
-    t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 
     const res2 = await request(makeApp(1))
         .del(`/attachments/${res1.body[0].attachmentId}`)
