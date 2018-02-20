@@ -31,7 +31,7 @@ export const paths = {
     thesisView: { path: '/thesis/:id', component: ThesisViewPage },
     thesis: { path: '/thesis', component: ThesisCreate, navText: 'New thesis' },
     assesment: { path: '/assesment', component: AssesmentOfTheses, navText: 'Assesment of theses' },
-    councilMeeting: { path: '/councilmeeting/:id', component: CouncilmeetingView, navText: 'Next council meeting' },
+    councilMeeting: { path: '/councilmeeting/:id?', component: CouncilmeetingView, navText: 'Next council meeting' },
     councilMeetings: { path: '/councilmeetings', component: CouncilmeetingManage, navText: 'Council meetings' },
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
