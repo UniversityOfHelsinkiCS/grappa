@@ -36,16 +36,11 @@ const combinedReducers = combineReducers({
     statistics: statisticsReducer
 })
 
-let store
-if (process.env.REACT_APP_DEVTOOLS === '1') {
-    store = createStore(
-        combinedReducers,
-        compose(applyMiddleware(thunk, handleRequest),
-        // eslint-disable-next-line
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
-} else {
-    store = createStore(
-        combinedReducers,
-        applyMiddleware(thunk, handleRequest))
-}
+const store = createStore(
+    combinedReducers,
+    compose(applyMiddleware(thunk, handleRequest)),
+    // eslint-disable-next-line
+    (process.env.NODE_ENV !== 'produvtion' && window.__REDUX_DEVTOOLS_EXTENSION__) && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
+
 export default store
