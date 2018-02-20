@@ -117,7 +117,7 @@ export async function updateThesis(req, res) {
     let thesis = await thesisService.getThesisById(updatedFields.thesisId)
     const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId)
 
-    await checkUserHasRightToModifyThesis(req, agreements)
+    await agreementService.checkUserHasRightToModifyAgreement(req, agreements)
 
     Object.keys(thesis).forEach((key) => {
         if (updatedFields[key] !== undefined)
@@ -173,48 +173,6 @@ const updateGraders = async (graders, agreement) => {
             roleService.linkAgreementAndPersonRole(agreement.agreementId, personWithRole.personRoleId)
         }
     }))
-}
-
-async function checkUserHasRightToModifyThesis(req, agreements) {
-    const user = await personService.getLoggedPerson(req)
-    const roles = await roleService.getUsersRoles(user)
-
-    if (isAdmin(roles)) {
-        return
-    }
-
-    if (await hasStudyfieldRole(roles, agreements)) {
-        return
-    }
-
-    if (await isAgreementPersonForThesis(user, agreements)) {
-        return
-    }
-
-    throw new Error('User has no access to edit thesis')
-}
-
-function isAdmin(roles) {
-    return !!roles.find(item => item.role.name === 'admin')
-}
-
-async function hasStudyfieldRole(roles, agreements) {
-    const studyfieldRoles = ['manager', 'resp_professor']
-    const thesisProgramme = await programmeService.getStudyfieldsProgramme(agreements[0].studyfieldId)
-    const studyfieldRole = roles
-        .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
-        .find(item => studyfieldRoles.includes(item.role.name))
-
-    return !!studyfieldRole
-}
-
-async function isAgreementPersonForThesis(user, agreements) {
-    const agreementPersons = await Promise.map(
-        agreements,
-        agreement => roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
-    ).reduce((prev, cur) => prev.concat(cur), [])
-
-    return !!agreementPersons.find(person => person.personId === user.personId)
 }
 
 export async function markPrinted(req, res) {

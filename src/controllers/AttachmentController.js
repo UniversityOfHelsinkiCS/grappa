@@ -116,11 +116,13 @@ async function getAgreementObjects(agreementIds) {
 }
 
 export async function deleteAttachment(req, res) {
-    try {
-        const attachmentId = req.params.id
-        const deletedId = await attachmentService.deleteAttachment(attachmentId)
-        res.status(200).send(deletedId).end()
-    } catch (error) {
-        res.status(500).end()
-    }
+    const attachmentId = req.params.id
+    const attachment = await attachmentService.getAttachments([attachmentId])
+    const agreement = await agreementService.getAgreementById(attachment[0].agreementId)
+    await agreementService.checkUserHasRightToModifyAgreement(req, [agreement])
+
+    const deletedId = await attachmentService.deleteAttachment(attachmentId)
+    notificationService.createNotification('ATTACHMENT_DELETE_ONE_SUCCESS', req)
+
+    res.status(200).send(deletedId).end()
 }
