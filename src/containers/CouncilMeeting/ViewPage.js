@@ -131,6 +131,7 @@ export class CouncilmeetingViewPage extends Component {
                     agreements={this.props.agreements}
                     markPrinted={this.props.markPrinted}
                     showButtons
+                    selectable
                 />
             </div>
         )
