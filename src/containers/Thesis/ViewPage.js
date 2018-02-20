@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { arrayOf, func, object } from 'prop-types'
-import { Grid, GridColumn, GridRow, Button } from 'semantic-ui-react'
+import { Grid, GridColumn, GridRow } from 'semantic-ui-react'
 import moment from 'moment'
 import {
     agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
@@ -144,19 +144,28 @@ class ThesisViewPage extends Component {
                 <GridRow>
                     <ThesisValueField title="Thesis title">{thesis.title}</ThesisValueField>
                     <GridColumn width={8} />
-                    <EditButton toggle={() => this.toggleEditField('title')} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('title')}
+                        allowEdit={allowEdit}
+                        save={this.saveChanges}
+                        active={this.state.open === 'title'}
+                    />
                     <TextEdit
                         active={this.state.open === 'title'}
                         value={this.state.value}
                         handleChange={this.handleChange}
-                        save={this.saveChanges}
                     />
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Unit">{programmeData.programme.name}</ThesisValueField>
                     <ThesisValueField title="Studyfield">{programmeData.studyfield.name}</ThesisValueField>
                     <ThesisValueField title="Grade">{thesis.grade}</ThesisValueField>
-                    <EditButton toggle={this.toggleGradeAndStudyfieldEdit} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={this.toggleGradeAndStudyfieldEdit}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'grade'}
+                        save={this.saveStudyfieldAndGrade}
+                    />
                     <ThesisFieldEdit active={this.state.open === 'grade'}>
                         <select value={this.state.programmeId} onChange={this.changeProgramme}>
                             {this.props.programmes.map(programme => (
@@ -181,7 +190,6 @@ class ThesisViewPage extends Component {
                                     <option key={grade.id} value={grade.id}>{grade.name}</option>
                                 ))}
                         </select>
-                        <Button onClick={this.saveStudyfieldAndGrade}>Save</Button>
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
@@ -191,9 +199,13 @@ class ThesisViewPage extends Component {
                         ))}
                     </ThesisValueField>
                     <GridColumn width={8} />
-                    <EditButton toggle={() => this.toggleEditField('graders')} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('graders')}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'graders'}
+                        save={this.saveGraders}
+                    />
                     <ThesisFieldEdit active={this.state.open === 'graders'}>
-                        <Button onClick={this.saveGraders} >Save</Button>
                         <GraderSelector
                             graders={graders}
                             validationErrors={{}}
@@ -210,12 +222,16 @@ class ThesisViewPage extends Component {
                         <a href={thesis.urkund} target="new">{thesis.urkund}</a>
                     </ThesisValueField>
                     <GridColumn width={8} />
-                    <EditButton toggle={() => this.toggleEditField('urkund')} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('urkund')}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'urkund'}
+                        save={this.saveChanges}
+                    />
                     <TextEdit
                         active={this.state.open === 'urkund'}
                         value={this.state.value}
                         handleChange={this.handleChange}
-                        save={this.saveChanges}
                     />
                 </GridRow>
                 <GridRow>
@@ -223,7 +239,12 @@ class ThesisViewPage extends Component {
                         {councilMeeting ? moment(councilMeeting.date).format('DD.MM.YYYY') : 'Not selected'}
                     </ThesisValueField>
                     <GridColumn width={8} />
-                    <EditButton toggle={() => this.toggleEditField('councilmeeting')} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('councilmeeting')}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'councilmeeting'}
+                        noSave
+                    />
                     <ThesisFieldEdit active={this.state.open === 'councilmeeting'}>
                         <ThesisCouncilmeetingPicker
                             councilmeetings={this.props.councilMeetings}
@@ -241,7 +262,12 @@ class ThesisViewPage extends Component {
                             attachments={thesisAttachments}
                         />
                     </GridColumn>
-                    <EditButton toggle={() => this.toggleEditField('attachments')} allowEdit={allowEdit} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('attachments')}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'attachments'}
+                        noSave
+                    />
                     <ThesisFieldEdit active={this.state.open === 'attachments'}>
                         <AttachmentAdder
                             attachments={this.state.newAttachments}
