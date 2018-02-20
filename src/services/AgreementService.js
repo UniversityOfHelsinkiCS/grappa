@@ -1,7 +1,8 @@
 import Promise from 'bluebird'
 import logger from '../util/logger'
 
-import { getStudyfieldsProgramme, getLoggedPerson } from './PersonService'
+import { getLoggedPerson } from './PersonService'
+import { getStudyfieldsProgramme } from './ProgrammeService'
 import { getAgreementPersonsByAgreementId, getUsersRoles } from './RoleService'
 
 const knex = require('../db/connection').getKnex()
