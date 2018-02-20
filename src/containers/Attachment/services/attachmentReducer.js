@@ -6,7 +6,7 @@ const reducer = (state = [], action) => {
         case 'THESIS_SAVE_ONE_SUCCESS':
             // Saving thesis response has multiple fields.
             // Whilst saving a new thesis there shouldn't exist any old attachments
-            return [...state, action.response.attachments]
+            return [...state, ...action.response.attachments]
         case 'AGREEMENT_SAVE_ONE_SUCCESS':
             // TODO update attachments when agreement is saved
             return state
