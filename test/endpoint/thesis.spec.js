@@ -65,7 +65,7 @@ const generateThesisWithId = (thesisForm, thesisId) => ({
     printDone: thesisForm.printDone
 })
 
-const generateAgreement = (thesisForm, agreementId, thesisId, authorId, startDate) => ({
+const generateAgreement = (thesisForm, agreementId, thesisId, authorId, startDate, email) => ({
     agreementId,
     thesisId,
     authorId,
@@ -73,6 +73,7 @@ const generateAgreement = (thesisForm, agreementId, thesisId, authorId, startDat
     responsibleSupervisorId: null,
     studyfieldId: thesisForm.studyfieldId,
     fake: true,
+    email,
     completionEta: null,
     performancePlace: null,
     studentGradeGoal: null,
@@ -110,7 +111,8 @@ const validPostForm = async (t, app, thesisForm, addAttachment) => {
     const { thesis, author, agreement, attachments } = res.body
     const expectedThesis = generateThesisWithId(thesisForm, thesis.thesisId)
     const expectedAuthor = undefined
-    const expectedAgreement = generateAgreement(thesisForm, agreement.agreementId, agreement.thesisId, agreement.authorId, agreement.startDate)
+    const expectedAgreement = generateAgreement(thesisForm, agreement.agreementId, agreement.thesisId,
+        agreement.authorId, agreement.startDate, thesisForm.authorEmail)
     // Check the linking is right
     t.is(thesis.thesisId, agreement.thesisId)
     // Check the contents are right
