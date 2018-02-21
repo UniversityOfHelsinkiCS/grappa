@@ -104,10 +104,11 @@ export async function saveThesisForm(req, res) {
     const programme = await programmeService.getStudyfieldsProgramme(studyfieldId)
     await emailService.newThesisAddedNotifyRespProf(programme.programmeId)
     await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme.programmeId)
+    const returnAgreement = await agreementService.getAgreementWithoutPersonById(savedAgreement.agreementId)
 
     const response = {
         thesis: savedThesis,
-        agreement: savedAgreement,
+        agreement: returnAgreement,
         attachments,
         roles
     }
