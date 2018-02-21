@@ -2,7 +2,7 @@ import Checkit from 'checkit'
 import moment from 'moment'
 
 export const formatTheses = (theses, agreements, persons, roles = [], councilMeetings = []) => {
-    if (!theses || !persons || !agreements)
+    if (theses.length === 0 || persons.length === 0 || agreements.length === 0)
         return []
 
     return theses.map(thesis => formatThesis(thesis, agreements, persons, roles, councilMeetings))
