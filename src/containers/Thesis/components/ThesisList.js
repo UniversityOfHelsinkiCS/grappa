@@ -112,7 +112,7 @@ class ThesisList extends Component {
                 <table className="ui celled table">
                     <thead>
                         <tr>
-                            {this.props.selectable ? <th>Select</th> : null}
+                            {this.props.selectable || this.props.showButtons ? <th>Select</th> : null}
                             <th>Author</th>
                             <th>Email</th>
                             <th>Title</th>
@@ -123,7 +123,7 @@ class ThesisList extends Component {
                     <tbody>
                         {this.state.filteredTheses.map(thesis => (
                             <tr key={thesis.thesisId}>
-                                {this.props.selectable ? (
+                                {this.props.selectable || this.props.showButtons ? (
                                     <td>
                                         <Checkbox
                                             checked={this.state.selectedThesesIds.includes(thesis.thesisId)}
