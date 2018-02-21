@@ -134,12 +134,12 @@ export const getUsersRoles = async (user) => {
 }
 
 export async function isUserAdmin(user) {
-    knex.select()
+    return knex.select()
         .from('personWithRole')
         .join('role', 'personWithRole.roleId', 'role.roleId')
         .where('personId', user.personId)
         .where('name', 'admin')
-        .then(res => res.length > 1)
+        .then(res => res.length > 0)
 }
 
 export async function isUserAdminOrManager(user) {
