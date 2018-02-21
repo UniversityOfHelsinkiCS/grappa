@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { arrayOf, func, bool } from 'prop-types'
 import { Checkbox, Icon } from 'semantic-ui-react'
 import { thesisType, agreementType, attachmentType } from '../../../util/types'
-import ThesisListButtons from './ThesisListButtons'
+import LoadingIndicator from '../../LoadingIndicator'
 
 class ThesisList extends Component {
     constructor(props) {
@@ -94,19 +94,48 @@ class ThesisList extends Component {
         return field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />
     }
 
+    renderButtons() {
+        if (!this.props.showButtons) {
+            return null
+        }
+
+        return (
+            <div className="ui form">
+                <div className="two fields" >
+                    <div className="field">
+                        <LoadingIndicator type="DOWNLOAD" />
+                        <button className="ui orange button" onClick={this.sendDownloadSelected}>Download</button>
+                        &nbsp;
+                        <div className="ui toggle checkbox">
+                            <input
+                                type="checkbox"
+                                checked={this.state.cover ? 'true' : ''}
+                                onChange={this.toggleCover}
+                            />
+                            <label>Include cover</label>
+                        </div>
+                        &nbsp;
+                        <div className="ui toggle checkbox">
+                            <input
+                                type="checkbox"
+                                checked={this.state.markDone ? 'true' : ''}
+                                onChange={this.toggleMarkDone}
+                            />
+                            <label>Mark print done</label>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <button className="ui purple button" onClick={this.toggleAll}>Select all</button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
-                {this.props.showButtons ? (
-                    <ThesisListButtons
-                        sendDownloadSelected={this.sendDownloadSelected}
-                        toggleCover={this.toggleCover}
-                        cover={this.state.cover}
-                        markDone={this.state.markDone}
-                        toggleMarkDone={this.toggleMarkDone}
-                        toggleAll={this.toggleAll}
-                    />
-                ) : null}
+                {this.renderButtons()}
                 <div className="ui fluid category search">
                     <div className="ui icon input">
                         <input className="prompt" type="text" placeholder="Filter theses" onChange={this.search} />
