@@ -38,7 +38,7 @@ ThesisListButtons.propTypes = {
     sendDownloadSelected: func.isRequired,
     toggleCover: func.isRequired,
     cover: bool.isRequired,
-    markDone: func.isRequired,
+    markDone: bool.isRequired,
     toggleMarkDone: func.isRequired,
     toggleAll: func.isRequired
 }
