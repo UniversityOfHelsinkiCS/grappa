@@ -19,15 +19,16 @@ export async function getPersons(req, res) {
     if (!user) {
         return userNotFound(res)
     }
-    const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     // Add user to person list
     persons.push(user)
 
     // If user is an admin, get everything
-    if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
+    if (await roleService.isUserAdmin(user)) {
         return getAllPersons(res)
     }
+
+    const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     rolesInProgrammes.forEach(async (item) => {
         // As resp_prof persons who are writing theses in programme
@@ -36,35 +37,41 @@ export async function getPersons(req, res) {
             persons = [...new Set([...persons, ...newPersons])]
         }
     })
-    // Persons who are supervisors / supervising for new thesis / agreement supervisor list
-    const supervisorId = await roleService.getRoleId('supervisor')
-    newPersons = await personService.getPersonsWithRole(supervisorId)
-    persons = [...new Set([...persons, ...newPersons])]
-    // or grading / graders for new thesis / agreement graders list.
-    const graderId = await roleService.getRoleId('grader')
-    newPersons = await personService.getPersonsWithRole(graderId)
-    persons = [...new Set([...persons, ...newPersons])]
+
+    const gradersAndSupervisors = await getGradersAndSupervisors()
 
     // Persons (students) who are writing theses user has access to as
     // a agreementperson (supervisor, grader etc)
     newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
-    persons = [...new Set([...persons, ...newPersons])]
-
-    // Remove duplicates
-    const responsePersons = []
-    persons.forEach((person) => {
-        if (!responsePersons.find(item => item.personId === person.personId)) {
-            responsePersons.push(person)
-        }
-    })
+    persons = [...new Set([...persons, ...gradersAndSupervisors, ...newPersons])]
 
     // All required persons found, now role objects for front
     const roles = await roleService.getRolesForAllPersons()
     const responseObject = {
         roles,
-        persons: responsePersons
+        persons: removeDuplicates(persons)
     }
     return res.status(200).json(responseObject)
+}
+
+async function getGradersAndSupervisors() {
+    const supervisorId = await roleService.getRoleId('supervisor')
+    const graderId = await roleService.getRoleId('grader')
+
+    const supervisors = await personService.getPersonsWithRole(supervisorId)
+    const graders = await personService.getPersonsWithRole(graderId)
+    return [...supervisors, ...graders]
+}
+
+function removeDuplicates(persons) {
+    const responsePersons = new Map()
+    persons.forEach((person) => {
+        if (!responsePersons.get(person.personId)) {
+            responsePersons.set(person.personId, person)
+        }
+    })
+
+    return [...responsePersons.values()]
 }
 
 async function userNotFound(res) {

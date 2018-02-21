@@ -1,4 +1,5 @@
 import logger from '../util/logger'
+import { checkUserHasRightToModifyAgreement, getAgreement } from './AgreementService'
 
 const knex = require('../db/connection').getKnex()
 const pdfManipulator = require('../util/pdfManipulator')
@@ -51,6 +52,9 @@ export async function saveAttachments(req, res, agreementId) {
         if (!id) {
             id = JSON.parse(request.body.json).agreementId
         }
+
+        const agreement = await getAgreement(id)
+        await checkUserHasRightToModifyAgreement(req, agreement)
 
         const attachments = [].concat(...await Promise.all(
             Object.keys(request.files)

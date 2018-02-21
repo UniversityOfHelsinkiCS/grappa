@@ -19,7 +19,6 @@ Dependencies: [![Known Vulnerabilities](https://snyk.io/test/github/UniversityOf
 
 ```
 $ docker run --name grappa-postgres-container -d -e POSTGRES_PASSWORD=password -it -p 5433:5432 postgres:9.6.3
-$ docker exec -it postgres-container createdb -U postgres grappa
 $ docker exec -it grappa-postgres-container createdb -U postgres grappa
 ```
 
