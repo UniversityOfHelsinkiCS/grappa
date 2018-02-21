@@ -60,7 +60,7 @@ export class CouncilmeetingViewPage extends Component {
             previousMeetingId,
             currentMeeting,
             nextMeetingId,
-            theses: formatTheses(filteredTheses, agreements, persons)
+            theses: formatTheses(filteredTheses, agreements, persons, [], councilmeetings)
         })
     };
 
