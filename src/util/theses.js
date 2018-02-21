@@ -1,7 +1,7 @@
 import Checkit from 'checkit'
 import moment from 'moment'
 
-export const formatTheses = (theses, agreements, persons, roles, councilMeetings) => {
+export const formatTheses = (theses, agreements, persons, roles = [], councilMeetings = []) => {
     if (!theses || !persons || !agreements)
         return []
 
@@ -42,7 +42,9 @@ export const formatThesis = (thesis, agreements, persons, roles, councilMeetings
     if (formattedThesis.councilmeetingId) {
         const councilMeeting = councilMeetings
             .find(meeting => meeting.councilmeetingId === formattedThesis.councilmeetingId)
-        formattedThesis.councilMeeting = moment(councilMeeting.date).format('DD.MM.YYYY')
+
+        if (councilMeeting)
+            formattedThesis.councilMeeting = moment(councilMeeting.date).format('DD.MM.YYYY')
     }
 
     return formattedThesis

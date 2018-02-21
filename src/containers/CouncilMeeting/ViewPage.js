@@ -88,7 +88,7 @@ export class CouncilmeetingViewPage extends Component {
     });
 
     handleDownload = (attachmentIds) => {
-        this.props.downloadAttachments(attachmentIds)
+        this.props.downloadAttachments([...attachmentIds, `cm${this.props.match.params.id}`])
     };
 
     renderCouncilMeetingTitle() {
