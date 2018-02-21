@@ -25,13 +25,14 @@ export async function getTheses(req, res) {
     let theses = []
     let newTheses = []
 
-    const rolesInProgrammes = await roleService.getUsersRoles(user)
-    if (rolesInProgrammes.find(item => item.role.name === 'admin')) {
+    if (await roleService.isUserAdmin(user)) {
         // As an admin, get all theses
         const allTheses = await thesisService.getAllTheses()
         res.status(200).json(allTheses).end()
         return
     }
+
+    const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     rolesInProgrammes.forEach(async (item) => {
         if (programmeRoles.includes(item.role.name)) {
@@ -46,15 +47,18 @@ export async function getTheses(req, res) {
 
     theses = [...theses, ...thesesAsAgreementPerson, ...thesesAsAuthor]
 
-    // Remove duplicates
-    const response = []
+    res.status(200).json(removeDuplicates(theses)).end()
+}
+
+function removeDuplicates(theses) {
+    const response = new Map()
     theses.forEach((thesis) => {
-        if (!response.find(item => item.thesisId === thesis.thesisId)) {
-            response.push(thesis)
+        if (!response.get(thesis.thesisId)) {
+            response.set(thesis.thesisId, thesis)
         }
     })
 
-    res.status(200).json(response).end()
+    return [...response.values()]
 }
 
 async function validateThesis(thesis) {
