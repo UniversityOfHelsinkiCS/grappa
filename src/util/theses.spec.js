@@ -7,7 +7,7 @@ test('Thesis formatter finds correct names to thesis', (t) => {
     const persons = [{ personId: 2, firstname: 'First', lastname: 'Last' }]
     const agreements = [{ agreementId: 3, thesisId: 1, authorId: 2 }]
 
-    const formattedTheses = formatTheses(theses, agreements, persons)
+    const formattedTheses = formatTheses(theses, agreements, persons, [], [])
 
     t.is(formattedTheses[0].authorFirstname, 'First')
     t.is(formattedTheses[0].authorLastname, 'Last')

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { arrayOf, func, bool } from 'prop-types'
-import { Checkbox } from 'semantic-ui-react'
+import { Checkbox, Icon } from 'semantic-ui-react'
 import { thesisType, agreementType, attachmentType } from '../../../util/types'
 import ThesisListButtons from './ThesisListButtons'
 
@@ -90,6 +90,10 @@ class ThesisList extends Component {
         this.setState({ markDone: !this.state.markDone })
     };
 
+    renderStatusIcons(field) {
+        return field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />
+    }
+
     render() {
         return (
             <div>
@@ -113,11 +117,12 @@ class ThesisList extends Component {
                     <thead>
                         <tr>
                             {this.props.selectable || this.props.showButtons ? <th>Select</th> : null}
-                            <th>Author</th>
-                            <th>Email</th>
                             <th>Title</th>
-                            <th>Grade</th>
-                            <th>Print Done</th>
+                            <th>Author</th>
+                            <th>Scheduled council meeting</th>
+                            <th>Checked by author</th>
+                            <th>Checked by resp. prof</th>
+                            <th>Printed</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,13 +137,16 @@ class ThesisList extends Component {
                                         />
                                     </td>)
                                     : null}
-                                <td>
-                                    {thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}
-                                </td>
-                                <td>{thesis.authorEmail}</td>
                                 <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
-                                <td>{thesis.grade}</td>
-                                <td>{thesis.printDone.toString()}</td>
+                                <td>
+                                    {thesis.authorLastname ?
+                                        `${thesis.authorLastname}, ${thesis.authorFirstname}` :
+                                        thesis.authorEmail}
+                                </td>
+                                <td>{thesis.councilMeeting ? thesis.councilMeeting : null}</td>
+                                <td>{this.renderStatusIcons(thesis.authorLastname)}</td>
+                                <td>{this.renderStatusIcons(thesis.gradersApproved)}</td>
+                                <td>{this.renderStatusIcons(thesis.printDone)}</td>
                             </tr>
                         ))}
                     </tbody>

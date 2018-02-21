@@ -1,16 +1,18 @@
 import Checkit from 'checkit'
+import moment from 'moment'
 
-export const formatTheses = (theses, agreements, persons, roles) => {
+export const formatTheses = (theses, agreements, persons, roles, councilMeetings) => {
     if (!theses || !persons || !agreements)
         return []
 
-    return theses.map(thesis => formatThesis(thesis, agreements, persons, roles))
+    return theses.map(thesis => formatThesis(thesis, agreements, persons, roles, councilMeetings))
 }
 
-export const formatThesis = (thesis, agreements, persons, roles) => {
+export const formatThesis = (thesis, agreements, persons, roles, councilMeetings) => {
+    const formattedThesis = Object.assign({}, thesis)
     const thesisAgreement = agreements.find(agreement => agreement.thesisId === thesis.thesisId)
     const author = thesisAgreement ? persons.find(person => person.personId === thesisAgreement.authorId) : {}
-    const formattedThesis = Object.assign({}, thesis)
+
     if (!thesisAgreement) {
         return formattedThesis
     }
@@ -23,6 +25,10 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
                 role.agreementId === thesisAgreement.agreementId
             )
         )
+
+        formattedThesis.gradersApproved = roles
+            .filter(role => thesisAgreement.agreementId === role.agreementId)
+            .every(role => role.approved === true)
     }
 
     if (author) {
@@ -31,6 +37,12 @@ export const formatThesis = (thesis, agreements, persons, roles) => {
         formattedThesis.authorLastname = author.lastname
     } else { // Thesis not linked to person yet, use invite link email
         formattedThesis.authorEmail = thesisAgreement.email
+    }
+
+    if (formattedThesis.councilmeetingId) {
+        const councilMeeting = councilMeetings
+            .find(meeting => meeting.councilmeetingId === formattedThesis.councilmeetingId)
+        formattedThesis.councilMeeting = moment(councilMeeting.date).format('DD.MM.YYYY')
     }
 
     return formattedThesis
