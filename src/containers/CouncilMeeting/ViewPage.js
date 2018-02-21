@@ -60,7 +60,7 @@ export class CouncilmeetingViewPage extends Component {
             previousMeetingId,
             currentMeeting,
             nextMeetingId,
-            theses: formatTheses(filteredTheses, agreements, persons)
+            theses: formatTheses(filteredTheses, agreements, persons, [], councilmeetings)
         })
     };
 
@@ -68,12 +68,13 @@ export class CouncilmeetingViewPage extends Component {
         theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
 
     findIndexFromProps = (props) => {
+        const { match, councilmeetings } = props
         let foundIndex
-        if (props.match.params && props.match.params.id !== 'next') {
-            const councilmeetingId = Number(props.match.params.id)
-            foundIndex = props.councilmeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
+        if (match.params && match.params.id) {
+            const councilmeetingId = Number(match.params.id)
+            foundIndex = councilmeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
         } else {
-            foundIndex = this.findNextMeeting(new Date(), props.councilmeetings)
+            foundIndex = this.findNextMeeting(new Date(), councilmeetings)
         }
         return foundIndex
     };
@@ -87,7 +88,7 @@ export class CouncilmeetingViewPage extends Component {
     });
 
     handleDownload = (attachmentIds) => {
-        this.props.downloadAttachments(attachmentIds)
+        this.props.downloadAttachments([...attachmentIds, `cm${this.props.match.params.id}`])
     };
 
     renderCouncilMeetingTitle() {
@@ -130,6 +131,7 @@ export class CouncilmeetingViewPage extends Component {
                     agreements={this.props.agreements}
                     markPrinted={this.props.markPrinted}
                     showButtons
+                    selectable
                 />
             </div>
         )
@@ -165,7 +167,7 @@ CouncilmeetingViewPage.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
     match: shape({
         params: shape({
-            id: string.isRequired
+            id: string
         })
     }).isRequired
 }

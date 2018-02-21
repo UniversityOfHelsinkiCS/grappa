@@ -1,7 +1,8 @@
 import React from 'react'
 import test from 'ava'
 import sinon from 'sinon'
-import { shallow } from 'enzyme'
+import { MemoryRouter } from 'react-router-dom'
+import { shallow, mount } from 'enzyme'
 
 import ThesisList from './ThesisList'
 
@@ -85,15 +86,17 @@ test('theses can be selected to download', (t) => {
     ]
 
     const download = sinon.spy()
-    const component = shallow(
-        <ThesisList
-            theses={theses}
-            downloadSelected={download}
-            markPrinted={() => ({})}
-            agreements={agreements}
-            attachments={attachments}
-            showButtons
-        />
+    const component = mount(
+        <MemoryRouter>
+            <ThesisList
+                theses={theses}
+                downloadSelected={download}
+                markPrinted={() => ({})}
+                agreements={agreements}
+                attachments={attachments}
+                showButtons
+            />
+        </MemoryRouter>
     )
 
     component.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } })

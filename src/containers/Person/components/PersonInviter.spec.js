@@ -18,7 +18,7 @@ test('person can be invited to Grappa', (t) => {
 
     component.find('select').at(0).simulate('change', { target: { value: 1 } })
     component.find('select').at(1).simulate('change', { target: { value: 1 } })
-    component.find('input').at(0).simulate('change', { target: { value: 'foo@bar.com' } })
+    component.find('input').at(1).simulate('change', { target: { value: 'foo@bar.com' } })
     component.find('button.green').simulate('click')
 
     t.true(handler.called)
