@@ -22,7 +22,6 @@ const reducer = (state = [], action) => {
                 a.href = url
                 const date = new Date()
                 a.download = `grappa_files_${date.toLocaleDateString()}.pdf`
-                a.target = '_blank'
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
