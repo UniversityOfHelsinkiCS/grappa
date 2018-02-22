@@ -17,7 +17,7 @@ export class UnitRoleList extends Component {
                 {rolesInUnits.map(rolesInUnit => (
                     <div key={rolesInUnit.name}>
                         <h2>{rolesInUnit.name}:</h2>
-                        {Object.keys(rolesInUnit).filter(key => key !== 'name').sort(this.sortRoles).map(key => (
+                        {Object.keys(rolesInUnit).filter(key => key !== 'name' && key !== 'admin').sort(this.sortRoles).map(key => (
                             <div key={key + rolesInUnit.name}>
                                 <h3>In role {key}:</h3>
                                 &nbsp;{rolesInUnit[key]
