@@ -6,7 +6,7 @@ import LoadingIndicator from '../LoadingIndicator/index'
 import { makeGetFormatTheses } from '../../selectors/thesisList'
 import ThesisListRow from './components/ThesisListRow'
 
-class ThesisList extends Component {
+export class ThesisList extends Component {
     constructor(props) {
         super(props)
         this.state = {
