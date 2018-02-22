@@ -26,6 +26,7 @@ class NewCouncilmeetingForm extends Component {
         const meeting = Object.assign({}, this.state.meeting)
         meeting[field] = event.target.value
         this.setState({ meeting })
+
     };
 
     handleDateChange = (date) => {
@@ -34,6 +35,7 @@ class NewCouncilmeetingForm extends Component {
     };
 
     handleProgrammeChange = (event) => {
+      console.log(this.props.programmes)
         const newProgramme = this.props.programmes.find(programme =>
             programme.programmeId === Number(event.target.value)
             && !this.state.meeting.programmes.find(p => p.programmeId === programme.programmeId)
