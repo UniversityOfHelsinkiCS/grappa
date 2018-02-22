@@ -34,6 +34,12 @@ export const getAgreementById = agreementId => knex.select().from('agreement')
     .where('agreementId', agreementId)
     .then(agreement => parseAgreementData(agreement[0]))
 
+export const getAgreementByIds = agreementIds => knex.select().from('agreement')
+    .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+    .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+    .join('programme', 'studyfield.programmeId', '=', 'programme.programmeId')
+    .whereIn('agreementId', agreementIds)
+
 export const getAgreement = agreementId => knex.select().from('agreement').where('agreementId', agreementId)
 
 export const getAgreementsInStudyfield = studyfieldId => knex.select()
@@ -228,7 +234,7 @@ function isAdmin(roles) {
 }
 
 async function hasStudyfieldRole(roles, agreements) {
-    const studyfieldRoles = ['manager', 'resp_professor']
+    const studyfieldRoles = ['manager', 'resp_professor', 'print_person']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
     const studyfieldRole = roles
         .filter(item => item.programme.programmeId === thesisProgramme.programmeId)

@@ -1,4 +1,5 @@
 import logger from '../util/logger'
+import { checkUserHasRightToModifyAgreement, getAgreementByIds } from '../services/AgreementService'
 
 const attachmentService = require('../services/AttachmentService')
 const agreementService = require('../services/AgreementService')
@@ -38,6 +39,16 @@ export async function downloadAttachments(req, res) {
         attachments.sort((a, b) => order[a.attachmentId] - order[b.attachmentId])
 
         const agreementIds = attachments.map(attachment => attachment.agreementId)
+
+        try {
+            const agreements = await getAgreementByIds(agreementIds)
+            await checkUserHasRightToModifyAgreement(req, agreements)
+        } catch (error) {
+            logger.error('Permisson check failed', { error: error.message })
+            res.status(403).send({ text: 'Not available' }).end()
+            return
+        }
+
         const thesisObjects = await getAgreementObjects(agreementIds)
 
         const promiseList = await Promise.all(attachments.map(async (attachment) => {
