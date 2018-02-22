@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { arrayOf, func, bool } from 'prop-types'
-import { Checkbox, Icon } from 'semantic-ui-react'
-import { thesisType, agreementType, attachmentType } from '../../../util/types'
-import LoadingIndicator from '../../LoadingIndicator'
+import { connect } from 'react-redux'
+import { arrayOf, func, bool, number } from 'prop-types'
+import { thesisType, agreementType, attachmentType } from '../../util/types'
+import LoadingIndicator from '../LoadingIndicator/index'
+import { makeGetFormatTheses } from '../../selectors/thesisList'
+import ThesisListRow from './components/ThesisListRow'
 
 class ThesisList extends Component {
     constructor(props) {
@@ -90,10 +91,6 @@ class ThesisList extends Component {
         this.setState({ markDone: !this.state.markDone })
     };
 
-    renderStatusIcons(field) {
-        return field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />
-    }
-
     renderButtons() {
         if (!this.props.showButtons) {
             return null
@@ -156,27 +153,14 @@ class ThesisList extends Component {
                     </thead>
                     <tbody>
                         {this.state.filteredTheses.map(thesis => (
-                            <tr key={thesis.thesisId}>
-                                {this.props.selectable || this.props.showButtons ? (
-                                    <td>
-                                        <Checkbox
-                                            checked={this.state.selectedThesesIds.includes(thesis.thesisId)}
-                                            onChange={this.toggleThesis(thesis)}
-                                            fitted
-                                        />
-                                    </td>)
-                                    : null}
-                                <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
-                                <td>
-                                    {thesis.authorLastname ?
-                                        `${thesis.authorLastname}, ${thesis.authorFirstname}` :
-                                        thesis.authorEmail}
-                                </td>
-                                <td>{thesis.councilMeeting ? thesis.councilMeeting : null}</td>
-                                <td>{this.renderStatusIcons(thesis.authorLastname)}</td>
-                                <td>{this.renderStatusIcons(thesis.gradersApproved)}</td>
-                                <td>{this.renderStatusIcons(thesis.printDone)}</td>
-                            </tr>
+                            <ThesisListRow
+                                key={thesis.thesisId}
+                                thesis={thesis}
+                                toggleThesis={this.toggleThesis}
+                                showButtons={this.props.showButtons}
+                                selectable={this.props.selectable}
+                                selectedThesesIds={this.state.selectedThesesIds}
+                            />
                         ))}
                     </tbody>
                 </table>
@@ -192,11 +176,22 @@ ThesisList.propTypes = {
     attachments: arrayOf(attachmentType).isRequired,
     showButtons: bool.isRequired,
     markPrinted: func.isRequired,
-    selectable: bool
+    selectable: bool,
+    councilMeetingId: number // eslint-disable-line
 }
 
 ThesisList.defaultProps = {
-    selectable: false
+    selectable: false,
+    councilMeetingId: null
 }
 
-export default ThesisList
+const getFormatTheses = makeGetFormatTheses()
+
+const mapStateToProps = (state, props) => ({
+    theses: getFormatTheses(state, props),
+    agreements: state.agreements,
+    attachments: state.attachments
+
+})
+
+export default connect(mapStateToProps)(ThesisList)
