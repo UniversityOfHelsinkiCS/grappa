@@ -20,7 +20,8 @@ const reducer = (state = [], action) => {
             } else { // Download
                 const a = document.createElement('a')
                 a.href = url
-                a.download = 'theses.pdf'
+                const date = new Date()
+                a.download = `grappa_files_${date.toLocaleDateString()}.pdf`
                 a.target = '_blank'
                 document.body.appendChild(a)
                 a.click()
