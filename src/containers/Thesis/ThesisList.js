@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { arrayOf, func, bool } from 'prop-types'
-import { thesisType, agreementType, attachmentType } from '../../../util/types'
-import LoadingIndicator from '../../LoadingIndicator'
+import { connect } from 'react-redux'
+import { arrayOf, func, bool, number } from 'prop-types'
+import { thesisType, agreementType, attachmentType } from '../../util/types'
+import LoadingIndicator from '../LoadingIndicator/index'
+import { makeGetFormatTheses } from '../../selectors/thesisList'
+import ThesisListRow from './components/ThesisListRow'
 
 class ThesisList extends Component {
     constructor(props) {
@@ -14,8 +16,6 @@ class ThesisList extends Component {
             cover: true,
             markDone: false
         }
-
-        this.search = this.search.bind(this)
     }
 
     componentWillReceiveProps(newProps) {
@@ -36,7 +36,7 @@ class ThesisList extends Component {
         this.setState({ selectedThesesIds })
     };
 
-    search(event) {
+    search = (event) => {
         if (!event.target.value) {
             this.setState({ filteredTheses: this.state.formattedTheses })
             return
@@ -50,37 +50,28 @@ class ThesisList extends Component {
     }
 
     sendDownloadSelected = () => {
-        if (this.state.selectedThesesIds.length > 0) {
-            const attachmentIds = this.props.agreements.map((agreement) => {
-                if (this.state.selectedThesesIds.find(id => id === agreement.thesisId)) {
-                    return this.props.attachments.filter((attachment) => {
-                        if (attachment.agreementId === agreement.agreementId) {
-                            // Pick correct files;
-                            if (attachment.label === 'thesisFile' || attachment.label === 'reviewFile') {
-                                return true
-                            }
-                        }
-                        return false
-                    })
-                        .sort((a) => {
-                            if (a.label === 'thesisFile') { // Thesis comes before review.
-                                return -1
-                            }
-                            return 1
-                        })
-                }
-                return false
-            }).reduce((acc, cur) => { // Flatten thesis, review pairs.
-                if (cur) {
-                    return acc.concat(cur.map(attachment => attachment.attachmentId)) // Take only ids
-                }
-                return acc
-            }, this.state.cover ? ['cover'] : [] // Add cover if it's chosen.
-            )
-            this.props.downloadSelected(attachmentIds)
-            if (this.state.markDone) {
-                this.props.markPrinted(this.state.selectedThesesIds)
-            }
+        if (this.state.selectedThesesIds.length === 0)
+            return
+
+        const agreementsToPrint = this.props.agreements
+            .filter(agreement => this.state.selectedThesesIds.includes(agreement.thesisId))
+            .map(agreement => agreement.agreementId)
+
+        const attachments = this.props.attachments
+            .filter(attachment => agreementsToPrint.includes(attachment.agreementId))
+            .filter(attachment => ['thesisFile', 'reviewFile'].includes(attachment.label))
+            .sort((a, b) => {
+                if (a.agreementId === b.agreementId)
+                    return a.label === 'thesisFile' ? -1 : 1
+
+                return a.agreementId - b.agreementId
+            })
+            .map(attachment => attachment.attachmentId)
+
+        this.props.downloadSelected(this.state.cover ? ['cover', ...attachments] : attachments)
+
+        if (this.state.markDone) {
+            this.props.markPrinted(this.state.selectedThesesIds)
         }
     };
 
@@ -151,37 +142,25 @@ class ThesisList extends Component {
                 <table className="ui celled table">
                     <thead>
                         <tr>
-                            <th>Select</th>
-                            <th>Author</th>
-                            <th>Email</th>
+                            {this.props.selectable || this.props.showButtons ? <th>Select</th> : null}
                             <th>Title</th>
-                            <th>Grade</th>
-                            <th>Print Done</th>
+                            <th>Author</th>
+                            <th>Scheduled council meeting</th>
+                            <th>Checked by author</th>
+                            <th>Checked by resp. prof</th>
+                            <th>Printed</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.filteredTheses.map(thesis => (
-                            <tr key={thesis.thesisId}>
-                                <td>
-                                    <div className="ui fitted checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={
-                                                this.state.selectedThesesIds.includes(thesis.thesisId) ? 'true' : ''
-                                            }
-                                            onChange={this.toggleThesis(thesis)}
-                                        />
-                                        <label />
-                                    </div>
-                                </td>
-                                <td>
-                                    {thesis.authorLastname ? `${thesis.authorLastname}, ${thesis.authorFirstname}` : ''}
-                                </td>
-                                <td>{thesis.authorEmail}</td>
-                                <td><Link to={`/thesis/${thesis.thesisId}`}>{thesis.title}</Link></td>
-                                <td>{thesis.grade}</td>
-                                <td>{thesis.printDone.toString()}</td>
-                            </tr>
+                            <ThesisListRow
+                                key={thesis.thesisId}
+                                thesis={thesis}
+                                toggleThesis={this.toggleThesis}
+                                showButtons={this.props.showButtons}
+                                selectable={this.props.selectable}
+                                selectedThesesIds={this.state.selectedThesesIds}
+                            />
                         ))}
                     </tbody>
                 </table>
@@ -196,8 +175,23 @@ ThesisList.propTypes = {
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
     showButtons: bool.isRequired,
-    markPrinted: func.isRequired
+    markPrinted: func.isRequired,
+    selectable: bool,
+    councilMeetingId: number // eslint-disable-line
 }
 
+ThesisList.defaultProps = {
+    selectable: false,
+    councilMeetingId: null
+}
 
-export default ThesisList
+const getFormatTheses = makeGetFormatTheses()
+
+const mapStateToProps = (state, props) => ({
+    theses: getFormatTheses(state, props),
+    agreements: state.agreements,
+    attachments: state.attachments
+
+})
+
+export default connect(mapStateToProps)(ThesisList)

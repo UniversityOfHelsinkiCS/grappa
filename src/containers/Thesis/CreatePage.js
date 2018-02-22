@@ -9,7 +9,7 @@ import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
 import PersonSelector from '../Person/components/PersonSelector'
-import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
+import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
 import { emptyThesisData, thesisValidation } from '../../util/theses'
 import LoadingIndicator from '../LoadingIndicator'
 
@@ -45,6 +45,8 @@ export class ThesisCreatePage extends Component {
             .then(() => {
                 if (this.validateAttachments(this.state.attachments)) {
                     this.setState({ showModal: !this.state.showModal })
+                } else {
+                    this.setState({ invalidAttachments: true })
                 }
             })
             .catch(res => this.setState({ validationErrors: res.errors }))
@@ -67,7 +69,7 @@ export class ThesisCreatePage extends Component {
         return thesisValidation.run(thesis)
     }
 
-    renderGraderSelecter() {
+    renderGraderSelector() {
         const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 role.name === 'grader'
@@ -108,14 +110,16 @@ export class ThesisCreatePage extends Component {
                         thesis={this.state.thesis}
                         validationErrors={this.state.validationErrors}
                     />
-                    {this.renderGraderSelecter()}
-                    <h2>Upload at least thesis file and the review file</h2>
+                    {this.renderGraderSelector()}
+                    <h2 style={this.state.invalidAttachments ? { color: 'red' } : null}>
+                        Upload at least thesis file and the review file
+                    </h2>
                     <AttachmentAdder
                         attachments={this.state.attachments}
                         changeList={this.editAttachmentList}
                     />
                     <br />
-                    <ThesisCouncilmeetingPicker
+                    <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
