@@ -14,7 +14,7 @@ const reducer = (state = [], action) => {
             // TODO: refactor
             const blob = new Blob([action.response], { type: 'application/pdf' })
             const url = URL.createObjectURL(blob)
-            const show = true
+            const show = false
             if (show) { // Display
                 window.location.href = url
             } else { // Download
