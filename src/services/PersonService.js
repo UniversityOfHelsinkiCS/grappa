@@ -64,16 +64,6 @@ export async function savePerson(personData) {
     return person
 }
 
-export function savePersonRole(personRoleData) {
-    return knex('personWithRole')
-        .returning('personRoleId')
-        .insert(personRoleData)
-        .then(personRoleId => personRoleId[0])
-        .catch((error) => {
-            throw error
-        })
-}
-
 export function updatePerson(personData) {
     return knex('person')
         .returning('personId')
