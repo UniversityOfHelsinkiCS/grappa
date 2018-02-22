@@ -6,6 +6,7 @@ import { personType, roleType, programmeType, availableRoleType } from '../../ut
 import PersonSelector from './components/PersonSelector'
 import PersonInviter from './components/PersonInviter'
 import PersonRoleChoose from './components/PersonRoleChoose'
+import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions'
 import { invitePerson } from './services/personActions'
@@ -107,6 +108,8 @@ export class PersonRoleManagePage extends Component {
                     selected={selected}
                     changeList={this.selectPerson}
                 />
+                <div className="ui divider" />
+                <UnitRoleList/>
             </div>
         )
     }
