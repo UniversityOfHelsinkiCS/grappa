@@ -21,7 +21,7 @@ const reducer = (state = [], action) => {
                 const a = document.createElement('a')
                 a.href = url
                 const date = new Date()
-                a.download = `grappa_files_${date.toLocaleDateString()}.pdf`
+                a.download = `grappa_files_${date.toLocaleDateString('en-GB')}.pdf`
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
