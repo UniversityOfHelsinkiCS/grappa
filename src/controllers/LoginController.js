@@ -10,9 +10,9 @@ export async function logout(req, res) {
     req.session.destroy((error) => {
         if (error)
             logger.error('Logout error', { error })
-
-        res.status(200).send({ logoutUrl: `${logoutUrl}/return=https://grappa.cs.helsinki.fi/v2/` }).end()
     })
+
+    res.status(200).send({ logoutUrl: `${logoutUrl}/?return=https://grappa.cs.helsinki.fi/v2/` }).end()
 }
 
 
