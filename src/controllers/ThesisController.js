@@ -92,7 +92,7 @@ export async function saveThesisForm(req, res) {
     delete thesis.authorEmail
 
     if (thesis.graders) {
-        updateGraders(thesis.graders, agreement)
+        await updateGraders(thesis.graders, agreement)
         delete thesis.graders
     }
     const savedThesis = await thesisService.saveThesis(thesis)
@@ -164,7 +164,7 @@ const updateGraders = async (graders, agreement) => {
         if (personRole) {
             // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
-                roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
+                await roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
             }
         }
     }))

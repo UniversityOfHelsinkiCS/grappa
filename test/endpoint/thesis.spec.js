@@ -39,6 +39,10 @@ const createAdmin = async () => {
 const generateThesisForm = async () => {
     const person1 = await createPerson()
     const person2 = await createPerson()
+
+    await knex('personWithRole').insert({ personId: person1.personId, roleId: 5, programmeId: 1 })
+    await knex('personWithRole').insert({ personId: person2.personId, roleId: 5, programmeId: 1 })
+
     const thesisForm = {
         id: undefined,
         authorEmail: `author${numberFromTo(0, 1000)}@example.com`,
@@ -127,7 +131,7 @@ const validPostForm = async (t, app, thesisForm, addAttachment) => {
     return res.body
 }
 
-test('thesisForm post & creates id without attachment', async (t) => {
+test.only('thesisForm post & creates id without attachment', async (t) => {
     t.plan(6)
     const { thesisForm, person1, person2 } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
@@ -141,7 +145,7 @@ test('thesisForm post & creates id without attachment', async (t) => {
         .where('agreementId', agreement.agreementId)
         .where('personId', person1.personId)
         .orWhere('personId', person2.personId)
-    t.truthy(personRoles.length, 2,
+    t.is(personRoles.length, 2,
         `Someone else was found linked to agreement: ${JSON.stringify(personRoles)}`)
 })
 
