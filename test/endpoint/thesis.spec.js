@@ -131,7 +131,7 @@ const validPostForm = async (t, app, thesisForm, addAttachment) => {
     return res.body
 }
 
-test.only('thesisForm post & creates id without attachment', async (t) => {
+test('thesisForm post & creates id without attachment', async (t) => {
     t.plan(6)
     const { thesisForm, person1, person2 } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
