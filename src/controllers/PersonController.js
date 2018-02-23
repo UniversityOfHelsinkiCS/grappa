@@ -1,5 +1,6 @@
 import logger from '../util/logger'
 import { checkUserIsAdminOrManager } from '../services/RoleService'
+import { getLoggedPerson, updatePerson } from '../services/PersonService'
 
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
@@ -14,7 +15,7 @@ export async function getPersons(req, res) {
 
     let persons = []
     let newPersons = []
-    const user = await personService.getLoggedPerson(req)
+    const user = await getLoggedPerson(req)
 
     if (!user) {
         return userNotFound(res)
@@ -102,4 +103,14 @@ export async function invitePerson(req, res) {
     await checkUserIsAdminOrManager(req)
     await emailInviteService.createEmailInviteForRole(req.body)
     res.status(200).end()
+}
+
+export async function useSecondaryEmail(req, res) {
+    const person = await getLoggedPerson(req)
+
+    person.useSecondaryEmail = req.body.useSecondaryEmail
+    await updatePerson(person)
+    const updatedPerson = await personService.getPersonById(person.personId)
+
+    res.status(200).json(updatedPerson).end()
 }
