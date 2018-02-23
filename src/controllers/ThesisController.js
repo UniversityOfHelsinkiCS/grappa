@@ -1,5 +1,6 @@
 import Checkit from 'checkit'
 import Promise from 'bluebird'
+import { linkAgreementAndPersonRole, unlinkAgreementAndPersonRole } from '../services/RoleService'
 
 const thesisService = require('../services/ThesisService')
 const agreementService = require('../services/AgreementService')
@@ -11,6 +12,8 @@ const studyfieldService = require('../services/StudyfieldService')
 const notificationService = require('../services/NotificationService')
 const emailService = require('../services/EmailService')
 const emailInviteService = require('../services/EmailInviteService')
+
+const knex = require('../db/connection').getKnex()
 
 const checkit = new Checkit({
     title: 'required',
@@ -76,44 +79,48 @@ export async function saveThesisForm(req, res) {
 
     await validateThesis(thesis)
 
-    // Order so that agreementId is available to save attachments.
-    const agreement = await agreementService.createFakeAgreement()
-    const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId)
-    const { studyfieldId, authorEmail } = thesis
-    const { agreementId } = agreement
+    const response = await knex.transaction(async (trx) => {
+        // Order so that agreementId is available to save attachments.
+        const agreement = await agreementService.createFakeAgreement(trx)
+        const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId, trx)
 
-    agreement.studyfieldId = thesis.studyfieldId
+        const { studyfieldId, authorEmail } = thesis
+        const { agreementId } = agreement
 
-    delete thesis.authorFirstname
-    delete thesis.authorLastname
-    delete thesis.studyfieldId
-    // TODO: Add email to new email send table
-    delete thesis.thesisEmails
-    delete thesis.authorEmail
+        agreement.studyfieldId = thesis.studyfieldId
 
-    if (thesis.graders) {
-        await updateGraders(thesis.graders, agreement)
-        delete thesis.graders
-    }
-    const savedThesis = await thesisService.saveThesis(thesis)
+        delete thesis.authorFirstname
+        delete thesis.authorLastname
+        delete thesis.studyfieldId
+        // TODO: Add email to new email send table
+        delete thesis.thesisEmails
+        delete thesis.authorEmail
 
-    // Agreement was missing the thesisId completing linking.
-    agreement.thesisId = savedThesis.thesisId
-    const savedAgreement = await agreementService.updateAgreement(agreement)
-    const roles = await roleService.getRolesForAllPersons()
-    const programme = await programmeService.getStudyfieldsProgramme(studyfieldId)
-    await emailService.newThesisAddedNotifyRespProf(programme.programmeId)
-    await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme.programmeId)
-    savedAgreement.email = authorEmail
+        if (thesis.graders) {
+            await updateGraders(thesis.graders, agreement, trx)
+            delete thesis.graders
+        }
+        const savedThesis = await thesisService.saveThesis(thesis, trx)
 
-    const response = {
-        thesis: savedThesis,
-        agreement: savedAgreement,
-        attachments,
-        roles
-    }
+        // Agreement was missing the thesisId completing linking.
+        agreement.thesisId = savedThesis.thesisId
+        const savedAgreement = await agreementService.updateAgreement(agreement, trx)
+        const roles = await roleService.getRolesForAllPersons()
+        const programme = await programmeService.getStudyfieldsProgramme(studyfieldId)
+        await emailService.newThesisAddedNotifyRespProf(programme.programmeId)
+        await emailInviteService.createEmailInviteForThesisAuthor(authorEmail, agreementId, programme.programmeId, trx)
+        savedAgreement.email = authorEmail
 
-    notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId)
+        await notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId)
+
+        return {
+            thesis: savedThesis,
+            agreement: savedAgreement,
+            attachments,
+            roles
+        }
+    })
+
     res.status(200).json(response)
 }
 
@@ -131,16 +138,18 @@ export async function updateThesis(req, res) {
 
     await validateThesis(thesis)
 
-    thesis = await thesisService.updateThesis(thesis)
+    await knex.transaction(async (trx) => {
+        thesis = await thesisService.updateThesis(thesis, trx)
 
-    // TODO: support multiple agreements on one thesis
-    if (updatedFields.graders)
-        await updateGraders(updatedFields.graders, agreements[0])
+        // TODO: support multiple agreements on one thesis
+        if (updatedFields.graders)
+            await updateGraders(updatedFields.graders, agreements[0], trx)
 
-    if (updatedFields.studyfieldId) {
-        agreements[0].studyfieldId = updatedFields.studyfieldId
-        await agreementService.updateAgreement(agreements[0])
-    }
+        if (updatedFields.studyfieldId) {
+            agreements[0].studyfieldId = updatedFields.studyfieldId
+            await agreementService.updateAgreement(agreements[0], trx)
+        }
+    })
 
     const roles = await roleService.getRolesForAllPersons()
     const responseObject = { thesis, roles, agreements: [agreements[0]] }
@@ -148,13 +157,13 @@ export async function updateThesis(req, res) {
 }
 
 
-const updateGraders = async (graders, agreement) => {
+const updateGraders = async (graders, agreement, trx) => {
     // To unlink person and
     const agreementPersons = await roleService.getAgreementPersonsByAgreementId(agreement.agreementId)
     await Promise.all(agreementPersons.map(async (agreementPerson) => {
         const personRole = await roleService.getPersonRoleWithId(agreementPerson.personRoleId)
         if (!graders.find(grader => grader === personRole.personId)) {
-            await roleService.unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId)
+            await unlinkAgreementAndPersonRole(agreementPerson.agreementId, agreementPerson.personRoleId, trx)
         }
     }))
     // If grader not in agreementperson, link them.
@@ -164,7 +173,7 @@ const updateGraders = async (graders, agreement) => {
         if (personRole) {
             // If person exists as a grader and not already linked, link them
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
-                await roleService.linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId)
+                await linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId, trx)
             }
         }
     }))

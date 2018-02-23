@@ -83,7 +83,21 @@ export const saveAgreement = async (agreement) => {
     return knex.select(agreementSchema).from('agreement').where('agreementId', agreementId).first()
 }
 
-export const createFakeAgreement = () => {
+export const saveAgreementTransactional = async (agreement, trx) => {
+    const agreementIds = await knex('agreement')
+        .returning('agreementId')
+        .insert(agreement)
+        .transacting(trx)
+
+    const agreementId = agreementIds[0]
+    return knex.select(agreementSchema)
+        .from('agreement')
+        .where('agreementId', agreementId)
+        .transacting(trx)
+        .first()
+}
+
+export const createFakeAgreement = (trx) => {
     const fakeAgreement = {
         authorId: null,
         thesisId: null,
@@ -102,16 +116,18 @@ export const createFakeAgreement = () => {
         whoNext: null
     }
 
-    return saveAgreement(fakeAgreement)
+    return saveAgreementTransactional(fakeAgreement, trx)
 }
 
-export const updateAgreement = agreement => knex('agreement')
+export const updateAgreement = (agreement, trx) => knex('agreement')
     .returning('agreementId')
     .where('agreementId', '=', agreement.agreementId)
     .update(agreement)
+    .transacting(trx)
     .then(() =>
         knex.select(agreementSchema).from('agreement')
             .where('agreementId', '=', agreement.agreementId)
+            .transacting(trx)
             .first()
     )
     .catch((error) => {

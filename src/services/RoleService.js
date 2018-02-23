@@ -64,15 +64,16 @@ export async function getPersonRole(personId, programmeId, roleName) {
 
 // AgreementPerson
 
-export async function linkAgreementAndPersonRole(agreementId, personRoleId) {
-    return knex('agreementPerson').insert({ agreementId, personRoleId })
+export async function linkAgreementAndPersonRole(agreementId, personRoleId, trx) {
+    return knex('agreementPerson').insert({ agreementId, personRoleId }).transacting(trx)
 }
 
-export async function unlinkAgreementAndPersonRole(agreementId, personRoleId) {
+export async function unlinkAgreementAndPersonRole(agreementId, personRoleId, trx) {
     return knex('agreementPerson')
         .where('agreementId', '=', agreementId)
         .where('personRoleId', '=', personRoleId)
         .del()
+        .transacting(trx)
 }
 
 export const getAgreementPersonsByAgreementId = agreementId => knex.select().from('agreementPerson')

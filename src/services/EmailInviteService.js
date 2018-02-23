@@ -19,13 +19,13 @@ function generateToken() {
     return crypto.randomBytes(16).toString('hex')
 }
 
-export async function createEmailInviteForThesisAuthor(email, agreementId, programmeId) {
+export async function createEmailInviteForThesisAuthor(email, agreementId, programmeId, trx) {
     const token = generateToken()
     const invite = { email, agreement: agreementId, token, type: 'thesis_author' }
 
     if (authorInviteType.validateSync(invite)[0]) throw new Error('Invalid parameters')
 
-    await knex('emailInvite').insert(invite)
+    await knex('emailInvite').insert(invite).transacting(trx)
     await emailService.sendInvite(invite, 'thesis', programmeId)
 }
 

@@ -132,7 +132,7 @@ const validPostForm = async (t, app, thesisForm, addAttachment) => {
 }
 
 test('thesisForm post & creates id without attachment', async (t) => {
-    t.plan(6)
+    t.plan(8)
     const { thesisForm, person1, person2 } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
     const app = makeApp(adminId)
@@ -147,6 +147,11 @@ test('thesisForm post & creates id without attachment', async (t) => {
         .orWhere('personId', person2.personId)
     t.is(personRoles.length, 2,
         `Someone else was found linked to agreement: ${JSON.stringify(personRoles)}`)
+
+    const agreements = await knex.select().from('agreement').where('agreementId', agreement.agreementId)
+    t.is(agreements.length, 1, 'agreement not saved')
+    const thesis = await knex.select().from('thesis').where('thesisId', agreement.thesisId)
+    t.is(thesis.length, 1, 'thesis not saved')
 })
 
 test('thesis get all', async (t) => {

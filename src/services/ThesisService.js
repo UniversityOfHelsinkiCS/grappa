@@ -49,17 +49,25 @@ export function getThesesByAgreementPerson(personId) {
 export const getThesisById = thesisId => knex.select(thesisSchema).from('thesis')
     .where('thesisId', thesisId).first()
 
-export const saveThesis = async (thesis) => {
+export const saveThesis = async (thesis, trx) => {
     const thesisIds = await knex('thesis')
         .returning('thesisId')
         .insert(thesis)
+        .transacting(trx)
+
     const thesisId = thesisIds[0]
-    return knex.select(thesisSchema).from('thesis').where('thesisId', thesisId).first()
+    return knex
+        .select(thesisSchema)
+        .from('thesis')
+        .where('thesisId', thesisId)
+        .first()
+        .transacting(trx)
 }
 
-export const updateThesis = async thesisData => knex('thesis')
+export const updateThesis = async (thesisData, trx) => knex('thesis')
     .where('thesisId', thesisData.thesisId)
     .update(thesisData)
+    .transacting(trx)
     .then(() => getThesisById(thesisData.thesisId))
 
 export const markPrinted = thesisIds => knex('thesis')
