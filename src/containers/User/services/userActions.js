@@ -11,3 +11,9 @@ export const logout = () => {
     const route = '/user/logout'
     return callController(route, prefix)
 }
+
+export const switchEmail = (useSecondaryEmail) => {
+    const prefix = 'USER_EMAIL_UPDATE_'
+    const route = '/persons/email'
+    return callController(route, prefix, { useSecondaryEmail }, 'put')
+}
