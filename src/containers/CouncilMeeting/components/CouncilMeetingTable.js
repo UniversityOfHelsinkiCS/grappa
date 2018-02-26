@@ -80,7 +80,7 @@ const getTableBody = (props) => {
                                         : null)
                                 )}
                             </Table.Cell>
-                            <Table.Cell>
+                            <Table.Cell textAlign="center">
                                 {getControlsDropDown(councilmeetingId, openRowFn, removeMeetingFn)}
                             </Table.Cell>
                         </Table.Row>
