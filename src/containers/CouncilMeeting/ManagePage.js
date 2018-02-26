@@ -1,117 +1,138 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
-import 'react-datepicker/dist/react-datepicker.css'
-import { Container, Header, Button, Radio } from 'semantic-ui-react'
+import { Container, Header, Button, Radio, Confirm, Message } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import {
     getCouncilmeetings,
-    saveCouncilmeeting,
-    updateCouncilmeeting,
     deleteCouncilmeeting
 } from './services/councilmeetingActions'
-import NewCouncilmeetingForm from './components/NewCouncilmeetingForm'
-import UpdateCouncilmeetingForm from './components/UpdateCouncilmeetingForm'
-import CouncilmeetingList from './components/CouncilmeetingList'
-import { councilmeetingType, programmeType } from '../../util/types'
+
+import { councilmeetingType } from '../../util/types'
 import { isDateAfterNow, sortDates } from '../../util/common'
 import CouncilMeetingTable from './components/CouncilMeetingTable'
 import CouncilMeetingDetails from './components/CouncilMeetingDetails'
+import { makeAndGetMeetingsWithProgramNames } from '../../selectors/councilMeetings'
 
 
 class CouncilMeetingManagePage extends Component {
   static propTypes = {
-      councilmeetings: arrayOf(councilmeetingType).isRequired,
+      councilMeetings: arrayOf(councilmeetingType).isRequired,
       getCouncilMeetings: func.isRequired,
-      saveCouncilMeeting: func.isRequired,
-      updateCouncilMeeting: func.isRequired,
-      deleteCouncilMeeting: func.isRequired,
-      programmes: arrayOf(programmeType).isRequired
+      deleteCouncilMeeting: func.isRequired
   }
 
   state = {
-      newCouncilMeeting: { instructorDeadlineDays: 8, studentDeadlineDays: 8 },
-      updateCouncilMeeting: {},
       showOld: false,
       openMeetingId: null,
-      addNewMeeting: false
+      addNewMeeting: false,
+      removableMeetingId: false,
+      isConfirmRemove: false
   }
 
   componentDidMount() {
       this.props.getCouncilMeetings()
   }
 
-  handleDateChange = (formname, name) => (date) => {
-      const meeting = this.state[formname]
-      meeting[name] = date
-      this.setState({ [formname]: meeting })
+  handleShowOldUnitsChange = () => {
+      this.setState({ showOld: !this.state.showOld })
   };
 
-  handleChange = (formname, name) => (event) => {
-      const meeting = this.state[formname]
-      meeting[name] = event.target.value
-      this.setState({ [formname]: meeting })
-  };
+  confirmDeleteMeeting = (removableMeetingId) => {
+      this.setState({ isConfirmRemove: true, removableMeetingId })
+  }
 
-  handleCheckboxChange = () => {
-      this.setState({
-          shownDates: !this.state.showOld ? this.state.formattedDates : this.state.filteredDates,
-          showOld: !this.state.showOld
-      })
-  };
-
-  saveMeeting = meeting => this.props.saveCouncilMeeting(meeting);
-  updateMeeting = (meeting) => {
-      this.props.updateCouncilMeeting(meeting)
-      this.setState({ updateCouncilMeeting: {} })
-  };
-  selectMeeting = meeting => this.setState({ updateCouncilMeeting: meeting });
-  deleteMeeting = meeting => this.props.deleteCouncilMeeting(meeting.councilmeetingId);
+  cancelConfirm = () => {
+      this.setState({ isConfirmRemove: false, removableMeetingId: undefined })
+  }
+  removeMeeting = () => {
+      const { removableMeetingId } = this.state
+      this.props.deleteCouncilMeeting(removableMeetingId)
+      this.setState({ isConfirmRemove: false, removableMeetingId: undefined })
+      this.closeMeetingRow()
+  }
 
   openMeetingRow = (openMeetingId) => {
       this.setState({ openMeetingId, addNewMeeting: false })
   }
 
   closeMeetingRow = () => {
-      this.setState({ openMeetingId: null })
+      this.setState({ openMeetingId: null, addNewMeeting: false })
   }
 
   addNewMeetingRow = () => {
-      this.setState({ addNewMeeting: true, openMeetingId: null })
+      this.setState({ openMeetingId: null, addNewMeeting: true })
   }
 
   renderMeetingTables = () => {
-      const { councilmeetings } = this.props
+      const { councilMeetings } = this.props
       const { showOld, openMeetingId, addNewMeeting } = this.state
 
       const components = []
-      let meetings = showOld ? councilmeetings : councilmeetings.filter(m => isDateAfterNow(m.date))
+      let meetings = showOld ? councilMeetings : councilMeetings.filter(m => isDateAfterNow(m.date))
+      const isVisibleMeetings = meetings.length > 0
+
+      if (!isVisibleMeetings) {
+          components.push(
+              <Message key="warning" warning style={{ width: '100%' }}>
+                  <Message.Header>No scheduled meetings</Message.Header>
+              </Message>
+          )
+      }
+
       meetings.sort((a, b) => sortDates(a.date, b.date))
-      if (addNewMeeting) {
-          components.push(<CouncilMeetingDetails />)
+
+      if (addNewMeeting || !isVisibleMeetings) {
+          components.push(
+              <CouncilMeetingDetails
+                  key="new-meeting"
+                  closeRowFn={this.closeMeetingRow}
+                  newMeeting
+              />)
       } else if (openMeetingId) {
-          const indexOfOpen = meetings.findIndex(meeting => meeting.councilmeetingId === openMeetingId) + 1
+          const indexOfOpen = meetings.findIndex(meeting => meeting.councilmeetingId === openMeetingId)
           const openMeeting = meetings[indexOfOpen]
-          const meetingsRest = meetings.slice(indexOfOpen)
-          meetings = meetings.slice(0, indexOfOpen)
-          components.push(<CouncilMeetingDetails meeting={openMeeting} />)
+          const meetingsRest = meetings.slice(indexOfOpen + 1)
+          meetings = meetings.slice(0, indexOfOpen + 1)
+          components.push(<CouncilMeetingDetails
+              key="edit-meeting"
+              meeting={openMeeting}
+              closeRowFn={this.closeMeetingRow}
+          />)
           components.push(<CouncilMeetingTable
+              key="bottom-rows"
               meetings={meetingsRest}
-              openRowFn={this.openMeetingRow}
+              removeMeetingFn={this.confirmDeleteMeeting}
               attached="bottom"
               noHeader
           />)
       }
+
+      if (!addNewMeeting && !openMeetingId && isVisibleMeetings) {
+          components.push(
+              <Button
+                  key="add-btn"
+                  positive
+                  style={{ marginTop: '5px' }}
+                  disabled={addNewMeeting}
+                  icon="plus"
+                  content="Schedule new meeting"
+                  onClick={this.addNewMeetingRow}
+              />
+          )
+      }
+
       return [<CouncilMeetingTable
+          key="top-rows"
           meetings={meetings}
           openRowFn={this.openMeetingRow}
-          closeRowFn={this.closeMeetingRow}
+          removeMeetingFn={this.confirmDeleteMeeting}
           openMeetingId={openMeetingId}
           attached="top"
       />, ...components]
   }
 
   render() {
-      const { showOld, addNewMeeting } = this.state
+      const { showOld, isConfirmRemove } = this.state
       return (
           <Container text>
               <Header as="h2" dividing>Council Meetings</Header>
@@ -119,74 +140,33 @@ class CouncilMeetingManagePage extends Component {
                   toggle
                   label="Show past meetings"
                   checked={showOld}
-                  onChange={this.handleCheckboxChange}
+                  onChange={this.handleShowOldUnitsChange}
               />
-
               { this.renderMeetingTables() }
-              <Button
-                  style={{ marginTop: '5px' }}
-                  disabled={addNewMeeting}
-                  icon="plus"
-                  content="Schedule meeting"
-                  onClick={this.addNewMeetingRow}
+              <Confirm
+                  open={isConfirmRemove}
+                  onCancel={this.cancelConfirm}
+                  onConfirm={this.removeMeeting}
+                  header="Confirm remove meeting"
+                  content="You can delete any meeting that has no theses linked to it.
+                  Otherwise you have to remove/move them before you can delete the meeting."
+                  cancelButton="Cancel"
+                  confirmButton={<Button negative content="Delete meeting" />}
               />
-              <div className="ui form">
-                  <div className="ui two fields">
-                      <div className="field">
-                          <NewCouncilmeetingForm
-                              saveMeeting={this.saveMeeting}
-                              programmes={this.props.programmes}
-                          />
-                          <UpdateCouncilmeetingForm
-                              meeting={this.state.updateCouncilMeeting}
-                              updateMeeting={this.updateMeeting}
-                              programmes={this.props.programmes}
-                          />
-                      </div>
-                      <div className="field">
-                          <h2 className="ui dividing header">Upcoming councilmeetings</h2>
-                          <p>
-                You can delete any meeting that has no theses linked to it.
-                Otherwise you have to remove/move them before you can delete a meeting.
-                          </p>
-                          <div className="ui checkbox">
-                              <input
-                                  id="showPastDates"
-                                  type="checkbox"
-                                  checked={this.state.showOld ? 'true' : ''}
-                                  onChange={this.handleCheckboxChange}
-                              />
-                              <label htmlFor="showPastDates">Show also past dates</label>
-                          </div>
-                          <CouncilmeetingList
-                              meetings={this.props.councilmeetings}
-                              selectMeeting={this.selectMeeting}
-                              deleteMeeting={this.deleteMeeting}
-                              showOld={this.state.showOld}
-                              programmes={this.props.programmes}
-                          />
-                      </div>
-                  </div>
-              </div>
           </Container>
       )
   }
 }
 
-const mapStateToProps = ({ councilmeetings, programmes }) => ({
-    councilmeetings,
-    programmes
+const getCouncilMeetingsWithProgramNames = makeAndGetMeetingsWithProgramNames()
+
+const mapStateToProps = state => ({
+    councilMeetings: getCouncilMeetingsWithProgramNames(state)
 })
 
 const mapDispatchToProps = dispatch => ({
     getCouncilMeetings() {
         dispatch(getCouncilmeetings())
-    },
-    saveCouncilMeeting(data) {
-        dispatch(saveCouncilmeeting(data))
-    },
-    updateCouncilMeeting(data) {
-        dispatch(updateCouncilmeeting(data))
     },
     deleteCouncilMeeting(data) {
         dispatch(deleteCouncilmeeting(data))

@@ -1,48 +1,119 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Segment, Form, Button, Dropdown, Radio } from 'semantic-ui-react'
+import { Segment, Form, Button, Dropdown, Radio, Input } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
+import { arrayOf, func, bool } from 'prop-types'
+
+import { makeAndGetProgrammesForDropdown } from '../../../selectors/programmes'
 import { councilmeetingType, programmeType } from '../../../util/types'
-import { DISPLAY_DATE_FORMAT } from '../../../util/common'
-import { arrayOf } from 'prop-types'
+import { daysBetween, DISPLAY_DATE_FORMAT, formatDisplayDate } from '../../../util/common'
+import { saveCouncilmeeting, updateCouncilmeeting } from '../services/councilmeetingActions'
 
 const INSTRUCTOR_DAYS_DEFAULT = 8
 const STUDENT_DAYS_DEFAULT = 6
 
 class CouncilMeetingDetails extends Component {
   static propTypes = {
+      saveCouncilMeeting: func.isRequired,
+      updateCouncilMeeting: func.isRequired,
       programmes: arrayOf(programmeType).isRequired,
-      meeting: councilmeetingType
+      closeRowFn: func.isRequired,
+      meeting: councilmeetingType,
+      newMeeting: bool
+
 
   }
   static defaultProps = {
-      meeting: {}
+      meeting: {
+          programmes: []
+      },
+      newMeeting: false
   }
   state = {
-      meeting: {},
-      useOldUnits: false
+      meetingLocal: {},
+      useOldUnits: false,
+      instructorDays: INSTRUCTOR_DAYS_DEFAULT,
+      studentDays: STUDENT_DAYS_DEFAULT
   }
 
   componentDidMount() {
-      this.setState({ meeting: this.props.meeting })
+      this.handleUpdate(this.props)
   }
 
-  onMeetingDateChange = (d) => {
-      const { meeting } = this.state
-      const date = moment(d)
-      const instructorDeadline = moment(d).subtract(INSTRUCTOR_DAYS_DEFAULT, 'days')
-      const studentDeadline = moment(d).subtract(STUDENT_DAYS_DEFAULT, 'days')
-
-      this.setState({ meeting: { ...meeting, date, instructorDeadline, studentDeadline } })
+  componentWillReceiveProps(nextProps) {
+      this.handleUpdate(nextProps)
   }
 
-  onUseOldUnitsChange = () => this.setState({ useOldUnits: !this.state.useOldUnits })
+  handleUpdate = (props) => {
+      const { meeting, newMeeting } = props
+      if (newMeeting) {
+          this.setState({ meetingLocal: {} },
+              () => this.handleMeetingDateChange())
+      } else {
+          const { date, instructorDeadline, studentDeadline } = meeting
+          this.setState({
+              instructorDays: daysBetween(date, instructorDeadline),
+              studentDays: daysBetween(date, studentDeadline),
+              meetingLocal: {
+                  ...meeting,
+                  programmes: meeting.programmes.map(p => p.programmeId)
+              }
+          })
+      }
+  }
+
+  handleMeetingDateChange = (d = moment()) => {
+      const { meetingLocal, instructorDays, studentDays } = this.state
+      const date = d
+      const instructorDeadline = moment(d).subtract(instructorDays, 'days')
+      const studentDeadline = moment(d).subtract(studentDays, 'days')
+
+      this.setState({ meetingLocal: { ...meetingLocal, date, instructorDeadline, studentDeadline } })
+  }
+
+  handleInstructorDeadline = (e, { value = INSTRUCTOR_DAYS_DEFAULT }) => {
+      const { meetingLocal } = this.state
+      const instructorDeadline = moment(meetingLocal.date).subtract(value, 'days')
+      this.setState({ instructorDays: value, meetingLocal: { ...meetingLocal, instructorDeadline } })
+  }
+
+  handleStudentDeadline = (e, { value = STUDENT_DAYS_DEFAULT }) => {
+      const { meetingLocal } = this.state
+      const studentDeadline = moment(meetingLocal.date).subtract(value, 'days')
+      this.setState({ studentDays: value, meetingLocal: { ...meetingLocal, studentDeadline } })
+  }
+
+  handleUseOldUnitsChange = () => this.setState({ useOldUnits: !this.state.useOldUnits })
+
+  handleUnitSelectChange = (e, { value }) => {
+      const { meetingLocal } = this.state
+      this.setState({ meetingLocal: {
+          ...meetingLocal,
+          programmes: value
+      } })
+  }
+
+  handleSaveOrUpdateMeeting = () => {
+      const { meetingLocal } = this.state
+      const { newMeeting, saveCouncilMeeting, updateCouncilMeeting, closeRowFn } = this.props
+      if (newMeeting) {
+          saveCouncilMeeting(meetingLocal)
+      } else {
+          updateCouncilMeeting(meetingLocal)
+      }
+      this.setState({ meetingLocal: {} })
+      closeRowFn()
+  }
 
   renderDateInputGroup = () => {
-      const { date, instructorDeadline, studentDeadline } = this.state.meeting
+      const { instructorDays, studentDays, meetingLocal } = this.state
+      const { date, instructorDeadline, studentDeadline } = meetingLocal
+      const numberInputStyle = { width: '65px' }
+
       return (
-          <Form.Group>
+          <Form.Group widths="equal">
               <Form.Input
                   control={DatePicker}
                   placeholderText="dd.mm.yyyy"
@@ -50,37 +121,46 @@ class CouncilMeetingDetails extends Component {
                   selected={moment(date)}
                   fluid
                   label="Date"
-                  onChange={d => this.onMeetingDateChange(d)}
+                  onChange={d => this.handleMeetingDateChange(d)}
               />
-              <Form.Input
-                  control={DatePicker}
-                  placeholderText="dd.mm.yyyy"
-                  dateFormat={DISPLAY_DATE_FORMAT}
-                  selected={moment(instructorDeadline)}
-                  fluid
-                  label="Instructor deadline"
-                  disabled
-              />
-              <Form.Input
-                  control={DatePicker}
-                  placeholderText="dd.mm.yyyy"
-                  dateFormat={DISPLAY_DATE_FORMAT}
-                  selected={moment(studentDeadline)}
-                  fluid
-                  label="Student deadline"
-                  disabled
-              />
+              <Form.Field>
+                  <label>Instructor deadline</label>
+                  <Input
+                      label={formatDisplayDate(instructorDeadline)}
+                      type="number"
+                      value={instructorDays}
+                      onChange={this.handleInstructorDeadline}
+                      style={numberInputStyle}
+
+                  />
+              </Form.Field>
+              <Form.Field>
+                  <label>Student deadline</label>
+                  <Input
+                      label={formatDisplayDate(studentDeadline)}
+                      type="number"
+                      value={studentDays}
+                      onChange={this.handleStudentDeadline}
+                      style={numberInputStyle}
+                  />
+              </Form.Field>
           </Form.Group>
       )
   }
 
   renderProgrammeSelectGroup = () => {
       const { programmes } = this.props
-      const { useOldUnits } = this.state
+      const { useOldUnits, meetingLocal } = this.state
+
+      const programs = useOldUnits ?
+          programmes.filter(p => p.text.includes('Department')) :
+          programmes
+
+      const selectedPrograms = meetingLocal.programmes || []
 
       return (
           <Form.Group>
-              <Form.Field width="6">
+              <Form.Field width="8">
                   <label>Units</label>
                   <Dropdown
                       placeholder="Select units"
@@ -89,7 +169,10 @@ class CouncilMeetingDetails extends Component {
                       fluid
                       selection
                       noResultsMessage="No units found."
-                      options={programmes}
+                      value={selectedPrograms}
+                      options={programs}
+                      onChange={this.handleUnitSelectChange}
+                      closeOnChange
                   />
               </Form.Field>
               <Form.Field>
@@ -99,38 +182,50 @@ class CouncilMeetingDetails extends Component {
                       style={{ marginTop: '10px' }}
                       label={useOldUnits ? 'On' : 'Off'}
                       checked={useOldUnits}
-                      onChange={this.onUseOldUnitsChange}
+                      onChange={this.handleUseOldUnitsChange}
                   />
               </Form.Field>
           </Form.Group>
       )
   }
 
-  renderInputForm = () => (
-      <Form className="attached fluid">
-          { this.renderDateInputGroup() }
-          { this.renderProgrammeSelectGroup() }
-          <Button color="blue">Submit</Button>
-      </Form>
-  )
-
-
   render() {
+      const { closeRowFn, newMeeting } = this.props
       return (
-          <Segment attached clearing >
-              { this.renderInputForm() }
+          <Segment attached color="grey" style={{ minWidth: '800px' }} >
+              <Form className="attached fluid">
+                  { this.renderDateInputGroup() }
+                  { this.renderProgrammeSelectGroup() }
+                  <Button
+                      color="green"
+                      content={newMeeting ? 'Save new meeting' : 'Update meeting'}
+                      onClick={this.handleSaveOrUpdateMeeting}
+                  />
+                  <Button
+                      neutral="true"
+                      content="Cancel"
+                      onClick={closeRowFn}
+                      style={{ marginLeft: '10px' }}
+                  />
+              </Form>
           </Segment>
       )
   }
 }
 
-const mapStateToProps = ({ programmes }) => ({
-    // TODO: move to middleware
-    programmes: programmes.map(p => (
-        {
-            key: p.programmeId, value: p.programmeId, text: p.name
-        }))
+const getProgrammesForDropdown = makeAndGetProgrammesForDropdown()
+
+const mapStateToProps = state => ({
+    programmes: getProgrammesForDropdown(state)
 })
 
+const mapDispatchToProps = dispatch => ({
+    saveCouncilMeeting(data) {
+        dispatch(saveCouncilmeeting(data))
+    },
+    updateCouncilMeeting(data) {
+        dispatch(updateCouncilmeeting(data))
+    }
+})
 
-export default connect(mapStateToProps)(CouncilMeetingDetails)
+export default connect(mapStateToProps, mapDispatchToProps)(CouncilMeetingDetails)

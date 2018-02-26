@@ -1,12 +1,13 @@
 import React from 'react'
-import { arrayOf, func, string, number, bool } from 'prop-types'
-import { Table, Icon } from 'semantic-ui-react'
+import { arrayOf, func, string, number, bool, shape, object } from 'prop-types'
+import { Table, Dropdown } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
+
 import { formatDisplayDate } from '../../../util/common'
 import { councilmeetingType } from '../../../util/types'
 
-
 const getTableHeaders = () => {
-    const headers = ['', 'Date', 'Instructor deadline', 'Student deadline', 'Programmes']
+    const headers = ['', 'Date', 'Instructor deadline', 'Student deadline', 'Programmes', 'Controls']
     return (
         <Table.Header>
             <Table.Row>
@@ -22,48 +23,65 @@ const getTableHeaders = () => {
     )
 }
 
-const getOpenMeetingRow = (closeRowFn, meetingId) => (
-    <Table.Row
-        active
-        key={meetingId}
-        style={{ cursor: 'pointer' }}
-    >
-        <Table.Cell textAlign="left" colSpan="4" onClick={closeRowFn} icon="minus" />
-        <Table.Cell textAlign="right">
-            <Icon size="large" name="pencil" style={{ marginLeft: '15px' }} />
-            <Icon size="large" name="trash outline" style={{ marginLeft: '15px' }} />
-        </Table.Cell>
-    </Table.Row>
+const getControlsDropDown = (meetingId, openRowFn, removeMeetingFn) => (
+    <Dropdown icon="ellipsis vertical">
+        <Dropdown.Menu style={{ right: '0', left: 'auto' }}>
+            <Dropdown.Item
+                icon="pencil"
+                text="Edit"
+                onClick={() => openRowFn(meetingId)}
+            />
+            <Dropdown.Item
+                icon="trash outline"
+                text="Remove"
+                onClick={() => removeMeetingFn(meetingId)}
+            />
+        </Dropdown.Menu>
+    </Dropdown>
 )
 
 const getTableBody = (props) => {
-    const { meetings, openRowFn, closeRowFn, openMeetingId } = props
+    const { meetings, openMeetingId, openRowFn, removeMeetingFn, history } = props
+
     return (
         <Table.Body>
             {
                 meetings.map((meeting) => {
-                    const { councilmeetingId, date, instructorDeadLine, studentDeadline, programmes } = meeting
+                    const { councilmeetingId, date, instructorDeadline, studentDeadline, programmes } = meeting
                     if (councilmeetingId === openMeetingId) {
-                        return getOpenMeetingRow(closeRowFn, councilmeetingId)
+                        return null
                     }
+                    const openMeeting = () => history.push(`/councilmeeting/${councilmeetingId}`)
+
                     return (
                         <Table.Row
                             key={councilmeetingId}
-                            onClick={() => openRowFn(councilmeetingId)}
                             style={{ cursor: 'pointer' }}
+                            selectable="true"
                         >
-                            <Table.Cell textAlign="left" icon="plus" />
-                            <Table.Cell textAlign="center">
+                            <Table.Cell
+                                textAlign="left"
+                                icon="external"
+                                onClick={() => openMeeting()}
+                            />
+                            <Table.Cell textAlign="center" onClick={openMeeting}>
                                 {formatDisplayDate(date)}
                             </Table.Cell>
-                            <Table.Cell textAlign="center">
-                                {formatDisplayDate(instructorDeadLine)}
+                            <Table.Cell textAlign="center" onClick={openMeeting}>
+                                {formatDisplayDate(instructorDeadline)}
                             </Table.Cell>
-                            <Table.Cell textAlign="center">
+                            <Table.Cell textAlign="center" onClick={openMeeting}>
                                 {formatDisplayDate(studentDeadline)}
                             </Table.Cell>
-                            <Table.Cell textAlign="left">
-                                {programmes}
+                            <Table.Cell textAlign="left" singleLine onClick={openMeeting}>
+                                {programmes.map(program =>
+                                    (program ?
+                                        (<div key={program.programmeId}>{program.name}</div>)
+                                        : null)
+                                )}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {getControlsDropDown(councilmeetingId, openRowFn, removeMeetingFn)}
                             </Table.Cell>
                         </Table.Row>
                     )
@@ -76,13 +94,13 @@ const getTableBody = (props) => {
 getTableBody.propTypes = {
     meetings: arrayOf(councilmeetingType).isRequired,
     openRowFn: func.isRequired,
+    removeMeetingFn: func.isRequired,
     openMeetingId: number.isRequired,
-    closeRowFn: func
+    history: shape(object).isRequired
 }
 
 getTableBody.defaultProps = {
-    openMeetingId: null,
-    closeRowFn: () => null
+    openMeetingId: null
 }
 
 
@@ -91,9 +109,8 @@ const CouncilMeetingTable = (props) => {
     if (!meetings || meetings.length === 0) {
         return (null)
     }
-
     return (
-        <Table selectable unstackable attached={attached}>
+        <Table selectable unstackable attached={attached} style={{ minWidth: '800px' }} >
             { !noHeader && getTableHeaders() }
             { getTableBody(props) }
         </Table>)
@@ -110,4 +127,4 @@ CouncilMeetingTable.defaultProps = {
     noHeader: false
 }
 
-export default CouncilMeetingTable
+export default withRouter(CouncilMeetingTable)
