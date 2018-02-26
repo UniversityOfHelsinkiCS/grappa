@@ -58,12 +58,12 @@ router.get('/', (req, res, next) => personController.getPersons(req, res).catch(
 router.post('/invite', jsonParser, (req, res, next) => personController.invitePerson(req, res).catch(next))
 
 /**
- * @api {put} persons/secondaryMail switch between user emails
+ * @api {put} persons/email switch between user emails
  * @apiName SecondaryMail
  * @apiGroup Persons
  *
  * @apiParam {bool} useSecondaryEmail
  */
-router.put('/secondaryMail', jsonParser, (req, res, next) => personController.useSecondaryEmail(req, res).catch(next))
+router.put('/email', jsonParser, (req, res, next) => personController.useSecondaryEmail(req, res).catch(next))
 
 module.exports = router
