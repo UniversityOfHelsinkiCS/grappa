@@ -54,7 +54,7 @@ export default class PersonSelector extends Component {
     handleKeyPress = (target) => {
         // charCode 13 is ENTER
         if (target.charCode === 13) {
-            const person = this.state.filtered.find(person => !this.isActivated(person))
+            const person = this.state.filtered.find(p => !this.isActivated(p))
             if (person !== undefined) {
                 this.addPerson(person)()
             }

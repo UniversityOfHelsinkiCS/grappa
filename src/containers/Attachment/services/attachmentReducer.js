@@ -14,14 +14,14 @@ const reducer = (state = [], action) => {
             // TODO: refactor
             const blob = new Blob([action.response], { type: 'application/pdf' })
             const url = URL.createObjectURL(blob)
-            const show = true
+            const show = false
             if (show) { // Display
                 window.location.href = url
             } else { // Download
                 const a = document.createElement('a')
                 a.href = url
-                a.download = 'theses.pdf'
-                a.target = '_blank'
+                const date = new Date()
+                a.download = `grappa_files_${date.toLocaleDateString('en-GB')}.pdf`
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)

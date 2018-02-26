@@ -1,28 +1,9 @@
 import React from 'react'
 import test from 'ava'
-import sinon from 'sinon'
 import { shallow } from 'enzyme'
 
-import ThesisList from './ThesisList'
+import { ThesisList } from './ThesisList'
 
-const thesis = {
-    authorFirstname: 'Teppo',
-    authorLastname: 'Testaaja',
-    thesisTitle: 'Gradu',
-    grade: '5',
-    thesisId: 1,
-    printDone: false
-}
-const thesisList = [thesis]
-const thesisApp = (<ThesisList
-    theses={thesisList}
-    downloadSelected={() => ({})}
-    attachments={[]}
-    agreements={[]}
-    showButtons
-    markPrinted={() => ({})}
-/>)
-const wrapper = shallow(thesisApp)
 
 const theses = [
     {
@@ -43,14 +24,6 @@ const theses = [
     }
 ]
 
-test('should have a table element', (t) => {
-    t.is(wrapper.find('table').length, 1)
-})
-
-test('should have 2 tr elements', (t) => {
-    t.is(wrapper.find('tr').length, 2)
-})
-
 test('theses can be filtered', (t) => {
     const component = shallow(
         <ThesisList
@@ -67,39 +40,4 @@ test('theses can be filtered', (t) => {
     t.is(component.state().filteredTheses[0].thesisId, 2)
     component.find('.prompt').simulate('change', { target: { value: '' } })
     t.is(component.state().filteredTheses.length, 2)
-})
-
-// TODO: fix
-test.skip('theses can be selected to download', (t) => {
-    const agreements = [
-        {
-            agreementId: 1,
-            thesisId: 1
-        }
-    ]
-    const attachments = [
-        {
-            attachmentId: 1,
-            agreementId: 1,
-            label: 'thesisFile'
-        }
-    ]
-
-    const download = sinon.spy()
-    const component = shallow(
-        <ThesisList
-            theses={theses}
-            downloadSelected={download}
-            markPrinted={() => ({})}
-            agreements={agreements}
-            attachments={attachments}
-            showButtons
-        />
-    )
-
-    component.find('input[type="checkbox"]').at(2).simulate('change', { target: { checked: true } })
-    component.find('.orange').simulate('click')
-
-    t.true(download.called)
-    t.is(download.args[0][0].length, 2)
 })

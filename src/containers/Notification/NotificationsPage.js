@@ -15,10 +15,10 @@ const NotificationsPage = ({ notifications, persons }) => {
             <table className="ui celled table">
                 <thead>
                     <tr>
-                        <th>Tapahtuma</th>
+                        <th>Action</th>
                         <th />
-                        <th>Aika</th>
-                        <th>Käyttäjä</th>
+                        <th>Time</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +26,7 @@ const NotificationsPage = ({ notifications, persons }) => {
                         <tr key={notification.notificationId}>
                             <td>{notification.type}</td>
                             <td>{notification.programmeId}</td>
-                            <td>{notification.timestamp}</td>
+                            <td>{(new Date(notification.timestamp).toLocaleString('en-GB'))}</td>
                             <td>{getPersonNameForId(notification.userId)}</td>
                         </tr>
                     ))}
