@@ -56,7 +56,7 @@ test('manager can get thesis authors', async (t) => {
     const res = await request(makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
-    t.is(res.body.persons.length, 6)
+    t.is(res.body.persons.length, 9)
 })
 
 test('email can be switched', async (t) => {
