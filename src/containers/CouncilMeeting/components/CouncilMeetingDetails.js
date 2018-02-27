@@ -190,12 +190,14 @@ class CouncilMeetingDetails extends Component {
           programmes
 
       const selectedPrograms = meetingLocal.programmes || []
+      const hasSelectedPrograms = selectedPrograms.length > 0
 
       return (
           <Form.Group>
               <Form.Field width="8">
                   <label>Units</label>
                   <Dropdown
+                      error={!hasSelectedPrograms}
                       placeholder="Select units"
                       multiple
                       search
@@ -223,7 +225,8 @@ class CouncilMeetingDetails extends Component {
   }
   render() {
       const { closeRowFn, newMeeting } = this.props
-      const { invalidDate, isDateTaken } = this.state
+      const { invalidDate, isDateTaken, meetingLocal } = this.state
+      const hasSelectedPrograms = meetingLocal.programmes && meetingLocal.programmes.length > 0
 
       return (
           <Segment attached color="grey" style={{ minWidth: '800px' }} >
@@ -235,7 +238,7 @@ class CouncilMeetingDetails extends Component {
                   { this.renderDateInputGroup() }
                   { this.renderProgrammeSelectGroup() }
                   <Button
-                      disabled={invalidDate}
+                      disabled={invalidDate || !hasSelectedPrograms}
                       color="green"
                       content={newMeeting ? 'Save new meeting' : 'Update meeting'}
                       onClick={this.handleSaveOrUpdateMeeting}
