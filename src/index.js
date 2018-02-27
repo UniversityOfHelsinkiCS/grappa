@@ -27,9 +27,16 @@ const killServiceWorkers = () => {
     }
 }
 
+const assumeBasename = () => {
+    const POSSIBLE_BASENAMES = ['v2', 'staging']
+    const haystack = window.location.pathname.split('/')
+    const needle = haystack.find(path => POSSIBLE_BASENAMES.includes(path))
+    return needle || '/'
+}
+
 ReactDOM.render(
     <Provider store={store}>
-        <Router basename="/v2">
+        <Router basename={assumeBasename()}>
             <div className="App">
                 <Route component={NavBar} />
                 <div className="ui left aligned container" style={{ margin: '1.5%' }}>

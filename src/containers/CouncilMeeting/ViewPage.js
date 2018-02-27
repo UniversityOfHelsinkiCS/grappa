@@ -7,10 +7,9 @@ import isEqual from 'lodash/isEqual'
 import { connect } from 'react-redux'
 import { downloadAttachments } from '../Attachment/services/attachmentActions'
 import { markPrinted } from '../Thesis/services/thesisActions'
-import { personType, thesisType, agreementType, attachmentType, programmeType } from '../../util/types'
-import { formatTheses } from '../../util/theses'
+import { thesisType, agreementType, programmeType } from '../../util/types'
 
-import ThesisList from '../Thesis/components/ThesisList'
+import ThesisList from '../Thesis/ThesisList'
 
 export class CouncilmeetingViewPage extends Component {
     constructor() {
@@ -18,8 +17,7 @@ export class CouncilmeetingViewPage extends Component {
         this.state = {
             previousMeetingId: undefined,
             currentMeeting: undefined,
-            nextMeetingId: undefined,
-            theses: []
+            nextMeetingId: undefined
         }
     }
 
@@ -49,18 +47,16 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     initState = (props) => {
-        const { councilmeetings, theses, agreements, persons } = props
+        const { councilMeetings } = props
         const foundIndex = this.findIndexFromProps(props)
-        const previousMeetingId = foundIndex > 0 ? councilmeetings[foundIndex - 1].councilmeetingId : undefined
-        const currentMeeting = councilmeetings[foundIndex]
-        const nextMeetingId = foundIndex === councilmeetings.length - 1 ?
-            undefined : councilmeetings[foundIndex + 1].councilmeetingId
-        const filteredTheses = currentMeeting && theses ? this.filterThesesByMeeting(theses, currentMeeting) : []
+        const previousMeetingId = foundIndex > 0 ? councilMeetings[foundIndex - 1].councilmeetingId : undefined
+        const currentMeeting = councilMeetings[foundIndex]
+        const nextMeetingId = foundIndex === councilMeetings.length - 1 ?
+            undefined : councilMeetings[foundIndex + 1].councilmeetingId
         this.setState({
             previousMeetingId,
             currentMeeting,
-            nextMeetingId,
-            theses: formatTheses(filteredTheses, agreements, persons, [], councilmeetings)
+            nextMeetingId
         })
     };
 
@@ -68,13 +64,13 @@ export class CouncilmeetingViewPage extends Component {
         theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
 
     findIndexFromProps = (props) => {
-        const { match, councilmeetings } = props
+        const { match, councilMeetings } = props
         let foundIndex
         if (match.params && match.params.id) {
             const councilmeetingId = Number(match.params.id)
-            foundIndex = councilmeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
+            foundIndex = councilMeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
         } else {
-            foundIndex = this.findNextMeeting(new Date(), councilmeetings)
+            foundIndex = this.findNextMeeting(new Date(), councilMeetings)
         }
         return foundIndex
     };
@@ -100,6 +96,7 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     render() {
+        const councilMeetingId = this.state.currentMeeting ? this.state.currentMeeting.councilmeetingId : 0
         return (
             <div>
                 <div>
@@ -125,11 +122,8 @@ export class CouncilmeetingViewPage extends Component {
                 <div style={{ marginTop: '1em', marginBottom: '1em' }}>{this.getProgrammeNames()}</div>
                 <ThesisList
                     downloadSelected={this.handleDownload}
-                    theses={this.state.theses}
-                    userRoles={this.props.user.roles}
-                    attachments={this.props.attachments}
-                    agreements={this.props.agreements}
                     markPrinted={this.props.markPrinted}
+                    councilMeetingId={councilMeetingId}
                     showButtons
                     selectable
                 />
@@ -139,11 +133,8 @@ export class CouncilmeetingViewPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    persons: state.persons,
-    user: state.user,
-    councilmeetings: state.councilmeetings,
+    councilMeetings: state.councilmeetings,
     theses: state.theses,
-    attachments: state.attachments,
     agreements: state.agreements,
     programmes: state.programmes
 })
@@ -158,11 +149,9 @@ const mapDispatchToProps = dispatch => ({
 })
 
 CouncilmeetingViewPage.propTypes = {
-    user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
     downloadAttachments: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
-    attachments: arrayOf(attachmentType).isRequired,
     markPrinted: func.isRequired,
     programmes: arrayOf(programmeType).isRequired,
     match: shape({

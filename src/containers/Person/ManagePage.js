@@ -6,9 +6,11 @@ import { personType, roleType, programmeType, availableRoleType } from '../../ut
 import PersonSelector from './components/PersonSelector'
 import PersonInviter from './components/PersonInviter'
 import PersonRoleChoose from './components/PersonRoleChoose'
+import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions'
 import { invitePerson } from './services/personActions'
+import { makePersonRoles } from '../../selectors/personRoles'
 
 export class PersonRoleManagePage extends Component {
     constructor(props) {
@@ -107,6 +109,8 @@ export class PersonRoleManagePage extends Component {
                     selected={selected}
                     changeList={this.selectPerson}
                 />
+                <div className="ui divider" />
+                <UnitRoleList />
             </div>
         )
     }
@@ -127,10 +131,12 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
+const personRoles = makePersonRoles()
+
 const mapStateToProps = state => ({
     programmes: state.programmes,
     persons: state.persons,
-    roles: state.roles,
+    roles: personRoles(state),
     availableRoles: state.availableRoles
 })
 

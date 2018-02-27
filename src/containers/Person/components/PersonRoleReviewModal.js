@@ -11,12 +11,24 @@ export default class PersonRoleReviewModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.personRole) {
-            this.setState({ statement: newProps.personRole.statement })
+            const statement = newProps.personRole.statement ?
+                newProps.personRole.statement : this.defaultStatement(newProps)
+            this.setState({ statement })
         }
+    }
+
+    defaultStatement = (props) => {
+        const { name, role, thesis } = props.personRole
+        const { title } = thesis
+        return `I approve ${name} to be qualified as a ${role} for the thesis ${title}`
     }
 
     saveReview = approved => () => {
         this.props.sendReview(this.state.statement, approved, this.props.personRole)
+    }
+
+    clearReview = () => {
+        this.setState({ statement: '' })
     }
 
     handleReviewChange = (event) => {
@@ -34,7 +46,7 @@ export default class PersonRoleReviewModal extends Component {
                 <div>
                     <div className="ui form">
                         <div className="field">
-                            <label>Write your statement here</label>
+                            <label>Write your statement here (required)</label>
                             <textarea
                                 rows="8"
                                 value={this.state.statement}
@@ -65,6 +77,9 @@ export default class PersonRoleReviewModal extends Component {
                         </button>
                         <button className="ui negative button" onClick={this.saveReview(false)}>
                             Disapprove
+                        </button>
+                        <button className="ui button" onClick={this.clearReview}>
+                            Clear statement field
                         </button>
                     </div>
                 </div>

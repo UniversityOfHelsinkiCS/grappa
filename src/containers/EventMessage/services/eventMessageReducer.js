@@ -56,6 +56,14 @@ const reducer = (state = {}, action) => {
                     text: 'Thesis saved.'
                 }
             })
+        case action.type === 'USER_EMAIL_UPDATE_SUCCESS':
+            return Object.assign({}, state, {
+                [action.type]: {
+                    active: true,
+                    type: 'success',
+                    text: 'Email updated'
+                }
+            })
         case action.type.includes('_FAILURE'): {
             const message = {}
             message[action.type] = {
@@ -88,6 +96,15 @@ const reducer = (state = {}, action) => {
             message[action.type] = {
                 active: false,
                 type: 'attempt',
+                text: action.type
+            }
+            return Object.assign({}, state, message)
+        }
+        case action.type.includes('_SUCCESS'): {
+            const message = {}
+            message[action.type] = {
+                active: false,
+                type: 'success',
                 text: action.type
             }
             return Object.assign({}, state, message)

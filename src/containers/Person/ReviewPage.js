@@ -101,7 +101,7 @@ export class PersonRoleReviewPage extends Component {
                 <thead>
                     <tr>
                         <th>Person</th>
-                        <th>Programme</th>
+                        <th>Unit</th>
                         <th>Role</th>
                         <th>Thesis</th>
                         <th>Actions</th>
@@ -133,8 +133,21 @@ export class PersonRoleReviewPage extends Component {
                     personRole={this.state.personRoleInReview}
                     sendReview={this.reviewAgreementPerson}
                 />
-                Review and approve graders here.
-                <h2>List of thesis supervisors </h2>
+                <p>
+                    Review and approve graders here.
+                </p>
+                <p>
+                    Blue action means that you have not yet reviewed them, press the button to open a review dialog.
+                </p>
+                <p>
+                    Green action means that you have approved them.
+                    Red action means that you have rejected them.
+                    You can also edit your review by pressing the button, which opens the review dialog again.
+                </p>
+                <p>
+                    You can also review a thesis by going back to the thesis list and clicking the thesis title.
+                </p>
+                <h2>List of theses & graders </h2>
                 {this.renderList()}
             </div>
         )

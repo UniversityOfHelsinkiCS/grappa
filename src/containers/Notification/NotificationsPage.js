@@ -6,7 +6,7 @@ import { personType } from '../../util/types'
 
 const NotificationsPage = ({ notifications, persons }) => {
     const getPersonNameForId = (personId) => {
-        const person = persons.find(person => person.personId === personId)
+        const person = persons.find(p => p.personId === personId)
         return person ? `${person.firstname} ${person.lastname}` : 'UNKNOWN USER'
     }
 
@@ -15,10 +15,10 @@ const NotificationsPage = ({ notifications, persons }) => {
             <table className="ui celled table">
                 <thead>
                     <tr>
-                        <th>Tapahtuma</th>
+                        <th>Action</th>
                         <th />
-                        <th>Aika</th>
-                        <th>Käyttäjä</th>
+                        <th>Time</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +26,7 @@ const NotificationsPage = ({ notifications, persons }) => {
                         <tr key={notification.notificationId}>
                             <td>{notification.type}</td>
                             <td>{notification.programmeId}</td>
-                            <td>{notification.timestamp}</td>
+                            <td>{(new Date(notification.timestamp).toLocaleString('en-GB'))}</td>
                             <td>{getPersonNameForId(notification.userId)}</td>
                         </tr>
                     ))}

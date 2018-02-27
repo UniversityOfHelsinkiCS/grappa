@@ -4,6 +4,8 @@ const reducer = (state = {}, action) => {
             return action.response
         case 'USER_LOGOUT_SUCCESS':
             return {}
+        case 'USER_EMAIL_UPDATE_SUCCESS':
+            return action.response
         default:
             return state
     }
