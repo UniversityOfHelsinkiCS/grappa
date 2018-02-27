@@ -60,13 +60,13 @@ class CouncilMeetingDetails extends Component {
           this.setState({ meetingLocal: {} },
               () => this.handleMeetingDateChange())
       } else {
-          const { date, instructorDeadline, studentDeadline } = meeting
+          const { date, instructorDeadline, studentDeadline, programmes } = meeting
           this.setState({
               instructorDays: daysBetween(date, instructorDeadline),
               studentDays: daysBetween(date, studentDeadline),
               meetingLocal: {
                   ...meeting,
-                  programmes: meeting.programmes.map(p => p.programmeId)
+                  programmes: programmes.map(p => p.programmeId)
               }
           })
       }

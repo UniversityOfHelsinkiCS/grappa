@@ -8,7 +8,7 @@ import {
 } from './services/councilmeetingActions'
 
 import { councilmeetingType } from '../../util/types'
-import { isDateAfterNow, sortDates } from '../../util/common'
+import { isDateSameOrAfterAsToday, sortDates } from '../../util/common'
 import CouncilMeetingTable from './components/CouncilMeetingTable'
 import CouncilMeetingDetails from './components/CouncilMeetingDetails'
 import { makeAndGetMeetingsWithProgramNames } from '../../selectors/councilMeetings'
@@ -68,12 +68,12 @@ class CouncilMeetingManagePage extends Component {
       const { showOld, openMeetingId, addNewMeeting } = this.state
 
       const components = []
-      let meetings = showOld ? councilMeetings : councilMeetings.filter(m => isDateAfterNow(m.date))
+      let meetings = showOld ? councilMeetings : councilMeetings.filter(m => isDateSameOrAfterAsToday(m.date))
       const isVisibleMeetings = meetings.length > 0
 
       if (!isVisibleMeetings) {
           components.push(
-              <Message key="warning" warning style={{ width: '100%' }}>
+              <Message key="warning" warning style={{ width: '800px' }}>
                   <Message.Header>No scheduled meetings</Message.Header>
               </Message>
           )
@@ -101,6 +101,7 @@ class CouncilMeetingManagePage extends Component {
           components.push(<CouncilMeetingTable
               key="bottom-rows"
               meetings={meetingsRest}
+              openRowFn={this.openMeetingRow}
               removeMeetingFn={this.confirmDeleteMeeting}
               attached="bottom"
               noHeader

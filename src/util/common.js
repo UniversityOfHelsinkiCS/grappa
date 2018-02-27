@@ -4,9 +4,9 @@ export const DISPLAY_DATE_FORMAT = 'DD.MM.YYYY'
 
 export const sortDates = (d1, d2) => moment(d1) - moment(d2)
 
-export const isDateAfter = (d1, d2) => moment(d1).isAfter(d2)
+export const isDateSameOrAfter = (d1, d2) => moment(d1).isSameOrAfter(d2, 'days')
 
-export const isDateAfterNow = date => isDateAfter(date, moment())
+export const isDateSameOrAfterAsToday = date => isDateSameOrAfter(date, moment())
 
 export const formatDisplayDate = date => moment(date).format(DISPLAY_DATE_FORMAT)
 
