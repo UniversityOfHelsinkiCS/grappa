@@ -84,3 +84,34 @@ test('attachment can be deleted', async (t) => {
 
     t.is(res2.status, 200)
 })
+
+const createAttachment = async () => {
+    const agreementId = 1
+    const res1 = await request(makeApp(1))
+        .post('/attachments')
+        .field('json', JSON.stringify({ agreementId }))
+        .attach('otherFile', './LICENSE')
+
+    return res1.body[0].attachmentId
+}
+
+test('attachment download permissions are checked', async (t) => {
+    const person = await knex.getKnex()('person')
+        .insert({ firstname: 'tester', lastname: 'test' })
+        .returning('personId')
+
+    const attachmentId = await createAttachment()
+
+    const res1 = await request(makeApp(person[0]))
+        .get(`/attachments/${attachmentId}`)
+
+    t.is(res1.status, 403)
+
+    // Grant print_person role for user
+    await knex.getKnex()('personWithRole').insert({ programmeId: 1, personId: person[0], roleId: 3 })
+
+    const res2 = await request(makeApp(person[0]))
+        .get(`/attachments/${attachmentId}`)
+
+    t.is(res2.status, 501) // PDF printing fails, but user has access
+})

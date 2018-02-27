@@ -35,7 +35,7 @@ test('person get all for admin', async (t) => {
     t.is(res.status, 200)
     const { persons, roles } = res.body
     t.truthy(roles.length > 10)
-    t.is(persons.length, allPersons.length + 1) // Test below creates new person
+    t.is(persons.length, allPersons.length + 2) // Tests below creates new persons
 })
 
 test('person get all for student', async (t) => {
@@ -56,5 +56,35 @@ test('manager can get thesis authors', async (t) => {
     const res = await request(makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
-    t.is(res.body.persons.length, 6)
+    t.is(res.body.persons.length, 9)
+})
+
+test('email can be switched', async (t) => {
+    const personIds = await knex('person')
+        .insert({
+            firstname: 'email',
+            lastname: 'test',
+            email: 'primary@example.com',
+            secondaryEmail: 'other@example.com'
+        }).returning('personId')
+
+    const res = await request(makeApp(personIds[0])).put('/persons/email').send({ useSecondaryEmail: true })
+
+    t.is(res.status, 200)
+
+    const result1 = await knex('person')
+        .select('useSecondaryEmail')
+        .where('personId', personIds[0])
+        .first()
+
+    t.is(result1.useSecondaryEmail, true)
+
+    await request(makeApp(personIds[0])).put('/persons/email').send({ useSecondaryEmail: false })
+
+    const result2 = await knex('person')
+        .select('useSecondaryEmail')
+        .where('personId', personIds[0])
+        .first()
+
+    t.is(result2.useSecondaryEmail, false)
 })

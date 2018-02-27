@@ -34,6 +34,12 @@ export const getAgreementById = agreementId => knex.select().from('agreement')
     .where('agreementId', agreementId)
     .then(agreement => parseAgreementData(agreement[0]))
 
+export const getAgreementByIds = agreementIds => knex.select().from('agreement')
+    .join('thesis', 'agreement.thesisId', '=', 'thesis.thesisId')
+    .join('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
+    .join('programme', 'studyfield.programmeId', '=', 'programme.programmeId')
+    .whereIn('agreementId', agreementIds)
+
 export const getAgreement = agreementId => knex.select().from('agreement').where('agreementId', agreementId)
 
 export const getAgreementsInStudyfield = studyfieldId => knex.select()
@@ -77,7 +83,21 @@ export const saveAgreement = async (agreement) => {
     return knex.select(agreementSchema).from('agreement').where('agreementId', agreementId).first()
 }
 
-export const createFakeAgreement = () => {
+export const saveAgreementTransactional = async (agreement, trx) => {
+    const agreementIds = await knex('agreement')
+        .returning('agreementId')
+        .insert(agreement)
+        .transacting(trx)
+
+    const agreementId = agreementIds[0]
+    return knex.select(agreementSchema)
+        .from('agreement')
+        .where('agreementId', agreementId)
+        .transacting(trx)
+        .first()
+}
+
+export const createFakeAgreement = (trx) => {
     const fakeAgreement = {
         authorId: null,
         thesisId: null,
@@ -96,16 +116,18 @@ export const createFakeAgreement = () => {
         whoNext: null
     }
 
-    return saveAgreement(fakeAgreement)
+    return saveAgreementTransactional(fakeAgreement, trx)
 }
 
-export const updateAgreement = agreement => knex('agreement')
+export const updateAgreement = (agreement, trx) => knex('agreement')
     .returning('agreementId')
     .where('agreementId', '=', agreement.agreementId)
     .update(agreement)
+    .transacting(trx)
     .then(() =>
         knex.select(agreementSchema).from('agreement')
             .where('agreementId', '=', agreement.agreementId)
+            .transacting(trx)
             .first()
     )
     .catch((error) => {
@@ -228,7 +250,7 @@ function isAdmin(roles) {
 }
 
 async function hasStudyfieldRole(roles, agreements) {
-    const studyfieldRoles = ['manager', 'resp_professor']
+    const studyfieldRoles = ['manager', 'resp_professor', 'print_person']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
     const studyfieldRole = roles
         .filter(item => item.programme.programmeId === thesisProgramme.programmeId)

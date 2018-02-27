@@ -17,6 +17,12 @@ export async function thesisAuthorInvite(req, res) {
     const person = await personService.getLoggedPerson(req)
     await agreementService.linkAuthorToAgreement(inviteData.agreement, person.personId)
     await emailInviteService.markTokenUsed(req.params.token)
+
+    if (inviteData.email !== person.email) {
+        person.secondaryEmail = inviteData.email
+        await personService.updatePerson(person)
+    }
+
     res.status(200).end()
 }
 

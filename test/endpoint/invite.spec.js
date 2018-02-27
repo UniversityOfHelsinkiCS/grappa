@@ -45,6 +45,25 @@ test('thesis is linked to author when invite is accepted', async (t) => {
     t.is(agreement.authorId, personId)
 })
 
+test('thesis invite is accepted, secondary email is saved', async (t) => {
+    const email = 'helsinki@example.com'
+    const { personId } = await createPerson(email)
+    const agreementId = await knex('agreement').insert({}).returning('agreementId')
+    const token = 'asdfgh12987'
+    await knex('emailInvite').insert({
+        email: 'personal@example.com',
+        token,
+        agreement: agreementId[0],
+        type: 'thesis_author'
+    })
+
+    await request(makeApp(personId)).get(`/invite/thesis/${token}`)
+
+    const person = await knex('person').where('personId', personId).first()
+    t.is(person.email, email)
+    t.is(person.secondaryEmail, 'personal@example.com')
+})
+
 test('invalid token is handled', async (t) => {
     const email = 'test5-invite@opiskelija.example.com'
     const { personId } = await createPerson(email)

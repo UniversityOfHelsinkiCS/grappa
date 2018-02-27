@@ -67,14 +67,14 @@ export async function saveAttachments(req, res, agreementId) {
     }
 }
 
-export async function saveAttachmentFiles(files, agreementId) {
+export async function saveAttachmentFiles(files, agreementId, trx) {
     return [].concat(...await Promise.all(
         Object.keys(files)
-            .map(key => saveFileArray(agreementId, files[key]))
+            .map(key => saveFileArray(agreementId, files[key], trx))
     ))
 }
 
-const saveFileArray = async (agreementId, fileArray) => Promise.all(fileArray.map(async (file) => {
+const saveFileArray = async (agreementId, fileArray, trx) => Promise.all(fileArray.map(async (file) => {
     const attachment = {
         agreementId,
         savedOnDisk: true,
@@ -87,8 +87,13 @@ const saveFileArray = async (agreementId, fileArray) => Promise.all(fileArray.ma
     const attachmentIds = await knex('attachment')
         .returning('attachmentId')
         .insert(attachment)
-    const attachmentId = attachmentIds[0]
-    return knex.select(attachmentSchema).from('attachment').where('attachmentId', attachmentId).first()
+        .transacting(trx)
+
+    return knex.select(attachmentSchema)
+        .from('attachment')
+        .where('attachmentId', attachmentIds[0])
+        .first()
+        .transacting(trx)
 }))
 
 export async function getAllAttachments() {

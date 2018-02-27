@@ -30,6 +30,14 @@ export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
         .select(personSchema)
 }
 
+export function getProgrammePersons(programmeId) {
+    return knex('person')
+        .join('personWithRole', 'person.personId', 'personWithRole.personId')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('programmeId', programmeId)
+        .whereIn('role.name', ['manager', 'print_person', 'resp_professor'])
+}
+
 export async function getLoggedPerson(req) {
     if (req.session.user_id) {
         const userId = req.session.user_id
@@ -62,16 +70,6 @@ export async function savePerson(personData) {
         person = knex.select(personSchema).from('person').where('personId', personId).first()
     }
     return person
-}
-
-export function savePersonRole(personRoleData) {
-    return knex('personWithRole')
-        .returning('personRoleId')
-        .insert(personRoleData)
-        .then(personRoleId => personRoleId[0])
-        .catch((error) => {
-            throw error
-        })
 }
 
 export function updatePerson(personData) {
