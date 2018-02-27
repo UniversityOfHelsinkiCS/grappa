@@ -115,7 +115,7 @@ module.exports = {
             "specialLink": ["to", "hrefLeft", "hrefRight"],
             "aspects": ["noHref", "invalidHref", "preferButton"]
         }],
-        'import/prefer-default-export': 'warn',
+        'import/prefer-default-export': 'off',
         'react/sort-comp': 'warn',
         'no-nested-ternary': 'warn',
         'react/jsx-wrap-multilines': 'warn',

@@ -26,15 +26,9 @@ class CouncilMeetingDetails extends Component {
       programmes: arrayOf(programmeType).isRequired,
       councilMeetings: arrayOf(councilmeetingType).isRequired,
       closeRowFn: func.isRequired,
-      meeting: councilmeetingType,
       newMeeting: bool
-
-
   }
   static defaultProps = {
-      meeting: {
-          programmes: []
-      },
       newMeeting: false
   }
   state = {

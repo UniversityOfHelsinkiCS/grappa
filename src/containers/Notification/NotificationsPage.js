@@ -6,7 +6,7 @@ import { personType } from '../../util/types'
 
 const NotificationsPage = ({ notifications, persons }) => {
     const getPersonNameForId = (personId) => {
-        const person = persons.find(person => person.personId === personId)
+        const person = persons.find(p => p.personId === personId)
         return person ? `${person.firstname} ${person.lastname}` : 'UNKNOWN USER'
     }
 
