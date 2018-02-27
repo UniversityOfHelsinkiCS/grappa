@@ -4,9 +4,8 @@ import { Checkbox, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { thesisType } from '../../../util/types'
 
-const renderStatusIcons = (field) => {
-    return field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />
-}
+const renderStatusIcons = field =>
+    (field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />)
 
 const ThesisListRow = ({ thesis, showButtons, selectable, toggleThesis, selectedThesesIds }) => (
     <tr>

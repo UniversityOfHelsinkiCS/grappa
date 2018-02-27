@@ -23,8 +23,7 @@ function callApi(url, method = 'get', data, prefix) {
         case 'delete':
             return getAxios().delete(url)
         default:
-            console.error('Invalid http method')
-            return Promise.reject()
+            return Promise.reject(new Error('Invalid http method'))
     }
 }
 
@@ -41,7 +40,7 @@ export const callController = (route, prefix, data, method = 'get') => (dispatch
 // If you feel a sudden urge to call this. Don't.
 export const handleRequest = store => next => (action) => {
     next(action)
-    const payload = action.payload
+    const { payload } = action
     if (payload) {
         callApi(payload.route, payload.method, payload.data, payload.prefix)
             .then((res) => {

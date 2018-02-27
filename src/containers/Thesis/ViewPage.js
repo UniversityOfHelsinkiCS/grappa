@@ -18,7 +18,8 @@ import EditButton from './components/edit/EditButton'
 import ThesisCouncilmeetingPicker from './components/ThesisCouncilmeetingPicker'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
 import GraderSelector from './components/edit/GraderSelector'
-import { combineAllThesisData, gradeFields, oldGradeFields } from '../../util/theses'
+import { combineAllThesisData } from '../../util/theses'
+import GradeEdit from './components/edit/GradeEdit'
 
 class ThesisViewPage extends Component {
     state = {
@@ -167,29 +168,17 @@ class ThesisViewPage extends Component {
                         save={this.saveStudyfieldAndGrade}
                     />
                     <ThesisFieldEdit active={this.state.open === 'grade'}>
-                        <select value={this.state.programmeId} onChange={this.changeProgramme}>
-                            {this.props.programmes.map(programme => (
-                                <option key={programme.programmeId} value={programme.programmeId}>
-                                    {programme.name}
-                                </option>
-                            ))}
-                        </select>
-                        <select value={this.state.studyfieldId} onChange={this.changeStudyfield}>
-                            <option />
-                            {this.props.studyfields
-                                .filter(field => field.programmeId === this.state.programmeId)
-                                .map(field => (
-                                    <option key={field.studyfieldId} value={field.studyfieldId}>{field.name}</option>
-                                ))}
-                        </select>
-                        <select value={this.state.grade} onChange={this.changeGrade}>
-                            {programmeData.programme.name.includes('Department') ?
-                                oldGradeFields.map(grade => (
-                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                )) : gradeFields.map(grade => (
-                                    <option key={grade.id} value={grade.id}>{grade.name}</option>
-                                ))}
-                        </select>
+                        <GradeEdit
+                            programmeId={this.state.programmeId}
+                            studyfieldId={this.state.studyfieldId}
+                            grade={this.state.grade}
+                            programmes={this.props.programmes}
+                            studyfields={this.props.studyfields}
+                            programmeData={programmeData}
+                            changeProgramme={this.changeProgramme}
+                            changeStudyfield={this.changeStudyfield}
+                            changeGrade={this.changeGrade}
+                        />
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
