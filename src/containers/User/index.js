@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { login } from './services/userActions'
+import { login, switchEmail } from './services/userActions'
 import { personType } from '../../util/types'
 import PersonSwitcher from '../Person/components/PersonSwitcher'
 import RoleExplain from './components/RoleExplain'
+import EmailSwitcher from './components/EmailSwitcher'
 
 export class UserPage extends Component {
     componentDidMount() {
@@ -15,7 +16,11 @@ export class UserPage extends Component {
         if (!event.target.value) return
         const shibbolethId = event.target.value
         this.props.login(shibbolethId)
-    };
+    }
+
+    handleEmailUpdate = (event) => {
+        this.props.updateEmail(event.target.value)
+    }
 
     render() {
         return (
@@ -27,7 +32,8 @@ export class UserPage extends Component {
                             <span className="header">Student number</span> {this.props.user.studentNumber}
                         </div>
                         <div className="item">
-                            <span className="header">Email</span> {this.props.user.email}
+                            <span className="header">Email</span>
+                            <EmailSwitcher user={this.props.user} update={this.handleEmailUpdate} />
                         </div>
                         <div className="item">
                             <span className="header">Phone</span> {this.props.user.phone}
@@ -49,6 +55,9 @@ export class UserPage extends Component {
 const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data))
+    },
+    updateEmail(useSecondaryEmail) {
+        dispatch(switchEmail(useSecondaryEmail))
     }
 })
 
@@ -61,7 +70,8 @@ const { arrayOf, func } = PropTypes
 UserPage.propTypes = {
     user: personType.isRequired,
     persons: arrayOf(personType).isRequired,
-    login: func.isRequired
+    login: func.isRequired,
+    updateEmail: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage)
