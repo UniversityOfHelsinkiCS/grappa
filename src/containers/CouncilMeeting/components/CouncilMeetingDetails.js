@@ -8,7 +8,12 @@ import { arrayOf, func, bool } from 'prop-types'
 
 import { makeAndGetProgrammesForDropdown } from '../../../selectors/programmes'
 import { councilmeetingType, programmeType } from '../../../util/types'
-import { daysBetween, DISPLAY_DATE_FORMAT, formatDisplayDate, isInDisplayDateFormat, momentFromDisplayFormat } from '../../../util/common'
+import {
+    daysBetween,
+    DISPLAY_DATE_FORMAT,
+    formatDisplayDate,
+    isInDisplayDateFormat,
+    momentFromDisplayFormat } from '../../../util/common'
 import { saveCouncilmeeting, updateCouncilmeeting } from '../services/councilmeetingActions'
 
 const INSTRUCTOR_DAYS_DEFAULT = 8
@@ -204,7 +209,7 @@ class CouncilMeetingDetails extends Component {
 
   render() {
       const { closeRowFn, newMeeting } = this.props
-      const { invalidDate } = this.state
+      const { invalidDate } = this.state
       return (
           <Segment attached color="grey" style={{ minWidth: '800px' }} >
               <Form className="attached fluid">
