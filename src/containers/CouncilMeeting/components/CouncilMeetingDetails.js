@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Segment, Form, Button, Dropdown, Radio, Input } from 'semantic-ui-react'
+import { Segment, Form, Button, Dropdown, Radio, Input, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
@@ -24,6 +24,7 @@ class CouncilMeetingDetails extends Component {
       saveCouncilMeeting: func.isRequired,
       updateCouncilMeeting: func.isRequired,
       programmes: arrayOf(programmeType).isRequired,
+      councilMeetings: arrayOf(councilmeetingType).isRequired,
       closeRowFn: func.isRequired,
       meeting: councilmeetingType,
       newMeeting: bool
@@ -41,7 +42,8 @@ class CouncilMeetingDetails extends Component {
       useOldUnits: false,
       instructorDays: INSTRUCTOR_DAYS_DEFAULT,
       studentDays: STUDENT_DAYS_DEFAULT,
-      invalidDate: false
+      invalidDate: false,
+      isDateTaken: false
   }
 
   componentDidMount() {
@@ -69,11 +71,20 @@ class CouncilMeetingDetails extends Component {
           })
       }
   }
+
+  checkOverlappingMeetings = (date) => {
+      const { councilMeetings } = this.props
+      const { councilmeetingId } = this.state.meetingLocal
+
+      return councilMeetings.some(meeting => (councilmeetingId !== meeting.councilmeetingId
+        && moment(meeting.date).isSame(moment(date), 'days')))
+  }
+
   // react-datepicker doesnt trigger onChange on manual input
   handleMeetingDateChangeRaw = (e) => {
       const { value } = e.target
-      const isDateValid = !isInDisplayDateFormat(value) || momentFromDisplayFormat(value).isBefore(moment(), 'days')
-      this.setState({ invalidDate: isDateValid })
+      const isDateValid = isInDisplayDateFormat(value) && !momentFromDisplayFormat(value).isBefore(moment(), 'days')
+      this.setState({ invalidDate: !isDateValid })
       if (isDateValid) {
           this.handleMeetingDateChange(momentFromDisplayFormat(value))
       }
@@ -84,8 +95,12 @@ class CouncilMeetingDetails extends Component {
       const date = d
       const instructorDeadline = moment(d).subtract(instructorDays, 'days')
       const studentDeadline = moment(d).subtract(studentDays, 'days')
-
-      this.setState({ meetingLocal: { ...meetingLocal, date, instructorDeadline, studentDeadline } })
+      const isDateTaken = this.checkOverlappingMeetings(d)
+      this.setState({
+          isDateTaken,
+          invalidDate: false,
+          meetingLocal: { ...meetingLocal, date, instructorDeadline, studentDeadline }
+      })
   }
 
   handleInstructorDeadline = (e, { value = INSTRUCTOR_DAYS_DEFAULT }) => {
@@ -206,13 +221,17 @@ class CouncilMeetingDetails extends Component {
           </Form.Group>
       )
   }
-
   render() {
       const { closeRowFn, newMeeting } = this.props
-      const { invalidDate } = this.state
+      const { invalidDate, isDateTaken } = this.state
+
       return (
           <Segment attached color="grey" style={{ minWidth: '800px' }} >
-              <Form className="attached fluid">
+              <Form className="attached fluid" warning={isDateTaken}>
+                  <Message
+                      warning
+                      header="Selected date already has a council meeting scheduled."
+                  />
                   { this.renderDateInputGroup() }
                   { this.renderProgrammeSelectGroup() }
                   <Button
@@ -236,7 +255,8 @@ class CouncilMeetingDetails extends Component {
 const getProgrammesForDropdown = makeAndGetProgrammesForDropdown()
 
 const mapStateToProps = state => ({
-    programmes: getProgrammesForDropdown(state)
+    programmes: getProgrammesForDropdown(state),
+    councilMeetings: state.councilmeetings
 })
 
 const mapDispatchToProps = dispatch => ({
