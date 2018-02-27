@@ -8,7 +8,7 @@ import { arrayOf, func, bool } from 'prop-types'
 
 import { makeAndGetProgrammesForDropdown } from '../../../selectors/programmes'
 import { councilmeetingType, programmeType } from '../../../util/types'
-import { daysBetween, DISPLAY_DATE_FORMAT, formatDisplayDate } from '../../../util/common'
+import { daysBetween, DISPLAY_DATE_FORMAT, formatDisplayDate, isInDisplayDateFormat, momentFromDisplayFormat } from '../../../util/common'
 import { saveCouncilmeeting, updateCouncilmeeting } from '../services/councilmeetingActions'
 
 const INSTRUCTOR_DAYS_DEFAULT = 8
@@ -35,7 +35,8 @@ class CouncilMeetingDetails extends Component {
       meetingLocal: {},
       useOldUnits: false,
       instructorDays: INSTRUCTOR_DAYS_DEFAULT,
-      studentDays: STUDENT_DAYS_DEFAULT
+      studentDays: STUDENT_DAYS_DEFAULT,
+      invalidDate: false
   }
 
   componentDidMount() {
@@ -61,6 +62,15 @@ class CouncilMeetingDetails extends Component {
                   programmes: meeting.programmes.map(p => p.programmeId)
               }
           })
+      }
+  }
+  // react-datepicker doesnt trigger onChange on manual input
+  handleMeetingDateChangeRaw = (e) => {
+      const { value } = e.target
+      const isDateValid = !isInDisplayDateFormat(value) || momentFromDisplayFormat(value).isBefore(moment(), 'days')
+      this.setState({ invalidDate: isDateValid })
+      if (isDateValid) {
+          this.handleMeetingDateChange(momentFromDisplayFormat(value))
       }
   }
 
@@ -108,20 +118,23 @@ class CouncilMeetingDetails extends Component {
   }
 
   renderDateInputGroup = () => {
-      const { instructorDays, studentDays, meetingLocal } = this.state
+      const { instructorDays, studentDays, meetingLocal, invalidDate } = this.state
       const { date, instructorDeadline, studentDeadline } = meetingLocal
       const numberInputStyle = { width: '65px' }
 
       return (
           <Form.Group widths="equal">
               <Form.Input
+                  error={invalidDate}
                   control={DatePicker}
                   placeholderText="dd.mm.yyyy"
                   dateFormat={DISPLAY_DATE_FORMAT}
                   selected={moment(date)}
+                  minDate={moment()}
                   fluid
                   label="Date"
                   onChange={d => this.handleMeetingDateChange(d)}
+                  onChangeRaw={e => this.handleMeetingDateChangeRaw(e)}
               />
               <Form.Field>
                   <label>Instructor deadline</label>
@@ -191,12 +204,14 @@ class CouncilMeetingDetails extends Component {
 
   render() {
       const { closeRowFn, newMeeting } = this.props
+      const { invalidDate } = this.state
       return (
           <Segment attached color="grey" style={{ minWidth: '800px' }} >
               <Form className="attached fluid">
                   { this.renderDateInputGroup() }
                   { this.renderProgrammeSelectGroup() }
                   <Button
+                      disabled={invalidDate}
                       color="green"
                       content={newMeeting ? 'Save new meeting' : 'Update meeting'}
                       onClick={this.handleSaveOrUpdateMeeting}
