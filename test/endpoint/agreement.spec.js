@@ -1,5 +1,5 @@
 import test from 'ava'
-import { initDb } from '../utils'
+import { initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'agreement_test'
 
@@ -10,8 +10,7 @@ const agreement = require('../../src/routes/agreements')
 const makeApp = (userId) => {
     const app = express()
     app.use('/agreements', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
+        req['x-access-token'] = createToken(userId)
         next()
     }, agreement)
     return app

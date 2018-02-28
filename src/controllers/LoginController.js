@@ -23,11 +23,6 @@ const generateToken = async (uid) => {
 export async function logout(req, res) {
     const logoutUrl = req.headers.shib_logout_url
 
-    req.session.destroy((error) => {
-        if (error)
-            logger.error('Logout error', { error })
-    })
-
     res.status(200).send({ logoutUrl: `${logoutUrl}?return=https://grappa.cs.helsinki.fi/v2/` }).end()
 }
 

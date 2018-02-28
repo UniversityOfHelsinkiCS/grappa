@@ -1,21 +1,17 @@
 import test from 'ava'
-import { initDb } from '../utils'
+import { initDb, makeTestApp } from '../utils'
 
 process.env.DB_SCHEMA = 'statistics_test'
 
 const request = require('supertest')
-const express = require('express')
 const statisctics = require('../../src/routes/statisctics')
 const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/statistics', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
-        next()
-    }, statisctics)
-    return app
+
+const makeApp = async (id) => {
+    const userId = (await knex.select().from('person').where('personId', id)
+        .first()).shibbolethId
+    return makeTestApp('/statistics', userId, statisctics)
 }
 
 test.before(async () => {
@@ -38,7 +34,7 @@ test('statistics can be fetched', async (t) => {
     await knex('agreement').insert({ thesisId: thesisId2[0], studyfieldId: 1 })
     await knex('meetingProgramme').insert({ councilmeetingId: councilmeeting[0], programmeId: 1 })
 
-    const res = await request(makeApp(1)).get('/statistics')
+    const res = await request(await makeApp(1)).get('/statistics')
 
     const expectedResponse = {
         2017: {

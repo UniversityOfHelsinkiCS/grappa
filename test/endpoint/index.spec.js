@@ -1,23 +1,16 @@
 import test from 'ava'
-import { initDb } from '../utils'
+import { initDb, makeTestApp } from '../utils'
 
 process.env.DB_SCHEMA = 'index_test'
 
 const request = require('supertest')
-const express = require('express')
 const index = require('../../src/routes/index')
-const errorHandler = require('../../src/util/errorHandler')
+const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
-        next()
-    }, index)
-
-    app.use(errorHandler)
-    return app
+const makeApp = async (id) => {
+    const userId = (await knex.select().from('person').where('personId', id)
+        .first()).shibbolethId
+    return makeTestApp('/', userId, index)
 }
 
 test.before(async () => {
@@ -26,7 +19,7 @@ test.before(async () => {
 
 test('Initial test', async (t) => {
     t.plan(1)
-    const app = makeApp()
+    const app = makeApp(1)
     const res = await request(app)
         .get('/')
     t.is(res.status, 200)

@@ -1,5 +1,5 @@
 import test from 'ava'
-import { initDb } from '../utils'
+import { initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'programme_test'
 
@@ -11,8 +11,7 @@ const errorHandler = require('../../src/util/errorHandler')
 const makeApp = (userId) => {
     const app = express()
     app.use('/', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
+        req['x-access-token'] = createToken(userId)
         next()
     }, index)
 

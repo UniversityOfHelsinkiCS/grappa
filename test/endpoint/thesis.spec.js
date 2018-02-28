@@ -1,6 +1,6 @@
 import test from 'ava'
 import sinon from 'sinon'
-import { createPerson, initDb } from '../utils'
+import { createPerson, initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'thesis_test'
 
@@ -13,8 +13,7 @@ const errorHandler = require('../../src/util/errorHandler')
 const makeApp = (userId) => {
     const app = express()
     app.use('/theses', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
+        req['x-access-token'] = createToken(userId)
         next()
     }, theses)
 
