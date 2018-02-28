@@ -19,6 +19,21 @@ exports.up = async (knex) => {
         table.foreign('programmeId').references('programme.programmeId').onDelete('CASCADE')
     })
 
+    // Initial data is created on seed files.
+    // When creating new a database or running tests faculty and programmes are not yet created.
+    // Check & create required rows
+    const faculty = await knex('faculty').select().where('facultyId', 1)
+    const prg1 = await knex('programme').select().where('name', 'Master\'s Programme in Mathematics and Statistics')
+    const prg2 = await knex('programme').select().where('name', 'Department of Mathematics and Statistics')
+
+    if (faculty.length === 0)
+        await knex('faculty').insert({ name: 'Faculty of Science', facultyId: 1 })
+    if (prg1.length === 0)
+        await knex('programme').insert({ name: 'Master\'s Programme in Mathematics and Statistics', facultyId: 1 })
+    if (prg2.length === 0)
+        await knex('programme').insert({ name: 'Department of Mathematics and Statistics', facultyId: 1 })
+
+
     const programmeId = await knex('programme')
         .select('programmeId')
         .where('name', 'Master\'s Programme in Mathematics and Statistics')
