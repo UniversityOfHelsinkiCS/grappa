@@ -56,7 +56,7 @@ module.exports.shibRegister = async (req, res, next) => {
     const token = req.headers['x-access-token']
 
     logger.debug('shibRegister starts')
-    if (!token) {
+    if (!token && process.env.NODE_ENV !== 'development') {
         logger.debug('First if')
         if (req.headers['shib-session-id']) {
             const shibUid = req.headers.uid
@@ -93,9 +93,9 @@ module.exports.shibRegister = async (req, res, next) => {
             }
         } else {
             logger.debug('Header didnt have shib-session-id')
-            res.status(403).end()
+            return res.status(403).end()
         }
     }
     logger.debug('token already exists: ', token)
-    next()
+    return next()
 }
