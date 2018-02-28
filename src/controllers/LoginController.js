@@ -4,6 +4,22 @@ const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
 const programmeService = require('../services/ProgrammeService')
 
+const jwt = require('jsonwebtoken')
+const config = require('../util/config')
+
+const generateToken = async (uid) => {
+    const user = await personService.getPersonByShibbolethId(uid)
+    if (user) {
+        const payload = { userId: uid }
+        const token = jwt.sign(payload, config.TOKEN_SECRET, {
+            expiresIn: '24h'
+        })
+        return token
+    }
+    return null
+}
+
+
 export async function logout(req, res) {
     const logoutUrl = req.headers.shib_logout_url
 
@@ -17,19 +33,16 @@ export async function logout(req, res) {
 
 
 // Return user
-export async function showUser(req, res) {
-    if (req.session.user_id) {
-        try {
-            let user = await personService.getPersonById(req.session.user_id)
+export async function login(req, res) {
+    try {
+        const shibbolethId = req.headers.uid
+        let user = await personService.getPersonByShibbolethId(shibbolethId)
 
-            user = await buildPerson(user)
+        user = await buildPerson(user)
 
-            res.status(200).json(user)
-        } catch (err) {
-            res.status(500).end()
-        }
-    } else {
-        res.status(401).end()
+        res.status(200).json(user)
+    } catch (err) {
+        res.status(500).end()
     }
 }
 
@@ -39,8 +52,6 @@ export async function fakeLogin(req, res) {
     logger.debug(`Faking login with ${shibbolethId}`)
     try {
         let user = await personService.getPersonByShibbolethId(shibbolethId)
-
-        req.session.user_id = user.personId
 
         user = await buildPerson(user)
 
@@ -55,7 +66,7 @@ async function buildPerson(user) {
     const programmeToId = await programmeService.getAllProgrammes()
     const personRoles = await roleService.getPersonRoles(user.personId)
     const roleHash = {}
-
+    user.token = generateToken(user.shibbolethId)
     user.roles = personRoles.map((role) => {
         const programme = programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId)
         return {

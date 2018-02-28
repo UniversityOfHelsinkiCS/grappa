@@ -1,6 +1,9 @@
 const utf8 = require('utf8')
+const jwt = require('jsonwebtoken')
+
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
+const config = require('../util/config')
 
 const logger = require('../util/logger')
 
@@ -9,27 +12,18 @@ const logger = require('../util/logger')
  *
  */
 module.exports.checkAuth = async (req, res, next) => {
-    if (!req.session.user_id) {
-        if (!req.headers['shib-session-id']) {
-            // forbid if in production and bypassed shibboleth
-            if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
-                res.status(403).end()
+    const token = req.headers['x-access-token']
+    if (token) {
+        jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                res.status(403).json({ message: 'Failed to authenticate token.' }).end()
             }
-        }
-        // log user in if shibboleth session id exists
-        req.session.shib_session_id = req.headers['shib-session-id']
-        const shibUid = req.headers.uid
-        try {
-            const user = await personService.getPersonByShibbolethId(shibUid)
-            if (user) {
-                req.session.user_id = user.personId
-            }
+            // if everything is good, save to request for use in other routes
+            req.decodedToken = decoded
             next()
-        } catch (err) {
-            res.status(404).end()
-        }
+        })
     } else {
-        next()
+        res.status(403).end()
     }
 }
 
@@ -59,19 +53,18 @@ module.exports.shibRegister = async (req, res, next) => {
     // req.headers['mail'] = 'opiskelija@example.com';
     // req.headers['edupersonaffiliation'] = 'student;member';
     // req.headers['shib_logout_url'] = 'https://example.com/logout/';
+    const token = req.headers['x-access-token']
 
     logger.debug('shibRegister starts')
-    if (!req.session.user_id) {
+    if (!token) {
         logger.debug('First if')
-        if (req.headers['shib-session-id'] && req.session.shib_session_id !== req.headers['shib-session-id']) {
-            req.session.shib_session_id = req.headers['shib-session-id']
+        if (req.headers['shib-session-id']) {
             const shibUid = req.headers.uid
             const studentNumberRegex = /.*:([0-9]*)$/
             const regexResults = studentNumberRegex.exec(req.headers['unique-code'])
             const studentNumber = regexResults ? regexResults[1] : undefined
             try {
                 const user = await personService.getPersonByShibbolethId(shibUid)
-                req.session.user_id = user.personId
                 user.firstname = utf8.decode(req.headers.givenname)
                 user.lastname = utf8.decode(req.headers.sn)
                 user.email = req.headers.mail
@@ -94,23 +87,15 @@ module.exports.shibRegister = async (req, res, next) => {
                     logger.info('save Person', user)
                     const person = await personService.savePerson(user)
                     logger.debug('Done:', person)
-                    req.session.user_id = person.personId
                 } catch (error2) {
                     logger.error('Saving person failed', error2)
                 }
             }
-            try {
-                const user = await personService.getPersonByShibbolethId(shibUid)
-                if (user) {
-                    req.session.user_id = user.personId
-                }
-            } catch (error) {
-                logger.error('Help', error)
-            }
         } else {
-            logger.debug('Already has a session')
+            logger.debug('Header didnt have shib-session-id')
+            res.status(403).end()
         }
     }
-    logger.debug('session.user_id exists: ', req.session.user_id)
+    logger.debug('token already exists: ', token)
     next()
 }

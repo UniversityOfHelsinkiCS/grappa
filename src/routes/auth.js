@@ -33,7 +33,7 @@ const jsonParser = bodyParser.json()
  *  }
  */
 router.get('/login', jsonParser, (req, res) => {
-    loginController.showUser(req, res)
+    loginController.login(req, res)
 })
 
 /**

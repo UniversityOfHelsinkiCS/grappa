@@ -31,12 +31,9 @@ export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
 }
 
 export async function getLoggedPerson(req) {
-    if (req.session.user_id) {
-        const userId = req.session.user_id
-        return getPersonById(userId)
-    } else if (req.headers.uid) {
-        const shibbolethId = req.headers.uid
-        return getPersonByShibbolethId(shibbolethId)
+    if (req.decodedToken) {
+        const { userId } = req.decodedToken
+        return getPersonByShibbolethId(userId)
     }
 
     return null
