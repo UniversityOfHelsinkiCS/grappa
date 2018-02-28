@@ -32,9 +32,12 @@ export async function getPersons(req, res) {
     const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     rolesInProgrammes.forEach(async (item) => {
-        // As resp_prof persons who are writing theses in programme
         if (programmeRoles.includes(item.role.name)) {
             newPersons = await personService.getPersonsWithAgreementInStudyfield(item.programme.programmeId)
+            persons = [...new Set([...persons, ...newPersons])]
+        }
+        if (item.role.name === 'manager') {
+            newPersons = await personService.getProgrammePersons(item.programme.programmeId)
             persons = [...new Set([...persons, ...newPersons])]
         }
     })

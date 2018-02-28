@@ -30,6 +30,14 @@ export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
         .select(personSchema)
 }
 
+export function getProgrammePersons(programmeId) {
+    return knex('person')
+        .join('personWithRole', 'person.personId', 'personWithRole.personId')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('programmeId', programmeId)
+        .whereIn('role.name', ['manager', 'print_person', 'resp_professor'])
+}
+
 export async function getLoggedPerson(req) {
     if (req.decodedToken) {
         const { userId } = req.decodedToken
