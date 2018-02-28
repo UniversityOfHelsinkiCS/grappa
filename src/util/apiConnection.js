@@ -10,22 +10,24 @@ export const getAxios = () => {
 }
 
 function callApi(url, method = 'get', data, prefix, token) {
-    const headers = {
-        'x-access-token': token
+    const options = {
+        headers: {
+            'x-access-token': token
+        }
     }
     if (prefix.includes('DOWNLOAD')) {
-        headers.responseType = 'arraybuffer'
-        return getAxios().get(url, headers)
+        options.responseType = 'arraybuffer'
+        return getAxios().get(url, options)
     }
     switch (method) {
         case 'get':
-            return getAxios().get(url, headers)
+            return getAxios().get(url, options)
         case 'post':
-            return getAxios().post(url, data, headers)
+            return getAxios().post(url, data, options)
         case 'put':
-            return getAxios().put(url, data, headers)
+            return getAxios().put(url, data, options)
         case 'delete':
-            return getAxios().delete(url, headers)
+            return getAxios().delete(url, options)
         default:
             return Promise.reject(new Error('Invalid http method'))
     }
