@@ -23,56 +23,59 @@ import { getAxios } from '../util/apiConnection'
 const logout = () => {
     getAxios()
         .get('/user/logout')
-        .then((res) => { window.location = res.data.logoutUrl })
+        .then((res) => {
+            localStorage.clear()
+            window.location = res.data.logoutUrl
+        })
 }
 
 class NavBar extends Component {
-  static propTypes = {
-      login: func.isRequired,
-      getPersons: func.isRequired,
-      getProgrammes: func.isRequired,
-      getStudyfields: func.isRequired,
-      getAgreements: func.isRequired,
-      getCouncilmeetings: func.isRequired,
-      getTheses: func.isRequired,
-      getNotifications: func.isRequired,
-      getEmailDrafts: func.isRequired,
-      user: personType.isRequired
-  }
+    static propTypes = {
+        login: func.isRequired,
+        getPersons: func.isRequired,
+        getProgrammes: func.isRequired,
+        getStudyfields: func.isRequired,
+        getAgreements: func.isRequired,
+        getCouncilmeetings: func.isRequired,
+        getTheses: func.isRequired,
+        getNotifications: func.isRequired,
+        getEmailDrafts: func.isRequired,
+        user: personType.isRequired
+    }
 
-  state = {
-      links: [],
-      loaded: false
-  }
+    state = {
+        links: [],
+        loaded: false
+    }
 
-  componentDidMount() {
-      // This login will allow shibboleth to check on page reload
-      this.props.login()
+    componentDidMount() {
+        // This login will allow shibboleth to check on page reload
+        this.props.login()
 
-      if (process.env.NODE_ENV === 'development') {
-          this.props.getPersons()
-      }
-  }
+        if (process.env.NODE_ENV === 'development') {
+            this.props.getPersons()
+        }
+    }
 
-  componentWillReceiveProps(newProps) {
-      this.refreshLinks(newProps)
-      // TODO: redux persistent storage & fetch in middleware
-      if (newProps.user && !this.state.loaded) {
-          this.props.getPersons()
-          this.props.getStudyfields()
-          this.props.getProgrammes()
-          this.props.getAgreements()
-          this.props.getCouncilmeetings()
-          this.props.getTheses()
-          this.props.getEmailDrafts()
+    componentWillReceiveProps(newProps) {
+        this.refreshLinks(newProps)
+        // TODO: redux persistent storage & fetch in middleware
+        if (newProps.user && !this.state.loaded) {
+            this.props.getPersons()
+            this.props.getStudyfields()
+            this.props.getProgrammes()
+            this.props.getAgreements()
+            this.props.getCouncilmeetings()
+            this.props.getTheses()
+            this.props.getEmailDrafts()
 
-          if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
-              this.props.getNotifications()
-          }
+            if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
+                this.props.getNotifications()
+            }
 
-          this.setState({ loaded: true })
-      }
-  }
+            this.setState({ loaded: true })
+        }
+    }
 
     refreshLinks = (props) => {
         let links = []
