@@ -44,14 +44,12 @@ class NavBar extends Component {
     }
 
     state = {
-        links: [],
-        loaded: false
+        links: []
     }
 
     componentDidMount() {
-        // This login will allow shibboleth to check on page reload
-        this.props.login()
-
+        this.refreshLinks(this.props)
+        this.getEverything()
         if (process.env.NODE_ENV === 'development') {
             this.props.getPersons()
         }
@@ -59,21 +57,19 @@ class NavBar extends Component {
 
     componentWillReceiveProps(newProps) {
         this.refreshLinks(newProps)
-        // TODO: redux persistent storage & fetch in middleware
-        if (newProps.user && !this.state.loaded) {
-            this.props.getPersons()
-            this.props.getStudyfields()
-            this.props.getProgrammes()
-            this.props.getAgreements()
-            this.props.getCouncilmeetings()
-            this.props.getTheses()
-            this.props.getEmailDrafts()
+    }
 
-            if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
-                this.props.getNotifications()
-            }
+    getEverything = () => {
+        this.props.getPersons()
+        this.props.getStudyfields()
+        this.props.getProgrammes()
+        this.props.getAgreements()
+        this.props.getCouncilmeetings()
+        this.props.getTheses()
+        this.props.getEmailDrafts()
 
-            this.setState({ loaded: true })
+        if (this.props.user.roles && this.props.user.roles.filter(role => role.role === 'admin').length > 0) {
+            this.props.getNotifications()
         }
     }
 
@@ -158,9 +154,13 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-const mapStateToProps = state => ({
-    user: state.user
-})
+const mapStateToProps = state => {
+    console.log('MAP STATE TO PROPS')
+    console.log(state.user)
+    return ({
+        user: state.user
+    })
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
 
