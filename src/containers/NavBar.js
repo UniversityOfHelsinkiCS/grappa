@@ -44,22 +44,32 @@ class NavBar extends Component {
     }
 
     state = {
-        links: []
+        links: [],
+        loaded: false
     }
 
     componentDidMount() {
-        this.refreshLinks(this.props)
-        this.getEverything()
+        if (!this.props.user.token) {
+            this.props.login()
+        } else {
+            this.setState({ loaded: true },
+                this.getEverything(this.props.user))
+        }
         if (process.env.NODE_ENV === 'development') {
             this.props.getPersons()
         }
     }
 
     componentWillReceiveProps(newProps) {
-        this.refreshLinks(newProps)
+        if (!this.state.loaded && newProps.user.token) {
+            this.setState({ loaded: true },
+                this.getEverything(newProps.user))
+        } else if (this.props.user.token !== newProps.user.token) {
+            this.refreshLinks(newProps.user)
+        }
     }
 
-    getEverything = () => {
+    getEverything = (user) => {
         this.props.getPersons()
         this.props.getStudyfields()
         this.props.getProgrammes()
@@ -71,13 +81,14 @@ class NavBar extends Component {
         if (this.props.user.roles && this.props.user.roles.filter(role => role.role === 'admin').length > 0) {
             this.props.getNotifications()
         }
+        this.refreshLinks(user)
     }
 
-    refreshLinks = (props) => {
+    refreshLinks = (user) => {
         let links = []
         // Get all links that the user could require in their work.
-        if (props.user && props.user.roles) {
-            props.user.roles.forEach((roleObject) => {
+        if (user && user.roles) {
+            user.roles.forEach((roleObject) => {
                 const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show')
                 links = links.concat(linkPermissions.filter(link => !links.includes(link)))
             })
