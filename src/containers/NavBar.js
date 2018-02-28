@@ -154,13 +154,9 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-const mapStateToProps = state => {
-    console.log('MAP STATE TO PROPS')
-    console.log(state.user)
-    return ({
-        user: state.user
-    })
-}
+const mapStateToProps = state => ({
+    user: state.user
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
 
