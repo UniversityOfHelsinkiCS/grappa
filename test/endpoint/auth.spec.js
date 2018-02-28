@@ -74,7 +74,7 @@ test('logout gives redirect address', async (t) => {
         .get('/user/logout')
 
     t.is(res.status, 200)
-    t.is(res.body.logoutUrl, 'https://example.com/logout/?return=https://grappa.cs.helsinki.fi/v2/')
+    t.is(res.body.logoutUrl, 'https://example.com/logout?return=https://grappa.cs.helsinki.fi/v2/')
     t.truthy(sessionDestroyStub.calledOnce)
 })
 
