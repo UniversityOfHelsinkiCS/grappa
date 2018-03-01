@@ -9,7 +9,8 @@ RUN npm i
 
 RUN npm run build
 RUN npm install -g serve
+RUN ["chmod", "+x", "docker-run.sh"]
 
 EXPOSE 5000
 
-CMD ["serve", "-s", "build"]
+CMD ./docker-run.sh
