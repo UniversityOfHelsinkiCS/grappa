@@ -27,7 +27,6 @@ const makeApp = (user, logout) => {
         req.headers.shib_logout_url = 'https://example.com/logout'
         next()
     })
-    app.use(auth.shibRegister)
     app.use('/', index)
     app.use(auth.checkAuth)
     app.use('/user', shibboleth)
