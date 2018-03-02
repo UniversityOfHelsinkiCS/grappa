@@ -36,7 +36,7 @@ test('delete role', async (t) => {
 })
 
 test('get available roles', async (t) => {
-    const res = await request(await makeApp()).get('/roles/available')
+    const res = await request(await makeApp(1)).get('/roles/available')
     t.is(res.status, 200)
     t.is(res.body.length, 6)
 })

@@ -25,6 +25,7 @@ const makeApp = (user, logout) => {
         req.headers.uid = id
         req.headers.mail = email
         req.headers.shib_logout_url = 'https://example.com/logout'
+        req.decodedToken = { id }
         next()
     })
     app.use('/', index)
