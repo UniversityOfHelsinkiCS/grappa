@@ -8,7 +8,8 @@ test('thesis statistics page renders', (t) => {
     const store = {
         programmes: [{ programmeId: 1, name: '' }],
         statistics: stats,
-        studyfields: [{ studyfieldId: 1, programmeId: 1, name: '' }]
+        studyfields: [{ studyfieldId: 1, programmeId: 1, name: '' }],
+        user: {}
     }
 
     const component = mountWithStore(<ThesisStatisticsPage />, mockStore(store))
