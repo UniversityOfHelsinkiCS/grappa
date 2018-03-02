@@ -1,5 +1,3 @@
-import { checkUserIsAdminOrManager } from '../services/RoleService'
-
 const emailInviteService = require('../services/EmailInviteService')
 const personService = require('../services/PersonService')
 const agreementService = require('../services/AgreementService')
