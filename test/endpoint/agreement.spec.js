@@ -6,13 +6,18 @@ process.env.DB_SCHEMA = 'agreement_test'
 const request = require('supertest')
 const express = require('express')
 const agreement = require('../../src/routes/agreements')
+const errorHandler = require('../../src/util/errorHandler')
 
 const makeApp = (userId) => {
     const app = express()
     app.use('/agreements', (req, res, next) => {
         req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, agreement)
+
+    app.use(errorHandler)
+
     return app
 }
 

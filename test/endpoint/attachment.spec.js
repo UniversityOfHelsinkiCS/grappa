@@ -31,7 +31,7 @@ test('attachment post & creates id', async (t) => {
 
 test('attachment post permissions checked', async (t) => {
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'test', lastname: 'test' })
+        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission1' })
         .returning('personId')
         .first()
     const agreementId = 1
@@ -51,7 +51,7 @@ test('attachment permissions are checked on delete', async (t) => {
         .attach('otherFile', './LICENSE')
     t.is(res1.status, 200)
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'test', lastname: 'test' })
+        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission2' })
         .returning('personId')
         .first()
 
@@ -89,7 +89,7 @@ const createAttachment = async () => {
 
 test('attachment download permissions are checked', async (t) => {
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'tester', lastname: 'test' })
+        .insert({ firstname: 'tester', lastname: 'test', shibbolethId: 'attachmentPermissionsId' })
         .returning('personId')
 
     const attachmentId = await createAttachment()

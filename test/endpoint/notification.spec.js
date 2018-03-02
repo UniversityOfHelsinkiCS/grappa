@@ -13,6 +13,7 @@ const makeApp = (userId) => {
     app.use('/', (req, res, next) => {
         req.session = {}
         req.session.user_id = userId
+        req.decodedToken = { userId }
         next()
     }, index)
 

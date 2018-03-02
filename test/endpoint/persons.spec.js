@@ -57,7 +57,8 @@ test('email can be switched', async (t) => {
             firstname: 'email',
             lastname: 'test',
             email: 'primary@example.com',
-            secondaryEmail: 'other@example.com'
+            secondaryEmail: 'other@example.com',
+            shibbolethId: 'mailswitcherId'
         }).returning('personId')
 
     const res = await request(await makeApp(personIds[0])).put('/persons/email').send({ useSecondaryEmail: true })
@@ -69,7 +70,7 @@ test('email can be switched', async (t) => {
         .where('personId', personIds[0])
         .first()
 
-    t.is(result1.useSecondaryEmail, true)
+    t.is(result1.useSecondaryEmail, true, 'Email not switched')
 
     await request(await makeApp(personIds[0])).put('/persons/email').send({ useSecondaryEmail: false })
 
@@ -78,5 +79,5 @@ test('email can be switched', async (t) => {
         .where('personId', personIds[0])
         .first()
 
-    t.is(result2.useSecondaryEmail, false)
+    t.is(result2.useSecondaryEmail, false, 'Email not switched back')
 })

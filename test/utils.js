@@ -16,6 +16,9 @@ export async function createPerson(email) {
         .returning('personId')
         .insert(person)
     person.personId = insert[0]
+
+    await knex.getKnex()('person').update({ shibbolethId: person.personId }).where('personId', person.personId)
+
     return person
 }
 
@@ -62,7 +65,7 @@ export async function initDb() {
     await connection.seed.run()
 }
 
-const createToken = (userId) => {
+export const createToken = (userId) => {
     const payload = { userId }
     const token = jwt.sign(payload, config.TOKEN_SECRET, {
         expiresIn: '24h'
@@ -75,6 +78,7 @@ export const makeTestApp = async (route, userId, ...handler) => {
     app.use(errorHandler)
     app.use(route, (req, res, next) => {
         req.headers['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, auth.checkAuth, ...handler)
     return app

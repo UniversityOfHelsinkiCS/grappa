@@ -14,6 +14,7 @@ const makeApp = (userId) => {
     const app = express()
     app.use('/theses', (req, res, next) => {
         req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, theses)
 
