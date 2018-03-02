@@ -52,7 +52,6 @@
     "utf8": "^3.0.0",
     "validator": "^9.4.1",
     "winston": "^3.0.0-rc1",
-    "winston-daily-rotate-file": "^1.7.2",
     "xml2js": "^0.4.19",
     "xmlbuilder": "^9.0.7"
   },

@@ -1,8 +1,9 @@
 import test from 'ava'
-import { initDb, makeTestApp } from '../utils'
 import knex from '../../src/db/connection'
 
 process.env.DB_SCHEMA = 'attachment_test'
+
+const { initDb, makeTestApp } = require('../utils')
 
 const request = require('supertest')
 const attachment = require('../../src/routes/attachments')
@@ -29,13 +30,13 @@ test('attachment post & creates id', async (t) => {
     t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 })
 
-test('attachment post permissions checked', async (t) => {
+test.only('attachment post permissions checked', async (t) => {
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission1' })
+        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission123' })
         .returning('personId')
-        .first()
+
     const agreementId = 1
-    const res = await request(await makeApp(person.personId))
+    const res = await request(await makeApp(person[0]))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')

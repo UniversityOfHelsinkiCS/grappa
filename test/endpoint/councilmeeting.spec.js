@@ -1,8 +1,8 @@
 import test from 'ava'
-import { initDb, makeTestApp, createPerson } from '../utils'
 
 process.env.DB_SCHEMA = 'councilmeeting_test'
 
+const { initDb, makeTestApp, createPerson } = require('../utils')
 const request = require('supertest')
 const councilmeetings = require('../../src/routes/councilmeeting')
 const knex = require('../../src/db/connection').getKnex()

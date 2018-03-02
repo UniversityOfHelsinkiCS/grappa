@@ -1,8 +1,8 @@
 import test from 'ava'
-import { initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'agreement_test'
 
+const { initDb, createToken } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const agreement = require('../../src/routes/agreements')

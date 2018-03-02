@@ -1,9 +1,9 @@
 import test from 'ava'
 import sinon from 'sinon'
-import { initDb } from '../utils'
 
 process.env.DB_SCHEMA = 'auth_test'
 
+const { initDb } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const index = require('../../src/routes/index')
