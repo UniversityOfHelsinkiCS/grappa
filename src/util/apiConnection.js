@@ -9,19 +9,25 @@ export const getAxios = () => {
     return axios
 }
 
-function callApi(url, method = 'get', data, prefix) {
+function callApi(url, method = 'get', data, prefix, token) {
+    const options = {
+        headers: {
+            'x-access-token': token
+        }
+    }
     if (prefix.includes('DOWNLOAD')) {
-        return getAxios().get(url, { responseType: 'arraybuffer' })
+        options.responseType = 'arraybuffer'
+        return getAxios().get(url, options)
     }
     switch (method) {
         case 'get':
-            return getAxios().get(url)
+            return getAxios().get(url, options)
         case 'post':
-            return getAxios().post(url, data)
+            return getAxios().post(url, data, options)
         case 'put':
-            return getAxios().put(url, data)
+            return getAxios().put(url, data, options)
         case 'delete':
-            return getAxios().delete(url)
+            return getAxios().delete(url, options)
         default:
             return Promise.reject(new Error('Invalid http method'))
     }
@@ -42,7 +48,7 @@ export const handleRequest = store => next => (action) => {
     next(action)
     const { payload } = action
     if (payload) {
-        callApi(payload.route, payload.method, payload.data, payload.prefix)
+        callApi(payload.route, payload.method, payload.data, payload.prefix, store.getState().user.token)
             .then((res) => {
                 store.dispatch({ type: `${payload.prefix}SUCCESS`, response: res.data })
             })

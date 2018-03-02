@@ -23,62 +23,72 @@ import { getAxios } from '../util/apiConnection'
 const logout = () => {
     getAxios()
         .get('/user/logout')
-        .then((res) => { window.location = res.data.logoutUrl })
+        .then((res) => {
+            localStorage.clear()
+            window.location = res.data.logoutUrl
+        })
 }
 
 class NavBar extends Component {
-  static propTypes = {
-      login: func.isRequired,
-      getPersons: func.isRequired,
-      getProgrammes: func.isRequired,
-      getStudyfields: func.isRequired,
-      getAgreements: func.isRequired,
-      getCouncilmeetings: func.isRequired,
-      getTheses: func.isRequired,
-      getNotifications: func.isRequired,
-      getEmailDrafts: func.isRequired,
-      user: personType.isRequired
-  }
+    static propTypes = {
+        login: func.isRequired,
+        getPersons: func.isRequired,
+        getProgrammes: func.isRequired,
+        getStudyfields: func.isRequired,
+        getAgreements: func.isRequired,
+        getCouncilmeetings: func.isRequired,
+        getTheses: func.isRequired,
+        getNotifications: func.isRequired,
+        getEmailDrafts: func.isRequired,
+        user: personType.isRequired
+    }
 
-  state = {
-      links: [],
-      loaded: false
-  }
+    state = {
+        links: [],
+        loaded: false
+    }
 
-  componentDidMount() {
-      // This login will allow shibboleth to check on page reload
-      this.props.login()
+    componentDidMount() {
+        if (!this.props.user.token) {
+            this.props.login()
+        } else {
+            this.setState({ loaded: true },
+                this.getEverything(this.props.user))
+        }
+        if (process.env.NODE_ENV === 'development') {
+            this.props.getPersons()
+        }
+    }
 
-      if (process.env.NODE_ENV === 'development') {
-          this.props.getPersons()
-      }
-  }
+    componentWillReceiveProps(newProps) {
+        if (!this.state.loaded && newProps.user.token) {
+            this.setState({ loaded: true },
+                this.getEverything(newProps.user))
+        } else if (this.props.user.token !== newProps.user.token) {
+            this.refreshLinks(newProps.user)
+        }
+    }
 
-  componentWillReceiveProps(newProps) {
-      this.refreshLinks(newProps)
-      // TODO: redux persistent storage & fetch in middleware
-      if (newProps.user && !this.state.loaded) {
-          this.props.getPersons()
-          this.props.getStudyfields()
-          this.props.getProgrammes()
-          this.props.getAgreements()
-          this.props.getCouncilmeetings()
-          this.props.getTheses()
-          this.props.getEmailDrafts()
+    getEverything = (user) => {
+        this.props.getPersons()
+        this.props.getStudyfields()
+        this.props.getProgrammes()
+        this.props.getAgreements()
+        this.props.getCouncilmeetings()
+        this.props.getTheses()
+        this.props.getEmailDrafts()
 
-          if (newProps.user.roles && newProps.user.roles.filter(role => role.role === 'admin').length > 0) {
-              this.props.getNotifications()
-          }
+        if (this.props.user.roles && this.props.user.roles.filter(role => role.role === 'admin').length > 0) {
+            this.props.getNotifications()
+        }
+        this.refreshLinks(user)
+    }
 
-          this.setState({ loaded: true })
-      }
-  }
-
-    refreshLinks = (props) => {
+    refreshLinks = (user) => {
         let links = []
         // Get all links that the user could require in their work.
-        if (props.user && props.user.roles) {
-            props.user.roles.forEach((roleObject) => {
+        if (user && user.roles) {
+            user.roles.forEach((roleObject) => {
                 const linkPermissions = getPermissions(roleObject.role, 'nav-bar', 'show')
                 links = links.concat(linkPermissions.filter(link => !links.includes(link)))
             })
