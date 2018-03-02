@@ -1,23 +1,17 @@
 import test from 'ava'
-import { initDb } from '../utils'
 import knex from '../../src/db/connection'
 
 process.env.DB_SCHEMA = 'attachment_test'
 
-const request = require('supertest')
-const express = require('express')
-const attachment = require('../../src/routes/attachments')
-const errorHandler = require('../../src/util/errorHandler')
+const { initDb, makeTestApp } = require('../utils')
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use(errorHandler)
-    app.use('/attachments', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
-        next()
-    }, attachment)
-    return app
+const request = require('supertest')
+const attachment = require('../../src/routes/attachments')
+
+const makeApp = async (id) => {
+    const userId = (await knex.getKnex().select().from('person').where('personId', id)
+        .first()).shibbolethId
+    return makeTestApp('/attachments', userId, attachment)
 }
 
 test.before(async () => {
@@ -26,7 +20,7 @@ test.before(async () => {
 
 test('attachment post & creates id', async (t) => {
     const agreementId = 1
-    const res = await request(makeApp(1))
+    const res = await request(await makeApp(1))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
@@ -36,14 +30,13 @@ test('attachment post & creates id', async (t) => {
     t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 })
 
-test('attachment post permissions chekced', async (t) => {
+test.only('attachment post permissions checked', async (t) => {
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'test', lastname: 'test' })
+        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission123' })
         .returning('personId')
-        .first()
 
     const agreementId = 1
-    const res = await request(makeApp(person))
+    const res = await request(await makeApp(person[0]))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
@@ -53,17 +46,17 @@ test('attachment post permissions chekced', async (t) => {
 
 test('attachment permissions are checked on delete', async (t) => {
     const agreementId = 1
-    const res1 = await request(makeApp(1))
+    const res1 = await request(await makeApp(1))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
     t.is(res1.status, 200)
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'test', lastname: 'test' })
+        .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission2' })
         .returning('personId')
         .first()
 
-    const res2 = await request(makeApp(person))
+    const res2 = await request(await makeApp(person.personId))
         .del(`/attachments/${res1.body[0].attachmentId}`)
 
     t.is(res2.status, 500)
@@ -71,7 +64,7 @@ test('attachment permissions are checked on delete', async (t) => {
 
 test('attachment can be deleted', async (t) => {
     const agreementId = 1
-    const res1 = await request(makeApp(1))
+    const res1 = await request(await makeApp(1))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
@@ -79,7 +72,7 @@ test('attachment can be deleted', async (t) => {
     const attachments = res1.body
     t.is(attachments.length, 1)
 
-    const res2 = await request(makeApp(1))
+    const res2 = await request(await makeApp(1))
         .del(`/attachments/${res1.body[0].attachmentId}`)
 
     t.is(res2.status, 200)
@@ -87,7 +80,7 @@ test('attachment can be deleted', async (t) => {
 
 const createAttachment = async () => {
     const agreementId = 1
-    const res1 = await request(makeApp(1))
+    const res1 = await request(await makeApp(1))
         .post('/attachments')
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
@@ -97,12 +90,12 @@ const createAttachment = async () => {
 
 test('attachment download permissions are checked', async (t) => {
     const person = await knex.getKnex()('person')
-        .insert({ firstname: 'tester', lastname: 'test' })
+        .insert({ firstname: 'tester', lastname: 'test', shibbolethId: 'attachmentPermissionsId' })
         .returning('personId')
 
     const attachmentId = await createAttachment()
 
-    const res1 = await request(makeApp(person[0]))
+    const res1 = await request(await makeApp(person[0]))
         .get(`/attachments/${attachmentId}`)
 
     t.is(res1.status, 403)
@@ -110,7 +103,7 @@ test('attachment download permissions are checked', async (t) => {
     // Grant print_person role for user
     await knex.getKnex()('personWithRole').insert({ programmeId: 1, personId: person[0], roleId: 3 })
 
-    const res2 = await request(makeApp(person[0]))
+    const res2 = await request(await makeApp(person[0]))
         .get(`/attachments/${attachmentId}`)
 
     t.is(res2.status, 501) // PDF printing fails, but user has access

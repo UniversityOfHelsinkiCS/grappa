@@ -39,12 +39,9 @@ export function getProgrammePersons(programmeId) {
 }
 
 export async function getLoggedPerson(req) {
-    if (req.session.user_id) {
-        const userId = req.session.user_id
-        return getPersonById(userId)
-    } else if (req.headers.uid) {
-        const shibbolethId = req.headers.uid
-        return getPersonByShibbolethId(shibbolethId)
+    if (req.decodedToken) {
+        const { userId } = req.decodedToken
+        return getPersonByShibbolethId(userId)
     }
 
     return null
@@ -67,13 +64,13 @@ export async function savePerson(personData) {
             .returning('personId')
             .insert(personData)
         const personId = personIds[0]
-        person = knex.select(personSchema).from('person').where('personId', personId).first()
+        person = await getPersonById(personId)
     }
     return person
 }
 
-export function updatePerson(personData) {
-    return knex('person')
+export const updatePerson = async (personData) => {
+    const personId = await knex('person')
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
@@ -81,6 +78,7 @@ export function updatePerson(personData) {
         .catch((error) => {
             throw error
         })
+    return getPersonById(personId)
 }
 
 export const getPersonsWithAgreementPerson = agreementpersonId => knex.select(personSchema).from('person')

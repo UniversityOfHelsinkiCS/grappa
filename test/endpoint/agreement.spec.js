@@ -1,19 +1,23 @@
 import test from 'ava'
-import { initDb } from '../utils'
 
 process.env.DB_SCHEMA = 'agreement_test'
 
+const { initDb, createToken } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const agreement = require('../../src/routes/agreements')
+const errorHandler = require('../../src/util/errorHandler')
 
 const makeApp = (userId) => {
     const app = express()
     app.use('/agreements', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
+        req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, agreement)
+
+    app.use(errorHandler)
+
     return app
 }
 

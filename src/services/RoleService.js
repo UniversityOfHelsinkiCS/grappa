@@ -148,8 +148,7 @@ export async function isUserAdminOrManager(user) {
         .from('personWithRole')
         .join('role', 'personWithRole.roleId', 'role.roleId')
         .where('personId', user.personId)
-        .where('name', 'admin')
-        .orWhere('name', 'manager')
+        .andWhere(function () { this.where('name', 'admin').orWhere('name', 'manager') })
         .then(res => res.length > 0)
 }
 

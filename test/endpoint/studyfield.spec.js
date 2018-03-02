@@ -1,22 +1,19 @@
 import test from 'ava'
-import { initDb } from '../utils'
 
 process.env.DB_SCHEMA = 'studyfield_test'
 
+const { initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
-const express = require('express')
 const programmes = require('../../src/routes/programmes')
 const mockStudyfields = require('../../src/mockdata/MockProgrammes')
+const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/programmes', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
-        next()
-    }, programmes)
-    return app
+const makeApp = async (id) => {
+    const userId = (await knex.select().from('person').where('personId', id)
+        .first()).shibbolethId
+    return makeTestApp('/programmes', userId, programmes)
 }
+
 
 test.before(async () => {
     await initDb()
@@ -24,7 +21,7 @@ test.before(async () => {
 
 test('programme get all', async (t) => {
     t.plan(2)
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const res = await request(app)
         .get('/programmes')
 

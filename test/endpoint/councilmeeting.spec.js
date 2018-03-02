@@ -1,23 +1,16 @@
 import test from 'ava'
-import { initDb } from '../utils'
 
 process.env.DB_SCHEMA = 'councilmeeting_test'
 
+const { initDb, makeTestApp, createPerson } = require('../utils')
 const request = require('supertest')
-const express = require('express')
 const councilmeetings = require('../../src/routes/councilmeeting')
-const errorHandler = require('../../src/util/errorHandler')
 const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/councilmeetings', (req, res, next) => {
-        req.session = {}
-        req.session.user_id = userId
-        next()
-    }, councilmeetings)
-    app.use(errorHandler)
-    return app
+const makeApp = async (id) => {
+    const userId = (await knex.select().from('person').where('personId', id)
+        .first()).shibbolethId
+    return makeTestApp('/councilmeetings', userId, councilmeetings)
 }
 
 test.before(async () => {
@@ -85,14 +78,14 @@ const validUpdate = async (t, app, id) => {
 test('councilmeeting post returns the councilmeeting', async (t) => {
     t.plan(3)
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     await validPost(t, app, councilMeeting)
 })
 
 test('councilmeeting get', async (t) => {
     t.plan(7)
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
 
     await validPost(t, app, councilMeeting)
 
@@ -116,7 +109,7 @@ test('councilmeeting get', async (t) => {
 test('councilmeeting delete returns id', async (t) => {
     t.plan(7)
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
     const response = await validDelete(t, app, councilMeetingId)
@@ -129,7 +122,7 @@ test('councilmeeting delete returns id', async (t) => {
 test('councilmeeting update', async (t) => {
     t.plan(10)
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
 
@@ -144,7 +137,7 @@ test('councilmeeting update', async (t) => {
 
 test.serial('councilmeeting with invalid data cannot be created', async (t) => {
     t.plan(6)
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const getBefore = await validGet(t, app)
 
     const badMeeting1 = {
@@ -189,7 +182,7 @@ test.serial('councilmeeting with invalid data cannot be created', async (t) => {
 
 test('meeting with theses cant be deleted', async (t) => {
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const meeting = await validPost(t, app, councilMeeting)
     const meetingId = meeting.councilmeetingId
 
@@ -201,8 +194,9 @@ test('meeting with theses cant be deleted', async (t) => {
 })
 
 test('normal people can\'t create meetings', async (t) => {
+    const person = await createPerson('email@here.com')
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(99)
+    const app = await makeApp(person.personId)
 
     const res = await request(app)
         .post('/councilmeetings')
@@ -212,11 +206,12 @@ test('normal people can\'t create meetings', async (t) => {
 
 test('normal people can\'t edit meetings', async (t) => {
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
 
-    const app2 = makeApp(99)
+    const person = await createPerson('normal1234@example.com')
+    const app2 = await makeApp(person.personId)
 
     const res = await request(app2)
         .put(`/councilmeetings/${councilMeetingId}`)
@@ -226,11 +221,12 @@ test('normal people can\'t edit meetings', async (t) => {
 
 test('normal people can\'t delete meetings', async (t) => {
     const councilMeeting = generateCouncilMeeting()
-    const app = makeApp(1)
+    const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
 
-    const app2 = makeApp(99)
+    const person = await createPerson('normal4321@example.com')
+    const app2 = await makeApp(person.personId)
 
     const res = await request(app2)
         .del(`/councilmeetings/${councilMeetingId}`)
