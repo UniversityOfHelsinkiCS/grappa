@@ -17,7 +17,6 @@ const auth = require('./middleware/auth')
 const auditLogger = require('./middleware/auditLogger')
 
 module.exports = (app) => {
-    app.use(auth.shibRegister)
     app.use(auditLogger)
     app.use('/', index)
     app.use('/user', shibboleth)

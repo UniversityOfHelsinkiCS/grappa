@@ -64,13 +64,13 @@ export async function savePerson(personData) {
             .returning('personId')
             .insert(personData)
         const personId = personIds[0]
-        person = knex.select(personSchema).from('person').where('personId', personId).first()
+        person = await getPersonById(personId)
     }
     return person
 }
 
-export function updatePerson(personData) {
-    return knex('person')
+export const updatePerson = async (personData) => {
+    const personId = await knex('person')
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
@@ -78,6 +78,7 @@ export function updatePerson(personData) {
         .catch((error) => {
             throw error
         })
+    return getPersonById(personId)
 }
 
 export const getPersonsWithAgreementPerson = agreementpersonId => knex.select(personSchema).from('person')
