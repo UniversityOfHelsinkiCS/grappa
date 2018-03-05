@@ -60,6 +60,7 @@ export async function getAllAgreements(req, res) {
         }
         res.status(200).json(responseObject)
     } catch (error) {
+        console.log(error)
         logger.error('Get agreements failed', { error })
         res.status(500).json(error)
     }

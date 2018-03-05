@@ -1,7 +1,7 @@
 module.exports = [
     {
         personId: 1,
-        shibbolethId: 'amandaadmininshibboId',
+        shibbolethId: 1,
         email: 'amanda@admin.com',
         firstname: 'Amanda',
         lastname: 'Admin',
@@ -10,7 +10,7 @@ module.exports = [
     },
     {
         personId: 2,
-        shibbolethId: 'harrihallinnonshibboId',
+        shibbolethId: 2,
         email: 'harri@hallinto.com',
         firstname: 'Harri',
         lastname: 'CS-Hallinto',
@@ -20,7 +20,7 @@ module.exports = [
     },
     {
         personId: 3,
-        shibbolethId: 'petraprinttaajanshibboId',
+        shibbolethId: 3,
         email: 'petra@printtaaja.com',
         firstname: 'Petra',
         lastname: 'CS-Printtaaja',
@@ -30,7 +30,7 @@ module.exports = [
     },
     {
         personId: 4,
-        shibbolethId: 'victoriaproffanshibboId',
+        shibbolethId: 4,
         email: 'victoria@vastuuproffa.com',
         firstname: 'Victoria',
         lastname: 'CS-Vastuuproffa',
@@ -40,7 +40,7 @@ module.exports = [
     },
     {
         personId: 5,
-        shibbolethId: 'thomastarkastajashibboId',
+        shibbolethId: 5,
         email: 'thomas@tarkastaja.com',
         firstname: 'Thomas',
         lastname: 'CS-Tarkastaja',
@@ -50,7 +50,7 @@ module.exports = [
     },
     {
         personId: 6,
-        shibbolethId: 'olliohjaajanshibboId',
+        shibbolethId: 6,
         email: 'olli@ohjaaja.com',
         firstname: 'Olli',
         lastname: 'CS-Ohjaaja',
@@ -60,7 +60,7 @@ module.exports = [
     },
     {
         personId: 7,
-        shibbolethId: 'oliviaopiskelijanshibboId',
+        shibbolethId: 7,
         email: 'olivia@opiskelija.com',
         firstname: 'Olivia',
         lastname: 'CS-Opiskelija',
@@ -70,7 +70,7 @@ module.exports = [
     },
     {
         personId: 8,
-        shibbolethId: 'venlavastuuproffanshibboId',
+        shibbolethId: 8,
         email: 'venla@vastuuproffa.com',
         firstname: 'Venla',
         lastname: 'Math-Vastuuproffa',
@@ -80,7 +80,7 @@ module.exports = [
     },
     {
         personId: 9,
-        shibbolethId: 'annapuunshibboId',
+        shibbolethId: 9,
         email: 'anna@puu.com',
         firstname: 'Anna',
         lastname: 'Puu',
@@ -90,7 +90,7 @@ module.exports = [
     },
     {
         personId: 10,
-        shibbolethId: 'tarjaopiskelijanshibboId',
+        shibbolethId: 10,
         email: 'tarja@opiskelija.com',
         firstname: 'Tarja',
         lastname: 'Math+CS-Opiskelija',
@@ -100,7 +100,7 @@ module.exports = [
     },
     {
         personId: 11,
-        shibbolethId: 'erkkierikoistapauksenshibboId',
+        shibbolethId: 11,
         email: 'erkki@erikoistapaus.com',
         firstname: 'Erkki',
         lastname: 'Erikoistapaus',
@@ -110,7 +110,7 @@ module.exports = [
     },
     {
         personId: 12,
-        shibbolethId: 'tubotöhönshibboId',
+        shibbolethId: 12,
         email: 'turbo@töhö.com',
         firstname: 'Turbo',
         lastname: 'Töhö',

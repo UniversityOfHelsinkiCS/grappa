@@ -1,8 +1,8 @@
 import test from 'ava'
-import { initDb, makeTestApp } from '../utils'
 
 process.env.DB_SCHEMA = 'studyfield_test'
 
+const { initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
 const programmes = require('../../src/routes/programmes')
 const mockStudyfields = require('../../src/mockdata/MockProgrammes')

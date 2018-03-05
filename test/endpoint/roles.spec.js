@@ -1,8 +1,8 @@
 import test from 'ava'
-import { createPerson, initDb, makeTestApp } from '../utils'
 
 process.env.DB_SCHEMA = 'roles_test'
 
+const { createPerson, initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
 const rolesRoute = require('../../src/routes/roles')
 const knex = require('../../src/db/connection').getKnex()
@@ -36,7 +36,7 @@ test('delete role', async (t) => {
 })
 
 test('get available roles', async (t) => {
-    const res = await request(await makeApp()).get('/roles/available')
+    const res = await request(await makeApp(1)).get('/roles/available')
     t.is(res.status, 200)
     t.is(res.body.length, 6)
 })

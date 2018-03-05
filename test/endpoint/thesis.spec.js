@@ -1,9 +1,9 @@
 import test from 'ava'
 import sinon from 'sinon'
-import { createPerson, initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'thesis_test'
 
+const { createPerson, initDb, createToken } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const theses = require('../../src/routes/theses')
@@ -14,6 +14,7 @@ const makeApp = (userId) => {
     const app = express()
     app.use('/theses', (req, res, next) => {
         req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, theses)
 

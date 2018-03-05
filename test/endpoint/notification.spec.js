@@ -1,8 +1,8 @@
 import test from 'ava'
-import { initDb } from '../utils'
 
 process.env.DB_SCHEMA = 'notification_test'
 
+const { initDb } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const index = require('../../src/routes/index')
@@ -13,6 +13,7 @@ const makeApp = (userId) => {
     app.use('/', (req, res, next) => {
         req.session = {}
         req.session.user_id = userId
+        req.decodedToken = { userId }
         next()
     }, index)
 

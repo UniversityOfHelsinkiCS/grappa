@@ -1,8 +1,8 @@
 import test from 'ava'
-import { createPerson, initDb, createToken } from '../utils'
 
 process.env.DB_SCHEMA = 'invite_test'
 
+const { createPerson, initDb, createToken } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const invite = require('../../src/routes/invite')
@@ -14,10 +14,12 @@ const makeApp = (userId) => {
     const app = express()
     app.use('/invite', (req, res, next) => {
         req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, invite)
     app.use('/persons', (req, res, next) => {
         req['x-access-token'] = createToken(userId)
+        req.decodedToken = { userId }
         next()
     }, persons)
     app.use(errorHandler)

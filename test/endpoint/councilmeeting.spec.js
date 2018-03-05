@@ -1,8 +1,8 @@
 import test from 'ava'
-import { initDb, makeTestApp, createPerson } from '../utils'
 
 process.env.DB_SCHEMA = 'councilmeeting_test'
 
+const { initDb, makeTestApp, createPerson } = require('../utils')
 const request = require('supertest')
 const councilmeetings = require('../../src/routes/councilmeeting')
 const knex = require('../../src/db/connection').getKnex()
@@ -210,7 +210,8 @@ test('normal people can\'t edit meetings', async (t) => {
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
 
-    const app2 = makeApp(99)
+    const person = await createPerson('normal1234@example.com')
+    const app2 = await makeApp(person.personId)
 
     const res = await request(app2)
         .put(`/councilmeetings/${councilMeetingId}`)
@@ -224,7 +225,8 @@ test('normal people can\'t delete meetings', async (t) => {
     const responseMeeting = await validPost(t, app, councilMeeting)
     const councilMeetingId = responseMeeting.councilmeetingId
 
-    const app2 = await makeApp(99)
+    const person = await createPerson('normal4321@example.com')
+    const app2 = await makeApp(person.personId)
 
     const res = await request(app2)
         .del(`/councilmeetings/${councilMeetingId}`)
