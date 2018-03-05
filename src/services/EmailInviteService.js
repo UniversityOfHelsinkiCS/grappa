@@ -25,7 +25,7 @@ export async function createEmailInviteForThesisAuthor(email, agreementId, progr
 
     if (authorInviteType.validateSync(invite)[0]) throw new Error('Invalid parameters')
 
-    await knex('emailInvite').insert(invite).transacting(trx)
+    await knex('emailInvite').insert(invite)
     await emailService.sendInvite(invite, 'thesis', programmeId)
 }
 
