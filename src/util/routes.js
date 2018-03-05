@@ -36,7 +36,7 @@ export const paths = {
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
     notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' },
-    invite: { path: '/invite/:type/:token', component: InvitePage }
+    invite: { path: '/invite', component: InvitePage }
 }
 
 export default () => (
