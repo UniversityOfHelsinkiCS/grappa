@@ -1,3 +1,5 @@
+import logger from '../util/logger'
+
 const crypto = require('crypto')
 const Checkit = require('checkit')
 const knex = require('../db/connection').getKnex()
@@ -25,8 +27,13 @@ export async function createEmailInviteForThesisAuthor(email, agreementId, progr
 
     if (authorInviteType.validateSync(invite)[0]) throw new Error('Invalid parameters')
 
-    await knex('emailInvite').insert(invite)
-    await emailService.sendInvite(invite, 'thesis', programmeId)
+    await knex('emailInvite').insert(invite).transacting(trx)
+
+    try {
+        await emailService.sendInvite(invite, 'thesis', programmeId)
+    } catch (err) {
+        logger.error('Email send error', { error: err.message })
+    }
 }
 
 export async function createEmailInviteForRole(inviteData) {
