@@ -80,7 +80,7 @@ function removeDuplicates(persons) {
 
 async function userNotFound(res) {
     if (process.env.NODE_ENV !== 'development') {
-        return res.status(200).json({}).end()
+        return res.status(403).json({ message: `DecodedToken did not contain valid userId ${res.decodedToken}` }).end()
     }
     logger.debug('It indeed is a developer.')
     const persons = await personService.getAllPersons()
