@@ -51,6 +51,9 @@ class NavBar extends Component {
 
     componentDidMount() {
         this.props.login()
+        if (this.props.user) {
+            this.refreshLinks(this.props.user)
+        }
         if (process.env.NODE_ENV === 'development') {
             this.props.getPersons()
         }
