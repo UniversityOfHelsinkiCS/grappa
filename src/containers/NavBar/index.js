@@ -4,21 +4,22 @@ import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 
-import { getPermissions } from '../util/rolePermissions'
-import { login } from './User/services/userActions'
-import { personType } from '../util/types'
+import { getPermissions } from '../../util/rolePermissions'
+import { login } from '../User/services/userActions'
+import { personType } from '../../util/types'
+import Interval from './components/Interval'
 
 
 // TODO: redux persistent storage & fetch in middleware
-import { getProgrammes } from './Unit/services/programmeActions'
-import { getStudyfields } from './Studyfield/services/studyfieldActions'
-import { getAgreements } from './Agreement/services/agreementActions'
-import { getCouncilmeetings } from './CouncilMeeting/services/councilmeetingActions'
-import { getTheses } from './Thesis/services/thesisActions'
-import { getPersons } from './Person/services/personActions'
-import { getNotifications } from './Notification/services/notificationsAction'
-import { getEmailDrafts } from './Email/services/emailActions'
-import { getAxios } from '../util/apiConnection'
+import { getProgrammes } from '../Unit/services/programmeActions'
+import { getStudyfields } from '../Studyfield/services/studyfieldActions'
+import { getAgreements } from '../Agreement/services/agreementActions'
+import { getCouncilmeetings } from '../CouncilMeeting/services/councilmeetingActions'
+import { getTheses } from '../Thesis/services/thesisActions'
+import { getPersons } from '../Person/services/personActions'
+import { getNotifications } from '../Notification/services/notificationsAction'
+import { getEmailDrafts } from '../Email/services/emailActions'
+import { getAxios } from '../../util/apiConnection'
 
 const logout = () => {
     getAxios()
@@ -49,12 +50,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        if (!this.props.user.token) {
-            this.props.login()
-        } else {
-            this.setState({ loaded: true },
-                this.getEverything(this.props.user))
-        }
+        this.props.login()
         if (process.env.NODE_ENV === 'development') {
             this.props.getPersons()
         }
@@ -103,8 +99,9 @@ class NavBar extends Component {
     render() {
         return (
             <div>
+                <Interval function={this.props.login} />
                 <div className="ui inverted segment">
-                    <h1><Link to="/">Grappa</Link></h1>
+                    <h1><Link to="/">Gradut pikaisesti pakettiin</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
                     {this.state.links ? this.state.links.map((elem) => {
