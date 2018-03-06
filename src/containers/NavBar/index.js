@@ -9,7 +9,6 @@ import { login } from '../User/services/userActions'
 import { personType } from '../../util/types'
 import Interval from './components/Interval'
 
-
 // TODO: redux persistent storage & fetch in middleware
 import { getProgrammes } from '../Unit/services/programmeActions'
 import { getStudyfields } from '../Studyfield/services/studyfieldActions'
@@ -20,15 +19,6 @@ import { getPersons } from '../Person/services/personActions'
 import { getNotifications } from '../Notification/services/notificationsAction'
 import { getEmailDrafts } from '../Email/services/emailActions'
 import { getAxios } from '../../util/apiConnection'
-
-const logout = () => {
-    getAxios()
-        .get('/user/logout')
-        .then((res) => {
-            localStorage.clear()
-            window.location = res.data.logoutUrl
-        })
-}
 
 class NavBar extends Component {
     static propTypes = {
@@ -127,7 +117,7 @@ class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <Button as="a" className="item" onClick={logout}>Logout</Button>
+                        <Button as="a" className="item" onClick={this.props.logout}>Logout</Button>
                     </div>
                 </div>
             </div>
@@ -138,6 +128,15 @@ class NavBar extends Component {
 const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data))
+    },
+    logout() {
+        getAxios()
+            .get('/user/logout')
+            .then((res) => {
+                dispatch({ type: 'USER_LOGOUT_SUCCESS' })
+                localStorage.clear()
+                window.location = res.data.logoutUrl
+            })
     },
     getProgrammes() {
         dispatch(getProgrammes())
