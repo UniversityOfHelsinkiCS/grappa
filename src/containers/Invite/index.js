@@ -3,11 +3,12 @@ import { string, shape, bool, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
+import * as queryString from 'query-string'
 
 import { acceptThesis, acceptRole } from './services/inviteAction'
 
-const InvitePage = ({ acceptThesisAction, acceptRoleAction, match, status }) => {
-    const { type, token } = match.params
+const InvitePage = ({ acceptThesisAction, acceptRoleAction, location, status }) => {
+    const { type, token } = queryString.parse(location.search)
 
     if (!status && type === 'thesis') {
         acceptThesisAction(token)
@@ -57,11 +58,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 InvitePage.propTypes = {
-    match: shape({
-        params: shape({
-            token: string.isRequired,
-            type: string.isRequired
-        }).isRequired
+    location: shape({
+        search: string.isRequired
     }).isRequired,
     status: bool.isRequired,
     acceptThesisAction: func.isRequired,
