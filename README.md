@@ -15,17 +15,53 @@ Grappa 2.0 (GRAdut Pikaisesti PAkettiin 2.0) will be a tool for both students an
 
 Dependencies: [![Known Vulnerabilities](https://snyk.io/test/github/UniversityOfHelsinkiCS/back-grappa2/badge.svg)](https://snyk.io/test/github/UniversityOfHelsinkiCS/back-grappa2)
 
-## Dev database setup
+# Installation
 
+## Database
+Install docker & docker-compose:
+
+Install docker CE: https://docs.docker.com/engine/installation/
+
+Install docker-compose: https://docs.docker.com/compose/install/
+
+Create docker-compose.yml file containing following:
 ```
-$ docker run --name grappa-postgres-container -d -e POSTGRES_PASSWORD=password -it -p 5433:5432 postgres:9.6.3
-$ docker exec -it grappa-postgres-container createdb -U postgres grappa
+version: '3'
+
+services:
+  grappa_db:
+    image: postgres:9.6.3
+    ports:
+      - "5321:5432"
+    volumes:
+      - ./grappa_pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: grappadata
+    container_name: grappa_db
 ```
 
-Create .env file to project root and add database connection string
+To start the database run:
+`docker-compose up -d`
+
+## Set up project
+
+Install node, git
+
+Clone the repository
+
+Run:
+`npm install`
+
+Create .env file to project root, fill the following:
 ```
-DATABASE_URL=postgres://postgres:password@localhost:5433/grappa
+DATABASE_URL=postgres://postgres@localhost:5321/grappadata
+TOKEN_SECRET=LikeNoOneEverWas
 ```
+
+Run:
+`npm run db:migrate`
+`npm run db:seed`
+`npm start`
 
 Tests are run using own schema for each test file. Test schema is defined using
 `DB_SCHEMA` env which is set in each test file.
