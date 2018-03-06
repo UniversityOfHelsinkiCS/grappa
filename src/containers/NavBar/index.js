@@ -4,30 +4,21 @@ import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 
-import { getPermissions } from '../util/rolePermissions'
-import { login } from './User/services/userActions'
-import { personType } from '../util/types'
-
+import { getPermissions } from '../../util/rolePermissions'
+import { login } from '../User/services/userActions'
+import { personType } from '../../util/types'
+import Interval from './components/Interval'
 
 // TODO: redux persistent storage & fetch in middleware
-import { getProgrammes } from './Unit/services/programmeActions'
-import { getStudyfields } from './Studyfield/services/studyfieldActions'
-import { getAgreements } from './Agreement/services/agreementActions'
-import { getCouncilmeetings } from './CouncilMeeting/services/councilmeetingActions'
-import { getTheses } from './Thesis/services/thesisActions'
-import { getPersons } from './Person/services/personActions'
-import { getNotifications } from './Notification/services/notificationsAction'
-import { getEmailDrafts } from './Email/services/emailActions'
-import { getAxios } from '../util/apiConnection'
-
-const logout = () => {
-    getAxios()
-        .get('/user/logout')
-        .then((res) => {
-            localStorage.clear()
-            window.location = res.data.logoutUrl
-        })
-}
+import { getProgrammes } from '../Unit/services/programmeActions'
+import { getStudyfields } from '../Studyfield/services/studyfieldActions'
+import { getAgreements } from '../Agreement/services/agreementActions'
+import { getCouncilmeetings } from '../CouncilMeeting/services/councilmeetingActions'
+import { getTheses } from '../Thesis/services/thesisActions'
+import { getPersons } from '../Person/services/personActions'
+import { getNotifications } from '../Notification/services/notificationsAction'
+import { getEmailDrafts } from '../Email/services/emailActions'
+import { getAxios } from '../../util/apiConnection'
 
 class NavBar extends Component {
     static propTypes = {
@@ -49,11 +40,9 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        if (!this.props.user.token) {
-            this.props.login()
-        } else {
-            this.setState({ loaded: true },
-                this.getEverything(this.props.user))
+        this.props.login()
+        if (this.props.user) {
+            this.refreshLinks(this.props.user)
         }
         if (process.env.NODE_ENV === 'development') {
             this.props.getPersons()
@@ -103,8 +92,9 @@ class NavBar extends Component {
     render() {
         return (
             <div>
+                <Interval function={this.props.login} />
                 <div className="ui inverted segment">
-                    <h1><Link to="/">Grappa</Link></h1>
+                    <h1><Link to="/">Gradut pikaisesti pakettiin</Link></h1>
                 </div>
                 <div className="ui stackable secondary pointing menu">
                     {this.state.links ? this.state.links.map((elem) => {
@@ -127,7 +117,7 @@ class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <Button as="a" className="item" onClick={logout}>Logout</Button>
+                        <Button as="a" className="item" onClick={this.props.logout}>Logout</Button>
                     </div>
                 </div>
             </div>
@@ -138,6 +128,15 @@ class NavBar extends Component {
 const mapDispatchToProps = dispatch => ({
     login(data) {
         dispatch(login(data))
+    },
+    logout() {
+        getAxios()
+            .get('/user/logout')
+            .then((res) => {
+                dispatch({ type: 'USER_LOGOUT_SUCCESS' })
+                localStorage.clear()
+                window.location = res.data.logoutUrl
+            })
     },
     getProgrammes() {
         dispatch(getProgrammes())

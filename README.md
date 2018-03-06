@@ -9,9 +9,21 @@ Grappa 2.0 (GRAdut Pikaisesti PAkettiin 2.0) will be a tool for both students an
 
 This front-end is made with React + Redux + Webpack. You can read the documentation in which the general structure is explained:
 
-[Documentation](https://drive.google.com/drive/folders/0B5AboURQNTdya2xJcC0zVmVDM1E)
+[Old documentation](https://drive.google.com/drive/folders/0B5AboURQNTdya2xJcC0zVmVDM1E)
 
-How to install (to be added)
+# Installation
+
+## Set up project
+
+Install node, git
+
+Clone the repository
+
+Run:
+`npm install`
+
+Run:
+`npm start`
 
 [![Build Status](https://travis-ci.org/UniversityOfHelsinkiCS/front-grappa2.svg?branch=master)](https://travis-ci.org/UniversityOfHelsinkiCS/front-grappa2)
 [![codebeat badge](https://codebeat.co/badges/353dcbec-3018-4853-b41b-ecff68c746ca)](https://codebeat.co/projects/github-com-universityofhelsinkics-front-grappa2-master)
