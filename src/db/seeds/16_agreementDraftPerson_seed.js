@@ -12,4 +12,5 @@ exports.seed = async (knex) => {
             agreementDraftId: 2
         }
     ])
+    // return knex.raw('ALTER SEQUENCE "agreementDraftPerson_agreementDraftPersonId_seq" RESTART WITH 50')
 }

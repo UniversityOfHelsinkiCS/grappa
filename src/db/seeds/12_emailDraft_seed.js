@@ -2,7 +2,7 @@ exports.seed = async (knex) => {
     // Deletes ALL existing entries
     await knex('emailDraft').del()
     // Inserts seed entries
-    return knex('emailDraft').insert([
+    await knex('emailDraft').insert([
         {
             type: 'StudentRegistrationNotification',
             title: 'Thesis approval',
@@ -78,4 +78,5 @@ student's master's degree.
 $LOGIN_URL$`
         }
     ])
+    return knex.raw('ALTER SEQUENCE "emailDraft_emailDraftId_seq" RESTART WITH 50')
 }

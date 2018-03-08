@@ -4,5 +4,6 @@ exports.seed = async (knex) => {
     // Deletes ALL existing entries
     await knex('person').del()
     // Inserts seed entries
-    return knex('person').insert(persons)
+    await knex('person').insert(persons)
+    return knex.raw('ALTER SEQUENCE "person_personId_seq" RESTART WITH 50')
 }

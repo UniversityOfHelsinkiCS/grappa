@@ -2,7 +2,7 @@ exports.seed = async (knex) => {
     // Deletes ALL existing entries
     await knex('agreementDraft').del()
     // Inserts seed entries
-    return knex('agreementDraft').insert([
+    await knex('agreementDraft').insert([
         {
             agreementDraftId: 1,
             mainSupervisorId: 1,
@@ -46,4 +46,5 @@ exports.seed = async (knex) => {
             other: 'muuta?'
         }
     ])
+    return knex.raw('ALTER SEQUENCE "agreementDraft_agreementDraftId_seq" RESTART WITH 50')
 }
