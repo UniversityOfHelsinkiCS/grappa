@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { string, shape, bool, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -7,49 +7,70 @@ import * as queryString from 'query-string'
 
 import { acceptThesis, acceptRole } from './services/inviteAction'
 
-const InvitePage = ({ acceptThesisAction, acceptRoleAction, location, status }) => {
-    const { type, token } = queryString.parse(location.search)
-
-    if (!status && type === 'thesis') {
-        acceptThesisAction(token)
+export class InvitePage extends Component {
+    state = {
+        loaded: false
     }
 
-    if (!status && type === 'role') {
-        acceptRoleAction(token)
+    componentWillReceiveProps(newProps) {
+        if (!this.state.loaded && newProps.user.token) {
+            this.setState({ loaded: true },
+                this.acceptToken(newProps))
+        }
     }
 
-    if (status) {
-        return <Redirect to="/theses" />
+    acceptToken = (props) => {
+        const { acceptThesisAction, acceptRoleAction, location, status } = props
+        const { type, token } = queryString.parse(location.search)
+
+        if (!status && type === 'thesis') {
+            acceptThesisAction(token)
+        }
+
+        if (!status && type === 'role') {
+            acceptRoleAction(token)
+        }
+
     }
-    // Error:
-    return (
-        <div>
-            <h3>Welcome, do not panic</h3>
-            <p>
-                You should not see this page if there was not an error message above.
-                You came here through a link and the link was already used, you probably clicked it once before.
+
+    render() {
+        const { status } = this.props
+
+
+        if (status) {
+            return <Redirect to="/theses" />
+        }
+        // Error:
+        return (
+            <div>
+                <h3>Welcome, do not panic</h3>
+                <p>
+                    You should not see this page if there was not an error message above.
+                    You came here through a link and the link was already used, you probably clicked it once before.
             </p>
-            <p>
-                If you are a student, check the <Link to="/theses">Thesis List</Link> page.
-                You should see one thesis and by clicking that thesis you should see correct data.
+                <p>
+                    If you are a student, check the <Link to="/theses">Thesis List</Link> page.
+                    You should see one thesis and by clicking that thesis you should see correct data.
             </p>
-            <p>
-                If the data is not correct, contact your supervisor.
+                <p>
+                    If the data is not correct, contact your supervisor.
             </p>
-            <p>
-                If you are not a student:
+                <p>
+                    If you are not a student:
                 you should see your information on the <Link to="/">Homepage</Link> which has been updated accordingly
             </p>
-            <p>
-                If Grappa (this application) behaves in a strange way contact grp-toska@helsinki.fi
+                <p>
+                    If this application behaves in a strange way contact grp-toska@helsinki.fi
             </p>
 
-        </div>
-    )
+            </div>
+        )
+    }
 }
 
-const mapStateToProps = ({ invite }) => ({
-    status: invite
+const mapStateToProps = ({ invite, user }) => ({
+    status: invite,
+    user
 })
 
 const mapDispatchToProps = dispatch => ({
