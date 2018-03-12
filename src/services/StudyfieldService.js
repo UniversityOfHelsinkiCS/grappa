@@ -1,4 +1,5 @@
 const knex = require('../db/connection').getKnex()
+const Studyfield = require('../db/models/studyfield')
 
 const studyfieldSchema = [
     'studyfieldId',
@@ -6,7 +7,9 @@ const studyfieldSchema = [
     'studyfield.programmeId'
 ]
 
-export const getStudyfields = async () => knex.select(studyfieldSchema).from('studyfield')
+export const getStudyfields = async () => Studyfield.fetchAll({ withRelated: ['major'] })
+
+//export const getStudyfields = async () => knex.select(studyfieldSchema).from('studyfield')
 
 export const getStudyfield = async studyfieldId =>
     knex.select(studyfieldSchema).from('studyfield').where('studyfield.studyfieldId', studyfieldId).first()
