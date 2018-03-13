@@ -127,8 +127,35 @@ export default class ThesisInformation extends Component {
             .filter(studyfield => studyfield.programmeId === Number(this.props.thesis.programmeId))
             .map(studyfield => ({
                 id: studyfield.studyfieldId,
-                name: studyfield.name
+                name: studyfield.name,
+                major: studyfield.major
             }))
+
+        const majors = studyfields.filter(field => field.major !== undefined)
+            .map(field => ({
+                id: field.major.majorId,
+                name: field.major.majorName,
+                studyfieldId: field.id
+            }))
+
+        const groupedMajors = { majors: [] }
+        if (majors.length > 0) {
+            for (let i = 0; i < majors.length; i += 1) {
+                const major = majors[i]
+                if (!groupedMajors[major.id]) {
+                    groupedMajors.majors.push(major)
+                    groupedMajors[major.id] = { id: major.id, name: major.name, studyfields: [major.studyfieldId] }
+                } else {
+                    groupedMajors[major.id].studyfields.push(major.studyfieldId)
+                }
+            }
+        }
+
+        const majorStudyfields = this.props.thesis.majorId && groupedMajors.majors.length > 0 ?
+            studyfields.filter(studyfield =>
+                groupedMajors[this.props.thesis.majorId].studyfields.includes(studyfield.id))
+            : undefined
+
 
         return (
             <div className="ui form">
@@ -140,10 +167,16 @@ export default class ThesisInformation extends Component {
                         {this.renderToggleUnitsAndGradingButton()}
                     </div>
                 </div>
-                <div className="three fields">
+                <div className="four fields">
                     {this.renderDropdownField('Unit', programmes, 'programmeId', !this.props.allowEdit)}
                     <div className="field">
-                        {this.renderDropdownField('Studyfield', studyfields, 'studyfieldId', !this.props.allowEdit)}
+                        {groupedMajors.majors.length > 0 ?
+                            this.renderDropdownField('Major', groupedMajors.majors, 'majorId', !this.props.allowEdit)
+                            : undefined }
+                    </div>
+                    <div className="field">
+                        {this.renderDropdownField('Studyfield', majorStudyfields !== undefined ?
+                            majorStudyfields : studyfields, 'studyfieldId', !this.props.allowEdit)}
                     </div>
                     {this.state.oldGrading ?
                         this.renderDropdownField('Grade', oldGradeFields, 'grade', !this.props.allowEdit) :
