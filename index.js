@@ -11,6 +11,7 @@ const gracefulExit = require('express-graceful-exit')
 const routes = require('./src/routes.js')
 const server = require('http').createServer(app)
 const errorHandler = require('./src/util/errorHandler')
+const cors = require('cors')
 
 module.exports = app
 
@@ -19,6 +20,10 @@ app.listen(3100, () => {
 })
 
 app.use(gracefulExit.middleware(app))
+if (process.env.NODE_ENV === 'development') {
+    app.use(cors())
+}
+
 
 routes(app)
 
