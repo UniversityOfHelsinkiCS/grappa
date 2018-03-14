@@ -260,7 +260,7 @@ module.exports = {
     // Define API URL
     new webpack.DefinePlugin({
       'process.env': {
-        'API_URL': JSON.stringify(process.env.API_URL)
+        'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL)
       }
     }),
     // Minify the code.
