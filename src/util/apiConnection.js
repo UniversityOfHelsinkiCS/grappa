@@ -1,12 +1,17 @@
 import axios from 'axios'
 
+const createApiUrl = (path) => {
+    const API_PATHS = ['staging', 'v2']
+    const mode = path.split('/')[1]
+    return API_PATHS.includes(mode) ? `/${mode}/api` : ''
+}
+
 export const getAxios = () => {
-    if (process.env.API_URL) {
-        return axios.create({
-            baseURL: process.env.API_URL
-        })
-    }
-    return axios
+    const hostUrl = window.location.origin
+    const apiPath = createApiUrl(window.location.pathname)
+    return axios.create({
+        baseURL: `${hostUrl}${apiPath}`
+    })
 }
 
 function callApi(url, method = 'get', data, prefix, token) {
