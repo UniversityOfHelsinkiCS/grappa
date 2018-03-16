@@ -80,6 +80,9 @@ export async function saveThesisForm(req, res) {
     await validateThesis(thesis)
 
     const response = await knex.transaction(async (trx) => {
+
+        // TODO refactor!!!
+
         // Order so that agreementId is available to save attachments.
         const agreement = await agreementService.createFakeAgreement(trx)
         const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId, trx)
@@ -92,6 +95,7 @@ export async function saveThesisForm(req, res) {
         delete thesis.authorFirstname
         delete thesis.authorLastname
         delete thesis.studyfieldId
+        delete thesis.majorId
         // TODO: Add email to new email send table
         delete thesis.thesisEmails
         delete thesis.authorEmail
