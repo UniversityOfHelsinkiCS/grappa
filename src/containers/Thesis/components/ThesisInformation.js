@@ -116,7 +116,8 @@ export default class ThesisInformation extends Component {
     renderThesisInformation() {
         const programmes = this.props.programmes
             .filter(programme => (
-                programme.name.includes('Department') === this.state.oldGrading
+                programme.name.includes('Department') === this.state.oldGrading &&
+                !programme.name.includes('OLD')
             ))
             .map(programme => ({
                 id: programme.programmeId,
