@@ -3,7 +3,7 @@ import axios from 'axios'
 const createApiUrl = (path) => {
     const API_PATHS = ['staging', 'v2']
     const mode = path.split('/')[1]
-    return API_PATHS.includes(mode) ? `/${mode}/api` : ''
+    return API_PATHS.includes(mode) ? `/${mode}/api` : '/api'
 }
 
 export const getAxios = () => {

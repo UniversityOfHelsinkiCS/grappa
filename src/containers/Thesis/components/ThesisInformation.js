@@ -21,12 +21,21 @@ export default class ThesisInformation extends Component {
     }
 
     changeField = fieldName => (event) => {
-        this.props.sendChange({ [fieldName]: event.target.value })
+        const changedValues = { [fieldName]: event.target.value }
+        if (fieldName === 'programmeId') {
+            changedValues.studyfieldId = ''
+            changedValues.majorId = ''
+        }
+        if (fieldName === 'majorId') {
+            changedValues.studyfieldId = ''
+        }
+        this.props.sendChange(changedValues)
     };
 
     toggleGrading = () => {
         this.props.sendChange({
             programmeId: '',
+            majorId: '',
             studyfieldId: '',
             grade: ''
         })
@@ -116,7 +125,8 @@ export default class ThesisInformation extends Component {
     renderThesisInformation() {
         const programmes = this.props.programmes
             .filter(programme => (
-                programme.name.includes('Department') === this.state.oldGrading
+                programme.name.includes('Department') === this.state.oldGrading &&
+                !programme.name.includes('OLD')
             ))
             .map(programme => ({
                 id: programme.programmeId,
@@ -172,7 +182,7 @@ export default class ThesisInformation extends Component {
                     <div className="field">
                         {groupedMajors.majors.length > 0 ?
                             this.renderDropdownField('Major', groupedMajors.majors, 'majorId', !this.props.allowEdit)
-                            : undefined }
+                            : undefined}
                     </div>
                     <div className="field">
                         {this.renderDropdownField('Studyfield', majorStudyfields !== undefined ?
