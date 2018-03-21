@@ -74,9 +74,7 @@
     "webpack-dev-server": "2.11.1"
   },
   "scripts": {
-    "start": "REACT_APP_API_URL=http://localhost:3100 node scripts/start.js",
-    "start:dev": "REACT_APP_DEVTOOLS=1 REACT_APP_API_URL=http://localhost:3100 node scripts/start.js",
-    "start:win": "set REACT_APP_API_URL=http://localhost:3100&&node scripts/start.js",
+    "start": "node scripts/start.js",
     "build": "REACT_APP_API_URL=api/ node scripts/build.js",
     "test": "NODE_ENV=test BABEL_DISABLE_CACHE=1 nyc ava -t",
     "test:win": "ava",
@@ -103,5 +101,14 @@
       "./src/util/test-env.js"
     ],
     "babel": "inherit"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3100",
+      "pathRewrite": {
+        "^/api": "",
+        "^/v2/api": ""
+      }
+    }
   }
 }
