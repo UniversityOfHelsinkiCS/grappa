@@ -44,7 +44,8 @@ ReactDOM.render(
                     {killServiceWorkers()}
                     {routes()}
                 </div>
-                <h4 style={{ marginBottom: '2%' }}>If you have trouble, contact grp-toska@helsinki.fi</h4>
+                <h4>If you are a staff member and need grader rights, please contact the Grappa manager of your unit.</h4>
+                <h4 style={{ marginBottom: '2%' }}>If you have any additional trouble, contact grp-toska@helsinki.fi</h4>
             </div>
         </Router>
     </Provider>,
