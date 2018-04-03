@@ -14,7 +14,7 @@ const GraderSelector = ({ graders, change, persons, roles, validationErrors, all
     return (
         <div className="field">
             <label>
-                Select graders
+                Select 2 graders
                 <PersonSelector
                     persons={programmeGraders}
                     selected={graders}
