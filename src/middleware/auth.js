@@ -21,6 +21,7 @@ module.exports.checkAuth = async (req, res, next) => {
                 }
             } else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
                 console.log('development mode')
+                console.log(token)
                 req.decodedToken = decoded
                 next()
             } else if (decoded.userId === req.headers.uid) {

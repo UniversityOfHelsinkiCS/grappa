@@ -66,4 +66,6 @@ router.post('/invite', jsonParser, (req, res, next) => personController.invitePe
  */
 router.put('/email', jsonParser, (req, res, next) => personController.useSecondaryEmail(req, res).catch(next))
 
+router.post('/add_outsider', jsonParser, (req, res, next) => personController.addOutsidePerson(req, res).catch(next))
+
 module.exports = router

@@ -17,7 +17,7 @@ test.before(async () => {
     await initDb()
 })
 
-test('person get all for admin', async (t) => {
+test.serial('person get all for admin', async (t) => {
     t.plan(3)
 
     const allPersons = await knex('person').select()
@@ -27,10 +27,10 @@ test('person get all for admin', async (t) => {
     t.is(res.status, 200)
     const { persons, roles } = res.body
     t.truthy(roles.length > 10)
-    t.is(persons.length, allPersons.length + 2) // Tests below creates new persons
+    t.is(persons.length, allPersons.length)
 })
 
-test('person get all for student', async (t) => {
+test.serial('person get all for student', async (t) => {
     t.plan(3)
 
     const person = await knex('person').insert({ email: 'ei@ole.com' }).returning('personId')
@@ -44,7 +44,7 @@ test('person get all for student', async (t) => {
     t.is(persons.length, 5)
 })
 
-test('manager can get thesis authors', async (t) => {
+test.serial('manager can get thesis authors', async (t) => {
     const res = await request(await makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
@@ -80,4 +80,36 @@ test('email can be switched', async (t) => {
         .first()
 
     t.is(result2.useSecondaryEmail, false, 'Email not switched back')
+})
+
+test('Can add an non-university person as a grader', async (t) => {
+    const res = await request(await makeApp(1))
+        .post('/persons/add_outsider')
+        .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com', units: [1, 2] })
+    t.truthy(res.body.person !== undefined)
+    t.is(res.status, 201)
+})
+
+test('Cannot add outsider with wrong parameter names', async (t) => {
+    const res = await request(await makeApp(1))
+        .post('/persons/add_outsider')
+        .send({ first: 'matti', last: 'puoskari', email: 'matti@puoskari.com', units: [1, 2] })
+    t.truthy(res.body.person === undefined)
+    t.is(res.status, 400)
+})
+
+test('Cannot add outsider without units', async (t) => {
+    const res = await request(await makeApp(1))
+        .post('/persons/add_outsider')
+        .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com' })
+    t.truthy(res.body.person === undefined)
+    t.is(res.status, 400)
+})
+
+test('Cannot add outsider with missing person info', async (t) => {
+    const res = await request(await makeApp(1))
+        .post('/persons/add_outsider')
+        .send({ firstname: 'matti', lastname: 'puoskari', units: [1, 2] })
+    t.truthy(res.body.person === undefined)
+    t.is(res.status, 400)
 })

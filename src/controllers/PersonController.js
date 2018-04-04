@@ -117,3 +117,14 @@ export async function useSecondaryEmail(req, res) {
 
     res.status(200).json(updatedPerson).end()
 }
+
+export const addOutsidePerson = async (req, res) => {
+    await checkUserIsAdminOrManager(req)
+    const { units, firstname, lastname, email } = req.body
+    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, units)
+    if (!outsidePerson.errorMsg) {
+        res.status(201).send(outsidePerson)
+    } else {
+        res.status(400).send(outsidePerson)
+    }
+}
