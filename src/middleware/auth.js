@@ -14,23 +14,18 @@ module.exports.checkAuth = async (req, res, next) => {
         jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
             if (err) {
                 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-                    console.log('development mode')
+                    console.log(`development mode, ignoring error with token ${JSON.stringify(err)}`)
                     next()
                 } else {
                     res.status(403).json({ message: `JWT verify led to error ${JSON.stringify(err)}` })
                 }
-            } else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-                console.log('development mode')
-                console.log(token)
-                req.decodedToken = decoded
-                next()
-            } else if (decoded.userId === req.headers.uid) {
-                console.log('decoded userId was equal to req.headers.uid')
+            } else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' ||
+                decoded.userId === req.headers.uid) {
                 req.decodedToken = decoded
                 next()
             } else {
                 res.status(403)
-                    .json({ message: `token userId ${JSON.stringify(decoded.userId)} was not equal to headers uid ${JSON.stringify(req.headers.uid)}` })
+                    .json({ message: `token userId ${decoded.userId} was not equal to headers uid ${req.headers.uid}` })
                     .end()
             }
         })
