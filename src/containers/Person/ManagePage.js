@@ -6,6 +6,7 @@ import { personType, roleType, programmeType, availableRoleType } from '../../ut
 import PersonSelector from './components/PersonSelector'
 import PersonInviter from './components/PersonInviter'
 import PersonRoleChoose from './components/PersonRoleChoose'
+import AddOutsidePerson from './components/AddOutsidePerson'
 import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions'
@@ -111,6 +112,9 @@ export class PersonRoleManagePage extends Component {
                 />
                 <div className="ui divider" />
                 <UnitRoleList />
+                <h3>Add a non-HY grader (cannot sign in)</h3>
+                <AddOutsidePerson />
+                <div className="ui divider" />
             </div>
         )
     }
