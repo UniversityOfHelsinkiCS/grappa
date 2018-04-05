@@ -1,4 +1,5 @@
 const knex = require('../db/connection').getKnex()
+const roleService = require('./RoleService')
 
 const personSchema = [
     'person.personId',
@@ -92,3 +93,22 @@ export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(pe
     .innerJoin('agreementPerson', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
     .where('personWithRole.programmeId', programmeId)
+
+export const createOutsidePerson = async (firstname, lastname, email, programmes) => {
+    try {
+        const person = await savePerson({ firstname, lastname, email })
+        const roleId = await roleService.getRoleId('grader')
+        const personRoles = await Promise.all(programmes
+            .map(programmeId =>
+                roleService.savePersonRole({
+                    roleId,
+                    personId: person.personId,
+                    programmeId
+                })
+            ))
+        return { person, personRoles }
+    } catch (error) {
+        // console.log(error)
+        return { errorMsg: 'Failed to create outside person with roles', error }
+    }
+}
