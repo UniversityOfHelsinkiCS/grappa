@@ -80,7 +80,7 @@ export class ThesisCreatePage extends Component {
         return (
             <div className="field">
                 <label>
-                    Select graders
+                    Select 2 graders
                     <PersonSelector
                         persons={programmeGraders}
                         selected={this.state.thesis.graders}
