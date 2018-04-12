@@ -8,9 +8,7 @@ const councilmeetings = require('../../src/routes/councilmeeting')
 const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
-    const userId = (await knex.select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/councilmeetings', userId, councilmeetings)
+    return makeTestApp('/councilmeetings', id, councilmeetings)
 }
 
 test.before(async () => {

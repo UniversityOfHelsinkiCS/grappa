@@ -8,9 +8,7 @@ const emailDrafts = require('../../src/routes/emailDrafts')
 const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
-    const userId = (await knex.select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/emailDrafts', userId, emailDrafts)
+    return makeTestApp('/emailDrafts', id, emailDrafts)
 }
 
 test.before(async () => {
