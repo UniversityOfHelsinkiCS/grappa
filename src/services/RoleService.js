@@ -169,7 +169,7 @@ export async function checkUserIsAdminOrManager(req) {
 
 export async function checkUserHasRightToPrint(req) {
     const user = await getLoggedPerson(req)
-    const printerRoles = ['manager', 'admin', 'resp', 'resp_prof', 'admin']
+    const printerRoles = ['manager', 'admin', 'print_person', 'resp_prof', 'admin']
 
     if (await doesUserHaveRole(user, printerRoles)) {
         return true
