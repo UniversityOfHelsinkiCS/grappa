@@ -52,11 +52,8 @@ test('attachment permissions are checked on delete', async (t) => {
     const person = await knex.getKnex()('person')
         .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission2' })
         .returning('personId')
-        .first()
-
-    const res2 = await request(await makeApp(person.personId))
+    const res2 = await request(await makeApp(person[0]))
         .del(`/attachments/${res1.body[0].attachmentId}`)
-
     t.is(res2.status, 500)
 })
 

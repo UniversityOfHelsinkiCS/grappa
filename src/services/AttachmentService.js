@@ -1,5 +1,6 @@
 import logger from '../util/logger'
-import { checkUserHasRightToModifyAgreement, getAgreement } from './AgreementService'
+import { checkUserHasRightToModifyAgreement } from './PermissionService'
+import { getAgreement } from './AgreementService'
 
 const knex = require('../db/connection').getKnex()
 const pdfManipulator = require('../util/pdfManipulator')

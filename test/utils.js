@@ -76,7 +76,7 @@ export const createToken = (userId) => {
 export const makeTestApp = async (route, userId, ...handler) => {
     const app = express()
     const shibId = (await knex.getKnex().select().from('person').where('personId', userId)
-    .first()).shibbolethId
+        .first()).shibbolethId
     app.use(errorHandler)
     app.use(route, (req, res, next) => {
         req.headers['x-access-token'] = createToken(shibId)

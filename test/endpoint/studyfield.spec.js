@@ -6,7 +6,6 @@ const { initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
 const programmes = require('../../src/routes/programmes')
 const mockStudyfields = require('../../src/mockdata/MockProgrammes')
-const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
     return makeTestApp('/programmes', id, programmes)
