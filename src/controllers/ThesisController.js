@@ -185,6 +185,10 @@ const updateGraders = async (graders, agreement, trx) => {
 }
 
 export async function markPrinted(req, res) {
-    await thesisService.markPrinted(req.body)
-    res.status(200).json(req.body)
+    if (await roleService.checkUserHasRightToPrint(req)) {
+        await thesisService.markPrinted(req.body)
+        res.status(200).json(req.body)
+    } else {
+        res.status(403).json({ error: 'no dice boy' })
+    }
 }

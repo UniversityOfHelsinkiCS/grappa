@@ -152,8 +152,27 @@ export async function isUserAdminOrManager(user) {
         .then(res => res.length > 0)
 }
 
+export async function doesUserHaveRole(user, roles) {
+    return knex.select()
+        .from('personWithRole')
+        .join('role', 'personWithRole.roleId', 'role.roleId')
+        .where('personId', user.personId)
+        .andWhere(function () { this.whereIn('name', roles) })
+        .then(res => res.length > 0)
+}
+
 export async function checkUserIsAdminOrManager(req) {
     if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
         throw new Error('User is not admin or manager')
     }
+}
+
+export async function checkUserHasRightToPrint(req) {
+    const user = await getLoggedPerson(req)
+    const printerRoles = ['manager', 'admin', 'print_person', 'resp_prof', 'admin']
+
+    if (await doesUserHaveRole(user, printerRoles)) {
+        return true
+    }
+    return false
 }
