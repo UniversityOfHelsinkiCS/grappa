@@ -8,9 +8,7 @@ const councilmeetings = require('../../src/routes/councilmeeting')
 const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
-    const userId = (await knex.select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/councilmeetings', userId, councilmeetings)
+    return makeTestApp('/councilmeetings', id, councilmeetings)
 }
 
 test.before(async () => {
@@ -95,8 +93,8 @@ test('councilmeeting get', async (t) => {
         `responseMeetingArray is ${typeof responseMeetingArray}, maybe its length is 0`)
 
     const responseMeeting = responseMeetingArray.find(meeting =>
-        Object.keys(councilMeeting).find(key =>
-            councilMeeting[key] === meeting[key])
+        Object.keys(councilMeeting).every(key =>
+            councilMeeting[key].toString() === meeting[key].toString())
     )
     t.truthy(responseMeeting,
         `councilMeeting was not found in responseMeetingArray, ${responseMeeting}`)

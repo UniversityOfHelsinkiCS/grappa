@@ -7,6 +7,7 @@ const agreementService = require('../services/AgreementService')
 const attachmentService = require('../services/AttachmentService')
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
+const permissionService = require('../services/PermissionService')
 const programmeService = require('../services/ProgrammeService')
 const studyfieldService = require('../services/StudyfieldService')
 const notificationService = require('../services/NotificationService')
@@ -133,7 +134,7 @@ export async function updateThesis(req, res) {
     let thesis = await thesisService.getThesisById(updatedFields.thesisId)
     const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId)
 
-    await agreementService.checkUserHasRightToModifyAgreement(req, agreements)
+    await permissionService.checkUserHasRightToModifyAgreement(req, agreements)
 
     Object.keys(thesis).forEach((key) => {
         if (updatedFields[key] !== undefined)
@@ -184,6 +185,10 @@ const updateGraders = async (graders, agreement, trx) => {
 }
 
 export async function markPrinted(req, res) {
-    await thesisService.markPrinted(req.body)
-    res.status(200).json(req.body)
+    if (await roleService.checkUserHasRightToPrint(req)) {
+        await thesisService.markPrinted(req.body)
+        res.status(200).json(req.body)
+    } else {
+        res.status(403).json({ error: 'no dice boy' })
+    }
 }

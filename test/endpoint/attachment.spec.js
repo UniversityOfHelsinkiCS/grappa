@@ -9,9 +9,7 @@ const request = require('supertest')
 const attachment = require('../../src/routes/attachments')
 
 const makeApp = async (id) => {
-    const userId = (await knex.getKnex().select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/attachments', userId, attachment)
+    return makeTestApp('/attachments', id, attachment)
 }
 
 test.before(async () => {
@@ -30,7 +28,7 @@ test('attachment post & creates id', async (t) => {
     t.is(attachments[0].agreementId, agreementId, 'Attachment linked to given agreementId')
 })
 
-test.only('attachment post permissions checked', async (t) => {
+test('attachment post permissions checked', async (t) => {
     const person = await knex.getKnex()('person')
         .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission123' })
         .returning('personId')
@@ -54,11 +52,8 @@ test('attachment permissions are checked on delete', async (t) => {
     const person = await knex.getKnex()('person')
         .insert({ firstname: 'test', lastname: 'test', shibbolethId: 'permission2' })
         .returning('personId')
-        .first()
-
-    const res2 = await request(await makeApp(person.personId))
+    const res2 = await request(await makeApp(person[0]))
         .del(`/attachments/${res1.body[0].attachmentId}`)
-
     t.is(res2.status, 500)
 })
 

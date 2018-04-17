@@ -8,9 +8,7 @@ const persons = require('../../src/routes/persons')
 const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
-    const userId = (await knex.select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/persons', userId, persons)
+    return makeTestApp('/persons', id, persons)
 }
 
 test.before(async () => {
@@ -25,9 +23,9 @@ test.serial('person get all for admin', async (t) => {
     const res = await request(await makeApp(1))
         .get('/persons')
     t.is(res.status, 200)
-    const { persons, roles } = res.body
+    const { persons: testpersons, roles } = res.body
     t.truthy(roles.length > 10)
-    t.is(persons.length, allPersons.length)
+    t.is(testpersons.length, allPersons.length)
 })
 
 test.serial('person get all for student', async (t) => {
@@ -38,10 +36,10 @@ test.serial('person get all for student', async (t) => {
     const res = await request(await makeApp(personId)).get('/persons')
 
     t.is(res.status, 200)
-    const { persons, roles } = res.body
+    const { persons: testpersons, roles } = res.body
 
     t.truthy(roles.length > 10)
-    t.is(persons.length, 5)
+    t.is(testpersons.length, 5)
 })
 
 test.serial('manager can get thesis authors', async (t) => {

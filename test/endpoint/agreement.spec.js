@@ -2,23 +2,13 @@ import test from 'ava'
 
 process.env.DB_SCHEMA = 'agreement_test'
 
-const { initDb, createToken } = require('../utils')
+const { initDb, createToken, makeTestApp } = require('../utils')
+
 const request = require('supertest')
-const express = require('express')
 const agreement = require('../../src/routes/agreements')
-const errorHandler = require('../../src/util/errorHandler')
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/agreements', (req, res, next) => {
-        req['x-access-token'] = createToken(userId)
-        req.decodedToken = { userId }
-        next()
-    }, agreement)
-
-    app.use(errorHandler)
-
-    return app
+const makeApp = async (userId) => {
+    return makeTestApp('/agreements', userId, agreement)
 }
 
 test.before(async () => {
@@ -71,7 +61,7 @@ const agreementWithId = {
 // TODO: Test something like thesis: thesisForm post & creates id without attachment
 test.skip('agreement post & correct response', async (t) => {
     t.plan(2)
-    const res = await request(makeApp())
+    const res = await request(await makeApp())
         .post('/agreements')
         .send(agreementForm)
     t.is(res.status, 200)
@@ -82,7 +72,7 @@ test.skip('agreement post & correct response', async (t) => {
 
 test('agreements get should also return attachments', async (t) => {
     t.plan(3)
-    const res = await request(makeApp(10))
+    const res = await request(await makeApp(10))
         .get('/agreements')
     t.is(res.status, 200)
     const agreements = res.body.agreements

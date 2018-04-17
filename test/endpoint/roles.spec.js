@@ -8,9 +8,7 @@ const rolesRoute = require('../../src/routes/roles')
 const knex = require('../../src/db/connection').getKnex()
 
 const makeApp = async (id) => {
-    const userId = (await knex.select().from('person').where('personId', id)
-        .first()).shibbolethId
-    return makeTestApp('/roles', userId, rolesRoute)
+    return makeTestApp('/roles', id, rolesRoute)
 }
 
 test.before(async () => {

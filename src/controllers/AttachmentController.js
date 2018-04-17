@@ -1,5 +1,6 @@
 import logger from '../util/logger'
-import { checkUserHasRightToModifyAgreement, getAgreementByIds } from '../services/AgreementService'
+import { getAgreementByIds } from '../services/AgreementService'
+import { checkUserHasRightToModifyAgreement, checkUserHasRightToSeeAgreement } from '../services/PermissionService'
 
 const attachmentService = require('../services/AttachmentService')
 const agreementService = require('../services/AgreementService')
@@ -42,7 +43,7 @@ export async function downloadAttachments(req, res) {
 
         try {
             const agreements = await getAgreementByIds(agreementIds)
-            await checkUserHasRightToModifyAgreement(req, agreements)
+            await checkUserHasRightToSeeAgreement(req, agreements)
         } catch (error) {
             logger.error('Permisson check failed', { error: error.message })
             res.status(403).send({ text: 'Not available' }).end()
@@ -126,7 +127,7 @@ export async function deleteAttachment(req, res) {
     const attachmentId = req.params.id
     const attachment = await attachmentService.getAttachments([attachmentId])
     const agreement = await agreementService.getAgreementById(attachment[0].agreementId)
-    await agreementService.checkUserHasRightToModifyAgreement(req, [agreement])
+    await checkUserHasRightToModifyAgreement(req, [agreement])
 
     const deletedId = await attachmentService.deleteAttachment(attachmentId)
     notificationService.createNotification('ATTACHMENT_DELETE_ONE_SUCCESS', req)
