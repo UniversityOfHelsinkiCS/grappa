@@ -33,7 +33,7 @@ export async function checkUserHasRightToSeeAgreement(req, agreements) {
         return
     }
 
-    if (await hasStudyfieldRole(roles, agreements)) {
+    if (await isManagerRespProfOrPrintPerson(roles, agreements)) {
         return
     }
 
@@ -53,6 +53,16 @@ function isAdmin(roles) {
 }
 
 async function hasStudyfieldRole(roles, agreements) {
+    const studyfieldRoles = ['manager', 'resp_professor']
+    const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
+    const studyfieldRole = roles
+        .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
+        .find(item => studyfieldRoles.includes(item.role.name))
+
+    return !!studyfieldRole
+}
+
+async function isManagerRespProfOrPrintPerson(roles, agreements) {
     const studyfieldRoles = ['manager', 'resp_professor', 'print_person']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
     const studyfieldRole = roles
