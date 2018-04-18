@@ -8,7 +8,6 @@ const personSchema = [
     'firstname',
     'lastname',
     'isRetired',
-    'studentNumber',
     'phone'
 ]
 
