@@ -5,8 +5,6 @@ const config = require('./knexfile.js')
 const knexModule = require('knex')
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'not working'
-logger.debug(`ENVIRONMENT IS ${env}`)
-
 let knex
 
 module.exports.getKnex = () => {
@@ -15,13 +13,13 @@ module.exports.getKnex = () => {
 
     if (env !== 'test') {
         knex = knexModule(config[env])
-
         knex.migrate.latest().then((msg) => {
-            logger.info('KNEX MIGRATE SUCCESS', { msg })
+            if (msg[1].length) {
+                logger.info('Successful migrate', { msg })
+            }
         }).catch((err) => {
-            logger.info('KNEX MIGRATE FAILURE', { err })
+            logger.error('Migrate failed', { err })
         })
-
         return knex
     }
 
