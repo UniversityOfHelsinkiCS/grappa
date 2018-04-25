@@ -4,12 +4,9 @@ require('babel-polyfill')
 const express = require('express')
 const Raven = require('raven')
 
-const app = express()
-
 const logger = require('./src/util/logger')
 const cors = require('cors')
 const gracefulExit = require('express-graceful-exit')
-const logger = require('./src/util/logger')
 const routes = require('./src/routes.js')
 const errorHandler = require('./src/util/errorHandler')
 
