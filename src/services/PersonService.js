@@ -1,5 +1,6 @@
 const knex = require('../db/connection').getKnex()
 const roleService = require('./RoleService')
+const PersonWithRole = require('../db/models/person_with_role')
 
 const personSchema = [
     'person.personId',
@@ -8,7 +9,6 @@ const personSchema = [
     'firstname',
     'lastname',
     'isRetired',
-    'studentNumber',
     'phone'
 ]
 
@@ -16,11 +16,24 @@ export function getAllPersons() {
     return knex.select(personSchema).from('person')
 }
 
+// TODO: replace this completely with getPersonsForRole
 export function getPersonsWithRole(roleId) {
     return knex.table('person').distinct('person.personId')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
         .select(personSchema)
+}
+
+export const getPersonsForRole = async (role) => {
+    const roleId = await roleService.getRoleId(role)
+    return PersonWithRole
+        .query({ where: { roleId }, columns: ['personId', 'roleId', 'programmeId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
 }
 
 export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
