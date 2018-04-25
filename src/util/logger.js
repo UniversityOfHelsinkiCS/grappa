@@ -1,30 +1,30 @@
-import { createLogger, format, transports } from 'winston'
+import winston from 'winston'
+import 'winston-log2gelf'
 
-const { combine, timestamp } = format
-const fileFormat = combine(timestamp(), format.json())
-
-const logger = createLogger({
-    transports: [
-        new transports.File({
-            level: 'info',
-            format: fileFormat,
-            filename: './logs/grappa.log'
-        })
-    ]
-})
+const logTransports = []
 
 // Log to console when running unit tests if CONSOLE_OUTPUT=true
 if (process.env.CONSOLE_OUTPUT === 'true') {
-    logger.add(new transports.Console({ level: 'debug', format: format.simple() }))
+    logTransports.push(new winston.transports.Console({ level: 'debug' }))
 }
 
 if (process.env.NODE_ENV !== 'test') {
-    logger.add(new transports.Console({ level: 'debug', format: format.simple() }))
-    logger.add(new transports.File({
+    logTransports.push(new winston.transports.Console({ level: 'debug' }))
+    logTransports.push(new winston.transports.File({
         level: 'error',
-        format: fileFormat,
         filename: './logs/grappa.error.log'
     }))
 }
+
+if (process.env.LOG_PORT && process.env.LOG_HOST) {
+    logTransports.push(new winston.transports.Log2gelf({
+        hostname: process.env.LOG_HOSTNAME || 'grappa2-backend',
+        host: process.env.LOG_HOST,
+        port: process.env.LOG_PORT,
+        protocol: 'http'
+    }))
+}
+
+const logger = new winston.Logger({ transports: logTransports })
 
 module.exports = logger
