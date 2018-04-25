@@ -4,6 +4,7 @@ require('babel-core/register')
 require('babel-polyfill')
 
 const express = require('express')
+const Raven = require('raven')
 
 const app = express()
 const logger = require('./src/util/logger')
@@ -14,6 +15,8 @@ const errorHandler = require('./src/util/errorHandler')
 const cors = require('cors')
 
 module.exports = app
+
+Raven.config(process.env.SENTRY_ADDR).install()
 
 app.listen(3100, () => {
     logger.info('Grappa app listening on port 3100!')

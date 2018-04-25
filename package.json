@@ -51,6 +51,7 @@
     "node-pdftk": "^1.2.2",
     "nodemailer": "^4.6.0",
     "pg": "^7.4.1",
+    "raven": "^2.6.0",
     "request": "^2.83.0",
     "utf8": "^3.0.0",
     "validator": "^9.4.1",
