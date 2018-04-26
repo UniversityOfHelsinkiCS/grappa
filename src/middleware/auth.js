@@ -4,33 +4,28 @@ const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
 const config = require('../util/config')
 
+const isShibboUser = (userId, uidHeader) => userId === uidHeader
+
 /**
  * Authentication middleware that is called before any requests.
  *
  */
 module.exports.checkAuth = async (req, res, next) => {
     const token = req.headers['x-access-token']
+    const { uid } = req.headers
     if (token) {
         jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
             if (err) {
-                if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-                    console.log(`development mode, ignoring error with token ${JSON.stringify(err)}`)
-                    next()
-                } else {
-                    res.status(403).json({ message: `JWT verify led to error ${JSON.stringify(err)}` })
-                }
-            } else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' ||
-                decoded.userId === req.headers.uid) {
+                res.status(403).json(err)
+            } else if (isShibboUser(decoded.userId, uid)) {
                 req.decodedToken = decoded
                 next()
             } else {
-                res.status(403)
-                    .json({ message: `token userId ${decoded.userId} was not equal to headers uid ${req.headers.uid}` })
-                    .end()
+                res.status(403).json({ error: 'User shibboleth id and token id did not match' })
             }
         })
     } else {
-        res.status(403).json({ message: 'No token in headers' }).end()
+        res.status(403).json({ error: 'No token in headers' })
     }
 }
 
