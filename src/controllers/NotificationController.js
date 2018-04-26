@@ -2,7 +2,7 @@ import { checkUserIsAdminOrManager } from '../services/RoleService'
 
 const notificationService = require('../services/NotificationService')
 
-export async function getNotifications(req, res) {
+export const getNotifications = async (req, res) => {
     try {
         await checkUserIsAdminOrManager(req)
         const notifications = await notificationService.getAllNotifications()

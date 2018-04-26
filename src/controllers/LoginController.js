@@ -1,8 +1,6 @@
 import logger from '../util/logger'
 
 const personService = require('../services/PersonService')
-const roleService = require('../services/RoleService')
-const programmeService = require('../services/ProgrammeService')
 
 const utf8 = require('utf8')
 const jwt = require('jsonwebtoken')
@@ -21,69 +19,35 @@ const generateToken = async (uid) => {
 }
 
 
-export async function logout(req, res) {
-    const logoutUrl = req.headers.shib_logout_url
-
-    res.status(200).send({ logoutUrl: `${logoutUrl}?return=https://grappa.cs.helsinki.fi/v2/` }).end()
+export const logout = async (req, res) => {
+    try {
+        const logoutUrl = req.headers.shib_logout_url
+        const { returnUrl } = req.body
+        if (logoutUrl) {
+            return res.status(200).send({ logoutUrl: `${logoutUrl}?return=${returnUrl}` })
+        }
+        return res.status(200).send({ logoutUrl: returnUrl })
+    } catch (err) {
+        return res.status(500).json({ message: 'Error with logout', err })
+    }
 }
 
 
 // Return user
-export async function login(req, res) {
+export const login = async (req, res) => {
     if (req.headers['shib-session-id']) {
         try {
             const { shibbolethId, studentNumber, firstname, lastname, email } =
                 parseShibbolethInformationFromHeaders(req.headers)
-
-            let user = await register(shibbolethId, studentNumber, firstname, lastname, email)
-
-            user = await buildPerson(user)
-
-            res.status(200).json(user)
+            await register(shibbolethId, studentNumber, firstname, lastname, email)
+            const token = await generateToken(shibbolethId)
+            res.status(200).json({ token })
         } catch (err) {
-            res.status(500).end()
+            res.status(500).send(err)
         }
     } else {
-        res.status(401).end()
+        res.status(401).send('No shib sesison id')
     }
-}
-// Used without shibboleth
-export async function fakeLogin(req, res) {
-    const shibbolethId = req.params.id
-    logger.debug(`Faking login with ${shibbolethId}`)
-    try {
-        let user = await personService.getPersonByShibbolethId(shibbolethId)
-        user = await buildPerson(user)
-        res.status(200).json(user)
-    } catch (err) {
-        res.status(500).end()
-    }
-}
-
-async function buildPerson(user) {
-    const roleToId = await roleService.getRoles()
-    const programmeToId = await programmeService.getAllProgrammes()
-    const personRoles = await roleService.getPersonRoles(user.personId)
-    const roleHash = {}
-    user.token = await generateToken(user.shibbolethId)
-    user.roles = personRoles.map((role) => {
-        const programme = programmeToId.find(programmeIdPair => programmeIdPair.programmeId === role.programmeId)
-        return {
-            programme: programme.name,
-            programmeId: programme.programmeId,
-            role: roleToId.find(roleIdPair => roleIdPair.roleId === role.roleId).name
-        }
-    }).filter((role) => {
-        const included = roleHash[`${role.programmeId}-${role.role}`]
-
-        if (included)
-            return false
-
-        roleHash[`${role.programmeId}-${role.role}`] = true
-        return true
-    })
-
-    return user
 }
 
 const register = async (shibbolethId, studentNumber, firstname, lastname, email) => {
@@ -94,14 +58,18 @@ const register = async (shibbolethId, studentNumber, firstname, lastname, email)
         user.email = email
         return personService.updatePerson(user)
     } catch (error) {
-        const user = {
-            firstname,
-            lastname,
-            studentNumber,
-            shibbolethId,
-            email
+        try {
+            const user = {
+                firstname,
+                lastname,
+                studentNumber,
+                shibbolethId,
+                email
+            }
+            return personService.savePerson(user)
+        } catch (err) {
+            return Promise.reject()
         }
-        return personService.savePerson(user)
     }
 }
 
@@ -125,12 +93,23 @@ const parseShibbolethInformationFromHeaders = (headers) => {
         sn,
         mail: email
     } = headers
-
+    let lastname
+    let firstname
+    try {
+        lastname = utf8.decode(sn)
+    } catch (e) {
+        lastname = sn
+    }
+    try {
+        firstname = utf8.decode(givenname)
+    } catch (e) {
+        firstname = givenname
+    }
     return {
         studentNumber,
         shibbolethId,
-        firstname: utf8.decode(givenname),
-        lastname: utf8.decode(sn),
+        firstname,
+        lastname,
         email
     }
 }
