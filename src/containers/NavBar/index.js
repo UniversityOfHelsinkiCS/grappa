@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 
 import { getPermissions } from '../../util/rolePermissions'
-import { login } from '../User/services/userActions'
+import { getUser } from '../User/services/userActions'
 import { personType } from '../../util/types'
 import Interval from './components/Interval'
 
@@ -18,11 +18,11 @@ import { getTheses } from '../Thesis/services/thesisActions'
 import { getPersons } from '../Person/services/personActions'
 import { getNotifications } from '../Notification/services/notificationsAction'
 import { getEmailDrafts } from '../Email/services/emailActions'
-import { getAxios } from '../../util/apiConnection'
+import { logout } from '../../util/apiConnection'
 
 class NavBar extends Component {
     static propTypes = {
-        login: func.isRequired,
+        getUser: func.isRequired,
         getPersons: func.isRequired,
         getProgrammes: func.isRequired,
         getStudyfields: func.isRequired,
@@ -40,7 +40,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        this.props.login()
+        this.props.getUser()
         if (this.props.user) {
             this.refreshLinks(this.props.user)
         }
@@ -50,11 +50,11 @@ class NavBar extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (!this.state.loaded && newProps.user.token) {
+        if (!this.state.loaded && newProps.user.shibbolethId) {
             this.setState({ loaded: true },
                 this.getEverything(newProps.user))
-        } else if (this.props.user.token !== newProps.user.token) {
-            this.refreshLinks(newProps.user)
+        } else if (this.props.user.shibbolethId !== newProps.user.shibbolethId) {
+            this.getEverything(newProps.user)
         }
     }
 
@@ -92,7 +92,7 @@ class NavBar extends Component {
     render() {
         return (
             <div>
-                <Interval function={this.props.login} />
+                <Interval function={this.props.getUser} />
                 <div className="ui inverted segment">
                     <h1><Link to="/">Gradut pikaisesti pakettiin</Link></h1>
                 </div>
@@ -117,7 +117,7 @@ class NavBar extends Component {
                     }) : undefined}
                     <div className="right menu">
                         <Link to="/" className="item">{this.props.user.firstname}</Link>
-                        <Button as="a" className="item" onClick={this.props.logout}>Logout</Button>
+                        <Button as="a" className="item" onClick={logout}>Logout</Button>
                     </div>
                 </div>
             </div>
@@ -126,17 +126,8 @@ class NavBar extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    login(data) {
-        dispatch(login(data))
-    },
-    logout() {
-        getAxios()
-            .get('/user/logout')
-            .then((res) => {
-                dispatch({ type: 'USER_LOGOUT_SUCCESS' })
-                localStorage.clear()
-                window.location = res.data.logoutUrl
-            })
+    getUser() {
+        dispatch(getUser())
     },
     getProgrammes() {
         dispatch(getProgrammes())

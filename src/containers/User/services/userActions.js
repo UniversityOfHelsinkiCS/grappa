@@ -1,14 +1,8 @@
 import { callController } from '../../../util/apiConnection'
 
-export const login = (shibbolethId) => {
+export const getUser = () => {
     const prefix = 'USER_LOGIN_'
-    const route = shibbolethId ? `/user/${shibbolethId}` : '/user/login'
-    return callController(route, prefix)
-}
-
-export const logout = () => {
-    const prefix = 'USER_LOGOUT_'
-    const route = '/user/logout'
+    const route = '/user'
     return callController(route, prefix)
 }
 
