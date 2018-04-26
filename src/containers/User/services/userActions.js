@@ -17,3 +17,9 @@ export const switchEmail = (useSecondaryEmail) => {
     const route = '/persons/email'
     return callController(route, prefix, { useSecondaryEmail }, 'put')
 }
+
+export const graderRoleRequest = (programmeId) => {
+    const prefix = 'USER_GRADER_REQUEST_'
+    const route = 'roles/grader_request'
+    return callController(route, prefix, { programmeId }, 'post')
+}

@@ -15,7 +15,7 @@ import { getStudyfields } from '../Studyfield/services/studyfieldActions'
 import { getAgreements } from '../Agreement/services/agreementActions'
 import { getCouncilmeetings } from '../CouncilMeeting/services/councilmeetingActions'
 import { getTheses } from '../Thesis/services/thesisActions'
-import { getPersons } from '../Person/services/personActions'
+import { getPersons, getManagers } from '../Person/services/personActions'
 import { getNotifications } from '../Notification/services/notificationsAction'
 import { getEmailDrafts } from '../Email/services/emailActions'
 import { getAxios } from '../../util/apiConnection'
@@ -24,6 +24,7 @@ class NavBar extends Component {
     static propTypes = {
         login: func.isRequired,
         getPersons: func.isRequired,
+        getManagers: func.isRequired,
         getProgrammes: func.isRequired,
         getStudyfields: func.isRequired,
         getAgreements: func.isRequired,
@@ -41,6 +42,8 @@ class NavBar extends Component {
 
     componentDidMount() {
         this.props.login()
+        this.props.getManagers()
+        this.props.getProgrammes()
         if (this.props.user) {
             this.refreshLinks(this.props.user)
         }
@@ -61,7 +64,6 @@ class NavBar extends Component {
     getEverything = (user) => {
         this.props.getPersons()
         this.props.getStudyfields()
-        this.props.getProgrammes()
         this.props.getAgreements()
         this.props.getCouncilmeetings()
         this.props.getTheses()
@@ -161,6 +163,9 @@ const mapDispatchToProps = dispatch => ({
     },
     getEmailDrafts() {
         dispatch(getEmailDrafts())
+    },
+    getManagers() {
+        dispatch(getManagers())
     }
 })
 
