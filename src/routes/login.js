@@ -32,7 +32,7 @@ const jsonParser = bodyParser.json()
  *   ]
  *  }
  */
-router.get('/login', jsonParser, (req, res) => {
+router.post('/login', jsonParser, (req, res) => {
     loginController.login(req, res)
 })
 
@@ -45,15 +45,8 @@ router.get('/login', jsonParser, (req, res) => {
  *
  * @apiSuccess {String} logoutUrl Shibboleth logout url
  */
-router.get('/logout', jsonParser, (req, res) => {
+router.delete('/logout', jsonParser, (req, res) => {
     loginController.logout(req, res)
 })
-
-// For now we use get to login for dev.
-if (process.env.NODE_ENV === 'development') {
-    router.get('/:id', jsonParser, (req, res) => {
-        loginController.fakeLogin(req, res)
-    })
-}
 
 module.exports = router

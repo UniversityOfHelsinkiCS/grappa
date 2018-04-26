@@ -7,7 +7,7 @@ const { initDb } = require('../utils')
 const request = require('supertest')
 const express = require('express')
 const index = require('../../src/routes/index')
-const shibboleth = require('../../src/routes/auth')
+const shibboleth = require('../../src/routes/login')
 const knex = require('../../src/db/connection').getKnex()
 const auth = require('../../src/middleware/auth')
 

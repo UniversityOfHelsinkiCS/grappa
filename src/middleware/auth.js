@@ -12,7 +12,7 @@ const isShibboUser = (userId, uidHeader) => userId === uidHeader
  */
 module.exports.checkAuth = async (req, res, next) => {
     const token = req.headers['x-access-token']
-    const uid = req.headers
+    const { uid } = req.headers
     if (token) {
         jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
             if (err) {

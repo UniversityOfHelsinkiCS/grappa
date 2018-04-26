@@ -10,10 +10,6 @@ if (process.env.CONSOLE_OUTPUT === 'true') {
 
 if (process.env.NODE_ENV !== 'test') {
     logTransports.push(new winston.transports.Console({ level: 'debug' }))
-    logTransports.push(new winston.transports.File({
-        level: 'error',
-        filename: './logs/grappa.error.log'
-    }))
 }
 
 if (process.env.LOG_PORT && process.env.LOG_HOST) {
