@@ -98,6 +98,7 @@
     "powerAssert": false,
     "require": [
       "babel-register",
+      "babel-polyfill",
       "ignore-styles",
       "./src/util/test-env.js"
     ],
