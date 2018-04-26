@@ -28,7 +28,7 @@ export async function getPersons(req, res) {
     if (await roleService.isUserAdmin(user)) {
         return getAllPersons(res)
     }
-
+    
     const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     rolesInProgrammes.forEach(async (item) => {
@@ -56,6 +56,11 @@ export async function getPersons(req, res) {
         persons: removeDuplicates(persons)
     }
     return res.status(200).json(responseObject)
+}
+
+export const getManagers = async (req, res) => {
+    const managers = await personService.getPersonsForRole('manager')
+    return res.status(200).json({ managers })
 }
 
 async function getGradersAndSupervisors() {
@@ -93,11 +98,13 @@ async function userNotFound(res) {
 }
 
 async function getAllPersons(res) {
+    const managers = await personService.getPersonsForRole('manager')
     const persons = await personService.getAllPersons()
     const roles = await roleService.getRolesForAllPersons()
     const responseObject = {
         roles,
-        persons
+        persons,
+        managers
     }
     return res.status(200).json(responseObject).end()
 }

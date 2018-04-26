@@ -51,3 +51,10 @@ export async function updateStatement(req, res) {
     const updatedRole = await roleService.getRoleWithAgreementIdAndPersonRole(agreementId, personRoleId)
     res.status(200).json(updatedRole).end()
 }
+
+export const sendGraderRequest = async (req, res) => {
+    const user = await personService.getLoggedPerson(req)
+    const roles = await roleService.getUsersRoles(user)
+    console.log(roles)
+    res.status(201).json({ msg: 'very nice' })
+}
