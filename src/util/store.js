@@ -38,18 +38,11 @@ const combinedReducers = combineReducers({
     statistics: statisticsReducer
 })
 
-const persistedState = localStorage.getItem('user') ? { user: JSON.parse(localStorage.getItem('user')) } : {}
-
 // eslint-disable-next-line
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 const store = createStore(
     combinedReducers,
-    persistedState,
     composeEnhancers(applyMiddleware(thunk, handleRequest))
 )
-
-store.subscribe(() => {
-    localStorage.setItem('user', JSON.stringify(store.getState().user))
-})
 
 export default store

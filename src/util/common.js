@@ -1,4 +1,43 @@
 import moment from 'moment'
+import jwtDecode from 'jwt-decode'
+import { TOKEN_NAME } from './constants'
+
+import { login } from './apiConnection'
+
+export const setToken = token => localStorage.setItem(TOKEN_NAME, token)
+
+export const decodeToken = (token) => {
+    try {
+        return jwtDecode(token)
+    } catch (e) {
+        return {}
+    }
+}
+
+export const tokenAccessInvalid = (token) => {
+    const decodedToken = decodeToken(token)
+    // Expired
+    if (!decodedToken || decodedToken.exp < (new Date().getTime() / 1000)) {
+        return true
+    }
+    // Misses fields
+    /*
+    const fields = ['enabled', 'userId', 'name']
+    if (fields.some(key => !Object.keys(decodedToken).includes(key))) {
+        return true
+    }
+    */
+    return false
+}
+
+export const getToken = async (forceNew = false) => {
+    let token = localStorage.getItem(TOKEN_NAME)
+    if (!token || tokenAccessInvalid(token) || forceNew) {
+        token = await login()
+        setToken(token)
+    }
+    return token
+}
 
 export const DISPLAY_DATE_FORMAT = 'DD.MM.YYYY'
 

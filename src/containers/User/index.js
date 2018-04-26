@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { List, Button, Segment } from 'semantic-ui-react'
 
-import { login, switchEmail, graderRoleRequest } from './services/userActions'
+import { getUser, switchEmail, graderRoleRequest } from './services/userActions'
 import { personType, programmeType } from '../../util/types'
 import PersonSwitcher from '../Person/components/PersonSwitcher'
 import RoleExplain from './components/RoleExplain'
 import EmailSwitcher from './components/EmailSwitcher'
 import ProgrammeSelect from '../Unit/components/ProgrammeSelect'
+import { swapDevUser } from '../../util/apiConnection'
 
 export class UserPage extends Component {
     state = { programmeId: undefined }
@@ -17,10 +18,18 @@ export class UserPage extends Component {
         document.title = 'Grappa: Main page'
     }
 
-    handleRoleChange = (event) => {
+    handleRoleChange = async (event) => {
         if (!event.target.value) return
-        const shibbolethId = event.target.value
-        this.props.login(shibbolethId)
+        const uid = event.target.value
+        const person = this.props.persons.find(p => p.shibbolethId === uid)
+        await swapDevUser({
+            uid: person.shibbolethId,
+            givenname: person.firstname,
+            sn: person.lastname,
+            mail: person.email,
+            'unique-code': `'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:${person.studentNumber}}`
+        })
+        this.props.getUser()
     }
 
     handleEmailUpdate = (event) => {
@@ -79,8 +88,8 @@ export class UserPage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    login(data) {
-        dispatch(login(data))
+    getUser() {
+        dispatch(getUser())
     },
     updateEmail(useSecondaryEmail) {
         dispatch(switchEmail(useSecondaryEmail))
@@ -103,7 +112,7 @@ UserPage.propTypes = {
     persons: arrayOf(personType).isRequired,
     managers: arrayOf(personType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
-    login: func.isRequired,
+    getUser: func.isRequired,
     updateEmail: func.isRequired,
     graderRequest: func.isRequired
 }
