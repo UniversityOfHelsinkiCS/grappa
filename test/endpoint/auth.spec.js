@@ -6,7 +6,6 @@ process.env.DB_SCHEMA = 'auth_test'
 const { initDb } = require('../utils')
 const request = require('supertest')
 const express = require('express')
-const index = require('../../src/routes/index')
 const shibboleth = require('../../src/routes/login')
 const knex = require('../../src/db/connection').getKnex()
 const auth = require('../../src/middleware/auth')
@@ -28,7 +27,6 @@ const makeApp = (user, logout) => {
         req.decodedToken = { id }
         next()
     })
-    app.use('/', index)
     app.use(auth.checkAuth)
     app.use('/user', shibboleth)
     return app
