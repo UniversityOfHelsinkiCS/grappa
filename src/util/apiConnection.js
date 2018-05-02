@@ -35,6 +35,7 @@ const getDevOptions = () => {
         if (!options) throw new Error('no')
         return JSON.parse(options)
     } catch (e) {
+        localStorage.removeItem(DEV_USER)
         return devDefaultOptions
     }
 }
