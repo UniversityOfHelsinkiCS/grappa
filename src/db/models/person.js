@@ -1,11 +1,11 @@
 const bookshelf = require('../bookshelf')
-const PersonWithRole = require('./person_with_role')
+require('./person_with_role')
 
 const Person = bookshelf.Model.extend({
     tableName: 'person',
     idAttribute: 'personId',
     roles() {
-        return this.hasMany(PersonWithRole, 'personId', 'personId')
+        return this.hasMany('PersonWithRole', 'personId', 'personId')
     }
 })
-module.exports = Person
+module.exports = bookshelf.model('Person', Person)

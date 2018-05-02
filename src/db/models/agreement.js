@@ -5,4 +5,4 @@ const Agreement = bookshelf.Model.extend({
     tableName: 'agreement',
     idAttribute: 'agreementId'
 })
-module.exports = Agreement
+module.exports = bookshelf.model('Agreement', Agreement)

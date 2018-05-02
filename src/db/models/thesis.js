@@ -5,4 +5,4 @@ const Thesis = bookshelf.Model.extend({
     idAttribute: 'thesisId'
 })
 
-module.exports = Thesis
+module.exports = bookshelf.model('Thesis', Thesis)

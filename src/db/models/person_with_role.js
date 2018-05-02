@@ -1,19 +1,19 @@
 const bookshelf = require('../bookshelf')
-const Person = require('./person')
-const Programme = require('./programme')
-const Role = require('./role')
+require('./person')
+require('./programme')
+require('./role')
 
 const PersonWithRole = bookshelf.Model.extend({
     tableName: 'personWithRole',
     idAttribute: 'personRoleId',
     person() {
-        return this.belongsTo(Person, 'personId', 'personId')
+        return this.belongsTo('Person', 'personId', 'personId')
     },
     programme() {
-        return this.belongsTo(Programme, 'programmeId', 'programmeId')
+        return this.belongsTo('Programme', 'programmeId', 'programmeId')
     },
     role() {
-        return this.belongsTo(Role, 'roleId', 'roleId')
+        return this.belongsTo('Role', 'roleId', 'roleId')
     }
 })
-module.exports = PersonWithRole
+module.exports = bookshelf.model('PersonWithRole', PersonWithRole)

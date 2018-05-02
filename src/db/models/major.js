@@ -5,4 +5,4 @@ const Major = bookshelf.Model.extend({
     idAttribute: 'majorId'
 })
 
-module.exports = Major
+module.exports = bookshelf.model('Major', Major)
