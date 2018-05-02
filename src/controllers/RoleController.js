@@ -53,8 +53,14 @@ export async function updateStatement(req, res) {
 }
 
 export const sendGraderRequest = async (req, res) => {
+    const { programmeId } = req.body
     const user = await personService.getLoggedPerson(req)
     const roles = await roleService.getUsersRoles(user)
-    console.log(roles)
-    res.status(201).json({ msg: 'very nice' })
+    if (roles.find(r => r.role.name === 'grader' &&  r.programme.programmeId === parseInt(programmeId))) {
+        res.status(409).json({ msg: 'You already have grader right for that unit.' })
+        return
+    }
+    //const rr = await roleService.submitRoleRequest(55, 5, 4)
+    //console.log(rr)
+    res.status(201).json({ msg: 'very NICE' })
 }

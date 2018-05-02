@@ -1,4 +1,5 @@
 import { getLoggedPerson } from './PersonService'
+import RoleRequest from '../db/models/role_request'
 
 const knex = require('../db/connection').getKnex()
 const programmeService = require('./ProgrammeService')
@@ -173,4 +174,14 @@ export const checkUserHasRightToPrint = async (req) => {
         return true
     }
     return false
+}
+
+export const submitRoleRequest = async (personId, roleId, programmeId) => {
+    const request = await RoleRequest.forge({
+        personId,
+        roleId,
+        programmeId,
+        handled: false
+    }).save()
+    return request
 }

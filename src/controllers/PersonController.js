@@ -28,7 +28,7 @@ export async function getPersons(req, res) {
     if (await roleService.isUserAdmin(user)) {
         return getAllPersons(res)
     }
-    
+
     const rolesInProgrammes = await roleService.getUsersRoles(user)
 
     rolesInProgrammes.forEach(async (item) => {
