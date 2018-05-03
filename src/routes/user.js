@@ -32,7 +32,7 @@ const getPerson = async (uid) => {
 
 router.get('/', async (req, res) => {
     const user = await getPerson(req.headers.uid)
-
+    user.affiliation = req.headers.edupersonaffiliation.split(';')
     res.status(200).json(user)
 })
 

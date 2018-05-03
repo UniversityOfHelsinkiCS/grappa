@@ -53,14 +53,31 @@ export async function updateStatement(req, res) {
 }
 
 export const sendGraderRequest = async (req, res) => {
-    const { programmeId } = req.body
+    const programmeId = parseInt(req.body.programmeId)
     const user = await personService.getLoggedPerson(req)
     const roles = await roleService.getUsersRoles(user)
-    if (roles.find(r => r.role.name === 'grader' &&  r.programme.programmeId === parseInt(programmeId))) {
+    if (roles.find(r => r.role.name === 'grader' && r.programme.programmeId === programmeId)) {
         res.status(409).json({ msg: 'You already have grader right for that unit.' })
         return
     }
-    //const rr = await roleService.submitRoleRequest(55, 5, 4)
-    //console.log(rr)
-    res.status(201).json({ msg: 'very NICE' })
+    const roleId = await roleService.getRoleId('grader')
+    const rr = await roleService.submitRoleRequest(user.personId, roleId, programmeId)
+    console.log(rr)
+    res.status(201).json({ msg: 'Good job, you!' })
+}
+
+export const getUnhandledRoleRequests = async (req, res) => {
+    await checkUserIsAdminOrManager(req)
+    const roleRequests = await roleService.findUnhandledRoleRequests()
+    console.log(roleRequests)
+    res.status(200).json(roleRequests)
+}
+
+export const handleRoleRequest = async (req, res) => {
+    const { roleRequestId, granted } = req.body
+    await checkUserIsAdminOrManager(req)
+    const user = await personService.getLoggedPerson(req)
+    await roleService.grantRoleRequest(roleRequestId, granted, user)
+    const roleRequests = await roleService.findUnhandledRoleRequests()
+    res.status(201).json(roleRequests)
 }

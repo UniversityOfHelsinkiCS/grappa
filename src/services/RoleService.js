@@ -1,5 +1,7 @@
 import { getLoggedPerson } from './PersonService'
 import RoleRequest from '../db/models/role_request'
+import PersonWithRole from '../db/models/person_with_role'
+import bookshelf from '../db/bookshelf'
 
 const knex = require('../db/connection').getKnex()
 const programmeService = require('./ProgrammeService')
@@ -184,4 +186,26 @@ export const submitRoleRequest = async (personId, roleId, programmeId) => {
         handled: false
     }).save()
     return request
+}
+
+export const findUnhandledRoleRequests = async () => (
+    RoleRequest.where('handled', false).fetchAll({ withRelated: [{
+        person: (qb) => {
+            qb.column('personId', 'firstname', 'lastname', 'email')
+        } }, 'programme', 'role'] })
+)
+
+export const grantRoleRequest = async (roleRequestId, granted, granter) => {
+    const roleRequest = await RoleRequest.where('roleRequestId', roleRequestId).fetch()
+    await bookshelf.transaction(async (t) => {
+        await roleRequest.save({ granted, handled: true, granterId: granter.personId }, { transacting: t })
+        if (granted === true) {
+            const personId = roleRequest.get('personId')
+            const roleId = roleRequest.get('roleId')
+            const programmeId = roleRequest.get('programmeId')
+            await PersonWithRole.forge({ personId, roleId, programmeId }, { transacting: t }).save()
+        }
+        return roleRequest
+    })
+    return roleRequest
 }

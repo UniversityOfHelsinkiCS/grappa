@@ -68,4 +68,12 @@ router.post('/grader_request', jsonParser, (req, res, next) => {
     roleController.sendGraderRequest(req, res).catch(next)
 })
 
+router.get('/requests', (req, res, next) => {
+    roleController.getUnhandledRoleRequests(req, res).catch(next)
+})
+
+router.post('/requests', jsonParser, (req, res, next) => {
+    roleController.handleRoleRequest(req, res).catch(next)
+})
+
 module.exports = router
