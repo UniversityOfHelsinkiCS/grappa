@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getToken, setToken } from './common'
-import { TOKEN_NAME } from './constants'
+import { TOKEN_NAME, DEV_USER } from './constants'
 
 const createApiUrl = (path) => {
     const API_PATHS = ['staging', 'v2']
@@ -17,7 +17,8 @@ export const getAxios = () => {
 }
 
 const isDevEnv = process.env.NODE_ENV === 'development'
-const devOptions = {
+
+const devDefaultOptions = {
     headers: {
         uid: 'dev',
         'unique-code': 'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:012345678',
@@ -29,20 +30,32 @@ const devOptions = {
     }
 }
 
+const getDevOptions = () => {
+    try {
+        const options = localStorage.getItem(DEV_USER)
+        if (!options) throw new Error('no')
+        return JSON.parse(options)
+    } catch (e) {
+        localStorage.removeItem(DEV_USER)
+        return devDefaultOptions
+    }
+}
+
 export const login = async () => {
-    const options = isDevEnv ? devOptions : null
+    const options = isDevEnv ? getDevOptions() : null
     const response = await getAxios().post('/login', null, options)
     return response.data.token
 }
 
 export const swapDevUser = async (newHeaders) => {
-    devOptions.headers = { ...devOptions.headers, ...newHeaders }
+    const options = { headers: { ...getDevOptions().headers, ...newHeaders } }
+    localStorage.setItem(DEV_USER, JSON.stringify(options))
     const token = await login()
     setToken(token)
 }
 
 const callApi = async (url, method = 'get', data, prefix) => {
-    const options = isDevEnv ? devOptions : { headers: {} }
+    const options = isDevEnv ? getDevOptions() : { headers: {} }
     const token = await getToken()
     options.headers['x-access-token'] = token
 

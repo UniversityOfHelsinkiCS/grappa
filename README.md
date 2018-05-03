@@ -25,6 +25,8 @@ Run:
 Run:
 `npm start`
 
+And grappa will be running on localhost:3000.
+
 [![Build Status](https://travis-ci.org/UniversityOfHelsinkiCS/front-grappa2.svg?branch=master)](https://travis-ci.org/UniversityOfHelsinkiCS/front-grappa2)
 [![codebeat badge](https://codebeat.co/badges/353dcbec-3018-4853-b41b-ecff68c746ca)](https://codebeat.co/projects/github-com-universityofhelsinkics-front-grappa2-master)
 [![Coverage Status](https://coveralls.io/repos/github/UniversityOfHelsinkiCS/front-grappa2/badge.svg?branch=master)](https://coveralls.io/github/UniversityOfHelsinkiCS/front-grappa2?branch=master)
