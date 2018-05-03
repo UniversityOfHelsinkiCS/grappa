@@ -24,7 +24,8 @@ const devOptions = {
         givenname: 'Etunimi',
         sn: 'Sukunimi',
         mail: 'testi-email@example.com',
-        'shib-session-id': 'mock-session'
+        'shib-session-id': 'mock-session',
+        eduPersonAffiliation: 'student;member;staff;employee'
     }
 }
 

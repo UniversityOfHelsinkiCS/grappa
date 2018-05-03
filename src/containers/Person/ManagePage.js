@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { arrayOf, func } from 'prop-types'
 import { personType, roleType, programmeType, availableRoleType } from '../../util/types'
 
+import RoleRequests from './components/RoleRequests'
 import PersonSelector from './components/PersonSelector'
 import PersonInviter from './components/PersonInviter'
 import PersonRoleChoose from './components/PersonRoleChoose'
 import AddOutsidePerson from './components/AddOutsidePerson'
 import UnitRoleList from '../UnitRoleList'
 
-import { getAvailableRoles, saveRole, deleteRole } from '../Role/services/roleActions'
+import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction } from '../Role/services/roleActions'
 import { invitePerson } from './services/personActions'
 import { makePersonRoles } from '../../selectors/personRoles'
 
@@ -21,6 +22,10 @@ export class PersonRoleManagePage extends Component {
             person: undefined,
             roles: undefined
         }
+    }
+
+    componentDidMount() {
+        this.props.getRoleRequests()
     }
 
     componentWillReceiveProps(newProps) {
@@ -66,6 +71,11 @@ export class PersonRoleManagePage extends Component {
         this.props.invitePerson({ programme, role, email })
     };
 
+    handleGrantRole = (e, data) => {
+        console.log(data.data)
+        this.props.grantRole(data.data)
+    }
+
     renderManagement = () => {
         if (!this.state.person) {
             return (
@@ -101,6 +111,7 @@ export class PersonRoleManagePage extends Component {
                     In addition, you can choose a person using the selector.
                     When a person is chosen you can edit their roles.
                 </p>
+                <RoleRequests roleRequests={this.props.roleRequests} handleGrantRole={this.handleGrantRole} />
                 <div className="ui divider" />
                 {this.renderManagement()}
                 <div className="ui divider" />
@@ -132,7 +143,13 @@ const mapDispatchToProps = dispatch => ({
     },
     invitePerson(invite) {
         dispatch(invitePerson(invite))
-    }
+    },
+    getRoleRequests: () => (
+        dispatch(getRoleRequestsAction())
+    ),
+    grantRole: data => (
+        dispatch(grantRoleAction(data))
+    )
 })
 
 const personRoles = makePersonRoles()
@@ -141,7 +158,8 @@ const mapStateToProps = state => ({
     programmes: state.programmes,
     persons: state.persons,
     roles: personRoles(state),
-    availableRoles: state.availableRoles
+    availableRoles: state.availableRoles,
+    roleRequests: state.roleRequests
 })
 
 PersonRoleManagePage.propTypes = {

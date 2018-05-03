@@ -14,6 +14,7 @@ import emailReducer from '../containers/Email/services/emailReducer'
 import personReducer from '../containers/Person/services/personReducer'
 import managerReducer from '../containers/Person/services/managerReducer'
 import roleReducer from '../containers/Role/services/roleReducer'
+import roleRequestReducer from '../containers/Role/services/roleRequestReducer'
 import notificationsReducer from '../containers/Notification/services/notificationsReducer'
 import eventMessageReducer from '../containers/EventMessage/services/eventMessageReducer'
 import inviteReducer from '../containers/Invite/services/inviteReducer'
@@ -26,6 +27,7 @@ const combinedReducers = combineReducers({
     user: userReducer,
     councilmeetings: councilmeetingReducer,
     roles: roleReducer,
+    roleRequests: roleRequestReducer,
     theses: thesisReducer,
     studyfields: studyfieldReducer,
     programmes: programmeReducer,

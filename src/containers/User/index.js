@@ -40,15 +40,16 @@ export class UserPage extends Component {
         this.setState({ programmeId: event.target.value })
     }
 
-    submitGraderRequest = () => {
+    submitGraderRequest = async () => {
         if (this.state.programmeId) {
-            this.props.graderRequest(this.state.programmeId)
-            console.log('submitting grader request! ', this.state.programmeId)
+            this.props.graderRequest(this.state.programmeId).then(() => console.log('request submitted!'))
         }
     }
 
     render() {
         const unitManagers = this.props.managers.filter(manager => manager.programmeId === parseInt(this.state.programmeId, 10))
+        const isStaff = (this.props.roles && this.props.roles.length > 0) ||
+            (this.props.user && this.props.user.affiliation && this.props.user.affiliation.length && this.props.user.affiliation.includes('staff'))
         return (
             <div>
                 <div className="ui segment">
@@ -73,15 +74,21 @@ export class UserPage extends Component {
                     />
                     : null}
                 <RoleExplain user={this.props.user} />
-                <Segment inverted color="green" tertiary >
-                    <h3>Do you need grader rights? Select a Unit from the dropdown and submit a request for new rights </h3>
-                    <ProgrammeSelect programmes={this.props.programmes} onChange={this.handleUnitChange} />
-                    {this.state.programmeId ? <Button primary onClick={this.submitGraderRequest}>Request rights</Button> : undefined}
-                    <h3> Below are the managers for the selected unit for any additional queries</h3>
-                    <List>
-                        {unitManagers.map(manager => <List.Item as="a" href={`mailto:${manager.person.email}`}>{`${manager.person.firstname} ${manager.person.lastname}`}</List.Item>)}
-                    </List>
-                </Segment>
+                {isStaff ?
+                    <Segment inverted color="green" tertiary >
+                        <h3>Do you need grader rights? Select a Unit from the dropdown and submit a request for new rights </h3>
+                        <ProgrammeSelect programmes={this.props.programmes} onChange={this.handleUnitChange} />
+                        {this.state.programmeId ? <Button primary onClick={this.submitGraderRequest}>Request rights</Button> : undefined}
+                        <h3> Below are the managers for the selected unit for any additional queries</h3>
+                        <List>
+                            {unitManagers.map(manager => (
+                                <List.Item as="a" href={`mailto:${manager.person.email}`}>
+                                    {`${manager.person.firstname} ${manager.person.lastname}`}
+                                </List.Item>
+                            ))}
+                        </List>
+                    </Segment> : undefined
+                }
             </div>
         )
     }
@@ -94,9 +101,8 @@ const mapDispatchToProps = dispatch => ({
     updateEmail(useSecondaryEmail) {
         dispatch(switchEmail(useSecondaryEmail))
     },
-    graderRequest(programmeId) {
+    graderRequest: programmeId =>
         dispatch(graderRoleRequest(programmeId))
-    }
 })
 
 const mapStateToProps = state => ({
