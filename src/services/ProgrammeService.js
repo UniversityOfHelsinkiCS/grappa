@@ -1,10 +1,15 @@
 const knex = require('../db/connection').getKnex()
+const Programme = require('../db/models/programme')
 
 const programmeSchema = [
     'programme.programmeId',
     'programme.name',
     'programme.facultyId'
 ]
+
+export const getProgrammeById = async (id) => {
+    return Programme.where('programmeId', id).fetch()
+}
 
 export const getAllProgrammes = () =>
     knex.select(programmeSchema).from('programme').then(programme => programme)

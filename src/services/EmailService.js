@@ -38,3 +38,15 @@ export async function sendInvite(emailInvite, type, programmeId) {
         logger.error('Email send error', { error: error.message })
     }
 }
+
+export const sendRoleRequestNotification = async (address, roleName, granted, granterName, programmeName) => {
+    const title = 'Notification from Grappa'
+    const body = `You have ${granted ? '' : 'NOT'} been granted the following role to Grappa:\n 
+    ${roleName} in ${programmeName}\n
+    The request was handled by ${granterName}. Please contact them for any further information.`
+    try {
+        await mailer.sendEmail(address, title, body)
+    } catch (error) {
+        logger.error('Email send error', { error: error.message })
+    }
+}

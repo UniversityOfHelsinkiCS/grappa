@@ -1,6 +1,7 @@
 import { getLoggedPerson } from './PersonService'
 import RoleRequest from '../db/models/role_request'
 import PersonWithRole from '../db/models/person_with_role'
+import Role from '../db/models/role'
 import bookshelf from '../db/bookshelf'
 
 const knex = require('../db/connection').getKnex()
@@ -19,6 +20,10 @@ export async function getAvailableRoles() {
 export async function getRoleId(roleName) {
     const role = await knex.select().from('role').where('name', roleName).first()
     return role.roleId
+}
+
+export const getRoleById = async (id) => {
+    return Role.where('roleId', id).fetch()
 }
 
 export async function saveRole(roleName) {
