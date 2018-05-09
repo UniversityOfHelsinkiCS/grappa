@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
-
 import { connect } from 'react-redux'
+import { Dropdown } from 'semantic-ui-react'
+
 import { saveThesis } from './services/thesisActions'
+import { requestGraderAction, getGradersAction } from '../Person/services/personActions'
 import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types'
 
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
-import PersonSelector from '../Person/components/PersonSelector'
+//import PersonSelector from '../Person/components/PersonSelector'
 import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
 import { emptyThesisData, thesisValidation } from '../../util/theses'
 import LoadingIndicator from '../LoadingIndicator'
+import AddOutsidePerson from '../Person/components/AddOutsidePerson'
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -56,6 +59,9 @@ export class ThesisCreatePage extends Component {
         const thesis = Object.assign({}, this.state.thesis, changedValues)
 
         this.setState({ thesis })
+        if (changedValues.programmeId) {
+            this.props.getGraders(changedValues.programmeId)
+        }
         this.validateThesis(thesis)
             .then(() => this.setState({ validationErrors: {} }))
             .catch(res => this.setState({ validationErrors: res.errors }))
@@ -69,30 +75,59 @@ export class ThesisCreatePage extends Component {
         return thesisValidation.run(thesis)
     }
 
+    addNewGrader = (data) => {
+        const { firstname, lastname, email } = data
+        const programmeId = data.units[0].value
+        const role = 'grader'
+        console.log(programmeId)
+        console.log(firstname)
+        console.log(lastname)
+        console.log(email)
+        const person = { firstname, lastname, email }
+        const roleRequest = { programmeId, role }
+        this.props.requestNewGrader({ person, roleRequest })
+    }
+
     renderGraderSelector() {
-        const programmeGraders = this.props.persons.filter(person =>
+        /*const programmeGraders = this.props.persons.filter(person =>
             this.props.roles.find(role =>
                 role.name === 'grader'
                 && role.personId === person.personId
                 && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
             )
-        )
-        return (
+        )*/
+        const graders = this.props.graders.map((grader) => {
+            const { personId, firstname, lastname, email } = grader.person
+            const obj = {
+                key: personId,
+                value: personId,
+                text: `${firstname} ${lastname} ${email}`
+            }
+            if (grader.roleRequestId) {
+                console.log('its here')
+                obj.label = { color: 'red', empty: true, circular: true }
+                obj.text = `${obj.text}  -  NOT YET CONFIRMED GRADER`
+            }
+            return obj
+        })
+        return <Dropdown placeholder="Grader" fluid multiple search selection options={graders} />
+        /*return (
             <div className="field">
                 <label>
                     Select 2 graders
                     <PersonSelector
-                        persons={programmeGraders}
+                        persons={this.props.graders}
                         selected={this.state.thesis.graders}
                         changeList={list => this.handleChange({ graders: list })}
                         validationError={Object.keys(this.state.validationErrors).includes('graders')}
                     />
                 </label>
             </div>
-        )
+        )*/
     }
 
     render() {
+        const programme = this.props.programmes.find(p => p.programmeId === parseInt(this.state.thesis.programmeId, 10))
         return (
             <div>
                 <LoadingIndicator type="THESIS_SAVE" redirect="/" />
@@ -111,6 +146,9 @@ export class ThesisCreatePage extends Component {
                         validationErrors={this.state.validationErrors}
                     />
                     {this.renderGraderSelector()}
+                    {programme !== undefined ?
+                        <AddOutsidePerson programmes={[programme]} addOutsider={this.addNewGrader} /> :
+                        undefined}
                     <h2 style={this.state.invalidAttachments ? { color: 'red' } : null}>
                         Upload at least thesis file and the review file
                     </h2>
@@ -138,7 +176,13 @@ export class ThesisCreatePage extends Component {
 const mapDispatchToProps = dispatch => ({
     saveThesis(thesis) {
         dispatch(saveThesis(thesis))
-    }
+    },
+    requestNewGrader: data => (
+        dispatch(requestGraderAction(data))
+    ),
+    getGraders: programmeId => (
+        dispatch(getGradersAction(programmeId))
+    )
 })
 
 const mapStateToProps = state => ({
@@ -146,7 +190,8 @@ const mapStateToProps = state => ({
     programmes: state.programmes,
     studyfields: state.studyfields,
     roles: state.roles,
-    persons: state.persons
+    persons: state.persons,
+    graders: state.graders
 })
 
 ThesisCreatePage.propTypes = {

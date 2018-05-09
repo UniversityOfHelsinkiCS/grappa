@@ -6,4 +6,8 @@ export const getManagers = () => callController('/persons/managers', 'PERSON_GET
 
 export const invitePerson = invite => callController('/persons/invite', 'PERSON_INVITE_ONE_', invite, 'post')
 
-export const addOutsider = info => callController('/persons/add_outsider', 'PERSON_ADD_OUTSIDER_', info, 'post')
+export const addOutsiderAction = info => callController('/persons/add_outsider', 'PERSON_ADD_OUTSIDER_', info, 'post')
+
+export const requestGraderAction = data => callController('/persons/request_grader', 'PERSON_REQUEST_GRADER_', data, 'post')
+
+export const getGradersAction = programmeId => callController(`/persons/graders/?programmeId=${programmeId}`, 'PERSON_GET_GRADERS_')

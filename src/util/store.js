@@ -12,6 +12,7 @@ import studyfieldReducer from '../containers/Studyfield/services/studyfieldReduc
 import programmeReducer from '../containers/Unit/services/programmeReducer'
 import emailReducer from '../containers/Email/services/emailReducer'
 import personReducer from '../containers/Person/services/personReducer'
+import graderReducer from '../containers/Person/services/graderReducer'
 import managerReducer from '../containers/Person/services/managerReducer'
 import roleReducer from '../containers/Role/services/roleReducer'
 import roleRequestReducer from '../containers/Role/services/roleRequestReducer'
@@ -32,6 +33,7 @@ const combinedReducers = combineReducers({
     studyfields: studyfieldReducer,
     programmes: programmeReducer,
     emails: emailReducer,
+    graders: graderReducer,
     managers: managerReducer,
     persons: personReducer,
     notifications: notificationsReducer,

@@ -11,7 +11,8 @@ import AddOutsidePerson from './components/AddOutsidePerson'
 import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction } from '../Role/services/roleActions'
-import { invitePerson } from './services/personActions'
+import { invitePerson, addOutsiderAction } from './services/personActions'
+
 import { makePersonRoles } from '../../selectors/personRoles'
 
 export class PersonRoleManagePage extends Component {
@@ -100,6 +101,7 @@ export class PersonRoleManagePage extends Component {
 
     render() {
         const selected = this.state.person ? [this.state.person] : []
+        const { programmes } = this.props
         return (
             <div>
                 <p>
@@ -124,7 +126,9 @@ export class PersonRoleManagePage extends Component {
                 <div className="ui divider" />
                 <UnitRoleList />
                 <h3>Add a non-HY grader (cannot sign in)</h3>
-                <AddOutsidePerson />
+                {this.props.programmes.length > 0 ?
+                    <AddOutsidePerson programmes={programmes} addOutsider={this.props.addOutsider} /> :
+                    <p>loading</p>}
                 <div className="ui divider" />
             </div>
         )
@@ -149,6 +153,9 @@ const mapDispatchToProps = dispatch => ({
     ),
     grantRole: data => (
         dispatch(grantRoleAction(data))
+    ),
+    addOutsider: data => (
+        dispatch(addOutsiderAction(data))
     )
 })
 
