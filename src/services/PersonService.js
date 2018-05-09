@@ -1,6 +1,7 @@
 const knex = require('../db/connection').getKnex()
 const roleService = require('./RoleService')
 const PersonWithRole = require('../db/models/person_with_role')
+const RoleRequest = require('../db/models/role_request')
 
 const personSchema = [
     'person.personId',
@@ -125,3 +126,25 @@ export const createOutsidePerson = async (firstname, lastname, email, programmes
         return { errorMsg: 'Failed to create outside person with roles', error }
     }
 }
+
+export const getPersonsWithRoleForProgramme = async (roleId, programmeId) => (
+    PersonWithRole
+        .query({ where: { roleId, programmeId }, columns: ['personId', 'roleId', 'programmeId'], distinct: 'personId' })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
+)
+
+export const getPendingPersonsWithRole = async (roleId, programmeId) => (
+    RoleRequest
+        .query({ where: { roleId, programmeId, handled: false }, distinct: ['personId', 'roleRequestId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
+)
