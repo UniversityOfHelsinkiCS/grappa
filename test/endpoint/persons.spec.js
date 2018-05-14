@@ -46,7 +46,7 @@ test.serial('manager can get thesis authors', async (t) => {
     const res = await request(await makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
-    t.is(res.body.persons.length, 9)
+    t.is(res.body.persons.length, 10)
 })
 
 test('email can be switched', async (t) => {
