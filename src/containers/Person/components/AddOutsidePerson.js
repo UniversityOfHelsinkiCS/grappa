@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-//import { connect } from 'react-redux'
 import { arrayOf, func } from 'prop-types'
 import { Accordion, Form, Icon, Dropdown, Message, Button } from 'semantic-ui-react'
-//import { addOutsider } from '../services/personActions'
 import { programmeType } from '../../../util/types'
 
 const ACCORDION_OPEN = 0
@@ -21,10 +19,21 @@ export class AddOutsidePerson extends Component {
 
     componentDidMount() {
         const { programmes } = this.props
+        this.updateOptions(programmes)
+    }
+
+    componentDidUpdate(prevProps) {
+        const { programmes } = this.props
+        if (programmes === prevProps.programmes) {
+            return
+        }
+        this.updateOptions(programmes)
+    }
+
+    updateOptions = (programmes) => {
         const options = []
         programmes.map(programme => options.push({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
         this.setState({ unitOptions: options })
-        console.log(this.state.unitOptions)
         if (options.length === 1) this.setState({ units: options })
     }
 
@@ -110,12 +119,6 @@ export class AddOutsidePerson extends Component {
         return <div>wait for it</div>
     }
 }
-
-//const mapDispatchToProps = dispatch => ({
-//    addOutsider(data) {
-//        dispatch(addOutsider(data))
-//    }
-//})
 
 AddOutsidePerson.propTypes = {
     programmes: arrayOf(programmeType).isRequired,

@@ -10,7 +10,6 @@ import { personType, roleType, programmeType, studyfieldType, councilmeetingType
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
-//import PersonSelector from '../Person/components/PersonSelector'
 import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
 import { emptyThesisData, thesisValidation } from '../../util/theses'
 import LoadingIndicator from '../LoadingIndicator'
@@ -79,23 +78,17 @@ export class ThesisCreatePage extends Component {
         const { firstname, lastname, email } = data
         const programmeId = data.units[0].value
         const role = 'grader'
-        console.log(programmeId)
-        console.log(firstname)
-        console.log(lastname)
-        console.log(email)
         const person = { firstname, lastname, email }
         const roleRequest = { programmeId, role }
         this.props.requestNewGrader({ person, roleRequest })
     }
 
-    renderGraderSelector() {
-        /*const programmeGraders = this.props.persons.filter(person =>
-            this.props.roles.find(role =>
-                role.name === 'grader'
-                && role.personId === person.personId
-                && role.programmeId === parseInt(this.state.thesis.programmeId, 10)
-            )
-        )*/
+    changeGraders = (e, data) => {
+        console.log(data.value)
+        this.handleChange({ graders: data.value })
+    }
+
+    renderGraderSelector = () => {
         const graders = this.props.graders.map((grader) => {
             const { personId, firstname, lastname, email } = grader.person
             const obj = {
@@ -104,26 +97,12 @@ export class ThesisCreatePage extends Component {
                 text: `${firstname} ${lastname} ${email}`
             }
             if (grader.roleRequestId) {
-                console.log('its here')
                 obj.label = { color: 'red', empty: true, circular: true }
                 obj.text = `${obj.text}  -  NOT YET CONFIRMED GRADER`
             }
             return obj
         })
-        return <Dropdown placeholder="Grader" fluid multiple search selection options={graders} />
-        /*return (
-            <div className="field">
-                <label>
-                    Select 2 graders
-                    <PersonSelector
-                        persons={this.props.graders}
-                        selected={this.state.thesis.graders}
-                        changeList={list => this.handleChange({ graders: list })}
-                        validationError={Object.keys(this.state.validationErrors).includes('graders')}
-                    />
-                </label>
-            </div>
-        )*/
+        return <Dropdown placeholder="Select grader" fluid multiple search selection options={graders} onChange={this.changeGraders} />
     }
 
     render() {
@@ -147,7 +126,10 @@ export class ThesisCreatePage extends Component {
                     />
                     {this.renderGraderSelector()}
                     {programme !== undefined ?
-                        <AddOutsidePerson programmes={[programme]} addOutsider={this.addNewGrader} /> :
+                        <div>
+                            <p><b>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</b></p>
+                            <AddOutsidePerson programmes={[programme]} addOutsider={this.addNewGrader} />
+                        </div> :
                         undefined}
                     <h2 style={this.state.invalidAttachments ? { color: 'red' } : null}>
                         Upload at least thesis file and the review file
@@ -200,6 +182,9 @@ ThesisCreatePage.propTypes = {
     studyfields: arrayOf(studyfieldType).isRequired,
     roles: arrayOf(roleType).isRequired,
     persons: arrayOf(personType).isRequired,
+    graders: arrayOf(personType).isRequired,
+    getGraders: func.isRequired,
+    requestNewGrader: func.isRequired,
     saveThesis: func.isRequired
 }
 
