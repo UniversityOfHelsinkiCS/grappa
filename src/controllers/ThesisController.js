@@ -180,6 +180,13 @@ const updateGraders = async (graders, agreement, trx) => {
             if (!agreementPersons.find(agreementPerson => agreementPerson.personRoleId === personRole.personRoleId)) {
                 await linkAgreementAndPersonRole(agreement.agreementId, personRole.personRoleId, trx)
             }
+            return
+        }
+        const roleId = await roleService.getRoleId('grader')
+        const pendingPersons = await personService.getPendingPersonsWithRole(roleId, studyfield.programmeId)
+        const pendingGrader = pendingPersons.find(person => person.get('personId') === grader)
+        if (pendingGrader) {
+            await roleService.linkRoleRequestToAgreement(agreement.agreementId, pendingGrader.get('roleRequestId'), trx)
         }
     }))
 }
