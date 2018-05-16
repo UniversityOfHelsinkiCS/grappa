@@ -5,7 +5,7 @@ import { Dropdown } from 'semantic-ui-react'
 
 import { saveThesis } from './services/thesisActions'
 import { requestGraderAction, getGradersAction } from '../Person/services/personActions'
-import { personType, roleType, programmeType, studyfieldType, councilmeetingType } from '../../util/types'
+import { personType, programmeType, studyfieldType, councilmeetingType } from '../../util/types'
 
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
@@ -85,7 +85,8 @@ export class ThesisCreatePage extends Component {
 
     changeGraders = (e, data) => {
         console.log(data.value)
-        this.handleChange({ graders: data.value })
+        const graders = this.props.graders.filter(grader => data.value.includes(grader.personId))
+        this.handleChange({ graders })
     }
 
     renderGraderSelector = () => {
@@ -180,8 +181,6 @@ ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
-    roles: arrayOf(roleType).isRequired,
-    persons: arrayOf(personType).isRequired,
     graders: arrayOf(personType).isRequired,
     getGraders: func.isRequired,
     requestNewGrader: func.isRequired,
