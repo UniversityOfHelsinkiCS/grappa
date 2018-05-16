@@ -84,7 +84,6 @@ export class ThesisCreatePage extends Component {
     }
 
     changeGraders = (e, data) => {
-        console.log(data.value)
         const graders = this.props.graders.filter(grader => data.value.includes(grader.personId))
         this.handleChange({ graders })
     }
