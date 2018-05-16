@@ -116,7 +116,7 @@ export const emptyThesisData = {
     authorLastname: '',
     authorEmail: '',
     title: '',
-    urkund: 'http://',
+    urkund: 'https://',
     grade: '',
     graders: [],
     programmeId: undefined,
