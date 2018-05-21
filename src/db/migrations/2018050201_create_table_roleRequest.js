@@ -14,6 +14,8 @@ exports.up = async knex => Promise.all([
         table.boolean('granted')
         table.integer('granterId').unsigned()
         table.foreign('granterId').references('person.personId').onDelete('SET NULL')
+        table.integer('agreementId').unsigned()
+        table.foreign('agreementId').references('agreement.agreementId').onDelete('SET NULL')
     })
 ])
 

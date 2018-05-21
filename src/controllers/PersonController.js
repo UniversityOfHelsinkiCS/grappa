@@ -135,3 +135,34 @@ export const addOutsidePerson = async (req, res) => {
         res.status(400).send(outsidePerson)
     }
 }
+
+export const requestGrader = async (req, res) => {
+    // TODO: check user has right to submit thesis
+    const personData = req.body.person
+    const { role } = req.body.roleRequest
+    const programmeId = parseInt(req.body.roleRequest.programmeId, 10)
+    const person = await personService.savePerson(personData)
+    const { personId } = person
+    const roleId = await roleService.getRoleId(role)
+    // check that this person doesn't already have grader role in the programme
+    if (await roleService.getPersonRole(personId, programmeId, role) === undefined) {
+        await roleService.submitRoleRequest(personId, roleId, programmeId)
+        const graders = await personService.getPersonsWithRoleForProgramme(roleId, programmeId)
+        const pendingGraders = await personService.getPendingPersonsWithRole(roleId, programmeId)
+        // Is there a simpler way to append these to queries?
+        const allGraders = [...graders.serialize(), ...pendingGraders.serialize()]
+        res.status(201).json(allGraders)
+        return
+    }
+    res.status(400).json({ msg: 'not like this' })
+}
+
+export const getProgrammeGraders = async (req, res) => {
+    const { programmeId } = req.query
+    const roleId = await roleService.getRoleId('grader')
+    const graders = await personService.getPersonsWithRoleForProgramme(roleId, programmeId)
+    const pendingGraders = await personService.getPendingPersonsWithRole(roleId, programmeId)
+    // Is there a simpler way to append these to queries?
+    const allGraders = [...graders.serialize(), ...pendingGraders.serialize()]
+    res.status(200).json(allGraders)
+}

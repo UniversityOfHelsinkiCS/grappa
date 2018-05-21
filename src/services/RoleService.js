@@ -208,9 +208,20 @@ export const grantRoleRequest = async (roleRequestId, granted, granter) => {
             const personId = roleRequest.get('personId')
             const roleId = roleRequest.get('roleId')
             const programmeId = roleRequest.get('programmeId')
-            await PersonWithRole.forge({ personId, roleId, programmeId }, { transacting: t }).save()
+            const agreementId = roleRequest.get('agreementId')
+            const personRole = await PersonWithRole.forge({ personId, roleId, programmeId }).save(null, { transacting: t })
+            if (agreementId) {
+                await linkAgreementAndPersonRole(agreementId, personRole.get('personRoleId'), t)
+            }
         }
         return roleRequest
     })
     return roleRequest
 }
+
+export const linkRoleRequestToAgreement = async (agreementId, roleRequestId, trx) => (
+    // why does this work?
+    knex('roleRequest').where({ roleRequestId }).update({ agreementId }).transacting(trx)
+    // and this does not? Should use the same transaction function
+    //RoleRequest.forge({ roleRequestId }).save({ agreementId }, { patch: true }, { transacting: trx })
+)
