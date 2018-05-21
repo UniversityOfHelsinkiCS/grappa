@@ -1,4 +1,7 @@
+const fs = require('fs')
 const pdftk = require('node-pdftk')
+const PDFDocument = require('pdfkit')
+const uuidv1 = require('uuid/v1')
 
 /**
  * Joins the PDF-files into a single file
@@ -32,37 +35,48 @@ export async function combinePdf(...buffers) {
  * @return {Promise<Array>} Array of something??? TODO
  */
 export async function generateThesesCover(thesisInformationArray, councilmeeting) {
-    const template = './data/coverTemplate.pdf'
+    const doc = new PDFDocument({ size: 'A4', margin: 50 })
+
+    // We save generated pdf into /tmp with expectation that container is restarted
+    // often enough to delete old files.
+    const filename = '/tmp/cover-'.concat(uuidv1())
+    doc.pipe(fs.createWriteStream(filename))
+
     const dateInformation = councilmeeting ?
         createDateString(councilmeeting.date)
         : ''
-    const thesisInformation = createThesisString(thesisInformationArray)
-    const formData = {
-        dateInformation,
-        thesisInformation
+    const thesisnumber = thesisInformationArray.length
+    const lastpage = Math.ceil(thesisnumber / 5)
+
+    thesisInformationArray.forEach((thesis, i) => {
+        if (i % 5 === 0) {
+            const currpage = Math.floor(i / 5) + 1
+            doc.fontSize(14).text(`${dateInformation}     (${currpage}/${lastpage})`, 400, 40)
+            doc.fontSize(24).text('Pro Gradu -tutkielmat', 100, 100, { indent: -40 })
+            doc.moveDown()
+            doc.fontSize(18)
+        }
+        doc.text(`${thesis.authorLastname}, ${thesis.authorFirstname}: ${thesis.title}`, { indent: -40 })
+        doc.text(`Graders: ${thesis.graders.map(grader => `${grader.firstname} ${grader.lastname}`).join(', ')}`,
+            { indent: -40 })
+        doc.text(`Proposed grade: ${thesis.grade}`, { indent: -40 })
+        doc.moveDown()
+        if (i % 5 === 4) doc.addPage()
+    })
+
+    doc.end()
+
+    const input = {
+        A: filename
     }
-    return pdftk
-        .input(template)
-        .fillForm(formData)
-        .flatten()
-        .output()
+    return pdftk.input(input).output()
 }
 
 function createDateString(date) {
     const day = `0${date.getDate()}`.slice(-2)
     const month = `0${date.getMonth() + 1}`.slice(-2)
     const year = date.getFullYear()
-    return `${day}/${month}/${year}`
-}
-
-function createThesisString(thesisInfoArray) {
-    return thesisInfoArray.map((thesis) => {
-        const thesisString = `${thesis.authorLastname}, ${thesis.authorFirstname}: ${thesis.title}\n`
-        const graderString =
-            `Graders: ${thesis.graders.map(grader => `${grader.firstname} ${grader.lastname}`).join(', ')}\n`
-        const gradeString = `Proposed grade: ${thesis.grade}`
-        return thesisString + graderString + gradeString
-    }).join('\n\n')
+    return `${day}.${month}.${year}`
 }
 
 export async function generateReviewPage(reviewInformationArray) {
