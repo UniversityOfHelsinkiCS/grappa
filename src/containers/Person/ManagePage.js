@@ -5,7 +5,6 @@ import { personType, roleType, programmeType, availableRoleType } from '../../ut
 
 import RoleRequests from './components/RoleRequests'
 import PersonSelector from './components/PersonSelector'
-import PersonInviter from './components/PersonInviter'
 import PersonRoleChoose from './components/PersonRoleChoose'
 import AddOutsidePerson from './components/AddOutsidePerson'
 import UnitRoleList from '../UnitRoleList'
@@ -44,6 +43,16 @@ export class PersonRoleManagePage extends Component {
         }
     }
 
+    checkUserRights = () => {
+        const { user } = this.props
+        if (user.roles.find(role => role.role === 'admin')) {
+            return this.props.programmes
+        }
+        const managerRoles = user.roles.filter(role => role.role === 'manager')
+        const programmes = managerRoles.map(role => ({ programmeId: role.programmeId, name: role.programme }))
+        return programmes
+    }
+
     selectPerson = (persons) => {
         const person = persons.find(item => !this.state.person || item.personId !== this.state.person.personId)
         const roles = person ?
@@ -68,8 +77,8 @@ export class PersonRoleManagePage extends Component {
         this.props.deleteRole(role)
     };
 
-    handleSendInvite = (programme, role, email) => {
-        this.props.invitePerson({ programme, role, email })
+    handleSendInvite = (data) => {
+        this.props.invitePerson(data)
     };
 
     handleGrantRole = (e, data) => {
@@ -78,60 +87,59 @@ export class PersonRoleManagePage extends Component {
     }
 
     renderManagement = () => {
-        if (!this.state.person) {
+        if (this.state.person) {
             return (
-                <PersonInviter
-                    roles={this.props.availableRoles}
+                <PersonRoleChoose
+                    person={this.state.person}
+                    roles={this.state.roles}
                     programmes={this.props.programmes}
-                    handleSendInvite={this.handleSendInvite}
+                    availableRoles={this.props.availableRoles}
+                    addRole={this.handleAddRole}
+                    removeRole={this.handleRemoveRole}
                 />
             )
         }
-        return (
-            <PersonRoleChoose
-                person={this.state.person}
-                roles={this.state.roles}
-                programmes={this.props.programmes}
-                availableRoles={this.props.availableRoles}
-                addRole={this.handleAddRole}
-                removeRole={this.handleRemoveRole}
-            />
-        )
-    };
+        return undefined
+    }
 
     render() {
-        const selected = this.state.person ? [this.state.person] : []
-        const { programmes } = this.props
-        return (
-            <div>
-                <p>
-                    On this page you can invite new users
-                    by choosing the correct unit, role and inputting email address.
-                    Grappa will then send an email to that address
-                    with a link that will make them the role of your choosing.
-                    <br />
-                    In addition, you can choose a person using the selector.
-                    When a person is chosen you can edit their roles.
-                </p>
-                <RoleRequests roleRequests={this.props.roleRequests} handleGrantRole={this.handleGrantRole} />
-                <div className="ui divider" />
-                {this.renderManagement()}
-                <div className="ui divider" />
-                <h2>Select person</h2>
-                <PersonSelector
-                    persons={this.props.persons}
-                    selected={selected}
-                    changeList={this.selectPerson}
-                />
-                <div className="ui divider" />
-                <UnitRoleList />
-                <h3>Add a non-HY grader (cannot sign in)</h3>
-                {this.props.programmes.length > 0 ?
-                    <AddOutsidePerson programmes={programmes} addOutsider={this.props.addOutsider} /> :
-                    <p>loading</p>}
-                <div className="ui divider" />
-            </div>
-        )
+        if (this.props.user.roles) {
+            console.log(this.props.user)
+            const programmes = this.checkUserRights()
+            const selected = this.state.person ? [this.state.person] : []
+            return (
+                <div>
+                    <p>
+                        On this page you can invite new users
+                        by choosing the correct unit, role and inputting email address.
+                        Grappa will then send an email to that address
+                        with a link that will make them the role of your choosing.
+                        <br />
+                        In addition, you can choose a person using the selector.
+                        When a person is chosen you can edit their roles.
+                    </p>
+                    <RoleRequests roleRequests={this.props.roleRequests.filter(request => programmes.find(programme => programme.programmeId === request.programmeId))} handleGrantRole={this.handleGrantRole} />
+                    <div className="ui divider" />
+                    <h3>Add a person to Grappa (NOTE: person without @helsinki email cannot sign in)</h3>
+                    {this.props.programmes.length > 0 && this.props.availableRoles ?
+                        <AddOutsidePerson programmes={programmes} roles={this.props.availableRoles.map(role => role.name)} addOutsider={this.handleSendInvite} /> :
+                        <p>loading</p>}
+                    <div className="ui divider" />
+                    <h3>Select a person to manage their roles</h3>
+                    <PersonSelector
+                        persons={this.props.persons}
+                        selected={selected}
+                        changeList={this.selectPerson}
+                    />
+                    <div className="ui divider" />
+                    {this.renderManagement()}
+                    <div className="ui divider" />
+                    <UnitRoleList />
+                    <div className="ui divider" />
+                </div>
+            )
+        }
+        return (<p>Coming right back</p>)
     }
 }
 
@@ -166,7 +174,8 @@ const mapStateToProps = state => ({
     persons: state.persons,
     roles: personRoles(state),
     availableRoles: state.availableRoles,
-    roleRequests: state.roleRequests
+    roleRequests: state.roleRequests,
+    user: state.user
 })
 
 PersonRoleManagePage.propTypes = {
@@ -177,7 +186,10 @@ PersonRoleManagePage.propTypes = {
     getAvailableRoles: func.isRequired,
     saveRole: func.isRequired,
     deleteRole: func.isRequired,
-    invitePerson: func.isRequired
+    invitePerson: func.isRequired,
+    getRoleRequests: func.isRequired,
+    grantRole: func.isRequired,
+    addOutsider: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage)

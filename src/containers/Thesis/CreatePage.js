@@ -76,7 +76,7 @@ export class ThesisCreatePage extends Component {
 
     addNewGrader = (data) => {
         const { firstname, lastname, email } = data
-        const programmeId = data.units[0].value
+        const programmeId = data.programmes[0].value
         const role = 'grader'
         const person = { firstname, lastname, email }
         const roleRequest = { programmeId, role }
@@ -128,7 +128,7 @@ export class ThesisCreatePage extends Component {
                     {programme !== undefined ?
                         <div>
                             <p><b>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</b></p>
-                            <AddOutsidePerson programmes={[programme]} addOutsider={this.addNewGrader} />
+                            <AddOutsidePerson programmes={[programme]} roles={['grader']} addOutsider={this.addNewGrader} />
                         </div> :
                         undefined}
                     <h2 style={this.state.invalidAttachments ? { color: 'red' } : null}>
