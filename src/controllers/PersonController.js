@@ -4,7 +4,9 @@ import { getLoggedPerson, updatePerson } from '../services/PersonService'
 
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
+const programmeService = require('../services/ProgrammeService')
 const emailInviteService = require('../services/EmailInviteService')
+const emailService = require('../services/EmailService')
 
 /**
  * Get persons that are of interest to the person doing query
@@ -111,7 +113,16 @@ async function getAllPersons(res) {
 
 export async function invitePerson(req, res) {
     await checkUserIsAdminOrManager(req)
-    await emailInviteService.createEmailInviteForRole(req.body)
+    const { programmes, role, email, firstname, lastname } = req.body
+    const roleId = await roleService.getRoleId(role)
+    const newPerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, roleId)
+    if (!newPerson.errorMsg) {
+        const programmesWithNames = await programmeService.getProgrammesByIds(programmes)
+        await emailService.sendAddedToGrappa(programmesWithNames.serialize(), role, email, firstname, lastname)
+        res.status(201).send(newPerson)
+    } else {
+        res.status(400).send(newPerson)
+    }
     res.status(200).end()
 }
 
@@ -127,8 +138,8 @@ export async function useSecondaryEmail(req, res) {
 
 export const addOutsidePerson = async (req, res) => {
     await checkUserIsAdminOrManager(req)
-    const { units, firstname, lastname, email } = req.body
-    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, units)
+    const { programmes, firstname, lastname, email } = req.body
+    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, 'grader')
     if (!outsidePerson.errorMsg) {
         res.status(201).send(outsidePerson)
     } else {

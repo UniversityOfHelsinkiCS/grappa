@@ -2,6 +2,7 @@ const knex = require('../db/connection').getKnex()
 const roleService = require('./RoleService')
 const PersonWithRole = require('../db/models/person_with_role')
 const RoleRequest = require('../db/models/role_request')
+const Person = require('../db/models/person')
 
 const personSchema = [
     'person.personId',
@@ -108,10 +109,9 @@ export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(pe
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
     .where('personWithRole.programmeId', programmeId)
 
-export const createOutsidePerson = async (firstname, lastname, email, programmes) => {
+export const createOutsidePerson = async (firstname, lastname, email, programmes, roleId) => {
     try {
         const person = await savePerson({ firstname, lastname, email })
-        const roleId = await roleService.getRoleId('grader')
         const personRoles = await Promise.all(programmes
             .map(programmeId =>
                 roleService.savePersonRole({
@@ -147,4 +147,10 @@ export const getPendingPersonsWithRole = async (roleId, programmeId) => (
             } },
             'programme']
         })
+)
+
+export const getPersonByEmail = async email => Person.where({ email }).fetch()
+
+export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
+    person.set({ studentNumber, shibbolethId }).save()
 )

@@ -31,6 +31,7 @@ export async function roleInvite(req, res) {
         return
     }
 
+    /*
     const person = await personService.getLoggedPerson(req)
     const personWithRole = {
         roleId: inviteData.role,
@@ -39,6 +40,7 @@ export async function roleInvite(req, res) {
     }
 
     await roleService.savePersonRole(personWithRole)
+    */
     await emailInviteService.markTokenUsed(req.params.token)
 
     res.status(200).end()

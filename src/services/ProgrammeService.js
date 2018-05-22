@@ -7,9 +7,9 @@ const programmeSchema = [
     'programme.facultyId'
 ]
 
-export const getProgrammeById = async (id) => {
-    return Programme.where('programmeId', id).fetch()
-}
+export const getProgrammeById = async id => Programme.where('programmeId', id).fetch()
+
+export const getProgrammesByIds = async ids => Programme.query(qb => qb.whereIn('programmeId', ids)).fetchAll()
 
 export const getAllProgrammes = () =>
     knex.select(programmeSchema).from('programme').then(programme => programme)
