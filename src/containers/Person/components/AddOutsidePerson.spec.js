@@ -6,12 +6,14 @@ import { Message } from 'semantic-ui-react'
 import { AddOutsidePerson } from './AddOutsidePerson'
 
 const programmes = [{ programmeId: 1, name: 'programme 1' }, { programmeId: 2, name: 'programme 2' }]
+const roles = ['grader', 'manager', 'print_person']
 
 test('Outsider submission is sent when all parameters in state', (t) => {
     const handleSubmit = sinon.spy()
     const addOutsider = sinon.spy()
     const component = shallow(<AddOutsidePerson
         programmes={programmes}
+        roles={roles}
         addOutsider={addOutsider}
         handleSubmit={handleSubmit}
     />)
@@ -19,7 +21,7 @@ test('Outsider submission is sent when all parameters in state', (t) => {
     event.preventDefault = () => {
         // console.log('prevented')
     }
-    component.setState({ firstname: 'Ding', lastname: 'Dong', email: 'dd@gg.bet', units: [1, 2] })
+    component.setState({ firstname: 'Ding', lastname: 'Dong', email: 'dd@gg.bet', programmes: [1, 2], role: 'grader' })
     component.instance().handleSubmit(event)
 
     t.truthy(addOutsider.calledOnce)
@@ -29,6 +31,7 @@ test('Outsider submission is sent when all parameters in state', (t) => {
 test('Outsider submission is not sent when all parameters not provided', (t) => {
     const addOutsider = sinon.spy()
     const component = shallow(<AddOutsidePerson
+        roles={roles}
         programmes={programmes}
         addOutsider={addOutsider}
     />)
@@ -36,20 +39,20 @@ test('Outsider submission is not sent when all parameters not provided', (t) => 
     event.preventDefault = () => {
         // console.log('prevented')
     }
-    component.setState({ firstname: '', lastname: 'Dong', email: 'dd@gg.bet', units: [1, 2] })
+    component.setState({ firstname: '', lastname: 'Dong', email: 'dd@gg.bet', programmes: [1, 2], role: 'grader' })
     component.instance().handleSubmit(event)
     t.truthy(addOutsider.notCalled)
     t.falsy(component.state('formSubmitted'))
 
-    component.setState({ firstname: 'Ding', lastname: '', email: 'dd@gg.bet', units: [1, 2] })
+    component.setState({ firstname: 'Ding', lastname: '', email: 'dd@gg.bet', programmes: [1, 2] })
     component.instance().handleSubmit(event)
     t.truthy(addOutsider.notCalled)
 
-    component.setState({ firstname: 'Ding', lastname: 'Dong', email: '', units: [1, 2] })
+    component.setState({ firstname: 'Ding', lastname: 'Dong', email: '', programmes: [1, 2] })
     component.instance().handleSubmit(event)
     t.truthy(addOutsider.notCalled)
 
-    component.setState({ firstname: 'Ding', lastname: 'Dong', email: 'dd@gg.bet', units: [] })
+    component.setState({ firstname: 'Ding', lastname: 'Dong', email: 'dd@gg.bet', programmes: [] })
     component.instance().handleSubmit(event)
     t.truthy(addOutsider.notCalled)
 })
@@ -57,6 +60,7 @@ test('Outsider submission is not sent when all parameters not provided', (t) => 
 test('Outsider submission is not sent when units is not an array', (t) => {
     const addOutsider = sinon.spy()
     const component = shallow(<AddOutsidePerson
+        roles={roles}
         programmes={programmes}
         addOutsider={addOutsider}
     />)
@@ -64,7 +68,7 @@ test('Outsider submission is not sent when units is not an array', (t) => {
     event.preventDefault = () => {
         // console.log('prevented')
     }
-    component.setState({ firstname: '', lastname: 'Dong', email: 'dd@gg.bet', units: 1 })
+    component.setState({ firstname: '', lastname: 'Dong', email: 'dd@gg.bet', programmes: 1 })
     component.instance().handleSubmit(event)
     t.truthy(addOutsider.notCalled)
     t.falsy(component.state('formSubmitted'))
@@ -73,6 +77,7 @@ test('Outsider submission is not sent when units is not an array', (t) => {
 test('Submission message is presented if the submission has been attempted', (t) => {
     const message = sinon.spy()
     const component = shallow(<AddOutsidePerson
+        roles={roles}
         programmes={programmes}
         submissionMessage={message}
         addOutsider={() => {}}
