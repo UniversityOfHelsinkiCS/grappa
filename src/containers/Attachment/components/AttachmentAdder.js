@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone'
 import { arrayOf, func, number } from 'prop-types'
 import { attachmentType } from '../../../util/types'
 
+const zoneStyle = { borderStyle: 'dotted', cursor: 'pointer', maxWidth: 300, maxHeight: 300 }
 
 export default class AttachmentAdder extends Component {
     state = {
@@ -57,12 +58,12 @@ export default class AttachmentAdder extends Component {
 
     getFileNumberLabel = () => {
         if (!this.props.attachments || this.props.attachments.length < 1) {
-            return <h3>No attachments to be uploaded</h3>
+            return <h3>No files selected</h3>
         }
         return (
             <h3>
-                {(this.props.attachments.length === 1) ? 'One attachment to be uploaded:' :
-                    `${this.props.attachments.length} attachments to be uploaded:`}
+                {(this.props.attachments.length === 1) ? 'One file to be uploaded:' :
+                    `${this.props.attachments.length} files to be uploaded:`}
             </h3>
         )
     }
@@ -87,9 +88,9 @@ export default class AttachmentAdder extends Component {
                     multiple={false}
                     accept="application/pdf"
                 >
-                    <div className="field" style={{ borderStyle: 'dashed' }}>
+                    <div style={zoneStyle}>
                         <p className="upload-p">
-                            Click to navigate to the file or drag and drop them here.
+                            Click or drag files here.
                         </p>
                         <br />
                     </div>
@@ -100,10 +101,10 @@ export default class AttachmentAdder extends Component {
     }
 
     render() {
-        const pdfFontSize = `${(this.state.rejected * 50) + 100}%`
+        //const pdfFontSize = `${(this.state.rejected * 50) + 100}%`
         return (
             <div>
-                <h3>Upload <span style={{ fontSize: pdfFontSize }}>pdf</span> attachments</h3>
+                {/*<h3>Upload <span style={{ fontSize: pdfFontSize }}>pdf</span> attachments</h3>*/}
                 {this.renderDropzone()}
                 {this.props.attachments ? this.getFileList() : undefined}
                 {this.props.uploadAttachments && this.props.attachments.length > 0 ?

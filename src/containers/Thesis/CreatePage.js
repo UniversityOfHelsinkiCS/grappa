@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux'
-import { Dropdown, Message } from 'semantic-ui-react'
+import { Dropdown, Label, Header } from 'semantic-ui-react'
 import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
@@ -129,8 +129,13 @@ export class ThesisCreatePage extends Component {
             }
             return obj
         })
-        return <Dropdown placeholder="Select grader" fluid multiple search selection options={graders} onChange={this.changeGraders} />
+        return <Dropdown placeholder="Select graders" fluid multiple search selection options={graders} onChange={this.changeGraders} />
     }
+
+    /*
+    <label className="ui primary button" htmlFor="test" >COOL BEANS</label>
+    <input style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }} id="test" type="file" onChange={this.onDrop} />
+    */
 
     render() {
         const programme = this.props.programmes.find(p => p.programmeId === parseInt(this.state.thesis.programmeId, 10))
@@ -151,32 +156,28 @@ export class ThesisCreatePage extends Component {
                         thesis={this.state.thesis}
                         validationErrors={this.state.validationErrors}
                     />
+                    <Header as="h3" dividing>Graders of the thesis</Header>
                     {this.renderGraderSelector()}
                     {programme !== undefined ?
                         <div>
-                            <p><b>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</b></p>
+                            <p>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</p>
                             <AddOutsidePerson programmes={[programme]} roles={['grader']} addOutsider={this.addNewGrader} />
                         </div> :
                         undefined}
-                    <h2 style={this.state.invalidAttachments ? { color: 'red' } : null}>
-                        Upload at least thesis file and the review file
-                    </h2>
+                    <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>
+                        Upload thesis and review file <Header.Subheader>You can add additional files as well. All need to be in pdf format.</Header.Subheader>
+                    </Header>
                     <AttachmentAdder
                         attachments={this.state.attachments}
                         changeList={this.editAttachmentList}
                     />
                     <br />
-                    <div className="two fields">
-                        <div className="field">
-                            {programme ?
-                                <Message color="teal">{programme.name}</Message> :
-                                <Message color="red">Please select the unit first</Message>
-                            }
-                        </div>
-                        <div className="field">
-                            <Dropdown placeholder="Select meeting" fluid selection options={this.formatMeetings()} onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })} />
-                        </div>
-                    </div>
+                    <Header as="h3" dividing>Select the councilmeeting</Header>
+                    {programme ?
+                        <Label basic size="large" color="teal">{programme.name}</Label> :
+                        <Label basic size="large" color="red">Please select the unit first.</Label>
+                    }
+                    <Dropdown placeholder="Select meeting" selection options={this.formatMeetings()} onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })} />
                     {/*
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}

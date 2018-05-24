@@ -115,12 +115,14 @@ export class AddOutsidePerson extends Component {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === ACCORDION_OPEN}>
                             <Form onSubmit={this.handleSubmit} >
+                                <label style={{ fontSize: '13px' }}><b>Unit</b></label>
                                 {unitOptions.length > 1 ?
                                     <Dropdown name="programmes" placeholder="Select units" fluid multiple selection options={unitOptions} onChange={this.handleInputChange} /> :
                                     <Button disabled>{unitOptions[0].text}</Button>
                                 }
+                                <label style={{ fontSize: '13px' }}><b>Role</b></label>
                                 {roleOptions.length > 1 ?
-                                    <Dropdown name="role" placeholder="Select role" selection options={roleOptions} onChange={this.handleInputChange} /> :
+                                    <Dropdown name="role" placeholder="Select role" fluid selection options={roleOptions} onChange={this.handleInputChange} /> :
                                     <Button disabled>{roleOptions[0].text}</Button>
                                 }
                                 <Form.Group>
