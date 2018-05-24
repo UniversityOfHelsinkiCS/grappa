@@ -123,7 +123,6 @@ export async function invitePerson(req, res) {
     } else {
         res.status(400).send(newPerson)
     }
-    res.status(200).end()
 }
 
 export async function useSecondaryEmail(req, res) {
@@ -139,7 +138,8 @@ export async function useSecondaryEmail(req, res) {
 export const addOutsidePerson = async (req, res) => {
     await checkUserIsAdminOrManager(req)
     const { programmes, firstname, lastname, email } = req.body
-    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, 'grader')
+    const roleId = await roleService.getRoleId('grader')
+    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, roleId)
     if (!outsidePerson.errorMsg) {
         res.status(201).send(outsidePerson)
     } else {
