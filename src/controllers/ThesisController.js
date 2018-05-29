@@ -84,6 +84,8 @@ export async function saveThesisForm(req, res) {
 
         // TODO refactor!!!
 
+        await permissionService.checkUserHasRightToAddAgreement(req, thesis.studyfieldId)
+
         // Order so that agreementId is available to save attachments.
         const agreement = await agreementService.createFakeAgreement(trx)
         const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId, trx)
