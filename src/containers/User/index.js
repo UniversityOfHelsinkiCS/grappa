@@ -21,13 +21,13 @@ export class UserPage extends Component {
     handleRoleChange = async (event) => {
         if (!event.target.value) return
         const uid = event.target.value
-        const person = this.props.persons.find(p => p.shibbolethId === uid)
+        const person = this.props.persons.find(p => p.shibbolethId === uid || `${p.firstname} ${p.lastname}` === uid)
         await swapDevUser({
             uid: person.shibbolethId,
             givenname: person.firstname,
             sn: person.lastname,
             mail: person.email,
-            'unique-code': `'urn:schac:personalUniqueCode:int:studentID:helsinki.fi:${person.studentNumber}}`
+            'unique-code': `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:${person.studentNumber}`
         })
         this.props.getUser()
     }
@@ -48,8 +48,8 @@ export class UserPage extends Component {
 
     render() {
         const unitManagers = this.props.managers.filter(manager => manager.programmeId === parseInt(this.state.programmeId, 10))
-        const isStaff = (this.props.roles && this.props.roles.length > 0) ||
-            (this.props.user && this.props.user.affiliation && this.props.user.affiliation.length && this.props.user.affiliation.includes('staff'))
+        const isStaff = this.props.user && ((this.props.user.roles && this.props.user.roles.length > 0) ||
+            (this.props.user.affiliation && this.props.user.affiliation.length && this.props.user.affiliation.includes('staff')))
         return (
             <div>
                 <div className="ui segment">
@@ -82,7 +82,7 @@ export class UserPage extends Component {
                         <h3> Below are the managers for the selected unit for any additional queries</h3>
                         <List>
                             {unitManagers.map(manager => (
-                                <List.Item as="a" href={`mailto:${manager.person.email}`}>
+                                <List.Item key={manager.personId} as="a" href={`mailto:${manager.person.email}`}>
                                     {`${manager.person.firstname} ${manager.person.lastname}`}
                                 </List.Item>
                             ))}

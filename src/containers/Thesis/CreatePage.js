@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux'
-import { Dropdown, Label, Header } from 'semantic-ui-react'
+import { Dropdown, Header } from 'semantic-ui-react'
 import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
@@ -11,7 +11,7 @@ import { personType, programmeType, studyfieldType, councilmeetingType } from '.
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
 import AttachmentAdder from '../Attachment/components/AttachmentAdder'
-// import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
+import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
 import { emptyThesisData, thesisValidation } from '../../util/theses'
 import LoadingIndicator from '../LoadingIndicator'
 import AddOutsidePerson from '../Person/components/AddOutsidePerson'
@@ -172,20 +172,20 @@ export class ThesisCreatePage extends Component {
                         changeList={this.editAttachmentList}
                     />
                     <br />
+                    {/*
                     <Header as="h3" dividing>Select the councilmeeting</Header>
                     {programme ?
                         <Label basic size="large" color="teal">{programme.name}</Label> :
                         <Label basic size="large" color="red">Please select the unit first.</Label>
                     }
                     <Dropdown placeholder="Select meeting" selection options={this.formatMeetings()} onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })} />
-                    {/*
+                    */}
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}
                         chosenMeetingId={this.state.thesis.councilmeetingId}
                         councilmeetings={this.props.councilmeetings}
                         programmes={this.props.programmes}
                     />
-                    */}
                 </div>
                 <br />
                 <button className="ui positive button" onClick={this.toggleModal}>
