@@ -82,7 +82,6 @@ export class PersonRoleManagePage extends Component {
     };
 
     handleGrantRole = (e, data) => {
-        console.log(data.data)
         this.props.grantRole(data.data)
     }
 
@@ -104,7 +103,6 @@ export class PersonRoleManagePage extends Component {
 
     render() {
         if (this.props.user.roles) {
-            console.log(this.props.user)
             const programmes = this.checkUserRights()
             const selected = this.state.person ? [this.state.person] : []
             return (
