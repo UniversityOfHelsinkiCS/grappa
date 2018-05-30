@@ -26,3 +26,17 @@ export const updateRole = (role) => {
     const method = 'put'
     return callController(route, prefix, role, method)
 }
+
+export const getRoleRequestsAction = () => {
+    const route = '/roles/requests'
+    const prefix = 'ROLE_GET_REQUESTS_'
+    const method = 'get'
+    return callController(route, prefix, method)
+}
+
+export const grantRoleAction = (data) => {
+    const route = '/roles/requests'
+    const prefix = 'ROLE_GRANT_ONE_'
+    const method = 'post'
+    return callController(route, prefix, data, method)
+}

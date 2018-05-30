@@ -22,7 +22,7 @@ test('has Dropzone element', (t) => {
 
 test('header informs no files uploaded when started', (t) => {
     const wrapper = shallow(defaultAttachmentAdder)
-    const noElementsHeader = 'No attachments to be uploaded'
+    const noElementsHeader = 'No files selected'
     t.truthy(wrapper.contains(noElementsHeader))
 })
 
@@ -35,7 +35,7 @@ test('headers changes when attachment is added', (t) => {
         changeList={sinon.spy()}
     />)
     const wrapper = shallow(adder)
-    const oneElementAddedHeader = 'One attachment to be uploaded:'
+    const oneElementAddedHeader = 'One file to be uploaded:'
     t.truthy(wrapper.contains(oneElementAddedHeader))
 })
 

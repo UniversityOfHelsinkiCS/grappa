@@ -1,28 +1,55 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { login, switchEmail } from './services/userActions'
-import { personType } from '../../util/types'
+import { List, Button, Segment } from 'semantic-ui-react'
+
+import { getUser, switchEmail, graderRoleRequest } from './services/userActions'
+import { personType, programmeType } from '../../util/types'
 import PersonSwitcher from '../Person/components/PersonSwitcher'
 import RoleExplain from './components/RoleExplain'
 import EmailSwitcher from './components/EmailSwitcher'
+import ProgrammeSelect from '../Unit/components/ProgrammeSelect'
+import { swapDevUser } from '../../util/apiConnection'
 
 export class UserPage extends Component {
+    state = { programmeId: undefined }
+
     componentDidMount() {
         document.title = 'Grappa: Main page'
     }
 
-    handleRoleChange = (event) => {
+    handleRoleChange = async (event) => {
         if (!event.target.value) return
-        const shibbolethId = event.target.value
-        this.props.login(shibbolethId)
+        const uid = event.target.value
+        const person = this.props.persons.find(p => p.shibbolethId === uid || `${p.firstname} ${p.lastname}` === uid)
+        await swapDevUser({
+            uid: person.shibbolethId,
+            givenname: person.firstname,
+            sn: person.lastname,
+            mail: person.email,
+            'unique-code': `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:${person.studentNumber}`
+        })
+        this.props.getUser()
     }
 
     handleEmailUpdate = (event) => {
         this.props.updateEmail(event.target.value)
     }
 
+    handleUnitChange = (event) => {
+        this.setState({ programmeId: event.target.value })
+    }
+
+    submitGraderRequest = async () => {
+        if (this.state.programmeId) {
+            this.props.graderRequest(this.state.programmeId).then(() => console.log('request submitted!'))
+        }
+    }
+
     render() {
+        const unitManagers = this.props.managers.filter(manager => manager.programmeId === parseInt(this.state.programmeId, 10))
+        const isStaff = this.props.user && ((this.props.user.roles && this.props.user.roles.length > 0) ||
+            (this.props.user.affiliation && this.props.user.affiliation.length && this.props.user.affiliation.includes('staff')))
         return (
             <div>
                 <div className="ui segment">
@@ -47,31 +74,53 @@ export class UserPage extends Component {
                     />
                     : null}
                 <RoleExplain user={this.props.user} />
+                {isStaff ?
+                    <Segment inverted color="green" tertiary >
+                        <h3>Do you need grader rights? Select a Unit from the dropdown and submit a request for new rights </h3>
+                        <ProgrammeSelect programmes={this.props.programmes} onChange={this.handleUnitChange} />
+                        {this.state.programmeId ? <Button primary onClick={this.submitGraderRequest}>Request rights</Button> : undefined}
+                        <h3> Below are the managers for the selected unit for any additional queries</h3>
+                        <List>
+                            {unitManagers.map(manager => (
+                                <List.Item key={manager.personId} as="a" href={`mailto:${manager.person.email}`}>
+                                    {`${manager.person.firstname} ${manager.person.lastname}`}
+                                </List.Item>
+                            ))}
+                        </List>
+                    </Segment> : undefined
+                }
             </div>
         )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    login(data) {
-        dispatch(login(data))
+    getUser() {
+        dispatch(getUser())
     },
     updateEmail(useSecondaryEmail) {
         dispatch(switchEmail(useSecondaryEmail))
-    }
+    },
+    graderRequest: programmeId =>
+        dispatch(graderRoleRequest(programmeId))
 })
 
 const mapStateToProps = state => ({
     user: state.user,
-    persons: state.persons
+    persons: state.persons,
+    managers: state.managers,
+    programmes: state.programmes
 })
 
 const { arrayOf, func } = PropTypes
 UserPage.propTypes = {
     user: personType.isRequired,
     persons: arrayOf(personType).isRequired,
-    login: func.isRequired,
-    updateEmail: func.isRequired
+    managers: arrayOf(personType).isRequired,
+    programmes: arrayOf(programmeType).isRequired,
+    getUser: func.isRequired,
+    updateEmail: func.isRequired,
+    graderRequest: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage)

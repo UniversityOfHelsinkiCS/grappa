@@ -12,7 +12,10 @@ import studyfieldReducer from '../containers/Studyfield/services/studyfieldReduc
 import programmeReducer from '../containers/Unit/services/programmeReducer'
 import emailReducer from '../containers/Email/services/emailReducer'
 import personReducer from '../containers/Person/services/personReducer'
+import graderReducer from '../containers/Person/services/graderReducer'
+import managerReducer from '../containers/Person/services/managerReducer'
 import roleReducer from '../containers/Role/services/roleReducer'
+import roleRequestReducer from '../containers/Role/services/roleRequestReducer'
 import notificationsReducer from '../containers/Notification/services/notificationsReducer'
 import eventMessageReducer from '../containers/EventMessage/services/eventMessageReducer'
 import inviteReducer from '../containers/Invite/services/inviteReducer'
@@ -25,10 +28,13 @@ const combinedReducers = combineReducers({
     user: userReducer,
     councilmeetings: councilmeetingReducer,
     roles: roleReducer,
+    roleRequests: roleRequestReducer,
     theses: thesisReducer,
     studyfields: studyfieldReducer,
     programmes: programmeReducer,
     emails: emailReducer,
+    graders: graderReducer,
+    managers: managerReducer,
     persons: personReducer,
     notifications: notificationsReducer,
     eventMessage: eventMessageReducer,
@@ -36,18 +42,11 @@ const combinedReducers = combineReducers({
     statistics: statisticsReducer
 })
 
-const persistedState = localStorage.getItem('user') ? { user: JSON.parse(localStorage.getItem('user')) } : {}
-
 // eslint-disable-next-line
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 const store = createStore(
     combinedReducers,
-    persistedState,
     composeEnhancers(applyMiddleware(thunk, handleRequest))
 )
-
-store.subscribe(() => {
-    localStorage.setItem('user', JSON.stringify(store.getState().user))
-})
 
 export default store

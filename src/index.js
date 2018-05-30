@@ -18,6 +18,10 @@ import './media/App.css'
 // routes
 import routes from './util/routes'
 
+try {
+    Raven.config('http://542d335e623743528aa5f0e1b85346d1@toska.cs.helsinki.fi:8500/6').install() // eslint-disable-line
+} catch (e) { } // eslint-disable-line
+
 const killServiceWorkers = () => {
     if (window.navigator && navigator.serviceWorker) {
         navigator.serviceWorker.getRegistrations()
