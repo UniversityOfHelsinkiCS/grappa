@@ -2,6 +2,7 @@ const router = require('express').Router()
 const bodyParser = require('body-parser')
 
 const jsonParser = bodyParser.json()
+const auth = require('../middleware/auth')
 const emailDraftController = require('../controllers/EmailDraftController')
 
 /**
@@ -22,7 +23,7 @@ const emailDraftController = require('../controllers/EmailDraftController')
  *      }
  * ]
  */
-router.get('/', (req, res) => {
+router.get('/', auth.checkManagerOrAdmin, (req, res) => {
     emailDraftController.getEmailDrafts(req, res)
 })
 
@@ -38,7 +39,7 @@ router.get('/', (req, res) => {
  * @apiParam {String} type Draft type
  * @apiParam {Number} [programme] Programme id of related programme
  */
-router.post('/', jsonParser, (req, res) => {
+router.post('/', jsonParser, auth.checkManagerOrAdmin, (req, res) => {
     emailDraftController.saveEmailDraft(req, res)
 })
 
@@ -54,7 +55,7 @@ router.post('/', jsonParser, (req, res) => {
  * @apiParam {String} body Email body
  * @apiParam {Number} [programme] Programme id of related programme
  */
-router.post('/:id', jsonParser, (req, res) => {
+router.post('/:id', jsonParser, auth.checkManagerOrAdmin, (req, res) => {
     emailDraftController.updateEmailDraft(req, res)
 })
 
@@ -67,7 +68,7 @@ router.post('/:id', jsonParser, (req, res) => {
  *
  * @apiParam {Number} id Draft id
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth.checkManagerOrAdmin, (req, res) => {
     emailDraftController.deleteEmailDraft(req, res)
 })
 

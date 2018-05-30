@@ -5,7 +5,7 @@ import { getLoggedPerson, updatePerson } from '../services/PersonService'
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
 const programmeService = require('../services/ProgrammeService')
-const emailInviteService = require('../services/EmailInviteService')
+// const emailInviteService = require('../services/EmailInviteService')
 const emailService = require('../services/EmailService')
 
 /**

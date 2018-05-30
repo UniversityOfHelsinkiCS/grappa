@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const thesisController = require('../controllers/ThesisController')
 
 const jsonParser = bodyParser.json()
+const auth = require('../middleware/auth')
 const attachment = require('../middleware/attachments')
 
 /**
@@ -40,7 +41,7 @@ router.get('/', (req, res, next) => thesisController.getTheses(req, res).catch(n
  * @apiSuccess thesis Updated thesis
  * @apiSuccess roles Updated roles
  */
-router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(req, res).catch(next))
+router.put('/', jsonParser, auth.checkStaff, (req, res, next) => thesisController.updateThesis(req, res).catch(next))
 
 /**
  * @api {post} theses/ Save new thesis
@@ -72,7 +73,7 @@ router.put('/', jsonParser, (req, res, next) => thesisController.updateThesis(re
  * @apiSuccess thesis New thesis
  * @apiSuccess roles New roles
  */
-router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next))
+router.post('/', attachment, auth.checkStaff, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next))
 
 /**
  * @api {put} theses/printed Mark theses as printed
@@ -83,6 +84,7 @@ router.post('/', attachment, (req, res, next) => thesisController.saveThesisForm
  *
  * @apiParam {Number[]} body theses ids
  */
-router.put('/printed', jsonParser, (req, res, next) => thesisController.markPrinted(req, res).catch(next))
+router.put('/printed', jsonParser, auth.checkStaff, (req, res, next) =>
+    thesisController.markPrinted(req, res).catch(next))
 
 module.exports = router

@@ -76,13 +76,12 @@ export const getUnhandledRoleRequests = async (req, res) => {
 export const handleRoleRequest = async (req, res) => {
     const { roleRequestId, granted } = req.body
     await checkUserIsAdminOrManager(req)
-    const user = await personService.getLoggedPerson(req)
-    const roleRequest = await roleService.grantRoleRequest(roleRequestId, granted, user)
-    const { email } = user
-    const role = await roleService.getRoleById(roleRequest.get('roleId'))
-    const programme = await programmeService.getProgrammeById(roleRequest.get('programmeId'))
-    const granter = await personService.getPersonById(roleRequest.get('granterId'))
-    await emailService.sendRoleRequestNotification(email, role.get('name'), granted, `${granter.firstname} ${granter.lastname}`, programme.get('name'))
+    const granter = await personService.getLoggedPerson(req)
+    const roleRequest = await roleService.grantRoleRequest(roleRequestId, granted, granter).then(request => request.serialize())
+    const requester = await personService.getPersonById(roleRequest.personId)
+    const role = await roleService.getRoleById(roleRequest.roleId)
+    const programme = await programmeService.getProgrammeById(roleRequest.programmeId)
+    await emailService.sendRoleRequestNotification(requester.email, role.get('name'), granted, `${granter.firstname} ${granter.lastname}`, programme.get('name'))
     const roleRequests = await roleService.findUnhandledRoleRequests()
     res.status(201).json(roleRequests)
 }
