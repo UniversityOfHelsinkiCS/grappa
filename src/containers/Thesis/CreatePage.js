@@ -77,7 +77,7 @@ export class ThesisCreatePage extends Component {
 
     addNewGrader = (data) => {
         const { firstname, lastname, email } = data
-        const programmeId = data.programmes[0].value
+        const programmeId = data.programmes[0]
         const role = 'grader'
         const person = { firstname, lastname, email }
         const roleRequest = { programmeId, role }
@@ -131,11 +131,6 @@ export class ThesisCreatePage extends Component {
         })
         return <Dropdown placeholder="Select graders" fluid multiple search selection options={graders} onChange={this.changeGraders} />
     }
-
-    /*
-    <label className="ui primary button" htmlFor="test" >COOL BEANS</label>
-    <input style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }} id="test" type="file" onChange={this.onDrop} />
-    */
 
     render() {
         const programme = this.props.programmes.find(p => p.programmeId === parseInt(this.state.thesis.programmeId, 10))
