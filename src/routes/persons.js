@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
+const auth = require('../middleware/auth')
 const personController = require('../controllers/PersonController')
 
 const jsonParser = bodyParser.json()
@@ -55,7 +56,8 @@ router.get('/', (req, res, next) => personController.getPersons(req, res).catch(
  * @apiParam {Number} role Role id of given role
  * @apiParam {String} email Email where invitation is sent
  */
-router.post('/invite', jsonParser, (req, res, next) => personController.invitePerson(req, res).catch(next))
+router.post('/invite', jsonParser, auth.checkManagerOrAdmin, (req, res, next) =>
+    personController.invitePerson(req, res).catch(next))
 
 /**
  * @api {put} persons/email switch between user emails
@@ -66,7 +68,8 @@ router.post('/invite', jsonParser, (req, res, next) => personController.invitePe
  */
 router.put('/email', jsonParser, (req, res, next) => personController.useSecondaryEmail(req, res).catch(next))
 
-router.post('/add_outsider', jsonParser, (req, res, next) => personController.addOutsidePerson(req, res).catch(next))
+router.post('/add_outsider', jsonParser, auth.checkManagerOrAdmin, (req, res, next) =>
+    personController.addOutsidePerson(req, res).catch(next))
 
 router.get('/managers', jsonParser, (req, res, next) => personController.getManagers(req, res).catch(next))
 

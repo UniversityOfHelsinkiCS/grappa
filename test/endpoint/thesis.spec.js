@@ -1,6 +1,8 @@
 import test from 'ava'
 import sinon from 'sinon'
 
+const mailer = require('../../src/util/mailer')
+
 process.env.DB_SCHEMA = 'thesis_test'
 
 const { createPerson, initDb, createToken } = require('../utils')
@@ -187,7 +189,6 @@ test('thesisForm post & creates id with attachment', async (t) => {
 
 test('thesisForm post sends emails', async (t) => {
     t.plan(8)
-    const mailer = require('../../src/util/mailer')
     const mailSpy = sinon.stub(mailer, 'sendEmail')
     const { thesisForm } = await generateThesisForm()
     const form = Object.assign({}, thesisForm)
@@ -331,7 +332,7 @@ test('admin can see all theses', async (t) => {
     const { personId: supervisorId } = await createPerson()
     const { personId: adminId } = await createAdmin()
 
-    const theses = await Promise.all([
+    const theses2 = await Promise.all([
         await insertThesisWithAuthorAndPersonInRole(authorId),
         await insertThesisWithAuthorAndPersonInRole(authorId, respProfId, 4),
         await insertThesisWithAuthorAndPersonInRole(authorId, supervisorId, 6),
@@ -345,7 +346,7 @@ test('admin can see all theses', async (t) => {
     t.is(res.status, 200)
 
     const foundTheses = res.body
-    theses.map(thesis => thesis.title).forEach((title) => {
+    theses2.map(thesis => thesis.title).forEach((title) => {
         t.truthy(foundTheses.find(thesis => thesis.title === title),
             `Title ${title} was not found in ${JSON.stringify(foundTheses)}`)
     })

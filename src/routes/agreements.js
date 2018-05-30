@@ -2,6 +2,9 @@ const router = require('express').Router()
 const bodyParser = require('body-parser')
 
 const jsonParser = bodyParser.json()
+
+const auth = require('../middleware/auth')
+
 const agreementController = require('../controllers/AgreementController')
 
 /**
@@ -20,6 +23,7 @@ router.get('/', (req, res, next) => agreementController.getAllAgreements(req, re
  *
  * @apiDescription TODO: Fix documentation when we start using this feature
  */
-router.post('/', jsonParser, (req, res, next) => agreementController.saveAgreementForm(req, res).catch(next))
+router.post('/', jsonParser, auth.checkStaff, (req, res, next) =>
+    agreementController.saveAgreementForm(req, res).catch(next))
 
 module.exports = router

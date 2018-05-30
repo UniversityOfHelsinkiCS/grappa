@@ -59,5 +59,5 @@ test('save role test fail', async (t) => {
         .send({ roleId: 5, personId, programmeId: 1 })
 
     t.is(res.status, 500)
-    t.is(res2.status, 500)
+    t.is(res2.status, 403)
 })

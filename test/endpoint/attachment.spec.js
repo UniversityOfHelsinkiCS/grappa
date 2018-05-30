@@ -39,7 +39,7 @@ test('attachment post permissions checked', async (t) => {
         .field('json', JSON.stringify({ agreementId }))
         .attach('otherFile', './LICENSE')
 
-    t.is(res.status, 500)
+    t.is(res.status, 403)
 })
 
 test('attachment permissions are checked on delete', async (t) => {
@@ -54,7 +54,7 @@ test('attachment permissions are checked on delete', async (t) => {
         .returning('personId')
     const res2 = await request(await makeApp(person[0]))
         .del(`/attachments/${res1.body[0].attachmentId}`)
-    t.is(res2.status, 500)
+    t.is(res2.status, 403)
 })
 
 test('attachment can be deleted', async (t) => {

@@ -191,7 +191,7 @@ test('meeting with theses cant be deleted', async (t) => {
     t.is(res.status, 500)
 })
 
-test('normal people can\'t create meetings', async (t) => {
+test('normal people can not create meetings', async (t) => {
     const person = await createPerson('email@here.com')
     const councilMeeting = generateCouncilMeeting()
     const app = await makeApp(person.personId)
@@ -199,10 +199,10 @@ test('normal people can\'t create meetings', async (t) => {
     const res = await request(app)
         .post('/councilmeetings')
         .send(councilMeeting)
-    t.is(res.status, 500)
+    t.is(res.status, 403)
 })
 
-test('normal people can\'t edit meetings', async (t) => {
+test('normal people can not edit meetings', async (t) => {
     const councilMeeting = generateCouncilMeeting()
     const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
@@ -214,10 +214,10 @@ test('normal people can\'t edit meetings', async (t) => {
     const res = await request(app2)
         .put(`/councilmeetings/${councilMeetingId}`)
         .send(councilMeeting)
-    t.is(res.status, 500)
+    t.is(res.status, 403)
 })
 
-test('normal people can\'t delete meetings', async (t) => {
+test('normal people can not delete meetings', async (t) => {
     const councilMeeting = generateCouncilMeeting()
     const app = await makeApp(1)
     const responseMeeting = await validPost(t, app, councilMeeting)
@@ -228,5 +228,5 @@ test('normal people can\'t delete meetings', async (t) => {
 
     const res = await request(app2)
         .del(`/councilmeetings/${councilMeetingId}`)
-    t.is(res.status, 500)
+    t.is(res.status, 403)
 })
