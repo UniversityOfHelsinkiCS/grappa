@@ -32,14 +32,45 @@ module.exports.checkAuth = async (req, res, next) => {
 module.exports.checkAdmin = async (req, res, next) => {
     const user = await personService.getLoggedPerson(req)
     try {
-        const roles = await roleService.getRoles(user.personId)
-
-        if (roles.filter(role => role.name === 'admin').length > 0) {
+        const roles = await roleService.getUsersRoles(user)
+        if (roles.filter(role => role.role.name === 'admin').length > 0) {
             next()
         } else {
-            res.status(404).end()
+            res.status(403).json({ error: 'denied' })
         }
     } catch (err) {
-        res.status(404).end()
+        res.status(520).json({ error: 'something went wrong' })
+    }
+}
+
+module.exports.checkStaff = async (req, res, next) => {
+    const user = await personService.getLoggedPerson(req)
+    const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin', 'print_person']
+    const userRoles = await roleService.getUsersRoles(user)
+    try {
+        if (userRoles.filter(item => staffRoles.includes(item.role.name)).length > 0) {
+            next()
+        } else {
+            res.status(403).json({ error: 'denied' })
+        }
+    } catch (err) {
+        res.status(520).json({ error: 'something went wrong' })
+    }
+}
+
+module.exports.checkManagerOrAdmin = async (req, res, next) => {
+    const user = await personService.getLoggedPerson(req)
+    try {
+        const roles = await roleService.getUsersRoles(user)
+
+        if (roles.filter(role => (role.role.name === 'manager'
+            || role.role.name === 'admin')
+        ).length > 0) {
+            next()
+        } else {
+            res.status(403).json({ error: 'denied' })
+        }
+    } catch (err) {
+        res.status(520).json({ error: 'something went wrong' })
     }
 }

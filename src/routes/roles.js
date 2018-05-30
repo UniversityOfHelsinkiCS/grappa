@@ -2,6 +2,7 @@ const router = require('express').Router()
 const bodyParser = require('body-parser')
 
 const jsonParser = bodyParser.json()
+const auth = require('../middleware/auth')
 const roleController = require('../controllers/RoleController')
 
 /**
@@ -35,7 +36,7 @@ router.get('/available', (req, res, next) => {
  * @apiParam {Number} personId Person id
  * @apiParam {Number} programmeId Programme id
  */
-router.post('/', jsonParser, (req, res, next) => {
+router.post('/', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
     roleController.saveRole(req, res).catch(next)
 })
 
@@ -47,7 +48,7 @@ router.post('/', jsonParser, (req, res, next) => {
  * @apiParam {String} statement Statement text
  * @apiParam {Boolean} approved Is person role approved
  */
-router.put('/', jsonParser, (req, res, next) => {
+router.put('/', jsonParser, auth.checkStaff, (req, res, next) => {
     roleController.updateStatement(req, res).catch(next)
 })
 
@@ -60,7 +61,7 @@ router.put('/', jsonParser, (req, res, next) => {
  *
  * @apiParam {Number} id Role id
  */
-router.delete('/:id', jsonParser, (req, res, next) => {
+router.delete('/:id', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
     roleController.deleteRole(req, res).catch(next)
 })
 
@@ -68,11 +69,11 @@ router.post('/grader_request', jsonParser, (req, res, next) => {
     roleController.sendGraderRequest(req, res).catch(next)
 })
 
-router.get('/requests', (req, res, next) => {
+router.get('/requests', auth.checkManagerOrAdmin, (req, res, next) => {
     roleController.getUnhandledRoleRequests(req, res).catch(next)
 })
 
-router.post('/requests', jsonParser, (req, res, next) => {
+router.post('/requests', auth.checkManagerOrAdmin, jsonParser, (req, res, next) => {
     roleController.handleRoleRequest(req, res).catch(next)
 })
 

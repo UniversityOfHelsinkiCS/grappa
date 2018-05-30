@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const auth = require('../middleware/auth')
 const attachmentController = require('../controllers/AttachmentController')
 
 /**
@@ -9,7 +10,8 @@ const attachmentController = require('../controllers/AttachmentController')
  * @apiDescription Multipart post with attachment file & metadata
  * TODO: Describe metadata
  */
-router.post('/', (req, res, next) => attachmentController.saveAttachments(req, res).catch(next))
+router.post('/', auth.checkStaff, (req, res, next) =>
+    attachmentController.saveAttachments(req, res).catch(next))
 
 /**
  * @api {get} attachments/:ids Download attachments
@@ -29,6 +31,6 @@ router.get('/:ids', (req, res) => {
  *
  * @apiParam {Number} id Attachment id
  */
-router.delete('/:id', (req, res, next) => attachmentController.deleteAttachment(req, res).catch(next))
+router.delete('/:id', auth.checkStaff, (req, res, next) => attachmentController.deleteAttachment(req, res).catch(next))
 
 module.exports = router

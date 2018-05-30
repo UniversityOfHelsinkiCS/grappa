@@ -81,7 +81,6 @@ export async function saveThesisForm(req, res) {
     await validateThesis(thesis)
 
     const response = await knex.transaction(async (trx) => {
-
         // TODO refactor!!!
 
         await permissionService.checkUserHasRightToAddAgreement(req, thesis.studyfieldId)
