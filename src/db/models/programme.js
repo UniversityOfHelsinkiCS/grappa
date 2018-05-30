@@ -5,4 +5,4 @@ const Programme = bookshelf.Model.extend({
     idAttribute: 'programmeId'
 })
 
-module.exports = Programme
+module.exports = bookshelf.model('Programme', Programme)

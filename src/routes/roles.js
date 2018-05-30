@@ -64,4 +64,16 @@ router.delete('/:id', jsonParser, (req, res, next) => {
     roleController.deleteRole(req, res).catch(next)
 })
 
+router.post('/grader_request', jsonParser, (req, res, next) => {
+    roleController.sendGraderRequest(req, res).catch(next)
+})
+
+router.get('/requests', (req, res, next) => {
+    roleController.getUnhandledRoleRequests(req, res).catch(next)
+})
+
+router.post('/requests', jsonParser, (req, res, next) => {
+    roleController.handleRoleRequest(req, res).catch(next)
+})
+
 module.exports = router

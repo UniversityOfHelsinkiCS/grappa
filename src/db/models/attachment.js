@@ -5,4 +5,4 @@ const Attachment = bookshelf.Model.extend({
     tableName: 'attachment',
     idAttribute: 'attachmentId'
 })
-module.exports = Attachment
+module.exports = bookshelf.model('Attachment', Attachment)

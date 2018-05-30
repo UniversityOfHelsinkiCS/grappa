@@ -1,5 +1,8 @@
 const knex = require('../db/connection').getKnex()
 const roleService = require('./RoleService')
+const PersonWithRole = require('../db/models/person_with_role')
+const RoleRequest = require('../db/models/role_request')
+const Person = require('../db/models/person')
 
 const personSchema = [
     'person.personId',
@@ -7,19 +10,31 @@ const personSchema = [
     'email',
     'firstname',
     'lastname',
-    'isRetired',
-    'phone'
+    'isRetired'
 ]
 
 export function getAllPersons() {
     return knex.select(personSchema).from('person')
 }
 
+// TODO: replace this completely with getPersonsForRole
 export function getPersonsWithRole(roleId) {
     return knex.table('person').distinct('person.personId')
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .where('roleId', roleId)
         .select(personSchema)
+}
+
+export const getPersonsForRole = async (role) => {
+    const roleId = await roleService.getRoleId(role)
+    return PersonWithRole
+        .query({ where: { roleId }, columns: ['personId', 'roleId', 'programmeId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
 }
 
 export function getPersonsWithRoleInStudyfield(roleId, programmeId) {
@@ -93,10 +108,9 @@ export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(pe
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
     .where('personWithRole.programmeId', programmeId)
 
-export const createOutsidePerson = async (firstname, lastname, email, programmes) => {
+export const createOutsidePerson = async (firstname, lastname, email, programmes, roleId) => {
     try {
         const person = await savePerson({ firstname, lastname, email })
-        const roleId = await roleService.getRoleId('grader')
         const personRoles = await Promise.all(programmes
             .map(programmeId =>
                 roleService.savePersonRole({
@@ -111,3 +125,31 @@ export const createOutsidePerson = async (firstname, lastname, email, programmes
         return { errorMsg: 'Failed to create outside person with roles', error }
     }
 }
+
+export const getPersonsWithRoleForProgramme = async (roleId, programmeId) => (
+    PersonWithRole
+        .query({ where: { roleId, programmeId }, columns: ['personId', 'roleId', 'programmeId'], distinct: 'personId' })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
+)
+
+export const getPendingPersonsWithRole = async (roleId, programmeId) => (
+    RoleRequest
+        .query({ where: { roleId, programmeId, handled: false }, distinct: ['personId', 'roleRequestId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } },
+            'programme']
+        })
+)
+
+export const getPersonByEmail = async email => Person.where({ email }).fetch()
+
+export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
+    person.set({ studentNumber, shibbolethId }).save()
+)

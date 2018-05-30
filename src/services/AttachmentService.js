@@ -34,7 +34,6 @@ const attachmentSchema = [
 
 export async function saveAttachments(req, res, agreementId) {
     logger.debug('Saving to disk')
-    // TODO: Transaction
 
     try {
         const uploaded = new Promise((resolve, reject) => {
@@ -56,10 +55,11 @@ export async function saveAttachments(req, res, agreementId) {
 
         const agreement = await getAgreement(id)
         await checkUserHasRightToModifyAgreement(req, agreement)
-
-        const attachments = [].concat(...await Promise.all(
-            Object.keys(request.files)
-                .map(key => saveFileArray(id, request.files[key]))
+        const attachments = await knex.transaction(async trx => (
+            [].concat(...await Promise.all(
+                Object.keys(request.files)
+                    .map(key => saveFileArray(id, request.files[key], trx))
+            ))
         ))
         return { attachments, json: JSON.parse(request.body.json) }
     } catch (error) {

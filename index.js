@@ -1,19 +1,19 @@
 require('dotenv').config()
-
 require('babel-core/register')
 require('babel-polyfill')
-
 const express = require('express')
+const Raven = require('raven')
+
+const cors = require('cors')
+const gracefulExit = require('express-graceful-exit')
+const logger = require('./src/util/logger')
+const routes = require('./src/routes.js')
+const errorHandler = require('./src/util/errorHandler')
 
 const app = express()
-const logger = require('./src/util/logger')
-const gracefulExit = require('express-graceful-exit')
-const routes = require('./src/routes.js')
 const server = require('http').createServer(app)
-const errorHandler = require('./src/util/errorHandler')
-const cors = require('cors')
 
-module.exports = app
+Raven.config(process.env.SENTRY_ADDR).install()
 
 app.listen(3100, () => {
     logger.info('Grappa app listening on port 3100!')
@@ -23,7 +23,6 @@ app.use(gracefulExit.middleware(app))
 if (process.env.NODE_ENV === 'development') {
     app.use(cors())
 }
-
 
 routes(app)
 
@@ -40,3 +39,5 @@ process.on('SIGTERM', () => {
         socketio: app.settings.socketio
     })
 })
+
+module.exports = app

@@ -117,5 +117,16 @@ module.exports = [
         isRetired: false,
         studentNumber: ('24877292'),
         phone: '050 98765432'
+    },
+    {
+        personId: 13,
+        shibbolethId: 'dev',
+        email: 'testi-email@example.com',
+        firstname: 'Etunimi',
+        lastname: 'Sukunimi',
+        isRetired: false,
+        studentNumber: ('012345678'),
+        phone: '0000'
     }
+
 ]

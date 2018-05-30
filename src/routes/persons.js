@@ -68,4 +68,10 @@ router.put('/email', jsonParser, (req, res, next) => personController.useSeconda
 
 router.post('/add_outsider', jsonParser, (req, res, next) => personController.addOutsidePerson(req, res).catch(next))
 
+router.get('/managers', jsonParser, (req, res, next) => personController.getManagers(req, res).catch(next))
+
+router.get('/graders', jsonParser, (req, res, next) => personController.getProgrammeGraders(req, res).catch(next))
+
+router.post('/request_grader', jsonParser, (req, res, next) => personController.requestGrader(req, res).catch(next))
+
 module.exports = router

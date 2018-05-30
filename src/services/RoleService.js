@@ -1,4 +1,8 @@
 import { getLoggedPerson } from './PersonService'
+import RoleRequest from '../db/models/role_request'
+import PersonWithRole from '../db/models/person_with_role'
+import Role from '../db/models/role'
+import bookshelf from '../db/bookshelf'
 
 const knex = require('../db/connection').getKnex()
 const programmeService = require('./ProgrammeService')
@@ -16,6 +20,10 @@ export async function getAvailableRoles() {
 export async function getRoleId(roleName) {
     const role = await knex.select().from('role').where('name', roleName).first()
     return role.roleId
+}
+
+export const getRoleById = async (id) => {
+    return Role.where('roleId', id).fetch()
 }
 
 export async function saveRole(roleName) {
@@ -100,29 +108,27 @@ const roleSchema = [
     'agreementPerson.approvalDate'
 ]
 
-export async function getRolesForAllPersons() {
-    return knex.select(roleSchema).from('personWithRole')
+export const getRolesForAllPersons = async () =>
+    knex.select(roleSchema).from('personWithRole')
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-}
 
 // May return multiple, since one personRole can have multiple agreementPersons via agreementIds
-export async function getRolesForPersonWithRole(personRoleId) {
-    return knex.select(roleSchema).from('personWithRole')
+export const getRolesForPersonWithRole = async personRoleId =>
+    knex.select(roleSchema).from('personWithRole')
         .where('personWithRole.personRoleId', personRoleId)
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
-}
 
 // Will return single
-export async function getRoleWithAgreementIdAndPersonRole(agreementId, personRoleId) {
-    return knex.select(roleSchema).from('personWithRole')
+export const getRoleWithAgreementIdAndPersonRole = async (agreementId, personRoleId) =>
+    knex.select(roleSchema).from('personWithRole')
         .where('personWithRole.personRoleId', personRoleId)
         .where('agreementPerson.agreementId', agreementId)
         .innerJoin('role', 'personWithRole.roleId', '=', 'role.roleId')
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .first()
-}
+
 
 export const getUsersRoles = async (user) => {
     const roleToId = await getRoles()
@@ -134,40 +140,40 @@ export const getUsersRoles = async (user) => {
     }))
 }
 
-export async function isUserAdmin(user) {
-    return knex.select()
+export const isUserAdmin = async user =>
+    knex.select()
         .from('personWithRole')
         .join('role', 'personWithRole.roleId', 'role.roleId')
         .where('personId', user.personId)
         .where('name', 'admin')
         .then(res => res.length > 0)
-}
 
-export async function isUserAdminOrManager(user) {
-    return knex.select()
+
+export const isUserAdminOrManager = async user =>
+    knex.select()
         .from('personWithRole')
         .join('role', 'personWithRole.roleId', 'role.roleId')
         .where('personId', user.personId)
         .andWhere(function () { this.where('name', 'admin').orWhere('name', 'manager') })
         .then(res => res.length > 0)
-}
 
-export async function doesUserHaveRole(user, roles) {
-    return knex.select()
+
+export const doesUserHaveRole = async (user, roles) =>
+    knex.select()
         .from('personWithRole')
         .join('role', 'personWithRole.roleId', 'role.roleId')
         .where('personId', user.personId)
         .andWhere(function () { this.whereIn('name', roles) })
         .then(res => res.length > 0)
-}
 
-export async function checkUserIsAdminOrManager(req) {
+
+export const checkUserIsAdminOrManager = async (req) => {
     if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
         throw new Error('User is not admin or manager')
     }
 }
 
-export async function checkUserHasRightToPrint(req) {
+export const checkUserHasRightToPrint = async (req) => {
     const user = await getLoggedPerson(req)
     const printerRoles = ['manager', 'admin', 'print_person', 'resp_prof', 'admin']
 
@@ -176,3 +182,46 @@ export async function checkUserHasRightToPrint(req) {
     }
     return false
 }
+
+export const submitRoleRequest = async (personId, roleId, programmeId) => {
+    const request = await RoleRequest.forge({
+        personId,
+        roleId,
+        programmeId,
+        handled: false
+    }).save()
+    return request
+}
+
+export const findUnhandledRoleRequests = async () => (
+    RoleRequest.where('handled', false).fetchAll({ withRelated: [{
+        person: (qb) => {
+            qb.column('personId', 'firstname', 'lastname', 'email')
+        } }, 'programme', 'role'] })
+)
+
+export const grantRoleRequest = async (roleRequestId, granted, granter) => {
+    const roleRequest = await RoleRequest.where('roleRequestId', roleRequestId).fetch()
+    await bookshelf.transaction(async (t) => {
+        await roleRequest.save({ granted, handled: true, granterId: granter.personId }, { transacting: t })
+        if (granted === true) {
+            const personId = roleRequest.get('personId')
+            const roleId = roleRequest.get('roleId')
+            const programmeId = roleRequest.get('programmeId')
+            const agreementId = roleRequest.get('agreementId')
+            const personRole = await PersonWithRole.forge({ personId, roleId, programmeId }).save(null, { transacting: t })
+            if (agreementId) {
+                await linkAgreementAndPersonRole(agreementId, personRole.get('personRoleId'), t)
+            }
+        }
+        return roleRequest
+    })
+    return roleRequest
+}
+
+export const linkRoleRequestToAgreement = async (agreementId, roleRequestId, trx) => (
+    // why does this work?
+    knex('roleRequest').where({ roleRequestId }).update({ agreementId }).transacting(trx)
+    // and this does not? Should use the same transaction function
+    //RoleRequest.forge({ roleRequestId }).save({ agreementId }, { patch: true }, { transacting: trx })
+)

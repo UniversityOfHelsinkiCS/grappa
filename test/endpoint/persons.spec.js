@@ -46,7 +46,7 @@ test.serial('manager can get thesis authors', async (t) => {
     const res = await request(await makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
-    t.is(res.body.persons.length, 9)
+    t.is(res.body.persons.length, 10)
 })
 
 test('email can be switched', async (t) => {
@@ -80,10 +80,10 @@ test('email can be switched', async (t) => {
     t.is(result2.useSecondaryEmail, false, 'Email not switched back')
 })
 
-test('Can add an non-university person as a grader', async (t) => {
+test('Can add a non-university person as a grader', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
-        .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com', units: [1, 2] })
+        .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com', programmes: [1, 2], role: 'grader' })
     t.truthy(res.body.person !== undefined)
     t.is(res.status, 201)
 })
@@ -91,12 +91,12 @@ test('Can add an non-university person as a grader', async (t) => {
 test('Cannot add outsider with wrong parameter names', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
-        .send({ first: 'matti', last: 'puoskari', email: 'matti@puoskari.com', units: [1, 2] })
+        .send({ first: 'matti', last: 'puoskari', email: 'matti@puoskari.com', programmes: [1, 2], role: 'grader' })
     t.truthy(res.body.person === undefined)
     t.is(res.status, 400)
 })
 
-test('Cannot add outsider without units', async (t) => {
+test('Cannot add outsider without programmes', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
         .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com' })
@@ -107,7 +107,7 @@ test('Cannot add outsider without units', async (t) => {
 test('Cannot add outsider with missing person info', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
-        .send({ firstname: 'matti', lastname: 'puoskari', units: [1, 2] })
+        .send({ firstname: 'matti', lastname: 'puoskari', programmes: [1, 2] })
     t.truthy(res.body.person === undefined)
     t.is(res.status, 400)
 })

@@ -72,5 +72,17 @@ module.exports = [
         personId: 12, // Erkki Erikoistapaus
         roleId: 6, // supervisor
         programmeId: 1 // Tietojenkäsittelytiede
+    },
+    {
+        personRoleId: 17,
+        personId: 13, // dev login
+        roleId: 1, // admin
+        programmeId: 1 // Irrelevant for admin, Tietojenkäsittelytiede
+    },
+    {
+        personRoleId: 18,
+        personId: 13, // dev login
+        roleId: 2, // manager so we hopefully see dev login option when logging in
+        programmeId: 1
     }
 ]

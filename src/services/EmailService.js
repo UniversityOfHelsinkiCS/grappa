@@ -38,3 +38,33 @@ export async function sendInvite(emailInvite, type, programmeId) {
         logger.error('Email send error', { error: error.message })
     }
 }
+
+export const sendAddedToGrappa = async (programmes, role, email, firstname, lastname) => {
+    const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/v2/ with the Univeristy of Helsinki credentials associated with this email address.'
+    const nonHelsinkiEmail = 'You can not login to Grappa since this is not a @helsinki.fi email address. Only people with Univeristy of Helsinki username can use Grappa. You can still act as a grader, but will just not be able to use Grappa.'
+    const title = 'You have been added to Grappa'
+    const body = `Dear ${firstname} ${lastname}\n
+    You have been added to Grappa, a web application to help in managing the final stages of approving student's master's thesis.\n
+    You have been granted the role ${role} in: \n${programmes.map(programme => `${programme.name}\n`)}.
+    ${email.includes('@helsinki.fi') ? helsinkiEmail : nonHelsinkiEmail}\n
+    If you have any problems or questions please contact grp-toska@helsinki.fi.\n\n
+    Best regards,\n
+    Grappa team`
+    try {
+        await mailer.sendEmail(email, title, body)
+    } catch (error) {
+        logger.error('Email send error', { error: error.message })
+    }
+}
+
+export const sendRoleRequestNotification = async (address, roleName, granted, granterName, programmeName) => {
+    const title = 'Notification from Grappa'
+    const body = `You have ${granted ? '' : 'NOT'} been granted the following role to Grappa:\n 
+    ${roleName} in ${programmeName}\n
+    The request was handled by ${granterName}. Please contact them for any further information.`
+    try {
+        await mailer.sendEmail(address, title, body)
+    } catch (error) {
+        logger.error('Email send error', { error: error.message })
+    }
+}

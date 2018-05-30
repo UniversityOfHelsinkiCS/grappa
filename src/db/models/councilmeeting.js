@@ -1,12 +1,12 @@
 const bookshelf = require('../bookshelf')
-const Programme = require('./programme')
+require('./programme')
 
 const Councilmeeting = bookshelf.Model.extend({
     tableName: 'councilmeeting',
     idAttribute: 'councilmeetingId',
     programmes() {
-        return this.belongsToMany(Programme, 'meetingProgramme', 'councilmeetingId', 'programmeId')
+        return this.belongsToMany('Programme', 'meetingProgramme', 'councilmeetingId', 'programmeId')
     }
 })
 
-module.exports = Councilmeeting
+module.exports = bookshelf.model('Councilmeeting', Councilmeeting)

@@ -6,6 +6,21 @@ import { getAgreementPersonsByAgreementId, getUsersRoles } from './RoleService'
 
 // TODO refactor
 
+export async function checkUserHasRightToAddAgreement(req, studyfieldId) {
+    const user = await getLoggedPerson(req)
+    const roles = await getUsersRoles(user)
+
+    if (isAdmin(roles)) {
+        return
+    }
+
+    if (await hasStudyfieldRoleToAddThesis(roles, studyfieldId)) {
+        return
+    }
+
+    throw new Error('User has no access to add thesis')
+}
+
 export async function checkUserHasRightToModifyAgreement(req, agreements) {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
@@ -50,6 +65,16 @@ export async function checkUserHasRightToSeeAgreement(req, agreements) {
 
 function isAdmin(roles) {
     return !!roles.find(item => item.role.name === 'admin')
+}
+
+async function hasStudyfieldRoleToAddThesis(roles, studyfieldId) {
+    const studyfieldRoles = ['manager', 'resp_professor', 'supervisor', 'grader']
+    const thesisProgramme = await getStudyfieldsProgramme(studyfieldId)
+    const studyfieldRole = roles
+        .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
+        .find(item => studyfieldRoles.includes(item.role.name))
+
+    return !!studyfieldRole
 }
 
 async function hasStudyfieldRole(roles, agreements) {
