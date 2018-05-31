@@ -108,7 +108,7 @@ export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(pe
     .innerJoin('personWithRole', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
     .where('personWithRole.programmeId', programmeId)
 
-export const createOutsidePerson = async (firstname, lastname, email, programmes, roleId) => {
+export const createNewPerson = async (firstname, lastname, email, programmes, roleId) => {
     try {
         const person = await savePerson({ firstname, lastname, email })
         const personRoles = await Promise.all(programmes
@@ -119,10 +119,11 @@ export const createOutsidePerson = async (firstname, lastname, email, programmes
                     programmeId
                 })
             ))
-        return { person, personRoles }
+        // TODO: messages should be handled by the controller, not service
+        return { person, personRoles, msg: 'New person created' }
     } catch (error) {
         // console.log(error)
-        return { errorMsg: 'Failed to create outside person with roles', error }
+        return { error: 'Failed to create outside person with roles' }
     }
 }
 
