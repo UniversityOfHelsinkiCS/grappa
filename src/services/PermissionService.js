@@ -6,7 +6,7 @@ import { getAgreementPersonsByAgreementId, getUsersRoles } from './RoleService'
 
 // TODO refactor
 
-export async function checkUserHasRightToAddAgreement(req, studyfieldId) {
+export const checkUserHasRightToAddAgreement = async (req, studyfieldId) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
 
@@ -21,7 +21,7 @@ export async function checkUserHasRightToAddAgreement(req, studyfieldId) {
     throw new Error('User has no access to add thesis')
 }
 
-export async function checkUserHasRightToModifyAgreement(req, agreements) {
+export const checkUserHasRightToModifyAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
 
@@ -40,7 +40,7 @@ export async function checkUserHasRightToModifyAgreement(req, agreements) {
     throw new Error('User has no access to edit thesis')
 }
 
-export async function checkUserHasRightToSeeAgreement(req, agreements) {
+export const checkUserHasRightToSeeAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
 
@@ -63,11 +63,9 @@ export async function checkUserHasRightToSeeAgreement(req, agreements) {
     throw new Error('User has no access to download attachments')
 }
 
-function isAdmin(roles) {
-    return !!roles.find(item => item.role.name === 'admin')
-}
+const isAdmin = roles => !!roles.find(item => item.role.name === 'admin')
 
-async function hasStudyfieldRoleToAddThesis(roles, studyfieldId) {
+const hasStudyfieldRoleToAddThesis = async (roles, studyfieldId) => {
     const studyfieldRoles = ['manager', 'resp_professor', 'supervisor', 'grader']
     const thesisProgramme = await getStudyfieldsProgramme(studyfieldId)
     const studyfieldRole = roles
@@ -77,7 +75,7 @@ async function hasStudyfieldRoleToAddThesis(roles, studyfieldId) {
     return !!studyfieldRole
 }
 
-async function hasStudyfieldRole(roles, agreements) {
+const hasStudyfieldRole = async (roles, agreements) => {
     const studyfieldRoles = ['manager', 'resp_professor']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
     const studyfieldRole = roles
@@ -87,7 +85,7 @@ async function hasStudyfieldRole(roles, agreements) {
     return !!studyfieldRole
 }
 
-async function isManagerRespProfOrPrintPerson(roles, agreements) {
+const isManagerRespProfOrPrintPerson = async (roles, agreements) => {
     const studyfieldRoles = ['manager', 'resp_professor', 'print_person']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
     const studyfieldRole = roles
@@ -97,7 +95,7 @@ async function isManagerRespProfOrPrintPerson(roles, agreements) {
     return !!studyfieldRole
 }
 
-async function isAgreementPersonForThesis(user, agreements) {
+const isAgreementPersonForThesis = async (user, agreements) => {
     const agreementPersons = await Promise.map(
         agreements,
         agreement => getAgreementPersonsByAgreementId(agreement.agreementId)
@@ -106,7 +104,7 @@ async function isAgreementPersonForThesis(user, agreements) {
     return !!agreementPersons.find(person => person.personId === user.personId)
 }
 
-function isAuthor(user, agreements) {
+const isAuthor = (user, agreements) => {
     if (agreements.length < 1) {
         return false
     }
