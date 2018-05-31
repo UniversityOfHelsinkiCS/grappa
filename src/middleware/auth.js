@@ -10,7 +10,7 @@ const isShibboUser = (userId, uidHeader) => userId === uidHeader
  * Authentication middleware that is called before any requests.
  *
  */
-module.exports.checkAuth = async (req, res, next) => {
+export const checkAuth = async (req, res, next) => {
     const token = req.headers['x-access-token']
     const { uid } = req.headers
     if (token) {
@@ -29,7 +29,7 @@ module.exports.checkAuth = async (req, res, next) => {
     }
 }
 
-module.exports.checkAdmin = async (req, res, next) => {
+export const checkAdmin = async (req, res, next) => {
     const user = await personService.getLoggedPerson(req)
     try {
         const roles = await roleService.getUsersRoles(user)
@@ -43,7 +43,7 @@ module.exports.checkAdmin = async (req, res, next) => {
     }
 }
 
-module.exports.checkStaff = async (req, res, next) => {
+export const checkStaff = async (req, res, next) => {
     const user = await personService.getLoggedPerson(req)
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin', 'print_person']
     const userRoles = await roleService.getUsersRoles(user)
@@ -58,7 +58,7 @@ module.exports.checkStaff = async (req, res, next) => {
     }
 }
 
-module.exports.checkManagerOrAdmin = async (req, res, next) => {
+export const checkManagerOrAdmin = async (req, res, next) => {
     const user = await personService.getLoggedPerson(req)
     try {
         const roles = await roleService.getUsersRoles(user)
