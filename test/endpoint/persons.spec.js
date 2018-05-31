@@ -80,7 +80,7 @@ test('email can be switched', async (t) => {
     t.is(result2.useSecondaryEmail, false, 'Email not switched back')
 })
 
-test('Can add a non-university person as a grader', async (t) => {
+test.skip('Can add a non-university person as a grader', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
         .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com', programmes: [1, 2], role: 'grader' })
@@ -88,7 +88,7 @@ test('Can add a non-university person as a grader', async (t) => {
     t.is(res.status, 201)
 })
 
-test('Cannot add outsider with wrong parameter names', async (t) => {
+test.skip('Cannot add outsider with wrong parameter names', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
         .send({ first: 'matti', last: 'puoskari', email: 'matti@puoskari.com', programmes: [1, 2], role: 'grader' })
@@ -96,7 +96,7 @@ test('Cannot add outsider with wrong parameter names', async (t) => {
     t.is(res.status, 400)
 })
 
-test('Cannot add outsider without programmes', async (t) => {
+test.skip('Cannot add outsider without programmes', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
         .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com' })
@@ -104,7 +104,7 @@ test('Cannot add outsider without programmes', async (t) => {
     t.is(res.status, 400)
 })
 
-test('Cannot add outsider with missing person info', async (t) => {
+test.skip('Cannot add outsider with missing person info', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
         .send({ firstname: 'matti', lastname: 'puoskari', programmes: [1, 2] })
