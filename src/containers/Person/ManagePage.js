@@ -10,7 +10,7 @@ import AddPerson from './components/AddPerson'
 import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction } from '../Role/services/roleActions'
-import { invitePerson, addPersonAction } from './services/personActions'
+import { invitePerson } from './services/personActions'
 
 import { makePersonRoles } from '../../selectors/personRoles'
 
