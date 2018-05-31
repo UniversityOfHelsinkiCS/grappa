@@ -42,14 +42,16 @@ export class UserPage extends Component {
 
     submitGraderRequest = async () => {
         if (this.state.programmeId) {
-            this.props.graderRequest(this.state.programmeId).then(() => console.log('request submitted!'))
+            // TODO: this should pop-up a notification with the response message
+            this.props.graderRequest(this.state.programmeId)
         }
     }
 
     render() {
         const unitManagers = this.props.managers.filter(manager => manager.programmeId === parseInt(this.state.programmeId, 10))
         const isStaff = this.props.user && ((this.props.user.roles && this.props.user.roles.length > 0) ||
-            (this.props.user.affiliation && this.props.user.affiliation.length && this.props.user.affiliation.includes('staff')))
+            (this.props.user.affiliation && this.props.user.affiliation.length &&
+            (this.props.user.affiliation.includes('staff') || this.props.user.affiliation.includes('faculty'))))
         return (
             <div>
                 <div className="ui segment">
