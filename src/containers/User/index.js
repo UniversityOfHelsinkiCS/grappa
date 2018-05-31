@@ -43,7 +43,7 @@ export class UserPage extends Component {
     submitGraderRequest = async () => {
         if (this.state.programmeId) {
             // TODO: this should pop-up a notification with the response message
-            this.props.graderRequest(this.state.programmeId)
+            this.props.graderRequest(this.state.programmeId).then(() => this.setState({ programmeId: undefined }))
         }
     }
 
