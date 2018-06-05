@@ -13,6 +13,7 @@ const generateToken = async (uid) => {
         const token = jwt.sign(payload, config.TOKEN_SECRET, {
             expiresIn: '24h'
         })
+        // console.log(token)
         return token
     }
     return null
@@ -53,6 +54,13 @@ export const login = async (req, res) => {
 const register = async (shibbolethId, studentNumber, firstname, lastname, email) => {
     try {
         const user = await personService.getPersonByShibbolethId(shibbolethId)
+        if (!user) {
+            const nonRegUser = await personService.getPersonByEmail(email)
+            if (nonRegUser) {
+                const newUser = await personService.updateNonRegisteredPerson(nonRegUser, studentNumber, shibbolethId)
+                return newUser
+            }
+        }
         user.firstname = firstname
         user.lastname = lastname
         user.email = email
