@@ -6,7 +6,7 @@ import { programmeType } from '../../../util/types'
 const ACCORDION_OPEN = 0
 const ACCORDION_CLOSED = -1
 
-export class AddOutsidePerson extends Component {
+export class AddPerson extends Component {
 
     state = {
         activeIndex: ACCORDION_CLOSED,
@@ -72,7 +72,7 @@ export class AddOutsidePerson extends Component {
                 programmes,
                 role
             }
-            this.props.addOutsider(data)
+            this.props.addNewPerson(data)
             this.setState({
                 formSubmitted: true,
                 firstname: '',
@@ -141,10 +141,10 @@ export class AddOutsidePerson extends Component {
     }
 }
 
-AddOutsidePerson.propTypes = {
+AddPerson.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
     roles: arrayOf(string).isRequired,
-    addOutsider: func.isRequired
+    addNewPerson: func.isRequired
 }
 
-export default AddOutsidePerson
+export default AddPerson

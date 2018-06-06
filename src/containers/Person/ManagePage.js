@@ -6,11 +6,11 @@ import { personType, roleType, programmeType, availableRoleType } from '../../ut
 import RoleRequests from './components/RoleRequests'
 import PersonSelector from './components/PersonSelector'
 import PersonRoleChoose from './components/PersonRoleChoose'
-import AddOutsidePerson from './components/AddOutsidePerson'
+import AddPerson from './components/AddPerson'
 import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction } from '../Role/services/roleActions'
-import { invitePerson, addOutsiderAction } from './services/personActions'
+import { invitePerson } from './services/personActions'
 
 import { makePersonRoles } from '../../selectors/personRoles'
 
@@ -120,7 +120,7 @@ export class PersonRoleManagePage extends Component {
                     <div className="ui divider" />
                     <h3>Add a person to Grappa (NOTE: person without @helsinki email cannot sign in)</h3>
                     {this.props.programmes.length > 0 && this.props.availableRoles ?
-                        <AddOutsidePerson programmes={programmes} roles={this.props.availableRoles.map(role => role.name)} addOutsider={this.handleSendInvite} /> :
+                        <AddPerson programmes={programmes} roles={this.props.availableRoles.map(role => role.name)} addNewPerson={this.handleSendInvite} /> :
                         <p>loading</p>}
                     <div className="ui divider" />
                     <h3>Select a person to manage their roles</h3>
@@ -159,9 +159,6 @@ const mapDispatchToProps = dispatch => ({
     ),
     grantRole: data => (
         dispatch(grantRoleAction(data))
-    ),
-    addOutsider: data => (
-        dispatch(addOutsiderAction(data))
     )
 })
 
@@ -186,8 +183,7 @@ PersonRoleManagePage.propTypes = {
     deleteRole: func.isRequired,
     invitePerson: func.isRequired,
     getRoleRequests: func.isRequired,
-    grantRole: func.isRequired,
-    addOutsider: func.isRequired
+    grantRole: func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonRoleManagePage)

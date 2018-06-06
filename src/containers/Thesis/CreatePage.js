@@ -14,7 +14,7 @@ import AttachmentAdder from '../Attachment/components/AttachmentAdder'
 import ThesisCouncilMeetingPicker from './components/ThesisCouncilmeetingPicker'
 import { emptyThesisData, thesisValidation } from '../../util/theses'
 import LoadingIndicator from '../LoadingIndicator'
-import AddOutsidePerson from '../Person/components/AddOutsidePerson'
+import AddPerson from '../Person/components/AddPerson'
 
 export class ThesisCreatePage extends Component {
     constructor(props) {
@@ -156,7 +156,7 @@ export class ThesisCreatePage extends Component {
                     {programme !== undefined ?
                         <div>
                             <p>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</p>
-                            <AddOutsidePerson programmes={[programme]} roles={['grader']} addOutsider={this.addNewGrader} />
+                            <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
                         </div> :
                         undefined}
                     <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>

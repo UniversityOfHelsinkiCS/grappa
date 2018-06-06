@@ -63,13 +63,21 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: 'Email updated'
                 }
-            })
+            })/*
+        case action.type === 'USER_GRADER_REQUEST_SUCCESS':
+            return Object.assign({}, state, {
+                [action.type]: {
+                    active: true,
+                    type: 'success',
+                    text: action.response.msg
+                }
+            })*/
         case action.type.includes('_FAILURE'): {
             const message = {}
             message[action.type] = {
                 active: true,
                 type: 'error',
-                text: action.type
+                text: action.response.error ? action.response.error : action.type
             }
             return Object.assign({}, state, message)
         }
@@ -102,10 +110,11 @@ const reducer = (state = {}, action) => {
         }
         case action.type.includes('_SUCCESS'): {
             const message = {}
+            const active = action.response.msg !== undefined
             message[action.type] = {
-                active: false,
+                active,
                 type: 'success',
-                text: action.type
+                text: action.response.msg ? action.response.msg : action.type
             }
             return Object.assign({}, state, message)
         }
