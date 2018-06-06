@@ -154,3 +154,22 @@ export const getPersonByEmail = async email => Person.where({ email }).fetch()
 export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
     person.set({ studentNumber, shibbolethId }).save()
 )
+
+export const getPersonsByAgreementId = async (agreementId, roleId) => (
+    knex.select(personSchema).from('person')
+        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .innerJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .whereIn('agreement.agreementId', agreementId)
+        .andWhere('personWithRole.roleId', roleId)
+)
+
+export const getPendingPersonsByAgreement = async (agreementId, roleId) => (
+    RoleRequest
+        .query({ where: { roleId, agreementId, handled: false }, distinct: ['personId', 'roleRequestId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } }]
+        }).then(res => res.serialize())
+)

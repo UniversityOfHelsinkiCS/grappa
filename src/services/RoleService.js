@@ -216,6 +216,8 @@ export const grantRoleRequest = async (roleRequestId, granted, granter) => {
                 await linkAgreementAndPersonRole(agreementId, personRole.get('personRoleId'), t)
             }
         }
+        // if the request is rejected and the person doesn't have any roles or shibboId,
+        // then the person should be removed from database alltogether.
         return roleRequest
     })
     return roleRequest
