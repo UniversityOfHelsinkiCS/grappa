@@ -68,13 +68,23 @@ router.post('/invite', jsonParser, auth.checkManagerOrAdmin, (req, res, next) =>
  */
 router.put('/email', jsonParser, (req, res, next) => personController.useSecondaryEmail(req, res).catch(next))
 
-router.post('/add_outsider', jsonParser, auth.checkManagerOrAdmin, (req, res, next) =>
-    personController.addOutsidePerson(req, res).catch(next))
-
+/**
+ * @api {get} persons/managers get all managers of Grappa
+ */
 router.get('/managers', jsonParser, (req, res, next) => personController.getManagers(req, res).catch(next))
 
+/**
+ * @api {get} persons/graders get for the specified programme
+ * @apiQuery {Number} programmeId
+ */
 router.get('/graders', jsonParser, (req, res, next) => personController.getProgrammeGraders(req, res).catch(next))
 
-router.post('/request_grader', jsonParser, (req, res, next) => personController.requestGrader(req, res).catch(next))
+/**
+ * @api {post} persons/request_grader request grader role for a program
+ * Requester needs to have right to submit theses.
+ * @apiParam {Object} person {email: String, firstname: String, lastname: String}
+ * @apiParem {Object} roleRequest {role: String, programmeId: String}
+ */
+router.post('/request_grader', jsonParser, auth.checkCanSubmitThesis, (req, res, next) => personController.requestGrader(req, res).catch(next))
 
 module.exports = router

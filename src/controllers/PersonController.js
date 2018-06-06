@@ -1,5 +1,5 @@
 import logger from '../util/logger'
-import { checkUserIsAdminOrManager } from '../services/RoleService'
+// import { checkUserIsAdminOrManager } from '../services/RoleService'
 import { getLoggedPerson, updatePerson } from '../services/PersonService'
 
 const personService = require('../services/PersonService')
@@ -111,11 +111,17 @@ async function getAllPersons(res) {
     return res.status(200).json(responseObject).end()
 }
 
-export async function invitePerson(req, res) {
-    await checkUserIsAdminOrManager(req)
+/**
+ * Creates a new person with specified roles.
+ * Email message is sent to invited person to inform about addition to grappa.
+ * @param {*} req 
+ * @param {*} res 
+ */
+export const invitePerson = async (req, res) => {
+    // await checkUserIsAdminOrManager(req)
     const { programmes, role, email, firstname, lastname } = req.body
     const roleId = await roleService.getRoleId(role)
-    const newPerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, roleId)
+    const newPerson = await personService.createNewPerson(firstname, lastname, email, programmes, roleId)
     if (!newPerson.errorMsg) {
         const programmesWithNames = await programmeService.getProgrammesByIds(programmes)
         await emailService.sendAddedToGrappa(programmesWithNames.serialize(), role, email, firstname, lastname)
@@ -135,22 +141,16 @@ export async function useSecondaryEmail(req, res) {
     res.status(200).json(updatedPerson).end()
 }
 
-export const addOutsidePerson = async (req, res) => {
-    await checkUserIsAdminOrManager(req)
-    const { programmes, firstname, lastname, email } = req.body
-    const roleId = await roleService.getRoleId('grader')
-    const outsidePerson = await personService.createOutsidePerson(firstname, lastname, email, programmes, roleId)
-    if (!outsidePerson.errorMsg) {
-        res.status(201).send(outsidePerson)
-    } else {
-        res.status(400).send(outsidePerson)
-    }
-}
-
+/**
+ * Creates a new role request for the specified person.
+ * Person is created if doesn't exist already and then a role request is created for them.
+ * @param {} req
+ * @param {} res
+ */
 export const requestGrader = async (req, res) => {
-    // TODO: check user has right to submit thesis
     const personData = req.body.person
     const { role } = req.body.roleRequest
+    // programmeId comes as a string, so it needs to be parsed
     const programmeId = parseInt(req.body.roleRequest.programmeId, 10)
     const person = await personService.savePerson(personData)
     const { personId } = person
@@ -162,10 +162,10 @@ export const requestGrader = async (req, res) => {
         const pendingGraders = await personService.getPendingPersonsWithRole(roleId, programmeId)
         // Is there a simpler way to append these to queries?
         const allGraders = [...graders.serialize(), ...pendingGraders.serialize()]
-        res.status(201).json(allGraders)
+        res.status(201).json({ allGraders, msg: 'Created request for a new grader' })
         return
     }
-    res.status(400).json({ msg: 'not like this' })
+    res.status(400).json({ error: 'not like this' })
 }
 
 export const getProgrammeGraders = async (req, res) => {
