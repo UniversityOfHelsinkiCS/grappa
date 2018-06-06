@@ -30,30 +30,27 @@ export const checkAuth = async (req, res, next) => {
 }
 
 export const checkAdmin = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['admin']
-    await checkRoles(staffRoles, user, res, next)
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkStaff = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin', 'print_person']
-    await checkRoles(staffRoles, user, res, next)
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkManagerOrAdmin = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['admin', 'manager']
-    await checkRoles(staffRoles, user, res, next)
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkCanSubmitThesis = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin']
-    await checkRoles(staffRoles, user, res, next)
+    await checkRoles(staffRoles, req, res, next)
 }
 
-const checkRoles = async (allowedRoles, user, res, next) => {
+const checkRoles = async (allowedRoles, req, res, next) => {
+    const user = await personService.getLoggedPerson(req)
     const userRoles = await roleService.getUsersRoles(user)
     try {
         if (userRoles.filter(item => allowedRoles.includes(item.role.name)).length > 0) {
