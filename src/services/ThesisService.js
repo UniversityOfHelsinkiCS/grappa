@@ -18,7 +18,7 @@ const thesisSchema = [
 // In case we need all theses
 // Restricted to show only last 10 years thesis
 export const getAllTheses = async () => {
-    const theses = await Thesis.fetchAll().then(res => res.serialize())
+    const theses = await Thesis.fetchAll({ withRelated: ['authors'] }).then(res => res.serialize())
     return getGradersForTheses(theses)
 }
 
