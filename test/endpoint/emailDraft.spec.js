@@ -19,9 +19,9 @@ test('emailDrafts get all', async (t) => {
     t.plan(3)
     const res = await request(await makeApp(1)).get('/emailDrafts')
     t.is(res.status, 200)
-    const emailDrafts = res.body
-    t.truthy(emailDrafts.length > 0)
-    t.truthy(emailDrafts[0].type)
+    const drafts = res.body
+    t.truthy(drafts.length > 0)
+    t.truthy(drafts[0].type)
 })
 
 test('emailDraft update', async (t) => {

@@ -9,58 +9,44 @@ import { getAgreementPersonsByAgreementId, getUsersRoles } from './RoleService'
 export const checkUserHasRightToAddAgreement = async (req, studyfieldId) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
+    const checks = [isAdmin(roles), await hasStudyfieldRoleToAddThesis(roles, studyfieldId)]
 
-    if (isAdmin(roles)) {
-        return
-    }
-
-    if (await hasStudyfieldRoleToAddThesis(roles, studyfieldId)) {
-        return
-    }
-
-    throw new Error('User has no access to add thesis')
+    await checkPermissions(checks)
 }
 
 export const checkUserHasRightToModifyAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
+    const studyfieldId = agreements[0].studyfieldId
+    const checks = [
+        isAdmin(roles),
+        await hasStudyfieldRole(roles, studyfieldId),
+        isAgreementPersonForThesis(user, agreements)
+    ]
 
-    if (isAdmin(roles)) {
-        return
-    }
-
-    if (await hasStudyfieldRole(roles, agreements)) {
-        return
-    }
-
-    if (await isAgreementPersonForThesis(user, agreements)) {
-        return
-    }
-
-    throw new Error('User has no access to edit thesis')
+    await checkPermissions(checks)
 }
 
 export const checkUserHasRightToSeeAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
+    const checks = [
+        isAdmin(roles),
+        await isManagerRespProfOrPrintPerson(roles, agreements),
+        await isAgreementPersonForThesis(user, agreements),
+        isAuthor(user, agreements)
+    ]
 
-    if (isAdmin(roles)) {
+    await checkPermissions(checks)
+}
+
+const checkPermissions = async (checks) => {
+
+    if (checks.includes(true)) {
         return
     }
 
-    if (await isManagerRespProfOrPrintPerson(roles, agreements)) {
-        return
-    }
-
-    if (await isAgreementPersonForThesis(user, agreements)) {
-        return
-    }
-
-    if (isAuthor(user, agreements)) {
-        return
-    }
-
-    throw new Error('User has no access to download attachments')
+    throw new Error('User has no access to add thesis')
 }
 
 const isAdmin = roles => !!roles.find(item => item.role.name === 'admin')
@@ -75,9 +61,9 @@ const hasStudyfieldRoleToAddThesis = async (roles, studyfieldId) => {
     return !!studyfieldRole
 }
 
-const hasStudyfieldRole = async (roles, agreements) => {
+const hasStudyfieldRole = async (roles, studyfieldId) => {
     const studyfieldRoles = ['manager', 'resp_professor']
-    const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
+    const thesisProgramme = await getStudyfieldsProgramme(studyfieldId)
     const studyfieldRole = roles
         .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
         .find(item => studyfieldRoles.includes(item.role.name))
@@ -88,7 +74,7 @@ const hasStudyfieldRole = async (roles, agreements) => {
 const isManagerRespProfOrPrintPerson = async (roles, agreements) => {
     const studyfieldRoles = ['manager', 'resp_professor', 'print_person']
     const thesisProgramme = await getStudyfieldsProgramme(agreements[0].studyfieldId)
-    const studyfieldRole = roles
+    const studyfieldRole = await roles
         .filter(item => item.programme.programmeId === thesisProgramme.programmeId)
         .find(item => studyfieldRoles.includes(item.role.name))
 

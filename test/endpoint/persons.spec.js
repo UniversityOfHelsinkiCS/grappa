@@ -83,7 +83,13 @@ test('email can be switched', async (t) => {
 test.skip('Can add a non-university person as a grader', async (t) => {
     const res = await request(await makeApp(1))
         .post('/persons/add_outsider')
-        .send({ firstname: 'matti', lastname: 'puoskari', email: 'matti@puoskari.com', programmes: [1, 2], role: 'grader' })
+        .send({
+            firstname: 'matti',
+            lastname: 'puoskari',
+            email: 'matti@puoskari.com',
+            programmes: [1, 2],
+            role: 'grader'
+        })
     t.truthy(res.body.person !== undefined)
     t.is(res.status, 201)
 })
