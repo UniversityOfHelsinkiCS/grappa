@@ -60,5 +60,5 @@ const checkRoles = async (allowedRoles, req, res, next) => {
         }
     } catch (err) {
         res.status(520).json({ error: 'something went wrong' })
-    }    
+    }
 }
