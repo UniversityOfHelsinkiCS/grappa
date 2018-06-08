@@ -48,7 +48,8 @@ export class UserPage extends Component {
     }
 
     render() {
-        const unitManagers = this.props.managers.filter(manager => manager.programmeId === parseInt(this.state.programmeId, 10))
+        const unitManagers = this.props.managers.filter(manager =>
+            manager.programmeId === parseInt(this.state.programmeId, 10))
         const isStaff = this.props.user && ((this.props.user.roles && this.props.user.roles.length > 0) ||
             (this.props.user.affiliation && this.props.user.affiliation.length &&
             (this.props.user.affiliation.includes('staff') || this.props.user.affiliation.includes('faculty'))))
@@ -78,9 +79,14 @@ export class UserPage extends Component {
                 <RoleExplain user={this.props.user} />
                 {isStaff ?
                     <Segment inverted color="green" tertiary >
-                        <h3>Do you need grader rights? Select a Unit from the dropdown and submit a request for new rights </h3>
+                        <h3>
+                            Do you need grader rights? Select a Unit from the dropdown and submit a request
+                            for new rights
+                        </h3>
                         <ProgrammeSelect programmes={this.props.programmes} onChange={this.handleUnitChange} />
-                        {this.state.programmeId ? <Button primary onClick={this.submitGraderRequest}>Request rights</Button> : undefined}
+                        {this.state.programmeId ?
+                            <Button primary onClick={this.submitGraderRequest}>Request rights
+                            </Button> : undefined}
                         <h3> Below are the managers for the selected unit for any additional queries</h3>
                         <List>
                             {unitManagers.map(manager => (
