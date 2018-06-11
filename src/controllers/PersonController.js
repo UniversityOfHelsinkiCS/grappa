@@ -114,8 +114,8 @@ async function getAllPersons(res) {
 /**
  * Creates a new person with specified roles.
  * Email message is sent to invited person to inform about addition to grappa.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 export const invitePerson = async (req, res) => {
     // await checkUserIsAdminOrManager(req)
