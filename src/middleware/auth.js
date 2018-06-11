@@ -30,60 +30,33 @@ export const checkAuth = async (req, res, next) => {
 }
 
 export const checkAdmin = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
-    try {
-        const roles = await roleService.getUsersRoles(user)
-        if (roles.filter(role => role.role.name === 'admin').length > 0) {
-            next()
-        } else {
-            res.status(403).json({ error: 'denied' })
-        }
-    } catch (err) {
-        res.status(520).json({ error: 'something went wrong' })
-    }
+    const staffRoles = ['admin']
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkStaff = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin', 'print_person']
-    const userRoles = await roleService.getUsersRoles(user)
-    try {
-        if (userRoles.filter(item => staffRoles.includes(item.role.name)).length > 0) {
-            next()
-        } else {
-            res.status(403).json({ error: 'denied' })
-        }
-    } catch (err) {
-        res.status(520).json({ error: 'something went wrong' })
-    }
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkManagerOrAdmin = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
-    try {
-        const roles = await roleService.getUsersRoles(user)
-
-        if (roles.filter(role => (role.role.name === 'manager'
-            || role.role.name === 'admin')
-        ).length > 0) {
-            next()
-        } else {
-            res.status(403).json({ error: 'denied' })
-        }
-    } catch (err) {
-        res.status(520).json({ error: 'something went wrong' })
-    }
+    const staffRoles = ['admin', 'manager']
+    await checkRoles(staffRoles, req, res, next)
 }
 
 export const checkCanSubmitThesis = async (req, res, next) => {
-    const user = await personService.getLoggedPerson(req)
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin']
+    await checkRoles(staffRoles, req, res, next)
+}
+
+const checkRoles = async (allowedRoles, req, res, next) => {
+    const user = await personService.getLoggedPerson(req)
     const userRoles = await roleService.getUsersRoles(user)
     try {
-        if (userRoles.filter(item => staffRoles.includes(item.role.name)).length > 0) {
+        if (userRoles.filter(item => allowedRoles.includes(item.role.name)).length > 0) {
             next()
         } else {
-            res.status(403).json({ error: 'denied' })
+            res.status(403).json({ error: 'no access' })
         }
     } catch (err) {
         res.status(520).json({ error: 'something went wrong' })
