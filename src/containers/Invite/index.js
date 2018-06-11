@@ -47,21 +47,21 @@ export class InvitePage extends Component {
                 <p>
                     You should not see this page if there was not an error message above.
                     You came here through a link and the link was already used, you probably clicked it once before.
-            </p>
+                </p>
                 <p>
                     If you are a student, check the <Link to="/theses">Thesis List</Link> page.
                     You should see one thesis and by clicking that thesis you should see correct data.
-            </p>
+                </p>
                 <p>
                     If the data is not correct, contact your supervisor.
-            </p>
+                </p>
                 <p>
                     If you are not a student:
                 you should see your information on the <Link to="/">Homepage</Link> which has been updated accordingly
-            </p>
+                </p>
                 <p>
                     If this application behaves in a strange way contact grp-toska@helsinki.fi
-            </p>
+                </p>
 
             </div>
         )

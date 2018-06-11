@@ -25,9 +25,23 @@ const RoleRequests = ({ roleRequests, handleGrantRole }) => {
                                 <Table.Cell>{req.role.name}</Table.Cell>
                                 <Table.Cell>
                                     <ButtonGroup>
-                                        <Button positive data={{ roleRequestId: req.roleRequestId, granted: true }} onClick={handleGrantRole}>Yes</Button>
+                                        <Button
+                                            positive
+                                            data={{
+                                                roleRequestId: req.roleRequestId,
+                                                granted: true
+                                            }}
+                                            onClick={handleGrantRole}
+                                        >Yes</Button>
                                         <Button.Or />
-                                        <Button negative data={{ roleRequestId: req.roleRequestId, granted: false }} onClick={handleGrantRole}>No</Button>
+                                        <Button
+                                            negative
+                                            data={{
+                                                roleRequestId: req.roleRequestId,
+                                                granted: false
+                                            }}
+                                            onClick={handleGrantRole}
+                                        >No</Button>
                                     </ButtonGroup>
                                 </Table.Cell>
                             </Table.Row>
