@@ -1,4 +1,3 @@
-import { getLoggedPerson } from './PersonService'
 import RoleRequest from '../db/models/role_request'
 import PersonWithRole from '../db/models/person_with_role'
 import Role from '../db/models/role'
@@ -127,7 +126,6 @@ export const getRoleWithAgreementIdAndPersonRole = async (agreementId, personRol
         .leftJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .first()
 
-
 export const getUsersRoles = async (user) => {
     const roleToId = await getRoles()
     const programmeToId = await programmeService.getAllProgrammes()
@@ -163,23 +161,6 @@ export const doesUserHaveRole = async (user, roles) =>
         .where('personId', user.personId)
         .andWhere(function () { this.whereIn('name', roles) })
         .then(res => res.length > 0)
-
-
-export const checkUserIsAdminOrManager = async (req) => {
-    if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
-        throw new Error('User is not admin or manager')
-    }
-}
-
-export const checkUserHasRightToPrint = async (req) => {
-    const user = await getLoggedPerson(req)
-    const printerRoles = ['manager', 'admin', 'print_person', 'resp_prof', 'admin']
-
-    if (await doesUserHaveRole(user, printerRoles)) {
-        return true
-    }
-    return false
-}
 
 export const submitRoleRequest = async (personId, roleId, programmeId) => {
     const request = await RoleRequest.forge({

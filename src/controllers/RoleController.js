@@ -1,4 +1,4 @@
-import { checkUserIsAdminOrManager } from '../services/RoleService'
+import { checkUserIsAdminOrManager } from '../services/PermissionService'
 
 const roleService = require('../services/RoleService')
 const programmeService = require('../services/ProgrammeService')
@@ -40,6 +40,7 @@ export async function deleteRole(req, res) {
 }
 
 export async function updateStatement(req, res) {
+    await checkUserIsAdminOrManager(req)
     const person = await personService.getLoggedPerson(req)
     const { agreementId, personRoleId } = req.body
     const agreementPerson = {
@@ -77,11 +78,13 @@ export const handleRoleRequest = async (req, res) => {
     const { roleRequestId, granted } = req.body
     await checkUserIsAdminOrManager(req)
     const granter = await personService.getLoggedPerson(req)
-    const roleRequest = await roleService.grantRoleRequest(roleRequestId, granted, granter).then(request => request.serialize())
+    const roleRequest = await roleService.grantRoleRequest(roleRequestId, granted, granter).then(request =>
+        request.serialize())
     const requester = await personService.getPersonById(roleRequest.personId)
     const role = await roleService.getRoleById(roleRequest.roleId)
     const programme = await programmeService.getProgrammeById(roleRequest.programmeId)
-    await emailService.sendRoleRequestNotification(requester.email, role.get('name'), granted, `${granter.firstname} ${granter.lastname}`, programme.get('name'))
+    await emailService.sendRoleRequestNotification(requester.email,
+        role.get('name'), granted, `${granter.firstname} ${granter.lastname}`, programme.get('name'))
     const roleRequests = await roleService.findUnhandledRoleRequests()
     res.status(201).json(roleRequests)
 }

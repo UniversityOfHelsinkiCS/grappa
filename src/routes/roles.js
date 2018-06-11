@@ -48,7 +48,7 @@ router.post('/', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
  * @apiParam {String} statement Statement text
  * @apiParam {Boolean} approved Is person role approved
  */
-router.put('/', jsonParser, auth.checkStaff, (req, res, next) => {
+router.put('/', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
     roleController.updateStatement(req, res).catch(next)
 })
 

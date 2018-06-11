@@ -1,7 +1,7 @@
 const emailInviteService = require('../services/EmailInviteService')
 const personService = require('../services/PersonService')
 const agreementService = require('../services/AgreementService')
-const roleService = require('../services/RoleService')
+// const roleService = require('../services/RoleService')
 
 export async function thesisAuthorInvite(req, res) {
     const inviteData = await emailInviteService.getEmailInviteDataForToken(req.params.token)
