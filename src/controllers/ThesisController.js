@@ -38,19 +38,18 @@ export async function getTheses(req, res) {
 
     const rolesInProgrammes = await roleService.getUsersRoles(user)
 
-    rolesInProgrammes.forEach(async (item) => {
+    await Promise.all(rolesInProgrammes.map(async (item) => {
         if (programmeRoles.includes(item.role.name)) {
             // ... As resp_professor, manager or print-person theses in programme
             newTheses = await thesisService.getThesesInProgramme(item.programme.programmeId)
             theses = [...new Set([...theses, ...newTheses])]
         }
-    })
+    }))
 
     const thesesAsAgreementPerson = await thesisService.getThesesByAgreementPerson(user.personId)
     const thesesAsAuthor = await thesisService.getThesesByPersonId(user.personId)
 
     theses = [...theses, ...thesesAsAgreementPerson, ...thesesAsAuthor]
-
     res.status(200).json(removeDuplicates(theses)).end()
 }
 

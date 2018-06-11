@@ -160,7 +160,7 @@ export const getPersonsByAgreementId = async (agreementId, roleId) => (
         .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
         .innerJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
         .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
-        .whereIn('agreement.agreementId', agreementId)
+        .whereIn('agreement.agreementId', [agreementId])
         .andWhere('personWithRole.roleId', roleId)
 )
 

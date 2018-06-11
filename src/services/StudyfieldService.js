@@ -13,3 +13,7 @@ export const getStudyfields = async () => Studyfield.fetchAll({ withRelated: ['m
 
 export const getStudyfield = async studyfieldId =>
     knex.select(studyfieldSchema).from('studyfield').where('studyfield.studyfieldId', studyfieldId).first()
+
+export const getPrgorammeStudyfields = async programmeId => (
+    Studyfield.query({ where: { programmeId } }).fetchAll()
+)
