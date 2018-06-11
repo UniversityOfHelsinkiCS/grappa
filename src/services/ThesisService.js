@@ -112,20 +112,23 @@ export const getPersonRoleForThesis = async (thesis, agreements, role) => {
  * Fetches all theses from database, with associated authors, supervisors and agreements.
  * Would be more efficient not to fetch all theses on each query, but bookshelf is hard.
  * TODO: Maybe possible to do smaller queries with Thesis.query().fetchAll() -syntax.
+ * TODO: Supervisors is just a row in personWithRole, fetch the info from person table.
  */
 const getThesesForFiltering = () => (
-    Thesis.fetchAll({ withRelated: ['authors', 'supervisors', {
-        agreements: (qb) => {
-            qb.columns('agreementId', 'thesisId', 'studyfieldId', 'authorId', 'responsibleSupervisorId')
-        }
-    }] }).then(res => res.serialize())
+    Thesis.fetchAll({ withRelated: [
+        { authors: (qb) => { qb.columns('person.personId', 'email', 'firstname', 'lastname', 'isRetired') } },
+        { agreements: (qb) => { qb.columns('agreementId', 'thesisId', 'studyfieldId', 'authorId', 'responsibleSupervisorId') } },
+        'supervisors'
+    ] }).then(res => res.serialize())
 )
 
 const getThesisAuthorsFromInvites = async (thesis, agreements) => (
     Promise.all(agreements.map(async agreement => (
-        emailInviteService.getInviteByAgreement(agreement.agreementId).then(res => (
-            { email: res.get('email') }
-        ))
+        emailInviteService.getInviteByAgreement(agreement.agreementId).then((res) => {
+            if (res) {
+                return { email: res.get('email') }
+            }
+        })
     )))
 )
 
