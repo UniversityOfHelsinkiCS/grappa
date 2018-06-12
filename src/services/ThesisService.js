@@ -122,6 +122,12 @@ const getThesesForFiltering = () => (
     ] }).then(res => res.serialize())
 )
 
+/**
+ * Search invites for thesis author.
+ * Only not used invites are fetched, based on agreement.
+ * @param {Thesis} thesis not needed
+ * @param {[Agreement]} agreements Array of agreements related to thesis.
+ */
 const getThesisAuthorsFromInvites = async (thesis, agreements) => (
     Promise.all(agreements.map(async agreement => (
         emailInviteService.getInviteByAgreement(agreement.agreementId).then((res) => {
@@ -132,6 +138,11 @@ const getThesisAuthorsFromInvites = async (thesis, agreements) => (
     )))
 )
 
+/**
+ * Fetches all additional supervisors, graders and authors for given theses.
+ * The function assumes that each thesis has already .authors and .supervisors
+ * @param {[Thesis]} theses An array of theses.
+ */
 const getAuthorsSupervisorsGraders = async theses => (
     Promise.all(theses.map(async (thesis) => {
         const expandedThesis = Object.assign({}, thesis)

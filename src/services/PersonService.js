@@ -123,7 +123,7 @@ export const createNewPerson = async (firstname, lastname, email, programmes, ro
         return { person, personRoles, msg: 'New person created' }
     } catch (error) {
         // console.log(error)
-        return { error: 'Failed to create outside person with roles' }
+        return { error: 'Failed to create a new person with roles' }
     }
 }
 
