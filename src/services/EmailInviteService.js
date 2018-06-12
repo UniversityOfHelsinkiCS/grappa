@@ -60,5 +60,5 @@ export function markTokenUsed(token) {
 }
 
 export const getInviteByAgreement = async agreement => (
-    EmailInvite.query({ where: { agreement, type: 'thesis_author' } }).fetch()
+    EmailInvite.query({ where: { agreement, type: 'thesis_author', used: false } }).fetch()
 )
