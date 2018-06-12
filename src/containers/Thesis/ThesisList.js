@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { arrayOf, func, bool, number } from 'prop-types'
-import { thesisType, agreementType, attachmentType } from '../../util/types'
+import { thesisType, agreementType, attachmentType, councilmeetingType } from '../../util/types'
 import LoadingIndicator from '../LoadingIndicator/index'
-import { makeGetFormatTheses } from '../../selectors/thesisList'
+// import { makeGetFormatTheses } from '../../selectors/thesisList'
 import ThesisListRow from './components/ThesisListRow'
 
 export class ThesisList extends Component {
@@ -147,7 +147,7 @@ export class ThesisList extends Component {
                             <th>Author</th>
                             <th>Scheduled council meeting</th>
                             <th>Checked by author</th>
-                            <th>Checked by resp. prof</th>
+                            <th>No pending graders</th>
                             <th>Printed</th>
                         </tr>
                     </thead>
@@ -156,6 +156,8 @@ export class ThesisList extends Component {
                             <ThesisListRow
                                 key={thesis.thesisId}
                                 thesis={thesis}
+                                councilmeeting={this.props.councilmeetings.find(councilmeeting => (
+                                    councilmeeting.councilmeetingId === thesis.councilmeetingId))}
                                 toggleThesis={this.toggleThesis}
                                 showButtons={this.props.showButtons}
                                 selectable={this.props.selectable}
@@ -171,6 +173,7 @@ export class ThesisList extends Component {
 
 ThesisList.propTypes = {
     theses: arrayOf(thesisType).isRequired,
+    councilmeetings: arrayOf(councilmeetingType).isRequired,
     downloadSelected: func.isRequired,
     agreements: arrayOf(agreementType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
@@ -185,10 +188,11 @@ ThesisList.defaultProps = {
     councilMeetingId: null
 }
 
-const getFormatTheses = makeGetFormatTheses()
+// const getFormatTheses = makeGetFormatTheses()
 
-const mapStateToProps = (state, props) => ({
-    theses: getFormatTheses(state, props),
+const mapStateToProps = state => ({
+    councilmeetings: state.councilmeetings,
+    theses: state.theses,
     agreements: state.agreements,
     attachments: state.attachments
 
