@@ -32,7 +32,8 @@ const RoleRequests = ({ roleRequests, handleGrantRole }) => {
                                                 granted: true
                                             }}
                                             onClick={handleGrantRole}
-                                        >Yes</Button>
+                                        >Yes
+                                        </Button>
                                         <Button.Or />
                                         <Button
                                             negative
@@ -41,7 +42,8 @@ const RoleRequests = ({ roleRequests, handleGrantRole }) => {
                                                 granted: false
                                             }}
                                             onClick={handleGrantRole}
-                                        >No</Button>
+                                        >No
+                                        </Button>
                                     </ButtonGroup>
                                 </Table.Cell>
                             </Table.Row>

@@ -30,7 +30,6 @@ export class InvitePage extends Component {
         if (!status && type === 'role') {
             acceptRoleAction(token)
         }
-
     }
 
     render() {
