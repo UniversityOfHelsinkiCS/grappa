@@ -40,11 +40,15 @@ export async function sendInvite(emailInvite, type, programmeId) {
 }
 
 export const sendAddedToGrappa = async (programmes, role, email, firstname, lastname) => {
-    const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/v2/ with the Univeristy of Helsinki credentials associated with this email address.'
-    const nonHelsinkiEmail = 'You can not login to Grappa since this is not a @helsinki.fi email address. Only people with Univeristy of Helsinki username can use Grappa. You can still act as a grader, but will just not be able to use Grappa.'
+    const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/v2/ with ' +
+        'the University of Helsinki credentials associated with this email address.'
+    const nonHelsinkiEmail = 'You can not login to Grappa since this is not a @helsinki.fi email ' +
+        'address. Only people with Univeristy of Helsinki username can use Grappa. You can still act' +
+        'as a grader, but will just not be able to use Grappa.'
     const title = 'You have been added to Grappa'
     const body = `Dear ${firstname} ${lastname}\n
-    You have been added to Grappa, a web application to help in managing the final stages of approving student's master's thesis.\n
+    You have been added to Grappa, a web application to help in managing the final stages of approving ' +
+        'student's master's thesis.\n
     You have been granted the role ${role} in: \n${programmes.map(programme => `${programme.name}\n`)}.
     ${email.includes('@helsinki.fi') ? helsinkiEmail : nonHelsinkiEmail}\n
     If you have any problems or questions please contact grp-toska@helsinki.fi.\n\n

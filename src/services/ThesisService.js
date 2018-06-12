@@ -39,21 +39,23 @@ export const getThesesByPersonId = async (personId) => {
 export const getThesesInProgramme = async (programmeId) => {
     const studyfields = await studyfieldService.getPrgorammeStudyfields(programmeId).then(res => res.serialize())
     const theses = await getThesesForFiltering()
-    const prgorammeTheses = theses.filter(thesis => thesis.agreements.find(agreement => studyfields.find(studyfield => agreement.studyfieldId === studyfield.studyfieldId)))
+    const programmeTheses = theses.filter(thesis => thesis.agreements
+        .find(agreement => studyfields.find(studyfield => agreement.studyfieldId === studyfield.studyfieldId)))
     // console.log(prgorammeTheses)
     // const theses = await knex.select(thesisSchema).from('thesis')
     //     .innerJoin('agreement', 'thesis.thesisId', '=', 'agreement.thesisId')
     //     .innerJoin('studyfield', 'agreement.studyfieldId', '=', 'studyfield.studyfieldId')
     //     .where('studyfield.programmeId', programmeId)
     //     .where('agreement.startDate', '>', moment().subtract(10, 'years'))
-    return getAuthorsSupervisorsGraders(prgorammeTheses)
+    return getAuthorsSupervisorsGraders(programmeTheses)
 }
 
 // In cases we need theses for a supervisor/grader
 export const getThesesByAgreementPerson = async (personId) => {
     const agreements = await agreementService.getAgreementsByAgreementPerson(personId)
     const theses = await getThesesForFiltering()
-    const agreementPersonsTheses = theses.filter(thesis => thesis.agreements.find(agreement => agreements.find(a => a.agreementId === agreement.agreementId)))
+    const agreementPersonsTheses = theses.filter(thesis => thesis.agreements
+        .find(agreement => agreements.find(a => a.agreementId === agreement.agreementId)))
     // const theses = await knex.distinct('thesis.thesisId').select(thesisSchema).from('personWithRole')
     //     .where('personWithRole.personId', personId)
     //     .innerJoin('agreementPerson', 'agreementPerson.personRoleId', '=', 'personWithRole.personRoleId')
@@ -117,7 +119,9 @@ export const getPersonRoleForThesis = async (thesis, agreements, role) => {
 const getThesesForFiltering = () => (
     Thesis.fetchAll({ withRelated: [
         { authors: (qb) => { qb.columns('person.personId', 'email', 'firstname', 'lastname', 'isRetired') } },
-        { agreements: (qb) => { qb.columns('agreementId', 'thesisId', 'studyfieldId', 'authorId', 'responsibleSupervisorId') } },
+        { agreements: (qb) => {
+            qb.columns('agreementId', 'thesisId', 'studyfieldId', 'authorId', 'responsibleSupervisorId')
+        } },
         'supervisors'
     ] }).then(res => res.serialize())
 )
@@ -128,6 +132,7 @@ const getThesisAuthorsFromInvites = async (thesis, agreements) => (
             if (res) {
                 return { email: res.get('email') }
             }
+            return {}
         })
     )))
 )
