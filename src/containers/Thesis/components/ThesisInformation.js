@@ -25,6 +25,7 @@ export default class ThesisInformation extends Component {
         if (fieldName === 'programmeId') {
             changedValues.studyfieldId = ''
             changedValues.majorId = ''
+            changedValues.graders = []
         }
         if (fieldName === 'majorId') {
             changedValues.studyfieldId = ''
@@ -37,7 +38,8 @@ export default class ThesisInformation extends Component {
             programmeId: '',
             majorId: '',
             studyfieldId: '',
-            grade: ''
+            grade: '',
+            graders: []
         })
         this.setState({ oldGrading: !this.state.oldGrading })
     }

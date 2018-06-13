@@ -68,9 +68,7 @@ export const combineAllThesisData = (thesisId, props) => {
     const studyfield = studyfields.find(field => field.studyfieldId === agreement.studyfieldId)
     const programme = programmes.find(prg => prg.programmeId === studyfield.programmeId)
     const programmeData = { studyfield, programme }
-    const graders = roles
-        .filter(role => role.agreementId === agreement.agreementId)
-        .map(role => persons.find(person => person.personId === role.personId))
+    const graders = thesis.graders.map(grader => grader.personId)
     const councilMeeting = councilMeetings
         .find(meeting => meeting.councilmeetingId === thesis.councilmeetingId)
     const thesisAttachments = attachments.filter(attachment => attachment.agreementId === agreement.agreementId)
