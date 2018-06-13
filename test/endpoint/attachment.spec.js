@@ -8,9 +8,7 @@ const { initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
 const attachment = require('../../src/routes/attachments')
 
-const makeApp = async (id) => {
-    return makeTestApp('/attachments', id, attachment)
-}
+const makeApp = async id => makeTestApp('/attachments', id, attachment)
 
 test.before(async () => {
     await initDb()

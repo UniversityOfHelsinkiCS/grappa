@@ -8,9 +8,7 @@ const statisctics = require('../../src/routes/statisctics')
 const knex = require('../../src/db/connection').getKnex()
 
 
-const makeApp = async (id) => {
-    return makeTestApp('/statistics', id, statisctics)
-}
+const makeApp = async id => makeTestApp('/statistics', id, statisctics)
 
 test.before(async () => {
     await initDb()

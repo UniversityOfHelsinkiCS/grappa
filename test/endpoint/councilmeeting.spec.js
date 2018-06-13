@@ -7,9 +7,7 @@ const request = require('supertest')
 const councilmeetings = require('../../src/routes/councilmeeting')
 const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = async (id) => {
-    return makeTestApp('/councilmeetings', id, councilmeetings)
-}
+const makeApp = async id => makeTestApp('/councilmeetings', id, councilmeetings)
 
 test.before(async () => {
     await initDb()
