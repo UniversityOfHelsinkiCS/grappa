@@ -174,12 +174,17 @@ export class ThesisCreatePage extends Component {
                     {this.renderGraderSelector()}
                     {programme !== undefined ?
                         <div>
-                            <p>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</p>
+                            <p>If a grader is not on the list, you can submit a request below to add him/her
+                                and they should then appear in the list.
+                            </p>
                             <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
                         </div> :
                         undefined}
                     <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>
-                        Upload thesis and review file <Header.Subheader>You can add additional files as well. All need to be in pdf format.</Header.Subheader>
+                        Upload thesis and review file
+                        <Header.Subheader>
+                            You can add additional files as well. All need to be in pdf format.
+                        </Header.Subheader>
                     </Header>
                     <AttachmentAdder
                         attachments={this.state.attachments}
@@ -192,7 +197,11 @@ export class ThesisCreatePage extends Component {
                         <Label basic size="large" color="teal">{programme.name}</Label> :
                         <Label basic size="large" color="red">Please select the unit first.</Label>
                     }
-                    <Dropdown placeholder="Select meeting" selection options={this.formatMeetings()} onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })} />
+                    <Dropdown
+                    placeholder="Select meeting"
+                    selection options={this.formatMeetings()}
+                    onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })}
+                    />
                     */}
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}

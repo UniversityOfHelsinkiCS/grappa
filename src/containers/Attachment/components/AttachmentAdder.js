@@ -101,10 +101,10 @@ export default class AttachmentAdder extends Component {
     }
 
     render() {
-        //const pdfFontSize = `${(this.state.rejected * 50) + 100}%`
+        // const pdfFontSize = `${(this.state.rejected * 50) + 100}%`
         return (
             <div>
-                {/*<h3>Upload <span style={{ fontSize: pdfFontSize }}>pdf</span> attachments</h3>*/}
+                {/* <h3>Upload <span style={{ fontSize: pdfFontSize }}>pdf</span> attachments</h3> */}
                 {this.renderDropzone()}
                 {this.props.attachments ? this.getFileList() : undefined}
                 {this.props.uploadAttachments && this.props.attachments.length > 0 ?

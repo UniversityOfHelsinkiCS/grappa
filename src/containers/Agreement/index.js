@@ -33,7 +33,7 @@ export class AgreementPage extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps && this.props !== newProps && newProps.agreements) {
             // const agreement = newProps.agreements.find(agreement => agreement.authorId === this.props.user.personId);
-            const agreements = newProps.agreements
+            const { agreements } = newProps
             if (agreements) {
                 this.setState(
                     {

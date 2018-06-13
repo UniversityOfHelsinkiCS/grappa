@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { func } from 'prop-types'
 
 class Interval extends Component {
-
     state = {
         intervalId: undefined
     }

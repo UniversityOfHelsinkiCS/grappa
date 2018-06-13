@@ -7,7 +7,6 @@ const ACCORDION_OPEN = 0
 const ACCORDION_CLOSED = -1
 
 export class AddPerson extends Component {
-
     state = {
         activeIndex: ACCORDION_CLOSED,
         unitOptions: [],
