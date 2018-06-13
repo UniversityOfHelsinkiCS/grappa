@@ -130,21 +130,24 @@ export async function saveThesisForm(req, res) {
 }
 
 export async function updateThesis(req, res) {
+    const relationFields = ['authors', 'graders', 'supervisors', 'agreements']
     const updatedFields = req.body
     let thesis = await thesisService.getThesisById(updatedFields.thesisId)
     const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId)
 
     await permissionService.checkUserHasRightToModifyAgreement(req, agreements)
 
+    const thesisFields = {}
     Object.keys(thesis).forEach((key) => {
-        if (updatedFields[key] !== undefined)
+        if (updatedFields[key] !== undefined && !relationFields.includes(key)) {
+            thesisFields[key] = updatedFields[key]
             thesis[key] = updatedFields[key]
+        }
     })
 
     await validateThesis(thesis)
-
     await knex.transaction(async (trx) => {
-        thesis = await thesisService.updateThesis(thesis, trx)
+        thesis = await thesisService.updateThesis(thesisFields, trx)
 
         // TODO: support multiple agreements on one thesis
         if (updatedFields.graders)

@@ -63,11 +63,7 @@ export const getThesesByAgreementPerson = async (personId) => {
 }
 
 export const getThesisById = async (thesisId) => {
-    const thesis = await knex.select(thesisSchema)
-        .from('thesis')
-        .where('thesisId', thesisId)
-        .first()
-    return thesis
+    return getThesisWithRelated(thesisId)
 }
 
 export const saveThesis = async (thesis, trx) => {
@@ -121,6 +117,19 @@ const getThesesForFiltering = () => (
         'supervisors'
     ] }).then(res => res.serialize())
 )
+
+const getThesisWithRelated = async (thesisId) => {
+    const thesis = await Thesis.where('thesisId', thesisId).fetch({ withRelated: [
+        { authors: (qb) => { qb.columns('person.personId', 'email', 'firstname', 'lastname', 'isRetired') } },
+        { agreements: (qb) => { qb.columns('agreementId', 'thesisId', 'studyfieldId', 'authorId', 'responsibleSupervisorId') } },
+        'supervisors'
+    ] }).then(res => res.serialize())
+    const { agreements } = thesis
+    thesis.authors.push(...await getThesisAuthorsFromInvites(thesis, agreements))
+    thesis.graders = await getPersonRoleForThesis(thesis, agreements, 'grader')
+    thesis.supervisors.push(...await getPersonRoleForThesis(thesis, agreements, 'supervisor'))
+    return thesis
+}
 
 /**
  * Search invites for thesis author.
