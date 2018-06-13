@@ -12,7 +12,8 @@ const Thesis = bookshelf.Model.extend({
         return this.hasMany('Agreement', 'thesisId', 'thesisId')
     },
     supervisors() {
-        return this.belongsToMany('PersonWithRole', 'agreement', 'thesisId', 'responsibleSupervisorId', 'thesisId', 'personId')
+        return this.belongsToMany('PersonWithRole', 'agreement', 'thesisId',
+            'responsibleSupervisorId', 'thesisId', 'personId')
     }
 })
 

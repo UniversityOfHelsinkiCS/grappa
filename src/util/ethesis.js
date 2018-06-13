@@ -165,7 +165,11 @@ async function eThesisAPI(meta, pdfAddr) {
         .on('finish', () => {
             // JSZip generates a readable stream with a "end" event,
             // but is piped here in a writable stream which emits a "finish" event.
+
+            // TODO: use logger, write more informative message
+            /* eslint-disable no-console */
             console.log('out.zip written.')
+            /* eslint-enable no-console */
         })
     //* /
     const settings = {

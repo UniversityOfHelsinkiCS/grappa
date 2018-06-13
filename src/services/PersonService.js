@@ -89,7 +89,7 @@ export const updatePerson = async (personData) => {
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
-        .then(personId => personId[0])
+        .then(returnArray => returnArray[0])
         .catch((error) => {
             throw error
         })

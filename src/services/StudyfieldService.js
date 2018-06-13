@@ -9,7 +9,7 @@ const studyfieldSchema = [
 
 export const getStudyfields = async () => Studyfield.fetchAll({ withRelated: ['major'] })
 
-//export const getStudyfields = async () => knex.select(studyfieldSchema).from('studyfield')
+// export const getStudyfields = async () => knex.select(studyfieldSchema).from('studyfield')
 
 export const getStudyfield = async studyfieldId =>
     knex.select(studyfieldSchema).from('studyfield').where('studyfield.studyfieldId', studyfieldId).first()

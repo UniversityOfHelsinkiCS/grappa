@@ -4,7 +4,6 @@ in Mathematics department. Also adds "Other major" to those studyfields in
 the same Unit that do not already have a major.
 */
 exports.up = async (knex) => {
-
     const oldProgrammeId = await knex('programme')
         .select('programmeId')
         .where('name', 'Department of Mathematics and Statistics')
@@ -100,7 +99,6 @@ exports.up = async (knex) => {
 }
 
 exports.down = async (knex) => {
-
     const statisticsId = await knex('major')
         .select('majorId')
         .where('majorName', 'Statistics')

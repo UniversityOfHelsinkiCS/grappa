@@ -15,7 +15,7 @@ export const checkUserHasRightToAddAgreement = async (req, studyfieldId) => {
 export const checkUserHasRightToModifyAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
-    const studyfieldId = agreements[0].studyfieldId
+    const { studyfieldId } = agreements[0]
     const checks = [
         isAdmin(roles),
         await hasStudyfieldRole(roles, studyfieldId),

@@ -5,25 +5,12 @@ const mailer = require('../../src/util/mailer')
 
 process.env.DB_SCHEMA = 'thesis_test'
 
-const { createPerson, initDb, createToken } = require('../utils')
+const { createPerson, initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
-const express = require('express')
 const theses = require('../../src/routes/theses')
 const knex = require('../../src/db/connection').getKnex()
-const errorHandler = require('../../src/util/errorHandler')
 
-const makeApp = (userId) => {
-    const app = express()
-    app.use('/theses', (req, res, next) => {
-        req['x-access-token'] = createToken(userId)
-        req.decodedToken = { userId }
-        next()
-    }, theses)
-
-    app.use(errorHandler)
-
-    return app
-}
+const makeApp = async id => makeTestApp('/theses', id, theses)
 
 test.before(async () => {
     await initDb()
@@ -137,7 +124,7 @@ test('thesisForm post & creates id without attachment', async (t) => {
     t.plan(8)
     const { thesisForm, person1, person2 } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     const { agreement } = await validPostForm(t, app, thesisForm)
 
     // Check that the persons are agreementPersons through personWithRole
@@ -161,7 +148,7 @@ test('thesis get all', async (t) => {
     const { thesisForm: thesisForm1 } = await generateThesisForm()
     const { thesisForm: thesisForm2 } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     const { thesis: thesis1 } = await validPostForm(t, app, thesisForm1)
     const { thesis: thesis2 } = await validPostForm(t, app, thesisForm2)
     const sentTheses = [thesis1, thesis2]
@@ -183,7 +170,7 @@ test('thesisForm post & creates id with attachment', async (t) => {
     t.plan(7)
     const { thesisForm } = await generateThesisForm()
     const { personId: adminId } = await createAdmin()
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     await validPostForm(t, app, thesisForm, true)
 })
 
@@ -196,7 +183,7 @@ test('thesisForm post sends emails', async (t) => {
     form.authorEmail = 'emailTest@example.com'
     form.studyfieldId = 1
     const { personId: adminId } = await createAdmin()
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     await validPostForm(t, app, form)
     t.true(mailSpy.calledWith(form.authorEmail), 'Email 1 ok')
     t.true(mailSpy.calledWith('victoria@vastuuproffa.com'), 'Email 2 ok')
@@ -237,7 +224,7 @@ const insertThesisWithAuthorAndPersonInRole = async (authorId, personId, roleId)
 test('author can see own thesis', async (t) => {
     t.plan(2)
     const { personId: authorId } = await createPerson()
-    const app = makeApp(authorId)
+    const app = await makeApp(authorId)
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId)
 
     const res = await request(app)
@@ -256,7 +243,7 @@ test('grader can see theses they are agreementPerson of', async (t) => {
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, graderId, 5)
     await insertThesisWithAuthorAndPersonInRole(authorId)
     await insertThesisWithAuthorAndPersonInRole(authorId)
-    const app = makeApp(graderId)
+    const app = await makeApp(graderId)
     const res = await request(app)
         .get('/theses')
     t.is(res.status, 200)
@@ -272,7 +259,7 @@ test('supervisor can see theses they are agreementPerson of', async (t) => {
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, supervisorId, 6)
     await insertThesisWithAuthorAndPersonInRole(authorId)
     await insertThesisWithAuthorAndPersonInRole(authorId)
-    const app = makeApp(supervisorId)
+    const app = await makeApp(supervisorId)
     const res = await request(app)
         .get('/theses')
     t.is(res.status, 200)
@@ -286,7 +273,7 @@ test('resp prof can see programme thesis', async (t) => {
     const { personId: authorId } = await createPerson()
     const { personId: respProfId } = await createPerson()
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, respProfId, 4)
-    const app = makeApp(respProfId)
+    const app = await makeApp(respProfId)
     const res = await request(app)
         .get('/theses')
     t.is(res.status, 200)
@@ -300,7 +287,7 @@ test('manager can see programme thesis', async (t) => {
     const { personId: authorId } = await createPerson()
     const { personId: managerId } = await createPerson()
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, managerId, 2)
-    const app = makeApp(managerId)
+    const app = await makeApp(managerId)
     const res = await request(app)
         .get('/theses')
     t.is(res.status, 200)
@@ -315,7 +302,7 @@ test('print-person can see programme thesis', async (t) => {
     const { personId: authorId } = await createPerson()
     const { personId: printPersonId } = await createPerson()
     const { title } = await insertThesisWithAuthorAndPersonInRole(authorId, printPersonId, 3)
-    const app = makeApp(printPersonId)
+    const app = await makeApp(printPersonId)
     const res = await request(app)
         .get('/theses')
     t.is(res.status, 200)
@@ -341,7 +328,7 @@ test('admin can see all theses', async (t) => {
         await insertThesisWithAuthorAndPersonInRole(author2Id, supervisorId, 6)
     ])
 
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     const res = await request(app).get('/theses')
     t.is(res.status, 200)
 
@@ -362,7 +349,7 @@ test.serial('invalid thesis is not accepted and has does not modify database', a
     }
 
     const { personId: adminId } = await createAdmin()
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
 
     const res = await request(app)
         .post('/theses')
@@ -399,7 +386,7 @@ test('thesis is validated when updated', async (t) => {
         printDone: false
     }
 
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     const res = await request(app)
         .put('/theses')
         .send(update)
@@ -423,7 +410,7 @@ test('thesis can be updated', async (t) => {
         graders: [newGrader.personId]
     }
 
-    const app = makeApp(adminId)
+    const app = await makeApp(adminId)
     const res = await request(app)
         .put('/theses')
         .send(update)
@@ -448,7 +435,7 @@ test('thesis edit access is checked', async (t) => {
         graders: [newGrader.personId]
     }
 
-    const app = makeApp(authorId)
+    const app = await makeApp(authorId)
     await request(app)
         .put('/theses')
         .send(update)
@@ -464,7 +451,7 @@ test('mark thesis printed', async (t) => {
     const { personId: printPersonId } = await createPerson()
     const { thesisId } = await insertThesisWithAuthorAndPersonInRole(authorId, printPersonId, 3)
 
-    const app = makeApp(printPersonId)
+    const app = await makeApp(printPersonId)
     const res = await request(app)
         .put('/theses/printed')
         .send([thesisId])

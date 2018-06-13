@@ -1,15 +1,13 @@
 import test from 'ava'
+import { createPerson, initDb, makeTestApp } from '../utils'
 
 process.env.DB_SCHEMA = 'roles_test'
 
-const { createPerson, initDb, makeTestApp } = require('../utils')
 const request = require('supertest')
 const rolesRoute = require('../../src/routes/roles')
 const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = async (id) => {
-    return makeTestApp('/roles', id, rolesRoute)
-}
+const makeApp = async id => makeTestApp('/roles', id, rolesRoute)
 
 test.before(async () => {
     await initDb()
