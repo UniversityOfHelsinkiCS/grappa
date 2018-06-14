@@ -36,11 +36,16 @@ module.exports = [
     },
     {
         programmeId: 8,
-        facultyId: 3,
-        name: 'Master\'s Programme in Mathematics and Statistics'
+        facultyId: 1,
+        name: 'OLD Department of Computer Science'
     },
     {
         programmeId: 9,
+        facultyId: 1,
+        name: 'Master\'s Programme in Mathematics and Statistics'
+    },
+    {
+        programmeId: 11,
         facultyId: 3,
         name: 'Master\'s Programme in Life Science'
     },
