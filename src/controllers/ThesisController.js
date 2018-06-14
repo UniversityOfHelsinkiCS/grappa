@@ -117,15 +117,18 @@ export async function saveThesisForm(req, res) {
         savedAgreement.email = authorEmail
 
         await notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId)
-
+        
         return {
-            thesis: savedThesis,
+            thesisId: savedThesis.thesisId,
             agreement: savedAgreement,
             attachments,
             roles
         }
     })
-
+    // Fetch the thesis again so that it includes everything necessary
+    // TODO: Refactor everything so that this is not necessary
+    const fullThesis = await thesisService.getThesisById(response.thesisId)
+    response.thesis = fullThesis
     res.status(200).json(response)
 }
 
