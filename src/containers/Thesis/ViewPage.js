@@ -20,6 +20,7 @@ import AttachmentAdder from '../Attachment/components/AttachmentAdder'
 import GraderSelector from './components/edit/GraderSelector'
 import { combineAllThesisData } from '../../util/theses'
 import GradeEdit from './components/edit/GradeEdit'
+import { getGradersAction } from '../Person/services/personActions'
 
 class ThesisViewPage extends Component {
     state = {
@@ -28,7 +29,9 @@ class ThesisViewPage extends Component {
         newAttachments: [],
         programmeId: '',
         studyfieldId: '',
-        grade: ''
+        grade: '',
+        programmeGraders: [],
+        graders: []
     }
 
     componentDidMount() {
@@ -39,11 +42,12 @@ class ThesisViewPage extends Component {
         this.updateState(newProps)
     }
 
-    updateState(newProps) {
+    updateState = (newProps) => {
         const thesisData = combineAllThesisData(Number(this.props.match.params.id), newProps)
-
-        if (!thesisData.invalid)
+        if (!thesisData.invalid) {
             this.setState(thesisData)
+            getGradersAction(thesisData.programmeData.programme.programmeId).then(res => this.setState({ programmeGraders: res.data }))
+        }
     }
 
     toggleEditField = (fieldName) => {
@@ -57,7 +61,9 @@ class ThesisViewPage extends Component {
 
     handleChange = event => this.setState({ value: event.target.value })
 
-    changeProgramme = event => this.setState({ programmeId: Number(event.target.value), studyfieldId: '' })
+    changeProgramme = (event) => {
+        this.setState({ programmeId: Number(event.target.value), studyfieldId: '' })
+    }
     changeStudyfield = event => this.setState({ studyfieldId: Number(event.target.value) })
     changeGrade = event => this.setState({ grade: event.target.value })
 
@@ -88,7 +94,7 @@ class ThesisViewPage extends Component {
         this.setState({ open: '', value: '' })
     }
 
-    updateGraders = graders => this.setState({ graders })
+    updateGraders = (e, data) => this.setState({ graders: data.value })
 
     updateAttachments = attachments => this.setState({ newAttachments: attachments })
 
@@ -111,7 +117,7 @@ class ThesisViewPage extends Component {
     saveGraders = () => {
         this.props.saveThesis({
             thesisId: this.state.thesis.thesisId,
-            graders: this.state.graders.map(grader => grader.personId)
+            graders: this.state.graders
         })
         this.setState({ open: '', value: '' })
         this.props.getAgreements()
@@ -128,18 +134,20 @@ class ThesisViewPage extends Component {
 
     render() {
         const {
-            thesis, agreement, author, programmeData, graders,
+            thesis, agreement, authors, programmeData,
             councilMeeting, thesisAttachments, allowEdit
         } = this.state
-
         if (!thesis || !agreement)
             return null
 
+        const { graders } = thesis
         return (
             <Grid columns={4}>
                 <GridRow>
                     <ThesisValueField title="Author">
-                        {author ? `${author.firstname} ${author.lastname}` : agreement.email}
+                        {authors ? authors.map(author => (
+                            author.firstname ? `${author.firstname} ${author.lastname}` : author.email
+                        )) : 'NO AUTHORS'}
                     </ThesisValueField>
                 </GridRow>
                 <GridRow>
@@ -183,9 +191,13 @@ class ThesisViewPage extends Component {
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Graders">
-                        {graders.map(grader => (
-                            <div key={grader.personId}>{grader.firstname} {grader.lastname}</div>
-                        ))}
+                        {graders && graders.length > 0 ? graders.map(grader => (
+                            grader.roleRequestId ?
+                                <div key={grader.personId}>
+                                    {grader.person.firstname} {grader.person.lastname} - GRADER NOT CONFIRMED
+                                </div> :
+                                <div key={grader.personId}>{grader.firstname} {grader.lastname}</div>
+                        )) : <div>NO GRADERS</div>}
                     </ThesisValueField>
                     <GridColumn width={8} />
                     <EditButton
@@ -196,12 +208,10 @@ class ThesisViewPage extends Component {
                     />
                     <ThesisFieldEdit active={this.state.open === 'graders'}>
                         <GraderSelector
-                            graders={graders}
+                            graders={this.state.graders}
                             validationErrors={{}}
                             allowEdit={allowEdit}
-                            persons={this.props.persons}
-                            programmeId={programmeData.programme.programmeId}
-                            roles={this.props.roles}
+                            programmeGraders={this.state.programmeGraders}
                             change={this.updateGraders}
                         />
                     </ThesisFieldEdit>

@@ -54,7 +54,7 @@ export const swapDevUser = async (newHeaders) => {
     setToken(token)
 }
 
-const callApi = async (url, method = 'get', data, prefix) => {
+export const callApi = async (url, method = 'get', data, prefix) => {
     const options = isDevEnv ? getDevOptions() : { headers: {} }
     const token = await getToken()
     options.headers['x-access-token'] = token

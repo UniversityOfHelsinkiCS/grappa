@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { number, func, arrayOf } from 'prop-types'
 import moment from 'moment'
+import { Dropdown } from 'semantic-ui-react'
 import { councilmeetingType, programmeType } from '../../../util/types'
-import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
+// import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
 
 export default class ThesisCouncilmeetingPicker extends Component {
     state = {
@@ -30,16 +31,22 @@ export default class ThesisCouncilmeetingPicker extends Component {
             }))
 
         return [{ id: '', content: 'Select Date' }, ...meetings]
-    };
+    }
+
+    formatProgrammes = programmes => (
+        programmes
+            .filter(programme => !programme.name.includes('Department') && !programme.name.includes('OLD'))
+            .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
+    )
 
     chooseMeeting = (event) => {
         if (event.target.value) {
             this.props.sendChange({ councilmeetingId: Number(event.target.value) })
         }
-    };
+    }
 
-    chooseProgramme = (event) => {
-        const programmeId = Number(event.target.value)
+    chooseProgramme = (event, data) => {
+        const programmeId = Number(data.value)
         if (programmeId) {
             this.setState({ programmeId },
                 this.props.sendChange({ councilmeetingId: undefined })
@@ -50,16 +57,18 @@ export default class ThesisCouncilmeetingPicker extends Component {
     render() {
         const chosenMeeting = this.props.chosenMeetingId !== null ? this.props.chosenMeetingId : ''
         const formattedMeetings = this.formatMeetings()
+        const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
             <div>
                 <h3 className="ui dividing header">Choose the Councilmeeting date</h3>
                 <p>
                     Select correct unit for the councilmeeting first.
                 </p>
-                <ProgrammeSelect
+                <Dropdown name="programmes" placeholder="Select unit" selection options={programmes} onChange={this.chooseProgramme} />
+                {/* <ProgrammeSelect
                     onChange={this.chooseProgramme}
                     programmes={this.props.programmes}
-                />
+                /> */}
                 <p>
                     Deadline tells when Grappa stops accepting new theses for that date. If the deadline has passed
                     you have to either contact admin or submit thesis to another Councilmeeting.

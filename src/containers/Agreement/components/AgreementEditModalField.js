@@ -19,7 +19,7 @@ class AgreementEditModalField extends Component {
     }
 
     resetContent = (e) => {
-        const originalContent = this.props.originalContent
+        const { originalContent } = this.props
         this.setState(
             {
                 content: originalContent

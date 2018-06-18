@@ -2,7 +2,7 @@ import React from 'react'
 import { arrayOf, func } from 'prop-types'
 import { personType } from '../../../util/types'
 
-const PersonSwitcher = ({ persons, onChange }) => (
+const PersonSwitcher = ({ persons, managers, onChange }) => (
     <div className="ui segment">
         <select id="roles" className="ui dropdown" onChange={onChange}>
             <option value="">Choose a role</option>
@@ -12,6 +12,14 @@ const PersonSwitcher = ({ persons, onChange }) => (
                     value={person.shibbolethId}
                 >
                     {person.firstname} {person.lastname}
+                </option>
+            ))}
+            {managers.map(manager => (
+                <option
+                    key={manager.person.email + manager.programmeId}
+                    value={manager.person.email}
+                >
+                    {manager.person.firstname} {manager.person.lastname}
                 </option>
             ))}
         </select>

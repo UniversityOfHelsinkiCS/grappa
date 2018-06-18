@@ -7,7 +7,6 @@ const ACCORDION_OPEN = 0
 const ACCORDION_CLOSED = -1
 
 export class AddPerson extends Component {
-
     state = {
         activeIndex: ACCORDION_CLOSED,
         unitOptions: [],
@@ -40,7 +39,8 @@ export class AddPerson extends Component {
 
     updateOptions = (programmes) => {
         const options = []
-        programmes.map(programme => options.push({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
+        programmes.map(programme =>
+            options.push({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
         this.setState({ unitOptions: options })
         if (options.length === 1) this.setState({ programmes: [options[0].value] })
     }
@@ -107,9 +107,14 @@ export class AddPerson extends Component {
         if (unitOptions.length > 0 && roleOptions.length > 0) {
             return (
                 <div>
-                    {this.state.formSubmitted !== undefined ? this.submissionMessage(this.state.formSubmitted) : undefined}
+                    {this.state.formSubmitted !== undefined ?
+                        this.submissionMessage(this.state.formSubmitted) : undefined}
                     <Accordion fluid styled>
-                        <Accordion.Title active={activeIndex === ACCORDION_OPEN} index={ACCORDION_OPEN} onClick={this.handleClick}>
+                        <Accordion.Title
+                            active={activeIndex === ACCORDION_OPEN}
+                            index={ACCORDION_OPEN}
+                            onClick={this.handleClick}
+                        >
                             <Icon name="id card" />
                             Person information form
                         </Accordion.Title>
@@ -117,18 +122,54 @@ export class AddPerson extends Component {
                             <Form onSubmit={this.handleSubmit} >
                                 <label style={{ fontSize: '13px' }}><b>Unit</b></label>
                                 {unitOptions.length > 1 ?
-                                    <Dropdown name="programmes" placeholder="Select units" fluid multiple selection options={unitOptions} onChange={this.handleInputChange} /> :
+                                    <Dropdown
+                                        name="programmes"
+                                        placeholder="Select units"
+                                        fluid
+                                        multiple
+                                        selection
+                                        options={unitOptions}
+                                        onChange={this.handleInputChange}
+                                    /> :
                                     <Button disabled>{unitOptions[0].text}</Button>
                                 }
                                 <label style={{ fontSize: '13px' }}><b>Role</b></label>
                                 {roleOptions.length > 1 ?
-                                    <Dropdown name="role" placeholder="Select role" fluid selection options={roleOptions} onChange={this.handleInputChange} /> :
+                                    <Dropdown
+                                        name="role"
+                                        placeholder="Select role"
+                                        fluid
+                                        selection
+                                        options={roleOptions}
+                                        onChange={this.handleInputChange}
+                                    /> :
                                     <Button disabled>{roleOptions[0].text}</Button>
                                 }
                                 <Form.Group>
-                                    <Form.Input name="firstname" label="First name" placeholder="First name" value={this.state.firstname} width={4} onChange={this.handleInputChange} />
-                                    <Form.Input name="lastname" label="Last name" placeholder="Last name" value={this.state.lastname} width={4} onChange={this.handleInputChange} />
-                                    <Form.Input name="email" label="Email" placeholder="firstname.lastname@example.com" value={this.state.email} width={6} onChange={this.handleInputChange} />
+                                    <Form.Input
+                                        name="firstname"
+                                        label="First name"
+                                        placeholder="First name"
+                                        value={this.state.firstname}
+                                        width={4}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <Form.Input
+                                        name="lastname"
+                                        label="Last name"
+                                        placeholder="Last name"
+                                        value={this.state.lastname}
+                                        width={4}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <Form.Input
+                                        name="email"
+                                        label="Email"
+                                        placeholder="firstname.lastname@example.com"
+                                        value={this.state.email}
+                                        width={6}
+                                        onChange={this.handleInputChange}
+                                    />
                                 </Form.Group>
                                 <Form.Button>Add</Form.Button>
                             </Form>

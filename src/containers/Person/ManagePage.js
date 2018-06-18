@@ -9,8 +9,9 @@ import PersonRoleChoose from './components/PersonRoleChoose'
 import AddPerson from './components/AddPerson'
 import UnitRoleList from '../UnitRoleList'
 
-import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction } from '../Role/services/roleActions'
-import { invitePerson } from './services/personActions'
+import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction }
+    from '../Role/services/roleActions'
+import { invitePerson, getPersons } from './services/personActions'
 
 import { makePersonRoles } from '../../selectors/personRoles'
 
@@ -26,6 +27,7 @@ export class PersonRoleManagePage extends Component {
 
     componentDidMount() {
         this.props.getRoleRequests()
+        this.props.getPersons()
     }
 
     componentWillReceiveProps(newProps) {
@@ -116,11 +118,19 @@ export class PersonRoleManagePage extends Component {
                         In addition, you can choose a person using the selector.
                         When a person is chosen you can edit their roles.
                     </p>
-                    <RoleRequests roleRequests={this.props.roleRequests.filter(request => programmes.find(programme => programme.programmeId === request.programmeId))} handleGrantRole={this.handleGrantRole} />
+                    <RoleRequests
+                        roleRequests={this.props.roleRequests.filter(request =>
+                            programmes.find(programme => programme.programmeId === request.programmeId))}
+                        handleGrantRole={this.handleGrantRole}
+                    />
                     <div className="ui divider" />
                     <h3>Add a person to Grappa (NOTE: person without @helsinki email cannot sign in)</h3>
                     {this.props.programmes.length > 0 && this.props.availableRoles ?
-                        <AddPerson programmes={programmes} roles={this.props.availableRoles.map(role => role.name)} addNewPerson={this.handleSendInvite} /> :
+                        <AddPerson
+                            programmes={programmes}
+                            roles={this.props.availableRoles.map(role => role.name)}
+                            addNewPerson={this.handleSendInvite}
+                        /> :
                         <p>loading</p>}
                     <div className="ui divider" />
                     <h3>Select a person to manage their roles</h3>
@@ -159,6 +169,9 @@ const mapDispatchToProps = dispatch => ({
     ),
     grantRole: data => (
         dispatch(grantRoleAction(data))
+    ),
+    getPersons: () => (
+        dispatch(getPersons())
     )
 })
 

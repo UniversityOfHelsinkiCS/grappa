@@ -71,7 +71,7 @@ const reducer = (state = {}, action) => {
                     type: 'success',
                     text: action.response.msg
                 }
-            })*/
+            }) */
         case action.type.includes('_FAILURE'): {
             const message = {}
             message[action.type] = {

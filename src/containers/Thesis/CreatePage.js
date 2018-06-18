@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
 import { requestGraderAction, getGradersAction } from '../Person/services/personActions'
-import { personType, programmeType, studyfieldType, councilmeetingType } from '../../util/types'
+import { programmeType, studyfieldType, councilmeetingType } from '../../util/types'
 
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
@@ -23,7 +23,8 @@ export class ThesisCreatePage extends Component {
             thesis: emptyThesisData,
             attachments: [],
             showModal: false,
-            validationErrors: {}
+            validationErrors: {},
+            graders: []
         }
     }
 
@@ -60,7 +61,9 @@ export class ThesisCreatePage extends Component {
 
         this.setState({ thesis })
         if (changedValues.programmeId) {
-            this.props.getGraders(changedValues.programmeId)
+            getGradersAction(changedValues.programmeId).then((res) => {
+                this.setState({ graders: res.data })
+            })
         }
         this.validateThesis(thesis)
             .then(() => this.setState({ validationErrors: {} }))
@@ -81,11 +84,18 @@ export class ThesisCreatePage extends Component {
         const role = 'grader'
         const person = { firstname, lastname, email }
         const roleRequest = { programmeId, role }
-        this.props.requestNewGrader({ person, roleRequest })
+        requestGraderAction({ person, roleRequest }).then((res) => {
+            const { allGraders } = res.data
+            const selected = allGraders.filter(grader => grader.person.email === email)
+            const { graders } = this.state.thesis
+            graders.push(...selected)
+            this.setState({ graders: allGraders })
+            this.handleChange({ graders })
+        })
     }
 
     changeGraders = (e, data) => {
-        const graders = this.props.graders.filter(grader => data.value.includes(grader.personId))
+        const graders = this.state.graders.filter(grader => data.value.includes(grader.personId))
         this.handleChange({ graders })
     }
 
@@ -116,7 +126,7 @@ export class ThesisCreatePage extends Component {
     }
 
     renderGraderSelector = () => {
-        const graders = this.props.graders.map((grader) => {
+        const graders = this.state.graders.map((grader) => {
             const { personId, firstname, lastname, email } = grader.person
             const obj = {
                 key: personId,
@@ -129,7 +139,16 @@ export class ThesisCreatePage extends Component {
             }
             return obj
         })
-        return <Dropdown placeholder="Select graders" fluid multiple search selection options={graders} onChange={this.changeGraders} />
+        return (<Dropdown
+            placeholder="Select graders"
+            fluid
+            multiple
+            search
+            selection
+            options={graders}
+            onChange={this.changeGraders}
+            value={this.state.thesis.graders.map(grader => grader.personId)}
+        />)
     }
 
     render() {
@@ -155,12 +174,17 @@ export class ThesisCreatePage extends Component {
                     {this.renderGraderSelector()}
                     {programme !== undefined ?
                         <div>
-                            <p>If a grader is not on the list, you can submit a request below to add him/her and they should then appear in the list</p>
+                            <p>If a grader is not on the list, you can submit a request below to add him/her
+                                and they should then appear in the list.
+                            </p>
                             <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
                         </div> :
                         undefined}
                     <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>
-                        Upload thesis and review file <Header.Subheader>You can add additional files as well. All need to be in pdf format.</Header.Subheader>
+                        Upload thesis and review file
+                        <Header.Subheader>
+                            You can add additional files as well. All need to be in pdf format.
+                        </Header.Subheader>
                     </Header>
                     <AttachmentAdder
                         attachments={this.state.attachments}
@@ -173,7 +197,11 @@ export class ThesisCreatePage extends Component {
                         <Label basic size="large" color="teal">{programme.name}</Label> :
                         <Label basic size="large" color="red">Please select the unit first.</Label>
                     }
-                    <Dropdown placeholder="Select meeting" selection options={this.formatMeetings()} onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })} />
+                    <Dropdown
+                    placeholder="Select meeting"
+                    selection options={this.formatMeetings()}
+                    onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })}
+                    />
                     */}
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}
@@ -194,13 +222,7 @@ export class ThesisCreatePage extends Component {
 const mapDispatchToProps = dispatch => ({
     saveThesis(thesis) {
         dispatch(saveThesis(thesis))
-    },
-    requestNewGrader: data => (
-        dispatch(requestGraderAction(data))
-    ),
-    getGraders: programmeId => (
-        dispatch(getGradersAction(programmeId))
-    )
+    }
 })
 
 const mapStateToProps = state => ({
@@ -208,17 +230,13 @@ const mapStateToProps = state => ({
     programmes: state.programmes,
     studyfields: state.studyfields,
     roles: state.roles,
-    persons: state.persons,
-    graders: state.graders
+    persons: state.persons
 })
 
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
-    graders: arrayOf(personType).isRequired,
-    getGraders: func.isRequired,
-    requestNewGrader: func.isRequired,
     saveThesis: func.isRequired
 }
 

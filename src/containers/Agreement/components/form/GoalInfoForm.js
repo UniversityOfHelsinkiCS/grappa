@@ -72,7 +72,8 @@ export default class GoalInfoForm extends Component {
                             <option key={grade.value} value={grade.value}>{grade.text}</option>
                         )}
                     </select>
-                    {(Object.keys(this.props.requiredFields).includes('studentGradeGoal') && !this.props.requiredFields.studentGradeGoal) ?
+                    {(Object.keys(this.props.requiredFields).includes('studentGradeGoal')
+                        && !this.props.requiredFields.studentGradeGoal) ?
                         (
                             <div className="ui left pointing red basic label">
                                 Valitse tavoitearvosana
