@@ -38,19 +38,18 @@ export async function getTheses(req, res) {
 
     const rolesInProgrammes = await roleService.getUsersRoles(user)
 
-    rolesInProgrammes.forEach(async (item) => {
+    await Promise.all(rolesInProgrammes.map(async (item) => {
         if (programmeRoles.includes(item.role.name)) {
             // ... As resp_professor, manager or print-person theses in programme
             newTheses = await thesisService.getThesesInProgramme(item.programme.programmeId)
             theses = [...new Set([...theses, ...newTheses])]
         }
-    })
+    }))
 
     const thesesAsAgreementPerson = await thesisService.getThesesByAgreementPerson(user.personId)
     const thesesAsAuthor = await thesisService.getThesesByPersonId(user.personId)
 
     theses = [...theses, ...thesesAsAgreementPerson, ...thesesAsAuthor]
-
     res.status(200).json(removeDuplicates(theses)).end()
 }
 
@@ -118,34 +117,40 @@ export async function saveThesisForm(req, res) {
         savedAgreement.email = authorEmail
 
         await notificationService.createNotification('THESIS_SAVE_ONE_SUCCESS', req, agreement.programmeId)
-
+        
         return {
-            thesis: savedThesis,
+            thesisId: savedThesis.thesisId,
             agreement: savedAgreement,
             attachments,
             roles
         }
     })
-
+    // Fetch the thesis again so that it includes everything necessary
+    // TODO: Refactor everything so that this is not necessary
+    const fullThesis = await thesisService.getThesisById(response.thesisId)
+    response.thesis = fullThesis
     res.status(200).json(response)
 }
 
 export async function updateThesis(req, res) {
+    const relationFields = ['authors', 'graders', 'supervisors', 'agreements']
     const updatedFields = req.body
     let thesis = await thesisService.getThesisById(updatedFields.thesisId)
     const agreements = await agreementService.getAgreementsByThesisId(thesis.thesisId)
 
     await permissionService.checkUserHasRightToModifyAgreement(req, agreements)
 
+    const thesisFields = {}
     Object.keys(thesis).forEach((key) => {
-        if (updatedFields[key] !== undefined)
+        if (updatedFields[key] !== undefined && !relationFields.includes(key)) {
+            thesisFields[key] = updatedFields[key]
             thesis[key] = updatedFields[key]
+        }
     })
 
     await validateThesis(thesis)
-
     await knex.transaction(async (trx) => {
-        thesis = await thesisService.updateThesis(thesis, trx)
+        thesis = await thesisService.updateThesis(thesisFields, trx)
 
         // TODO: support multiple agreements on one thesis
         if (updatedFields.graders)
@@ -193,7 +198,7 @@ const updateGraders = async (graders, agreement, trx) => {
 }
 
 export async function markPrinted(req, res) {
-    if (await roleService.checkUserHasRightToPrint(req)) {
+    if (await permissionService.checkUserHasRightToPrint(req)) {
         await thesisService.markPrinted(req.body)
         res.status(200).json(req.body)
     } else {

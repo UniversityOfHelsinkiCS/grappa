@@ -32,6 +32,7 @@ export const deleteFromDb = async (connection) => {
     await connection('attachment').del()
     await connection('agreementPerson').del()
     await connection('emailInvite').del()
+    await connection('roleRequest').del()
     await connection('agreement').del()
     await connection('thesis').del()
     await connection('personWithRole').del()

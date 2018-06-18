@@ -7,9 +7,7 @@ const request = require('supertest')
 const persons = require('../../src/routes/persons')
 const knex = require('../../src/db/connection').getKnex()
 
-const makeApp = async (id) => {
-    return makeTestApp('/persons', id, persons)
-}
+const makeApp = async id => makeTestApp('/persons', id, persons)
 
 test.before(async () => {
     await initDb()
@@ -28,18 +26,14 @@ test.serial('person get all for admin', async (t) => {
     t.is(testpersons.length, allPersons.length)
 })
 
-test.serial('person get all for student', async (t) => {
-    t.plan(3)
+test.serial('person cant get for student', async (t) => {
+    t.plan(1)
 
     const person = await knex('person').insert({ email: 'ei@ole.com' }).returning('personId')
     const personId = person[0]
     const res = await request(await makeApp(personId)).get('/persons')
 
-    t.is(res.status, 200)
-    const { persons: testpersons, roles } = res.body
-
-    t.truthy(roles.length > 10)
-    t.is(testpersons.length, 5)
+    t.is(res.status, 403)
 })
 
 test.serial('manager can get thesis authors', async (t) => {

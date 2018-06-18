@@ -2,9 +2,7 @@ import Promise from 'bluebird'
 
 import { getLoggedPerson } from './PersonService'
 import { getStudyfieldsProgramme } from './ProgrammeService'
-import { getAgreementPersonsByAgreementId, getUsersRoles } from './RoleService'
-
-// TODO refactor
+import { getAgreementPersonsByAgreementId, getUsersRoles, isUserAdminOrManager, doesUserHaveRole } from './RoleService'
 
 export const checkUserHasRightToAddAgreement = async (req, studyfieldId) => {
     const user = await getLoggedPerson(req)
@@ -17,7 +15,7 @@ export const checkUserHasRightToAddAgreement = async (req, studyfieldId) => {
 export const checkUserHasRightToModifyAgreement = async (req, agreements) => {
     const user = await getLoggedPerson(req)
     const roles = await getUsersRoles(user)
-    const studyfieldId = agreements[0].studyfieldId
+    const { studyfieldId } = agreements[0]
     const checks = [
         isAdmin(roles),
         await hasStudyfieldRole(roles, studyfieldId),
@@ -40,13 +38,28 @@ export const checkUserHasRightToSeeAgreement = async (req, agreements) => {
     await checkPermissions(checks)
 }
 
-const checkPermissions = async (checks) => {
+export const checkUserIsAdminOrManager = async (req) => {
+    if (!await isUserAdminOrManager(await getLoggedPerson(req))) {
+        throw new Error('User is not admin or manager')
+    }
+}
 
+export const checkUserHasRightToPrint = async (req) => {
+    const user = await getLoggedPerson(req)
+    const printerRoles = ['manager', 'admin', 'print_person', 'resp_prof', 'admin']
+
+    if (await doesUserHaveRole(user, printerRoles)) {
+        return true
+    }
+    return false
+}
+
+const checkPermissions = async (checks) => {
     if (checks.includes(true)) {
         return
     }
 
-    throw new Error('User has no access to add thesis')
+    throw new Error('User has no access to do this action')
 }
 
 const isAdmin = roles => !!roles.find(item => item.role.name === 'admin')

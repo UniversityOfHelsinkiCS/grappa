@@ -1,4 +1,4 @@
-import { checkUserIsAdminOrManager } from '../services/RoleService'
+import { checkUserIsAdminOrManager } from '../services/PermissionService'
 
 const emailDraftService = require('../services/EmailDraftService')
 const notificationService = require('../services/NotificationService')

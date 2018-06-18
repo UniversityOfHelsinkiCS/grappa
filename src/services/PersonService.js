@@ -89,7 +89,7 @@ export const updatePerson = async (personData) => {
         .returning('personId')
         .where('personId', '=', personData.personId)
         .update(personData)
-        .then(personId => personId[0])
+        .then(returnArray => returnArray[0])
         .catch((error) => {
             throw error
         })
@@ -123,7 +123,7 @@ export const createNewPerson = async (firstname, lastname, email, programmes, ro
         return { person, personRoles, msg: 'New person created' }
     } catch (error) {
         // console.log(error)
-        return { error: 'Failed to create outside person with roles' }
+        return { error: 'Failed to create a new person with roles' }
     }
 }
 
@@ -153,4 +153,23 @@ export const getPersonByEmail = async email => Person.where({ email }).fetch()
 
 export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
     person.set({ studentNumber, shibbolethId }).save()
+)
+
+export const getPersonsByAgreementId = async (agreementId, roleId) => (
+    knex.select(personSchema).from('person')
+        .innerJoin('personWithRole', 'person.personId', '=', 'personWithRole.personId')
+        .innerJoin('agreementPerson', 'personWithRole.personRoleId', '=', 'agreementPerson.personRoleId')
+        .innerJoin('agreement', 'agreementPerson.agreementId', '=', 'agreement.agreementId')
+        .whereIn('agreement.agreementId', [agreementId])
+        .andWhere('personWithRole.roleId', roleId)
+)
+
+export const getPendingPersonsByAgreement = async (agreementId, roleId) => (
+    RoleRequest
+        .query({ where: { roleId, agreementId, handled: false }, distinct: ['personId', 'roleRequestId'] })
+        .fetchAll({ withRelated: [
+            { person: (qb) => {
+                qb.column('personId', 'firstname', 'lastname', 'email', 'isRetired')
+            } }]
+        }).then(res => res.serialize())
 )

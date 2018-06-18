@@ -41,7 +41,7 @@ const jsonParser = bodyParser.json()
  *  ]
  * }
  */
-router.get('/', (req, res, next) => personController.getPersons(req, res).catch(next))
+router.get('/', auth.checkManagerOrAdmin, (req, res, next) => personController.getPersons(req, res).catch(next))
 
 /**
  * @api {post} persons/invite Invite person to role
@@ -85,6 +85,7 @@ router.get('/graders', jsonParser, (req, res, next) => personController.getProgr
  * @apiParam {Object} person {email: String, firstname: String, lastname: String}
  * @apiParem {Object} roleRequest {role: String, programmeId: String}
  */
-router.post('/request_grader', jsonParser, auth.checkCanSubmitThesis, (req, res, next) => personController.requestGrader(req, res).catch(next))
+router.post('/request_grader', jsonParser, auth.checkCanSubmitThesis, (req, res, next) =>
+    personController.requestGrader(req, res).catch(next))
 
 module.exports = router

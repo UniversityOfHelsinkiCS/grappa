@@ -7,10 +7,7 @@ const request = require('supertest')
 const programmes = require('../../src/routes/programmes')
 const mockStudyfields = require('../../src/mockdata/MockProgrammes')
 
-const makeApp = async (id) => {
-    return makeTestApp('/programmes', id, programmes)
-}
-
+const makeApp = async id => makeTestApp('/programmes', id, programmes)
 
 test.before(async () => {
     await initDb()

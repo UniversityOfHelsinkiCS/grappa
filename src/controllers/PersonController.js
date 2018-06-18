@@ -114,8 +114,8 @@ async function getAllPersons(res) {
 /**
  * Creates a new person with specified roles.
  * Email message is sent to invited person to inform about addition to grappa.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 export const invitePerson = async (req, res) => {
     // await checkUserIsAdminOrManager(req)
@@ -162,10 +162,15 @@ export const requestGrader = async (req, res) => {
         const pendingGraders = await personService.getPendingPersonsWithRole(roleId, programmeId)
         // Is there a simpler way to append these to queries?
         const allGraders = [...graders.serialize(), ...pendingGraders.serialize()]
-        res.status(201).json({ allGraders, msg: 'Created request for a new grader' })
+        res.status(201).json({
+            allGraders,
+            msg: `Created request for ${person.firstname} ${person.lastname} (${person.email}) to be added as a ${role}`
+        })
         return
     }
-    res.status(400).json({ error: 'not like this' })
+    res.status(400).json({
+        error: `Could not create a request for ${person.firstname} ${person.lastname} (${person.email}) to be added as a ${role}`
+    })
 }
 
 export const getProgrammeGraders = async (req, res) => {

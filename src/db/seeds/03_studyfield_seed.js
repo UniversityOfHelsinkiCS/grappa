@@ -5,5 +5,5 @@ exports.seed = async (knex) => {
     await knex('studyfield').del()
     // Inserts seed entries
     await knex('studyfield').insert(studyfields)
-    return knex.raw('ALTER SEQUENCE "studyfield_studyfieldId_seq" RESTART WITH 50')
+    return knex.raw('ALTER SEQUENCE "studyfield_studyfieldId_seq" RESTART WITH 80')
 }

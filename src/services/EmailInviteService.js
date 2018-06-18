@@ -3,6 +3,7 @@ import logger from '../util/logger'
 const crypto = require('crypto')
 const Checkit = require('checkit')
 const knex = require('../db/connection').getKnex()
+const EmailInvite = require('../db/models/email_invite')
 
 const emailService = require('./EmailService')
 
@@ -57,3 +58,7 @@ export function getEmailInviteDataForToken(token) {
 export function markTokenUsed(token) {
     return knex('emailInvite').update({ used: true }).where('token', token)
 }
+
+export const getInviteByAgreement = async agreement => (
+    EmailInvite.query({ where: { agreement, type: 'thesis_author', used: false } }).fetch()
+)
