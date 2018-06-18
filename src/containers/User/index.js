@@ -21,7 +21,13 @@ export class UserPage extends Component {
     handleRoleChange = async (event) => {
         if (!event.target.value) return
         const uid = event.target.value
-        const person = this.props.persons.find(p => p.shibbolethId === uid || `${p.firstname} ${p.lastname}` === uid)
+        let person = {}
+        if (this.props.persons.length > 0) {
+            person = this.props.persons.find(p => p.shibbolethId === uid || `${p.firstname} ${p.lastname}` === uid)
+        } else {
+            person = this.props.managers.find(p => p.person.email === uid || `${p.firstname} ${p.lastname}` === uid).person
+            person.shibbolethId = uid
+        }
         await swapDevUser({
             uid: person.shibbolethId,
             givenname: person.firstname,
@@ -73,6 +79,7 @@ export class UserPage extends Component {
                 {process.env.NODE_ENV !== 'production' ?
                     <PersonSwitcher
                         persons={this.props.persons}
+                        managers={this.props.managers}
                         onChange={this.handleRoleChange}
                     />
                     : null}

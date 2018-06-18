@@ -2,7 +2,7 @@ import React from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import { arrayOf, func, object, bool, number } from 'prop-types'
 // import PersonSelector from '../../../Person/components/PersonSelector'
-import { personType, roleType } from '../../../../util/types'
+import { personType } from '../../../../util/types'
 
 const renderGraderSelector = (graders, programmeGraders, change) => {
     const graderGroup = programmeGraders.map((grader) => {
@@ -21,7 +21,7 @@ const renderGraderSelector = (graders, programmeGraders, change) => {
     return <Dropdown placeholder="Select graders" multiple search selection value={graders} options={graderGroup} onChange={change} />
 }
 
-const GraderSelector = ({ change, programmeGraders, value }) => {
+const GraderSelector = ({ change, programmeGraders, graders }) => {
     // const programmeGraders = getGradersAction(programmeId)// persons.filter(person =>
     //     roles.find(role =>
     //         role.name === 'grader'
@@ -33,19 +33,17 @@ const GraderSelector = ({ change, programmeGraders, value }) => {
         <div className="field">
             <label>
                 Select 2 graders
-                {programmeGraders.length ? renderGraderSelector(value, programmeGraders, change) : <p>My name Jeff</p>}
+                {programmeGraders.length ? renderGraderSelector(graders, programmeGraders, change) : <p>My name Jeff</p>}
             </label>
         </div>
     )
 }
 
 GraderSelector.propTypes = {
-    graders: arrayOf(personType).isRequired,
+    graders: arrayOf(number).isRequired,
+    programmeGraders: arrayOf(personType).isRequired,
     validationErrors: object.isRequired,
     allowEdit: bool.isRequired,
-    persons: arrayOf(personType).isRequired,
-    programmeId: number.isRequired,
-    roles: arrayOf(roleType).isRequired,
     change: func.isRequired
 }
 

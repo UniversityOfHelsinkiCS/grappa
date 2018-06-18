@@ -47,7 +47,7 @@ class NavBar extends Component {
         if (this.props.user) {
             this.refreshLinks(this.props.user)
         }
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development' && this.props.user && this.props.user.roles && this.props.user.roles.find(role => role.role === 'admin')) {
             this.props.getPersons()
         }
     }
@@ -62,7 +62,7 @@ class NavBar extends Component {
     }
 
     getEverything = (user) => {
-        this.props.getPersons()
+        // this.props.getPersons()
         this.props.getStudyfields()
         this.props.getAgreements()
         this.props.getCouncilmeetings()

@@ -1,7 +1,7 @@
 const reducer = (state = [], action) => {
     switch (action.type) {
         case 'THESIS_SAVE_ONE_SUCCESS':
-            return action.response.roles
+            return state
         case 'THESIS_UPDATE_ONE_SUCCESS':
             return action.response.roles
         case 'PERSON_GET_ALL_SUCCESS':

@@ -11,7 +11,7 @@ import UnitRoleList from '../UnitRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction }
     from '../Role/services/roleActions'
-import { invitePerson } from './services/personActions'
+import { invitePerson, getPersons } from './services/personActions'
 
 import { makePersonRoles } from '../../selectors/personRoles'
 
@@ -27,6 +27,7 @@ export class PersonRoleManagePage extends Component {
 
     componentDidMount() {
         this.props.getRoleRequests()
+        this.props.getPersons()
     }
 
     componentWillReceiveProps(newProps) {
@@ -168,6 +169,9 @@ const mapDispatchToProps = dispatch => ({
     ),
     grantRole: data => (
         dispatch(grantRoleAction(data))
+    ),
+    getPersons: () => (
+        dispatch(getPersons())
     )
 })
 

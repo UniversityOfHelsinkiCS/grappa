@@ -134,7 +134,7 @@ class ThesisViewPage extends Component {
 
     render() {
         const {
-            thesis, agreement, author, programmeData,
+            thesis, agreement, authors, programmeData,
             councilMeeting, thesisAttachments, allowEdit
         } = this.state
         if (!thesis || !agreement)
@@ -145,7 +145,9 @@ class ThesisViewPage extends Component {
             <Grid columns={4}>
                 <GridRow>
                     <ThesisValueField title="Author">
-                        {author ? `${author.firstname} ${author.lastname}` : agreement.email}
+                        {authors ? authors.map(author => (
+                            author.firstname ? `${author.firstname} ${author.lastname}` : author.email
+                        )) : 'NO AUTHORS'}
                     </ThesisValueField>
                 </GridRow>
                 <GridRow>
@@ -206,13 +208,10 @@ class ThesisViewPage extends Component {
                     />
                     <ThesisFieldEdit active={this.state.open === 'graders'}>
                         <GraderSelector
-                            graders={graders}
+                            graders={this.state.graders}
                             validationErrors={{}}
                             allowEdit={allowEdit}
-                            persons={this.props.persons}
                             programmeGraders={this.state.programmeGraders}
-                            programmeId={programmeData.programme.programmeId}
-                            value={this.state.graders}
                             change={this.updateGraders}
                         />
                     </ThesisFieldEdit>
