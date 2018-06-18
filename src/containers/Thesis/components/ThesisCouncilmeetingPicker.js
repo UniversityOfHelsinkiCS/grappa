@@ -33,8 +33,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
         return [{ id: '', content: 'Select Date' }, ...meetings]
     }
 
-    formatProgrammes = () => (
-        this.props.programmes
+    formatProgrammes = programmes => (
+        programmes
             .filter(programme => !programme.name.includes('Department') && !programme.name.includes('OLD'))
             .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
     )
@@ -57,7 +57,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
     render() {
         const chosenMeeting = this.props.chosenMeetingId !== null ? this.props.chosenMeetingId : ''
         const formattedMeetings = this.formatMeetings()
-        const programmes = this.formatProgrammes()
+        const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
             <div>
                 <h3 className="ui dividing header">Choose the Councilmeeting date</h3>

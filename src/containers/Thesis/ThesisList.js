@@ -156,8 +156,8 @@ export class ThesisList extends Component {
                             <ThesisListRow
                                 key={thesis.thesisId}
                                 thesis={thesis}
-                                councilmeeting={this.props.councilmeetings.find(councilmeeting => (
-                                    councilmeeting.councilmeetingId === thesis.councilmeetingId))}
+                                councilmeeting={this.props.councilmeetings ? this.props.councilmeetings.find(councilmeeting => (
+                                    councilmeeting.councilmeetingId === thesis.councilmeetingId)) : undefined}
                                 toggleThesis={this.toggleThesis}
                                 showButtons={this.props.showButtons}
                                 selectable={this.props.selectable}
