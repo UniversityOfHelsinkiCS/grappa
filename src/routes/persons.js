@@ -41,7 +41,7 @@ const jsonParser = bodyParser.json()
  *  ]
  * }
  */
-router.get('/', (req, res, next) => personController.getPersons(req, res).catch(next))
+router.get('/', auth.checkManagerOrAdmin, (req, res, next) => personController.getPersons(req, res).catch(next))
 
 /**
  * @api {post} persons/invite Invite person to role
