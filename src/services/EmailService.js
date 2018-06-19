@@ -47,8 +47,8 @@ export const sendAddedToGrappa = async (programmes, role, email, firstname, last
         'as a grader, but will just not be able to use Grappa.'
     const title = 'You have been added to Grappa'
     const body = `Dear ${firstname} ${lastname}\n
-    You have been added to Grappa, a web application to help in managing the final stages of approving ' +
-        'student's master's thesis.\n
+    You have been added to Grappa, a web application to help in managing the final stages of approving ` +
+        `student's master's thesis.\n
     You have been granted the role ${role} in: \n${programmes.map(programme => `${programme.name}\n`)}.
     ${email.includes('@helsinki.fi') ? helsinkiEmail : nonHelsinkiEmail}\n
     If you have any problems or questions please contact grp-toska@helsinki.fi.\n\n
