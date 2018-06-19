@@ -157,7 +157,7 @@ export const requestGrader = async (req, res) => {
     const roleId = await roleService.getRoleId(role)
     // check that this person doesn't already have grader role in the programme
     if (await roleService.getPersonRole(personId, programmeId, role) === undefined) {
-        await roleService.submitRoleRequest(personId, roleId, programmeId)
+        await roleService.submitRoleRequest(personId, roleId, role, programmeId)
         const graders = await personService.getPersonsWithRoleForProgramme(roleId, programmeId)
         const pendingGraders = await personService.getPendingPersonsWithRole(roleId, programmeId)
         // Is there a simpler way to append these to queries?
