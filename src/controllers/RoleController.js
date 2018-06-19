@@ -64,7 +64,7 @@ export const sendGraderRequest = async (req, res) => {
         return
     }
     const roleId = await roleService.getRoleId('grader')
-    await roleService.submitRoleRequest(user.personId, roleId, programmeId)
+    await roleService.submitRoleRequest(user.personId, roleId, 'grader', programmeId)
     res.status(201).json({ msg: 'Good job, you!' })
 }
 

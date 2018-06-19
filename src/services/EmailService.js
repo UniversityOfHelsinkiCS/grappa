@@ -72,3 +72,17 @@ export const sendRoleRequestNotification = async (address, roleName, granted, gr
         logger.error('Email send error', { error: error.message })
     }
 }
+
+export const notifyManagersAboutRoleRequest = async (address, roleName, programmeName) => {
+    const title = `RoleRequest in Grappa for ${programmeName}`
+    const body = `A new role request for ${roleName} in ${programmeName} has been submitted to Grappa.\n
+    You are receiving this message since you are marked as a manager of this programme, and you (or another manager
+    of the programme) should view and handle the request. You can find unhandled requests at https://grappa.helsinki.fi/v2/PersonRoleManagement.\n\n
+    Best regards,\n
+    Toska-group`
+    try {
+        await mailer.sendEmail(address, title, body)
+    } catch (error) {
+        logger.error('Email send error', { error: error.message })
+    }
+}
