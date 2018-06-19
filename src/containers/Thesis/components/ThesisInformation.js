@@ -9,7 +9,7 @@ export default class ThesisInformation extends Component {
     constructor() {
         super()
         this.state = {
-            oldGrading: false
+            oldGrading: true
         }
     }
 
@@ -98,22 +98,22 @@ export default class ThesisInformation extends Component {
     renderToggleUnitsAndGradingButton() {
         return (
             <div>
-                <p><b>Is the thesis according to new (40 credits) or old (30 credits) grading?</b></p>
+                <p><b>Is the thesis according to old (40 credits) or new (30 credits) grading?</b></p>
                 <Button.Group id="unit_toggle">
-                    <Button
-                        color={this.state.oldGrading ? 'grey' : 'blue'}
-                        onClick={this.toggleGrading}
-                        disabled={!this.props.allowEdit}
-                        value={false}
-                    >
-                    40 credits
-                    </Button>
-                    <Button.Or />
                     <Button
                         color={this.state.oldGrading ? 'blue' : 'grey'}
                         onClick={this.toggleGrading}
                         disabled={!this.props.allowEdit}
                         value
+                    >
+                    40 credits
+                    </Button>
+                    <Button.Or />
+                    <Button
+                        color={this.state.oldGrading ? 'grey' : 'blue'}
+                        onClick={this.toggleGrading}
+                        disabled={!this.props.allowEdit}
+                        value={false}
                     >
                     30 credits
                     </Button>
