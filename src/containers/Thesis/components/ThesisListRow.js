@@ -39,7 +39,7 @@ const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggle
                 {authorName.join(' & ')}
             </td>
             <td>{councilmeeting ? formatDisplayDate(councilmeeting.date) : null}</td>
-            <td>{renderStatusIcons(authorName.includes('@'))}</td>
+            <td>{renderStatusIcons(!authorName.some(author => author.includes('@')))}</td>
             <td>{renderStatusIcons(checkGraders(thesis.graders))}</td>
             <td>{renderStatusIcons(thesis.printDone)}</td>
         </tr>

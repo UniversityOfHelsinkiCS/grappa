@@ -6,6 +6,7 @@ import { Redirect } from 'react-router'
 import * as queryString from 'query-string'
 
 import { acceptThesis, acceptRole } from './services/inviteAction'
+import { getToken } from '../../util/common'
 
 export class InvitePage extends Component {
     state = {
@@ -13,7 +14,7 @@ export class InvitePage extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (!this.state.loaded && newProps.user.token) {
+        if (!this.state.loaded && getToken()) {
             this.setState({ loaded: true },
                 this.acceptToken(newProps))
         }
@@ -22,7 +23,6 @@ export class InvitePage extends Component {
     acceptToken = (props) => {
         const { acceptThesisAction, acceptRoleAction, location, status } = props
         const { type, token } = queryString.parse(location.search)
-
         if (!status && type === 'thesis') {
             acceptThesisAction(token)
         }
@@ -34,8 +34,6 @@ export class InvitePage extends Component {
 
     render() {
         const { status } = this.props
-
-
         if (status) {
             return <Redirect to="/theses" />
         }
