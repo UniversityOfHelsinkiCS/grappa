@@ -5,6 +5,8 @@ import bookshelf from '../db/bookshelf'
 
 const knex = require('../db/connection').getKnex()
 const programmeService = require('./ProgrammeService')
+const personService = require('./PersonService')
+const emailService = require('./EmailService')
 
 // Role
 
@@ -162,13 +164,17 @@ export const doesUserHaveRole = async (user, roles) =>
         .andWhere(function () { this.whereIn('name', roles) })
         .then(res => res.length > 0)
 
-export const submitRoleRequest = async (personId, roleId, programmeId) => {
+export const submitRoleRequest = async (personId, roleId, roleName, programmeId) => {
     const request = await RoleRequest.forge({
         personId,
         roleId,
         programmeId,
         handled: false
     }).save()
+    const managers = await personService.getPersonsWithRoleForProgramme(await getRoleId('manager'), programmeId)
+        .then(res => res.serialize())
+    managers.map(manager =>
+        emailService.notifyManagersAboutRoleRequest(manager.person.email, roleName, manager.programme.name))
     return request
 }
 

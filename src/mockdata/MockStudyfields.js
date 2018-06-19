@@ -1,3 +1,5 @@
+// Remember to change id counting to start after mock data in studyfield_seed.js!!
+
 module.exports = [
     { studyfieldId: 1, programmeId: 1, name: 'Software Systems' },
     { studyfieldId: 2, programmeId: 1, name: 'Algorithms, Data Analytics and Machine Learning' },
