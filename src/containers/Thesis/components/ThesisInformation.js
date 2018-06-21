@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { arrayOf, bool, func, object } from 'prop-types'
+import { Button } from 'semantic-ui-react'
 
 import { oldGradeFields, gradeFields } from '../../../util/theses'
 import { thesisType, programmeType, studyfieldType } from '../../../util/types'
@@ -8,7 +9,7 @@ export default class ThesisInformation extends Component {
     constructor() {
         super()
         this.state = {
-            oldGrading: false
+            oldGrading: true
         }
     }
 
@@ -33,7 +34,8 @@ export default class ThesisInformation extends Component {
         this.props.sendChange(changedValues)
     };
 
-    toggleGrading = () => {
+    toggleGrading = (e, data) => {
+        if (this.state.oldGrading === data.value) return
         this.props.sendChange({
             programmeId: '',
             majorId: '',
@@ -41,7 +43,7 @@ export default class ThesisInformation extends Component {
             grade: '',
             graders: []
         })
-        this.setState({ oldGrading: !this.state.oldGrading })
+        this.setState({ oldGrading: data.value })
     }
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
@@ -95,14 +97,28 @@ export default class ThesisInformation extends Component {
 
     renderToggleUnitsAndGradingButton() {
         return (
-            <button
-                className="ui button"
-                onClick={this.toggleGrading}
-                disabled={!this.props.allowEdit}
-            >
-                {this.state.oldGrading ?
-                    'Enable new grading' : 'Enable old grading'}
-            </button>
+            <div>
+                <p><b>Is the thesis according to old (40 credits) or new (30 credits) grading?</b></p>
+                <Button.Group id="unit_toggle">
+                    <Button
+                        color={this.state.oldGrading ? 'blue' : 'grey'}
+                        onClick={this.toggleGrading}
+                        disabled={!this.props.allowEdit}
+                        value
+                    >
+                    40 credits
+                    </Button>
+                    <Button.Or />
+                    <Button
+                        color={this.state.oldGrading ? 'grey' : 'blue'}
+                        onClick={this.toggleGrading}
+                        disabled={!this.props.allowEdit}
+                        value={false}
+                    >
+                    30 credits
+                    </Button>
+                </Button.Group>
+            </div>
         )
     }
 
@@ -171,13 +187,12 @@ export default class ThesisInformation extends Component {
 
         return (
             <div className="ui form">
-                <div className="three fields">
+                <div className="two fields">
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
-                    <div className="field">
-                        <label>&nbsp;   </label>
-                        {this.renderToggleUnitsAndGradingButton()}
-                    </div>
+                </div>
+                <div className="one field">
+                    {this.renderToggleUnitsAndGradingButton()}
                 </div>
                 <div className="four fields">
                     {this.renderDropdownField('Unit', programmes, 'programmeId', !this.props.allowEdit)}
