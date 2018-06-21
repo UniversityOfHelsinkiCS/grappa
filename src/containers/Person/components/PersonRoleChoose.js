@@ -49,7 +49,7 @@ export default class PersonRoleChoose extends Component {
     removeRole = role => () => this.props.removeRole(role);
 
     render() {
-        const { person, roles } = this.props
+        const { person } = this.props
         return (
             <div>
                 <h2>{`${person.firstname} ${person.lastname}`}</h2>
@@ -68,9 +68,9 @@ export default class PersonRoleChoose extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {roles.map(role => (
+                        {person.roles.map(role => (
                             <tr key={role.personRoleId}>
-                                <td>{role.name}</td>
+                                <td>{role.role}</td>
                                 <td>{role.programme}</td>
                                 <td>
                                     {!role.agreementId ?
@@ -105,7 +105,7 @@ export default class PersonRoleChoose extends Component {
 PersonRoleChoose.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
     availableRoles: arrayOf(roleType).isRequired,
-    roles: arrayOf(roleType).isRequired,
+    // roles: arrayOf(roleType).isRequired,
     person: personType.isRequired,
     addRole: func.isRequired,
     removeRole: func.isRequired
