@@ -7,7 +7,7 @@ import RoleRequests from './components/RoleRequests'
 import PersonSelector from './components/PersonSelector'
 import PersonRoleChoose from './components/PersonRoleChoose'
 import AddPerson from './components/AddPerson'
-import UnitRoleList from '../UnitRoleList'
+import ProgrammeRoleList from '../ProgrammeRoleList'
 
 import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRoleAction }
     from '../Role/services/roleActions'
@@ -45,14 +45,20 @@ export class PersonRoleManagePage extends Component {
         }
     }
 
+    getUserProgrammes = () => {
+        const programmes = this.props.user.roles.filter(role => role.role === 'manager' || role.role === 'admin')
+        const simpleProgrammes = programmes.map(programme => programme.programme)
+        return [...new Set(simpleProgrammes)]
+    }
+
     checkUserRights = () => {
-        const { user } = this.props
+        const { user, programmes } = this.props
         if (user.roles.find(role => role.role === 'admin')) {
-            return this.props.programmes
+            return programmes
         }
         const managerRoles = user.roles.filter(role => role.role === 'manager')
-        const programmes = managerRoles.map(role => ({ programmeId: role.programmeId, name: role.programme }))
-        return programmes
+        const userProgrammes = managerRoles.map(role => ({ programmeId: role.programmeId, name: role.programme }))
+        return userProgrammes
     }
 
     selectPerson = (persons) => {
@@ -105,7 +111,8 @@ export class PersonRoleManagePage extends Component {
 
     render() {
         if (this.props.user.roles) {
-            const programmes = this.checkUserRights()
+            const { persons, availableRoles, roleRequests, programmes } = this.props
+            const userProgrammes = this.checkUserRights()
             const selected = this.state.person ? [this.state.person] : []
             return (
                 <div>
@@ -119,30 +126,33 @@ export class PersonRoleManagePage extends Component {
                         When a person is chosen you can edit their roles.
                     </p>
                     <RoleRequests
-                        roleRequests={this.props.roleRequests.filter(request =>
+                        roleRequests={roleRequests.filter(request =>
                             programmes.find(programme => programme.programmeId === request.programmeId))}
                         handleGrantRole={this.handleGrantRole}
                     />
                     <div className="ui divider" />
                     <h3>Add a person to Grappa (NOTE: person without @helsinki email cannot sign in)</h3>
-                    {this.props.programmes.length > 0 && this.props.availableRoles ?
+                    {programmes.length > 0 && availableRoles ?
                         <AddPerson
-                            programmes={programmes}
-                            roles={this.props.availableRoles.map(role => role.name)}
+                            programmes={userProgrammes}
+                            roles={availableRoles.map(role => role.name)}
                             addNewPerson={this.handleSendInvite}
                         /> :
                         <p>loading</p>}
                     <div className="ui divider" />
                     <h3>Select a person to manage their roles</h3>
                     <PersonSelector
-                        persons={this.props.persons}
+                        persons={persons}
                         selected={selected}
                         changeList={this.selectPerson}
                     />
                     <div className="ui divider" />
                     {this.renderManagement()}
                     <div className="ui divider" />
-                    <UnitRoleList />
+                    <ProgrammeRoleList
+                        userProgrammes={this.getUserProgrammes()}
+                        persons={persons}
+                    />
                     <div className="ui divider" />
                 </div>
             )
