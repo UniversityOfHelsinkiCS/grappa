@@ -13,15 +13,11 @@ const emailService = require('../services/EmailService')
  */
 export async function getPersons(req, res) {
     // TODO test & refactor
+    /*
     const programmeRoles = ['resp_professor', 'print_person', 'manager']
 
     let persons = []
     let newPersons = []
-    const user = await getLoggedPerson(req)
-
-    if (!user) {
-        return userNotFound(res)
-    }
 
     // Add user to person list
     persons.push(user)
@@ -53,9 +49,16 @@ export async function getPersons(req, res) {
 
     // All required persons found, now role objects for front
     const roles = await roleService.getRolesForAllPersons()
+    */
+    const user = await getLoggedPerson(req)
+
+    if (!user) {
+        return userNotFound(res)
+    }
+
+    const persons = await personService.getAllPersonsWithRoles()
     const responseObject = {
-        roles,
-        persons: removeDuplicates(persons)
+        persons
     }
     return res.status(200).json(responseObject)
 }
@@ -65,25 +68,25 @@ export const getManagers = async (req, res) => {
     return res.status(200).json({ managers })
 }
 
-async function getGradersAndSupervisors() {
-    const supervisorId = await roleService.getRoleId('supervisor')
-    const graderId = await roleService.getRoleId('grader')
+// async function getGradersAndSupervisors() {
+//     const supervisorId = await roleService.getRoleId('supervisor')
+//     const graderId = await roleService.getRoleId('grader')
 
-    const supervisors = await personService.getPersonsWithRole(supervisorId)
-    const graders = await personService.getPersonsWithRole(graderId)
-    return [...supervisors, ...graders]
-}
+//     const supervisors = await personService.getPersonsWithRole(supervisorId)
+//     const graders = await personService.getPersonsWithRole(graderId)
+//     return [...supervisors, ...graders]
+// }
 
-function removeDuplicates(persons) {
-    const responsePersons = new Map()
-    persons.forEach((person) => {
-        if (!responsePersons.get(person.personId)) {
-            responsePersons.set(person.personId, person)
-        }
-    })
+// function removeDuplicates(persons) {
+//     const responsePersons = new Map()
+//     persons.forEach((person) => {
+//         if (!responsePersons.get(person.personId)) {
+//             responsePersons.set(person.personId, person)
+//         }
+//     })
 
-    return [...responsePersons.values()]
-}
+//     return [...responsePersons.values()]
+// }
 
 async function userNotFound(res) {
     if (process.env.NODE_ENV !== 'development') {
@@ -99,17 +102,17 @@ async function userNotFound(res) {
     return res.status(200).json(responseObject).end()
 }
 
-async function getAllPersons(res) {
-    const managers = await personService.getPersonsForRole('manager')
-    const persons = await personService.getAllPersons()
-    const roles = await roleService.getRolesForAllPersons()
-    const responseObject = {
-        roles,
-        persons,
-        managers
-    }
-    return res.status(200).json(responseObject).end()
-}
+// async function getAllPersons(res) {
+//     const managers = await personService.getPersonsForRole('manager')
+//     const persons = await personService.getAllPersons()
+//     const roles = await roleService.getRolesForAllPersons()
+//     const responseObject = {
+//         roles,
+//         persons,
+//         managers
+//     }
+//     return res.status(200).json(responseObject).end()
+// }
 
 /**
  * Creates a new person with specified roles.
