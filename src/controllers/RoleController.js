@@ -36,7 +36,7 @@ export async function deleteRole(req, res) {
     await checkUserIsAdminOrManager(req)
     let personRoleId = req.params.id
     personRoleId = await roleService.deletePersonRole(personRoleId)
-    res.status(200).json(personRoleId).end()
+    res.status(200).json({ personRoleId, msg: 'Role was successfully deleted' })
 }
 
 export async function updateStatement(req, res) {
