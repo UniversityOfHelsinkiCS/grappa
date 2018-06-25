@@ -238,7 +238,7 @@ class ThesisViewPage extends Component {
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Council meeting">
-                        {councilMeeting ?
+                        {councilMeeting && meetingProgramme ?
                             `${meetingProgramme.name} ${moment(councilMeeting.date).format('DD.MM.YYYY')}` :
                             'Not selected'}
                     </ThesisValueField>

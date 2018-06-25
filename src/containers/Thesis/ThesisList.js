@@ -192,7 +192,7 @@ ThesisList.defaultProps = {
 
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
-    theses: state.theses,
+    // theses: state.theses,
     agreements: state.agreements,
     attachments: state.attachments
 
