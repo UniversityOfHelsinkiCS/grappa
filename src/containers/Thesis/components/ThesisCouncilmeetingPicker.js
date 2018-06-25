@@ -91,6 +91,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
         const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
             <Grid columns="equal">
+                <br />
                 <h3 className="ui dividing header">Choose the Councilmeeting date</h3>
                 <Grid.Row verticalAlign="bottom">
                     <Grid.Column width={5}>
