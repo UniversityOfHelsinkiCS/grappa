@@ -40,5 +40,5 @@ test('list is empty if programme is not selected', (t) => {
         />
     )
 
-    t.is(picker.find('option').length, 1)
+    t.is(picker.find('option').length, 0)
 })
