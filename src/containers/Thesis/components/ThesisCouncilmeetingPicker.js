@@ -180,11 +180,13 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
 ThesisCouncilmeetingPicker.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
-    chosenMeetingId: number,
     sendChange: func.isRequired,
-    programmes: arrayOf(programmeType).isRequired
+    programmes: arrayOf(programmeType).isRequired,
+    councilmeetingId: number,
+    programmeId: number
 }
 
 ThesisCouncilmeetingPicker.defaultProps = {
-    chosenMeetingId: undefined
+    councilmeetingId: undefined,
+    programmeId: undefined
 }

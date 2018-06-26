@@ -3,7 +3,7 @@ import { arrayOf, func, shape, string } from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import isEqual from 'lodash/isEqual'
-import { Grid, Dropdown, Button } from 'semantic-ui-react'
+import { Grid, Dropdown, Button, Header } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { downloadAttachments } from '../Attachment/services/attachmentActions'
@@ -126,14 +126,35 @@ export class CouncilmeetingViewPage extends Component {
         const councilMeetingId = this.state.currentMeeting ? this.state.currentMeeting.councilmeetingId : 0
         const { programmes, theses } = this.props
         const formattedProgrammes = this.formatProgrammes(programmes)
-        const selectedProgramme = this.state.selectedProgramme ? programmes.find(programme => programme.programmeId === this.state.selectedProgramme) : undefined
+        const selectedProgramme = this.state.selectedProgramme ?
+            programmes.find(programme => programme.programmeId === this.state.selectedProgramme) : undefined
         const meetingTheses = this.filterThesesByMeeting(theses, councilMeetingId)
         return (
             <Grid columns="equal">
                 <Grid.Row verticalAlign="bottom">
                     <Grid.Column width={5}>
-                        <Dropdown selection fluid value={this.state.selectedProgramme} options={formattedProgrammes} onChange={this.selectProgramme} />
+                        <Dropdown
+                            selection
+                            fluid
+                            placeholder="Select unit"
+                            value={this.state.selectedProgramme}
+                            options={formattedProgrammes}
+                            onChange={this.selectProgramme}
+                        />
                     </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Header as="h2" dividing>{selectedProgramme ? selectedProgramme.name : 'no unit selected'}
+                            <Header sub>
+                                <span>
+                                    {this.renderCouncilMeetingTitle()}
+                                </span>
+                            </Header>
+                        </Header>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
                     <Grid.Column>
                         <Button.Group color="blue">
                             {this.state.previousMeetingId ?
@@ -153,26 +174,19 @@ export class CouncilmeetingViewPage extends Component {
                         </Button.Group>
                     </Grid.Column>
                 </Grid.Row>
+                <br />
                 <Grid.Row>
-                    <Grid.Column width={5}>
-                        <h3>{selectedProgramme ? selectedProgramme.name : 'no unit selected'}</h3>
-                    </Grid.Column>
                     <Grid.Column>
-                        <h2 className="ui dividing header" style={{ marginTop: '1%' }}>
-                            <span>
-                                {this.renderCouncilMeetingTitle()}
-                            </span>
-                        </h2>
+                        <ThesisList
+                            theses={meetingTheses}
+                            downloadSelected={this.handleDownload}
+                            markPrinted={this.props.markPrinted}
+                            councilMeetingId={councilMeetingId}
+                            showButtons
+                            selectable
+                        />
                     </Grid.Column>
                 </Grid.Row>
-                <ThesisList
-                    theses={meetingTheses}
-                    downloadSelected={this.handleDownload}
-                    markPrinted={this.props.markPrinted}
-                    councilMeetingId={councilMeetingId}
-                    showButtons
-                    selectable
-                />
             </Grid>
         )
     }
