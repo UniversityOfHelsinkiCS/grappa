@@ -137,6 +137,9 @@ class ThesisViewPage extends Component {
             thesis, agreement, authors, programmeData,
             councilMeeting, thesisAttachments, allowEdit
         } = this.state
+        const meetingProgramme = councilMeeting ?
+            this.props.programmes.find(programme => programme.programmeId === councilMeeting.programmes[0]) :
+            undefined
         if (!thesis || !agreement)
             return null
 
@@ -235,7 +238,9 @@ class ThesisViewPage extends Component {
                 </GridRow>
                 <GridRow>
                     <ThesisValueField title="Council meeting">
-                        {councilMeeting ? moment(councilMeeting.date).format('DD.MM.YYYY') : 'Not selected'}
+                        {councilMeeting && meetingProgramme ?
+                            `${meetingProgramme.name} ${moment(councilMeeting.date).format('DD.MM.YYYY')}` :
+                            'Not selected'}
                     </ThesisValueField>
                     <GridColumn width={8} />
                     <EditButton
@@ -246,6 +251,8 @@ class ThesisViewPage extends Component {
                     />
                     <ThesisFieldEdit active={this.state.open === 'councilmeeting'}>
                         <ThesisCouncilmeetingPicker
+                            councilmeetingId={councilMeeting ? councilMeeting.councilmeetingId : undefined}
+                            programmeId={meetingProgramme ? meetingProgramme.programmeId : undefined}
                             councilmeetings={this.props.councilMeetings}
                             sendChange={this.saveMeeting}
                             programmes={this.props.programmes}

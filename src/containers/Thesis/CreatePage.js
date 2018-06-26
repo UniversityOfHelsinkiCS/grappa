@@ -205,7 +205,8 @@ export class ThesisCreatePage extends Component {
                     */}
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}
-                        chosenMeetingId={this.state.thesis.councilmeetingId}
+                        councilmeetingId={this.state.thesis.councilmeetingId}
+                        programmeId={this.state.thesis.programmeId}
                         councilmeetings={this.props.councilmeetings}
                         programmes={this.props.programmes}
                     />

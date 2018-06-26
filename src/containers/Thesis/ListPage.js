@@ -21,6 +21,7 @@ class ThesisListPage extends Component {
                 <br />
 
                 <ThesisList
+                    theses={this.props.theses}
                     downloadSelected={this.handleDownload}
                     showButtons={false}
                     markPrinted={() => ({})}
@@ -30,7 +31,9 @@ class ThesisListPage extends Component {
     }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = (state) => ({
+    theses: state.theses
+})
 
 const mapDispatchToProps = dispatch => ({
     downloadAttachments(attachmentIds) {

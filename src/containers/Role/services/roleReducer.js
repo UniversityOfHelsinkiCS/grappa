@@ -4,8 +4,8 @@ const reducer = (state = [], action) => {
             return state
         case 'THESIS_UPDATE_ONE_SUCCESS':
             return action.response.roles
-        case 'PERSON_GET_ALL_SUCCESS':
-            return action.response.roles
+        // case 'PERSON_GET_ALL_SUCCESS':
+        //     return action.response.roles
         case 'ROLE_SAVE_ONE_SUCCESS':
             return [...state, action.response]
         case 'ROLE_DELETE_ONE_SUCCESS':

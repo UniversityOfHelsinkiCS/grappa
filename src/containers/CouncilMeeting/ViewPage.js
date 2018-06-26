@@ -3,6 +3,7 @@ import { arrayOf, func, shape, string } from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import isEqual from 'lodash/isEqual'
+import { Grid, Dropdown, Button, Header } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { downloadAttachments } from '../Attachment/services/attachmentActions'
@@ -17,7 +18,9 @@ export class CouncilmeetingViewPage extends Component {
         this.state = {
             previousMeetingId: undefined,
             currentMeeting: undefined,
-            nextMeetingId: undefined
+            nextMeetingId: undefined,
+            selectedProgramme: undefined,
+            programmeMeetings: []
         }
     }
 
@@ -47,33 +50,35 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     initState = (props) => {
-        const { councilMeetings } = props
+        const { programmeMeetings } = this.state
+        if (!programmeMeetings.length === 0) return
         const foundIndex = this.findIndexFromProps(props)
-        const previousMeetingId = foundIndex > 0 ? councilMeetings[foundIndex - 1].councilmeetingId : undefined
-        const currentMeeting = councilMeetings[foundIndex]
-        const nextMeetingId = foundIndex === councilMeetings.length - 1 ?
-            undefined : councilMeetings[foundIndex + 1].councilmeetingId
+        const previousMeetingId = foundIndex > 0 ? programmeMeetings[foundIndex - 1].councilmeetingId : undefined
+        const currentMeeting = programmeMeetings[foundIndex]
+        const nextMeetingId = foundIndex === programmeMeetings.length - 1 ?
+            undefined : programmeMeetings[foundIndex + 1].councilmeetingId
         this.setState({
             previousMeetingId,
             currentMeeting,
             nextMeetingId
         })
-    };
+    }
 
-    filterThesesByMeeting = (theses, meeting) =>
-        theses.filter(thesis => thesis.councilmeetingId === meeting.councilmeetingId);
+    filterThesesByMeeting = (theses, councilmeetingId) =>
+        theses.filter(thesis => thesis.councilmeetingId === councilmeetingId)
 
     findIndexFromProps = (props) => {
-        const { match, councilMeetings } = props
+        const { match } = props
+        const { programmeMeetings } = this.state
         let foundIndex
         if (match.params && match.params.id) {
             const councilmeetingId = Number(match.params.id)
-            foundIndex = councilMeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
+            foundIndex = programmeMeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
         } else {
-            foundIndex = this.findNextMeeting(new Date(), councilMeetings)
+            foundIndex = this.findNextMeeting(new Date(), programmeMeetings)
         }
         return foundIndex
-    };
+    }
 
     /**
      * Finds the index of closest date including today from sorted list of CouncilMeetings
@@ -81,13 +86,35 @@ export class CouncilmeetingViewPage extends Component {
     findNextMeeting = (starting, meetings = []) => meetings.findIndex((meeting) => {
         const date = new Date(meeting.date)
         return (date >= starting || date.toDateString() === starting.toDateString())
-    });
+    })
 
     handleDownload = (attachmentIds) => {
         this.props.downloadAttachments([...attachmentIds, `cm${this.state.currentMeeting.councilmeetingId}`])
-    };
+    }
 
-    renderCouncilMeetingTitle() {
+    formatProgrammes = programmes => (
+        programmes.filter(programme => !programme.name.includes('OLD'))
+            .map(programme => ({
+                key: programme.programmeId,
+                value: programme.programmeId,
+                text: programme.name
+            }))
+    )
+
+    selectProgramme = (e, data) => {
+        if (data.value !== this.state.selectedProgramme) {
+            this.setState({ selectedProgramme: data.value })
+            this.filterMeetingsByProgramme(data.value)
+        }
+    }
+
+    filterMeetingsByProgramme = async (programmeId) => {
+        const programmeMeetings = this.props.councilMeetings.filter(meeting => meeting.programmes.includes(programmeId))
+        await this.setState({ programmeMeetings })
+        this.initState(this.props)
+    }
+
+    renderCouncilMeetingTitle = () => {
         if (this.state.currentMeeting) {
             return `Councilmeeting of ${moment(this.state.currentMeeting.date).format('DD.MM.YYYY')}`
         }
@@ -97,37 +124,70 @@ export class CouncilmeetingViewPage extends Component {
 
     render() {
         const councilMeetingId = this.state.currentMeeting ? this.state.currentMeeting.councilmeetingId : 0
+        const { programmes, theses } = this.props
+        const formattedProgrammes = this.formatProgrammes(programmes)
+        const selectedProgramme = this.state.selectedProgramme ?
+            programmes.find(programme => programme.programmeId === this.state.selectedProgramme) : undefined
+        const meetingTheses = this.filterThesesByMeeting(theses, councilMeetingId)
         return (
-            <div>
-                <div>
-                    {this.state.previousMeetingId ?
-
-                        <Link to={`/councilmeeting/${this.state.previousMeetingId}`} className="ui button blue">
-                            Previous
-                        </Link>
-                        :
-                        <button className="ui button blue" disabled>Previous</button>
-                    }
-                    {this.state.nextMeetingId ?
-                        <Link to={`/councilmeeting/${this.state.nextMeetingId}`} className="ui button blue">Next</Link>
-                        :
-                        <button className="ui button blue" disabled>Next</button>
-                    }
-                    <h2 className="ui dividing header" style={{ marginTop: '1%' }}>
-                        <span>
-                            {this.renderCouncilMeetingTitle()}
-                        </span>
-                    </h2>
-                </div>
-                <div style={{ marginTop: '1em', marginBottom: '1em' }}>{this.getProgrammeNames()}</div>
-                <ThesisList
-                    downloadSelected={this.handleDownload}
-                    markPrinted={this.props.markPrinted}
-                    councilMeetingId={councilMeetingId}
-                    showButtons
-                    selectable
-                />
-            </div>
+            <Grid columns="equal">
+                <Grid.Row verticalAlign="bottom">
+                    <Grid.Column width={5}>
+                        <Dropdown
+                            selection
+                            fluid
+                            placeholder="Select unit"
+                            value={this.state.selectedProgramme}
+                            options={formattedProgrammes}
+                            onChange={this.selectProgramme}
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Header as="h2" dividing>{selectedProgramme ? selectedProgramme.name : 'no unit selected'}
+                            <Header sub>
+                                <span>
+                                    {this.renderCouncilMeetingTitle()}
+                                </span>
+                            </Header>
+                        </Header>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Button.Group color="blue">
+                            {this.state.previousMeetingId ?
+                                <Button as={Link} to={`/councilmeeting/${this.state.previousMeetingId}`}>
+                                    Previous
+                                </Button>
+                                :
+                                <Button disabled>Previous</Button>
+                            }
+                            {this.state.nextMeetingId ?
+                                <Button as={Link} to={`/councilmeeting/${this.state.nextMeetingId}`}>
+                                    Next
+                                </Button>
+                                :
+                                <Button disabled>Next</Button>
+                            }
+                        </Button.Group>
+                    </Grid.Column>
+                </Grid.Row>
+                <br />
+                <Grid.Row>
+                    <Grid.Column>
+                        <ThesisList
+                            theses={meetingTheses}
+                            downloadSelected={this.handleDownload}
+                            markPrinted={this.props.markPrinted}
+                            councilMeetingId={councilMeetingId}
+                            showButtons
+                            selectable
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         )
     }
 }
