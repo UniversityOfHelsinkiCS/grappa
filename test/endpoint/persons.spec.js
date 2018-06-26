@@ -14,15 +14,14 @@ test.before(async () => {
 })
 
 test.serial('person get all for admin', async (t) => {
-    t.plan(3)
+    t.plan(2)
 
     const allPersons = await knex('person').select()
 
     const res = await request(await makeApp(1))
         .get('/persons')
     t.is(res.status, 200)
-    const { persons: testpersons, roles } = res.body
-    t.truthy(roles.length > 10)
+    const { persons: testpersons } = res.body
     t.is(testpersons.length, allPersons.length)
 })
 
@@ -36,11 +35,13 @@ test.serial('person cant get for student', async (t) => {
     t.is(res.status, 403)
 })
 
-test.serial('manager can get thesis authors', async (t) => {
+test.serial('manager can get all persons', async (t) => {
+    const allPersons = await knex('person').select()
+
     const res = await request(await makeApp(2)).get('/persons')
 
     t.is(res.status, 200)
-    t.is(res.body.persons.length, 10)
+    t.is(res.body.persons.length, allPersons.length)
 })
 
 test('email can be switched', async (t) => {

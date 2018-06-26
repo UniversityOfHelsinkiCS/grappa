@@ -1,5 +1,6 @@
 const knex = require('../db/connection').getKnex()
 const roleService = require('./RoleService')
+const programmeService = require('./ProgrammeService')
 const PersonWithRole = require('../db/models/person_with_role')
 const RoleRequest = require('../db/models/role_request')
 const Person = require('../db/models/person')
@@ -15,6 +16,24 @@ const personSchema = [
 
 export function getAllPersons() {
     return knex.select(personSchema).from('person')
+}
+
+export const getAllPersonsWithRoles = async () => {
+    const persons = await Person
+        .query({ columns: personSchema })
+        .fetchAll({ withRelated: ['roles']
+        }).then(res => res.serialize())
+    const fullPersons = await Promise.all(persons.map(async (person) => {
+        person.roles = await Promise.all(person.roles.map(async role => ({
+            personRoleId: role.personRoleId,
+            roleId: role.roleId,
+            role: await roleService.getRoleById(role.roleId).then(res => res.serialize().name),
+            programmeId: role.programmeId,
+            programme: await programmeService.getProgrammeById(role.programmeId).then(res => res.serialize().name)
+        })))
+        return person
+    }))
+    return fullPersons
 }
 
 // TODO: replace this completely with getPersonsForRole

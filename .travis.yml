@@ -29,3 +29,12 @@ notifications:
 cache:
   directories:
     - node_modules
+
+after_success:
+  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker build -t toska/back-grappa2:staging ."
+  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker push toska/back-grappa2:staging"
+  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker build -t toska/back-grappa2:latest ."
+  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker push toska/back-grappa2:latest"
+  
