@@ -5,19 +5,55 @@ import { Dropdown, Grid, Button, Message } from 'semantic-ui-react'
 import { councilmeetingType, programmeType } from '../../../util/types'
 // import ProgrammeSelect from '../../Unit/components/ProgrammeSelect'
 
+const NO_MEETING = 'No meeting selected'
+
 export default class ThesisCouncilmeetingPicker extends Component {
     state = {
         programmeId: undefined,
         councilmeetingId: undefined,
-        selected: 'No meeting selected'
+        selected: NO_MEETING
     }
 
     componentDidMount() {
         const { councilmeetingId, programmeId } = this.props
-        if (councilmeetingId)
+        if (councilmeetingId) {
             this.setState({ councilmeetingId })
-        if (programmeId)
+        }
+        if (programmeId) {
             this.setState({ programmeId })
+        }
+    }
+
+    componentDidUpdate = async () => {
+        const councilmeetingId = Number(this.props.councilmeetingId)
+        const programmeId = Number(this.props.programmeId)
+        // if a programmeId prop is given and no councilmeeting prop is given
+        // then auto select the programme for the meeting
+        if (programmeId && !this.state.programmeId && !councilmeetingId) {
+            const checkedId = this.checkForOldProgramme(programmeId)
+            await this.setState({ programmeId: checkedId })
+            // find the first possible meeting date if there are meetings
+            const meetings = this.formatMeetings()
+            if (meetings.length > 0)
+                await this.setState({ councilmeetingId: meetings[0].value })
+        } else if (programmeId && councilmeetingId && !this.state.councilmeetingId) {
+            // If there is both a programme and councilmeeting, set them both,
+            // given the meeting has changed from previous
+            this.setState({ programmeId, councilmeetingId })
+        }
+    }
+
+    checkForOldProgramme = (programmeId) => {
+        const { programmes } = this.props
+        const curProgramme = programmes.find(programme => programme.programmeId === programmeId)
+        if (!curProgramme.name.includes('Department')) {
+            return programmeId
+        }
+        const keyString = curProgramme.name.split(' ')[2]
+        const correspondingProg = programmes
+            .filter(programme => !programme.name.includes('Department') && !programme.name.includes('OLD'))
+            .find(programme => programme.name.includes(keyString))
+        return correspondingProg.programmeId
     }
 
     formatMeetings = () => {
@@ -66,7 +102,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
     }
 
     clearSelection = () => {
-        this.setState({ councilmeetingId: undefined, programmeId: undefined, selected: 'No meeting selected' })
+        this.setState({ councilmeetingId: undefined, programmeId: undefined, selected: NO_MEETING })
         this.props.sendChange({ councilmeetingId: undefined })
     }
 
@@ -80,13 +116,12 @@ export default class ThesisCouncilmeetingPicker extends Component {
             this.props.sendChange({ councilmeetingId })
             this.setState({ selected: `${programme.name}: ${formattedMeeting}` })
         } else {
-            this.setState({ selected: 'No meeting selected' })
+            this.setState({ selected: NO_MEETING })
         }
     }
 
     render() {
         const { councilmeetingId, programmeId, selected } = this.state
-        //const chosenMeeting = this.props.chosenMeetingId !== null ? this.props.chosenMeetingId : ''
         const formattedMeetings = this.formatMeetings()
         const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
@@ -98,29 +133,31 @@ export default class ThesisCouncilmeetingPicker extends Component {
                         <p>
                             Select correct unit for the councilmeeting first.
                         </p>
-                        <Dropdown name="programmes" placeholder="Select unit" fluid selection value={programmeId} options={programmes} onChange={this.chooseProgramme} />
-                        {/* <ProgrammeSelect
+                        <Dropdown
+                            name="programmes"
+                            placeholder="Select unit"
+                            fluid
+                            selection
+                            value={programmeId}
+                            options={programmes}
                             onChange={this.chooseProgramme}
-                            programmes={this.props.programmes}
-                        /> */}
+                        />
                     </Grid.Column>
                     <Grid.Column>
                         <p>
-                            Deadline tells when Grappa stops accepting new theses for that date. If the deadline has passed
-                            you have to either contact admin or submit thesis to another Councilmeeting.
+                            Deadline tells when Grappa stops accepting new theses for that date.
+                            If the deadline has passed you have to either contact admin
+                            or submit thesis to another Councilmeeting.
                         </p>
-                        <Dropdown name="councilmeetings" placeholder="Select meeting date" fluid selection value={councilmeetingId} options={formattedMeetings} onChange={this.chooseMeeting} />
-                        {/* <select
-                            className="ui fluid search dropdown"
-                            onChange={this.chooseMeeting}
+                        <Dropdown
+                            name="councilmeetings"
+                            placeholder="Select meeting date"
+                            fluid
+                            selection
                             value={councilmeetingId}
-                        >
-                            {formattedMeetings.map(meeting => (
-                                <option key={meeting.id} value={meeting.id} >
-                                    {meeting.content}
-                                </option>
-                            ))}
-                        </select> */}
+                            options={formattedMeetings}
+                            onChange={this.chooseMeeting}
+                        />
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Button color="blue" onClick={this.selectMeeting}>Select</Button>
@@ -128,10 +165,12 @@ export default class ThesisCouncilmeetingPicker extends Component {
                 </Grid.Row>
                 <Grid.Row verticalAlign="bottom">
                     <Grid.Column>
-                        <Message color="yellow">Meeting: {selected}  {selected !== 'No meeting selected' ?
-                            <Button size="small" color="red" onClick={this.clearSelection}>Remove</Button> : undefined}
+                        <Message color={selected !== NO_MEETING ? 'green' : 'red'}>
+                            Meeting: {selected}  {selected !== NO_MEETING ?
+                                <Button size="small" color="red" onClick={this.clearSelection}>
+                                    Remove
+                                </Button> : undefined}
                         </Message>
-                        {/* <p>{programmes.find(programme => programme.programmeId === this.state.programmeId)}</p> */}
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
