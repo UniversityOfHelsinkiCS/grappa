@@ -191,22 +191,10 @@ export class ThesisCreatePage extends Component {
                         changeList={this.editAttachmentList}
                     />
                     <br />
-                    {/*
-                    <Header as="h3" dividing>Select the councilmeeting</Header>
-                    {programme ?
-                        <Label basic size="large" color="teal">{programme.name}</Label> :
-                        <Label basic size="large" color="red">Please select the unit first.</Label>
-                    }
-                    <Dropdown
-                    placeholder="Select meeting"
-                    selection options={this.formatMeetings()}
-                    onChange={(e, data) => this.handleChange({ councilmeetingId: data.value })}
-                    />
-                    */}
                     <ThesisCouncilMeetingPicker
                         sendChange={this.handleChange}
                         councilmeetingId={this.state.thesis.councilmeetingId}
-                        programmeId={this.state.thesis.programmeId}
+                        programmeId={Number(this.state.thesis.programmeId)}
                         councilmeetings={this.props.councilmeetings}
                         programmes={this.props.programmes}
                     />
