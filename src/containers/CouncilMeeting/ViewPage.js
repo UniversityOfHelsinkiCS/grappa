@@ -50,17 +50,30 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     initState = (props) => {
-        const { programmeMeetings } = this.state
-        if (!programmeMeetings.length === 0) return
+        const meetings = this.state.programmeMeetings.length > 0 ? this.state.programmeMeetings : props.councilMeetings
         const foundIndex = this.findIndexFromProps(props)
-        const previousMeetingId = foundIndex > 0 ? programmeMeetings[foundIndex - 1].councilmeetingId : undefined
-        const currentMeeting = programmeMeetings[foundIndex]
-        const nextMeetingId = foundIndex === programmeMeetings.length - 1 ?
-            undefined : programmeMeetings[foundIndex + 1].councilmeetingId
+        const currentMeeting = meetings[foundIndex]
+        const previousMeeting = foundIndex > 0 ? meetings[foundIndex - 1] : undefined
+        const previousMeetingId =
+            previousMeeting &&
+            currentMeeting &&
+            previousMeeting.programmes &&
+            previousMeeting.programmes[0] === currentMeeting.programmes[0] ?
+                previousMeeting.councilmeetingId : undefined
+        const nextMeeting = foundIndex === meetings.length - 1 ?
+            undefined : meetings[foundIndex + 1]
+        const nextMeetingId =
+            nextMeeting &&
+            currentMeeting &&
+            nextMeeting.programmes &&
+            nextMeeting.programmes[0] === currentMeeting.programmes[0] ?
+                nextMeeting.councilmeetingId : undefined
         this.setState({
             previousMeetingId,
             currentMeeting,
-            nextMeetingId
+            nextMeetingId,
+            selectedProgramme: currentMeeting ?
+                currentMeeting.programmes[0] : this.state.selectedProgramme
         })
     }
 
@@ -69,15 +82,20 @@ export class CouncilmeetingViewPage extends Component {
 
     findIndexFromProps = (props) => {
         const { match } = props
-        const { programmeMeetings } = this.state
-        let foundIndex
+        // const { programmeMeetings } = this.state
+        const meetings = this.state.programmeMeetings.length > 0 ?
+            this.state.programmeMeetings : props.councilMeetings
+        const currentProgramme = this.state.selectedProgramme
         if (match.params && match.params.id) {
             const councilmeetingId = Number(match.params.id)
-            foundIndex = programmeMeetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
-        } else {
-            foundIndex = this.findNextMeeting(new Date(), programmeMeetings)
+            const foundMeeting = meetings.find(meeting => meeting.councilmeetingId === councilmeetingId)
+            if (foundMeeting &&
+                foundMeeting.programmes &&
+                (!currentProgramme || foundMeeting.programmes[0] === currentProgramme)) {
+                return meetings.findIndex(meeting => meeting.councilmeetingId === councilmeetingId)
+            }
         }
-        return foundIndex
+        return this.findNextMeeting(new Date(), this.state.programmeMeetings)
     }
 
     /**
