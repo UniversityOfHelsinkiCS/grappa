@@ -36,7 +36,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
             const meetings = this.formatMeetings()
             if (meetings.length > 0)
                 await this.setState({ councilmeetingId: meetings[0].value })
-        } else if (programmeId && councilmeetingId && !this.state.councilmeetingId) {
+        } else if (programmeId && councilmeetingId && !this.state.councilmeetingId && !this.state.programmeId) {
             // If there is both a programme and councilmeeting, set them both,
             // given the meeting has changed from previous
             this.setState({ programmeId, councilmeetingId })
