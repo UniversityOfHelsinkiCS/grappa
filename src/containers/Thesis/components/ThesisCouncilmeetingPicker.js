@@ -30,8 +30,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
         // if a programmeId prop is given and no councilmeeting prop is given
         // then auto select the programme for the meeting
         if (programmeId && !this.state.programmeId && !councilmeetingId) {
-            const checkedId = this.checkForOldProgramme(programmeId)
-            await this.setState({ programmeId: checkedId })
+            // const checkedId = this.checkForOldProgramme(programmeId)
+            await this.setState({ programmeId })
             // find the first possible meeting date if there are meetings
             const meetings = this.formatMeetings()
             if (meetings.length > 0)
@@ -82,22 +82,20 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
     formatProgrammes = programmes => (
         programmes
-            .filter(programme => !programme.name.includes('Department') && !programme.name.includes('OLD'))
+            .filter(programme => !programme.name.includes('OLD')) // && !programme.name.includes('Department')
             .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
     )
 
     chooseMeeting = (event, data) => {
         if (data.value) {
-            this.setState({ councilmeetingId: Number(data.value) })//.props.sendChange({ councilmeetingId: Number(event.target.value) })
+            this.setState({ councilmeetingId: Number(data.value) })
         }
     }
 
     chooseProgramme = (event, data) => {
         const programmeId = Number(data.value)
         if (programmeId) {
-            this.setState({ programmeId, councilmeetingId: undefined },
-                //this.props.sendChange({ councilmeetingId: undefined })
-            )
+            this.setState({ programmeId, councilmeetingId: undefined })
         }
     }
 
