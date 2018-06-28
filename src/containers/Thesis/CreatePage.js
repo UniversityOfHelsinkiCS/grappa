@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux'
-import { Dropdown, Header } from 'semantic-ui-react'
+import { Dropdown, Header, Loader } from 'semantic-ui-react'
 import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
@@ -152,7 +152,14 @@ export class ThesisCreatePage extends Component {
     }
 
     render() {
+        if (!this.props.programmes) {
+            return (<div><Loader active>Loading</Loader></div>)
+        }
         const programme = this.props.programmes.find(p => p.programmeId === parseInt(this.state.thesis.programmeId, 10))
+        const councilmeeting = this.props.councilmeetings.find(c =>
+            c.councilmeetingId === Number(this.state.thesis.councilmeetingId))
+        const meetingProgramme = councilmeeting ?
+            this.props.programmes.find(p => p.programmeId === councilmeeting.programmes[0]) : undefined
         return (
             <div>
                 <LoadingIndicator type="THESIS_SAVE" redirect="/" />
@@ -160,6 +167,10 @@ export class ThesisCreatePage extends Component {
                     sendSaveThesis={this.handleSaveThesis}
                     closeModal={this.toggleModal}
                     showModal={this.state.showModal}
+                    thesis={this.state.thesis}
+                    councilmeeting={councilmeeting}
+                    meetingProgramme={meetingProgramme}
+                    programme={programme}
                 />
                 <div className="ui form">
                     <ThesisInformation

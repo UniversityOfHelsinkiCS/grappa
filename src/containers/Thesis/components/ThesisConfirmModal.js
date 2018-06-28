@@ -1,47 +1,91 @@
 import React from 'react'
 import { bool, func } from 'prop-types'
-import { Button } from 'semantic-ui-react'
+import { Button, Modal } from 'semantic-ui-react'
+import { thesisType, programmeType, councilmeetingType } from '../../../util/types'
 
-const ThesisConfirmModal = ({ showModal, closeModal, sendSaveThesis }) => {
+const ThesisConfirmModal = ({
+    showModal,
+    closeModal,
+    sendSaveThesis,
+    thesis,
+    programme,
+    councilmeeting,
+    meetingProgramme }) => {
     if (!showModal) {
         return null
     }
+    const authorText = <p><b>Author email:</b> {thesis.authorEmail}</p>
+    const thesisText = <p><b>Thesis:</b> {thesis.title}</p>
+    const gradeText = <p><b>Grade:</b> {thesis.grade}</p>
+    const gradersText = (
+        <p>
+            <b>Graders:</b> {thesis.graders.map(grader => (
+                <span key={grader.person.personId}>
+                    {grader.person.firstname} {grader.person.lastname}, {grader.person.email},
+                </span>)
+            )}
+        </p>)
+    const programmeText = <p><b>Unit:</b> {programme.name}</p>
+    const isCouncilmeeting = councilmeeting && meetingProgramme
+    const councilmeetingText = isCouncilmeeting ?
+        <p><b>Council meeting:</b> {meetingProgramme.name} {new Date(councilmeeting.date).toLocaleDateString()}</p> :
+        <p><b>No council meeting selected. Are you sure about this?</b></p>
     return (
-        <div>
-            <div className="ui dimmer modals page transition visible active" onClick={closeModal} />
-            <div className="ui active modal" style={{ border: '2px solid black', borderRadius: '7px' }}>
-                <i className="close icon" onClick={closeModal} />
-                <div className="header">
-                    Reminder
-                </div>
-                <div style={{ margin: '1%' }}>
-                    <div className="description">
-                        <p>
-                            If you are from department of CS:
-                            Have you remembered to add the thesis into the thesis-management system?
-                            If not please do so right away.
-                        </p>
-                        <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://ilmo.cs.helsinki.fi/gradu/servlet/hae"
-                        >
-                            Ilmo (opens in a new window)
-                        </a>
-                    </div>
+        <Modal dimmer open closeOnDimmerClick={false} onClose={closeModal} closeIcon>
+            <Modal.Header>Confirm your submission details</Modal.Header>
+            <Modal.Content>
+                <Modal.Description>
+                    {authorText}
+                    {thesisText}
+                    {gradeText}
+                    {gradersText}
+                    {programmeText}
+                    {councilmeetingText}
+                    <p>
+                        After this submission, an email will be sent to the student at {thesis.authorEmail},
+                        instructing them to log in to Grappa to confirm that the thesis can be presented in
+                        the given councilmeeting. The student should also upload the thesis to e-thesis for
+                        archiving. You can also remind them about these.
+                        <br />
+                        <br />
+                    </p>
+                    {programme.name.includes('Computer Science') ?
+                        <div>
+                            <p>
+                                If you are from department of CS:
+                                Have you remembered to add the thesis into the thesis-management system?
+                                If not please do so right away.
+                            </p>
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://ilmo.cs.helsinki.fi/gradu/servlet/hae"
+                            >
+                                Ilmo (opens in a new window)
+                            </a>
+                        </div> : undefined}
                     <br />
                     <Button negative onClick={closeModal}>Cancel</Button>
                     <Button positive onClick={sendSaveThesis}>Confirm save</Button>
-                </div>
-            </div>
-        </div >
+                </Modal.Description>
+            </Modal.Content>
+        </Modal >
     )
 }
 
 ThesisConfirmModal.propTypes = {
     showModal: bool.isRequired,
     closeModal: func.isRequired,
-    sendSaveThesis: func.isRequired
+    sendSaveThesis: func.isRequired,
+    thesis: thesisType.isRequired,
+    programme: programmeType.isRequired,
+    councilmeeting: councilmeetingType,
+    meetingProgramme: programmeType
+}
+
+ThesisConfirmModal.defaultProps = {
+    councilmeeting: undefined,
+    meetingProgramme: undefined
 }
 
 export default ThesisConfirmModal
