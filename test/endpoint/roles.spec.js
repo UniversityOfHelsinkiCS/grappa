@@ -43,7 +43,7 @@ test('save role test', async (t) => {
         .post('/roles')
         .send({ roleId: 2, personId, programmeId: 1 })
 
-    t.is(res.status, 200)
+    t.is(res.status, 201)
 })
 
 test('save role test fail', async (t) => {
