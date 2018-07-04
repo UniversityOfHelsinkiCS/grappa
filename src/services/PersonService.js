@@ -36,6 +36,21 @@ export const getAllPersonsWithRoles = async () => {
     return fullPersons
 }
 
+export const getPersonWithRoles = async (personId) => {
+    const person = await Person
+        .query({ where: { personId }, columns: personSchema })
+        .fetch({ withRelated: ['roles']
+        }).then(res => res.serialize())
+    person.roles = await Promise.all(person.roles.map(async role => ({
+        personRoleId: role.personRoleId,
+        roleId: role.roleId,
+        role: await roleService.getRoleById(role.roleId).then(res => res.serialize().name),
+        programmeId: role.programmeId,
+        programme: await programmeService.getProgrammeById(role.programmeId).then(res => res.serialize().name)
+    })))
+    return person
+}
+
 // TODO: replace this completely with getPersonsForRole
 export function getPersonsWithRole(roleId) {
     return knex.table('person').distinct('person.personId')
@@ -130,7 +145,7 @@ export const getPersonsWithAgreementInStudyfield = programmeId => knex.select(pe
 export const createNewPerson = async (firstname, lastname, email, programmes, roleId) => {
     try {
         const person = await savePerson({ firstname, lastname, email })
-        const personRoles = await Promise.all(programmes
+        await Promise.all(programmes
             .map(programmeId =>
                 roleService.savePersonRole({
                     roleId,
@@ -138,11 +153,10 @@ export const createNewPerson = async (firstname, lastname, email, programmes, ro
                     programmeId
                 })
             ))
-        // TODO: messages should be handled by the controller, not service
-        return { person, personRoles, msg: 'New person created' }
+        return person.personId
     } catch (error) {
         // console.log(error)
-        return { error: 'Failed to create a new person with roles' }
+        return undefined
     }
 }
 

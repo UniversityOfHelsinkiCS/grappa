@@ -21,22 +21,23 @@ export async function saveRole(req, res) {
         throw new Error('User has no access to edit roles')
     }
 
-    let personWithRole = {
+    const personWithRole = {
         roleId: req.body.roleId,
         personId: req.body.personId,
         programmeId: req.body.programmeId
     }
-    personWithRole = await roleService.savePersonRole(personWithRole)
-    const roles = await roleService.getRolesForPersonWithRole(personWithRole.personRoleId)
-    const role = roles[0]
-    res.status(200).json(role).end()
+    await roleService.savePersonRole(personWithRole)
+    const person = await personService.getPersonWithRoles(req.body.personId)
+    res.status(201).json({ person, msg: 'Role was successfully added' })
 }
 
 export async function deleteRole(req, res) {
     await checkUserIsAdminOrManager(req)
     let personRoleId = req.params.id
+    const { personId } = await roleService.getPersonRoleWithId(personRoleId)
     personRoleId = await roleService.deletePersonRole(personRoleId)
-    res.status(200).json({ personRoleId, msg: 'Role was successfully deleted' })
+    const person = await personService.getPersonWithRoles(personId)
+    res.status(200).json({ person, msg: 'Role was successfully deleted' })
 }
 
 export async function updateStatement(req, res) {

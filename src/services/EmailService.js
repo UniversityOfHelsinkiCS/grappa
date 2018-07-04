@@ -43,7 +43,7 @@ export const sendAddedToGrappa = async (programmes, role, email, firstname, last
     const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/v2/ with ' +
         'the University of Helsinki credentials associated with this email address.'
     const nonHelsinkiEmail = 'You can not login to Grappa since this is not a @helsinki.fi email ' +
-        'address. Only people with University of Helsinki username can use Grappa. You can still act' +
+        'address. Only people with University of Helsinki username can use Grappa. You can still act ' +
         'as a grader, but will just not be able to use Grappa.'
     const title = 'You have been added to Grappa'
     const body = `Dear ${firstname} ${lastname}\n
