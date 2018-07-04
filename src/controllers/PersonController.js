@@ -128,7 +128,7 @@ export const invitePerson = async (req, res) => {
     if (personId) {
         const programmesWithNames = await programmeService.getProgrammesByIds(programmes)
         await emailService.sendAddedToGrappa(programmesWithNames.serialize(), role, email, firstname, lastname)
-        const person = personService.getPersonWithRoles(personId)
+        const person = await personService.getPersonWithRoles(personId)
         res.status(201).json({ person, msg: `Added ${person.firstname} ${person.lastname} to Grappa as ${role} in ${programmes}, invite message sent to ${person.email}.` })
     } else {
         res.status(400).json({ error: `Could not add ${firstname}, ${lastname} (${email}) as ${role} in ${programmes}, please check that all details are correct` })
