@@ -17,6 +17,7 @@ const ThesisConfirmModal = ({
     const authorText = <p><b>Author email:</b> {thesis.authorEmail}</p>
     const thesisText = <p><b>Thesis:</b> {thesis.title}</p>
     const gradeText = <p><b>Grade:</b> {thesis.grade}</p>
+    const additionalInfoText = thesis.additionalInfo ? <p><b>Additional info:</b> {thesis.additionalInfo}</p> : undefined
     const gradersText = (
         <p>
             <b>Graders:</b> {thesis.graders.map(grader => (
@@ -38,6 +39,7 @@ const ThesisConfirmModal = ({
                     {authorText}
                     {thesisText}
                     {gradeText}
+                    {additionalInfoText}
                     {gradersText}
                     {programmeText}
                     {councilmeetingText}
@@ -78,14 +80,15 @@ ThesisConfirmModal.propTypes = {
     closeModal: func.isRequired,
     sendSaveThesis: func.isRequired,
     thesis: thesisType.isRequired,
-    programme: programmeType.isRequired,
+    programme: programmeType,
     councilmeeting: councilmeetingType,
     meetingProgramme: programmeType
 }
 
 ThesisConfirmModal.defaultProps = {
     councilmeeting: undefined,
-    meetingProgramme: undefined
+    meetingProgramme: undefined,
+    programme: undefined
 }
 
 export default ThesisConfirmModal

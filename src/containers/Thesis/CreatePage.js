@@ -228,9 +228,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     programmes: state.programmes,
-    studyfields: state.studyfields,
-    roles: state.roles,
-    persons: state.persons
+    studyfields: state.studyfields
 })
 
 ThesisCreatePage.propTypes = {

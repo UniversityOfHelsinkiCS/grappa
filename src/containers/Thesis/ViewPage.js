@@ -4,8 +4,7 @@ import { arrayOf, func, object } from 'prop-types'
 import { Grid, GridColumn, GridRow } from 'semantic-ui-react'
 import moment from 'moment'
 import {
-    agreementType, attachmentType, councilmeetingType, personType, programmeType, roleType, studyfieldType,
-    thesisType
+    agreementType, attachmentType, councilmeetingType, personType, programmeType, studyfieldType, thesisType
 } from '../../util/types'
 import { createAttachment, deleteAttachment, downloadAttachments } from '../Attachment/services/attachmentActions'
 import AttachmentList from '../Attachment/components/AttachmentList'
@@ -260,6 +259,25 @@ class ThesisViewPage extends Component {
                     </ThesisFieldEdit>
                 </GridRow>
                 <GridRow>
+                    <ThesisValueField title="Additional info">
+                        {thesis.additionalInfo ? thesis.additionalInfo : ''}
+                    </ThesisValueField>
+                    <GridColumn width={8} />
+                    <EditButton
+                        toggle={() => this.toggleEditField('additionalInfo')}
+                        allowEdit={allowEdit}
+                        active={this.state.open === 'additionalInfo'}
+                        save={this.saveChanges}
+                    />
+                    <ThesisFieldEdit active={this.state.open === 'additionalInfo'}>
+                        <TextEdit
+                            active={this.state.open === 'additionalInfo'}
+                            value={this.state.value}
+                            handleChange={this.handleChange}
+                        />
+                    </ThesisFieldEdit>
+                </GridRow>
+                <GridRow>
                     <GridColumn width={12}>
                         <h3 className="ui sub header">Attachments</h3>
                         <AttachmentList
@@ -291,10 +309,10 @@ const mapStateToProps = state => ({
     user: state.user,
     theses: state.theses,
     agreements: state.agreements,
-    persons: state.persons,
+    // persons: state.persons,
     studyfields: state.studyfields,
     programmes: state.programmes,
-    roles: state.roles,
+    // roles: state.roles,
     councilMeetings: state.councilmeetings,
     attachments: state.attachments
 })
@@ -311,10 +329,10 @@ ThesisViewPage.propTypes = {
     user: personType.isRequired,
     theses: arrayOf(thesisType).isRequired,
     agreements: arrayOf(agreementType).isRequired,
-    persons: arrayOf(personType).isRequired,
+    // persons: arrayOf(personType).isRequired,
     studyfields: arrayOf(studyfieldType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
-    roles: arrayOf(roleType).isRequired,
+    // roles: arrayOf(roleType).isRequired,
     councilMeetings: arrayOf(councilmeetingType).isRequired,
     attachments: arrayOf(attachmentType).isRequired,
     match: object.isRequired,

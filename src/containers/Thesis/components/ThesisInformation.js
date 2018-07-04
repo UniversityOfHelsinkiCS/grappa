@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { arrayOf, bool, func, object } from 'prop-types'
-import { Button } from 'semantic-ui-react'
+import { Button, TextArea } from 'semantic-ui-react'
 
 import { oldGradeFields, gradeFields } from '../../../util/theses'
 import { thesisType, programmeType, studyfieldType } from '../../../util/types'
@@ -32,7 +32,7 @@ export default class ThesisInformation extends Component {
             changedValues.studyfieldId = ''
         }
         this.props.sendChange(changedValues)
-    };
+    }
 
     toggleGrading = (e, data) => {
         if (this.state.oldGrading === data.value) return
@@ -210,6 +210,17 @@ export default class ThesisInformation extends Component {
                         this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)
                     }
 
+                </div>
+                <div className="one field">
+                    <label htmlFor="additionalInfo">
+                        Additional info
+                        <TextArea
+                            id="additionalInfo"
+                            value={this.props.thesis.additionalInfo}
+                            onChange={this.changeField('additionalInfo')}
+                            placeholder="e.g. gradun erikoiskurssi, kypsyysnäytteen kieli"
+                        />
+                    </label>
                 </div>
             </div>
         )
