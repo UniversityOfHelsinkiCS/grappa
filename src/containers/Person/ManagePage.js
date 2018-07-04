@@ -6,7 +6,6 @@ import { Dropdown } from 'semantic-ui-react'
 import { personType, programmeType, availableRoleType } from '../../util/types'
 
 import RoleRequests from './components/RoleRequests'
-// import PersonSelector from './components/PersonSelector'
 import PersonRoleChoose from './components/PersonRoleChoose'
 import AddPerson from './components/AddPerson'
 import ProgrammeRoleList from '../ProgrammeRoleList'
@@ -15,15 +14,12 @@ import { getAvailableRoles, saveRole, deleteRole, getRoleRequestsAction, grantRo
     from '../Role/services/roleActions'
 import { invitePerson, getPersons } from './services/personActions'
 
-import { makePersonRoles } from '../../selectors/personRoles'
-
 export class PersonRoleManagePage extends Component {
     constructor(props) {
         super(props)
         this.props.getAvailableRoles()
         this.state = {
-            person: undefined,
-            roles: undefined
+            person: undefined
         }
     }
 
@@ -31,21 +27,6 @@ export class PersonRoleManagePage extends Component {
         this.props.getRoleRequests()
         this.props.getPersons()
     }
-
-    // componentWillReceiveProps(newProps) {
-    //     const { person } = this.state
-    //     console.log(newProps)
-    //     if (person) {
-    //         const roles = newProps.roles.filter(role => role.personId === person.personId)
-    //             .map(role =>
-    //                 Object.assign(
-    //                     role,
-    //                     { programme: newProps.programmes.find(field => field.programmeId === role.programmeId).name }
-    //                 )
-    //             )
-    //         this.setState({ roles })
-    //     }
-    // }
 
     componentDidUpdate() {
         const { person } = this.state
@@ -69,32 +50,22 @@ export class PersonRoleManagePage extends Component {
     selectPerson = (e, data) => {
         const { persons } = this.props
         const selected = data.value
-        const person = persons.find(item => item.personId === selected)//!this.state.person || item !== this.state.person.personId)
-        // const roles = person ?
-        //     this.props.roles.filter(role => role.personId === person.personId)
-        //         .map(role =>
-        //             Object.assign(
-        //                 role,
-        //                 { programme: this.props.programmes.find(field => field.programmeId === role.programmeId).name }
-        //             )
-        //         )
-        //     : undefined
+        const person = persons.find(item => item.personId === selected)
         this.setState({ person })
     }
 
     handleAddRole = (role) => {
         if (this.state.person.personId && role.roleId && role.programmeId) {
             this.props.saveRole(Object.assign(role, { personId: this.state.person.personId }))
-                .then(() => this.props.getPersons())
         }
     }
 
     handleRemoveRole = (role) => {
-        this.props.deleteRole(role).then(() => this.props.getPersons())
+        this.props.deleteRole(role)
     }
 
     handleSendInvite = (data) => {
-        this.props.invitePerson(data).then(() => this.props.getPersons())
+        this.props.invitePerson(data)
     }
 
     handleGrantRole = (e, data) => {
@@ -106,7 +77,6 @@ export class PersonRoleManagePage extends Component {
             return (
                 <PersonRoleChoose
                     person={this.state.person}
-                    roles={this.state.roles}
                     programmes={userProgrammes}
                     availableRoles={this.props.availableRoles}
                     addRole={this.handleAddRole}
@@ -170,11 +140,6 @@ export class PersonRoleManagePage extends Component {
                     <div className="ui divider" />
                     <h3>Select a person to manage their roles</h3>
                     {this.renderPersonSelector(persons, selected, this.selectPerson)}
-                    {/* <PersonSelector
-                        persons={persons}
-                        selected={selected}
-                        changeList={this.selectPerson}
-                    /> */}
                     <div className="ui divider" />
                     {this.renderManagement(userProgrammes)}
                     <div className="ui divider" />
@@ -214,12 +179,9 @@ const mapDispatchToProps = dispatch => ({
     )
 })
 
-const personRoles = makePersonRoles()
-
 const mapStateToProps = state => ({
     programmes: state.programmes,
     persons: state.persons,
-    roles: personRoles(state),
     availableRoles: state.availableRoles,
     roleRequests: state.roleRequests,
     user: state.user
@@ -228,7 +190,6 @@ const mapStateToProps = state => ({
 PersonRoleManagePage.propTypes = {
     programmes: arrayOf(programmeType).isRequired,
     persons: arrayOf(personType).isRequired,
-    // roles: arrayOf(roleType).isRequired,
     availableRoles: arrayOf(availableRoleType).isRequired,
     getAvailableRoles: func.isRequired,
     saveRole: func.isRequired,
