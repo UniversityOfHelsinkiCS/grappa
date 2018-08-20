@@ -77,7 +77,7 @@ export const notifyManagersAboutRoleRequest = async (address, roleName, programm
     const title = `RoleRequest in Grappa for ${programmeName}`
     const body = `A new role request for ${roleName} in ${programmeName} has been submitted to Grappa.\n
     You are receiving this message since you are marked as a manager of this programme, and you (or another manager
-    of the programme) should view and handle the request. You can find unhandled requests at https://grappa.helsinki.fi/v2/PersonRoleManagement.\n\n
+    of the programme) should view and handle the request. You can find unhandled requests at https://grappa.cs.helsinki.fi/v2/PersonRoleManagement.\n\n
     Best regards,\n
     Toska-group`
     try {
