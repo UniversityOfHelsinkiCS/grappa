@@ -31,7 +31,6 @@ class NavBar extends Component {
         getCouncilmeetings: func.isRequired,
         getTheses: func.isRequired,
         getNotifications: func.isRequired,
-        getEmailDrafts: func.isRequired,
         user: personType.isRequired
     }
 
@@ -69,7 +68,6 @@ class NavBar extends Component {
         this.props.getAgreements()
         this.props.getCouncilmeetings()
         this.props.getTheses()
-        this.props.getEmailDrafts()
 
         if (this.props.user.roles && this.props.user.roles.filter(role => role.role === 'admin').length > 0) {
             this.props.getNotifications()
