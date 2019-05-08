@@ -56,9 +56,8 @@ export default class ThesisCouncilmeetingPicker extends Component {
         return correspondingProg.programmeId
     }
 
-    formatMeetings = () => {
+    formatMeetings = (programmeId) => {
         const { councilmeetings } = this.props
-        const { programmeId } = this.state
 
         if (!councilmeetings)
             return []
@@ -69,22 +68,19 @@ export default class ThesisCouncilmeetingPicker extends Component {
         const formatDeadline = meeting => moment(meeting.instructorDeadline).format('23:59 DD.MM.YYYY')
         const isMeetingSelectable = meeting => isInFuture(meeting) && meeting.programmes.includes(programmeId)
 
-        const meetings = councilmeetings
+        return councilmeetings
             .filter(isMeetingSelectable)
             .map(meeting => ({
                 key: meeting.councilmeetingId,
                 value: meeting.councilmeetingId,
                 text: `${formatDate(meeting)} Deadline: ${formatDeadline(meeting)}`
             }))
-
-        return meetings
     }
 
-    formatProgrammes = programmes => (
-        programmes
-            .filter(programme => !programme.name.includes('OLD')) // && !programme.name.includes('Department')
-            .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
-    )
+    formatProgrammes = programmes => programmes
+        .filter(programme => !programme.name.includes('OLD')) // && !programme.name.includes('Department')
+        .filter(programme => this.formatMeetings(programme.programmeId).length)
+        .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
 
     chooseMeeting = (event, data) => {
         if (data.value) {
@@ -120,7 +116,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
     render() {
         const { councilmeetingId, programmeId, selected } = this.state
-        const formattedMeetings = this.formatMeetings()
+        const formattedMeetings = this.formatMeetings(programmeId)
         const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
             <Grid columns="equal">

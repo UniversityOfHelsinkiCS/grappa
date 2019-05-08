@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { arrayOf, bool, func, object } from 'prop-types'
 import { Button, TextArea } from 'semantic-ui-react'
 
 import { oldGradeFields, gradeFields } from '../../../util/theses'
 import { thesisType, programmeType, studyfieldType } from '../../../util/types'
 
-export default class ThesisInformation extends Component {
+class ThesisInformation extends Component {
     constructor() {
         super()
         this.state = {
@@ -106,7 +107,7 @@ export default class ThesisInformation extends Component {
                         disabled={!this.props.allowEdit}
                         value
                     >
-                    40 credits
+                        40 credits
                     </Button>
                     <Button.Or />
                     <Button
@@ -115,7 +116,7 @@ export default class ThesisInformation extends Component {
                         disabled={!this.props.allowEdit}
                         value={false}
                     >
-                    30 credits
+                        30 credits
                     </Button>
                 </Button.Group>
             </div>
@@ -143,8 +144,7 @@ export default class ThesisInformation extends Component {
     renderThesisInformation() {
         const programmes = this.props.programmes
             .filter(programme => (
-                programme.name.includes('Department') === this.state.oldGrading &&
-                !programme.name.includes('OLD')
+                programme.name.includes('Department') === this.state.oldGrading
             ))
             .map(programme => ({
                 id: programme.programmeId,
@@ -246,3 +246,16 @@ ThesisInformation.propTypes = {
     allowEdit: bool.isRequired,
     validationErrors: object.isRequired
 }
+
+const mapStateToProps = ({ programmes, studyfields, user }) => {
+    const roles = user.roles || []
+    return {
+        programmes: programmes
+            .filter(programme => roles
+                .find(role => programme.programmeId === role.programmeId))
+            .filter(programme => !programme.name.includes('OLD')),
+        studyfields
+    }
+}
+
+export default connect(mapStateToProps)(ThesisInformation)

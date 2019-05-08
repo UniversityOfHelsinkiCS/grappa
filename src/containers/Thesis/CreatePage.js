@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
 import { requestGraderAction, getGradersAction } from '../Person/services/personActions'
-import { programmeType, studyfieldType, councilmeetingType } from '../../util/types'
+import { programmeType, councilmeetingType } from '../../util/types'
 
 import ThesisConfirmModal from './components/ThesisConfirmModal'
 import ThesisInformation from './components/ThesisInformation'
@@ -176,8 +176,6 @@ export class ThesisCreatePage extends Component {
                     <ThesisInformation
                         sendChange={this.handleChange}
                         allowEdit
-                        studyfields={this.props.studyfields}
-                        programmes={this.props.programmes}
                         thesis={this.state.thesis}
                         validationErrors={this.state.validationErrors}
                     />
@@ -234,7 +232,6 @@ const mapStateToProps = state => ({
 ThesisCreatePage.propTypes = {
     councilmeetings: arrayOf(councilmeetingType).isRequired,
     programmes: arrayOf(programmeType).isRequired,
-    studyfields: arrayOf(studyfieldType).isRequired,
     saveThesis: func.isRequired
 }
 

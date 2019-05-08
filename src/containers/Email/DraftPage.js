@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import EmailDraft from './components/EmailDraft'
 
-import { saveEmailDraft, deleteEmailDraft, updateEmailDraft } from './services/emailActions'
+import { saveEmailDraft, deleteEmailDraft, updateEmailDraft, getEmailDrafts } from './services/emailActions'
 import { emailType, programmeType } from '../../util/types'
 
 export class EmailDraftPage extends Component {
@@ -15,12 +15,15 @@ export class EmailDraftPage extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.getEmailDrafts()
+    }
+
     sortDraftList = draftList => draftList.sort((a, b) => a.id > b.id);
 
     editName = (event) => {
         this.setState({ newDraftName: event.target.value })
     };
-
 
     handleUpdateDraft = (draft) => {
         this.props.updateEmailDraft(draft)
@@ -83,6 +86,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+    getEmailDrafts: () => {
+        dispatch(getEmailDrafts())
+    },
     updateEmailDraft(draft) {
         dispatch(updateEmailDraft(draft))
     },
@@ -96,6 +102,7 @@ const mapDispatchToProps = dispatch => ({
 
 const { func, arrayOf } = PropTypes
 EmailDraftPage.propTypes = {
+    getEmailDrafts: func.isRequired,
     updateEmailDraft: func.isRequired,
     deleteEmailDraft: func.isRequired,
     saveEmailDraft: func.isRequired,
