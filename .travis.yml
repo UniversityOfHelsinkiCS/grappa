@@ -28,7 +28,7 @@ jobs:
       deploy: # deploy is always skipped for PR
         provider: script
         skip_cleanup: true
-        script: docker push toska/grappa2-frontend:staging && echo "Done, please configure ToskaWatch to deploy"
+        script: docker push toska/front-grappa2:staging && echo "Done, please configure ToskaWatch to deploy"
         on:
           branch: master
     - if: tag IS present OR type = pull_request
@@ -41,6 +41,6 @@ jobs:
       deploy: # deploy is always skipped for PR
         provider: script
         skip_cleanup: true
-        script: docker push toska/grappa2-frontend && echo "Done, please MANUAL DEPLOY"
+        script: docker push toska/front-grappa2 && echo "Done, please MANUAL DEPLOY"
         on:
           tags: true
