@@ -1,22 +1,46 @@
 language: node_js
-node_js:
-- '8'
-after_success:
-- "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
-notifications:
-  slack:
-    secure: idiDt/o894DMrvqR2RAq9FHFkDkeK8o4T1TJINibMlRstsf2v2X/hXjZKhef3vakLItCURrkFa7UMkxFfokJDKUl102w05MpT7MykzYdCVqI2x5GCh69sB9dHNX/jVVWoYvlY7rNrJErG3SNZ9i3Kb8nT8WF75Q9TZ0Gxhrt3Ai7I+B3p6wkUd1Ka+lA1uOs7bpd4HfMej5ud8eVZ0rEPd3kdt3CT3oxteRt+VcOqPEovPreE7VOxkunyJ9OZLTb6aIYI648czrAwd9zYDAedKv0VQ8GF8pgLrNLL/MmciFxl7oTtral4ECwdram8nY8CiEW4/mAgxashROv9vwBbFSIGRmVIwIKgaiVPs1uVdkWcM+F1aUd/lPKKoC8aXNkairXJaEUOxq98ymr/RTf16bJCzDw61jH/6L92zw9sL6+P1VGwE7E4m/pyIpJ6xAA1e0w3AxoKC0prPM4v12qmF2v0eQZn5MK7ApZ9o06mVdo4YJO2bk7pdymxD1mwI2i8DNeOTF/HQKNZk9lHuXDL9UXatoCr4xxFqWAY2xZVbupXulCunPrEt8x5mGtMsrOW9nqtG9By1TpjvyUs+OfvcNaKRTQfpH04MYCUrWHiZCY1rgEfau3NfkIfEW0bm0n9GHGy9nunwncn1F2V6qu0ro/2i50FufF2eXDhqXaLt4=
-    on_success: change
-    on_failure: always
-cache:
-  directories:
-    - node_modules
 
-after_success:
-  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker build -t toska/front-grappa2:staging ."
-  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_BRANCH =~ (master) ]] && docker push toska/front-grappa2:staging"
-  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker build -t toska/front-grappa2:latest ."
-  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_TAG =~ (v[1-9].+) ]] && docker push toska/front-grappa2:latest"
-  
+node_js:
+  - "10"
+
+cache:
+  npm: true
+  directories:
+    - ~/.cache
+
+services:
+  - docker
+
+before_script:
+  - docker --version
+
+jobs:
+  include:
+    - stage: build & test & push & deploy
+      if: branch = master OR type = pull_request
+      env:
+        - IMAGE=STAGING
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - time npm ci 
+        - time npm run test
+        - DOCKER_BUILDKIT=1 docker build -t toska/front-grappa2:staging --build-arg BASE_PATH=/staging/ .
+      deploy: # deploy is always skipped for PR
+        provider: script
+        skip_cleanup: true
+        script: docker push toska/grappa2-frontend:staging && echo "Done, please configure ToskaWatch to deploy"
+        on:
+          branch: master
+    - if: tag IS present OR type = pull_request
+      env:
+        - IMAGE=PRODUCTION
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - time npm ci && npm run test
+        - DOCKER_BUILDKIT=1 docker build -t toska/front-grappa2 --build-arg BASE_PATH=/v2/ .
+      deploy: # deploy is always skipped for PR
+        provider: script
+        skip_cleanup: true
+        script: docker push toska/grappa2-frontend && echo "Done, please MANUAL DEPLOY"
+        on:
+          tags: true
