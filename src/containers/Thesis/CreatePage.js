@@ -24,6 +24,7 @@ export class ThesisCreatePage extends Component {
             attachments: [],
             showModal: false,
             validationErrors: {},
+            validationString: '',
             graders: []
         }
     }
@@ -67,7 +68,21 @@ export class ThesisCreatePage extends Component {
         }
         this.validateThesis(thesis)
             .then(() => this.setState({ validationErrors: {} }))
-            .catch(res => this.setState({ validationErrors: res.errors }))
+            .catch((res) => {
+                const validationErrors = res.errors
+                let readableError = ''
+                if (validationErrors.authorEmail) readableError = 'Author email is required'
+                else if (validationErrors.title) readableError = 'Title is required'
+                else if (validationErrors.urkund) readableError = 'Urkund link must be given'
+                else if (validationErrors.programmeId) readableError = 'Programme must be chosen'
+                else if (validationErrors.studyfieldId) readableError = 'Studyfield must be chosen'
+                else if (validationErrors.grade) readableError = 'Grade is required'
+                else if (validationErrors.graders) readableError = 'There must be 2 graders'
+                else if (!this.validateAttachments(this.state.attachments)) {
+                    readableError = 'Make sure you have uploaded the thesis and the review'
+                }
+                this.setState({ validationErrors, validationString: readableError })
+            })
     }
 
     editAttachmentList = (attachments) => {
@@ -181,14 +196,13 @@ export class ThesisCreatePage extends Component {
                     />
                     <Header as="h3" dividing>Graders of the thesis</Header>
                     {this.renderGraderSelector()}
-                    {programme !== undefined ?
+                    {programme ?
                         <div>
                             <p>If a grader is not on the list, you can submit a request below to add him/her
                                 and they should then appear in the list.
                             </p>
                             <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
-                        </div> :
-                        undefined}
+                        </div> : null }
                     <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>
                         Upload thesis and review file
                         <Header.Subheader>
@@ -209,7 +223,14 @@ export class ThesisCreatePage extends Component {
                     />
                 </div>
                 <br />
-                <button className="ui positive button" onClick={this.toggleModal}>
+                <div>
+                    {this.state.validationString}
+                </div>
+                <button
+                    disabled={Object.keys(this.state.validationErrors).length}
+                    className="ui positive button"
+                    onClick={this.toggleModal}
+                >
                     Submit
                 </button>
             </div>
