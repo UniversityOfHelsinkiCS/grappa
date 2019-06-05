@@ -27,18 +27,3 @@ const meetings = [
         councilmeetingId: 3
     }
 ]
-
-test('list is empty if programme is not selected', (t) => {
-    const change = sinon.spy()
-
-    const picker = shallow(
-        <ThesisCouncilmeetingPicker
-            councilmeetings={meetings}
-            chosenMeetingId={undefined}
-            sendChange={change}
-            programmes={undefined}
-        />
-    )
-
-    t.is(picker.find('option').length, 0)
-})
