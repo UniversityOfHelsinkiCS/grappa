@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { number, func, arrayOf } from 'prop-types'
 import moment from 'moment'
 import { Dropdown, Grid, Button, Message } from 'semantic-ui-react'
@@ -7,35 +8,35 @@ import { councilmeetingType, programmeType } from '../../../util/types'
 
 const NO_MEETING = 'No meeting selected'
 
-export default class ThesisCouncilmeetingPicker extends Component {
+class ThesisCouncilmeetingPicker extends Component {
     state = {
+        possibleProgrammes: [],
+        possibleMeetings: [],
         programmeId: undefined,
         councilmeetingId: undefined,
         selected: NO_MEETING
     }
 
     componentDidMount() {
-        const { councilmeetingId, programmeId } = this.props
-        if (councilmeetingId) {
-            this.setState({ councilmeetingId })
-        }
-        if (programmeId) {
-            this.setState({ programmeId })
-        }
+        const { councilmeetingId, programmeId, programmes } = this.props
+        this.setState({
+            possibleProgrammes: this.formatProgrammes(programmes),
+            councilmeetingId,
+            programmeId
+        })
     }
 
-    componentDidUpdate = async () => {
-        const councilmeetingId = Number(this.props.councilmeetingId)
-        const programmeId = Number(this.props.programmeId)
+    componentWillReceiveProps(props) {
+        const councilmeetingId = Number(props.councilmeetingId)
+        const programmeId = Number(props.programmeId)
         // if a programmeId prop is given and no councilmeeting prop is given
         // then auto select the programme for the meeting
         if (programmeId && !this.state.programmeId && !councilmeetingId) {
             // const checkedId = this.checkForOldProgramme(programmeId)
-            await this.setState({ programmeId })
             // find the first possible meeting date if there are meetings
-            const meetings = this.formatMeetings()
-            if (meetings.length > 0)
-                await this.setState({ councilmeetingId: meetings[0].value })
+            const possibleMeetings = this.formatMeetings(programmeId)
+            const firstMeeting = possibleMeetings[0] && possibleMeetings[0].value
+            this.setState({ programmeId, possibleMeetings, councilmeetingId: firstMeeting })
         } else if (programmeId && councilmeetingId && !this.state.councilmeetingId && !this.state.programmeId) {
             // If there is both a programme and councilmeeting, set them both,
             // given the meeting has changed from previous
@@ -82,16 +83,16 @@ export default class ThesisCouncilmeetingPicker extends Component {
         .filter(programme => this.formatMeetings(programme.programmeId).length)
         .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
 
-    chooseMeeting = (event, data) => {
-        if (data.value) {
-            this.setState({ councilmeetingId: Number(data.value) })
+    chooseMeeting = (_, target) => {
+        if (target.value) {
+            this.setState({ councilmeetingId: Number(target.value) })
         }
     }
 
-    chooseProgramme = (event, data) => {
-        const programmeId = Number(data.value)
+    chooseProgramme = (_, target) => {
+        const programmeId = Number(target.value)
         if (programmeId) {
-            this.setState({ programmeId, councilmeetingId: undefined })
+            this.setState({ programmeId, councilmeetingId: undefined, possibleMeetings: this.formatMeetings(programmeId) })
         }
     }
 
@@ -116,8 +117,6 @@ export default class ThesisCouncilmeetingPicker extends Component {
 
     render() {
         const { councilmeetingId, programmeId, selected } = this.state
-        const formattedMeetings = this.formatMeetings(programmeId)
-        const programmes = this.props.programmes ? this.formatProgrammes(this.props.programmes) : []
         return (
             <Grid columns="equal">
                 <br />
@@ -133,7 +132,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
                             fluid
                             selection
                             value={programmeId}
-                            options={programmes}
+                            options={this.state.possibleProgrammes}
                             onChange={this.chooseProgramme}
                         />
                     </Grid.Column>
@@ -149,7 +148,7 @@ export default class ThesisCouncilmeetingPicker extends Component {
                             fluid
                             selection
                             value={councilmeetingId}
-                            options={formattedMeetings}
+                            options={this.state.possibleMeetings}
                             onChange={this.chooseMeeting}
                         />
                     </Grid.Column>
@@ -184,3 +183,10 @@ ThesisCouncilmeetingPicker.defaultProps = {
     councilmeetingId: undefined,
     programmeId: undefined
 }
+
+const mapStateToProps = ({ councilmeetings, programmes }) => ({
+    councilmeetings,
+    programmes
+})
+
+export default connect(mapStateToProps)(ThesisCouncilmeetingPicker)

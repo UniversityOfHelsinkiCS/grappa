@@ -7,11 +7,8 @@ import { oldGradeFields, gradeFields } from '../../../util/theses'
 import { thesisType, programmeType, studyfieldType } from '../../../util/types'
 
 class ThesisInformation extends Component {
-    constructor() {
-        super()
-        this.state = {
-            oldGrading: true
-        }
+    state = {
+        oldGrading: true
     }
 
     componentWillReceiveProps(props) {
@@ -247,12 +244,11 @@ ThesisInformation.propTypes = {
     validationErrors: object.isRequired
 }
 
-const mapStateToProps = ({ programmes, studyfields, user }) => {
-    const roles = user.roles || []
+const mapStateToProps = ({ programmes, studyfields }) => {
+    // const roles = user.roles || []
     return {
         programmes: programmes
-            .filter(programme => roles
-                .find(role => programme.programmeId === role.programmeId))
+            // .filter(programme => roles.find(role => programme.programmeId === role.programmeId))
             .filter(programme => !programme.name.includes('OLD')),
         studyfields
     }

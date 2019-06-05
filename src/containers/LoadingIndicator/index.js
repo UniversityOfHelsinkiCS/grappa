@@ -51,7 +51,7 @@ export class LoadingIndicator extends Component {
                     </div>
                     <div style={{ margin: '1%' }}>
                         <div className="description">
-                            Imagine an icon that shows we are loading
+                            Thanks for patience!
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { arrayOf, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { Dropdown, Header, Loader } from 'semantic-ui-react'
-import moment from 'moment'
 
 import { saveThesis } from './services/thesisActions'
 import { requestGraderAction, getGradersAction } from '../Person/services/personActions'
@@ -114,32 +113,6 @@ export class ThesisCreatePage extends Component {
         this.handleChange({ graders })
     }
 
-
-    formatMeetings = () => {
-        const { councilmeetings } = this.props
-        const programmeId = parseInt(this.state.thesis.programmeId, 10)
-
-        if (!councilmeetings || !programmeId)
-            return []
-
-        // Deadline is always at the end of the day, so if day is either same or after, then it's not past the deadline.
-        const isInFuture = meeting => moment(meeting.instructorDeadline).isSameOrAfter(moment(), 'day')
-        const formatDate = meeting => moment(meeting.date).format('DD.MM.YYYY')
-        const formatDeadline = meeting => moment(meeting.instructorDeadline).format('23:59 DD.MM.YYYY')
-        const isMeetingSelectable = meeting => isInFuture(meeting) && meeting.programmes.includes(programmeId)
-
-        const meetings = councilmeetings
-            .filter(isMeetingSelectable)
-            .map(meeting => ({
-                name: 'councilmeetingId',
-                value: meeting.councilmeetingId,
-                key: meeting.councilmeetingId,
-                id: meeting.councilmeetingId,
-                text: `${formatDate(meeting)} Deadline: ${formatDeadline(meeting)}`
-            }))
-        return meetings
-    }
-
     renderGraderSelector = () => {
         const graders = this.state.graders.map((grader) => {
             const { personId, firstname, lastname, email } = grader.person
@@ -167,7 +140,7 @@ export class ThesisCreatePage extends Component {
     }
 
     render() {
-        if (!this.props.programmes) {
+        if (!this.props.programmes.length || !this.props.councilmeetings.length) {
             return (<div><Loader active>Loading</Loader></div>)
         }
         const programme = this.props.programmes.find(p => p.programmeId === parseInt(this.state.thesis.programmeId, 10))
@@ -202,7 +175,7 @@ export class ThesisCreatePage extends Component {
                                 and they should then appear in the list.
                             </p>
                             <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
-                        </div> : null }
+                        </div> : null}
                     <Header as="h3" style={this.state.invalidAttachments ? { color: 'red' } : null} dividing>
                         Upload thesis and review file
                         <Header.Subheader>
@@ -218,8 +191,6 @@ export class ThesisCreatePage extends Component {
                         sendChange={this.handleChange}
                         councilmeetingId={this.state.thesis.councilmeetingId}
                         programmeId={Number(this.state.thesis.programmeId)}
-                        councilmeetings={this.props.councilmeetings}
-                        programmes={this.props.programmes}
                     />
                 </div>
                 <br />
@@ -244,10 +215,10 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-const mapStateToProps = state => ({
-    councilmeetings: state.councilmeetings,
-    programmes: state.programmes,
-    studyfields: state.studyfields
+const mapStateToProps = ({ councilmeetings, programmes, studyfields }) => ({
+    councilmeetings,
+    programmes,
+    studyfields
 })
 
 ThesisCreatePage.propTypes = {
