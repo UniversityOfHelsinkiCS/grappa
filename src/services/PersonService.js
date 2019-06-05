@@ -101,7 +101,7 @@ export const getPersonById = id => knex.select().from('person').where('personId'
 export const getPersonByShibbolethId = shibbolethId =>
     knex.select().from('person').where('shibbolethId', shibbolethId).first()
 
-export async function savePerson(personData) {
+export const savePerson = async (personData) => {
     // If already exists then return that person
     let person = await knex.select(personSchema).from('person').where({
         email: personData.email,
@@ -182,7 +182,7 @@ export const getPendingPersonsWithRole = async (roleId, programmeId) => (
         })
 )
 
-export const getPersonByEmail = async email => Person.where({ email }).fetch()
+export const getPersonByEmail = async email => Person.where({ email: email.toLowerCase() }).fetch()
 
 export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
     person.set({ studentNumber, shibbolethId }).save()

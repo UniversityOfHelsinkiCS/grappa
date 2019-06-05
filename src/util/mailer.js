@@ -3,10 +3,10 @@ import logger from '../util/logger'
 const nodemailer = require('nodemailer')
 
 const smtp = () => ({
-    from: 'Grappa Robot <noreply@helsinki.fi>', // TODO: Move to env
+    from: 'Grappa Robot <noreply@helsinki.fi>',
     host: 'smtp.helsinki.fi',
     port: 587,
-    secure: false // false -> TLS, true -> SSL
+    secure: false
 })
 
 export async function getSettings() {
@@ -19,6 +19,7 @@ export async function sendEmail(to, subject, body, attachments) {
 
     // if you don't want to spam people/yourself use this
     if (process.env.NODE_ENV !== 'production') {
+        logger.info('Not actually sending')
         return logMail(to, subject, body, attachments)
     }
 
