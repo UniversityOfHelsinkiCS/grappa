@@ -152,7 +152,11 @@ export async function useSecondaryEmail(req, res) {
  * @param {} res
  */
 export const requestGrader = async (req, res) => {
-    const personData = req.body.person
+    const personData = {
+        email: req.body.person.email.toLowerCase(),
+        firstname: req.body.person.firstname,
+        lastname: req.body.person.lastname
+    }
     const { role } = req.body.roleRequest
     // programmeId comes as a string, so it needs to be parsed
     const programmeId = parseInt(req.body.roleRequest.programmeId, 10)
