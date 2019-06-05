@@ -160,6 +160,17 @@ export class ThesisCreatePage extends Component {
             c.councilmeetingId === Number(this.state.thesis.councilmeetingId))
         const meetingProgramme = councilmeeting ?
             this.props.programmes.find(p => p.programmeId === councilmeeting.programmes[0]) : undefined
+
+        const { validationErrors } = this.state
+        const readableErrors = []
+        if (validationErrors.authorEmail) readableErrors.push('Author email is required')
+        if (validationErrors.title) readableErrors.push('Title is required')
+        if (validationErrors.urkund) readableErrors.push('Urkund link must be given')
+        if (validationErrors.grade) readableErrors.push('Grade is required')
+        if (validationErrors.graders) readableErrors.push('There must be 2 graders')
+        if (validationErrors.programmeId) readableErrors.push('Programme must be chosen')
+        if (validationErrors.studyfieldId) readableErrors.push('Studyfield must be chosen')
+        if (!this.validateAttachments(this.state.attachments)) readableErrors.push('Make sure you have uploaded the thesis and the review')
         return (
             <div>
                 <LoadingIndicator type="THESIS_SAVE" redirect="/" />
@@ -209,7 +220,14 @@ export class ThesisCreatePage extends Component {
                     />
                 </div>
                 <br />
-                <button className="ui positive button" onClick={this.toggleModal}>
+                <div>
+                    {readableErrors.join(', ')}
+                </div>
+                <button
+                    disabled={Object.keys(this.state.validationErrors).length}
+                    className="ui positive button"
+                    onClick={this.toggleModal}
+                >
                     Submit
                 </button>
             </div>
