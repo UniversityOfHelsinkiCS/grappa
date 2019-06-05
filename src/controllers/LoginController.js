@@ -63,7 +63,7 @@ const register = async (shibbolethId, studentNumber, firstname, lastname, email)
         }
         user.firstname = firstname
         user.lastname = lastname
-        user.email = email
+        user.email = email.toLowerCase()
         return personService.updatePerson(user)
     } catch (error) {
         try {
@@ -72,7 +72,7 @@ const register = async (shibbolethId, studentNumber, firstname, lastname, email)
                 lastname,
                 studentNumber,
                 shibbolethId,
-                email
+                email: email.toLowerCase()
             }
             return personService.savePerson(user)
         } catch (err) {
