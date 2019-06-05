@@ -244,11 +244,11 @@ ThesisInformation.propTypes = {
     validationErrors: object.isRequired
 }
 
-const mapStateToProps = ({ programmes, studyfields }) => {
-    // const roles = user.roles || []
+const mapStateToProps = ({ programmes, studyfields, user }) => {
+    const roles = user.roles || []
     return {
         programmes: programmes
-            // .filter(programme => roles.find(role => programme.programmeId === role.programmeId))
+            .filter(programme => roles.find(role => programme.programmeId === role.programmeId))
             .filter(programme => !programme.name.includes('OLD')),
         studyfields
     }
