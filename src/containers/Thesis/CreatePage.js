@@ -66,7 +66,7 @@ export class ThesisCreatePage extends Component {
             })
         }
         this.validateThesis(thesis)
-            .then(() => this.setState({ validationErrors: {} }))
+            .then(() => this.setState({ validationErrors: {}, validationString: '' }))
             .catch((res) => {
                 const validationErrors = res.errors
                 let readableError = ''
