@@ -13,6 +13,7 @@ export class ThesisList extends Component {
             filteredTheses: props.theses,
             formattedTheses: props.theses,
             selectedThesesIds: [],
+            showInfo: false,
             cover: true,
             markDone: false
         }
@@ -139,6 +140,17 @@ export class ThesisList extends Component {
                         <i className="search icon" />
                     </div>
                 </div>
+                <div style={{ textAlign: 'right' }}>
+                    {this.state.showInfo ? (
+                        <p>
+                            Checked by author means that the author has visited grappa to review the thesis.
+                            <br />
+                            No pending graders means that the graders have been validated.
+                            <br />
+                            Printed for meeting means that the thesis has been printed.
+                        </p>
+                    ) : null}
+                </div>
                 <table className="ui celled table">
                     <thead>
                         <tr>
@@ -148,7 +160,7 @@ export class ThesisList extends Component {
                             <th>Scheduled council meeting</th>
                             <th>Checked by author</th>
                             <th>No pending graders</th>
-                            <th>Printed</th>
+                            <th>Printed for meeting <i className="question circle outline icon" style={{ cursor: 'pointer' }} onClick={() => this.setState({ showInfo: true })} /> </th>
                         </tr>
                     </thead>
                     <tbody>
