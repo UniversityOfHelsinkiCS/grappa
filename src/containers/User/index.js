@@ -54,26 +54,29 @@ export class UserPage extends Component {
     }
 
     render() {
+        const { user } = this.props
         const unitManagers = this.props.managers.filter(manager =>
             manager.programmeId === parseInt(this.state.programmeId, 10))
-        const isStaff = this.props.user && ((this.props.user.roles && this.props.user.roles.length > 0) ||
-            (this.props.user.affiliation && this.props.user.affiliation.length &&
-            (this.props.user.affiliation.includes('staff') || this.props.user.affiliation.includes('faculty'))))
+        const isStaff = user && ((user.roles && user.roles.length > 0) ||
+            (user.affiliation && user.affiliation.length &&
+                (user.affiliation.includes('staff') || user.affiliation.includes('faculty'))))
         return (
             <div>
                 <div className="ui segment">
-                    <h2>{this.props.user.firstname} {this.props.user.lastname}</h2>
+                    <h2>{user.firstname} {user.lastname}</h2>
                     <div className="ui list">
                         <div className="item">
-                            <span className="header">Student number</span> {this.props.user.studentNumber}
+                            <span className="header">Student number</span> {user.studentNumber}
                         </div>
                         <div className="item">
                             <span className="header">Email</span>
-                            <EmailSwitcher user={this.props.user} update={this.handleEmailUpdate} />
+                            <EmailSwitcher user={user} update={this.handleEmailUpdate} />
                         </div>
-                        <div className="item">
-                            <span className="header">Phone</span> {this.props.user.phone}
-                        </div>
+                        {user.phone && (
+                            <div className="item">
+                                <span className="header">Phone</span> {user.phone}
+                            </div>
+                        )}
                     </div>
                 </div>
                 {process.env.NODE_ENV !== 'production' ?
@@ -83,7 +86,12 @@ export class UserPage extends Component {
                         onChange={this.handleRoleChange}
                     />
                     : null}
-                <RoleExplain user={this.props.user} />
+                {user && user.roles && user.roles.find(access => access.role.toLowerCase() === 'grader') && (
+                    <Segment style={{ background: 'whitesmoke'}}>
+                        When a thesis is added to Grappa the student is notified to add their thesis to Ethesis. The development of the Ethesis integration has been suspended at least until an API for automated submissions is available.
+                    </Segment>
+                )}
+                <RoleExplain user={user} />
                 {isStaff ?
                     <Segment inverted color="green" tertiary >
                         <h3>
