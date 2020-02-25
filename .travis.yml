@@ -24,7 +24,7 @@ jobs:
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - time npm ci 
         - time npm run test
-        - DOCKER_BUILDKIT=1 docker build -t toska/front-grappa2:staging --build-arg BASE_PATH=/staging/ .
+        - docker build -t toska/front-grappa2:staging --build-arg BASE_PATH=/staging/ .
       deploy: # deploy is always skipped for PR
         provider: script
         skip_cleanup: true
@@ -37,7 +37,7 @@ jobs:
       script:
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - time npm ci && npm run test
-        - DOCKER_BUILDKIT=1 docker build -t toska/front-grappa2 --build-arg BASE_PATH=/v2/ .
+        - docker build -t toska/front-grappa2 --build-arg BASE_PATH=/v2/ .
       deploy: # deploy is always skipped for PR
         provider: script
         skip_cleanup: true
