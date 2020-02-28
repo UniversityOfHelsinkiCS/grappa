@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const axios = require('axios')
 const bodyParser = require('body-parser')
 const thesisController = require('../controllers/ThesisController')
 
@@ -86,5 +87,24 @@ router.post('/', attachment, auth.checkStaff, (req, res, next) => thesisControll
  */
 router.put('/printed', jsonParser, auth.checkStaff, (req, res, next) =>
     thesisController.markPrinted(req, res).catch(next))
+
+router.get('/in_ethesis', async (req, res) => {
+    const { title, authors } = req.query
+    const words = [...title.split(' '), ...authors.split(' ')]
+    const heldaUrl = `https://helda.helsinki.fi/handle/10138/17738/discover?query=${encodeURIComponent(words.join(' '))}`
+    try {
+        const { data } = await axios.get(heldaUrl)
+        const foundish = words.map((word) => {
+            const wordCountInHTML = data.split(word).length - 1
+            return wordCountInHTML > 3 // 3 is the magic amount it's there even if it's not found
+        })
+        const totalAmount = foundish.length
+        const likelyAmount = foundish.filter(f => f).length
+        const trustItsThere = likelyAmount / totalAmount
+        res.send({ found: trustItsThere > 0.5 }) // At least half of the words appear twice
+    } catch (err) {
+        res.send(404)
+    }
+})
 
 module.exports = router
