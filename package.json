@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/UniversityOfHelsinkiCS/back-grappa2#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "babel-core": "^6.26.3",
     "babel-polyfill": "^6.26.0",
     "bluebird": "^3.5.3",
@@ -42,7 +43,6 @@
     "express-fileupload": "^1.0.0",
     "express-graceful-exit": "^0.4.2",
     "form-data": "^2.3.3",
-    "husky": "^0.15.0-rc.8",
     "jsonwebtoken": "^8.3.0",
     "jszip": "^3.1.5",
     "knex": "^0.14.6",
@@ -106,10 +106,5 @@
   "apidoc": {
     "name": "Grappa backend",
     "url": "https://grappa.cs.helsinki.fi/v2api/"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
   }
 }
