@@ -59,7 +59,7 @@ export const callApi = async (url, method = 'get', data, prefix) => {
     const token = await getToken()
     options.headers['x-access-token'] = token
 
-    if (prefix.includes('DOWNLOAD')) {
+    if (prefix && prefix.includes('DOWNLOAD')) {
         options.responseType = 'arraybuffer'
         return getAxios().get(url, options)
     }

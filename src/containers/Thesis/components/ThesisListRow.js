@@ -4,6 +4,7 @@ import { Checkbox, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { thesisType, councilmeetingType } from '../../../util/types'
 import { formatDisplayDate } from '../../../util/common'
+import InEthesisIcon from './InEthesisIcon'
 
 const renderStatusIcons = field =>
     (field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />)
@@ -42,6 +43,7 @@ const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggle
             <td>{renderStatusIcons(!authorName.some(author => author.includes('@')))}</td>
             <td>{renderStatusIcons(checkGraders(thesis.graders))}</td>
             <td>{renderStatusIcons(thesis.printDone)}</td>
+            <td><InEthesisIcon authors={thesis.authors} title={thesis.title} /></td>
         </tr>
     )
 }
