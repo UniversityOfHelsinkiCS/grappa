@@ -43,7 +43,6 @@
     "express-fileupload": "^1.0.0",
     "express-graceful-exit": "^0.4.2",
     "form-data": "^2.3.3",
-    "husky": "^0.15.0-rc.8",
     "jsonwebtoken": "^8.3.0",
     "jszip": "^3.1.5",
     "knex": "^0.14.6",
@@ -107,10 +106,5 @@
   "apidoc": {
     "name": "Grappa backend",
     "url": "https://grappa.cs.helsinki.fi/v2api/"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
   }
 }
