@@ -1,9 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { arrayOf, number, bool, func } from 'prop-types'
 import { Checkbox, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { thesisType, councilmeetingType } from '../../../util/types'
 import { formatDisplayDate } from '../../../util/common'
+import InEthesisIcon from './InEthesisIcon'
 
 const renderStatusIcons = field =>
     (field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />)
@@ -21,7 +23,7 @@ const getAuthorName = (thesis) => {
 // This is a pretty basic check and could be improved.
 const checkGraders = graders => graders.filter(grader => grader.roleRequestId).length < 1
 
-const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggleThesis, selectedThesesIds }) => {
+const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggleThesis, selectedThesesIds, canSeeEthesis }) => {
     const authorName = getAuthorName(thesis)
     return (
         <tr>
@@ -42,6 +44,7 @@ const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggle
             <td>{renderStatusIcons(!authorName.some(author => author.includes('@')))}</td>
             <td>{renderStatusIcons(checkGraders(thesis.graders))}</td>
             <td>{renderStatusIcons(thesis.printDone)}</td>
+            {canSeeEthesis ? <td><InEthesisIcon authors={thesis.authors} title={thesis.title} /></td> : null}
         </tr>
     )
 }
@@ -55,4 +58,8 @@ ThesisListRow.propTypes = {
     selectedThesesIds: arrayOf(number).isRequired
 }
 
-export default ThesisListRow
+const mapStateToProps = state => ({
+    canSeeEthesis: ((state.user || {}).roles || []).find(role => role.role === 'manager' || role.role === 'print_person' || role.role === 'resp_professor')
+})
+
+export default connect(mapStateToProps)(ThesisListRow)

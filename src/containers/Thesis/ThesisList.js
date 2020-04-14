@@ -131,6 +131,8 @@ export class ThesisList extends Component {
     }
 
     render() {
+        const { canSeeEthesis } = this.props
+
         return (
             <div>
                 {this.renderButtons()}
@@ -161,6 +163,7 @@ export class ThesisList extends Component {
                             <th>Checked by author</th>
                             <th>No pending graders</th>
                             <th>Printed for meeting <i className="question circle outline icon" style={{ cursor: 'pointer' }} onClick={() => this.setState({ showInfo: true })} /> </th>
+                            {canSeeEthesis ? <th>Published in E-Thesis</th> : null}
                         </tr>
                     </thead>
                     <tbody>
@@ -206,8 +209,8 @@ const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
     // theses: state.theses,
     agreements: state.agreements,
-    attachments: state.attachments
-
+    attachments: state.attachments,
+    canSeeEthesis: ((state.user || {}).roles || []).find(role => role.role === 'manager' || role.role === 'print_person' || role.role === 'resp_professor')
 })
 
 export default connect(mapStateToProps)(ThesisList)
