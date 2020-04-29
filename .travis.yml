@@ -15,16 +15,7 @@ before_script:
 env:
   - DATABASE_URL=postgres://postgres@localhost/grappa CONSOLE_OUTPUT=true TOKEN_SECRET=salainen_token
 
-script: npm run test-tap
-
-after_success:
- - "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
-
-notifications:
-  slack:
-    secure: wxTnPqIOH9ybEAlNyuCpz2+MWm8NH/zzJS/UwQM4oKG2fWJ26HpAoNw+8ZK9Lyg5kK9xAP7sUOaITpBhEmXTuelL0T0JBq0uhhUb4wL0MEkq2luyYyTA/aPs/x4Gzz9POIxJ1wD27KxItg+9eQrvfjJt1TwGauwlvYfSPJ6HFiGuDV7XDMuVdacLyST3Udl6qNrPD2iVVoXSHqSMQQ334u4ot11xyX489HXLL3PG0tyzEwbUXJBvfqHKfGx/O0XmM6bUn6FUg8jJhCPWJJ9eac4ywgmeETwr85B+jum2JBBJDKAWjIcw8DL2hNfsKKTzzxgRpkVSYcjJVT9evFxlTy+pvUBbgB6W72HF9uvNFypisFI3CCx2iAHV55df5di2l2yTENJOo5tCmXM5vhXsmlAdczEUaC/b+NKEkMHEVeBuHfa/ouHq1VAiQ6brGtJC8IMMebumHTDY8TTyXFbVKDoiQ7S4RwoBf3/2YZXbdayIwypUqsSRdK7XnTDrboDKUUjikHpkJODySaer4qgAwV5k372oLNXy+J9ufIRHkIU513l/L4ZyS5hm1Usl/NDLrF320gyPHJuL4fMJHwf8n++noZE8yM054Le3o34xgAgCWnf2LGm3iu2Q7L817219Ai2zbqN52b1/ormfsGg7HjswS88i71lX84pL7wO0pVw=
-    on_success: change
-    on_failure: always
+script: npm run test
 
 cache:
   directories:

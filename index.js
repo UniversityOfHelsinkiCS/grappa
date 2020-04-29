@@ -17,6 +17,7 @@ Raven.config(process.env.SENTRY_ADDR).install()
 
 app.listen(3100, () => {
     logger.info('Grappa app listening on port 3100!')
+    logger.info(`Environment is ${process.env.NODE_ENV}`)
 })
 
 app.use(gracefulExit.middleware(app))

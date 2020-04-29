@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc ava",
-    "test-nyan": "NODE_ENV=test nyc ava | tnyan",
-    "test-tap": "NODE_ENV=test nyc ava",
+    "test": "NODE_ENV=test ava",
     "start": "NODE_ENV=development nodemon index.js",
     "start:win": "nodemon index.js",
     "start:prod": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:latest; NODE_ENV=production node index.js",
@@ -14,7 +12,6 @@
     "db:seed": "knex --knexfile ./src/db/knexfile.js --cwd . seed:run",
     "db:reset": "knex --knexfile ./src/db/knexfile.js --cwd . migrate:rollback",
     "build": "BABEL_ENV=production babel --out-dir=dist index.js",
-    "report": "nyc report --reporter=html",
     "lint": "eslint --ext .js src || true",
     "apidoc": "apidoc -i src -o apidoc"
   },
@@ -59,7 +56,7 @@
     "uuid": "^3.3.2",
     "validator": "^10.9.0",
     "winston": "^2.4.4",
-    "winston-log2gelf": "^1.9.1",
+    "winston-log2gelf": "^2.3.0",
     "xml2js": "^0.4.19",
     "xmlbuilder": "^10.1.1"
   },
@@ -78,7 +75,6 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "nodemon": "^1.18.6",
-    "nyc": "^11.9.0",
     "reqres": "^2.1.0",
     "sinon": "^4.5.0",
     "standard": "^11.0.1",
