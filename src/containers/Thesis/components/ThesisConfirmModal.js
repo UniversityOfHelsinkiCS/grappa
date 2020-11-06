@@ -46,26 +46,9 @@ const ThesisConfirmModal = ({
                     <p>
                         After this submission, an email will be sent to the student at {thesis.authorEmail},
                         instructing them to log in to Grappa to confirm that the thesis can be presented in
-                        the given councilmeeting. The student should also upload the thesis to e-thesis for
-                        archiving. You can also remind them about these.
-                        <br />
+                        the given councilmeeting. The student must also upload the thesis to e-thesis for archiving. You should also remind them about these.
                         <br />
                     </p>
-                    {programme.name.includes('Computer Science') ?
-                        <div>
-                            <p>
-                                If you are from department of CS:
-                                Have you remembered to add the thesis into the thesis-management system?
-                                If not please do so right away.
-                            </p>
-                            <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://ilmo.cs.helsinki.fi/gradu/servlet/hae"
-                            >
-                                Ilmo (opens in a new window)
-                            </a>
-                        </div> : undefined}
                     <br />
                     <Button negative onClick={closeModal}>Cancel</Button>
                     <Button positive onClick={sendSaveThesis}>Confirm save</Button>
