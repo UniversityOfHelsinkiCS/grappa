@@ -86,7 +86,7 @@ const permissions = {
     print_person: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.councilMeeting
+                nav.home, nav.theses, nav.statistics, nav.councilMeeting
             ]
         },
         agreement: {
@@ -106,21 +106,21 @@ const permissions = {
     resp_professor: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.agreementPersonManagement
+                nav.home, nav.theses, nav.statistics, nav.agreementPersonManagement
             ]
         }
     },
     grader: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.thesis
+                nav.home, nav.theses, nav.thesis, nav.statistics
             ]
         }
     },
     supervisor: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.thesis
+                nav.home, nav.theses, nav.thesis, nav.statistics
             ]
         }
     },
