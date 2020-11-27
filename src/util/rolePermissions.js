@@ -86,7 +86,7 @@ const permissions = {
     print_person: {
         'nav-bar': {
             show: [
-                nav.home, nav.theses, nav.statistics, nav.councilMeeting
+                nav.home, nav.theses, nav.statistics, nav.councilMeeting, nav.councilMeetings,
             ]
         },
         agreement: {
