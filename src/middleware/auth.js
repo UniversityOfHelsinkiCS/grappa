@@ -44,6 +44,11 @@ export const checkManagerOrAdmin = async (req, res, next) => {
     await checkRoles(staffRoles, req, res, next)
 }
 
+export const checkPrintPersonManagerOrAdmin = async (req, res, next) => {
+    const staffRoles = ['admin', 'manager', 'print_person']
+    await checkRoles(staffRoles, req, res, next)
+}
+
 export const checkCanSubmitThesis = async (req, res, next) => {
     const staffRoles = ['manager', 'resp_professor', 'supervisor', 'grader', 'admin']
     await checkRoles(staffRoles, req, res, next)

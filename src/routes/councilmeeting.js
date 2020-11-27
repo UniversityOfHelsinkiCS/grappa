@@ -40,7 +40,7 @@ router.get('/', (req, res, next) => {
  *      "studentDeadline": "2017-11-03T22:00:00.000Z"
  *  }
  */
-router.post('/', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
+router.post('/', jsonParser, auth.checkPrintPersonManagerOrAdmin, (req, res, next) => {
     councilmeetingController.saveCouncilmeeting(req, res).catch(next)
 })
 
@@ -60,7 +60,7 @@ router.post('/', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
  *      "studentDeadline": "2017-11-03T22:00:00.000Z"
  *  }
  */
-router.put('/:id', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
+router.put('/:id', jsonParser, auth.checkPrintPersonManagerOrAdmin, (req, res, next) => {
     councilmeetingController.updateCouncilmeeting(req, res).catch(next)
 })
 
@@ -73,7 +73,7 @@ router.put('/:id', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
  *
  * @apiParam {Number} id meeting id
  */
-router.delete('/:id', jsonParser, auth.checkManagerOrAdmin, (req, res, next) => {
+router.delete('/:id', jsonParser, auth.checkPrintPersonManagerOrAdmin, (req, res, next) => {
     councilmeetingController.deleteCouncilmeeting(req, res).catch(next)
 })
 
