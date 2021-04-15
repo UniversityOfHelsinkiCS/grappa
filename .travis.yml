@@ -1,0 +1,46 @@
+language: node_js
+
+node_js:
+  - "10"
+
+cache:
+  npm: true
+  directories:
+    - ~/.cache
+
+services:
+  - docker
+
+before_script:
+  - docker --version
+
+jobs:
+  include:
+    - stage: build & test & push & deploy
+      if: branch = master OR type = pull_request
+      env:
+        - IMAGE=STAGING
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - time npm ci 
+        - time npm run test
+        - docker build -t toska/front-grappa2:staging --build-arg BASE_PATH=/staging/ .
+      deploy: # deploy is always skipped for PR
+        provider: script
+        skip_cleanup: true
+        script: docker push toska/front-grappa2:staging && echo "Done, please configure ToskaWatch to deploy"
+        on:
+          branch: master
+    - if: tag IS present OR type = pull_request
+      env:
+        - IMAGE=PRODUCTION
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - time npm ci && npm run test
+        - docker build -t toska/front-grappa2 --build-arg BASE_PATH=/v2/ .
+      deploy: # deploy is always skipped for PR
+        provider: script
+        skip_cleanup: true
+        script: docker push toska/front-grappa2 && echo "Done, please MANUAL DEPLOY"
+        on:
+          tags: true

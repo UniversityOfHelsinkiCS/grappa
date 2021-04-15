@@ -1,0 +1,181 @@
+[
+    {
+        "title": "Tutkielman arvosteluasteikko",
+        "text": "Tutkielman osaamistavoitteet kuvataan koulutusohjelman opetussuunnitelmassa, jotka tiedekuntaneuvosto hyväksyy. Ylemmän korkeakoulututkinnon tutkielman arvostelussa käytetään asteikkoa 0-5, jossa 5 = erinomainen, 4 = kiitettävä 3 = hyvä, 2= tyydyttävä, 1 = välttävä ja 0 = hylätty."
+    },
+    {
+        "list": [
+            {
+                "title": "5 (erinomainen)",
+                "text": "Tutkielma on poikkeuksellisen hyvä ja osoittaa tekijän tieteellistä kypsyyttä, kriittistä ajattelua ja syvällistä perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa koherentin ja yhtenäisen kokonaisuuden. Tutkielma täyttää opinnäytetyölle asetetut vaatimukset erinomaisesti kaikilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "4 (kiitettävä)",
+                "text": "Tutkielma on erittäin hyvä ja osoittaa tekijän kypsyyttä, kriittisyyttä ja perehtyneisyyttä aiheeseen. Tutkielma sisältää oleelliset asiat loogisessa järjestyksessä ja muodostaa selkeän ja yhtenäisen kokonaisuuden. Tutkielma vastaa opinnäytetyölle asetettuja vaatimuksia kiitettävästi lähes kaikilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "3 (hyvä)",
+                "text": "Tutkielma on hyvä ja se sisältää oleelliset asiat loogisessa järjestyksessä muodostaen yhtenäisen kokonaisuuden. Tutkielma vastaa hyvin opinnäytetyölle asetettuja vaatimuksia useimmilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "2 (tyydyttävä)",
+                "text": "Tutkielma muodostaa ymmärrettävän ja riittävän loogisen kokonaisuuden. Tutkielmassa on puutteita, mutta se vastaa opinnäytetyölle asetettuja vaatimuksia useilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "1 (välttävä)",
+                "text": "Tutkielma sisältää oleellisia asioita jokseenkin loogisessa järjestyksessä ja ylittää hyväksyttävissä olevan rajan. Tutkielmassa on paljon puutteita, mutta se vastaa välttävästi opinnäytetyölle asetettuja vaatimuksia useilla arvioinnin osa-alueilla."
+            },
+            {
+                "title": "0 (hylätty)",
+                "text": "Tutkielma on hajanainen ja epälooginen, eikä muodosta kokonaisuutta. Tutkielman arvioinnin osa-alueiden vaatimukset eivät täyty hyväksyttävällä tavalla."
+            }
+        ]
+    },
+    {
+        "title": "Tutkielman arvioinnin osa-alueet",
+        "text": "Arvioitavien osa-alueiden otsikot ovat e-thesis –järjestelmän arviointilomakkeella, arviointi asteikolla 0-5. Koulutusohjelma-/tiedekuntakohtaisesti annetaan tarkemmat sovellusohjeet osa-alueiden arviointiin, arviointikriteerit. Tutkielman arvioinnissa kiinnitetään huomiota seuraaviin pääasioihin:"
+    },
+    {
+        "title": "1. Tutkimusaihe ja tutkimuksen tarkoitus",
+        "list": [
+            {
+                "text": "tutkielman aiheen ja sen merkittävyyden perustelu"
+            },
+            {
+                "text": "oivallus aiheen valinnassa ja rajauksessa"
+            },
+            {
+                "text": "selkeä tutkimustehtävä ja tavoite, tutkimusongelma tai -teema"
+            },
+            {
+                "text": "tutkimuseettisten näkökohtien huomioon ottaminen"
+            }
+        ]
+    },
+    {
+        "title": "2. Tutkimusalan tuntemus ja teoreettinen perehtyneisyys sekä kirjallisuuden käyttö",
+        "list": [
+            {
+                "text": "perehtyneisyys aiheeseen liittyvään tutkimukseen ja kirjallisuuteen"
+            },
+            {
+                "text": "näkökulman ja käsitteiden osuvuus käsiteltävän ongelman kannalta"
+            },
+            {
+                "text": "monipuolinen lähdekirjallisuuden käyttö"
+            },
+            {
+                "text": "lähdekritiikki ja alkuperäisten tieteellisten lähteiden käyttö"
+            },
+            {
+                "text": "lähdekirjallisuudessa esiintyvien näkökulmien analyyttinen tarkastelu ja synteesien tekeminen"
+            }
+        ]
+    },
+    {
+        "title": "3. Aineisto, aineistonhankinta ja analyysit",
+        "list": [
+            {
+                "text": "tutkimustehtävän ratkaisemiseen sopiva menetelmä"
+            },
+            {
+                "text": "menetelmän kattava kuvaaminen (strategia, tiedonhankinta ja analyysi)"
+            },
+            {
+                "text": "aineiston riittävyys ja sopivuus tutkimustehtävään ja analyysimenetelmään"
+            },
+            {
+                "text": "aineiston kuvaus"
+            },
+            {
+                "text": "menetelmän kriittinen ja arvioiva käyttö"
+            },
+            {
+                "text": "tutkimuseettisten näkökohtien huomioon ottaminen"
+            }
+        ]
+    },
+    {
+        "title": "4. Tutkimustulokset ja niiden raportointi",
+        "list": [
+            {
+                "text": "tuloksissa vastataan tutkimustehtävään"
+            },
+            {
+                "text": "tulosten raportoinnin loogisuus ja selkeys"
+            },
+            {
+                "text": "havainnollisuus: kuvien, piirrosten, taulukoiden suhde tekstiin"
+            }
+        ]
+    },
+    {
+        "title": "Tulosten tarkastelu (pohdinta) ja johtopäätökset",
+        "list": [
+            {
+                "text": "tutkimustulosten suhteuttaminen aiempaan tutkimukseen"
+            },
+            {
+                "text": "uusien tutkimusongelmien esittäminen"
+            },
+            {
+                "text": "sovellusmahdollisuuksien pohdinta"
+            },
+            {
+                "text": "tutkielman luotettavuustarkastelu tutkimusotteen mukaisesti"
+            },
+            {
+                "text": "tutkimuseettisten näkökohtien pohtiminen"
+            },
+            {
+                "text": "tutkimusprosessin ja -tulosten kriittinen ja perusteellinen tarkastelu"
+            },
+            {
+                "text":"johtopäätösten perusteellisuus, uskottavuus ja oivaltavuus"
+            },
+            {
+                "text":"johtopäätösten perustuminen saatuihin tuloksiin"
+            }
+        ]
+    },
+    {
+        "title": "6. Tutkielman rakenne, selkeys ja viimeistely",
+        "list": [
+            {
+                "text": "selkeä jäsentely, joka sopii tutkimusotteeseen"
+            },
+            {
+                "text": "tieteellisen asiatyylin hallinta (vaihtelee tutkimusotteen mukaan)"
+            },
+            {
+                "text": "tutkielman tekijän oman tulkinnan ja lähteessä esitetyn tiedon erottaminen ja yhteen niveltäminen selkeästi ja sujuvasti"
+            },
+            {
+                "text": "oikeakielisyys"
+            },
+            {
+                "text": "asiallinen ja johdonmukainen lähdeviitteiden merkintä"
+            },
+            {
+                "text": "lähdeluettelon selkeys ja virheettömyys"
+            },
+            {
+                "text": "ulkoasun moitteettomuus"
+            }
+        ]
+    },
+    {
+        "title": "7. Työskentely tutkielmaprosessin aikana",
+        "list": [
+            {
+                "text": "ennakkoluulottomuus ja itsenäisyys"
+            },
+            {
+                "text": "menetelmien omaksuminen ja luovuus ongelmanratkaisussa"
+            },
+            {
+                "text": "tutkielman tekeminen suunnitellussa aikataulussa"
+            }
+        ]
+    }
+]
