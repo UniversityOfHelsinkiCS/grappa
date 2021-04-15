@@ -8,9 +8,11 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 RUN apt-get update
 RUN apt-get install -y pdftk
 
-# Setup
 WORKDIR /usr/src/app
-COPY . .
+
+# Setup
+COPY package* ./
+RUN npm ci
 
 EXPOSE 3100
 

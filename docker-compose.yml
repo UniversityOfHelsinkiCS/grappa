@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  grappa-front:
+    build:
+      context: ./frontend/
+      dockerfile: config/dev.Dockerfile
+    image: grappafront
+    container_name: grappafront
+    ports:
+      - 3000:3000
+    volumes:
+      - nodemod-front:/usr/src/app/node_modules/
+      - ./frontend/:/usr/src/app/
+  grappa-back:
+    build:
+      context: ./backend/
+      dockerfile: config/dev.Dockerfile
+    image: grappaback
+    container_name: grappaback
+    ports:
+      - 3100:3100
+    depends_on:
+      - grappa-db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@grappa-db:5432/grappadatabase
+      TOKEN_SECRET: LikeNoOneEverWas
+    volumes:
+      - nodemod-back:/usr/src/app/node_modules/
+      - ./backend/:/usr/src/app/
+      - ./data/uploads:/usr/src/app/uploads
+  grappa-db:
+    image: postgres:9.6.3
+    restart: unless-stopped
+    ports:
+      - 7500:5432
+    volumes:
+      - ./data/database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=grappadatabase
+    container_name: grappa-db
+
+volumes:
+  nodemod-back:
+  nodemod-front:
