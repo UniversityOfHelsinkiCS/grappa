@@ -18,6 +18,15 @@ export class UserPage extends Component {
         document.title = 'Grappa: Main page'
     }
 
+    getProgrammes = () => {
+        if (!this.props.programmes || !this.props.user) return []
+        const currentProgrammes = this.props.user.roles
+            .filter(({ role }) => role === 'grader')
+            .map(({ programmeId }) => programmeId)
+        return this.props.programmes.filter(({ programmeId }) => !currentProgrammes.includes(programmeId))
+    }
+
+
     handleRoleChange = async (event) => {
         if (!event.target.value) return
         const uid = event.target.value
@@ -87,7 +96,7 @@ export class UserPage extends Component {
                     />
                     : null}
                 {user && user.roles && user.roles.find(access => access.role.toLowerCase() === 'grader') && (
-                    <Segment style={{ background: 'whitesmoke'}}>
+                    <Segment style={{ background: 'whitesmoke' }}>
                         When a thesis is added to Grappa the student is notified to add their thesis to Ethesis. The development of the Ethesis integration has been suspended at least until an API for automated submissions is available.
                     </Segment>
                 )}
@@ -98,7 +107,7 @@ export class UserPage extends Component {
                             Do you need grader rights? Select a Unit from the dropdown and submit a request
                             for new rights
                         </h3>
-                        <ProgrammeSelect programmes={this.props.programmes} onChange={this.handleUnitChange} />
+                        <ProgrammeSelect programmes={this.getProgrammes()} onChange={this.handleUnitChange} />
                         {this.state.programmeId ?
                             <Button primary onClick={this.submitGraderRequest}>Request rights
                             </Button> : undefined}
