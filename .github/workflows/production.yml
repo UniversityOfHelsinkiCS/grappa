@@ -33,7 +33,7 @@ jobs:
         with:
           context: backend
           push: true
-          tags: toska/front-grappa2:latest
+          tags: toska/back-grappa2:latest
           build-args: |
             BASE_PATH=/v2/
             GIT_SHA=${{ github.sha }}
