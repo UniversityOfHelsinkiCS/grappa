@@ -56,7 +56,7 @@ export class ThesisCreatePage extends Component {
             .catch(res => this.setState({ validationErrors: res.errors }))
     }
 
-    handleChange = (changedValues) => {
+    handleChange = (changedValues, validate = true) => {
         const thesis = Object.assign({}, this.state.thesis, changedValues)
 
         this.setState({ thesis })
@@ -65,23 +65,24 @@ export class ThesisCreatePage extends Component {
                 this.setState({ graders: res.data })
             })
         }
-        this.validateThesis(thesis)
-            .then(() => this.setState({ validationErrors: {}, validationString: '' }))
-            .catch((res) => {
-                const validationErrors = res.errors
-                let readableError = ''
-                if (validationErrors.authorEmail) readableError = 'Author email is required'
-                else if (validationErrors.title) readableError = 'Title is required'
-                else if (validationErrors.urkund) readableError = 'Urkund link must be given'
-                else if (validationErrors.programmeId) readableError = 'Programme must be chosen'
-                else if (validationErrors.studyfieldId) readableError = 'Studyfield must be chosen'
-                else if (validationErrors.grade) readableError = 'Grade is required'
-                else if (validationErrors.graders) readableError = 'There must be 2 graders'
-                else if (!this.validateAttachments(this.state.attachments)) {
-                    readableError = 'Make sure you have uploaded the thesis and the review'
-                }
-                this.setState({ validationErrors, validationString: readableError })
-            })
+        if (validate)
+            this.validateThesis(thesis)
+                .then(() => this.setState({ validationErrors: {}, validationString: '' }))
+                .catch((res) => {
+                    const validationErrors = res.errors
+                    let readableError = ''
+                    if (validationErrors.authorEmail) readableError = 'Author email is required'
+                    else if (validationErrors.title) readableError = 'Title is required'
+                    else if (validationErrors.urkund) readableError = 'Urkund link must be given'
+                    else if (validationErrors.programmeId) readableError = 'Programme must be chosen'
+                    else if (validationErrors.studyfieldId) readableError = 'Studyfield must be chosen'
+                    else if (validationErrors.grade) readableError = 'Grade is required'
+                    else if (validationErrors.graders) readableError = 'There must be 2 graders'
+                    else if (!this.validateAttachments(this.state.attachments)) {
+                        readableError = 'Make sure you have uploaded the thesis and the review'
+                    }
+                    this.setState({ validationErrors, validationString: readableError })
+                })
     }
 
     editAttachmentList = (attachments) => {
@@ -172,7 +173,7 @@ export class ThesisCreatePage extends Component {
                     {programme ?
                         <div>
                             <p>If a grader is not on the list, you can submit a request below to add him/her
-                                and they should then appear in the list.
+                            and they should then appear in the list.
                             </p>
                             <AddPerson programmes={[programme]} roles={['grader']} addNewPerson={this.addNewGrader} />
                         </div> : null}

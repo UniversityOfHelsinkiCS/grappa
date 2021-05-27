@@ -1,14 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { arrayOf, bool, func, object } from 'prop-types'
-import { Button, TextArea } from 'semantic-ui-react'
+import { TextArea } from 'semantic-ui-react'
 
-import { oldGradeFields, gradeFields } from '../../../util/theses'
+import { gradeFields } from '../../../util/theses'
 import { thesisType, programmeType, studyfieldType } from '../../../util/types'
 
 class ThesisInformation extends Component {
-    state = {
-        oldGrading: true
+
+    componentDidMount() {
+        const defaults = {}
+        const filteredProgrammes = this.props.programmes.filter(programme => !programme.name.includes('Department'))
+        if (filteredProgrammes.length === 1 && !this.props.thesis.programmeId)
+            defaults.programmeId = filteredProgrammes[0].programmeId.toString()
+
+        if (!defaults.programmeId)
+            return this.props.sendChange({ ...defaults }, false)
+
+        const studyfieldId = this.getDefaultStudyTrack(defaults.programmeId) || ''
+        return this.props.sendChange({ ...defaults, studyfieldId }, false)
     }
 
     componentWillReceiveProps(props) {
@@ -19,29 +29,30 @@ class ThesisInformation extends Component {
             props.thesis.programmeId = selectedProgrammeId.programmeId
     }
 
+    getDefaultStudyTrack(programmeId) {
+        if (!programmeId) return null
+        const filteredStudyTracks = this.props.studyfields
+            .filter(studyfield => studyfield.programmeId === Number(programmeId))
+        return filteredStudyTracks.length === 1
+            ? filteredStudyTracks[0].studyfieldId.toString()
+            : null
+    }
+
     changeField = fieldName => (event) => {
         const changedValues = { [fieldName]: event.target.value }
         if (fieldName === 'programmeId') {
-            changedValues.studyfieldId = ''
+            const defaultStudyfieldId = this.getDefaultStudyTrack(changedValues.programmeId)
+            changedValues.studyfieldId = defaultStudyfieldId || ''
             changedValues.majorId = ''
             changedValues.graders = []
         }
         if (fieldName === 'majorId') {
-            changedValues.studyfieldId = ''
+            const studyFields = this.props.studyfields
+                .filter(studyfield => studyfield.programmeId === Number(this.props.thesis.programmeId))
+                .filter(field => field.majorId === Number(changedValues.majorId))
+            changedValues.studyfieldId = studyFields.length === 1 ? studyFields[0].studyfieldId : ''
         }
         this.props.sendChange(changedValues)
-    }
-
-    toggleGrading = (e, data) => {
-        if (this.state.oldGrading === data.value) return
-        this.props.sendChange({
-            programmeId: '',
-            majorId: '',
-            studyfieldId: '',
-            grade: '',
-            graders: []
-        })
-        this.setState({ oldGrading: data.value })
     }
 
     renderTextField(label, fieldName, placeholder, disabled, type = 'text') {
@@ -93,33 +104,6 @@ class ThesisInformation extends Component {
         )
     }
 
-    renderToggleUnitsAndGradingButton() {
-        return (
-            <div>
-                <p><b>Is the thesis according to old (40 credits) or new (30 credits) grading?</b></p>
-                <Button.Group id="unit_toggle">
-                    <Button
-                        color={this.state.oldGrading ? 'blue' : 'grey'}
-                        onClick={this.toggleGrading}
-                        disabled={!this.props.allowEdit}
-                        value
-                    >
-                        40 credits
-                    </Button>
-                    <Button.Or />
-                    <Button
-                        color={this.state.oldGrading ? 'grey' : 'blue'}
-                        onClick={this.toggleGrading}
-                        disabled={!this.props.allowEdit}
-                        value={false}
-                    >
-                        30 credits
-                    </Button>
-                </Button.Group>
-            </div>
-        )
-    }
-
     renderThesisAuthor() {
         if (!this.props.thesis.authorFirstname) {
             return (
@@ -140,9 +124,7 @@ class ThesisInformation extends Component {
 
     renderThesisInformation() {
         const programmes = this.props.programmes
-            .filter(programme => (
-                programme.name.includes('Department') === this.state.oldGrading
-            ))
+            .filter(programme => !programme.name.includes('Department'))
             .map(programme => ({
                 id: programme.programmeId,
                 name: programme.name
@@ -188,9 +170,6 @@ class ThesisInformation extends Component {
                     {this.renderTextField('Title', 'title', 'Title', !this.props.allowEdit)}
                     {this.renderTextField('Urkund-link', 'urkund', 'Link to Urkund', !this.props.allowEdit)}
                 </div>
-                <div className="one field">
-                    {this.renderToggleUnitsAndGradingButton()}
-                </div>
                 <div className="four fields">
                     {this.renderDropdownField('Unit', programmes, 'programmeId', !this.props.allowEdit)}
                     <div className="field">
@@ -202,10 +181,7 @@ class ThesisInformation extends Component {
                         {this.renderDropdownField('Studyfield', majorStudyfields !== undefined ?
                             majorStudyfields : studyfields, 'studyfieldId', !this.props.allowEdit)}
                     </div>
-                    {this.state.oldGrading ?
-                        this.renderDropdownField('Grade', oldGradeFields, 'grade', !this.props.allowEdit) :
-                        this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)
-                    }
+                    {this.renderDropdownField('Grade', gradeFields, 'grade', !this.props.allowEdit)}
 
                 </div>
                 <div className="one field">

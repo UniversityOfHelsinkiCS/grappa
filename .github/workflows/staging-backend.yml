@@ -3,7 +3,7 @@ name: Release staging backend
 on:
   push:
     branches: 
-      - main
+      - trunk
     paths:
       - 'backend/**'
       - '.github/workflows/staging-backend.yml'
