@@ -36,6 +36,9 @@ const accessLogger = morgan((tokens, req, res) => {
 })
 
 module.exports = (app) => {
+    app.use('/sandbox', (req, res) => { //eslint-disable-line
+        throw new Error('Grappa ei toimi :eitoimi:')
+    })
     app.use(auditLogger)
     app.use(login)
     app.use(auth.checkAuth, accessLogger)
