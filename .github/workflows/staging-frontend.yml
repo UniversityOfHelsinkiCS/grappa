@@ -44,7 +44,7 @@ jobs:
         run: docker create --name front-grappa2 toska/front-grappa2:staging
 
       - name: Copy assets from the container
-        run: docker cp grappa/frontend:/usr/src/app/build ./build
+        run: docker cp front-grappa2:/usr/src/app/build ./build
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1
@@ -56,4 +56,4 @@ jobs:
         with:
           environment: staging
           sourcemaps: './build/static/js'
-          url_prefix: '~/v2/static/js'
+          url_prefix: '~/staging/static/js'
