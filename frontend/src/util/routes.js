@@ -36,7 +36,8 @@ export const paths = {
     emailDrafts: { path: '/emaildrafts', component: EmailDraftPage, navText: 'Email drafts' },
     statistics: { path: '/stats', component: ThesisStatistics, navText: 'Statistics' },
     notifications: { path: '/notifications', component: NotificationsPage, navText: 'Notifications' },
-    invite: { path: '/invite', component: InvitePage }
+    invite: { path: '/invite', component: InvitePage },
+    sandbox: { path: '/sandbox', component: () => { throw new Error('Grappa ei toimi :eitoimi:') } }
 }
 
 export default () => (
