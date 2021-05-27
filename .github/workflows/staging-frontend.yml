@@ -55,5 +55,6 @@ jobs:
           SENTRY_PROJECT: grappa
         with:
           environment: staging
+          set_commits: 'skip'
           sourcemaps: './build/static/js'
           url_prefix: '~/staging/static/js'
