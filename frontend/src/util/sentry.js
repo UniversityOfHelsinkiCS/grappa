@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 
 const { GIT_SHA, NODE_ENV } = process.env
