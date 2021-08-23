@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Segment, Form, Button, Dropdown, Radio, Input, Message } from 'semantic-ui-react'
+import { Segment, Form, Button, Dropdown, Input, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
@@ -177,11 +177,9 @@ class CouncilMeetingDetails extends Component {
 
   renderProgrammeSelectGroup = () => {
       const { programmes } = this.props
-      const { useOldUnits, meetingLocal } = this.state
+      const { meetingLocal } = this.state
 
-      const programs = useOldUnits ?
-          programmes.filter(p => p.text.includes('Department')) :
-          programmes
+      const programs = programmes.filter(p => !(p.text.includes('Department') || p.text.includes('OLD')))
 
       const selectedPrograms = meetingLocal.programmes || []
       const hasSelectedPrograms = selectedPrograms.length > 0
@@ -202,16 +200,6 @@ class CouncilMeetingDetails extends Component {
                       options={programs}
                       onChange={this.handleUnitSelectChange}
                       closeOnChange
-                  />
-              </Form.Field>
-              <Form.Field>
-                  <label>Use old units</label>
-                  <Radio
-                      toggle
-                      style={{ marginTop: '10px' }}
-                      label={useOldUnits ? 'On' : 'Off'}
-                      checked={useOldUnits}
-                      onChange={this.handleUseOldUnitsChange}
                   />
               </Form.Field>
           </Form.Group>

@@ -110,7 +110,7 @@ export class PersonRoleManagePage extends Component {
     render() {
         if (this.props.user.roles) {
             const { persons, availableRoles, roleRequests, programmes } = this.props
-            const userProgrammes = this.checkUserRights()
+            const userProgrammes = this.checkUserRights().filter(p => !(p.name.includes('Department') || p.name.includes('OLD')))
             const selected = this.state.person ? this.state.person.personId : null
             return (
                 <div>

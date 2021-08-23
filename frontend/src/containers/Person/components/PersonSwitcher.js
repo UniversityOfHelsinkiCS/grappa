@@ -6,14 +6,16 @@ const PersonSwitcher = ({ persons, managers, onChange }) => (
     <div className="ui segment">
         <select id="roles" className="ui dropdown" onChange={onChange}>
             <option value="">Choose a role</option>
-            {persons.map(person => (
-                <option
-                    key={person.personId}
-                    value={person.shibbolethId}
-                >
-                    {person.firstname} {person.lastname}
-                </option>
-            ))}
+            {persons
+                .sort((a, b) => `${a.firstname} ${a.lastname}`.localeCompare(`${b.firstname} ${b.lastname}`))
+                .map(person => (
+                    <option
+                        key={person.personId}
+                        value={person.shibbolethId}
+                    >
+                        {person.firstname} {person.lastname}
+                    </option>
+                ))}
             {managers.map(manager => (
                 <option
                     key={manager.person.email + manager.programmeId}
