@@ -2,18 +2,24 @@ require('dotenv').config()
 require('babel-core/register')
 require('babel-polyfill')
 const express = require('express')
-const Raven = require('raven')
+const Sentry = require('@sentry/node')
 
 const cors = require('cors')
 const gracefulExit = require('express-graceful-exit')
 const logger = require('./src/util/logger')
 const routes = require('./src/routes.js')
 const errorHandler = require('./src/util/errorHandler')
+const initializeSentry = require('./src/util/sentry')
 
 const app = express()
+
+initializeSentry(app)
+
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.tracingHandler())
+
 const server = require('http').createServer(app)
 
-Raven.config(process.env.SENTRY_ADDR).install()
 
 app.listen(3100, () => {
     logger.info('Grappa app listening on port 3100!')

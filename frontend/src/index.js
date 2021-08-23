@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import initializeSentry from './util/sentry'
 
 // nav
 import NavBar from './containers/NavBar'
@@ -18,9 +19,7 @@ import './media/App.css'
 // routes
 import routes from './util/routes'
 
-try {
-  Sentry.init({ dsn: 'http://542d335e623743528aa5f0e1b85346d1@toska.cs.helsinki.fi:8500/6' }) // eslint-disable-line
-} catch (e) { } // eslint-disable-line
+initializeSentry()
 
 const killServiceWorkers = () => {
     if (window.navigator && navigator.serviceWorker) {

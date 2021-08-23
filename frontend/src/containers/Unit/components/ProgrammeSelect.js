@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { arrayOf, func, bool } from 'prop-types'
-import { Checkbox, FormField } from 'semantic-ui-react'
 import { programmeType } from '../../../util/types'
 
 export default class ProgrammeSelect extends Component {
@@ -26,21 +25,12 @@ export default class ProgrammeSelect extends Component {
 
     render() {
         const programmes = this.props.programmes.filter(programme =>
-            !programme.name.includes('Department') === this.state.newUnits &&
-            !programme.name.includes('OLD')
+            !(programme.name.includes('Department') || programme.name.includes('OLD'))
         )
 
         return (
             <div className="ui form">
-                <div className="two fields">
-                    <FormField>
-                        <Checkbox
-                            toggle
-                            label="New units"
-                            onChange={this.swapUnit}
-                            checked={this.state.newUnits}
-                        />
-                    </FormField>
+                <div className="one fields">
                     <div className="field">
                         <select
                             className="ui dropdown"

@@ -26,35 +26,14 @@ class ThesisCouncilmeetingPicker extends Component {
         })
     }
 
-    componentWillReceiveProps(props) {
-        const councilmeetingId = Number(props.councilmeetingId)
-        const programmeId = Number(props.programmeId)
-        // if a programmeId prop is given and no councilmeeting prop is given
-        // then auto select the programme for the meeting
-        if (programmeId && !this.state.programmeId && !councilmeetingId) {
-            // const checkedId = this.checkForOldProgramme(programmeId)
-            // find the first possible meeting date if there are meetings
+    componentDidUpdate(prevProps) {
+        if (prevProps.programmeId !== this.props.programmeId) {
+            const programmeId = Number(this.props.programmeId)
             const possibleMeetings = this.formatMeetings(programmeId)
-            const firstMeeting = possibleMeetings[0] && possibleMeetings[0].value
-            this.setState({ programmeId, possibleMeetings, councilmeetingId: firstMeeting })
-        } else if (programmeId && councilmeetingId && !this.state.councilmeetingId && !this.state.programmeId) {
-            // If there is both a programme and councilmeeting, set them both,
-            // given the meeting has changed from previous
-            this.setState({ programmeId, councilmeetingId })
+            if (!possibleMeetings.length)
+                return
+            this.setState({ programmeId, possibleMeetings, councilmeetingId: possibleMeetings[0].value }, this.selectMeeting)
         }
-    }
-
-    checkForOldProgramme = (programmeId) => {
-        const { programmes } = this.props
-        const curProgramme = programmes.find(programme => programme.programmeId === programmeId)
-        if (!curProgramme.name.includes('Department')) {
-            return programmeId
-        }
-        const keyString = curProgramme.name.split(' ')[2]
-        const correspondingProg = programmes
-            .filter(programme => !programme.name.includes('Department') && !programme.name.includes('OLD'))
-            .find(programme => programme.name.includes(keyString))
-        return correspondingProg.programmeId
     }
 
     formatMeetings = (programmeId) => {
@@ -71,6 +50,7 @@ class ThesisCouncilmeetingPicker extends Component {
 
         return councilmeetings
             .filter(isMeetingSelectable)
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
             .map(meeting => ({
                 key: meeting.councilmeetingId,
                 value: meeting.councilmeetingId,
@@ -84,16 +64,18 @@ class ThesisCouncilmeetingPicker extends Component {
         .map(programme => ({ key: programme.programmeId, value: programme.programmeId, text: programme.name }))
 
     chooseMeeting = (_, target) => {
-        if (target.value) {
-            this.setState({ councilmeetingId: Number(target.value) })
-        }
+        if (!target.value) return
+        this.setState({ councilmeetingId: Number(target.value) }, this.selectMeeting)
     }
 
     chooseProgramme = (_, target) => {
         const programmeId = Number(target.value)
-        if (programmeId) {
-            this.setState({ programmeId, councilmeetingId: undefined, possibleMeetings: this.formatMeetings(programmeId) })
-        }
+        if (!programmeId) return
+        const possibleMeetings = this.formatMeetings(programmeId)
+        const councilmeetingId = possibleMeetings.length
+            ? possibleMeetings[0].value
+            : undefined
+        this.setState({ programmeId, councilmeetingId, possibleMeetings }, this.selectMeeting)
     }
 
     clearSelection = () => {
@@ -151,9 +133,6 @@ class ThesisCouncilmeetingPicker extends Component {
                             options={this.state.possibleMeetings}
                             onChange={this.chooseMeeting}
                         />
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Button color="blue" onClick={this.selectMeeting}>Select</Button>
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row verticalAlign="bottom">

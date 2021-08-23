@@ -111,7 +111,7 @@ export class CouncilmeetingViewPage extends Component {
     }
 
     formatProgrammes = programmes => (
-        programmes.filter(programme => !programme.name.includes('OLD'))
+        programmes.filter(programme => !(programme.name.includes('OLD') || programme.name.includes('Department')))
             .map(programme => ({
                 key: programme.programmeId,
                 value: programme.programmeId,
