@@ -10,7 +10,7 @@ ARG BASE_PATH
 ENV BASE_PATH=$BASE_PATH
 
 RUN npm run build
-RUN npm install -g serve
+RUN npm install -g serve@13
 
 EXPOSE 5000
 
