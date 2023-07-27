@@ -1,4 +1,4 @@
-FROM node:12.22.12-bullseye
+FROM node:10.15.0
 
 # Setup
 WORKDIR /usr/src/app
