@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "winston-gelf-transporter": "^1.0.2"
+  }
+}

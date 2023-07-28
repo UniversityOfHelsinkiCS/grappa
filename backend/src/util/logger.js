@@ -1,5 +1,7 @@
+const os = require('os')
+
 const winston = require('winston')
-const Log2gelf = require('winston-log2gelf')
+const { WinstonGelfTransporter } = require('winston-gelf-transporter')
 
 const transports = []
 
@@ -7,19 +9,20 @@ if (process.env.NODE_ENV !== 'test') {
     transports.push(new winston.transports.File({ filename: 'debug.log' }))
 }
 
-if (process.env.LOG_PORT && process.env.LOG_HOST) {
-    transports.push(
-        new Log2gelf({
-            hostname: process.env.LOG_HOSTNAME || 'grappa2-backend',
-            host: process.env.LOG_HOST,
-            port: process.env.LOG_PORT,
-            protocol: process.env.LOG_PROTOCOL || 'https',
-            environment: process.env.NODE_ENV,
-            protocolOptions: {
-                path: process.env.LOG_PATH || '/gelf'
-            }
-        })
-    )
+if (process.env.NODE_ENV === 'production') {
+  transports.push(
+    new WinstonGelfTransporter({
+      handleExceptions: true,
+      host: 'svm-116.cs.helsinki.fi',
+      port: 9503,
+      protocol: 'udp',
+      hostName: os.hostname(),
+      additional: {
+        app: 'grappa',
+        environment: 'production'
+      }
+    })
+  )
 }
 
 transports.push(new winston.transports.Console({ level: 'debug' }))
