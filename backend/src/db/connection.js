@@ -4,9 +4,7 @@ require('dotenv').config()
 const config = require('./knexfile.js')
 const knexModule = require('knex')
 
-const { NODE_ENV } = process.env
-const env = NODE_ENV === 'staging' ? 'production' : NODE_ENV || 'not working'
-
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'not working'
 let knex
 
 module.exports.getKnex = () => {

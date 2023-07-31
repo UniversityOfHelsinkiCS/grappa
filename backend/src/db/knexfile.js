@@ -52,5 +52,21 @@ module.exports = {
         seeds: {
             directory: './src/db/production_seeds'
         }
+    },
+    staging: {
+        client: 'pg',
+        connection: {
+            connectionString: config.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        },
+        useNullAsDefault: true,
+        migrations: {
+            directory: './src/db/migrations'
+        },
+        seeds: {
+            directory: './src/db/seeds'
+        }
     }
 }
