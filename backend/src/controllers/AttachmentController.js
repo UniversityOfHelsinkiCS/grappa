@@ -62,6 +62,7 @@ export async function downloadAttachments(req, res) {
                 const attachmentStream = await attachmentService.getPdf(attachment)
                 return attachmentService.mergePdfs(attachmentStream, reviewPage)
             }
+            console.log(JSON.stringify(attachment, null, 2))
             return attachmentService.getPdf(attachment)
         }))
 

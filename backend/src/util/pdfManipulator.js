@@ -103,3 +103,16 @@ function createReviewString(reviewInfoArray) {
         return `${identifyString}\n\n${graderString}`
     }).join('\n\n')
 }
+
+
+
+async function test() {
+    // Does not support past 26.
+    // Bug in node-pdftk or pdftk: trailing and leading spaces are A: ' B ' === 'A B A'
+    const pdf = 'A'
+
+    const input = {
+        A: './uploads' + '/df04fa0798318c949e2cccfdbf236da6'
+    }
+    return pdftk.input(input).cat(pdf).output()
+}
