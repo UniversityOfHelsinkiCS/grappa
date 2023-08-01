@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 
 const { GIT_SHA, NODE_ENV } = process.env
-const IN_PRODUCTION = NODE_ENV === 'development' || NODE_ENV === 'staging'
+const IN_PRODUCTION = NODE_ENV === 'production'
 
 const initializeSentry = () => {
     if (!IN_PRODUCTION) return
