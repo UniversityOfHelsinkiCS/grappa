@@ -22,7 +22,7 @@ jobs:
           containerfiles: |
             frontend/Dockerfile
           build-args: |
-            BASE_PATH=/v2/
+            BASE_PATH=/
             GIT_SHA=${{ github.sha }}
 
       - name: Push to quay.io
@@ -50,7 +50,7 @@ jobs:
           containerfiles: |
             backend/Dockerfile
           build-args: |
-            BASE_PATH=/v2/
+            BASE_PATH=/
             GIT_SHA=${{ github.sha }}
 
       - name: Push to quay.io

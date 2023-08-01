@@ -113,7 +113,7 @@ export const handleRequest = store => next => async (action) => {
 }
 
 export const logout = async () => {
-    const stagingPath = '/staging'
+    const stagingPath = '/grappa'
     const returnUrl = window.location.pathname.includes(stagingPath) ?
         `${window.location.origin}${stagingPath}` : window.location.origin
     const response = await getAxios().delete('/logout', { data: { returnUrl } })

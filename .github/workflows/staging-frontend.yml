@@ -27,7 +27,7 @@ jobs:
             frontend/Dockerfile
           build-args: |
             NODE_ENV=staging
-            BASE_PATH=/staging/
+            BASE_PATH=/grappa/
             GIT_SHA=${{ github.sha }}
 
       - name: Push to quay.io
@@ -63,4 +63,4 @@ jobs:
           environment: staging
           set_commits: 'skip'
           sourcemaps: './build/static/js'
-          url_prefix: '~/staging/static/js'
+          url_prefix: '~/grappa/static/js'

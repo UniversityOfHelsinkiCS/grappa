@@ -31,7 +31,7 @@ const killServiceWorkers = () => {
 }
 
 const assumeBasename = () => {
-    const POSSIBLE_BASENAMES = ['v2', 'staging']
+    const POSSIBLE_BASENAMES = ['grappa']
     const haystack = window.location.pathname.split('/')
     const needle = haystack.find(path => POSSIBLE_BASENAMES.includes(path))
     return needle || '/'

@@ -5,8 +5,8 @@ const mailer = require('../util/mailer')
 const emailDraftService = require('../services/EmailDraftService')
 const personService = require('../services/PersonService')
 
-const PROD_ADDRESS = 'https://grappa.cs.helsinki.fi/v2/'
-const DEV_ADDRESS = 'http://localhost:3000/v2/'
+const PROD_ADDRESS = 'https://grappa.cs.helsinki.fi/'
+const DEV_ADDRESS = 'http://localhost:3000/'
 
 const SERVER_ADDRESS = process.env.NODE_ENV === 'production' ? PROD_ADDRESS : DEV_ADDRESS
 
@@ -40,7 +40,7 @@ export async function sendInvite(emailInvite, type, programmeId) {
 }
 
 export const sendAddedToGrappa = async (programmes, role, email, firstname, lastname) => {
-    const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/v2/ with ' +
+    const helsinkiEmail = 'You can login to Grappa at https://grappa.cs.helsinki.fi/ with ' +
         'the University of Helsinki credentials associated with this email address.'
     const nonHelsinkiEmail = 'You can not login to Grappa since this is not a @helsinki.fi email ' +
         'address. Only people with University of Helsinki username can use Grappa. You can still act ' +
@@ -77,7 +77,7 @@ export const notifyManagersAboutRoleRequest = async (address, roleName, programm
     const title = `RoleRequest in Grappa for ${programmeName}`
     const body = `A new role request for ${roleName} in ${programmeName} has been submitted to Grappa.\n
     You are receiving this message since you are marked as a manager of this programme, and you (or another manager
-    of the programme) should view and handle the request. You can find unhandled requests at https://grappa.cs.helsinki.fi/v2/PersonRoleManagement.\n\n
+    of the programme) should view and handle the request. You can find unhandled requests at https://grappa.cs.helsinki.fi/PersonRoleManagement.\n\n
     Best regards,\n
     Toska-group`
     try {
