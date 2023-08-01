@@ -14,6 +14,9 @@ COPY package* ./
 
 RUN npm ci
 
+# pdftk fails otherwise
+RUN chmod -R 777 node_modules
+
 COPY . .
 
 EXPOSE 3100
