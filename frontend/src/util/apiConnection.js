@@ -3,7 +3,7 @@ import { getToken, setToken } from './common'
 import { TOKEN_NAME, DEV_USER } from './constants'
 
 const createApiUrl = (path) => {
-    const API_PATHS = ['staging', 'v2']
+    const API_PATHS = ['grappa']
     const mode = path.split('/')[1]
     return API_PATHS.includes(mode) ? `/${mode}/api` : '/api'
 }
