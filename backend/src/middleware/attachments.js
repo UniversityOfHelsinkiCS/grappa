@@ -1,6 +1,6 @@
 import multer from 'multer'
 
-const PATH_TO_FOLDER = './uploads/'
+const PATH_TO_FOLDER = '/usr/src/app/uploads/'
 
 const storage = () => {
     if (process.env.NODE_ENV === 'test') {
