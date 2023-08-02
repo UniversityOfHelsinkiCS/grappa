@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import initializeSentry from './util/sentry'
 
@@ -37,23 +37,31 @@ const assumeBasename = () => {
     return needle || '/'
 }
 
+const App = () => {
+    if (window.location.pathname.includes('v2')) return <Redirect to="/" />
+
+    return (
+        <div className="App">
+            <Route component={NavBar} />
+            <div className="ui left aligned container" style={{ margin: '1.5%' }}>
+                <EventMessageContainer />
+                {killServiceWorkers()}
+                {routes()}
+            </div>
+            <h4>
+                If you are a staff member and need grader rights, please contact the Grappa manager of your unit.
+            </h4>
+            <h4 style={{ marginBottom: '2%' }}>
+                If you have any additional trouble, contact grp-toska@helsinki.fi
+            </h4>
+        </div>
+    )
+}
+
 ReactDOM.render(
     <Provider store={store}>
         <Router basename={assumeBasename()}>
-            <div className="App">
-                <Route component={NavBar} />
-                <div className="ui left aligned container" style={{ margin: '1.5%' }}>
-                    <EventMessageContainer />
-                    {killServiceWorkers()}
-                    {routes()}
-                </div>
-                <h4>
-                    If you are a staff member and need grader rights, please contact the Grappa manager of your unit.
-                </h4>
-                <h4 style={{ marginBottom: '2%' }}>
-                    If you have any additional trouble, contact grp-toska@helsinki.fi
-                </h4>
-            </div>
+            <App />
         </Router>
     </Provider>,
     document.getElementById('root')
