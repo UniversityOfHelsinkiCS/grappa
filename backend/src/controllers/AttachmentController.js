@@ -126,11 +126,16 @@ async function getAgreementObjects(agreementIds) {
 
 export async function deleteAttachment(req, res) {
     const attachmentId = req.params.id
+    logger.info('Delete attachment', { attachmentId })
     const attachment = await attachmentService.getAttachments([attachmentId])
+    logger.info('Attachment', attachment)
     const agreement = await agreementService.getAgreementById(attachment[0].agreementId)
+    logger.info('Agreement', agreement)
     await checkUserHasRightToModifyAgreement(req, [agreement])
+    logger.info('Access success')
 
     const deletedId = await attachmentService.deleteAttachment(attachmentId)
+    logger.info('Attachment deleted', { deletedId })
     notificationService.createNotification('ATTACHMENT_DELETE_ONE_SUCCESS', req)
 
     res.status(200).send(deletedId).end()

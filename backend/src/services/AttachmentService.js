@@ -146,6 +146,7 @@ export async function createReviewPage(reviewObject) {
 }
 
 export async function deleteAttachment(attachmentId) {
+    logger.info('Deleting attachment', { attachmentId })
     // Do not delete the file for now.
     // TODO: Add timed file removal (after indexing has ended, 30 days?)
     return knex('attachment')
