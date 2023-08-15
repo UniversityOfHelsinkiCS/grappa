@@ -1,6 +1,7 @@
 import Checkit from 'checkit'
 import Promise from 'bluebird'
 import { linkAgreementAndPersonRole, unlinkAgreementAndPersonRole } from '../services/RoleService'
+import logger from '../util/logger'
 
 const thesisService = require('../services/ThesisService')
 const agreementService = require('../services/AgreementService')
@@ -75,15 +76,16 @@ async function validateThesis(thesis) {
 }
 
 export async function saveThesisForm(req, res) {
+    logger.info("Starting saveThesisForm")
     const thesis = JSON.parse(req.body.json)
 
     await validateThesis(thesis)
-
+    logger.info("Thesis validated")
     const response = await knex.transaction(async (trx) => {
         // TODO refactor!!!
-
+        logger.info("Checking user rights for adding")
         await permissionService.checkUserHasRightToAddAgreement(req, thesis.studyfieldId)
-
+        logger.info("User rights ok")
         // Order so that agreementId is available to save attachments.
         const agreement = await agreementService.createFakeAgreement(trx)
         const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId, trx)
@@ -100,11 +102,12 @@ export async function saveThesisForm(req, res) {
         // TODO: Add email to new email send table
         delete thesis.thesisEmails
         delete thesis.authorEmail
-
+        logger.info("Updating graders")
         if (thesis.graders) {
             await updateGraders(thesis.graders, agreement, trx)
             delete thesis.graders
         }
+        logger.info("Saving thesis")
         const savedThesis = await thesisService.saveThesis(thesis, trx)
 
         // Agreement was missing the thesisId completing linking.
