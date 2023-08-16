@@ -76,16 +76,16 @@ async function validateThesis(thesis) {
 }
 
 export async function saveThesisForm(req, res) {
-    logger.info("Starting saveThesisForm")
+    console.log("Starting saveThesisForm")
     const thesis = JSON.parse(req.body.json)
 
     await validateThesis(thesis)
-    logger.info("Thesis validated")
+    console.log("Thesis validated")
     const response = await knex.transaction(async (trx) => {
         // TODO refactor!!!
-        logger.info("Checking user rights for adding")
+        console.log("Checking user rights for adding")
         await permissionService.checkUserHasRightToAddAgreement(req, thesis.studyfieldId)
-        logger.info("User rights ok")
+        console.log("User rights ok")
         // Order so that agreementId is available to save attachments.
         const agreement = await agreementService.createFakeAgreement(trx)
         const attachments = await attachmentService.saveAttachmentFiles(req.files, agreement.agreementId, trx)
@@ -102,12 +102,12 @@ export async function saveThesisForm(req, res) {
         // TODO: Add email to new email send table
         delete thesis.thesisEmails
         delete thesis.authorEmail
-        logger.info("Updating graders")
+        console.log("Updating graders")
         if (thesis.graders) {
             await updateGraders(thesis.graders, agreement, trx)
             delete thesis.graders
         }
-        logger.info("Saving thesis")
+        console.log("Saving thesis")
         const savedThesis = await thesisService.saveThesis(thesis, trx)
 
         // Agreement was missing the thesisId completing linking.

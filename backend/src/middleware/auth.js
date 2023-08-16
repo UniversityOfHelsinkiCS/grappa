@@ -30,6 +30,7 @@ export const checkAuth = async (req, res, next) => {
 }
 
 export const checkAdmin = async (req, res, next) => {
+    console.log("Checking admin")
     const staffRoles = ['admin']
     await checkRoles(staffRoles, req, res, next)
 }
