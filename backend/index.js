@@ -23,6 +23,7 @@ const server = require('http').createServer(app)
 
 app.listen(3100, () => {
     logger.info('Grappa app listening on port 3100!')
+    logger.info('Debugging version: 0.0.1')
     logger.info(`Environment is ${process.env.NODE_ENV}`)
 })
 

@@ -8,6 +8,7 @@ const councilmeetingService = require('../services/CouncilmeetingService')
 const notificationService = require('../services/NotificationService')
 
 export async function saveAttachments(req, res) {
+    console.log("Saving attachments")
     const attachmentObject = await attachmentService.saveAttachments(req, res)
     const { attachments } = attachmentObject
     notificationService.createNotification('ATTACHMENT_SAVE_ONE_SUCCESS', req)
