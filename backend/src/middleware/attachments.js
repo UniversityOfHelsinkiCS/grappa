@@ -3,13 +3,20 @@ import multer from 'multer'
 const PATH_TO_FOLDER = '/usr/src/app/uploads/'
 
 const storage = () => {
-    if (process.env.NODE_ENV === 'test') {
-        return multer.memoryStorage()
+    try {
+        if (process.env.NODE_ENV === 'test') {
+            return multer.memoryStorage()
+        }
+        return multer.diskStorage({
+            destination: PATH_TO_FOLDER
+        })
+    } catch (e) {
+        console.log("storage method failed. Error starting from next line")
+        console.log(e)
+        throw e
     }
-    return multer.diskStorage({
-        destination: PATH_TO_FOLDER
-    })
 }
+
 const upload = multer({ storage: storage() }).fields([
     { name: 'otherFile' },
     { name: 'reviewFile', maxCount: 1 },

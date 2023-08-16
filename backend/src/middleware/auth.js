@@ -56,10 +56,12 @@ export const checkCanSubmitThesis = async (req, res, next) => {
 }
 
 const checkRoles = async (allowedRoles, req, res, next) => {
+    console.log("Checking roles")
     const user = await personService.getLoggedPerson(req)
     const userRoles = await roleService.getUsersRoles(user)
     try {
         if (userRoles.filter(item => allowedRoles.includes(item.role.name)).length > 0) {
+            console.log("Roles were ok")
             next()
         } else {
             res.status(403).json({ error: 'no access' })
