@@ -4,8 +4,8 @@ const logger = require('../util/logger')
 const loggedMethods = ['POST', 'PUT', 'DELETE']
 
 module.exports = function auditLogger(req, res, next) {
-    console.log("Method: " + req.method)
-    console.log("Time: " + new Date().toString())
+    console.log("Req: " + req.method + " " + req.originalUrl + " at " + new Date().toString())
+    console.log("body keys: " + Object.keys(req.body))
     if (loggedMethods.includes(req.method)) {
         const type = `${req.method} ${req.originalUrl}`
 
