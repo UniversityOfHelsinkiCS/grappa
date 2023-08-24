@@ -8,7 +8,7 @@ const initializeSentry = (app) => {
     if (!IN_PRODUCTION) return
 
     Sentry.init({
-        dsn: 'https://937cdbbab78348eaa445788e08bdba9c@sentry.cs.helsinki.fi/8',
+        dsn: 'https://bd3a3596f974cbb41f49fabbe408c5b5@toska.cs.helsinki.fi/8',
         release: GIT_SHA,
         integrations: [
             new Sentry.Integrations.Http({ tracing: true }),
