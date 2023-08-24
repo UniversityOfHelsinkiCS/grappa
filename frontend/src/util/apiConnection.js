@@ -2,18 +2,17 @@ import axios from 'axios'
 import { getToken, setToken } from './common'
 import { TOKEN_NAME, DEV_USER } from './constants'
 
-/* const createApiUrl = (path) => {
+const createApiUrl = (path) => {
     const API_PATHS = ['grappa']
     const mode = path.split('/')[1]
-
     return API_PATHS.includes(mode) ? `/${mode}/api` : '/api'
-} */
+}
 // Problems with api base path: /v2 or /api or even /
 export const getAxios = () => {
-    // const hostUrl = window.location.origin
-    // const apiPath = createApiUrl(window.location.pathname)
+    const hostUrl = window.location.origin
+    const apiPath = createApiUrl(window.location.pathname)
     return axios.create({
-        baseURL: 'https://grappa-mock.apps.ocp-prod-0.k8s.it.helsinki.fi'
+        baseURL: `${hostUrl}${apiPath}`
     })
 }
 
