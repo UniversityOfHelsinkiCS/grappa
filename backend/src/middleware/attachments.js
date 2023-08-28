@@ -18,19 +18,11 @@ const storage = () => {
     }
 }
 
-const upload = () => {
-    console.log("Starting upload")
-    try {
-    multer({ storage: storage() }).fields([
+const upload = multer({ storage: storage() }).fields([
     { name: 'otherFile' },
     { name: 'reviewFile', maxCount: 1 },
     { name: 'thesisFile', maxCount: 1 }
 ])
-    } catch (e) {
-        console.log("Upload failed. Error: ")
-        console.log(e)
-        throw e
-    }
-}
+
 
 module.exports = upload

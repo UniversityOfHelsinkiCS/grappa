@@ -74,7 +74,10 @@ router.put('/', jsonParser, auth.checkStaff, (req, res, next) => thesisControlle
  * @apiSuccess thesis New thesis
  * @apiSuccess roles New roles
  */
-router.post('/', attachment, auth.checkStaff, (req, res, next) => thesisController.saveThesisForm(req, res).catch(next))
+router.post('/', attachment, auth.checkStaff, (req, res, next) => { 
+    console.log("Starting route post thesis :")
+    return thesisController.saveThesisForm(req, res).catch(next)
+})
 
 /**
  * @api {put} theses/printed Mark theses as printed
