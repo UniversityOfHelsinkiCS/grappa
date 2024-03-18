@@ -5,6 +5,7 @@ import { thesisType, agreementType, attachmentType, councilmeetingType } from '.
 import LoadingIndicator from '../LoadingIndicator/index'
 // import { makeGetFormatTheses } from '../../selectors/thesisList'
 import ThesisListRow from './components/ThesisListRow'
+import { eThesisRoles, printedForMeetingRoles } from '../../util/constants'
 
 export class ThesisList extends Component {
     constructor(props) {
@@ -131,7 +132,7 @@ export class ThesisList extends Component {
     }
 
     render() {
-        const { canSeeEthesis } = this.props
+        const { canSeeEthesis, canSeePrintedForMeeting } = this.props
 
         return (
             <div>
@@ -162,7 +163,7 @@ export class ThesisList extends Component {
                             <th>Scheduled council meeting</th>
                             <th>Checked by author</th>
                             <th>No pending graders</th>
-                            <th>Printed for meeting <i className="question circle outline icon" style={{ cursor: 'pointer' }} onClick={() => this.setState({ showInfo: true })} /> </th>
+                            {canSeePrintedForMeeting ? <th>Printed for meeting <i className="question circle outline icon" style={{ cursor: 'pointer' }} onClick={() => this.setState({ showInfo: true })} /> </th> : null}
                             {canSeeEthesis ? <th>Published in E-Thesis</th> : null}
                         </tr>
                     </thead>
@@ -210,7 +211,14 @@ const mapStateToProps = state => ({
     // theses: state.theses,
     agreements: state.agreements,
     attachments: state.attachments,
-    canSeeEthesis: ((state.user || {}).roles || []).find(role => role.role === 'manager' || role.role === 'print_person' || role.role === 'resp_professor')
+    canSeePrintedForMeeting: Boolean(
+        ((state.user || {}).roles || [])
+            .find(role => printedForMeetingRoles.includes(role.role)
+            )),
+    canSeeEthesis: Boolean(
+        ((state.user || {}).roles || [])
+            .find(role => eThesisRoles.includes(role.role))
+    )
 })
 
 export default connect(mapStateToProps)(ThesisList)
