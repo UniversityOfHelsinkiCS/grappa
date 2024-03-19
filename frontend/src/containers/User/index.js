@@ -64,6 +64,9 @@ export class UserPage extends Component {
 
     render() {
         const { user } = this.props
+        const isAdmin = Boolean(
+            ((user || {}).roles || [])
+                .find(role => role.role === 'admin'))
         const unitManagers = this.props.managers.filter(manager =>
             manager.programmeId === parseInt(this.state.programmeId, 10))
         const isStaff = user && ((user.roles && user.roles.length > 0) ||
@@ -88,7 +91,7 @@ export class UserPage extends Component {
                         )}
                     </div>
                 </div>
-                {process.env.NODE_ENV !== 'production' ?
+                {process.env.NODE_ENV !== 'production' || isAdmin ?
                     <PersonSwitcher
                         persons={this.props.persons}
                         managers={this.props.managers}
