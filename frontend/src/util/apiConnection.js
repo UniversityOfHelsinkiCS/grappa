@@ -16,7 +16,7 @@ export const getAxios = () => {
     })
 }
 
-const isDevEnv = process.env.NODE_ENV === 'development'
+const isDevEnv = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
 
 const devDefaultOptions = {
     headers: {
