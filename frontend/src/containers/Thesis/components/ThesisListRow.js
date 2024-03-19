@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { thesisType, councilmeetingType } from '../../../util/types'
 import { formatDisplayDate } from '../../../util/common'
 import InEthesisIcon from './InEthesisIcon'
+import { eThesisRoles, printedForMeetingRoles } from '../../../util/constants'
 
 const renderStatusIcons = field =>
     (field ? <Icon color="green" name="checkmark" /> : <Icon color="red" name="remove" />)
@@ -23,7 +24,7 @@ const getAuthorName = (thesis) => {
 // This is a pretty basic check and could be improved.
 const checkGraders = graders => graders.filter(grader => grader.roleRequestId).length < 1
 
-const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggleThesis, selectedThesesIds, canSeeEthesis }) => {
+const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggleThesis, selectedThesesIds, canSeeEthesis, canSeePrintedForMeeting }) => {
     const authorName = getAuthorName(thesis)
     return (
         <tr>
@@ -43,7 +44,7 @@ const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggle
             <td>{councilmeeting ? formatDisplayDate(councilmeeting.date) : null}</td>
             <td>{renderStatusIcons(!authorName.some(author => author.includes('@')))}</td>
             <td>{renderStatusIcons(checkGraders(thesis.graders))}</td>
-            <td>{renderStatusIcons(thesis.printDone)}</td>
+            {canSeePrintedForMeeting ? <td>{renderStatusIcons(thesis.printDone)}</td> : null}
             {canSeeEthesis ? <td><InEthesisIcon authors={thesis.authors} title={thesis.title} /></td> : null}
         </tr>
     )
@@ -59,7 +60,11 @@ ThesisListRow.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    canSeeEthesis: ((state.user || {}).roles || []).find(role => role.role === 'manager' || role.role === 'print_person' || role.role === 'resp_professor')
+    canSeePrintedForMeeting: Boolean(
+        ((state.user || {}).roles || [])
+            .find(role => printedForMeetingRoles.includes(role.role)
+            )),
+    canSeeEthesis: ((state.user || {}).roles || []).find(role => eThesisRoles.includes(role.role))
 })
 
 export default connect(mapStateToProps)(ThesisListRow)

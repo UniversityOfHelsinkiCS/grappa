@@ -1,2 +1,3 @@
 /data
 **/grappa_pgdata
+.env
