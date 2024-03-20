@@ -32,7 +32,7 @@ const devDefaultOptions = {
 
 const getRequestOptions = () => {
     const mockUserShibId = localStorage.getItem(MOCK_USER)
-    const options = isDevEnv ? devDefaultOptions : {}
+    const options = isDevEnv ? devDefaultOptions : { headers: {} }
     return mockUserShibId
         ? { ...options, headers: { ...options.headers, 'x-mock-user-id': mockUserShibId } }
         : options
