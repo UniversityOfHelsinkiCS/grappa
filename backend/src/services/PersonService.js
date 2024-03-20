@@ -191,7 +191,7 @@ export const searchPersons = async (userQuery) => {
         const firstName = userQuery.split(' ')[0]
         const lastName = userQuery.split(' ')[1]
         query = qb => qb.where('firstname', 'iLIKE', `%${firstName}%`)
-            .orWhere('lastname', 'iLIKE', `%${lastName}%`)
+            .andWhere('lastname', 'iLIKE', `%${lastName}%`)
     } else {
         query = qb => qb.where('email', 'iLIKE', `%${userQuery}%`)
             .orWhere('firstname', 'iLIKE', `%${userQuery}%`)
