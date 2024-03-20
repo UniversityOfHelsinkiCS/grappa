@@ -9,7 +9,8 @@ import PersonSwitcher from '../Person/components/PersonSwitcher'
 import RoleExplain from './components/RoleExplain'
 import EmailSwitcher from './components/EmailSwitcher'
 import ProgrammeSelect from '../Unit/components/ProgrammeSelect'
-import { swapDevUser } from '../../util/apiConnection'
+import { swapMockUser } from '../../util/apiConnection'
+import { MOCK_USER } from '../../util/constants'
 
 export class UserPage extends Component {
     state = { programmeId: undefined }
@@ -26,24 +27,15 @@ export class UserPage extends Component {
         return this.props.programmes.filter(({ programmeId }) => !currentProgrammes.includes(programmeId))
     }
 
+    handleRoleChange = async (shibbolethId) => {
+        if (!shibbolethId) return
 
-    handleRoleChange = async (event) => {
-        if (!event.target.value) return
-        const uid = event.target.value
-        let person = {}
-        if (this.props.persons.length > 0) {
-            person = this.props.persons.find(p => p.shibbolethId === uid || `${p.firstname} ${p.lastname}` === uid)
-        } else {
-            person = this.props.managers.find(p => p.person.email === uid || `${p.firstname} ${p.lastname}` === uid).person
-            person.shibbolethId = uid
-        }
-        await swapDevUser({
-            uid: person.shibbolethId,
-            givenname: person.firstname,
-            sn: person.lastname,
-            mail: person.email,
-            'unique-code': `urn:schac:personalUniqueCode:int:studentID:helsinki.fi:${person.studentNumber}`
-        })
+        await swapMockUser(shibbolethId)
+        this.props.getUser()
+    }
+
+    handleResetMockUser = async () => {
+        await swapMockUser(undefined)
         this.props.getUser()
     }
 
@@ -91,12 +83,23 @@ export class UserPage extends Component {
                         )}
                     </div>
                 </div>
-                {process.env.NODE_ENV !== 'production' || isAdmin ?
-                    <PersonSwitcher
-                        persons={this.props.persons}
-                        managers={this.props.managers}
-                        onChange={this.handleRoleChange}
-                    />
+                {isAdmin ?
+                    <div>
+                        <p className="ui header">Search for people to impersonate</p>
+                        <PersonSwitcher
+                            onChange={this.handleRoleChange}
+                        />
+                    </div>
+                    : null}
+                {localStorage.getItem(MOCK_USER) ?
+                    <Segment inverted color="red" tertiary >
+                        <div>
+                            You are currently impersonating
+                        </div>
+                        <Button className="ui button black" onClick={this.handleResetMockUser}>
+                            Stop impersonating
+                        </Button>
+                    </Segment>
                     : null}
                 {user && user.roles && user.roles.find(access => access.role.toLowerCase() === 'grader') && (
                     <Segment style={{ background: 'whitesmoke' }}>

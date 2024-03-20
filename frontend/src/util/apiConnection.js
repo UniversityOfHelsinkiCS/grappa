@@ -31,14 +31,11 @@ const devDefaultOptions = {
 }
 
 const getRequestOptions = () => {
-    try {
-        const options = localStorage.getItem(MOCK_USER)
-        if (!options) throw new Error('no')
-        return JSON.parse(options)
-    } catch (e) {
-        localStorage.removeItem(MOCK_USER)
-        return isDevEnv ? devDefaultOptions : { headers: {} }
-    }
+    const mockUserShibId = localStorage.getItem(MOCK_USER)
+    const options = isDevEnv ? devDefaultOptions : {}
+    return mockUserShibId
+        ? { ...options, headers: { ...options.headers, 'x-mock-user-id': mockUserShibId } }
+        : options
 }
 
 export const login = async () => {
@@ -47,9 +44,13 @@ export const login = async () => {
     return response.data.token
 }
 
-export const swapMockUser = async (newHeaders) => {
-    const options = { headers: { ...getRequestOptions().headers, ...newHeaders } }
-    localStorage.setItem(MOCK_USER, JSON.stringify(options))
+export const swapMockUser = async (newUserShibId) => {
+    if (newUserShibId) {
+        localStorage.setItem(MOCK_USER, newUserShibId)
+    } else {
+        localStorage.removeItem(MOCK_USER)
+    }
+
     const token = await login()
     setToken(token)
 }

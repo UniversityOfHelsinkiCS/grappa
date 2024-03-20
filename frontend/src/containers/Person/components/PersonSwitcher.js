@@ -1,31 +1,64 @@
-import React from 'react'
-import { arrayOf, func, string } from 'prop-types'
-import { personType } from '../../../util/types'
+import React, { Component } from 'react'
+import { debounce } from 'lodash'
+import { func } from 'prop-types'
+import { callApi } from '../../../util/apiConnection'
 
-const PersonSwitcher = ({ persons, onChange, value, onReset }) => (
-    <div className="ui segment">
-        <select id="roles" className="ui dropdown" onChange={onChange} value={value} style={{ margin: 10 }}>
-            <option value="">Choose a role</option>
-            {persons
-                .sort((a, b) => `${a.firstname} ${a.lastname}`.localeCompare(`${b.firstname} ${b.lastname}`))
-                .map(person => (
-                    <option
-                        key={person.personId}
-                        value={person.shibbolethId}
-                    >
-                        {person.firstname} {person.lastname}
-                    </option>
-                ))}
-        </select>
-        <button className="ui black button" onClick={onReset}> Reset </button>
-    </div>
-)
+class PersonSwitcher extends Component {
+    state = {
+        email: '',
+        persons: []
+    };
+
+    handleChange = debounce(async (ev) => {
+        const query = ev.target.value
+        if (query.length < 5) return
+
+        const { data } = await callApi(`/persons/search?search=${query}`)
+        const results = data
+
+        this.setState({ persons: results })
+    }, 500)
+
+    render() {
+        const { onChange } = this.props
+
+        return (
+            <div className="ui segment" style={{ marginBottom: 10 }}>
+                <div className="ui fluid input" style={{ margin: 10 }}>
+                    <input
+                        type="text"
+                        className="search"
+                        placeholder="Start typing name or email. Minimum 5 characters"
+                        value={this.state.email}
+                        onChange={(ev) => {
+                            ev.persist()
+                            this.setState({ email: ev.target.value })
+                            this.handleChange(ev)
+                        }}
+                    />
+                </div>
+
+                <ul style={{ padding: 10, margin: 0 }}>
+                    {this.state.persons.map(person => (
+                        <div key={person.shibbolethId}>
+                            <button
+                                style={{ margin: 5 }}
+                                className="ui white button"
+                                onClick={() => onChange(person.shibbolethId)}
+                            >
+                                {' '}
+                                {person.firstname}{' '}{person.lastname}{' '}{person.email}{' '}Click to impersonate
+                            </button>
+                        </div>
+                    ))}
+                </ul>
+            </div>
+        )
+    }
+}
 
 PersonSwitcher.propTypes = {
-    persons: arrayOf(personType).isRequired,
-    onChange: func.isRequired,
-    onReset: func.isRequired,
-    value: string.isRequired
+    onChange: func.isRequired
 }
 
 export default PersonSwitcher

@@ -2,6 +2,8 @@ import { callController, callApi } from '../../../util/apiConnection'
 
 export const getPersons = () => callController('/persons', 'PERSON_GET_ALL_')
 
+export const searchPersons = () => callController('/persons', 'PERSON_SEARCH_')
+
 export const getManagers = () => callController('/persons/managers', 'PERSON_GET_MANAGERS_')
 
 export const invitePerson = invite => callController('/persons/invite', 'PERSON_INVITE_ONE_', invite, 'post')
