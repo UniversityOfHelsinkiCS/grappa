@@ -184,6 +184,23 @@ export const getPendingPersonsWithRole = async (roleId, programmeId) => (
 
 export const getPersonByEmail = async email => Person.where({ email: email.toLowerCase() }).fetch()
 
+export const searchPersons = async (userQuery) => {
+    let query
+
+    if (userQuery.split(' ').length === 2) {
+        const firstName = userQuery.split(' ')[0]
+        const lastName = userQuery.split(' ')[1]
+        query = qb => qb.where('firstname', 'iLIKE', `%${firstName}%`)
+            .orWhere('lastname', 'iLIKE', `%${lastName}%`)
+    } else {
+        query = qb => qb.where('email', 'iLIKE', `%${userQuery}%`)
+            .orWhere('firstname', 'iLIKE', `%${userQuery}%`)
+            .orWhere('lastname', 'iLIKE', `%${userQuery}%`)
+    }
+
+    return Person.query(query).fetchAll()
+}
+
 export const updateNonRegisteredPerson = async (person, studentNumber, shibbolethId) => (
     person.set({ studentNumber, shibbolethId }).save()
 )

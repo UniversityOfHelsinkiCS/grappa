@@ -43,6 +43,8 @@ const jsonParser = bodyParser.json()
  */
 router.get('/', auth.checkManagerOrAdmin, (req, res, next) => personController.getPersons(req, res).catch(next))
 
+router.get('/search', auth.checkAdmin, (req, res, next) => personController.findPersons(req, res).catch(next))
+
 /**
  * @api {post} persons/invite Invite person to role
  * @apiName InvitePerson

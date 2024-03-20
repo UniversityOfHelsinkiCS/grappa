@@ -8,6 +8,16 @@ const programmeService = require('../services/ProgrammeService')
 // const emailInviteService = require('../services/EmailInviteService')
 const emailService = require('../services/EmailService')
 
+export async function findPersons(req, res) {
+    const { search } = req.query
+    if (search.length < 5) {
+        throw Error('Search string must be at least 5 characters long')
+    }
+
+    const persons = await personService.searchPersons(search)
+    res.status(200).json(persons)
+}
+
 /**
  * Get persons that are of interest to the person doing query
  */
