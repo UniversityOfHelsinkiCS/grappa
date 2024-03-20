@@ -40,7 +40,7 @@ class PersonSwitcher extends Component {
 
                 <ul style={{ padding: 10, margin: 0 }}>
                     {this.state.persons.map(person => (
-                        <div key={person.shibbolethId}>
+                        <div key={person.shibbolethId || person.personId}>
                             <button
                                 style={{ margin: 5 }}
                                 className="ui white button"

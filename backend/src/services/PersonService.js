@@ -190,10 +190,12 @@ export const searchPersons = async (userQuery) => {
     if (userQuery.split(' ').length === 2) {
         const firstName = userQuery.split(' ')[0]
         const lastName = userQuery.split(' ')[1]
-        query = qb => qb.where('firstname', 'iLIKE', `%${firstName}%`)
+        query = qb => qb.whereNotNull('shibbolethId')
+            .andWhere('firstname', 'iLIKE', `%${firstName}%`)
             .andWhere('lastname', 'iLIKE', `%${lastName}%`)
     } else {
-        query = qb => qb.where('email', 'iLIKE', `%${userQuery}%`)
+        query = qb => qb.whereNotNull('shibbolethId')
+            .andWhere('email', 'iLIKE', `%${userQuery}%`)
             .orWhere('firstname', 'iLIKE', `%${userQuery}%`)
             .orWhere('lastname', 'iLIKE', `%${userQuery}%`)
     }
