@@ -1,5 +1,5 @@
 export const TOKEN_NAME = "token"
-export const DEV_USER = "devUser"
+export const MOCK_USER = "mockUser"
 
 export const printedForMeetingRoles = [
   "admin",

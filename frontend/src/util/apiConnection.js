@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getToken, setToken } from './common'
-import { TOKEN_NAME, DEV_USER } from './constants'
+import { TOKEN_NAME, MOCK_USER } from './constants'
 
 const createApiUrl = (path) => {
     const API_PATHS = ['grappa']
@@ -30,32 +30,32 @@ const devDefaultOptions = {
     }
 }
 
-const getDevOptions = () => {
+const getRequestOptions = () => {
     try {
-        const options = localStorage.getItem(DEV_USER)
+        const options = localStorage.getItem(MOCK_USER)
         if (!options) throw new Error('no')
         return JSON.parse(options)
     } catch (e) {
-        localStorage.removeItem(DEV_USER)
-        return devDefaultOptions
+        localStorage.removeItem(MOCK_USER)
+        return isDevEnv ? devDefaultOptions : { headers: {} }
     }
 }
 
 export const login = async () => {
-    const options = isDevEnv ? getDevOptions() : null
+    const options = getRequestOptions()
     const response = await getAxios().post('/login', null, options)
     return response.data.token
 }
 
-export const swapDevUser = async (newHeaders) => {
-    const options = { headers: { ...getDevOptions().headers, ...newHeaders } }
-    localStorage.setItem(DEV_USER, JSON.stringify(options))
+export const swapMockUser = async (newHeaders) => {
+    const options = { headers: { ...getRequestOptions().headers, ...newHeaders } }
+    localStorage.setItem(MOCK_USER, JSON.stringify(options))
     const token = await login()
     setToken(token)
 }
 
 export const callApi = async (url, method = 'get', data, prefix) => {
-    const options = isDevEnv ? getDevOptions() : { headers: {} }
+    const options = getRequestOptions()
     const token = await getToken()
     options.headers['x-access-token'] = token
 
