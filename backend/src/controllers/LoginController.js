@@ -40,7 +40,9 @@ export const login = async (req, res) => {
         try {
             const { shibbolethId, studentNumber, firstname, lastname, email } =
                 parseShibbolethInformationFromHeaders(req.headers)
-            await register(shibbolethId, studentNumber, firstname, lastname, email)
+            if (!req.isMockUser) {
+                await register(shibbolethId, studentNumber, firstname, lastname, email)
+            }
             const token = await generateToken(shibbolethId)
             res.status(200).json({ token })
         } catch (err) {
