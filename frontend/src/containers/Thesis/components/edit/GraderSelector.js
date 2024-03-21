@@ -1,7 +1,6 @@
 import React from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import { arrayOf, func, object, bool, number } from 'prop-types'
-// import PersonSelector from '../../../Person/components/PersonSelector'
 import { personType } from '../../../../util/types'
 
 const renderGraderSelector = (graders, programmeGraders, change) => {
@@ -22,13 +21,6 @@ const renderGraderSelector = (graders, programmeGraders, change) => {
 }
 
 const GraderSelector = ({ change, programmeGraders, graders }) => {
-    // const programmeGraders = getGradersAction(programmeId)// persons.filter(person =>
-    //     roles.find(role =>
-    //         role.name === 'grader'
-    //         && role.personId === person.personId
-    //         && role.programmeId === Number(programmeId)
-    //     )
-    // )
     return (
         <div className="field">
             <label>

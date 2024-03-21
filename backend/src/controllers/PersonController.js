@@ -1,65 +1,28 @@
 import logger from '../util/logger'
-// import { checkUserIsAdminOrManager } from '../services/RoleService'
 import { getLoggedPerson, updatePerson } from '../services/PersonService'
 
 const personService = require('../services/PersonService')
 const roleService = require('../services/RoleService')
 const programmeService = require('../services/ProgrammeService')
-// const emailInviteService = require('../services/EmailInviteService')
 const emailService = require('../services/EmailService')
 
 export async function findPersons(req, res) {
     const { search } = req.query
-    if (search.length < 5) {
-        throw Error('Search string must be at least 5 characters long')
+    if (!search) {
+        res.send(403, 'Search string must be provided as a query parameter')
+    }
+    if (search.trim().length < 5) {
+        res.send(403, 'Search string must be at least 5 characters long')
     }
 
-    const persons = await personService.searchPersons(search)
+    const persons = await personService.searchPersons(search.trim())
     res.status(200).json(persons)
 }
 
 /**
- * Get persons that are of interest to the person doing query
+ * Get persons
  */
 export async function getPersons(req, res) {
-    // TODO test & refactor
-    /*
-    const programmeRoles = ['resp_professor', 'print_person', 'manager']
-
-    let persons = []
-    let newPersons = []
-
-    // Add user to person list
-    persons.push(user)
-
-    // If user is an admin, get everything
-    if (await roleService.isUserAdmin(user)) {
-        return getAllPersons(res)
-    }
-
-    const rolesInProgrammes = await roleService.getUsersRoles(user)
-
-    rolesInProgrammes.forEach(async (item) => {
-        if (programmeRoles.includes(item.role.name)) {
-            newPersons = await personService.getPersonsWithAgreementInStudyfield(item.programme.programmeId)
-            persons = [...new Set([...persons, ...newPersons])]
-        }
-        if (item.role.name === 'manager') {
-            newPersons = await personService.getProgrammePersons(item.programme.programmeId)
-            persons = [...new Set([...persons, ...newPersons])]
-        }
-    })
-
-    const gradersAndSupervisors = await getGradersAndSupervisors()
-
-    // Persons (students) who are writing theses user has access to as
-    // a agreementperson (supervisor, grader etc)
-    newPersons = await personService.getPersonsWithAgreementPerson(user.personId)
-    persons = [...new Set([...persons, ...gradersAndSupervisors, ...newPersons])]
-
-    // All required persons found, now role objects for front
-    const roles = await roleService.getRolesForAllPersons()
-    */
     const user = await getLoggedPerson(req)
 
     if (!user) {
@@ -78,26 +41,6 @@ export const getManagers = async (req, res) => {
     return res.status(200).json({ managers })
 }
 
-// async function getGradersAndSupervisors() {
-//     const supervisorId = await roleService.getRoleId('supervisor')
-//     const graderId = await roleService.getRoleId('grader')
-
-//     const supervisors = await personService.getPersonsWithRole(supervisorId)
-//     const graders = await personService.getPersonsWithRole(graderId)
-//     return [...supervisors, ...graders]
-// }
-
-// function removeDuplicates(persons) {
-//     const responsePersons = new Map()
-//     persons.forEach((person) => {
-//         if (!responsePersons.get(person.personId)) {
-//             responsePersons.set(person.personId, person)
-//         }
-//     })
-
-//     return [...responsePersons.values()]
-// }
-
 async function userNotFound(res) {
     if (process.env.NODE_ENV !== 'development') {
         return res.status(403).json({ message: `DecodedToken did not contain valid userId ${res.decodedToken}` }).end()
@@ -112,17 +55,6 @@ async function userNotFound(res) {
     return res.status(200).json(responseObject).end()
 }
 
-// async function getAllPersons(res) {
-//     const managers = await personService.getPersonsForRole('manager')
-//     const persons = await personService.getAllPersons()
-//     const roles = await roleService.getRolesForAllPersons()
-//     const responseObject = {
-//         roles,
-//         persons,
-//         managers
-//     }
-//     return res.status(200).json(responseObject).end()
-// }
 
 /**
  * Creates a new person with specified roles.
