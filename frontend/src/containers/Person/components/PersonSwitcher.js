@@ -10,8 +10,8 @@ class PersonSwitcher extends Component {
     };
 
     handleChange = debounce(async (ev) => {
-        const query = ev.target.value
-        if (query.length < 5) return
+        const query = ev.target.value && ev.target.value.trim()
+        if (!query || query.length < 5) return
 
         const { data } = await callApi(`/persons/search?search=${query}`)
         const results = data
