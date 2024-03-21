@@ -10,7 +10,7 @@ const reducer = (state = [], action) => {
                 ...state.filter(thesis => thesis.thesisId !== action.response.thesis.thesisId), action.response.thesis
             ]
         case 'THESIS_DELETE_ONE_SUCCESS':
-            return state.filter(thesis => thesis.thesisId !== action.response.updatedThesis.thesisId)
+            return state.filter(thesis => thesis.thesisId !== action.params.thesisId)
         case 'THESIS_MARK_PRINTED_SUCCESS':
             return [...state].map((thesis) => {
                 if (action.response.includes(thesis.thesisId)) {

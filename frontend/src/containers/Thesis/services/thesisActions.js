@@ -30,7 +30,7 @@ export const deleteThesis = (thesisId) => {
     const route = `/theses/${thesisId}`
     const prefix = 'THESIS_DELETE_ONE_'
     const method = 'delete'
-    return callController(route, prefix, thesisId, method)
+    return callController(route, prefix, thesisId, method, {}, { thesisId })
 }
 
 export const markPrinted = (thesisIds) => {

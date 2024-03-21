@@ -79,13 +79,19 @@ export const callApi = async (url, method = 'get', data, prefix) => {
     }
 }
 
-export const callController = (route, prefix, data, method = 'get', query) => {
+// @params agrument here is purely used as metadata, and is needed
+// so that handleRequest() below has access to values of individual
+// path parameters. It might need to use them for example to
+// pass them further to reducers. This way reducers have access
+// to values of path params.
+export const callController = (route, prefix, data, method = 'get', query, params = {}) => {
     const requestSettings = {
         route,
         method,
         data,
         prefix,
-        query
+        query,
+        params
     }
     return { type: `${prefix}ATTEMPT`, requestSettings }
 }
@@ -95,11 +101,11 @@ export const handleRequest = store => next => async (action) => {
     const { requestSettings } = action
     if (requestSettings) {
         const {
-            route, method, data, prefix, query
+            route, method, data, prefix, query, params
         } = requestSettings
         try {
             const res = await callApi(route, method, data, prefix)
-            store.dispatch({ type: `${prefix}SUCCESS`, response: res.data, query })
+            store.dispatch({ type: `${prefix}SUCCESS`, response: res.data, query, params })
         } catch (e) {
             // Something failed. Assume it's the token and try again.
             try {

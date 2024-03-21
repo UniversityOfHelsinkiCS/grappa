@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { arrayOf, func, bool, number } from 'prop-types'
 import { thesisType, agreementType, attachmentType, councilmeetingType } from '../../util/types'
 import LoadingIndicator from '../LoadingIndicator/index'
-// import { makeGetFormatTheses } from '../../selectors/thesisList'
 import ThesisListRow from './components/ThesisListRow'
 import { eThesisRoles, printedForMeetingRoles } from '../../util/constants'
+import { deleteThesis } from './services/thesisActions'
 
 export class ThesisList extends Component {
     constructor(props) {
@@ -132,7 +132,7 @@ export class ThesisList extends Component {
     }
 
     render() {
-        const { canSeeEthesis, canSeePrintedForMeeting } = this.props
+        const { canSeeEthesis, canSeePrintedForMeeting, canDeleteThesis } = this.props
 
         return (
             <div>
@@ -165,6 +165,7 @@ export class ThesisList extends Component {
                             <th>No pending graders</th>
                             {canSeePrintedForMeeting ? <th>Printed for meeting <i className="question circle outline icon" style={{ cursor: 'pointer' }} onClick={() => this.setState({ showInfo: true })} /> </th> : null}
                             {canSeeEthesis ? <th>Published in E-Thesis</th> : null}
+                            {canDeleteThesis ? <th>Delete</th> : null}
                         </tr>
                     </thead>
                     <tbody>
@@ -178,6 +179,7 @@ export class ThesisList extends Component {
                                 showButtons={this.props.showButtons}
                                 selectable={this.props.selectable}
                                 selectedThesesIds={this.state.selectedThesesIds}
+                                onDelete={() => this.props.deleteThesis(thesis.thesisId)}
                             />
                         ))}
                     </tbody>
@@ -196,7 +198,7 @@ ThesisList.propTypes = {
     showButtons: bool.isRequired,
     markPrinted: func.isRequired,
     selectable: bool,
-    councilMeetingId: number // eslint-disable-line
+    councilMeetingId: number, // eslint-disable-line
 }
 
 ThesisList.defaultProps = {
@@ -204,7 +206,11 @@ ThesisList.defaultProps = {
     councilMeetingId: null
 }
 
-// const getFormatTheses = makeGetFormatTheses()
+const mapDispatchToProps = dispatch => ({
+    deleteThesis(thesisId) {
+        dispatch(deleteThesis(thesisId))
+    }
+})
 
 const mapStateToProps = state => ({
     councilmeetings: state.councilmeetings,
@@ -218,7 +224,11 @@ const mapStateToProps = state => ({
     canSeeEthesis: Boolean(
         ((state.user || {}).roles || [])
             .find(role => eThesisRoles.includes(role.role))
+    ),
+    canDeleteThesis: Boolean(
+        ((state.user || {}).roles || [])
+            .find(role => role.role === 'admin')
     )
 })
 
-export default connect(mapStateToProps)(ThesisList)
+export default connect(mapStateToProps, mapDispatchToProps)(ThesisList)

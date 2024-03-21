@@ -24,7 +24,19 @@ const getAuthorName = (thesis) => {
 // This is a pretty basic check and could be improved.
 const checkGraders = graders => graders.filter(grader => grader.roleRequestId).length < 1
 
-const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggleThesis, selectedThesesIds, canSeeEthesis, canSeePrintedForMeeting }) => {
+const ThesisListRow = ({
+    councilmeeting,
+    thesis,
+    showButtons,
+    selectable,
+    toggleThesis,
+    selectedThesesIds,
+    onDelete,
+
+    canSeeEthesis,
+    canSeePrintedForMeeting,
+    canDeleteThesis
+}) => {
     const authorName = getAuthorName(thesis)
     return (
         <tr>
@@ -46,6 +58,18 @@ const ThesisListRow = ({ councilmeeting, thesis, showButtons, selectable, toggle
             <td>{renderStatusIcons(checkGraders(thesis.graders))}</td>
             {canSeePrintedForMeeting ? <td>{renderStatusIcons(thesis.printDone)}</td> : null}
             {canSeeEthesis ? <td><InEthesisIcon authors={thesis.authors} title={thesis.title} /></td> : null}
+            {canDeleteThesis ?
+                <td>
+                    <button className="ui button red" onClick={onDelete}>
+                        <Icon
+                            color="white"
+                            name="trash"
+                            size="large"
+                            style={{ margin: 0 }}
+                        />
+                    </button>
+                </td>
+                : null}
         </tr>
     )
 }
@@ -56,7 +80,8 @@ ThesisListRow.propTypes = {
     toggleThesis: func.isRequired,
     showButtons: bool.isRequired,
     selectable: bool.isRequired,
-    selectedThesesIds: arrayOf(number).isRequired
+    selectedThesesIds: arrayOf(number).isRequired,
+    onDelete: func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -64,7 +89,11 @@ const mapStateToProps = state => ({
         ((state.user || {}).roles || [])
             .find(role => printedForMeetingRoles.includes(role.role)
             )),
-    canSeeEthesis: ((state.user || {}).roles || []).find(role => eThesisRoles.includes(role.role))
+    canSeeEthesis: ((state.user || {}).roles || []).find(role => eThesisRoles.includes(role.role)),
+    canDeleteThesis: Boolean(
+        ((state.user || {}).roles || [])
+            .find(role => role.role === 'admin')
+    )
 })
 
 export default connect(mapStateToProps)(ThesisListRow)
