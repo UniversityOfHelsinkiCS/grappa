@@ -30,6 +30,11 @@ export class ThesisList extends Component {
         }
     }
 
+    handleThesisDelete(thesisId) {
+        if (!window.confirm('Are you sure you want to delete this thesis?')) return
+        this.props.deleteThesis(thesisId)
+    }
+
     toggleThesis = thesis => () => {
         const selectedThesesIds = this.state.selectedThesesIds.includes(thesis.thesisId) ?
             this.state.selectedThesesIds.filter(id => id !== thesis.thesisId) :
@@ -179,7 +184,7 @@ export class ThesisList extends Component {
                                 showButtons={this.props.showButtons}
                                 selectable={this.props.selectable}
                                 selectedThesesIds={this.state.selectedThesesIds}
-                                onDelete={() => this.props.deleteThesis(thesis.thesisId)}
+                                onDelete={() => this.handleThesisDelete(thesis.thesisId)}
                             />
                         ))}
                     </tbody>
