@@ -93,6 +93,10 @@ export const markPrinted = thesisIds => knex('thesis')
     .update({ printDone: true })
     .whereIn('thesisId', thesisIds)
 
+export const deleteThesis = async thesisId =>
+    knex('thesis')
+        .where('thesisId', thesisId)
+        .delete(['thesisId'])
 
 export const getPersonRoleForThesis = async (thesis, agreements, role) => {
     const roleId = await roleService.getRoleId(role)

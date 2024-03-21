@@ -91,6 +91,9 @@ router.post('/', attachment, auth.checkStaff, (req, res, next) => {
 router.put('/printed', jsonParser, auth.checkStaff, (req, res, next) =>
     thesisController.markPrinted(req, res).catch(next))
 
+router.delete('/:id', auth.checkAdmin, (req, res, next) =>
+    thesisController.deleteThesis(req, res).catch(next))
+
 router.get('/in_ethesis', async (req, res) => {
     const { title, authors } = req.query
     const words = [...title.split(' '), ...authors.split(' ')]

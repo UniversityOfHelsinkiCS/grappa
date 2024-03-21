@@ -208,3 +208,10 @@ export async function markPrinted(req, res) {
         res.status(403).json({ error: 'no dice boy' })
     }
 }
+
+export async function deleteThesis(req, res) {
+    const thesisId = req.params.id
+    const deletedId = await thesisService.deleteThesis(thesisId)
+    logger.info('Thesis deleted', { deletedId })
+    res.status(204).end()
+}
