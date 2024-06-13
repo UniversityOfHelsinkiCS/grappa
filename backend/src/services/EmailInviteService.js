@@ -51,7 +51,9 @@ export function getEmailInviteDataForToken(token) {
     return knex('emailInvite')
         .select()
         .where('token', token)
-        .where('used', false)
+        // we want to allow users clicking the link multiple times
+        // therefore we do not check if the token is used
+        // .where('used', false)
         .first()
 }
 
